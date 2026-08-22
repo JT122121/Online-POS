@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Online POS</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #e5e5e5;
+  color: #111;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: Arial, sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+
+/* =========================================================
+   CONTROL PANEL
+   ========================================================= */
+
+.controls {
+  width: 440px;
+  max-width: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.15);
+}
+
+.controls h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.subtitle {
+  margin: 5px 0 20px;
+  color: #666;
+  font-size: 13px;
+}
+
+.section {
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+  margin-top: 18px;
+}
+
+.section h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+}
+
+label {
+  display: block;
+  margin-top: 11px;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   TWO COLUMN FORM
+   ========================================================= */
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.info {
+  margin-top: 8px;
+  padding: 9px;
+  background: #f2f2f2;
+  border-radius: 5px;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD EDITOR
+   ========================================================= */
+
+.payment-editor {
+  display: flex;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.payment-editor input {
+  flex: 1;
+}
+
+.payment-list {
+  margin-top: 10px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  background: #fafafa;
+}
+
+.payment-item button {
+  background: #ddd;
+  border: 0;
+  padding: 5px 8px;
+  border-radius: 4px;
+}
+
+
+/* =========================================================
+   ITEMS
+   ========================================================= */
+
+.item-row {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  background: #fafafa;
+}
+
+.item-row h4 {
+  margin: 0 0 8px;
+}
+
+.remove-item {
+  margin-top: 10px;
+  background: #ddd;
+  color: #111;
+  border: 0;
+  padding: 9px 12px;
+  border-radius: 5px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.primary-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px;
+  border: 0;
+  border-radius: 6px;
+  background: #111;
+  color: white;
+  font-size: 15px;
+}
+
+.secondary-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px;
+  border: 0;
+  border-radius: 6px;
+  background: #444;
+  color: white;
+  font-size: 15px;
+}
+
+.small-btn {
+  border: 0;
+  border-radius: 5px;
+  background: #111;
+  color: white;
+  padding: 10px 13px;
+}
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+.preview-area {
+  width: calc(100vw - 510px);
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+
+/* =========================================================
+   RECEIPT
+   ========================================================= */
+
+.receipt {
+  width: 80mm;
+  min-height: 100vh;
+  padding: 4mm;
+  background: white;
+  border: 2px solid #000;
+  color: #000;
+  flex-shrink: 0;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10pt;
+}
+
+
+/* =========================================================
+   RECEIPT HEADER
+   ========================================================= */
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px dashed #000;
+  padding-bottom: 3mm;
+  margin-bottom: 3mm;
+}
+
+.receipt-header h2 {
+  margin: 0;
+  font-size: 15pt;
+  word-break: break-word;
+}
+
+.receipt-store-details {
+  margin: 2mm 0;
+  font-size: 8.5pt;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.receipt-meta {
+  font-size: 8pt;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   RECEIPT TITLE
+   ========================================================= */
+
+.receipt-document-title {
+  font-size: 11pt;
+  font-weight: bold;
+  margin-top: 2mm;
+}
+
+
+/* =========================================================
+   RECEIPT ITEMS
+   ========================================================= */
+
+.receipt-column-header {
+  display: grid;
+  grid-template-columns: 1fr 11mm 23mm;
+  border-bottom: 1px solid #000;
+  padding-bottom: 1mm;
+  margin-bottom: 2mm;
+  font-weight: bold;
+}
+
+.receipt-column-header span:nth-child(2) {
+  text-align: center;
+}
+
+.receipt-column-header span:nth-child(3) {
+  text-align: right;
+}
+
+.receipt-item {
+  margin-bottom: 2.5mm;
+}
+
+.receipt-item-line {
+  display: grid;
+  grid-template-columns: 1fr 11mm 23mm;
+  gap: 1mm;
+}
+
+.receipt-item-name {
+  word-break: break-word;
+}
+
+.receipt-item-qty {
+  text-align: center;
+}
+
+.receipt-item-total {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.receipt-item-detail {
+  text-align: right;
+  font-size: 7.5pt;
+  margin-top: .5mm;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.dashed-line {
+  border-top: 1px dashed #000;
+  margin: 3mm 0;
+}
+
+
+/* =========================================================
+   TOTALS
+   ========================================================= */
+
+.receipt-total-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin: 1.5mm 0;
+}
+
+.receipt-grand-total {
+  font-size: 12pt;
+  font-weight: bold;
+  margin-top: 2mm;
+}
+
+
+/* =========================================================
+   PAYMENT
+   ========================================================= */
+
+.receipt-payment {
+  margin-top: 3mm;
+}
+
+.receipt-payment-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin: 1.5mm 0;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.receipt-footer {
+  margin-top: 6mm;
+  padding-top: 3mm;
+  border-top: 1px dashed #000;
+  text-align: center;
+  font-size: 8.5pt;
+  line-height: 1.5;
+}
+
+.receipt-footer p {
+  margin: 1mm 0;
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .app {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .preview-area {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+
+}
+
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@page {
+  margin: 0;
+}
+
+@media print {
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .controls {
+    display: none !important;
+  }
+
+  .preview-area {
+    width: auto;
+    min-height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .receipt {
+    margin: 0;
+    border: none;
+    min-height: auto;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- ======================================================
+     CONTROL PANEL
+     ====================================================== -->
+
+<div class="controls">
+
+
+<h1 id="appTitle">
+  Online POS
+</h1>
+
+<div class="subtitle"
+     id="appSubtitle">
+  Simple browser-based point of sale
+</div>
+
+
+<!-- ======================================================
+     LANGUAGE
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="languageTitle">
+  Language
+</h3>
+
+<label id="languageLabel">
+  Select Language
+</label>
+
+<select id="language"
+        onchange="changeLanguage()">
+
+  <option value="en">
+    English
+  </option>
+
+  <option value="ar">
+    العربية
+  </option>
+
+  <option value="fil">
+    Filipino
+  </option>
+
+</select>
+
+</div>
+
+
+<!-- ======================================================
+     DOCUMENT TYPE
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="documentTitle">
+  Document
+</h3>
+
+<label id="documentTypeLabel">
+  Document Type
+</label>
+
+<select id="documentType"
+        onchange="updateReceipt()">
+
+  <option value="receipt">
+    Receipt
+  </option>
+
+  <option value="invoice">
+    Invoice
+  </option>
+
+  <option value="payment">
+    Payment Received
+  </option>
+
+</select>
+
+</div>
+
+
+<!-- ======================================================
+     PAPER
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="paperTitle">
+  Paper Size
+</h3>
+
+<label id="paperLabel">
+  Receipt Paper
+</label>
+
+<select id="paperSize"
+        onchange="changePaperSize()">
+
+  <option value="58">
+    58mm Thermal
+  </option>
+
+  <option value="80"
+          selected>
+    80mm Thermal
+  </option>
+
+  <option value="148">
+    A5
+  </option>
+
+  <option value="210">
+    A4
+  </option>
+
+  <option value="custom">
+    Custom
+  </option>
+
+</select>
+
+
+<div id="customWidthContainer"
+     class="hidden">
+
+<label id="customWidthLabel">
+  Custom Width (mm)
+</label>
+
+<input id="customWidth"
+       type="number"
+       value="80"
+       min="30"
+       max="500"
+       oninput="changePaperSize()">
+
+</div>
+
+
+<div class="info">
+
+<span id="currentWidthLabel">
+Current width:
+</span>
+
+<strong>
+<span id="paperWidthDisplay">
+80
+</span>
+mm
+</strong>
+
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     CURRENCY
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="currencyTitle">
+  Currency
+</h3>
+
+
+<div class="two-columns">
+
+<div>
+
+<label id="currencyCodeLabel">
+Currency Code
+</label>
+
+<input id="currencyCode"
+       value="BHD"
+       oninput="updateReceipt()">
+
+</div>
+
+
+<div>
+
+<label id="currencySymbolLabel">
+Currency Symbol
+</label>
+
+<input id="currencySymbol"
+       value="BD"
+       oninput="updateReceipt()">
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     STORE
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="storeTitle">
+  Store Information
+</h3>
+
+
+<label id="storeNameLabel">
+Store Name
+</label>
+
+<input id="storeName"
+       value="NEO Supermarket"
+       oninput="updateReceipt()">
+
+
+<label id="storeDetailsLabel">
+Store Details
+</label>
+
+<textarea id="storeDetails"
+>Bldg. 302, Road 1245
+Kingdom of Bahrain
+Tel: +973 XXXXXXXX
+Email: sales@neosupermarket.com
+TRN: 123456789</textarea>
+
+
+<div class="info"
+     id="storeInfo">
+You can enter address, phone, email,
+TRN, website and other information.
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     RECEIPT NUMBER
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="receiptSettingsTitle">
+Receipt
+</h3>
+
+
+<label id="receiptNumberLabel">
+Receipt Number
+</label>
+
+<input id="receiptNumberInput"
+       readonly>
+
+
+<div class="info"
+     id="receiptNumberInfo">
+The next number is generated when
+you start a new sale.
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     TAX
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="taxTitle">
+Tax
+</h3>
+
+
+<label id="taxNameLabel">
+Tax Name
+</label>
+
+<input id="taxName"
+       value="Tax"
+       oninput="updateReceipt()">
+
+
+<label id="taxRateLabel">
+Tax Rate (%)
+</label>
+
+<input id="taxRate"
+       type="number"
+       value="10"
+       min="0"
+       step="0.01"
+       oninput="updateReceipt()">
+
+</div>
+
+
+<!-- ======================================================
+     PAYMENT METHODS
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="paymentMethodsTitle">
+Payment Methods
+</h3>
+
+
+<div class="payment-editor">
+
+<input id="newPaymentMethod"
+       placeholder="Cash">
+
+<button class="small-btn"
+        onclick="addPaymentMethod()">
++
+</button>
+
+</div>
+
+
+<div id="paymentMethodsList"
+     class="payment-list">
+</div>
+
+
+<div class="info"
+     id="paymentMethodsInfo">
+Add your own payment methods.
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     SALE PAYMENT
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="paymentTitle">
+Payment
+</h3>
+
+
+<label id="paymentMethodLabel">
+Payment Method
+</label>
+
+<select id="paymentMethod"
+        onchange="updateReceipt()">
+</select>
+
+
+<label id="amountReceivedLabel">
+Amount Received
+</label>
+
+<input id="amountReceived"
+       type="number"
+       min="0"
+       step="0.001"
+       value="0"
+       oninput="updateReceipt()">
+
+
+<div class="info">
+
+<span id="changeLabelInfo">
+Change:
+</span>
+
+<strong id="changePreview">
+BD 0.000
+</strong>
+
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     ITEMS
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="itemsTitle">
+Items
+</h3>
+
+
+<div id="itemsContainer">
+</div>
+
+
+<button class="primary-btn"
+        onclick="addItem()"
+        id="addItemButton">
+
++ Add Item
+
+</button>
+
+</div>
+
+
+<!-- ======================================================
+     FOOTER
+     ====================================================== -->
+
+<div class="section">
+
+<h3 id="footerTitle">
+Receipt Footer
+</h3>
+
+
+<label id="footerLine1Label">
+Footer Line 1
+</label>
+
+<input id="footer1"
+       value="Thank you for shopping with us!"
+       oninput="updateReceipt()">
+
+
+<label id="footerLine2Label">
+Footer Line 2
+</label>
+
+<input id="footer2"
+       value="Please come again."
+       oninput="updateReceipt()">
+
+</div>
+
+
+<!-- ======================================================
+     ACTIONS
+     ====================================================== -->
+
+<button class="primary-btn"
+        onclick="printReceipt()"
+        id="printButton">
+
+🖨 Print
+
+</button>
+
+
+<button class="secondary-btn"
+        onclick="newSale()"
+        id="newSaleButton">
+
++ New Sale
+
+</button>
+
+
+</div>
+
+
+<!-- ======================================================
+     LIVE RECEIPT
+     ====================================================== -->
+
+<div class="preview-area">
+
+
+<div id="receipt"
+     class="receipt">
+
+
+<!-- RECEIPT HEADER -->
+
+<div class="receipt-header">
+
+
+<h2 id="receiptStoreName">
+NEO Supermarket
+</h2>
+
+
+<div id="receiptStoreDetails"
+     class="receipt-store-details">
+</div>
+
+
+<div id="receiptDocumentTitle"
+     class="receipt-document-title">
+Receipt
+</div>
+
+
+<div class="receipt-meta">
+
+<div>
+<span id="receiptDateLabel">
+Date:
+</span>
+
+<span id="receiptDate">
+</span>
+</div>
+
+
+<div>
+
+<span id="receiptNumberText">
+Receipt No:
+</span>
+
+<span id="receiptNumber">
+</span>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- ITEMS HEADER -->
+
+<div class="receipt-column-header">
+
+<span id="receiptItemHeader">
+Item
+</span>
+
+<span id="receiptQtyHeader">
+Qty
+</span>
+
+<span id="receiptTotalHeader">
+Total
+</span>
+
+</div>
+
+
+<!-- ITEMS -->
+
+<div id="receiptItems">
+</div>
+
+
+<!-- TOTALS -->
+
+<div class="dashed-line">
+</div>
+
+
+<div class="receipt-total-line">
+
+<span id="subtotalLabel">
+Subtotal
+</span>
+
+<span id="subtotal">
+BD 0.000
+</span>
+
+</div>
+
+
+<div class="receipt-total-line">
+
+<span id="receiptTaxLabel">
+Tax
+</span>
+
+<span id="taxAmount">
+BD 0.000
+</span>
+
+</div>
+
+
+<div class="dashed-line">
+</div>
+
+
+<div class="receipt-total-line receipt-grand-total">
+
+<span id="totalLabel">
+TOTAL
+</span>
+
+<span id="grandTotal">
+BD 0.000
+</span>
+
+</div>
+
+
+<!-- PAYMENT -->
+
+<div class="receipt-payment">
+
+<div class="receipt-payment-line">
+
+<span id="receiptPaymentMethodLabel">
+Payment
+</span>
+
+<span id="receiptPaymentMethod">
+Cash
+</span>
+
+</div>
+
+
+<div class="receipt-payment-line">
+
+<span id="receiptReceivedLabel">
+Received
+</span>
+
+<span id="receiptReceived">
+BD 0.000
+</span>
+
+</div>
+
+
+<div class="receipt-payment-line">
+
+<span id="receiptChangeLabel">
+Change
+</span>
+
+<span id="receiptChange">
+BD 0.000
+</span>
+
+</div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="receipt-footer">
+
+<p id="receiptFooter1">
+Thank you for shopping with us!
+</p>
+
+<p id="receiptFooter2">
+Please come again.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TRANSLATIONS
+   ========================================================= */
+
+const translations = {
+
+  en: {
+
+    appTitle: "Online POS",
+
+    appSubtitle:
+      "Simple browser-based point of sale",
+
+    languageTitle:
+      "Language",
+
+    languageLabel:
+      "Select Language",
+
+    documentTitle:
+      "Document",
+
+    documentTypeLabel:
+      "Document Type",
+
+    receipt:
+      "Receipt",
+
+    invoice:
+      "Invoice",
+
+    payment:
+      "Payment Received",
+
+    paperTitle:
+      "Paper Size",
+
+    paperLabel:
+      "Receipt Paper",
+
+    customWidthLabel:
+      "Custom Width (mm)",
+
+    currentWidthLabel:
+      "Current width:",
+
+    currencyTitle:
+      "Currency",
+
+    currencyCodeLabel:
+      "Currency Code",
+
+    currencySymbolLabel:
+      "Currency Symbol",
+
+    storeTitle:
+      "Store Information",
+
+    storeNameLabel:
+      "Store Name",
+
+    storeDetailsLabel:
+      "Store Details",
+
+    storeInfo:
+      "You can enter address, phone, email, TRN, website and other information.",
+
+    receiptSettingsTitle:
+      "Receipt",
+
+    receiptNumberLabel:
+      "Receipt Number",
+
+    receiptNumberInfo:
+      "The next number is generated when you start a new sale.",
+
+    taxTitle:
+      "Tax",
+
+    taxNameLabel:
+      "Tax Name",
+
+    taxRateLabel:
+      "Tax Rate (%)",
+
+    paymentMethodsTitle:
+      "Payment Methods",
+
+    paymentMethodsInfo:
+      "Add your own payment methods.",
+
+    paymentTitle:
+      "Payment",
+
+    paymentMethodLabel:
+      "Payment Method",
+
+    amountReceivedLabel:
+      "Amount Received",
+
+    changeLabelInfo:
+      "Change:",
+
+    itemsTitle:
+      "Items",
+
+    addItemButton:
+      "+ Add Item",
+
+    footerTitle:
+      "Receipt Footer",
+
+    footerLine1Label:
+      "Footer Line 1",
+
+    footerLine2Label:
+      "Footer Line 2",
+
+    printButton:
+      "🖨 Print",
+
+    newSaleButton:
+      "+ New Sale",
+
+    item:
+      "Item",
+
+    qty:
+      "Qty",
+
+    total:
+      "Total",
+
+    subtotal:
+      "Subtotal",
+
+    tax:
+      "Tax",
+
+    received:
+      "Received",
+
+    change:
+      "Change",
+
+    paymentShort:
+      "Payment",
+
+    receiptNo:
+      "Receipt No:",
+
+    date:
+      "Date:",
+
+    thankYou:
+      "Thank you for shopping with us!",
+
+    comeAgain:
+      "Please come again."
+
+  },
+
+
+  ar: {
+
+    appTitle:
+      "نظام نقاط البيع",
+
+    appSubtitle:
+      "نظام نقاط بيع يعمل من المتصفح",
+
+    languageTitle:
+      "اللغة",
+
+    languageLabel:
+      "اختر اللغة",
+
+    documentTitle:
+      "المستند",
+
+    documentTypeLabel:
+      "نوع المستند",
+
+    receipt:
+      "إيصال",
+
+    invoice:
+      "فاتورة",
+
+    payment:
+      "إيصال استلام الدفع",
+
+    paperTitle:
+      "حجم الورق",
+
+    paperLabel:
+      "ورق الإيصال",
+
+    customWidthLabel:
+      "العرض المخصص (مم)",
+
+    currentWidthLabel:
+      "العرض الحالي:",
+
+    currencyTitle:
+      "العملة",
+
+    currencyCodeLabel:
+      "رمز العملة",
+
+    currencySymbolLabel:
+      "رمز العملة",
+
+    storeTitle:
+      "معلومات المتجر",
+
+    storeNameLabel:
+      "اسم المتجر",
+
+    storeDetailsLabel:
+      "تفاصيل المتجر",
+
+    storeInfo:
+      "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
+
+    receiptSettingsTitle:
+      "الإيصال",
+
+    receiptNumberLabel:
+      "رقم الإيصال",
+
+    receiptNumberInfo:
+      "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
+
+    taxTitle:
+      "الضريبة",
+
+    taxNameLabel:
+      "اسم الضريبة",
+
+    taxRateLabel:
+      "نسبة الضريبة (%)",
+
+    paymentMethodsTitle:
+      "طرق الدفع",
+
+    paymentMethodsInfo:
+      "أضف طرق الدفع الخاصة بك.",
+
+    paymentTitle:
+      "الدفع",
+
+    paymentMethodLabel:
+      "طريقة الدفع",
+
+    amountReceivedLabel:
+      "المبلغ المستلم",
+
+    changeLabelInfo:
+      "الباقي:",
+
+    itemsTitle:
+      "الأصناف",
+
+    addItemButton:
+      "+ إضافة صنف",
+
+    footerTitle:
+      "تذييل الإيصال",
+
+    footerLine1Label:
+      "السطر الأول",
+
+    footerLine2Label:
+      "السطر الثاني",
+
+    printButton:
+      "🖨 طباعة",
+
+    newSaleButton:
+      "+ بيع جديد",
+
+    item:
+      "الصنف",
+
+    qty:
+      "الكمية",
+
+    total:
+      "الإجمالي",
+
+    subtotal:
+      "المجموع الفرعي",
+
+    tax:
+      "الضريبة",
+
+    received:
+      "المستلم",
+
+    change:
+      "الباقي",
+
+    paymentShort:
+      "الدفع",
+
+    receiptNo:
+      "رقم الإيصال:",
+
+    date:
+      "التاريخ:",
+
+    thankYou:
+      "شكراً لتسوقكم معنا!",
+
+    comeAgain:
+      "نتمنى زيارتكم مرة أخرى."
+
+  },
+
+
+  fil: {
+
+    appTitle:
+      "Online POS",
+
+    appSubtitle:
+      "Simpleng point of sale system",
+
+    languageTitle:
+      "Wika",
+
+    languageLabel:
+      "Pumili ng Wika",
+
+    documentTitle:
+      "Dokumento",
+
+    documentTypeLabel:
+      "Uri ng Dokumento",
+
+    receipt:
+      "Resibo",
+
+    invoice:
+      "Invoice",
+
+    payment:
+      "Katibayan ng Bayad",
+
+    paperTitle:
+      "Laki ng Papel",
+
+    paperLabel:
+      "Papel ng Resibo",
+
+    customWidthLabel:
+      "Custom na Lapad (mm)",
+
+    currentWidthLabel:
+      "Kasalukuyang lapad:",
+
+    currencyTitle:
+      "Currency",
+
+    currencyCodeLabel:
+      "Currency Code",
+
+    currencySymbolLabel:
+      "Currency Symbol",
+
+    storeTitle:
+      "Impormasyon ng Tindahan",
+
+    storeNameLabel:
+      "Pangalan ng Tindahan",
+
+    storeDetailsLabel:
+      "Detalye ng Tindahan",
+
+    storeInfo:
+      "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
+
+    receiptSettingsTitle:
+      "Resibo",
+
+    receiptNumberLabel:
+      "Numero ng Resibo",
+
+    receiptNumberInfo:
+      "Ang susunod na numero ay ginagawa kapag nagsimula ng bagong sale.",
+
+    taxTitle:
+      "Buwis",
+
+    taxNameLabel:
+      "Pangalan ng Buwis",
+
+    taxRateLabel:
+      "Rate ng Buwis (%)",
+
+    paymentMethodsTitle:
+      "Paraan ng Pagbabayad",
+
+    paymentMethodsInfo:
+      "Magdagdag ng sarili mong payment methods.",
+
+    paymentTitle:
+      "Bayad",
+
+    paymentMethodLabel:
+      "Paraan ng Pagbabayad",
+
+    amountReceivedLabel:
+      "Natanggap na Halaga",
+
+    changeLabelInfo:
+      "Sukli:",
+
+    itemsTitle:
+      "Mga Item",
+
+    addItemButton:
+      "+ Magdagdag ng Item",
+
+    footerTitle:
+      "Footer ng Resibo",
+
+    footerLine1Label:
+      "Footer Line 1",
+
+    footerLine2Label:
+      "Footer Line 2",
+
+    printButton:
+      "🖨 I-print",
+
+    newSaleButton:
+      "+ Bagong Sale",
+
+    item:
+      "Item",
+
+    qty:
+      "Qty",
+
+    total:
+      "Total",
+
+    subtotal:
+      "Subtotal",
+
+    tax:
+      "Buwis",
+
+    received:
+      "Natanggap",
+
+    change:
+      "Sukli",
+
+    paymentShort:
+      "Bayad",
+
+    receiptNo:
+      "Resibo No:",
+
+    date:
+      "Petsa:",
+
+    thankYou:
+      "Salamat sa inyong pamimili!",
+
+    comeAgain:
+      "Bumalik po kayo."
+
+  }
+
+};
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let itemCounter = 0;
+
+let currentReceiptNumber = null;
+
+let paymentMethods = [];
+
+
+/* =========================================================
+   DEFAULT PAYMENT METHODS
+   ========================================================= */
+
+function loadPaymentMethods() {
+
+  const saved =
+    localStorage.getItem(
+      "POS_PAYMENT_METHODS"
+    );
+
+
+  if (saved) {
+
+    try {
+
+      paymentMethods =
+        JSON.parse(saved);
+
+    }
+
+    catch {
+
+      paymentMethods = [
+        "Cash",
+        "Card",
+        "Bank Transfer"
+      ];
+
+    }
+
+  }
+
+  else {
+
+    paymentMethods = [
+      "Cash",
+      "Card",
+      "Bank Transfer"
+    ];
+
+  }
+
+
+  renderPaymentMethods();
+
+}
+
+
+/* =========================================================
+   SAVE PAYMENT METHODS
+   ========================================================= */
+
+function savePaymentMethods() {
+
+  localStorage.setItem(
+    "POS_PAYMENT_METHODS",
+    JSON.stringify(
+      paymentMethods
+    )
+  );
+
+}
+
+
+/* =========================================================
+   ADD PAYMENT METHOD
+   ========================================================= */
+
+function addPaymentMethod() {
+
+  const input =
+    document.getElementById(
+      "newPaymentMethod"
+    );
+
+
+  const value =
+    input.value.trim();
+
+
+  if (!value) {
+
+    return;
+
+  }
+
+
+  if (
+    paymentMethods.includes(
+      value
+    )
+  ) {
+
+    alert(
+      "This payment method already exists."
+    );
+
+    return;
+
+  }
+
+
+  paymentMethods.push(
+    value
+  );
+
+
+  input.value = "";
+
+
+  savePaymentMethods();
+
+  renderPaymentMethods();
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   REMOVE PAYMENT METHOD
+   ========================================================= */
+
+function removePaymentMethod(
+  index
+) {
+
+  paymentMethods.splice(
+    index,
+    1
+  );
+
+
+  savePaymentMethods();
+
+  renderPaymentMethods();
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   RENDER PAYMENT METHODS
+   ========================================================= */
+
+function renderPaymentMethods() {
+
+  const list =
+    document.getElementById(
+      "paymentMethodsList"
+    );
+
+
+  const select =
+    document.getElementById(
+      "paymentMethod"
+    );
+
+
+  list.innerHTML = "";
+
+  select.innerHTML = "";
+
+
+  paymentMethods.forEach(
+    function(method, index) {
+
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "payment-item";
+
+
+      row.innerHTML = `
+
+        <span>
+          ${escapeHtml(method)}
+        </span>
+
+        <button
+          onclick="removePaymentMethod(${index})"
+        >
+          ×
+        </button>
+
+      `;
+
+
+      list.appendChild(
+        row
+      );
+
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        method;
+
+
+      option.textContent =
+        method;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RECEIPT NUMBER
+   ========================================================= */
+
+function getNextReceiptNumber() {
+
+  let last =
+    parseInt(
+      localStorage.getItem(
+        "POS_LAST_RECEIPT"
+      ) || "0",
+      10
+    );
+
+
+  last++;
+
+
+  localStorage.setItem(
+    "POS_LAST_RECEIPT",
+    String(last)
+  );
+
+
+  return String(
+    last
+  ).padStart(
+    6,
+    "0"
+  );
+
+}
+
+
+/* =========================================================
+   NEW SALE
+   ========================================================= */
+
+function startFirstSale() {
+
+  currentReceiptNumber =
+    getNextReceiptNumber();
+
+}
+
+
+function newSale() {
+
+  if (
+    !confirm(
+      "Start a new sale?"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  currentReceiptNumber =
+    getNextReceiptNumber();
+
+
+  itemCounter = 0;
+
+
+  document.getElementById(
+    "itemsContainer"
+  ).innerHTML = "";
+
+
+  document.getElementById(
+    "amountReceived"
+  ).value = "0";
+
+
+  addItem();
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+function updateDate() {
+
+  const now =
+    new Date();
+
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const year =
+    now.getFullYear();
+
+
+  const hours =
+    String(
+      now.getHours()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const minutes =
+    String(
+      now.getMinutes()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const seconds =
+    String(
+      now.getSeconds()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  document.getElementById(
+    "receiptDate"
+  ).textContent =
+
+    `${day}/${month}/${year} ` +
+    `${hours}:${minutes}:${seconds}`;
+
+}
+
+
+/* =========================================================
+   ADD ITEM
+   ========================================================= */
+
+function addItem() {
+
+  itemCounter++;
+
+
+  const container =
+    document.getElementById(
+      "itemsContainer"
+    );
+
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.className =
+    "item-row";
+
+
+  div.id =
+    "item-" +
+    itemCounter;
+
+
+  div.innerHTML = `
+
+    <h4>
+      Item ${itemCounter}
+    </h4>
+
+
+    <label>
+      Item Name
+    </label>
+
+    <input
+      class="item-name-input"
+      type="text"
+      placeholder="Example: Coca Cola"
+      oninput="updateReceipt()"
+    >
+
+
+    <label>
+      Quantity
+    </label>
+
+    <input
+      class="item-qty-input"
+      type="number"
+      value="1"
+      min="0"
+      step="1"
+      oninput="updateReceipt()"
+    >
+
+
+    <label>
+      Price
+    </label>
+
+    <input
+      class="item-price-input"
+      type="number"
+      value="0"
+      min="0"
+      step="0.001"
+      oninput="updateReceipt()"
+    >
+
+
+    <button
+      class="remove-item"
+      onclick="removeItem(${itemCounter})"
+    >
+
+      Remove
+
+    </button>
+
+  `;
+
+
+  container.appendChild(
+    div
+  );
+
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   REMOVE ITEM
+   ========================================================= */
+
+function removeItem(
+  id
+) {
+
+  const element =
+    document.getElementById(
+      "item-" + id
+    );
+
+
+  if (element) {
+
+    element.remove();
+
+  }
+
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   PAPER SIZE
+   ========================================================= */
+
+function changePaperSize() {
+
+  const select =
+    document.getElementById(
+      "paperSize"
+    );
+
+
+  const custom =
+    document.getElementById(
+      "customWidthContainer"
+    );
+
+
+  let width;
+
+
+  if (
+    select.value ===
+    "custom"
+  ) {
+
+    custom.classList.remove(
+      "hidden"
+    );
+
+
+    width =
+      Number(
+        document.getElementById(
+          "customWidth"
+        ).value
+      ) || 80;
+
+  }
+
+  else {
+
+    custom.classList.add(
+      "hidden"
+    );
+
+
+    width =
+      Number(
+        select.value
+      );
+
+  }
+
+
+  document.getElementById(
+    "receipt"
+  ).style.width =
+    width + "mm";
+
+
+  document.getElementById(
+    "paperWidthDisplay"
+  ).textContent =
+    width;
+
+
+  updatePrintStyle(
+    width
+  );
+
+}
+
+
+/* =========================================================
+   PRINT STYLE
+   ========================================================= */
+
+function updatePrintStyle(
+  width
+) {
+
+  let style =
+    document.getElementById(
+      "dynamicPrintStyle"
+    );
+
+
+  if (!style) {
+
+    style =
+      document.createElement(
+        "style"
+      );
+
+
+    style.id =
+      "dynamicPrintStyle";
+
+
+    document.head.appendChild(
+      style
+    );
+
+  }
+
+
+  style.textContent = `
+
+    @media print {
+
+      @page {
+
+        size: ${width}mm auto;
+
+        margin: 0;
+
+      }
+
+      .receipt {
+
+        width: ${width}mm !important;
+
+      }
+
+    }
+
+  `;
+
+}
+
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+function printReceipt() {
+
+  const select =
+    document.getElementById(
+      "paperSize"
+    );
+
+
+  let width;
+
+
+  if (
+    select.value ===
+    "custom"
+  ) {
+
+    width =
+      Number(
+        document.getElementById(
+          "customWidth"
+        ).value
+      ) || 80;
+
+  }
+
+  else {
+
+    width =
+      Number(
+        select.value
+      );
+
+  }
+
+
+  updatePrintStyle(
+    width
+  );
+
+
+  window.print();
+
+}
+
+
+/* =========================================================
+   DOCUMENT TITLE
+   ========================================================= */
+
+function getDocumentTitle() {
+
+  const language =
+    document.getElementById(
+      "language"
+    ).value;
+
+
+  const t =
+    translations[
+      language
+    ];
+
+
+  return document.getElementById(
+    "documentType"
+  ).value === "invoice"
+
+    ? t.invoice
+
+    : document.getElementById(
+        "documentType"
+      ).value === "payment"
+
+      ? t.payment
+
+      : t.receipt;
+
+}
+
+
+/* =========================================================
+   UPDATE RECEIPT
+   ========================================================= */
+
+function updateReceipt() {
+
+
+  const language =
+    document.getElementById(
+      "language"
+    ).value;
+
+
+  const t =
+    translations[
+      language
+    ];
+
+
+  /* -----------------------------------
+     CURRENCY
+     ----------------------------------- */
+
+  const symbol =
+    document.getElementById(
+      "currencySymbol"
+    ).value.trim()
+    || "BD";
+
+
+  /* -----------------------------------
+     STORE NAME
+     ----------------------------------- */
+
+  const storeName =
+    document.getElementById(
+      "storeName"
+    ).value;
+
+
+  document.getElementById(
+    "receiptStoreName"
+  ).textContent =
+    storeName ||
+    "Online POS";
+
+
+  /* -----------------------------------
+     STORE DETAILS
+     ----------------------------------- */
+
+  const details =
+    document.getElementById(
+      "storeDetails"
+    ).value;
+
+
+  document.getElementById(
+    "receiptStoreDetails"
+  ).innerHTML =
+    escapeHtml(
+      details
+    ).replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  /* -----------------------------------
+     DOCUMENT TITLE
+     ----------------------------------- */
+
+  document.getElementById(
+    "receiptDocumentTitle"
+  ).textContent =
+    getDocumentTitle();
+
+
+  /* -----------------------------------
+     RECEIPT NUMBER
+     ----------------------------------- */
+
+  document.getElementById(
+    "receiptNumber"
+  ).textContent =
+    currentReceiptNumber;
+
+
+  document.getElementById(
+    "receiptNumberInput"
+  ).value =
+    currentReceiptNumber;
+
+
+  /* -----------------------------------
+     TAX
+     ----------------------------------- */
+
+  const taxName =
+    document.getElementById(
+      "taxName"
+    ).value.trim()
+    || t.tax;
+
+
+  const taxRate =
+    Number(
+      document.getElementById(
+        "taxRate"
+      ).value
+    ) || 0;
+
+
+  document.getElementById(
+    "receiptTaxLabel"
+  ).textContent =
+
+    taxName +
+    " (" +
+    taxRate +
+    "%)";
+
+
+  /* -----------------------------------
+     ITEMS
+     ----------------------------------- */
+
+  const rows =
+    document.querySelectorAll(
+      ".item-row"
+    );
+
+
+  const receiptItems =
+    document.getElementById(
+      "receiptItems"
+    );
+
+
+  receiptItems.innerHTML = "";
+
+
+  let subtotal = 0;
+
+
+  rows.forEach(
+    function(row) {
+
+
+      const name =
+        row.querySelector(
+          ".item-name-input"
+        ).value;
+
+
+      const qty =
+        Number(
+          row.querySelector(
+            ".item-qty-input"
+          ).value
+        ) || 0;
+
+
+      const price =
+        Number(
+          row.querySelector(
+            ".item-price-input"
+          ).value
+        ) || 0;
+
+
+      const total =
+        qty * price;
+
+
+      subtotal +=
+        total;
+
+
+      if (
+        name ||
+        qty ||
+        price
+      ) {
+
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+
+        item.className =
+          "receipt-item";
+
+
+        item.innerHTML = `
+
+          <div class="receipt-item-line">
+
+            <span class="receipt-item-name">
+
+              ${escapeHtml(
+                name || t.item
+              )}
+
+            </span>
+
+
+            <span class="receipt-item-qty">
+
+              ${qty}
+
+            </span>
+
+
+            <span class="receipt-item-total">
+
+              ${escapeHtml(symbol)}
+              ${total.toFixed(3)}
+
+            </span>
+
+          </div>
+
+
+          <div class="receipt-item-detail">
+
+            ${escapeHtml(symbol)}
+            ${price.toFixed(3)}
+            × ${qty}
+
+          </div>
+
+        `;
+
+
+        receiptItems.appendChild(
+          item
+        );
+
+      }
+
+    }
+  );
+
+
+  /* -----------------------------------
+     TAX CALCULATION
+     ----------------------------------- */
+
+  const tax =
+    subtotal *
+    taxRate /
+    100;
+
+
+  const grandTotal =
+    subtotal +
+    tax;
+
+
+  /* -----------------------------------
+     PAYMENT
+     ----------------------------------- */
+
+  const paymentMethod =
+    document.getElementById(
+      "paymentMethod"
+    ).value ||
+    "";
+
+
+  let received =
+    Number(
+      document.getElementById(
+        "amountReceived"
+      ).value
+    ) || 0;
+
+
+  /*
+     For card / bank transfer etc.,
+     user can still enter exact amount.
+  */
+
+
+  let change =
+    received -
+    grandTotal;
+
+
+  if (
+    change < 0
+  ) {
+
+    change = 0;
+
+  }
+
+
+  /* -----------------------------------
+     TOTALS
+     ----------------------------------- */
+
+  document.getElementById(
+    "subtotal"
+  ).textContent =
+
+    symbol +
+    " " +
+    subtotal.toFixed(3);
+
+
+  document.getElementById(
+    "taxAmount"
+  ).textContent =
+
+    symbol +
+    " " +
+    tax.toFixed(3);
+
+
+  document.getElementById(
+    "grandTotal"
+  ).textContent =
+
+    symbol +
+    " " +
+    grandTotal.toFixed(3);
+
+
+  document.getElementById(
+    "receiptPaymentMethod"
+  ).textContent =
+    paymentMethod;
+
+
+  document.getElementById(
+    "receiptReceived"
+  ).textContent =
+
+    symbol +
+    " " +
+    received.toFixed(3);
+
+
+  document.getElementById(
+    "receiptChange"
+  ).textContent =
+
+    symbol +
+    " " +
+    change.toFixed(3);
+
+
+  document.getElementById(
+    "changePreview"
+  ).textContent =
+
+    symbol +
+    " " +
+    change.toFixed(3);
+
+
+  /* -----------------------------------
+     FOOTER
+     ----------------------------------- */
+
+  document.getElementById(
+    "receiptFooter1"
+  ).textContent =
+    document.getElementById(
+      "footer1"
+    ).value;
+
+
+  document.getElementById(
+    "receiptFooter2"
+  ).textContent =
+    document.getElementById(
+      "footer2"
+    ).value;
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+function changeLanguage() {
+
+  const language =
+    document.getElementById(
+      "language"
+    ).value;
+
+
+  const t =
+    translations[
+      language
+    ];
+
+
+  document.documentElement.lang =
+    language;
+
+
+  /*
+     Arabic direction
+  */
+
+  if (
+    language === "ar"
+  ) {
+
+    document.body.dir =
+      "rtl";
+
+  }
+
+  else {
+
+    document.body.dir =
+      "ltr";
+
+  }
+
+
+  document.getElementById(
+    "appTitle"
+  ).textContent =
+    t.appTitle;
+
+
+  document.getElementById(
+    "appSubtitle"
+  ).textContent =
+    t.appSubtitle;
+
+
+  document.getElementById(
+    "languageTitle"
+  ).textContent =
+    t.languageTitle;
+
+
+  document.getElementById(
+    "languageLabel"
+  ).textContent =
+    t.languageLabel;
+
+
+  document.getElementById(
+    "documentTitle"
+  ).textContent =
+    t.documentTitle;
+
+
+  document.getElementById(
+    "documentTypeLabel"
+  ).textContent =
+    t.documentTypeLabel;
+
+
+  document.getElementById(
+    "paperTitle"
+  ).textContent =
+    t.paperTitle;
+
+
+  document.getElementById(
+    "paperLabel"
+  ).textContent =
+    t.paperLabel;
+
+
+  document.getElementById(
+    "customWidthLabel"
+  ).textContent =
+    t.customWidthLabel;
+
+
+  document.getElementById(
+    "currentWidthLabel"
+  ).textContent =
+    t.currentWidthLabel;
+
+
+  document.getElementById(
+    "currencyTitle"
+  ).textContent =
+    t.currencyTitle;
+
+
+  document.getElementById(
+    "currencyCodeLabel"
+  ).textContent =
+    t.currencyCodeLabel;
+
+
+  document.getElementById(
+    "currencySymbolLabel"
+  ).textContent =
+    t.currencySymbolLabel;
+
+
+  document.getElementById(
+    "storeTitle"
+  ).textContent =
+    t.storeTitle;
+
+
+  document.getElementById(
+    "storeNameLabel"
+  ).textContent =
+    t.storeNameLabel;
+
+
+  document.getElementById(
+    "storeDetailsLabel"
+  ).textContent =
+    t.storeDetailsLabel;
+
+
+  document.getElementById(
+    "storeInfo"
+  ).textContent =
+    t.storeInfo;
+
+
+  document.getElementById(
+    "receiptSettingsTitle"
+  ).textContent =
+    t.receiptSettingsTitle;
+
+
+  document.getElementById(
+    "receiptNumberLabel"
+  ).textContent =
+    t.receiptNumberLabel;
+
+
+  document.getElementById(
+    "receiptNumberInfo"
+  ).textContent =
+    t.receiptNumberInfo;
+
+
+  document.getElementById(
+    "taxTitle"
+  ).textContent =
+    t.taxTitle;
+
+
+  document.getElementById(
+    "taxNameLabel"
+  ).textContent =
+    t.taxNameLabel;
+
+
+  document.getElementById(
+    "taxRateLabel"
+  ).textContent =
+    t.taxRateLabel;
+
+
+  document.getElementById(
+    "paymentMethodsTitle"
+  ).textContent =
+    t.paymentMethodsTitle;
+
+
+  document.getElementById(
+    "paymentMethodsInfo"
+  ).textContent =
+    t.paymentMethodsInfo;
+
+
+  document.getElementById(
+    "paymentTitle"
+  ).textContent =
+    t.paymentTitle;
+
+
+  document.getElementById(
+    "paymentMethodLabel"
+  ).textContent =
+    t.paymentMethodLabel;
+
+
+  document.getElementById(
+    "amountReceivedLabel"
+  ).textContent =
+    t.amountReceivedLabel;
+
+
+  document.getElementById(
+    "changeLabelInfo"
+  ).textContent =
+    t.changeLabelInfo;
+
+
+  document.getElementById(
+    "itemsTitle"
+  ).textContent =
+    t.itemsTitle;
+
+
+  document.getElementById(
+    "addItemButton"
+  ).textContent =
+    t.addItemButton;
+
+
+  document.getElementById(
+    "footerTitle"
+  ).textContent =
+    t.footerTitle;
+
+
+  document.getElementById(
+    "footerLine1Label"
+  ).textContent =
+    t.footerLine1Label;
+
+
+  document.getElementById(
+    "footerLine2Label"
+  ).textContent =
+    t.footerLine2Label;
+
+
+  document.getElementById(
+    "printButton"
+  ).textContent =
+    t.printButton;
+
+
+  document.getElementById(
+    "newSaleButton"
+  ).textContent =
+    t.newSaleButton;
+
+
+  /* RECEIPT */
+
+  document.getElementById(
+    "receiptItemHeader"
+  ).textContent =
+    t.item;
+
+
+  document.getElementById(
+    "receiptQtyHeader"
+  ).textContent =
+    t.qty;
+
+
+  document.getElementById(
+    "receiptTotalHeader"
+  ).textContent =
+    t.total;
+
+
+  document.getElementById(
+    "subtotalLabel"
+  ).textContent =
+    t.subtotal;
+
+
+  document.getElementById(
+    "totalLabel"
+  ).textContent =
+    t.total;
+
+
+  document.getElementById(
+    "receiptPaymentMethodLabel"
+  ).textContent =
+    t.paymentShort;
+
+
+  document.getElementById(
+    "receiptReceivedLabel"
+  ).textContent =
+    t.received;
+
+
+  document.getElementById(
+    "receiptChangeLabel"
+  ).textContent =
+    t.change;
+
+
+  document.getElementById(
+    "receiptNumberText"
+  ).textContent =
+    t.receiptNo;
+
+
+  document.getElementById(
+    "receiptDateLabel"
+  ).textContent =
+    t.date;
+
+
+  updateReceipt();
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHtml(
+  text
+) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    text;
+
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadPaymentMethods();
+
+startFirstSale();
+
+addItem();
+
+changePaperSize();
+
+updateDate();
+
+changeLanguage();
+
+updateReceipt();
+
+
+/* Update clock */
+
+setInterval(
+  updateDate,
+  1000
+);
+
+
+/* =========================================================
+   SAVE SETTINGS AUTOMATICALLY
+   ========================================================= */
+
+const settingsFields = [
+
+  "currencyCode",
+  "currencySymbol",
+  "storeName",
+  "storeDetails",
+  "taxName",
+  "taxRate",
+  "footer1",
+  "footer2"
+
+];
+
+
+settingsFields.forEach(
+  function(id) {
+
+    const element =
+      document.getElementById(
+        id
+      );
+
+
+    const saved =
+      localStorage.getItem(
+        "POS_" + id
+      );
+
+
+    if (
+      saved !== null
+    ) {
+
+      element.value =
+        saved;
+
+    }
+
+
+    element.addEventListener(
+      "input",
+      function() {
+
+        localStorage.setItem(
+          "POS_" + id,
+          element.value
+        );
+
+      }
+    );
+
+  }
+);
+
+
+</script>
+
+</body>
+</html>
