@@ -572,6 +572,40 @@ function symbolNow() { return document.getElementById("currencySymbol").value.tr
 function t() { return translations[document.getElementById("language").value]; }
 
 /* =========================================================
+   STORAGE ABSTRACTION
+   Uses Claude's artifact storage (window.storage) when this page is
+   viewed inside Claude's preview. When opened as a standalone HTML
+   file in a regular browser (e.g. downloaded and used on a shop
+   computer), window.storage does not exist, so this falls back to
+   the browser's own localStorage — which persists on that device
+   until its site data/cache is cleared.
+   ========================================================= */
+function hasArtifactStorage() {
+  return typeof window !== "undefined" && !!window.storage && typeof window.storage.get === "function";
+}
+
+async function storageGet(key) {
+  if (hasArtifactStorage()) {
+    try {
+      const res = await window.storage.get(key, false);
+      return (res && res.value !== undefined) ? res.value : null;
+    } catch (e) { return null; }
+  }
+  try { return localStorage.getItem("onlinepos_" + key); }
+  catch (e) { return null; }
+}
+
+async function storageSet(key, value) {
+  if (hasArtifactStorage()) {
+    try { await window.storage.set(key, value, false); }
+    catch (e) { console.error("Could not save " + key, e); }
+    return;
+  }
+  try { localStorage.setItem("onlinepos_" + key, value); }
+  catch (e) { console.error("Could not save " + key, e); }
+}
+
+/* =========================================================
    LEFT TAB SIDEBAR
    ========================================================= */
 function selectTab(name) {
@@ -598,16 +632,16 @@ function selectTab(name) {
    until the browser's site data/cache is cleared)
    ========================================================= */
 async function loadSettings() {
-  try {
-    const res = await window.storage.get("pos-settings");
-    if (res && res.value) {
-      const s = JSON.parse(res.value);
+  const raw = await storageGet("pos-settings");
+  if (raw) {
+    try {
+      const s = JSON.parse(raw);
       Object.keys(s).forEach(function(key) {
         const el = document.getElementById(key);
         if (el) el.value = s[key];
       });
-    }
-  } catch (e) { /* no saved settings yet, defaults from HTML are used */ }
+    } catch (e) { /* corrupt or missing settings, defaults from HTML are used */ }
+  }
 }
 
 async function saveSettings() {
@@ -619,45 +653,38 @@ async function saveSettings() {
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
     zoomRange: val("zoomRange")
   };
-  try { await window.storage.set("pos-settings", JSON.stringify(settings), false); }
-  catch (e) { console.error("Could not save settings", e); }
+  await storageSet("pos-settings", JSON.stringify(settings));
 }
 
 async function loadPaymentMethods() {
+  const raw = await storageGet("pos-payment-methods");
   try {
-    const res = await window.storage.get("pos-payment-methods");
-    paymentMethods = (res && res.value) ? JSON.parse(res.value) : ["Cash", "Card", "Bank Transfer"];
+    paymentMethods = raw ? JSON.parse(raw) : ["Cash", "Card", "Bank Transfer"];
   } catch (e) { paymentMethods = ["Cash", "Card", "Bank Transfer"]; }
   renderPaymentMethods();
 }
 
 async function savePaymentMethods() {
-  try { await window.storage.set("pos-payment-methods", JSON.stringify(paymentMethods), false); }
-  catch (e) { console.error("Could not save payment methods", e); }
+  await storageSet("pos-payment-methods", JSON.stringify(paymentMethods));
 }
 
 async function loadProductsFromStorage() {
+  const raw = await storageGet("pos-products");
   try {
-    const res = await window.storage.get("pos-products");
-    products = (res && res.value) ? JSON.parse(res.value) : [];
+    products = raw ? JSON.parse(raw) : [];
   } catch (e) { products = []; }
   renderProducts();
 }
 
 async function saveProducts() {
-  try { await window.storage.set("pos-products", JSON.stringify(products), false); }
-  catch (e) { console.error("Could not save products", e); }
+  await storageSet("pos-products", JSON.stringify(products));
 }
 
 async function getNextReceiptNumber() {
-  let last = 0;
-  try {
-    const res = await window.storage.get("pos-receipt-counter");
-    last = (res && res.value) ? (parseInt(res.value, 10) || 0) : 0;
-  } catch (e) { last = 0; }
+  const raw = await storageGet("pos-receipt-counter");
+  let last = parseInt(raw, 10) || 0;
   last++;
-  try { await window.storage.set("pos-receipt-counter", String(last), false); }
-  catch (e) { console.error("Could not save receipt counter", e); }
+  await storageSet("pos-receipt-counter", String(last));
   return String(last).padStart(6, "0");
 }
 
