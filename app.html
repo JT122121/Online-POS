@@ -513,8 +513,28 @@ TRN: 100000000000000</textarea>
 
       <div class="settings-panel-content" id="panel-products">
         <h3 id="productsTitle">Products</h3>
+        <label id="addProductNameLabel">Product Name</label>
+        <input id="newProductName" placeholder="e.g. Coca Cola 330ml">
+        <div class="two-columns">
+          <div>
+            <label id="addProductPriceLabel">Price</label>
+            <input id="newProductPrice" type="number" min="0" step="0.001" placeholder="0.000">
+          </div>
+          <div>
+            <label id="addProductCategoryLabel">Category (optional)</label>
+            <input id="newProductCategory" placeholder="e.g. Beverages">
+          </div>
+        </div>
+        <label id="addProductSkuLabel">SKU (optional)</label>
+        <input id="newProductSku" placeholder="e.g. 8901">
+        <button type="button" class="small-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:10px; width:100%;">+ Add Product</button>
+        <div id="addProductErrorBox" class="error-text hidden"></div>
+
+        <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
+        <div id="manageProductsEmpty" class="products-empty hidden">No products yet — add one above or upload a CSV below.</div>
+
+        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.</div>
         <input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
-        <div class="info" id="productsUploadHint" style="display:block;">Upload a CSV with columns: Name, Price, and optionally Category and SKU. Category is used to group items on the left panel.</div>
         <div id="csvErrorBox" class="error-text hidden"></div>
         <div id="csvSuccessBox" class="success-text hidden"></div>
         <div class="csv-actions">
@@ -633,7 +653,10 @@ en: {
   receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "The next number is generated when you start a new sale.",
   taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
-  productsTitle: "Products", productsUploadHint: "Upload a CSV with columns: Name, Price, and optionally Category and SKU. Category is used to group items on the left panel.",
+  productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.",
+  addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
+  addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
+  manageProductsEmpty: "No products yet — add one above or upload a CSV below.",
   productsSampleButton: "Download Sample CSV", productsClearButton: "Clear Products",
   productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
   productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
@@ -678,7 +701,10 @@ ar: {
   receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
   taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
-  productsTitle: "المنتجات", productsUploadHint: "قم برفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج.",
+  productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
+  addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
+  addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
+  manageProductsEmpty: "لا توجد منتجات بعد — أضف واحداً أعلاه أو ارفع ملف CSV أدناه.",
   productsSampleButton: "تحميل نموذج CSV", productsClearButton: "مسح المنتجات",
   productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
   productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
@@ -715,7 +741,10 @@ fil: {
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
   taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
-  productsTitle: "Mga Produkto", productsUploadHint: "Mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU.",
+  productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
+  addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
+  addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
+  manageProductsEmpty: "Wala pang produkto — magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
   productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
   productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
@@ -752,7 +781,10 @@ hi: {
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
   taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
-  productsTitle: "उत्पाद", productsUploadHint: "Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं।",
+  productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
+  addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
+  addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
+  manageProductsEmpty: "अभी कोई उत्पाद नहीं है — ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
   productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
   productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
@@ -789,7 +821,10 @@ es: {
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
   taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
-  productsTitle: "Productos", productsUploadHint: "Sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU.",
+  productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
+  addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
+  addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
+  manageProductsEmpty: "Aún no hay productos — agrega uno arriba o sube un CSV abajo.",
   productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
   productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
@@ -826,7 +861,10 @@ th: {
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
   taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
-  productsTitle: "สินค้า", productsUploadHint: "อัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้",
+  productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
+  addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
+  addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
+  manageProductsEmpty: "ยังไม่มีสินค้า — เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
   productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
   productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
@@ -1633,6 +1671,63 @@ function downloadSampleCsv() {
   URL.revokeObjectURL(url);
 }
 
+async function addSingleProduct() {
+  const nameEl = document.getElementById("newProductName");
+  const priceEl = document.getElementById("newProductPrice");
+  const categoryEl = document.getElementById("newProductCategory");
+  const skuEl = document.getElementById("newProductSku");
+  const errorBox = document.getElementById("addProductErrorBox");
+  errorBox.classList.add("hidden");
+
+  const name = nameEl.value.trim();
+  const price = parseFloat(priceEl.value);
+
+  if (!name) { errorBox.textContent = tr("addProductNameError"); errorBox.classList.remove("hidden"); return; }
+  if (isNaN(price) || price < 0) { errorBox.textContent = tr("addProductPriceError"); errorBox.classList.remove("hidden"); return; }
+
+  products.push({
+    name: name,
+    price: price,
+    category: categoryEl.value.trim(),
+    sku: skuEl.value.trim()
+  });
+  await saveProducts();
+  renderProductCatalog();
+
+  nameEl.value = "";
+  priceEl.value = "";
+  categoryEl.value = "";
+  skuEl.value = "";
+  nameEl.focus();
+}
+
+async function removeProduct(index) {
+  products.splice(index, 1);
+  await saveProducts();
+  renderProductCatalog();
+}
+
+function renderManageProductsList() {
+  const list = document.getElementById("manageProductsList");
+  const empty = document.getElementById("manageProductsEmpty");
+  if (!list || !empty) return;
+  const symbol = symbolNow();
+
+  list.innerHTML = "";
+  empty.classList.toggle("hidden", products.length > 0);
+  empty.textContent = tr("manageProductsEmpty");
+
+  products.forEach(function(p, index) {
+    const row = document.createElement("div");
+    row.className = "payment-item";
+    row.innerHTML =
+      "<span>" + escapeHtml(p.name) + " — " + escapeHtml(symbol) + " " + Number(p.price).toFixed(3) +
+      (p.category ? " <span style=\"color:var(--muted);\">(" + escapeHtml(p.category) + ")</span>" : "") + "</span>" +
+      "<button onclick=\"removeProduct(" + index + ")\">×</button>";
+    list.appendChild(row);
+  });
+}
+
 async function clearProducts() {
   if (!products.length) return;
   if (!confirm(tr("productsClearConfirm"))) return;
@@ -1713,6 +1808,7 @@ function renderProductCatalog() {
   });
 
   updateCartCountBadge();
+  renderManageProductsList();
 }
 
 function updateCartCountBadge() {
@@ -1917,6 +2013,8 @@ function changeLanguage() {
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
+    addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
+    addProductButton: "addProductButton",
     productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
     footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
     paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
