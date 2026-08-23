@@ -64,6 +64,8 @@ button:active { transform: translateY(1px); }
 .header-actions { display: flex; gap: 8px; }
 .header-actions button { padding: 11px 17px; border: 1px solid transparent; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
 #settingsButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+.active-cashier-select { padding: 11px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; background: var(--panel); color: var(--ink); }
+.active-cashier-select:focus { outline: none; border-color: var(--accent); }
 #settingsButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #printButton { background: var(--ink); color: #fff; }
 #printButton:hover { background: #263832; }
@@ -76,6 +78,25 @@ button:active { transform: translateY(1px); }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
 .site-footer span { margin: 0 8px; }
+
+.sales-summary-panel { max-width: 1500px; margin: 0 auto 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
+.ssp-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.ssp-header h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.ssp-header input[type="date"] { width: auto; padding: 8px 10px; font-size: 13px; }
+.ssp-breakdown { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.ssp-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: #f8f7f2; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; }
+.ssp-row span:last-child { font-family: var(--font-mono); color: var(--ink-soft); }
+.ssp-empty { padding: 14px 8px; text-align: center; color: var(--muted); font-size: 12.5px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
+.ssp-by-cashier { margin-bottom: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.ssp-subheading { margin: 0 0 10px; font-family: var(--font-display); font-weight: 600; font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.ssp-cashier-block { margin-bottom: 12px; }
+.ssp-cashier-block:last-child { margin-bottom: 0; }
+.ssp-cashier-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.ssp-cashier-block .ssp-row { background: #fff; border: 1px solid var(--line-soft); font-weight: 500; font-size: 12.5px; padding: 8px 12px; margin-bottom: 5px; }
+.ssp-cashier-block .ssp-row:last-child { margin-bottom: 0; }
+.ssp-cashier-total { font-weight: 700 !important; }
+.ssp-total-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--ink); color: #fff; border-radius: var(--radius-sm); font-size: 14.5px; font-weight: 700; }
+.ssp-total-row span:last-child { font-family: var(--font-mono); }
 
 .left-panel { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
 
@@ -177,6 +198,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-row .shr-date { color: var(--muted); font-size: 10.5px; }
 .sales-history-row .shr-total { font-weight: 700; text-align: right; font-family: var(--font-mono); }
 .sales-history-empty { padding: 18px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
+.sales-history-group-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); margin-bottom: 6px; background: #f4f3ee; cursor: pointer; }
+.sales-history-group-header:hover { background: #eeece2; }
+.sales-history-group-header.expanded { background: var(--accent-tint); border-color: #bfe0cf; margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.shg-left { display: flex; align-items: center; gap: 8px; }
+.shg-chevron { color: var(--accent-dark); font-size: 11px; width: 10px; }
+.shg-date { font-weight: 700; font-size: 12.5px; }
+.shg-count { font-size: 11px; color: var(--muted); }
+.shg-total { font-weight: 700; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent-dark); }
+.sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 8px 8px 2px; margin-bottom: 6px; }
+.sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
 .receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d8d5c9; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
@@ -219,7 +250,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   body { padding: 10px; }
   .app-header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .header-actions { width: 100%; }
-  .header-actions button { flex: 1; justify-content: center; }
+  .header-actions button, .header-actions select { flex: 1; justify-content: center; }
   .app { display: flex; flex-direction: column; gap: 14px; }
   .left-panel { position: relative; top: auto; width: 100%; max-height: none; }
   .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
@@ -232,7 +263,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .app-header, .left-panel, .settings-overlay, .site-footer { display: none !important; }
+  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -264,11 +295,29 @@ gtag('config', 'G-XXXXXXXXXX');
 </div>
 </a>
 <div class="header-actions">
+<select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
+<button id="summaryButton" onclick="toggleSalesSummary()">📊 <span id="summaryButtonLabel">Summary</span></button>
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
 </div>
 </header>
+
+<div id="salesSummaryPanel" class="sales-summary-panel hidden">
+<div class="ssp-header">
+<h3 id="salesSummaryTitle">Sales Summary</h3>
+<input id="summaryDateInput" type="date" onchange="renderSalesSummary()">
+</div>
+<div id="summaryBreakdown" class="ssp-breakdown"></div>
+<div id="summaryByCashier" class="ssp-by-cashier hidden">
+<h4 id="summaryByCashierTitle" class="ssp-subheading">By Cashier</h4>
+<div id="summaryByCashierBody"></div>
+</div>
+<div class="ssp-total-row">
+<span id="summaryTotalLabel">Overall Total</span>
+<span id="summaryTotalAmount">BD 0.000</span>
+</div>
+</div>
 
 <div class="app">
 
@@ -363,6 +412,8 @@ gtag('config', 'G-XXXXXXXXXX');
 <a href="privacy.html">Privacy Policy</a>
 <span>·</span>
 <a href="terms.html">Terms of Service</a>
+<span>·</span>
+<a href="contact.html">Contact</a>
 </footer>
 
 <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
@@ -377,6 +428,7 @@ gtag('config', 'G-XXXXXXXXXX');
       <button class="settings-tab-item" data-tab="document" onclick="selectSettingsTab('document')">📄 <span>Document</span></button>
       <button class="settings-tab-item" data-tab="tax" onclick="selectSettingsTab('tax')">🧮 <span>Tax &amp; Discount</span></button>
       <button class="settings-tab-item" data-tab="paymentMethods" onclick="selectSettingsTab('paymentMethods')">💳 <span>Payment Methods</span></button>
+      <button class="settings-tab-item" data-tab="cashiers" onclick="selectSettingsTab('cashiers')">🧑‍💼 <span>Cashiers</span></button>
       <button class="settings-tab-item" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
       <button class="settings-tab-item" data-tab="salesHistory" onclick="selectSettingsTab('salesHistory')">📊 <span>Sales History</span></button>
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
@@ -409,9 +461,6 @@ TRN: 100000000000000</textarea>
           </div>
         </div>
         <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.</div>
-        <label id="cashierNameLabel">Cashier Name</label>
-        <input id="cashierName" placeholder="e.g. John" oninput="updateReceipt()">
-        <div class="info" id="cashierNameInfo" style="display:block;">Optional — printed on every receipt. Leave blank to hide it.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-document">
@@ -445,6 +494,16 @@ TRN: 100000000000000</textarea>
         </div>
         <div id="paymentMethodsList" class="payment-list"></div>
         <div class="info" id="paymentMethodsInfo" style="display:block;">These appear in the Payment Method dropdown at checkout.</div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-cashiers">
+        <h3 id="cashiersTitle">Cashiers</h3>
+        <div class="payment-editor">
+          <input id="newCashier" placeholder="e.g. John">
+          <button class="small-btn" onclick="addCashier()">+</button>
+        </div>
+        <div id="cashiersList" class="payment-list"></div>
+        <div class="info" id="cashiersInfo" style="display:block;">These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the Summary panel.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-products">
@@ -558,8 +617,11 @@ en: {
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
   storeLogoLabel: "Company Logo", logoEmptyLabel: "No logo", removeLogoButton: "Remove logo",
   storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.",
-  cashierNameLabel: "Cashier Name", cashierNameInfo: "Optional — printed on every receipt. Leave blank to hide it.", cashierLabelText: "Cashier:",
+  cashiersTitle: "Cashiers", cashiersInfo: "These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the Summary panel.", cashierLabelText: "Cashier:",
+  activeCashierPlaceholder: "No cashier selected", summaryByCashierTitle: "By Cashier", summaryNoCashierLabel: "No cashier selected",
   customerNameLabel: "Customer Name", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
+  summaryButtonLabel: "Summary", salesSummaryTitle: "Sales Summary", summaryTotalLabel: "Overall Total",
+  summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
@@ -600,8 +662,11 @@ ar: {
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
   storeLogoLabel: "شعار الشركة", logoEmptyLabel: "لا يوجد شعار", removeLogoButton: "إزالة الشعار",
   storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل — يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
-  cashierNameLabel: "اسم الكاشير", cashierNameInfo: "اختياري — يُطبع على كل إيصال. اتركه فارغاً لإخفائه.", cashierLabelText: "الكاشير:",
+  cashiersTitle: "الكاشيرون", cashiersInfo: "تظهر هذه في قائمة الكاشير أعلى الشاشة الرئيسية. من يتم اختياره يُطبع على كل إيصال ويظهر في لوحة الملخص.", cashierLabelText: "الكاشير:",
+  activeCashierPlaceholder: "لم يتم اختيار كاشير", summaryByCashierTitle: "حسب الكاشير", summaryNoCashierLabel: "لم يتم اختيار كاشير",
   customerNameLabel: "اسم العميل", customerNamePlaceholder: "اختياري", customerLabelText: "العميل:",
+  summaryButtonLabel: "الملخص", salesSummaryTitle: "ملخص المبيعات", summaryTotalLabel: "الإجمالي الكلي",
+  summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
@@ -635,8 +700,11 @@ fil: {
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
   storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload — mawawala lang kung burahin ang data ng site o alisin ito dito.",
-  cashierNameLabel: "Pangalan ng Kahero", cashierNameInfo: "Opsyonal — nakalimbag sa bawat resibo. Iwanang blangko para itago.", cashierLabelText: "Kahero:",
+  cashiersTitle: "Mga Kahero", cashiersInfo: "Lalabas ito sa dropdown ng kahero sa itaas ng main screen. Ang napili doon ang nakalimbag sa bawat resibo at makikita sa Summary panel.", cashierLabelText: "Kahero:",
+  activeCashierPlaceholder: "Walang napiling kahero", summaryByCashierTitle: "Ayon sa Kahero", summaryNoCashierLabel: "Walang napiling kahero",
   customerNameLabel: "Pangalan ng Customer", customerNamePlaceholder: "Opsyonal", customerLabelText: "Customer:",
+  summaryButtonLabel: "Buod", salesSummaryTitle: "Buod ng Benta", summaryTotalLabel: "Kabuuang Total",
+  summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
@@ -669,8 +737,11 @@ hi: {
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
   storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है — यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
-  cashierNameLabel: "कैशियर का नाम", cashierNameInfo: "वैकल्पिक — हर रसीद पर छपेगा। छिपाने के लिए खाली छोड़ें।", cashierLabelText: "कैशियर:",
+  cashiersTitle: "कैशियर", cashiersInfo: "ये मुख्य स्क्रीन के ऊपर कैशियर ड्रॉपडाउन में दिखते हैं। वहां चुना गया नाम हर रसीद पर छपेगा और सारांश पैनल में दिखेगा।", cashierLabelText: "कैशियर:",
+  activeCashierPlaceholder: "कोई कैशियर चयनित नहीं", summaryByCashierTitle: "कैशियर के अनुसार", summaryNoCashierLabel: "कोई कैशियर चयनित नहीं",
   customerNameLabel: "ग्राहक का नाम", customerNamePlaceholder: "वैकल्पिक", customerLabelText: "ग्राहक:",
+  summaryButtonLabel: "सारांश", salesSummaryTitle: "बिक्री सारांश", summaryTotalLabel: "कुल योग",
+  summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
@@ -703,8 +774,11 @@ es: {
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
   storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página — solo desaparece si borras los datos del sitio o lo quitas aquí.",
-  cashierNameLabel: "Nombre del Cajero", cashierNameInfo: "Opcional — se imprime en cada recibo. Déjalo en blanco para ocultarlo.", cashierLabelText: "Cajero:",
+  cashiersTitle: "Cajeros", cashiersInfo: "Aparecen en el menú de cajero en la parte superior de la pantalla principal. Quien esté seleccionado se imprime en cada recibo y aparece en el panel de Resumen.", cashierLabelText: "Cajero:",
+  activeCashierPlaceholder: "Ningún cajero seleccionado", summaryByCashierTitle: "Por Cajero", summaryNoCashierLabel: "Ningún cajero seleccionado",
   customerNameLabel: "Nombre del Cliente", customerNamePlaceholder: "Opcional", customerLabelText: "Cliente:",
+  summaryButtonLabel: "Resumen", salesSummaryTitle: "Resumen de Ventas", summaryTotalLabel: "Total General",
+  summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
@@ -737,8 +811,11 @@ th: {
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
   storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า — จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
-  cashierNameLabel: "ชื่อแคชเชียร์", cashierNameInfo: "ไม่บังคับ — จะพิมพ์บนใบเสร็จทุกใบ เว้นว่างไว้เพื่อซ่อน", cashierLabelText: "แคชเชียร์:",
+  cashiersTitle: "แคชเชียร์", cashiersInfo: "รายชื่อนี้จะแสดงในเมนูแคชเชียร์ด้านบนของหน้าหลัก ผู้ที่ถูกเลือกจะถูกพิมพ์บนใบเสร็จทุกใบและแสดงในแผงสรุปยอด", cashierLabelText: "แคชเชียร์:",
+  activeCashierPlaceholder: "ยังไม่ได้เลือกแคชเชียร์", summaryByCashierTitle: "แยกตามแคชเชียร์", summaryNoCashierLabel: "ยังไม่ได้เลือกแคชเชียร์",
   customerNameLabel: "ชื่อลูกค้า", customerNamePlaceholder: "ไม่บังคับ", customerLabelText: "ลูกค้า:",
+  summaryButtonLabel: "สรุปยอด", salesSummaryTitle: "สรุปยอดขาย", summaryTotalLabel: "ยอดรวมทั้งหมด",
+  summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
@@ -767,6 +844,8 @@ th: {
 let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
+let cashiers = [];
+let activeCashierName = "";
 let products = [];
 const DEFAULT_LOGO_DATA_URL = "data:image/png;base64,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";
 let logoDataUrl = null;
@@ -830,7 +909,7 @@ async function loadSettings() {
 async function saveSettings() {
   const settings = {
     currencyCode: val("currencyCode"), currencySymbol: val("currencySymbol"),
-    storeName: val("storeName"), storeDetails: val("storeDetails"), cashierName: val("cashierName"),
+    storeName: val("storeName"), storeDetails: val("storeDetails"),
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
     footer1: val("footer1"), footer2: val("footer2"),
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
@@ -845,6 +924,18 @@ async function loadPaymentMethods() {
   renderPaymentMethods();
 }
 async function savePaymentMethods() { await storageSet("pos-payment-methods", JSON.stringify(paymentMethods)); }
+async function loadCashiers() {
+  const raw = await storageGet("pos-cashiers");
+  try { cashiers = raw ? JSON.parse(raw) : []; } catch (e) { cashiers = []; }
+  renderCashiersList();
+}
+async function saveCashiers() { await storageSet("pos-cashiers", JSON.stringify(cashiers)); }
+async function loadActiveCashier() {
+  const raw = await storageGet("pos-active-cashier");
+  activeCashierName = (raw && cashiers.indexOf(raw) > -1) ? raw : "";
+  renderCashierSelect();
+}
+async function saveActiveCashier() { await storageSet("pos-active-cashier", activeCashierName); }
 async function loadProductsFromStorage() {
   const raw = await storageGet("pos-products");
   try { products = raw ? JSON.parse(raw) : []; } catch (e) { products = []; }
@@ -957,6 +1048,67 @@ async function getNextReceiptNumber() {
 }
 async function startFirstSale() { currentReceiptNumber = await getNextReceiptNumber(); }
 
+function addCashier() {
+  const input = document.getElementById("newCashier");
+  const value = input.value.trim();
+  if (!value) return;
+  if (cashiers.includes(value)) { alert("This cashier already exists."); return; }
+  cashiers.push(value);
+  input.value = "";
+  saveCashiers();
+  renderCashiersList();
+  renderCashierSelect();
+}
+function removeCashier(index) {
+  const removed = cashiers[index];
+  cashiers.splice(index, 1);
+  saveCashiers();
+  renderCashiersList();
+  if (activeCashierName === removed) {
+    activeCashierName = "";
+    saveActiveCashier();
+  }
+  renderCashierSelect();
+  updateReceipt();
+}
+function renderCashiersList() {
+  const list = document.getElementById("cashiersList");
+  if (!list) return;
+  list.innerHTML = "";
+  cashiers.forEach(function(name, index) {
+    const row = document.createElement("div");
+    row.className = "payment-item";
+    row.innerHTML = "<span>" + escapeHtml(name) + "</span><button onclick=\"removeCashier(" + index + ")\">×</button>";
+    list.appendChild(row);
+  });
+}
+function renderCashierSelect() {
+  const select = document.getElementById("activeCashierSelect");
+  if (!select) return;
+  select.innerHTML = "";
+  select.classList.toggle("hidden", cashiers.length === 0);
+  if (cashiers.length === 0) return;
+
+  const blankOption = document.createElement("option");
+  blankOption.value = "";
+  blankOption.textContent = tr("activeCashierPlaceholder");
+  select.appendChild(blankOption);
+
+  cashiers.forEach(function(name) {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    select.appendChild(option);
+  });
+  select.value = activeCashierName;
+}
+function setActiveCashier() {
+  const select = document.getElementById("activeCashierSelect");
+  activeCashierName = select.value;
+  saveActiveCashier();
+  updateReceipt();
+}
+
 function addPaymentMethod() {
   const input = document.getElementById("newPaymentMethod");
   const value = input.value.trim();
@@ -1032,7 +1184,7 @@ async function saveCurrentSaleToHistory() {
     dateTime: document.getElementById("receiptDate").textContent,
     documentType: getDocumentTitle(),
     storeName: val("storeName"),
-    cashierName: val("cashierName").trim(),
+    cashierName: activeCashierName,
     customerName: val("customerName").trim(),
     currencyCode: val("currencyCode"),
     currencySymbol: symbolNow(),
@@ -1056,6 +1208,20 @@ async function saveCurrentSaleToHistory() {
   if (idx > -1) salesHistory[idx] = record; else salesHistory.push(record);
   await saveSalesHistoryToStorage();
   renderSalesHistoryPanel();
+  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
+}
+
+function saleDateKey(dateTimeStr) {
+  const datePart = (dateTimeStr || "").split(" ")[0];
+  const parts = datePart.split("/");
+  if (parts.length !== 3) return datePart;
+  return parts[2] + "-" + parts[1] + "-" + parts[0];
+}
+
+let expandedHistoryDates = {};
+function toggleHistoryGroup(key) {
+  expandedHistoryDates[key] = !expandedHistoryDates[key];
+  renderSalesHistoryPanel();
 }
 
 function renderSalesHistoryPanel() {
@@ -1077,17 +1243,142 @@ function renderSalesHistoryPanel() {
     return;
   }
 
-  salesHistory.slice().reverse().forEach(function(s) {
-    const row = document.createElement("div");
-    row.className = "sales-history-row";
-    row.innerHTML =
-      "<div>" +
-        "<div class=\"shr-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
-        "<div class=\"shr-date\">" + escapeHtml(s.dateTime) + " • " + escapeHtml(s.paymentMethod || "-") + "</div>" +
-      "</div>" +
-      "<div class=\"shr-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(3) + "</div>";
-    table.appendChild(row);
+  const groups = {};
+  salesHistory.forEach(function(s) {
+    const key = saleDateKey(s.dateTime);
+    if (!groups[key]) groups[key] = { dateLabel: (s.dateTime || "").split(" ")[0], sales: [], total: 0 };
+    groups[key].sales.push(s);
+    groups[key].total += Number(s.grandTotal) || 0;
   });
+
+  const sortedKeys = Object.keys(groups).sort().reverse();
+
+  sortedKeys.forEach(function(key) {
+    const group = groups[key];
+    const isExpanded = !!expandedHistoryDates[key];
+
+    const groupHeader = document.createElement("div");
+    groupHeader.className = "sales-history-group-header" + (isExpanded ? " expanded" : "");
+    groupHeader.innerHTML =
+      "<div class=\"shg-left\">" +
+        "<span class=\"shg-chevron\">" + (isExpanded ? "▾" : "▸") + "</span>" +
+        "<span class=\"shg-date\">" + escapeHtml(group.dateLabel) + "</span>" +
+        "<span class=\"shg-count\">" + group.sales.length + " sale" + (group.sales.length === 1 ? "" : "s") + "</span>" +
+      "</div>" +
+      "<div class=\"shg-total\">" + escapeHtml(symbol) + " " + group.total.toFixed(3) + "</div>";
+    groupHeader.addEventListener("click", function() { toggleHistoryGroup(key); });
+    table.appendChild(groupHeader);
+
+    if (isExpanded) {
+      const groupBody = document.createElement("div");
+      groupBody.className = "sales-history-group-body";
+      group.sales.slice().reverse().forEach(function(s) {
+        const row = document.createElement("div");
+        row.className = "sales-history-row";
+        row.innerHTML =
+          "<div>" +
+            "<div class=\"shr-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
+            "<div class=\"shr-date\">" + escapeHtml(s.dateTime) + " • " + escapeHtml(s.paymentMethod || "-") + "</div>" +
+          "</div>" +
+          "<div class=\"shr-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(3) + "</div>";
+        groupBody.appendChild(row);
+      });
+      table.appendChild(groupBody);
+    }
+  });
+}
+
+function todayDateInputValue() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+function toggleSalesSummary() {
+  const panel = document.getElementById("salesSummaryPanel");
+  panel.classList.toggle("hidden");
+  if (!panel.classList.contains("hidden")) {
+    renderSalesSummary();
+  }
+}
+
+function renderSalesSummary() {
+  const dateInput = document.getElementById("summaryDateInput");
+  if (!dateInput.value) dateInput.value = todayDateInputValue();
+  const selectedKey = dateInput.value;
+  const symbol = symbolNow();
+
+  const salesForDate = salesHistory.filter(function(s) { return saleDateKey(s.dateTime) === selectedKey; });
+
+  const totalsByMethod = {};
+  let overallTotal = 0;
+  salesForDate.forEach(function(s) {
+    const method = s.paymentMethod || tr("summaryNoMethodLabel");
+    totalsByMethod[method] = (totalsByMethod[method] || 0) + (Number(s.grandTotal) || 0);
+    overallTotal += Number(s.grandTotal) || 0;
+  });
+
+  const breakdown = document.getElementById("summaryBreakdown");
+  breakdown.innerHTML = "";
+  const methods = Object.keys(totalsByMethod);
+  if (!methods.length) {
+    const empty = document.createElement("div");
+    empty.className = "ssp-empty";
+    empty.textContent = tr("summaryEmptyState");
+    breakdown.appendChild(empty);
+  } else {
+    methods.sort().forEach(function(method) {
+      const row = document.createElement("div");
+      row.className = "ssp-row";
+      row.innerHTML = "<span>" + escapeHtml(method) + "</span><span>" + escapeHtml(symbol) + " " + totalsByMethod[method].toFixed(3) + "</span>";
+      breakdown.appendChild(row);
+    });
+  }
+
+  document.getElementById("summaryTotalAmount").textContent = symbol + " " + overallTotal.toFixed(3);
+
+  const byCashierSection = document.getElementById("summaryByCashier");
+  const byCashierBody = document.getElementById("summaryByCashierBody");
+  byCashierBody.innerHTML = "";
+
+  if (cashiers.length === 0 || !salesForDate.length) {
+    byCashierSection.classList.add("hidden");
+  } else {
+    byCashierSection.classList.remove("hidden");
+
+    const byCashier = {};
+    salesForDate.forEach(function(s) {
+      const cashierKey = s.cashierName || tr("summaryNoCashierLabel");
+      if (!byCashier[cashierKey]) byCashier[cashierKey] = { total: 0, methods: {} };
+      byCashier[cashierKey].total += Number(s.grandTotal) || 0;
+      const method = s.paymentMethod || tr("summaryNoMethodLabel");
+      byCashier[cashierKey].methods[method] = (byCashier[cashierKey].methods[method] || 0) + (Number(s.grandTotal) || 0);
+    });
+
+    Object.keys(byCashier).sort().forEach(function(cashierKey) {
+      const data = byCashier[cashierKey];
+      const block = document.createElement("div");
+      block.className = "ssp-cashier-block";
+
+      const nameEl = document.createElement("div");
+      nameEl.className = "ssp-cashier-name";
+      nameEl.textContent = cashierKey;
+      block.appendChild(nameEl);
+
+      Object.keys(data.methods).sort().forEach(function(method) {
+        const row = document.createElement("div");
+        row.className = "ssp-row";
+        row.innerHTML = "<span>" + escapeHtml(method) + "</span><span>" + escapeHtml(symbol) + " " + data.methods[method].toFixed(3) + "</span>";
+        block.appendChild(row);
+      });
+
+      const totalRow = document.createElement("div");
+      totalRow.className = "ssp-row ssp-cashier-total";
+      totalRow.innerHTML = "<span>" + escapeHtml(tr("summaryTotalLabel")) + "</span><span>" + escapeHtml(symbol) + " " + data.total.toFixed(3) + "</span>";
+      block.appendChild(totalRow);
+
+      byCashierBody.appendChild(block);
+    });
+  }
 }
 
 async function clearSalesHistory() {
@@ -1096,6 +1387,7 @@ async function clearSalesHistory() {
   salesHistory = [];
   await saveSalesHistoryToStorage();
   renderSalesHistoryPanel();
+  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
 }
 
 function todayStamp() {
@@ -1536,7 +1828,7 @@ function updateTotalsAndHeader() {
   document.getElementById("receiptNumber").textContent = currentReceiptNumber;
   document.getElementById("receiptNumberInput").value = currentReceiptNumber;
 
-  const cashierName = val("cashierName").trim();
+  const cashierName = activeCashierName;
   document.getElementById("receiptCashierName").textContent = cashierName;
   document.getElementById("receiptCashierRow").classList.toggle("hidden", !cashierName);
 
@@ -1600,8 +1892,9 @@ function changeLanguage() {
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
-    cashierNameLabel: "cashierNameLabel", cashierNameInfo: "cashierNameInfo", cashierLabelText: "cashierLabelText",
+    cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
+    summaryButtonLabel: "summaryButtonLabel", salesSummaryTitle: "salesSummaryTitle", summaryTotalLabel: "summaryTotalLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
@@ -1645,6 +1938,9 @@ function changeLanguage() {
 
   renderProductCatalog();
   updateReceipt();
+  renderSalesHistoryPanel();
+  renderCashierSelect();
+  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
 }
 
 function escapeHtml(text) {
@@ -1659,6 +1955,8 @@ function escapeAttr(text) {
 async function init() {
   await loadSettings();
   await loadPaymentMethods();
+  await loadCashiers();
+  await loadActiveCashier();
   await loadProductsFromStorage();
   await loadLogo();
   await loadSalesHistory();
