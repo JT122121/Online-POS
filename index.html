@@ -116,8 +116,9 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 .receipt-column-header span:nth-child(3) { text-align: right; }
 .receipt-item { margin-bottom: 2.5mm; }
 .receipt-item-line { display: grid; grid-template-columns: 1fr 11mm 23mm; gap: 1mm; align-items: center; }
-.receipt-item-name-input { border: none; background: transparent; padding: 0; font: inherit; word-break: break-word; width: 100%; }
+.receipt-item-name-input { border: none; background: transparent; padding: 0; font: inherit; word-break: break-word; white-space: normal; width: 100%; min-height: 1.3em; cursor: text; }
 .receipt-item-name-input:focus { outline: none; border-bottom: 1px dashed #999; }
+.receipt-item-name-input:empty:before { content: attr(data-placeholder); color: #999; }
 .receipt-item-qty { text-align: center; }
 .receipt-item-total { text-align: right; white-space: nowrap; }
 .receipt-item-detail-print { text-align: right; font-size: 7.5pt; margin-top: .5mm; }
@@ -156,7 +157,7 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; }
   .no-print { display: none !important; }
-  .receipt-item-name-input { pointer-events: none; }
+  .receipt-item-name-input { pointer-events: none; border-bottom: none !important; }
 }
 </style>
 </head>
@@ -814,18 +815,13 @@ function stepCartQty(id, delta) {
   const item = cart.find(function(c) { return c.id === id; });
   if (!item) return;
   item.qty += delta;
-  if (item.qty <= 0) { cart = cart.filter(function(c) { return c.id !== id; }); }
-  updateReceipt();
+  if (item.qty <= 0) { cart = cart.filter(function(c) { return c.id !== id; }); updateReceipt(); return; }
+  const row = document.querySelector('.receipt-item[data-id="' + id + '"]');
+  if (row) { const qtySpan = row.querySelector(".receipt-item-qty"); if (qtySpan) qtySpan.textContent = item.qty; }
+  updateTotalsAndHeader();
 }
 function removeCartItem(id) {
   cart = cart.filter(function(c) { return c.id !== id; });
-  updateReceipt();
-}
-function updateCartField(id, field, value) {
-  const item = cart.find(function(c) { return c.id === id; });
-  if (!item) return;
-  if (field === "price") item.price = Number(value) || 0;
-  else item.name = value;
   updateReceipt();
 }
 function getCartQtyFor(name, price) {
@@ -1097,9 +1093,58 @@ function computeTotals() {
 }
 
 /* =========================================================
-   UPDATE RECEIPT (renders cart + totals + checkout view)
+   RECEIPT RENDERING
+   Split in two on purpose:
+   - renderReceiptItems() rebuilds the row DOM. Only call this on
+     STRUCTURAL changes (add/remove item, qty +/-, currency symbol,
+     language, new sale) — never while someone is typing.
+   - updateTotalsAndHeader() only writes text into existing nodes
+     (including each row's own total/detail line). It is safe to
+     call on EVERY keystroke (item name, item price, amount received,
+     tax rate, etc.) because it never touches the name/price fields
+     themselves, so focus and cursor position are never disturbed.
+   updateReceipt() = both, for anything that isn't a live keystroke
+   inside an item row.
    ========================================================= */
-function updateReceipt() {
+function renderReceiptItems() {
+  const receiptItems = document.getElementById("receiptItems");
+  const emptyHint = document.getElementById("receiptEmptyHint");
+  receiptItems.innerHTML = "";
+  emptyHint.textContent = tr("receiptEmptyHint");
+  emptyHint.classList.toggle("hidden", cart.length > 0);
+
+  cart.forEach(function(c) {
+    const div = document.createElement("div");
+    div.className = "receipt-item";
+    div.setAttribute("data-id", c.id);
+    div.innerHTML =
+      "<div class=\"receipt-item-line\">" +
+        "<div class=\"receipt-item-name-input\" contenteditable=\"true\" data-placeholder=\"" + escapeAttr(tr("customItemName")) + "\">" + escapeHtml(c.name) + "</div>" +
+        "<span class=\"receipt-item-qty\">" + c.qty + "</span>" +
+        "<span class=\"receipt-item-total\">" + "</span>" +
+      "</div>" +
+      "<div class=\"receipt-item-detail-print\"></div>" +
+      "<div class=\"receipt-item-controls no-print\">" +
+        "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"0.001\" value=\"" + Number(c.price) + "\">" +
+        "<button type=\"button\" class=\"qty-btn\" data-action=\"dec\">−</button>" +
+        "<button type=\"button\" class=\"qty-btn\" data-action=\"inc\">+</button>" +
+        "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
+      "</div>";
+
+    const nameEl = div.querySelector(".receipt-item-name-input");
+    nameEl.addEventListener("input", function() { c.name = this.textContent; updateTotalsAndHeader(); });
+    nameEl.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); this.blur(); } });
+
+    div.querySelector(".price-input").addEventListener("input", function() { c.price = Number(this.value) || 0; updateTotalsAndHeader(); });
+    div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
+    div.querySelector("[data-action=\"inc\"]").addEventListener("click", function() { stepCartQty(c.id, 1); });
+    div.querySelector(".remove-cart-btn").addEventListener("click", function() { removeCartItem(c.id); });
+
+    receiptItems.appendChild(div);
+  });
+}
+
+function updateTotalsAndHeader() {
   const symbol = symbolNow();
   const taxName = val("taxName").trim() || tr("tax");
   const taxRate = Number(val("taxRate")) || 0;
@@ -1110,38 +1155,14 @@ function updateReceipt() {
   document.getElementById("receiptNumber").textContent = currentReceiptNumber;
   document.getElementById("receiptNumberInput").value = currentReceiptNumber;
 
-  const receiptItems = document.getElementById("receiptItems");
-  const emptyHint = document.getElementById("receiptEmptyHint");
-  receiptItems.innerHTML = "";
-  emptyHint.textContent = tr("receiptEmptyHint");
-  emptyHint.classList.toggle("hidden", cart.length > 0);
-
   cart.forEach(function(c) {
+    const row = document.querySelector('.receipt-item[data-id="' + c.id + '"]');
+    if (!row) return;
     const total = (Number(c.qty) || 0) * (Number(c.price) || 0);
-    const div = document.createElement("div");
-    div.className = "receipt-item";
-    div.setAttribute("data-id", c.id);
-    div.innerHTML =
-      "<div class=\"receipt-item-line\">" +
-        "<input class=\"receipt-item-name-input\" value=\"" + escapeAttr(c.name) + "\" placeholder=\"" + escapeAttr(tr("customItemName")) + "\">" +
-        "<span class=\"receipt-item-qty\">" + c.qty + "</span>" +
-        "<span class=\"receipt-item-total\">" + escapeHtml(symbol) + " " + total.toFixed(3) + "</span>" +
-      "</div>" +
-      "<div class=\"receipt-item-detail-print\">" + escapeHtml(symbol) + " " + Number(c.price).toFixed(3) + " × " + c.qty + "</div>" +
-      "<div class=\"receipt-item-controls no-print\">" +
-        "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"0.001\" value=\"" + Number(c.price) + "\">" +
-        "<button type=\"button\" class=\"qty-btn\" data-action=\"dec\">−</button>" +
-        "<button type=\"button\" class=\"qty-btn\" data-action=\"inc\">+</button>" +
-        "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
-      "</div>";
-
-    div.querySelector(".receipt-item-name-input").addEventListener("input", function() { updateCartField(c.id, "name", this.value); });
-    div.querySelector(".price-input").addEventListener("input", function() { updateCartField(c.id, "price", this.value); });
-    div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
-    div.querySelector("[data-action=\"inc\"]").addEventListener("click", function() { stepCartQty(c.id, 1); });
-    div.querySelector(".remove-cart-btn").addEventListener("click", function() { removeCartItem(c.id); });
-
-    receiptItems.appendChild(div);
+    const totalEl = row.querySelector(".receipt-item-total");
+    const detailEl = row.querySelector(".receipt-item-detail-print");
+    if (totalEl) totalEl.textContent = symbol + " " + total.toFixed(3);
+    if (detailEl) detailEl.textContent = symbol + " " + Number(c.price).toFixed(3) + " × " + c.qty;
   });
 
   const totals = computeTotals();
@@ -1166,8 +1187,13 @@ function updateReceipt() {
   document.getElementById("checkoutTotalAmount").textContent = symbol + " " + totals.grandTotal.toFixed(3);
   document.getElementById("proceedBtn").disabled = cart.length === 0;
 
-  updateCartCountBadge();
+  renderProductCatalog();
   saveSettings();
+}
+
+function updateReceipt() {
+  renderReceiptItems();
+  updateTotalsAndHeader();
 }
 
 /* =========================================================
