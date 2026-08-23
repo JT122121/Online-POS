@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Online POS – No Signup, No Login | GoOnlinePOS.com</title>
+<title>Free Online POS – No Signup, No Login | GoOnlinePOS.com</title>
 <meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login, nothing to install. See how it works, then start ringing up sales in seconds.">
 <meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
 <meta name="robots" content="index, follow">
@@ -87,6 +87,11 @@ img { max-width: 100%; display: block; }
 
 .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .feature-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.feature-card .fc-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.feature-card .fc-icon svg { width: 20px; height: 20px; }
+.feature-card:nth-child(2) .fc-icon { background: var(--gold-tint); color: #8a6417; }
+.feature-card:nth-child(4) .fc-icon { background: var(--gold-tint); color: #8a6417; }
+.feature-card:nth-child(6) .fc-icon { background: var(--gold-tint); color: #8a6417; }
 .feature-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; margin: 0 0 6px; }
 .feature-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
 
@@ -196,26 +201,37 @@ img { max-width: 100%; display: block; }
 <p class="section-sub">Everything lives in Settings — tap the gear icon in the top right.</p>
 <div class="feature-grid">
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></div>
+<h3>Upload your products</h3>
+<p>Add items one by one, or upload a CSV with names, prices, and categories in Settings → Products to load your whole catalog at once.</p>
+</div>
+<div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 21V12h6v9"></path></svg></div>
 <h3>Your logo & store details</h3>
 <p>Upload your own logo and store info in Settings → Store — it prints at the top of every receipt.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
 <h3>Cashier & customer name</h3>
 <p>Set a cashier name once in Settings, and optionally add a customer name at checkout — both are optional and print only when filled in.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
 <h3>Tax & discount</h3>
 <p>Set a tax name and rate, plus a discount percentage, in Settings → Tax & Discount. Totals recalculate automatically.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M14 2v5h5"></path><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg></div>
 <h3>Any paper size</h3>
 <p>Leave it on Auto to fit whatever printer you use, or pick 58mm, 80mm, A5, A4, or a custom width.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"></path></svg></div>
 <h3>Six languages</h3>
 <p>Switch the whole interface — English, Arabic, Filipino, Hindi, Spanish, or Thai — from Settings → Language.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
 <h3>Sales history export</h3>
 <p>Download a two-tab Excel report of every sale and every item sold, whenever you need your own records.</p>
 </div>
