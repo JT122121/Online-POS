@@ -331,6 +331,7 @@ gtag('config', 'G-XXXXXXXXXX');
 <div class="receipt-meta">
 <div><span id="receiptDateLabel">Date:</span> <span id="receiptDate"></span></div>
 <div><span id="receiptNumberText">Receipt No:</span> <span id="receiptNumber"></span></div>
+<div id="receiptCashierRow" class="hidden"><span id="cashierLabelText">Cashier:</span> <span id="receiptCashierName"></span></div>
 </div>
 </div>
 <div class="receipt-column-header">
@@ -404,6 +405,9 @@ TRN: 100000000000000</textarea>
           </div>
         </div>
         <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.</div>
+        <label id="cashierNameLabel">Cashier Name</label>
+        <input id="cashierName" placeholder="e.g. John" oninput="updateReceipt()">
+        <div class="info" id="cashierNameInfo" style="display:block;">Optional — printed on every receipt. Leave blank to hide it.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-document">
@@ -474,8 +478,9 @@ TRN: 100000000000000</textarea>
         <h3 id="paperTitle">Paper Size</h3>
         <label id="paperLabel">Receipt Paper</label>
         <select id="paperSize" onchange="changePaperSize(); saveSettings();">
+          <option value="auto" selected>Auto (fit any printer)</option>
           <option value="58">58mm Thermal</option>
-          <option value="80" selected>80mm Thermal</option>
+          <option value="80">80mm Thermal</option>
           <option value="148">A5</option>
           <option value="210">A4</option>
           <option value="custom">Custom</option>
@@ -549,6 +554,7 @@ en: {
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
   storeLogoLabel: "Company Logo", logoEmptyLabel: "No logo", removeLogoButton: "Remove logo",
   storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.",
+  cashierNameLabel: "Cashier Name", cashierNameInfo: "Optional — printed on every receipt. Leave blank to hide it.", cashierLabelText: "Cashier:",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
@@ -561,6 +567,7 @@ en: {
   productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
   footerTitle: "Receipt Footer", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   paperTitle: "Paper Size", paperLabel: "Receipt Paper", customWidthLabel: "Custom Width (mm)", currentWidthLabel: "Current width:",
+  autoWidthLabel: "Auto", autoOptionLabel: "Auto (fit any printer)",
   zoomLabel: "Screen Zoom (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   languageTitle: "Language", languageLabel: "Select Language",
@@ -588,6 +595,7 @@ ar: {
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
   storeLogoLabel: "شعار الشركة", logoEmptyLabel: "لا يوجد شعار", removeLogoButton: "إزالة الشعار",
   storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل — يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
+  cashierNameLabel: "اسم الكاشير", cashierNameInfo: "اختياري — يُطبع على كل إيصال. اتركه فارغاً لإخفائه.", cashierLabelText: "الكاشير:",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
@@ -600,6 +608,7 @@ ar: {
   productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
   footerTitle: "تذييل الإيصال", footerLine1Label: "السطر الأول", footerLine2Label: "السطر الثاني",
   paperTitle: "حجم الورق", paperLabel: "ورق الإيصال", customWidthLabel: "العرض المخصص (مم)", currentWidthLabel: "العرض الحالي:",
+  autoWidthLabel: "تلقائي", autoOptionLabel: "تلقائي (يناسب أي طابعة)",
   zoomLabel: "تكبير الشاشة (%)", zoomValueLabel: "التكبير:",
   currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
   languageTitle: "اللغة", languageLabel: "اختر اللغة",
@@ -620,6 +629,7 @@ fil: {
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
   storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload — mawawala lang kung burahin ang data ng site o alisin ito dito.",
+  cashierNameLabel: "Pangalan ng Kahero", cashierNameInfo: "Opsyonal — nakalimbag sa bawat resibo. Iwanang blangko para itago.", cashierLabelText: "Kahero:",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
@@ -631,6 +641,7 @@ fil: {
   productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
   footerTitle: "Footer ng Resibo", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   paperTitle: "Laki ng Papel", paperLabel: "Papel ng Resibo", customWidthLabel: "Custom na Lapad (mm)", currentWidthLabel: "Kasalukuyang lapad:",
+  autoWidthLabel: "Awtomatiko", autoOptionLabel: "Awtomatiko (bagay sa kahit anong printer)",
   zoomLabel: "Zoom ng Screen (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   languageTitle: "Wika", languageLabel: "Pumili ng Wika",
@@ -651,6 +662,7 @@ hi: {
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
   storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है — यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
+  cashierNameLabel: "कैशियर का नाम", cashierNameInfo: "वैकल्पिक — हर रसीद पर छपेगा। छिपाने के लिए खाली छोड़ें।", cashierLabelText: "कैशियर:",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
@@ -662,6 +674,7 @@ hi: {
   productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
   footerTitle: "रसीद फुटर", footerLine1Label: "फुटर लाइन 1", footerLine2Label: "फुटर लाइन 2",
   paperTitle: "पेपर साइज़", paperLabel: "रसीद पेपर", customWidthLabel: "कस्टम चौड़ाई (मिमी)", currentWidthLabel: "वर्तमान चौड़ाई:",
+  autoWidthLabel: "स्वचालित", autoOptionLabel: "स्वचालित (किसी भी प्रिंटर के अनुसार)",
   zoomLabel: "स्क्रीन ज़ूम (%)", zoomValueLabel: "ज़ूम:",
   currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
   languageTitle: "भाषा", languageLabel: "भाषा चुनें",
@@ -682,6 +695,7 @@ es: {
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
   storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página — solo desaparece si borras los datos del sitio o lo quitas aquí.",
+  cashierNameLabel: "Nombre del Cajero", cashierNameInfo: "Opcional — se imprime en cada recibo. Déjalo en blanco para ocultarlo.", cashierLabelText: "Cajero:",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
@@ -693,6 +707,7 @@ es: {
   productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
   footerTitle: "Pie del Recibo", footerLine1Label: "Línea de Pie 1", footerLine2Label: "Línea de Pie 2",
   paperTitle: "Tamaño de Papel", paperLabel: "Papel del Recibo", customWidthLabel: "Ancho Personalizado (mm)", currentWidthLabel: "Ancho actual:",
+  autoWidthLabel: "Automático", autoOptionLabel: "Automático (según la impresora)",
   zoomLabel: "Zoom de Pantalla (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
   languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
@@ -713,6 +728,7 @@ th: {
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
   storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า — จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
+  cashierNameLabel: "ชื่อแคชเชียร์", cashierNameInfo: "ไม่บังคับ — จะพิมพ์บนใบเสร็จทุกใบ เว้นว่างไว้เพื่อซ่อน", cashierLabelText: "แคชเชียร์:",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
@@ -724,6 +740,7 @@ th: {
   productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
   footerTitle: "ท้ายใบเสร็จ", footerLine1Label: "ข้อความท้ายบรรทัด 1", footerLine2Label: "ข้อความท้ายบรรทัด 2",
   paperTitle: "ขนาดกระดาษ", paperLabel: "กระดาษใบเสร็จ", customWidthLabel: "ความกว้างกำหนดเอง (มม.)", currentWidthLabel: "ความกว้างปัจจุบัน:",
+  autoWidthLabel: "อัตโนมัติ", autoOptionLabel: "อัตโนมัติ (เข้ากับเครื่องพิมพ์ทุกแบบ)",
   zoomLabel: "ซูมหน้าจอ (%)", zoomValueLabel: "ซูม:",
   currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
   languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
@@ -803,7 +820,7 @@ async function loadSettings() {
 async function saveSettings() {
   const settings = {
     currencyCode: val("currencyCode"), currencySymbol: val("currencySymbol"),
-    storeName: val("storeName"), storeDetails: val("storeDetails"),
+    storeName: val("storeName"), storeDetails: val("storeDetails"), cashierName: val("cashierName"),
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
     footer1: val("footer1"), footer2: val("footer2"),
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
@@ -1004,6 +1021,7 @@ async function saveCurrentSaleToHistory() {
     dateTime: document.getElementById("receiptDate").textContent,
     documentType: getDocumentTitle(),
     storeName: val("storeName"),
+    cashierName: val("cashierName").trim(),
     currencyCode: val("currencyCode"),
     currencySymbol: symbolNow(),
     taxName: val("taxName").trim() || tr("tax"),
@@ -1106,6 +1124,7 @@ function buildSalesExportRows() {
       "Date/Time": s.dateTime,
       "Document Type": s.documentType,
       "Store Name": s.storeName,
+      "Cashier": s.cashierName || "",
       "Item Count": s.itemCount,
       "Subtotal": s.subtotal.toFixed(3),
       "Discount": s.discount.toFixed(3),
@@ -1381,6 +1400,17 @@ function updateCartCountBadge() {
 function changePaperSize() {
   const select = document.getElementById("paperSize");
   const custom = document.getElementById("customWidthContainer");
+  const receipt = document.getElementById("receipt");
+  const widthDisplay = document.getElementById("paperWidthDisplay");
+
+  if (select.value === "auto") {
+    custom.classList.add("hidden");
+    receipt.style.width = "80mm";
+    widthDisplay.textContent = tr("autoWidthLabel");
+    updatePrintStyle("auto");
+    return;
+  }
+
   let width;
   if (select.value === "custom") {
     custom.classList.remove("hidden");
@@ -1389,8 +1419,8 @@ function changePaperSize() {
     custom.classList.add("hidden");
     width = Number(select.value);
   }
-  document.getElementById("receipt").style.width = width + "mm";
-  document.getElementById("paperWidthDisplay").textContent = width;
+  receipt.style.width = width + "mm";
+  widthDisplay.textContent = width;
   updatePrintStyle(width);
 }
 
@@ -1400,6 +1430,10 @@ function updatePrintStyle(width) {
     style = document.createElement("style");
     style.id = "dynamicPrintStyle";
     document.head.appendChild(style);
+  }
+  if (width === "auto") {
+    style.textContent = "@media print { @page { size: auto; margin: 0; } .receipt { width: 100% !important; max-width: none !important; zoom: 1 !important; } }";
+    return;
   }
   style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; zoom: 1 !important; } }";
 }
@@ -1414,7 +1448,8 @@ function updateZoom() {
 function printReceipt() {
   const select = document.getElementById("paperSize");
   let width;
-  if (select.value === "custom") width = Number(document.getElementById("customWidth").value) || 80;
+  if (select.value === "auto") width = "auto";
+  else if (select.value === "custom") width = Number(document.getElementById("customWidth").value) || 80;
   else width = Number(select.value);
   updatePrintStyle(width);
   window.print();
@@ -1488,6 +1523,10 @@ function updateTotalsAndHeader() {
   document.getElementById("receiptNumber").textContent = currentReceiptNumber;
   document.getElementById("receiptNumberInput").value = currentReceiptNumber;
 
+  const cashierName = val("cashierName").trim();
+  document.getElementById("receiptCashierName").textContent = cashierName;
+  document.getElementById("receiptCashierRow").classList.toggle("hidden", !cashierName);
+
   cart.forEach(function(c) {
     const row = document.querySelector('.receipt-item[data-id="' + c.id + '"]');
     if (!row) return;
@@ -1544,6 +1583,7 @@ function changeLanguage() {
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
+    cashierNameLabel: "cashierNameLabel", cashierNameInfo: "cashierNameInfo", cashierLabelText: "cashierLabelText",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
@@ -1575,6 +1615,12 @@ function changeLanguage() {
     dt.options[0].textContent = tr("receipt");
     dt.options[1].textContent = tr("invoice");
     dt.options[2].textContent = tr("payment");
+  }
+
+  const paperSizeSelect = document.getElementById("paperSize");
+  if (paperSizeSelect) paperSizeSelect.options[0].textContent = tr("autoOptionLabel");
+  if (paperSizeSelect && paperSizeSelect.value === "auto") {
+    document.getElementById("paperWidthDisplay").textContent = tr("autoWidthLabel");
   }
 
   renderProductCatalog();
