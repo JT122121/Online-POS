@@ -12,7 +12,6 @@ button, input, textarea, select { font-family: Arial, sans-serif; }
 button { cursor: pointer; }
 .hidden { display: none !important; }
 
-/* ===== HEADER ===== */
 .app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .app-header h1 { margin: 0; font-size: 22px; }
 .app-header .subtitle { margin: 4px 0 0; color: #666; font-size: 12px; }
@@ -24,7 +23,6 @@ button { cursor: pointer; }
 
 .app { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1500px; margin: auto; }
 
-/* ===== LEFT PANEL (catalog / checkout) ===== */
 .left-panel { position: sticky; top: 16px; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); padding: 14px; max-height: calc(100vh - 32px); overflow-y: auto; display: flex; flex-direction: column; }
 
 .panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -55,7 +53,6 @@ button { cursor: pointer; }
 .proceed-btn .amt { opacity: .85; }
 .proceed-btn:disabled { background: #ccc; color: #888; }
 
-/* ===== CHECKOUT VIEW (inside left panel) ===== */
 .checkout-total-box { background: #111; color: #fff; border-radius: 8px; padding: 14px; text-align: center; margin-bottom: 14px; }
 .checkout-total-box .label { font-size: 11px; opacity: .75; text-transform: uppercase; letter-spacing: .05em; }
 .checkout-total-box .amount { font-size: 26px; font-weight: bold; margin-top: 2px; }
@@ -73,7 +70,6 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 .complete-btn { background: #276438; color: #fff; font-weight: bold; }
 .complete-btn:disabled { background: #ccc; color: #888; }
 
-/* ===== SETTINGS MODAL ===== */
 .settings-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
 .settings-modal { background: #fff; border-radius: 10px; width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
 .settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #eee; }
@@ -107,7 +103,6 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 .sales-history-row .shr-total { font-weight: bold; text-align: right; }
 .sales-history-empty { padding: 14px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
 
-/* ===== LIVE RECEIPT ===== */
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
 .receipt { width: 80mm; min-height: 100vh; padding: 4mm; background: white; border: 2px solid #000; color: #000; flex-shrink: 0; font-family: "Courier New", monospace; font-size: 10pt; box-shadow: 0 3px 15px rgba(0,0,0,.15); }
 
@@ -183,10 +178,8 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 
 <div class="app">
 
-<!-- LEFT PANEL: catalog then checkout -->
 <div class="left-panel">
 
-  <!-- CATALOG VIEW -->
   <div id="catalogView">
     <div class="panel-heading">
       <h3 id="catalogHeading">Products</h3>
@@ -203,7 +196,6 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
     </button>
   </div>
 
-  <!-- CHECKOUT VIEW -->
   <div id="checkoutView" class="hidden">
     <div class="panel-heading">
       <h3 id="checkoutHeading">Payment</h3>
@@ -228,7 +220,6 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 
 </div>
 
-<!-- LIVE RECEIPT -->
 <div class="preview-area">
 <div id="receipt" class="receipt">
 <div class="receipt-header">
@@ -267,7 +258,6 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 
 </div>
 
-<!-- SETTINGS MODAL -->
 <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
 <div class="settings-modal">
   <div class="settings-modal-header">
@@ -426,13 +416,7 @@ TRN: 123456789</textarea>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-/* =========================================================
-   TRANSLATIONS
-   English is the complete/authoritative set. Other languages
-   translate the original core labels; any newer label not yet
-   translated for that language automatically falls back to
-   English via tr() below, so nothing ever renders blank.
-   ========================================================= */
+
 const translations = {
 
 en: {
@@ -621,9 +605,6 @@ th: {
 
 };
 
-/* =========================================================
-   STATE
-   ========================================================= */
 let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
@@ -636,18 +617,12 @@ let settingsActiveTab = "store";
 function val(id) { return document.getElementById(id).value; }
 function symbolNow() { return document.getElementById("currencySymbol").value.trim() || "BD"; }
 function currentLang() { return document.getElementById("language").value; }
-/* tr(key): current language, falling back to English so nothing renders blank */
+
 function tr(key) {
   const lang = translations[currentLang()] || translations.en;
   return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
 }
 
-/* =========================================================
-   STORAGE ABSTRACTION
-   Uses Claude's artifact storage (window.storage) when this page is
-   viewed inside Claude's preview. When opened as a standalone HTML
-   file in a regular browser, falls back to localStorage on that device.
-   ========================================================= */
 function hasArtifactStorage() {
   return typeof window !== "undefined" && !!window.storage && typeof window.storage.get === "function";
 }
@@ -666,9 +641,6 @@ async function storageSet(key, value) {
   try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
 }
 
-/* =========================================================
-   SETTINGS MODAL
-   ========================================================= */
 function openSettings() {
   document.getElementById("settingsOverlay").classList.remove("hidden");
   selectSettingsTab(settingsActiveTab);
@@ -682,9 +654,6 @@ function selectSettingsTab(name) {
   document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
 }
 
-/* =========================================================
-   PERSISTENT SETTINGS / PAYMENT METHODS / PRODUCTS
-   ========================================================= */
 async function loadSettings() {
   const raw = await storageGet("pos-settings");
   if (raw) {
@@ -694,7 +663,7 @@ async function loadSettings() {
         const el = document.getElementById(key);
         if (el) el.value = s[key];
       });
-    } catch (e) { /* defaults from HTML are used */ }
+    } catch (e) {  }
   }
 }
 async function saveSettings() {
@@ -736,9 +705,6 @@ async function getNextReceiptNumber() {
 }
 async function startFirstSale() { currentReceiptNumber = await getNextReceiptNumber(); }
 
-/* =========================================================
-   PAYMENT METHODS
-   ========================================================= */
 function addPaymentMethod() {
   const input = document.getElementById("newPaymentMethod");
   const value = input.value.trim();
@@ -775,9 +741,6 @@ function renderPaymentMethods() {
   if (paymentMethods.includes(prevSelected)) select.value = prevSelected;
 }
 
-/* =========================================================
-   WORKFLOW: New Sale / Proceed to Payment / Back / Complete
-   ========================================================= */
 async function newSale() {
   if (cart.length && !confirm("Start a new sale? The current cart will be cleared.")) return;
   currentReceiptNumber = await getNextReceiptNumber();
@@ -803,12 +766,6 @@ async function completeAndPrint() {
   printReceipt();
 }
 
-/* =========================================================
-   SALES HISTORY (parent = sale summary, child = line items)
-   Every completed sale is recorded here, keyed by receipt number.
-   Re-printing the same sale updates its existing record instead
-   of creating a duplicate.
-   ========================================================= */
 async function saveCurrentSaleToHistory() {
   if (cart.length === 0) return;
   const totals = computeTotals();
@@ -947,10 +904,6 @@ function buildSalesExportRows() {
   return { parentRows: parentRows, childRows: childRows };
 }
 
-/* Downloads one .xlsx workbook with two tabs: "Sales" (parent, one row
-   per sale) and "Sale Items" (child, one row per product sold, linked
-   back by Receipt No). Falls back to two separate CSV files if the
-   XLSX library couldn't load (e.g. no internet access). */
 function exportSalesToExcel() {
   if (!salesHistory.length) { alert("No completed sales yet — finish a sale first."); return; }
   const { parentRows, childRows } = buildSalesExportRows();
@@ -967,9 +920,6 @@ function exportSalesToExcel() {
   downloadTextFile("sales-report-items-" + todayStamp() + ".csv", rowsToCsv(childRows));
 }
 
-/* =========================================================
-   DATE
-   ========================================================= */
 function updateDate() {
   const now = new Date();
   const day = String(now.getDate()).padStart(2, "0");
@@ -981,9 +931,6 @@ function updateDate() {
   document.getElementById("receiptDate").textContent = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
 
-/* =========================================================
-   CART (single source of truth for the receipt)
-   ========================================================= */
 function findCartIndexByNamePrice(name, price) {
   return cart.findIndex(function(c) { return c.name === name && Math.abs(c.price - price) < 0.0005; });
 }
@@ -1023,9 +970,6 @@ function cartTotalCount() {
   return cart.reduce(function(sum, c) { return sum + c.qty; }, 0);
 }
 
-/* =========================================================
-   PRODUCTS: CSV UPLOAD
-   ========================================================= */
 function parseCSV(text) {
   const rows = [];
   let row = [], field = "", inQuotes = false;
@@ -1129,9 +1073,6 @@ async function clearProducts() {
   document.getElementById("csvErrorBox").classList.add("hidden");
 }
 
-/* =========================================================
-   PRODUCT CATALOG: categories + list (left panel)
-   ========================================================= */
 function getCategories() {
   const set = [];
   products.forEach(function(p) {
@@ -1207,9 +1148,6 @@ function updateCartCountBadge() {
   document.getElementById("cartCountBadge").textContent = cartTotalCount() + " " + tr("cartCountBadge");
 }
 
-/* =========================================================
-   PAPER SIZE
-   ========================================================= */
 function changePaperSize() {
   const select = document.getElementById("paperSize");
   const custom = document.getElementById("customWidthContainer");
@@ -1236,9 +1174,6 @@ function updatePrintStyle(width) {
   style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; zoom: 1 !important; } }";
 }
 
-/* =========================================================
-   SCREEN ZOOM (on-screen only, never affects print)
-   ========================================================= */
 function updateZoom() {
   const zoom = Number(document.getElementById("zoomRange").value) || 100;
   document.getElementById("zoomValueDisplay").textContent = zoom;
@@ -1246,9 +1181,6 @@ function updateZoom() {
   saveSettings();
 }
 
-/* =========================================================
-   PRINT
-   ========================================================= */
 function printReceipt() {
   const select = document.getElementById("paperSize");
   let width;
@@ -1258,9 +1190,6 @@ function printReceipt() {
   window.print();
 }
 
-/* =========================================================
-   DOCUMENT TITLE
-   ========================================================= */
 function getDocumentTitle() {
   const type = document.getElementById("documentType").value;
   if (type === "invoice") return tr("invoice");
@@ -1268,9 +1197,6 @@ function getDocumentTitle() {
   return tr("receipt");
 }
 
-/* =========================================================
-   TOTALS
-   ========================================================= */
 function computeTotals() {
   const taxRate = Number(val("taxRate")) || 0;
   const discountRate = Number(val("discountRate")) || 0;
@@ -1283,20 +1209,6 @@ function computeTotals() {
   return { subtotal: subtotal, discount: discount, tax: tax, grandTotal: grandTotal };
 }
 
-/* =========================================================
-   RECEIPT RENDERING
-   Split in two on purpose:
-   - renderReceiptItems() rebuilds the row DOM. Only call this on
-     STRUCTURAL changes (add/remove item, qty +/-, currency symbol,
-     language, new sale) — never while someone is typing.
-   - updateTotalsAndHeader() only writes text into existing nodes
-     (including each row's own total/detail line). It is safe to
-     call on EVERY keystroke (item name, item price, amount received,
-     tax rate, etc.) because it never touches the name/price fields
-     themselves, so focus and cursor position are never disturbed.
-   updateReceipt() = both, for anything that isn't a live keystroke
-   inside an item row.
-   ========================================================= */
 function renderReceiptItems() {
   const receiptItems = document.getElementById("receiptItems");
   const emptyHint = document.getElementById("receiptEmptyHint");
@@ -1387,9 +1299,6 @@ function updateReceipt() {
   updateTotalsAndHeader();
 }
 
-/* =========================================================
-   LANGUAGE
-   ========================================================= */
 function changeLanguage() {
   const language = document.getElementById("language").value;
   document.documentElement.lang = language;
@@ -1441,9 +1350,6 @@ function changeLanguage() {
   updateReceipt();
 }
 
-/* =========================================================
-   ESCAPE HELPERS
-   ========================================================= */
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
@@ -1453,9 +1359,6 @@ function escapeAttr(text) {
   return String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/* =========================================================
-   INITIALIZE
-   ========================================================= */
 async function init() {
   await loadSettings();
   await loadPaymentMethods();
