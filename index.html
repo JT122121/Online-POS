@@ -13,80 +13,96 @@ button { cursor: pointer; }
 .hidden { display: none !important; }
 
 /* ===== HEADER ===== */
-.app-header { max-width: 1800px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .app-header h1 { margin: 0; font-size: 22px; }
 .app-header .subtitle { margin: 4px 0 0; color: #666; font-size: 12px; }
 .header-actions { display: flex; gap: 8px; }
-.header-actions button { padding: 11px 18px; border: 0; border-radius: 6px; font-size: 14px; }
+.header-actions button { padding: 11px 16px; border: 0; border-radius: 6px; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+#settingsButton { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
 #printButton { background: #111; color: #fff; }
-#newSaleButton { background: #444; color: #fff; }
+#newSaleButton { background: #276438; color: #fff; }
 
-.app { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1800px; margin: auto; }
+.app { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1500px; margin: auto; }
 
-/* ===== LEFT TAB SIDEBAR ===== */
-.sidebar { position: sticky; top: 16px; display: flex; align-items: flex-start; }
+/* ===== LEFT PANEL (catalog / checkout) ===== */
+.left-panel { position: sticky; top: 16px; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); padding: 14px; max-height: calc(100vh - 32px); overflow-y: auto; display: flex; flex-direction: column; }
 
-.tab-rail { display: flex; flex-direction: column; gap: 4px; width: 60px; flex-shrink: 0; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); padding: 8px 6px; max-height: calc(100vh - 32px); overflow-y: auto; }
-.tab-icon { border: 0; background: transparent; border-radius: 8px; font-size: 19px; padding: 11px 0; display: flex; align-items: center; justify-content: center; color: #333; transition: background .15s; }
-.tab-icon:hover { background: #f0f0f0; }
-.tab-icon.active { background: #111; color: #fff; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.panel-heading h3 { margin: 0; font-size: 16px; }
+.cart-count-badge { background: #111; color: #fff; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 999px; }
 
-.tab-panel { width: 0; overflow: hidden; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); transition: width .18s ease, margin-left .18s ease, padding .18s ease; max-height: calc(100vh - 32px); overflow-y: auto; }
-.tab-panel:not(.open) { box-shadow: none; }
-.tab-panel.open { width: 320px; margin-left: 10px; padding: 14px; }
+.search-box { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 6px; font-size: 13px; margin-bottom: 10px; }
+.search-box:focus { outline: 2px solid #ddd; border-color: #555; }
 
-.panel-content { display: none; }
-.panel-content.active { display: block; }
-.panel-content h3 { margin: 0 0 10px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+.category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.category-chip { padding: 6px 11px; border: 1px solid #ccc; border-radius: 999px; background: #fff; font-size: 11.5px; color: #333; }
+.category-chip.active { background: #111; color: #fff; border-color: #111; }
 
-label { display: block; margin-top: 9px; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
+.product-list { flex: 1; overflow-y: auto; margin-bottom: 4px; }
+.product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px; border: 1px solid #e2e2e2; border-radius: 7px; margin-bottom: 6px; background: #fafafa; }
+.product-item:active { background: #f0f0f0; }
+.product-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.product-name { font-weight: bold; font-size: 13px; overflow-wrap: break-word; }
+.product-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.product-category { font-size: 9.5px; color: #777; text-transform: uppercase; letter-spacing: .03em; border: 1px solid #ddd; border-radius: 3px; padding: 1px 4px; }
+.product-price { font-size: 12px; color: #333; }
+.product-in-cart { font-size: 10.5px; color: #276438; font-weight: bold; }
+.product-item button { flex-shrink: 0; background: #111; color: #fff; border: 0; border-radius: 6px; width: 36px; height: 36px; font-size: 18px; }
+.products-empty { margin-top: 8px; padding: 16px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
+.custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #bbb; color: #555; padding: 9px; border-radius: 6px; font-size: 12.5px; margin-top: 4px; }
+
+.proceed-btn { width: 100%; margin-top: 10px; padding: 13px; border: 0; border-radius: 7px; background: #111; color: white; font-size: 14.5px; font-weight: bold; display: flex; align-items: center; justify-content: space-between; }
+.proceed-btn .amt { opacity: .85; }
+.proceed-btn:disabled { background: #ccc; color: #888; }
+
+/* ===== CHECKOUT VIEW (inside left panel) ===== */
+.checkout-total-box { background: #111; color: #fff; border-radius: 8px; padding: 14px; text-align: center; margin-bottom: 14px; }
+.checkout-total-box .label { font-size: 11px; opacity: .75; text-transform: uppercase; letter-spacing: .05em; }
+.checkout-total-box .amount { font-size: 26px; font-weight: bold; margin-top: 2px; }
+
+label { display: block; margin-top: 10px; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
 input, textarea, select { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 5px; background: #fff; font-size: 13px; }
-textarea { min-height: 100px; resize: vertical; line-height: 1.4; }
+textarea { min-height: 90px; resize: vertical; line-height: 1.4; }
 input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-color: #555; }
-input[type="file"] { padding: 8px; font-size: 12px; }
-input[type="range"] { padding: 0; }
+
+.info { margin-top: 8px; padding: 9px; background: #f2f2f2; border-radius: 5px; color: #555; font-size: 11px; line-height: 1.4; display: flex; justify-content: space-between; }
+
+.checkout-actions { display: flex; gap: 8px; margin-top: 16px; }
+.checkout-actions button { flex: 1; padding: 12px; border: 0; border-radius: 7px; font-size: 13.5px; }
+.back-btn { background: #eee; color: #111; }
+.complete-btn { background: #276438; color: #fff; font-weight: bold; }
+.complete-btn:disabled { background: #ccc; color: #888; }
+
+/* ===== SETTINGS MODAL ===== */
+.settings-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+.settings-modal { background: #fff; border-radius: 10px; width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
+.settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #eee; }
+.settings-modal-header h2 { margin: 0; font-size: 17px; }
+.settings-modal-header button { background: transparent; border: 0; font-size: 18px; padding: 4px 8px; color: #666; }
+.settings-modal-body { display: flex; flex: 1; overflow: hidden; }
+.settings-tab-rail { display: flex; flex-direction: column; gap: 2px; width: 150px; flex-shrink: 0; background: #f7f7f7; border-right: 1px solid #eee; padding: 8px; overflow-y: auto; }
+.settings-tab-item { border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; padding: 10px 9px; text-align: left; display: flex; align-items: center; gap: 8px; color: #333; }
+.settings-tab-item:hover { background: #eee; }
+.settings-tab-item.active { background: #111; color: #fff; }
+.settings-tab-panel { flex: 1; overflow-y: auto; padding: 16px 18px; }
+.settings-panel-content { display: none; }
+.settings-panel-content.active { display: block; }
+.settings-panel-content h3 { margin: 0 0 10px; font-size: 15px; }
 
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-.info { margin-top: 7px; padding: 8px; background: #f2f2f2; border-radius: 5px; color: #555; font-size: 11px; line-height: 1.4; }
 .error-text { margin-top: 7px; padding: 8px; background: #fdecea; border: 1px solid #f3b4ae; border-radius: 5px; color: #a32c22; font-size: 11px; line-height: 1.4; }
 .success-text { margin-top: 7px; padding: 8px; background: #eaf6ec; border: 1px solid #b6e0bd; border-radius: 5px; color: #276438; font-size: 11px; line-height: 1.4; }
-
 .payment-editor { display: flex; gap: 6px; margin-top: 7px; }
 .payment-editor input { flex: 1; }
 .payment-list { margin-top: 8px; }
 .payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; font-size: 12px; }
 .payment-item button { background: #ddd; border: 0; padding: 4px 7px; border-radius: 4px; }
-
-.item-row { margin-top: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 7px; background: #fafafa; }
-.item-row h4 { margin: 0 0 6px; font-size: 13px; }
-.remove-item { margin-top: 8px; background: #ddd; color: #111; border: 0; padding: 7px 10px; border-radius: 5px; font-size: 12px; }
-.qty-stepper { display: flex; align-items: center; gap: 6px; }
-.qty-stepper input { text-align: center; }
-.qty-stepper button { flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #aaa; background: #fff; border-radius: 5px; font-size: 16px; line-height: 1; }
-.items-hint { margin-top: 4px; margin-bottom: 8px; color: #666; font-size: 11px; line-height: 1.4; }
-
 .csv-actions { display: flex; gap: 6px; margin-top: 8px; }
-.csv-actions button { flex: 1; }
-.product-search { margin-top: 10px; }
-.product-list { margin-top: 8px; max-height: 320px; overflow-y: auto; }
-.product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; }
-.product-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.product-name { font-weight: bold; font-size: 12px; overflow-wrap: break-word; }
-.product-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.product-category { font-size: 9.5px; color: #777; text-transform: uppercase; letter-spacing: .03em; border: 1px solid #ddd; border-radius: 3px; padding: 1px 4px; }
-.product-price { font-size: 11px; color: #333; }
-.product-in-cart { font-size: 10.5px; color: #276438; font-weight: bold; }
-.product-item button { flex-shrink: 0; background: #111; color: #fff; border: 0; border-radius: 5px; width: 32px; height: 32px; font-size: 16px; }
-.products-empty { margin-top: 8px; padding: 12px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
-.products-count { margin-top: 6px; font-size: 11px; color: #666; }
-
-.primary-btn { width: 100%; margin-top: 8px; padding: 11px; border: 0; border-radius: 6px; background: #111; color: white; font-size: 14px; }
+.csv-actions button { flex: 1; border: 0; border-radius: 5px; color: #fff; padding: 9px; font-size: 12.5px; }
 .small-btn { border: 0; border-radius: 5px; background: #111; color: white; padding: 8px 12px; }
 
-/* ===== LIVE RECEIPT (wider preview area) ===== */
+/* ===== LIVE RECEIPT ===== */
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
-
 .receipt { width: 80mm; min-height: 100vh; padding: 4mm; background: white; border: 2px solid #000; color: #000; flex-shrink: 0; font-family: "Courier New", monospace; font-size: 10pt; box-shadow: 0 3px 15px rgba(0,0,0,.15); }
 
 .receipt-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 3mm; margin-bottom: 3mm; }
@@ -99,44 +115,48 @@ input[type="range"] { padding: 0; }
 .receipt-column-header span:nth-child(2) { text-align: center; }
 .receipt-column-header span:nth-child(3) { text-align: right; }
 .receipt-item { margin-bottom: 2.5mm; }
-.receipt-item-line { display: grid; grid-template-columns: 1fr 11mm 23mm; gap: 1mm; }
-.receipt-item-name { word-break: break-word; }
+.receipt-item-line { display: grid; grid-template-columns: 1fr 11mm 23mm; gap: 1mm; align-items: center; }
+.receipt-item-name-input { border: none; background: transparent; padding: 0; font: inherit; word-break: break-word; width: 100%; }
+.receipt-item-name-input:focus { outline: none; border-bottom: 1px dashed #999; }
 .receipt-item-qty { text-align: center; }
 .receipt-item-total { text-align: right; white-space: nowrap; }
-.receipt-item-detail { text-align: right; font-size: 7.5pt; margin-top: .5mm; }
+.receipt-item-detail-print { text-align: right; font-size: 7.5pt; margin-top: .5mm; }
+.receipt-item-controls { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 1mm; }
+.receipt-item-controls .price-input { width: 55px; border: 1px solid #ccc; border-radius: 3px; padding: 1px 3px; font-size: 7.5pt; text-align: right; }
+.receipt-item-controls .qty-btn { width: 18px; height: 18px; border: 1px solid #ccc; background: #f5f5f5; border-radius: 3px; font-size: 10px; line-height: 1; padding: 0; }
+.receipt-item-controls .remove-cart-btn { background: #fdecea; color: #a32c22; border: 1px solid #f3b4ae; border-radius: 3px; font-size: 7pt; padding: 1px 5px; }
 
 .dashed-line { border-top: 1px dashed #000; margin: 3mm 0; }
-
 .receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
 .receipt-grand-total { font-size: 12pt; font-weight: bold; margin-top: 2mm; }
-
 .receipt-payment { margin-top: 3mm; }
 .receipt-payment-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
-
 .receipt-footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px dashed #000; text-align: center; font-size: 8.5pt; line-height: 1.5; }
 .receipt-footer p { margin: 1mm 0; word-break: break-word; }
+.receipt-empty-hint { text-align: center; color: #999; font-size: 8pt; padding: 6mm 0; }
 
 @media (max-width: 900px) {
   body { padding: 8px; }
   .app-header { flex-direction: column; align-items: flex-start; gap: 8px; }
   .header-actions { width: 100%; }
-  .header-actions button { flex: 1; }
+  .header-actions button { flex: 1; justify-content: center; }
   .app { display: flex; flex-direction: column; gap: 12px; }
-  .sidebar { position: relative; top: auto; flex-direction: column; width: 100%; }
-  .tab-rail { flex-direction: row; width: 100%; max-height: none; overflow-x: auto; overflow-y: visible; }
-  .tab-icon { flex-shrink: 0; width: 48px; height: 48px; }
-  .tab-panel { max-height: none; }
-  .tab-panel.open { width: 100% !important; margin-left: 0; margin-top: 10px; }
+  .left-panel { position: relative; top: auto; width: 100%; max-height: none; }
   .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
   .receipt { box-shadow: none; }
+  .settings-modal-body { flex-direction: column; }
+  .settings-tab-rail { flex-direction: row; width: 100%; overflow-x: auto; border-right: 0; border-bottom: 1px solid #eee; }
+  .settings-tab-item { flex-shrink: 0; }
 }
 
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .app-header, .sidebar { display: none !important; }
+  .app-header, .left-panel, .settings-overlay { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; }
+  .no-print { display: none !important; }
+  .receipt-item-name-input { pointer-events: none; }
 }
 </style>
 </head>
@@ -148,182 +168,57 @@ input[type="range"] { padding: 0; }
 <div class="subtitle" id="appSubtitle">Simple browser-based point of sale</div>
 </div>
 <div class="header-actions">
-<button id="printButton" onclick="printReceipt()">🖨 Print</button>
-<button id="newSaleButton" onclick="newSale()">+ New Sale</button>
+<button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
+<button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
+<button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
 </div>
 </header>
 
 <div class="app">
 
-<div class="sidebar">
+<!-- LEFT PANEL: catalog then checkout -->
+<div class="left-panel">
 
-<!-- TAB RAIL -->
-<div class="tab-rail" id="tabRail">
-<button class="tab-icon" data-tab="items" title="Items" onclick="selectTab('items')">🛒</button>
-<button class="tab-icon" data-tab="products" title="Products" onclick="selectTab('products')">📦</button>
-<button class="tab-icon" data-tab="payment" title="Payment" onclick="selectTab('payment')">💵</button>
-<button class="tab-icon" data-tab="document" title="Document" onclick="selectTab('document')">📄</button>
-<button class="tab-icon" data-tab="store" title="Store" onclick="selectTab('store')">🏪</button>
-<button class="tab-icon" data-tab="tax" title="Tax & Discount" onclick="selectTab('tax')">🧮</button>
-<button class="tab-icon" data-tab="paymentMethods" title="Payment Methods" onclick="selectTab('paymentMethods')">💳</button>
-<button class="tab-icon" data-tab="receiptSettings" title="Receipt" onclick="selectTab('receiptSettings')">🧾</button>
-<button class="tab-icon" data-tab="footer" title="Footer" onclick="selectTab('footer')">📝</button>
-<button class="tab-icon" data-tab="paper" title="Paper & Zoom" onclick="selectTab('paper')">📏</button>
-<button class="tab-icon" data-tab="currency" title="Currency" onclick="selectTab('currency')">💱</button>
-<button class="tab-icon" data-tab="language" title="Language" onclick="selectTab('language')">🌐</button>
-</div>
+  <!-- CATALOG VIEW -->
+  <div id="catalogView">
+    <div class="panel-heading">
+      <h3 id="catalogHeading">Products</h3>
+      <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
+    </div>
+    <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
+    <div id="categoryChips" class="category-chips"></div>
+    <div id="productsList" class="product-list"></div>
+    <div id="productsEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
+    <button class="custom-item-link" onclick="addCustomItem()" id="customItemLink">+ Add a custom item</button>
+    <button class="proceed-btn" id="proceedBtn" onclick="goToCheckout()">
+      <span id="proceedLabel">Proceed to Payment</span>
+      <span class="amt" id="proceedAmount">BD 0.000</span>
+    </button>
+  </div>
 
-<!-- TAB PANEL -->
-<div class="tab-panel" id="tabPanel">
+  <!-- CHECKOUT VIEW -->
+  <div id="checkoutView" class="hidden">
+    <div class="panel-heading">
+      <h3 id="checkoutHeading">Payment</h3>
+    </div>
+    <div class="checkout-total-box">
+      <div class="label" id="totalDueLabel">Total Due</div>
+      <div class="amount" id="checkoutTotalAmount">BD 0.000</div>
+    </div>
+    <label id="paymentMethodLabel">Payment Method</label>
+    <select id="paymentMethod" onchange="updateReceipt()"></select>
+    <label id="amountReceivedLabel">Amount Received</label>
+    <input id="amountReceived" type="number" min="0" step="0.001" value="0" oninput="updateReceipt()">
+    <div class="info">
+      <span id="changeLabelInfo">Change:</span>
+      <strong id="changePreview">BD 0.000</strong>
+    </div>
+    <div class="checkout-actions">
+      <button class="back-btn" onclick="backToCatalog()" id="backToCatalogBtn">← Back</button>
+      <button class="complete-btn" id="completeBtn" onclick="completeAndPrint()">✓ <span id="completeBtnLabel">Complete &amp; Print</span></button>
+    </div>
+  </div>
 
-<div class="panel-content" id="panel-items">
-<h3 id="itemsTitle">Items</h3>
-<div class="items-hint" id="itemsHint">Add products from the Products tab, or add items manually below.</div>
-<div id="itemsContainer"></div>
-<button class="primary-btn" onclick="addItem()" id="addItemButton">+ Add Item</button>
-</div>
-
-<div class="panel-content" id="panel-products">
-<h3 id="productsTitle">Products</h3>
-<input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
-<div class="info" id="productsUploadHint">Upload a CSV with columns: Name, Price, and optionally Category and SKU.</div>
-<div id="csvErrorBox" class="error-text hidden"></div>
-<div id="csvSuccessBox" class="success-text hidden"></div>
-<div class="csv-actions">
-<button class="small-btn" style="background:#444;" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
-<button class="small-btn" style="background:#a32c22;" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
-</div>
-<input id="productSearch" class="product-search" type="text" placeholder="Search products..." oninput="renderProducts()">
-<div id="productsCount" class="products-count"></div>
-<div id="productsList" class="product-list"></div>
-<div id="productsEmpty" class="products-empty">No products yet. Upload a CSV to get started.</div>
-</div>
-
-<div class="panel-content" id="panel-payment">
-<h3 id="paymentTitle">Payment</h3>
-<label id="paymentMethodLabel">Payment Method</label>
-<select id="paymentMethod" onchange="updateReceipt()"></select>
-<label id="amountReceivedLabel">Amount Received</label>
-<input id="amountReceived" type="number" min="0" step="0.001" value="0" oninput="updateReceipt()">
-<div class="info">
-<span id="changeLabelInfo">Change:</span>
-<strong id="changePreview">BD 0.000</strong>
-</div>
-</div>
-
-<div class="panel-content" id="panel-document">
-<h3 id="documentTitle">Document</h3>
-<label id="documentTypeLabel">Document Type</label>
-<select id="documentType" onchange="updateReceipt()">
-<option value="receipt">Receipt</option>
-<option value="invoice">Invoice</option>
-<option value="payment">Payment Received</option>
-</select>
-</div>
-
-<div class="panel-content" id="panel-store">
-<h3 id="storeTitle">Store Information</h3>
-<label id="storeNameLabel">Store Name</label>
-<input id="storeName" value="NEO Supermarket" oninput="updateReceipt()">
-<label id="storeDetailsLabel">Store Details</label>
-<textarea id="storeDetails" oninput="updateReceipt()">Bldg. 302, Road 1245
-Kingdom of Bahrain
-Tel: +973 XXXXXXXX
-Email: sales@neosupermarket.com
-TRN: 123456789</textarea>
-<div class="info" id="storeInfo">You can enter address, phone, email, TRN, website and other information.</div>
-</div>
-
-<div class="panel-content" id="panel-tax">
-<h3 id="taxTitle">Tax & Discount</h3>
-<label id="taxNameLabel">Tax Name</label>
-<input id="taxName" value="Tax" oninput="updateReceipt()">
-<label id="taxRateLabel">Tax Rate (%)</label>
-<input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
-<label id="discountLabel">Discount (%)</label>
-<input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
-</div>
-
-<div class="panel-content" id="panel-paymentMethods">
-<h3 id="paymentMethodsTitle">Payment Methods</h3>
-<div class="payment-editor">
-<input id="newPaymentMethod" placeholder="Cash">
-<button class="small-btn" onclick="addPaymentMethod()">+</button>
-</div>
-<div id="paymentMethodsList" class="payment-list"></div>
-<div class="info" id="paymentMethodsInfo">Add your own payment methods.</div>
-</div>
-
-<div class="panel-content" id="panel-receiptSettings">
-<h3 id="receiptSettingsTitle">Receipt</h3>
-<label id="receiptNumberLabel">Receipt Number</label>
-<input id="receiptNumberInput" readonly>
-<div class="info" id="receiptNumberInfo">The next number is generated when you start a new sale.</div>
-</div>
-
-<div class="panel-content" id="panel-footer">
-<h3 id="footerTitle">Receipt Footer</h3>
-<label id="footerLine1Label">Footer Line 1</label>
-<input id="footer1" value="Thank you for shopping with us!" oninput="updateReceipt()">
-<label id="footerLine2Label">Footer Line 2</label>
-<input id="footer2" value="Please come again." oninput="updateReceipt()">
-</div>
-
-<div class="panel-content" id="panel-paper">
-<h3 id="paperTitle">Paper Size</h3>
-<label id="paperLabel">Receipt Paper</label>
-<select id="paperSize" onchange="changePaperSize(); saveSettings();">
-<option value="58">58mm Thermal</option>
-<option value="80" selected>80mm Thermal</option>
-<option value="148">A5</option>
-<option value="210">A4</option>
-<option value="custom">Custom</option>
-</select>
-<div id="customWidthContainer" class="hidden">
-<label id="customWidthLabel">Custom Width (mm)</label>
-<input id="customWidth" type="number" value="80" min="30" max="500" oninput="changePaperSize(); saveSettings();">
-</div>
-<div class="info">
-<span id="currentWidthLabel">Current width:</span>
-<strong><span id="paperWidthDisplay">80</span> mm</strong>
-</div>
-<label id="zoomLabel">Screen Zoom (%)</label>
-<input id="zoomRange" type="range" min="80" max="180" step="5" value="115" oninput="updateZoom()">
-<div class="info">
-<span id="zoomValueLabel">Zoom:</span>
-<strong><span id="zoomValueDisplay">115</span>%</strong>
-<span style="display:block;margin-top:4px;">Screen-only, does not affect the printed size.</span>
-</div>
-</div>
-
-<div class="panel-content" id="panel-currency">
-<h3 id="currencyTitle">Currency</h3>
-<div class="two-columns">
-<div>
-<label id="currencyCodeLabel">Currency Code</label>
-<input id="currencyCode" value="BHD" oninput="updateReceipt()">
-</div>
-<div>
-<label id="currencySymbolLabel">Currency Symbol</label>
-<input id="currencySymbol" value="BD" oninput="updateReceipt(); renderProducts();">
-</div>
-</div>
-</div>
-
-<div class="panel-content" id="panel-language">
-<h3 id="languageTitle">Language</h3>
-<label id="languageLabel">Select Language</label>
-<select id="language" onchange="changeLanguage(); saveSettings();">
-<option value="en">English</option>
-<option value="ar">العربية</option>
-<option value="fil">Filipino</option>
-<option value="hi">हिन्दी</option>
-<option value="es">Español</option>
-<option value="th">ไทย</option>
-</select>
-</div>
-
-</div>
 </div>
 
 <!-- LIVE RECEIPT -->
@@ -344,6 +239,7 @@ TRN: 123456789</textarea>
 <span id="receiptTotalHeader">Total</span>
 </div>
 <div id="receiptItems"></div>
+<div id="receiptEmptyHint" class="receipt-empty-hint no-print">Cart is empty — add products from the left panel.</div>
 <div class="dashed-line"></div>
 <div class="receipt-total-line"><span id="subtotalLabel">Subtotal</span><span id="subtotal">BD 0.000</span></div>
 <div class="receipt-total-line"><span id="receiptDiscountLabel">Discount</span><span id="discountAmount">BD 0.000</span></div>
@@ -364,272 +260,409 @@ TRN: 123456789</textarea>
 
 </div>
 
+<!-- SETTINGS MODAL -->
+<div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
+<div class="settings-modal">
+  <div class="settings-modal-header">
+    <h2 id="settingsModalTitle">Settings</h2>
+    <button onclick="closeSettings()">✕</button>
+  </div>
+  <div class="settings-modal-body">
+    <div class="settings-tab-rail" id="settingsTabRail">
+      <button class="settings-tab-item" data-tab="store" onclick="selectSettingsTab('store')">🏪 <span>Store</span></button>
+      <button class="settings-tab-item" data-tab="document" onclick="selectSettingsTab('document')">📄 <span>Document</span></button>
+      <button class="settings-tab-item" data-tab="tax" onclick="selectSettingsTab('tax')">🧮 <span>Tax &amp; Discount</span></button>
+      <button class="settings-tab-item" data-tab="paymentMethods" onclick="selectSettingsTab('paymentMethods')">💳 <span>Payment Methods</span></button>
+      <button class="settings-tab-item" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
+      <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
+      <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
+      <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
+      <button class="settings-tab-item" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
+    </div>
+    <div class="settings-tab-panel">
+
+      <div class="settings-panel-content" id="panel-store">
+        <h3 id="storeTitle">Store Information</h3>
+        <label id="storeNameLabel">Store Name</label>
+        <input id="storeName" value="NEO Supermarket" oninput="updateReceipt()">
+        <label id="storeDetailsLabel">Store Details</label>
+        <textarea id="storeDetails" oninput="updateReceipt()">Bldg. 302, Road 1245
+Kingdom of Bahrain
+Tel: +973 XXXXXXXX
+Email: sales@neosupermarket.com
+TRN: 123456789</textarea>
+        <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-document">
+        <h3 id="documentTitle">Document</h3>
+        <label id="documentTypeLabel">Document Type</label>
+        <select id="documentType" onchange="updateReceipt()">
+          <option value="receipt">Receipt</option>
+          <option value="invoice">Invoice</option>
+          <option value="payment">Payment Received</option>
+        </select>
+        <label id="receiptNumberLabel">Current Receipt Number</label>
+        <input id="receiptNumberInput" readonly>
+        <div class="info" id="receiptNumberInfo" style="display:block;">The next number is generated when you start a new sale.</div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-tax">
+        <h3 id="taxTitle">Tax &amp; Discount</h3>
+        <label id="taxNameLabel">Tax Name</label>
+        <input id="taxName" value="Tax" oninput="updateReceipt()">
+        <label id="taxRateLabel">Tax Rate (%)</label>
+        <input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
+        <label id="discountLabel">Discount (%)</label>
+        <input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
+      </div>
+
+      <div class="settings-panel-content" id="panel-paymentMethods">
+        <h3 id="paymentMethodsTitle">Payment Methods</h3>
+        <div class="payment-editor">
+          <input id="newPaymentMethod" placeholder="Cash">
+          <button class="small-btn" onclick="addPaymentMethod()">+</button>
+        </div>
+        <div id="paymentMethodsList" class="payment-list"></div>
+        <div class="info" id="paymentMethodsInfo" style="display:block;">These appear in the Payment Method dropdown at checkout.</div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-products">
+        <h3 id="productsTitle">Products</h3>
+        <input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
+        <div class="info" id="productsUploadHint" style="display:block;">Upload a CSV with columns: Name, Price, and optionally Category and SKU. Category is used to group items on the left panel.</div>
+        <div id="csvErrorBox" class="error-text hidden"></div>
+        <div id="csvSuccessBox" class="success-text hidden"></div>
+        <div class="csv-actions">
+          <button style="background:#444;" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
+          <button style="background:#a32c22;" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
+        </div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-footer">
+        <h3 id="footerTitle">Receipt Footer</h3>
+        <label id="footerLine1Label">Footer Line 1</label>
+        <input id="footer1" value="Thank you for shopping with us!" oninput="updateReceipt()">
+        <label id="footerLine2Label">Footer Line 2</label>
+        <input id="footer2" value="Please come again." oninput="updateReceipt()">
+      </div>
+
+      <div class="settings-panel-content" id="panel-paper">
+        <h3 id="paperTitle">Paper Size</h3>
+        <label id="paperLabel">Receipt Paper</label>
+        <select id="paperSize" onchange="changePaperSize(); saveSettings();">
+          <option value="58">58mm Thermal</option>
+          <option value="80" selected>80mm Thermal</option>
+          <option value="148">A5</option>
+          <option value="210">A4</option>
+          <option value="custom">Custom</option>
+        </select>
+        <div id="customWidthContainer" class="hidden">
+          <label id="customWidthLabel">Custom Width (mm)</label>
+          <input id="customWidth" type="number" value="80" min="30" max="500" oninput="changePaperSize(); saveSettings();">
+        </div>
+        <div class="info">
+          <span id="currentWidthLabel">Current width:</span>
+          <strong><span id="paperWidthDisplay">80</span> mm</strong>
+        </div>
+        <label id="zoomLabel">Screen Zoom (%)</label>
+        <input id="zoomRange" type="range" min="80" max="180" step="5" value="115" oninput="updateZoom()">
+        <div class="info">
+          <span id="zoomValueLabel">Zoom:</span>
+          <strong><span id="zoomValueDisplay">115</span>%</strong>
+        </div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-currency">
+        <h3 id="currencyTitle">Currency</h3>
+        <div class="two-columns">
+          <div>
+            <label id="currencyCodeLabel">Currency Code</label>
+            <input id="currencyCode" value="BHD" oninput="updateReceipt()">
+          </div>
+          <div>
+            <label id="currencySymbolLabel">Currency Symbol</label>
+            <input id="currencySymbol" value="BD" oninput="updateReceipt(); renderProductCatalog();">
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-language">
+        <h3 id="languageTitle">Language</h3>
+        <label id="languageLabel">Select Language</label>
+        <select id="language" onchange="changeLanguage(); saveSettings();">
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+          <option value="fil">Filipino</option>
+          <option value="hi">हिन्दी</option>
+          <option value="es">Español</option>
+          <option value="th">ไทย</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
 <script>
 /* =========================================================
    TRANSLATIONS
+   English is the complete/authoritative set. Other languages
+   translate the original core labels; any newer label not yet
+   translated for that language automatically falls back to
+   English via tr() below, so nothing ever renders blank.
    ========================================================= */
 const translations = {
 
 en: {
   appTitle: "Online POS", appSubtitle: "Simple browser-based point of sale",
-  languageTitle: "Language", languageLabel: "Select Language",
+  settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
+  catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
+  productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
+  customItemLink: "+ Add a custom item", proceedLabel: "Proceed to Payment",
+  checkoutHeading: "Payment", totalDueLabel: "Total Due",
+  paymentMethodLabel: "Payment Method", amountReceivedLabel: "Amount Received", changeLabelInfo: "Change:",
+  backToCatalogBtn: "← Back", completeBtnLabel: "Complete & Print",
+  cartEmptyAlert: "Add at least one item before proceeding to payment.",
+  receiptEmptyHint: "Cart is empty — add products from the left panel.",
+  settingsModalTitle: "Settings",
+  storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
+  storeInfo: "You can enter address, phone, email, TRN, website and other information.",
   documentTitle: "Document", documentTypeLabel: "Document Type",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
+  receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "The next number is generated when you start a new sale.",
+  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
+  paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
+  productsTitle: "Products", productsUploadHint: "Upload a CSV with columns: Name, Price, and optionally Category and SKU. Category is used to group items on the left panel.",
+  productsSampleButton: "Download Sample CSV", productsClearButton: "Clear Products",
+  productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
+  productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
+  footerTitle: "Receipt Footer", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   paperTitle: "Paper Size", paperLabel: "Receipt Paper", customWidthLabel: "Custom Width (mm)", currentWidthLabel: "Current width:",
   zoomLabel: "Screen Zoom (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
-  storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
-  storeInfo: "You can enter address, phone, email, TRN, website and other information.",
-  receiptSettingsTitle: "Receipt", receiptNumberLabel: "Receipt Number",
-  receiptNumberInfo: "The next number is generated when you start a new sale.",
-  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
-  paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "Add your own payment methods.",
-  paymentTitle: "Payment", paymentMethodLabel: "Payment Method", amountReceivedLabel: "Amount Received", changeLabelInfo: "Change:",
-  productsTitle: "Products", productsUploadHint: "Upload a CSV with columns: Name, Price, and optionally Category and SKU.",
-  productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Upload a CSV to get started.",
-  productsLoadedSuffix: "products loaded", productsClearButton: "Clear Products", productsSampleButton: "Download Sample CSV",
-  productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
-  productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
-  itemsTitle: "Items", itemsHint: "Add products from the Products tab, or add items manually below.", addItemButton: "+ Add Item",
-  itemNameLabel: "Item Name", quantityLabel: "Quantity", priceLabel: "Price", removeButton: "Remove",
-  footerTitle: "Receipt Footer", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
-  printButton: "🖨 Print", newSaleButton: "+ New Sale",
+  languageTitle: "Language", languageLabel: "Select Language",
   item: "Item", qty: "Qty", total: "Total",
   subtotal: "Subtotal", discount: "Discount", tax: "Tax",
   received: "Received", change: "Change", paymentShort: "Payment",
   receiptNo: "Receipt No:", date: "Date:",
-  thankYou: "Thank you for shopping with us!", comeAgain: "Please come again."
+  thankYou: "Thank you for shopping with us!", comeAgain: "Please come again.",
+  removeButton: "Remove", customItemName: "Custom Item"
 },
 
 ar: {
   appTitle: "نظام نقاط البيع", appSubtitle: "نظام نقاط بيع يعمل من المتصفح",
-  languageTitle: "اللغة", languageLabel: "اختر اللغة",
+  settingsButtonLabel: "الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
+  catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
+  productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
+  customItemLink: "+ إضافة صنف مخصص", proceedLabel: "المتابعة إلى الدفع",
+  checkoutHeading: "الدفع", totalDueLabel: "المبلغ المستحق",
+  paymentMethodLabel: "طريقة الدفع", amountReceivedLabel: "المبلغ المستلم", changeLabelInfo: "الباقي:",
+  backToCatalogBtn: "← رجوع", completeBtnLabel: "إتمام وطباعة",
+  cartEmptyAlert: "أضف صنفاً واحداً على الأقل قبل المتابعة إلى الدفع.",
+  receiptEmptyHint: "السلة فارغة — أضف منتجات من اللوحة اليسرى.",
+  settingsModalTitle: "الإعدادات",
+  storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
+  storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
+  receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
+  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
+  paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
+  productsTitle: "المنتجات", productsUploadHint: "قم برفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج.",
+  productsSampleButton: "تحميل نموذج CSV", productsClearButton: "مسح المنتجات",
+  productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
+  productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
+  footerTitle: "تذييل الإيصال", footerLine1Label: "السطر الأول", footerLine2Label: "السطر الثاني",
   paperTitle: "حجم الورق", paperLabel: "ورق الإيصال", customWidthLabel: "العرض المخصص (مم)", currentWidthLabel: "العرض الحالي:",
   zoomLabel: "تكبير الشاشة (%)", zoomValueLabel: "التكبير:",
   currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
-  storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
-  storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
-  receiptSettingsTitle: "الإيصال", receiptNumberLabel: "رقم الإيصال",
-  receiptNumberInfo: "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
-  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
-  paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "أضف طرق الدفع الخاصة بك.",
-  paymentTitle: "الدفع", paymentMethodLabel: "طريقة الدفع", amountReceivedLabel: "المبلغ المستلم", changeLabelInfo: "الباقي:",
-  productsTitle: "المنتجات", productsUploadHint: "قم برفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج.",
-  productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. ارفع ملف CSV للبدء.",
-  productsLoadedSuffix: "منتج تم تحميله", productsClearButton: "مسح المنتجات", productsSampleButton: "تحميل نموذج CSV",
-  productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
-  productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
-  itemsTitle: "الأصناف", itemsHint: "أضف منتجات من تبويب المنتجات، أو أضف صنفاً يدوياً أدناه.", addItemButton: "+ إضافة صنف",
-  itemNameLabel: "اسم الصنف", quantityLabel: "الكمية", priceLabel: "السعر", removeButton: "حذف",
-  footerTitle: "تذييل الإيصال", footerLine1Label: "السطر الأول", footerLine2Label: "السطر الثاني",
-  printButton: "🖨 طباعة", newSaleButton: "+ بيع جديد",
+  languageTitle: "اللغة", languageLabel: "اختر اللغة",
   item: "الصنف", qty: "الكمية", total: "الإجمالي",
   subtotal: "المجموع الفرعي", discount: "الخصم", tax: "الضريبة",
   received: "المستلم", change: "الباقي", paymentShort: "الدفع",
   receiptNo: "رقم الإيصال:", date: "التاريخ:",
-  thankYou: "شكراً لتسوقكم معنا!", comeAgain: "نتمنى زيارتكم مرة أخرى."
+  thankYou: "شكراً لتسوقكم معنا!", comeAgain: "نتمنى زيارتكم مرة أخرى.",
+  removeButton: "حذف", customItemName: "صنف مخصص"
 },
 
 fil: {
   appTitle: "Online POS", appSubtitle: "Simpleng point of sale system",
-  languageTitle: "Wika", languageLabel: "Pumili ng Wika",
+  catalogHeading: "Mga Produkto", allCategory: "Lahat",
+  checkoutHeading: "Bayad", totalDueLabel: "Kabuuang Babayaran",
+  paymentMethodLabel: "Paraan ng Pagbabayad", amountReceivedLabel: "Natanggap na Halaga", changeLabelInfo: "Sukli:",
+  storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
+  storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
+  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
+  paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
+  productsTitle: "Mga Produkto", productsUploadHint: "Mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU.",
+  productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
+  productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
+  productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
+  footerTitle: "Footer ng Resibo", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   paperTitle: "Laki ng Papel", paperLabel: "Papel ng Resibo", customWidthLabel: "Custom na Lapad (mm)", currentWidthLabel: "Kasalukuyang lapad:",
   zoomLabel: "Zoom ng Screen (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
-  storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
-  storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
-  receiptSettingsTitle: "Resibo", receiptNumberLabel: "Numero ng Resibo",
-  receiptNumberInfo: "Ang susunod na numero ay ginagawa kapag nagsimula ng bagong sale.",
-  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
-  paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Magdagdag ng sarili mong payment methods.",
-  paymentTitle: "Bayad", paymentMethodLabel: "Paraan ng Pagbabayad", amountReceivedLabel: "Natanggap na Halaga", changeLabelInfo: "Sukli:",
-  productsTitle: "Mga Produkto", productsUploadHint: "Mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU.",
-  productsSearchPlaceholder: "Maghanap ng produkto...", productsEmptyState: "Wala pang produkto. Mag-upload ng CSV para magsimula.",
-  productsLoadedSuffix: "produktong na-load", productsClearButton: "Alisin ang mga Produkto", productsSampleButton: "I-download ang Sample CSV",
-  productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
-  productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
-  itemsTitle: "Mga Item", itemsHint: "Magdagdag ng produkto mula sa tab ng Products, o magdagdag ng item nang manu-mano sa ibaba.", addItemButton: "+ Magdagdag ng Item",
-  itemNameLabel: "Pangalan ng Item", quantityLabel: "Dami", priceLabel: "Presyo", removeButton: "Alisin",
-  footerTitle: "Footer ng Resibo", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
-  printButton: "🖨 I-print", newSaleButton: "+ Bagong Sale",
+  languageTitle: "Wika", languageLabel: "Pumili ng Wika",
   item: "Item", qty: "Qty", total: "Total",
   subtotal: "Subtotal", discount: "Discount", tax: "Buwis",
   received: "Natanggap", change: "Sukli", paymentShort: "Bayad",
   receiptNo: "Resibo No:", date: "Petsa:",
-  thankYou: "Salamat sa inyong pamimili!", comeAgain: "Bumalik po kayo."
+  thankYou: "Salamat sa inyong pamimili!", comeAgain: "Bumalik po kayo.",
+  removeButton: "Alisin"
 },
 
 hi: {
   appTitle: "ऑनलाइन पीओएस", appSubtitle: "सरल ब्राउज़र-आधारित बिक्री प्रणाली",
-  languageTitle: "भाषा", languageLabel: "भाषा चुनें",
+  catalogHeading: "उत्पाद", allCategory: "सभी",
+  checkoutHeading: "भुगतान", totalDueLabel: "कुल देय राशि",
+  paymentMethodLabel: "भुगतान का तरीका", amountReceivedLabel: "प्राप्त राशि", changeLabelInfo: "बाकी राशि:",
+  storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
+  storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
+  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
+  paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
+  productsTitle: "उत्पाद", productsUploadHint: "Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं।",
+  productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
+  productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
+  productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
+  footerTitle: "रसीद फुटर", footerLine1Label: "फुटर लाइन 1", footerLine2Label: "फुटर लाइन 2",
   paperTitle: "पेपर साइज़", paperLabel: "रसीद पेपर", customWidthLabel: "कस्टम चौड़ाई (मिमी)", currentWidthLabel: "वर्तमान चौड़ाई:",
   zoomLabel: "स्क्रीन ज़ूम (%)", zoomValueLabel: "ज़ूम:",
   currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
-  storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
-  storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
-  receiptSettingsTitle: "रसीद", receiptNumberLabel: "रसीद नंबर",
-  receiptNumberInfo: "नई बिक्री शुरू करने पर अगला नंबर स्वतः बनता है।",
-  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
-  paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "अपने भुगतान के तरीके जोड़ें।",
-  paymentTitle: "भुगतान", paymentMethodLabel: "भुगतान का तरीका", amountReceivedLabel: "प्राप्त राशि", changeLabelInfo: "बाकी राशि:",
-  productsTitle: "उत्पाद", productsUploadHint: "Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं।",
-  productsSearchPlaceholder: "उत्पाद खोजें...", productsEmptyState: "अभी तक कोई उत्पाद नहीं। शुरू करने के लिए CSV अपलोड करें।",
-  productsLoadedSuffix: "उत्पाद लोड हुए", productsClearButton: "उत्पाद हटाएं", productsSampleButton: "नमूना CSV डाउनलोड करें",
-  productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
-  productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
-  itemsTitle: "आइटम", itemsHint: "Products टैब से उत्पाद जोड़ें, या नीचे मैन्युअल रूप से आइटम जोड़ें।", addItemButton: "+ आइटम जोड़ें",
-  itemNameLabel: "आइटम का नाम", quantityLabel: "मात्रा", priceLabel: "कीमत", removeButton: "हटाएं",
-  footerTitle: "रसीद फुटर", footerLine1Label: "फुटर लाइन 1", footerLine2Label: "फुटर लाइन 2",
-  printButton: "🖨 प्रिंट करें", newSaleButton: "+ नई बिक्री",
+  languageTitle: "भाषा", languageLabel: "भाषा चुनें",
   item: "आइटम", qty: "मात्रा", total: "कुल",
   subtotal: "उप-योग", discount: "छूट", tax: "कर",
   received: "प्राप्त", change: "बाकी", paymentShort: "भुगतान",
   receiptNo: "रसीद नंबर:", date: "दिनांक:",
-  thankYou: "हमारे यहां खरीदारी करने के लिए धन्यवाद!", comeAgain: "फिर से पधारें।"
+  thankYou: "हमारे यहां खरीदारी करने के लिए धन्यवाद!", comeAgain: "फिर से पधारें।",
+  removeButton: "हटाएं"
 },
 
 es: {
   appTitle: "POS en Línea", appSubtitle: "Sistema de punto de venta simple desde el navegador",
-  languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
+  catalogHeading: "Productos", allCategory: "Todos",
+  checkoutHeading: "Pago", totalDueLabel: "Total a Pagar",
+  paymentMethodLabel: "Método de Pago", amountReceivedLabel: "Monto Recibido", changeLabelInfo: "Cambio:",
+  storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
+  storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
+  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
+  paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
+  productsTitle: "Productos", productsUploadHint: "Sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU.",
+  productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
+  productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
+  productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
+  footerTitle: "Pie del Recibo", footerLine1Label: "Línea de Pie 1", footerLine2Label: "Línea de Pie 2",
   paperTitle: "Tamaño de Papel", paperLabel: "Papel del Recibo", customWidthLabel: "Ancho Personalizado (mm)", currentWidthLabel: "Ancho actual:",
   zoomLabel: "Zoom de Pantalla (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
-  storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
-  storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
-  receiptSettingsTitle: "Recibo", receiptNumberLabel: "Número de Recibo",
-  receiptNumberInfo: "El siguiente número se genera al iniciar una nueva venta.",
-  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
-  paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Agrega tus propios métodos de pago.",
-  paymentTitle: "Pago", paymentMethodLabel: "Método de Pago", amountReceivedLabel: "Monto Recibido", changeLabelInfo: "Cambio:",
-  productsTitle: "Productos", productsUploadHint: "Sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU.",
-  productsSearchPlaceholder: "Buscar productos...", productsEmptyState: "Aún no hay productos. Sube un CSV para comenzar.",
-  productsLoadedSuffix: "productos cargados", productsClearButton: "Eliminar Productos", productsSampleButton: "Descargar CSV de Ejemplo",
-  productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
-  productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
-  itemsTitle: "Artículos", itemsHint: "Agrega productos desde la pestaña Products, o agrega artículos manualmente abajo.", addItemButton: "+ Agregar Artículo",
-  itemNameLabel: "Nombre del Artículo", quantityLabel: "Cantidad", priceLabel: "Precio", removeButton: "Eliminar",
-  footerTitle: "Pie del Recibo", footerLine1Label: "Línea de Pie 1", footerLine2Label: "Línea de Pie 2",
-  printButton: "🖨 Imprimir", newSaleButton: "+ Nueva Venta",
+  languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
   item: "Artículo", qty: "Cant.", total: "Total",
   subtotal: "Subtotal", discount: "Descuento", tax: "Impuesto",
   received: "Recibido", change: "Cambio", paymentShort: "Pago",
   receiptNo: "N.º de Recibo:", date: "Fecha:",
-  thankYou: "¡Gracias por su compra!", comeAgain: "Vuelva pronto."
+  thankYou: "¡Gracias por su compra!", comeAgain: "Vuelva pronto.",
+  removeButton: "Eliminar"
 },
 
 th: {
   appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ระบบขายหน้าร้านผ่านเบราว์เซอร์อย่างง่าย",
-  languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
+  catalogHeading: "สินค้า", allCategory: "ทั้งหมด",
+  checkoutHeading: "การชำระเงิน", totalDueLabel: "ยอดที่ต้องชำระ",
+  paymentMethodLabel: "วิธีการชำระเงิน", amountReceivedLabel: "จำนวนเงินที่รับ", changeLabelInfo: "เงินทอน:",
+  storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
+  storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
+  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
+  paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
+  productsTitle: "สินค้า", productsUploadHint: "อัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้",
+  productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
+  productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
+  productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
+  footerTitle: "ท้ายใบเสร็จ", footerLine1Label: "ข้อความท้ายบรรทัด 1", footerLine2Label: "ข้อความท้ายบรรทัด 2",
   paperTitle: "ขนาดกระดาษ", paperLabel: "กระดาษใบเสร็จ", customWidthLabel: "ความกว้างกำหนดเอง (มม.)", currentWidthLabel: "ความกว้างปัจจุบัน:",
   zoomLabel: "ซูมหน้าจอ (%)", zoomValueLabel: "ซูม:",
   currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
-  storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
-  storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
-  receiptSettingsTitle: "ใบเสร็จ", receiptNumberLabel: "เลขที่ใบเสร็จ",
-  receiptNumberInfo: "หมายเลขถัดไปจะถูกสร้างขึ้นเมื่อเริ่มการขายใหม่",
-  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
-  paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "เพิ่มวิธีการชำระเงินของคุณเอง",
-  paymentTitle: "การชำระเงิน", paymentMethodLabel: "วิธีการชำระเงิน", amountReceivedLabel: "จำนวนเงินที่รับ", changeLabelInfo: "เงินทอน:",
-  productsTitle: "สินค้า", productsUploadHint: "อัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้",
-  productsSearchPlaceholder: "ค้นหาสินค้า...", productsEmptyState: "ยังไม่มีสินค้า อัปโหลดไฟล์ CSV เพื่อเริ่มต้น",
-  productsLoadedSuffix: "รายการสินค้าที่โหลด", productsClearButton: "ล้างรายการสินค้า", productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง",
-  productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
-  productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
-  itemsTitle: "รายการสินค้า", itemsHint: "เพิ่มสินค้าจากแท็บ Products หรือเพิ่มรายการด้วยตนเองด้านล่าง", addItemButton: "+ เพิ่มรายการ",
-  itemNameLabel: "ชื่อสินค้า", quantityLabel: "จำนวน", priceLabel: "ราคา", removeButton: "ลบ",
-  footerTitle: "ท้ายใบเสร็จ", footerLine1Label: "ข้อความท้ายบรรทัด 1", footerLine2Label: "ข้อความท้ายบรรทัด 2",
-  printButton: "🖨 พิมพ์", newSaleButton: "+ การขายใหม่",
+  languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
   item: "สินค้า", qty: "จำนวน", total: "รวม",
   subtotal: "ยอดรวมย่อย", discount: "ส่วนลด", tax: "ภาษี",
   received: "รับเงิน", change: "เงินทอน", paymentShort: "ชำระเงิน",
   receiptNo: "เลขที่ใบเสร็จ:", date: "วันที่:",
-  thankYou: "ขอบคุณที่ใช้บริการ!", comeAgain: "แล้วพบกันใหม่"
+  thankYou: "ขอบคุณที่ใช้บริการ!", comeAgain: "แล้วพบกันใหม่",
+  removeButton: "ลบ"
 }
 
 };
 
 /* =========================================================
-   VARIABLES
+   STATE
    ========================================================= */
 let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
-let products = [];
-let activeTab = null;
+let products = [];        // catalog, from CSV
+let cart = [];            // [{id, name, price, qty}]
+let activeCategory = "all";
+let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
 function symbolNow() { return document.getElementById("currencySymbol").value.trim() || "BD"; }
-function t() { return translations[document.getElementById("language").value]; }
+function currentLang() { return document.getElementById("language").value; }
+/* tr(key): current language, falling back to English so nothing renders blank */
+function tr(key) {
+  const lang = translations[currentLang()] || translations.en;
+  return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+}
 
 /* =========================================================
    STORAGE ABSTRACTION
    Uses Claude's artifact storage (window.storage) when this page is
    viewed inside Claude's preview. When opened as a standalone HTML
-   file in a regular browser (e.g. downloaded and used on a shop
-   computer), window.storage does not exist, so this falls back to
-   the browser's own localStorage — which persists on that device
-   until its site data/cache is cleared.
+   file in a regular browser, falls back to localStorage on that device.
    ========================================================= */
 function hasArtifactStorage() {
   return typeof window !== "undefined" && !!window.storage && typeof window.storage.get === "function";
 }
-
 async function storageGet(key) {
   if (hasArtifactStorage()) {
-    try {
-      const res = await window.storage.get(key, false);
-      return (res && res.value !== undefined) ? res.value : null;
-    } catch (e) { return null; }
+    try { const res = await window.storage.get(key, false); return (res && res.value !== undefined) ? res.value : null; }
+    catch (e) { return null; }
   }
-  try { return localStorage.getItem("onlinepos_" + key); }
-  catch (e) { return null; }
+  try { return localStorage.getItem("onlinepos_" + key); } catch (e) { return null; }
 }
-
 async function storageSet(key, value) {
   if (hasArtifactStorage()) {
-    try { await window.storage.set(key, value, false); }
-    catch (e) { console.error("Could not save " + key, e); }
+    try { await window.storage.set(key, value, false); } catch (e) { console.error("Could not save " + key, e); }
     return;
   }
-  try { localStorage.setItem("onlinepos_" + key, value); }
-  catch (e) { console.error("Could not save " + key, e); }
+  try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
 }
 
 /* =========================================================
-   LEFT TAB SIDEBAR
+   SETTINGS MODAL
    ========================================================= */
-function selectTab(name) {
-  const panel = document.getElementById("tabPanel");
-  const contents = document.querySelectorAll(".panel-content");
-  const icons = document.querySelectorAll(".tab-icon[data-tab]");
-
-  if (activeTab === name) {
-    activeTab = null;
-    panel.classList.remove("open");
-    contents.forEach(function(c) { c.classList.remove("active"); });
-    icons.forEach(function(i) { i.classList.remove("active"); });
-    return;
-  }
-
-  activeTab = name;
-  panel.classList.add("open");
-  contents.forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
-  icons.forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
+function openSettings() {
+  document.getElementById("settingsOverlay").classList.remove("hidden");
+  selectSettingsTab(settingsActiveTab);
+}
+function closeSettings() {
+  document.getElementById("settingsOverlay").classList.add("hidden");
+}
+function selectSettingsTab(name) {
+  settingsActiveTab = name;
+  document.querySelectorAll(".settings-panel-content").forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
+  document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
 }
 
 /* =========================================================
-   PERSISTENT STORAGE (per-device, survives reloads/new sessions
-   until the browser's site data/cache is cleared)
+   PERSISTENT SETTINGS / PAYMENT METHODS / PRODUCTS
    ========================================================= */
 async function loadSettings() {
   const raw = await storageGet("pos-settings");
@@ -640,10 +673,9 @@ async function loadSettings() {
         const el = document.getElementById(key);
         if (el) el.value = s[key];
       });
-    } catch (e) { /* corrupt or missing settings, defaults from HTML are used */ }
+    } catch (e) { /* defaults from HTML are used */ }
   }
 }
-
 async function saveSettings() {
   const settings = {
     currencyCode: val("currencyCode"), currencySymbol: val("currencySymbol"),
@@ -651,35 +683,23 @@ async function saveSettings() {
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
     footer1: val("footer1"), footer2: val("footer2"),
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
-    zoomRange: val("zoomRange")
+    zoomRange: val("zoomRange"), documentType: val("documentType")
   };
   await storageSet("pos-settings", JSON.stringify(settings));
 }
-
 async function loadPaymentMethods() {
   const raw = await storageGet("pos-payment-methods");
-  try {
-    paymentMethods = raw ? JSON.parse(raw) : ["Cash", "Card", "Bank Transfer"];
-  } catch (e) { paymentMethods = ["Cash", "Card", "Bank Transfer"]; }
+  try { paymentMethods = raw ? JSON.parse(raw) : ["Cash", "Card", "Bank Transfer"]; }
+  catch (e) { paymentMethods = ["Cash", "Card", "Bank Transfer"]; }
   renderPaymentMethods();
 }
-
-async function savePaymentMethods() {
-  await storageSet("pos-payment-methods", JSON.stringify(paymentMethods));
-}
-
+async function savePaymentMethods() { await storageSet("pos-payment-methods", JSON.stringify(paymentMethods)); }
 async function loadProductsFromStorage() {
   const raw = await storageGet("pos-products");
-  try {
-    products = raw ? JSON.parse(raw) : [];
-  } catch (e) { products = []; }
-  renderProducts();
+  try { products = raw ? JSON.parse(raw) : []; } catch (e) { products = []; }
+  renderProductCatalog();
 }
-
-async function saveProducts() {
-  await storageSet("pos-products", JSON.stringify(products));
-}
-
+async function saveProducts() { await storageSet("pos-products", JSON.stringify(products)); }
 async function getNextReceiptNumber() {
   const raw = await storageGet("pos-receipt-counter");
   let last = parseInt(raw, 10) || 0;
@@ -687,10 +707,7 @@ async function getNextReceiptNumber() {
   await storageSet("pos-receipt-counter", String(last));
   return String(last).padStart(6, "0");
 }
-
-async function startFirstSale() {
-  currentReceiptNumber = await getNextReceiptNumber();
-}
+async function startFirstSale() { currentReceiptNumber = await getNextReceiptNumber(); }
 
 /* =========================================================
    PAYMENT METHODS
@@ -706,14 +723,12 @@ function addPaymentMethod() {
   renderPaymentMethods();
   updateReceipt();
 }
-
 function removePaymentMethod(index) {
   paymentMethods.splice(index, 1);
   savePaymentMethods();
   renderPaymentMethods();
   updateReceipt();
 }
-
 function renderPaymentMethods() {
   const list = document.getElementById("paymentMethodsList");
   const select = document.getElementById("paymentMethod");
@@ -734,16 +749,30 @@ function renderPaymentMethods() {
 }
 
 /* =========================================================
-   NEW SALE
+   WORKFLOW: New Sale / Proceed to Payment / Back / Complete
    ========================================================= */
 async function newSale() {
-  if (!confirm("Start a new sale?")) return;
+  if (cart.length && !confirm("Start a new sale? The current cart will be cleared.")) return;
   currentReceiptNumber = await getNextReceiptNumber();
-  itemCounter = 0;
-  document.getElementById("itemsContainer").innerHTML = "";
+  cart = [];
   document.getElementById("amountReceived").value = "0";
-  addItem();
+  backToCatalog();
   updateReceipt();
+}
+
+function goToCheckout() {
+  if (cart.length === 0) { alert(tr("cartEmptyAlert")); return; }
+  document.getElementById("catalogView").classList.add("hidden");
+  document.getElementById("checkoutView").classList.remove("hidden");
+  updateReceipt();
+}
+function backToCatalog() {
+  document.getElementById("checkoutView").classList.add("hidden");
+  document.getElementById("catalogView").classList.remove("hidden");
+  renderProductCatalog();
+}
+function completeAndPrint() {
+  printReceipt();
 }
 
 /* =========================================================
@@ -761,81 +790,50 @@ function updateDate() {
 }
 
 /* =========================================================
-   ITEMS (manual + added from product catalog)
+   CART (single source of truth for the receipt)
    ========================================================= */
-function addItem(prefillName, prefillPrice) {
+function findCartIndexByNamePrice(name, price) {
+  return cart.findIndex(function(c) { return c.name === name && Math.abs(c.price - price) < 0.0005; });
+}
+function addProductToCart(product) {
+  const idx = findCartIndexByNamePrice(product.name, product.price);
+  if (idx > -1) { cart[idx].qty += 1; }
+  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1 }); }
+  updateReceipt();
+}
+function addCustomItem() {
   itemCounter++;
-  const id = itemCounter;
-  const container = document.getElementById("itemsContainer");
-  const div = document.createElement("div");
-  div.className = "item-row";
-  div.id = "item-" + id;
-
-  const name = prefillName || "";
-  const price = (prefillPrice !== undefined && prefillPrice !== null) ? prefillPrice : 0;
-
-  div.innerHTML =
-    "<h4 class=\"item-heading\">" + t().item + " " + id + "</h4>" +
-    "<label class=\"item-name-label\">" + t().itemNameLabel + "</label>" +
-    "<input class=\"item-name-input\" type=\"text\" placeholder=\"Example: Coca Cola\" value=\"" + escapeAttr(name) + "\" oninput=\"updateReceipt()\">" +
-    "<label class=\"item-qty-label\">" + t().quantityLabel + "</label>" +
-    "<div class=\"qty-stepper\">" +
-      "<button type=\"button\" onclick=\"stepQty(" + id + ",-1)\">−</button>" +
-      "<input class=\"item-qty-input\" type=\"number\" value=\"1\" min=\"0\" step=\"1\" oninput=\"updateReceipt()\">" +
-      "<button type=\"button\" onclick=\"stepQty(" + id + ",1)\">+</button>" +
-    "</div>" +
-    "<label class=\"item-price-label\">" + t().priceLabel + "</label>" +
-    "<input class=\"item-price-input\" type=\"number\" value=\"" + price + "\" min=\"0\" step=\"0.001\" oninput=\"updateReceipt()\">" +
-    "<button class=\"remove-item item-remove-btn\" onclick=\"removeItem(" + id + ")\">" + t().removeButton + "</button>";
-
-  container.appendChild(div);
+  cart.push({ id: itemCounter, name: "", price: 0, qty: 1 });
+  updateReceipt();
+  setTimeout(function() {
+    const input = document.querySelector('.receipt-item[data-id="' + itemCounter + '"] .receipt-item-name-input');
+    if (input) input.focus();
+  }, 0);
+}
+function stepCartQty(id, delta) {
+  const item = cart.find(function(c) { return c.id === id; });
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) { cart = cart.filter(function(c) { return c.id !== id; }); }
   updateReceipt();
 }
-
-function stepQty(id, delta) {
-  const row = document.getElementById("item-" + id);
-  if (!row) return;
-  const input = row.querySelector(".item-qty-input");
-  let v = (parseFloat(input.value) || 0) + delta;
-  if (v < 0) v = 0;
-  input.value = v;
+function removeCartItem(id) {
+  cart = cart.filter(function(c) { return c.id !== id; });
   updateReceipt();
 }
-
-function removeItem(id) {
-  const element = document.getElementById("item-" + id);
-  if (element) element.remove();
-  refreshItemRowLabels();
+function updateCartField(id, field, value) {
+  const item = cart.find(function(c) { return c.id === id; });
+  if (!item) return;
+  if (field === "price") item.price = Number(value) || 0;
+  else item.name = value;
   updateReceipt();
 }
-
-function refreshItemRowLabels() {
-  const tr = t();
-  document.querySelectorAll(".item-row").forEach(function(row, i) {
-    const heading = row.querySelector(".item-heading");
-    if (heading) heading.textContent = tr.item + " " + (i + 1);
-    const nameLabel = row.querySelector(".item-name-label");
-    if (nameLabel) nameLabel.textContent = tr.itemNameLabel;
-    const qtyLabel = row.querySelector(".item-qty-label");
-    if (qtyLabel) qtyLabel.textContent = tr.quantityLabel;
-    const priceLabel = row.querySelector(".item-price-label");
-    if (priceLabel) priceLabel.textContent = tr.priceLabel;
-    const removeBtn = row.querySelector(".item-remove-btn");
-    if (removeBtn) removeBtn.textContent = tr.removeButton;
-  });
+function getCartQtyFor(name, price) {
+  const idx = findCartIndexByNamePrice(name, price);
+  return idx > -1 ? cart[idx].qty : 0;
 }
-
-/* Sum of quantities already in the cart for a given product (by name + price) */
-function getCartQty(name, price) {
-  let qty = 0;
-  document.querySelectorAll(".item-row").forEach(function(row) {
-    const n = row.querySelector(".item-name-input").value;
-    const p = Number(row.querySelector(".item-price-input").value) || 0;
-    if (n === name && Math.abs(p - price) < 0.0005) {
-      qty += Number(row.querySelector(".item-qty-input").value) || 0;
-    }
-  });
-  return qty;
+function cartTotalCount() {
+  return cart.reduce(function(sum, c) { return sum + c.qty; }, 0);
 }
 
 /* =========================================================
@@ -903,16 +901,17 @@ function handleCsvUpload(event) {
 
       products = newProducts;
       await saveProducts();
-      renderProducts();
-      successBox.textContent = products.length + " " + t().productsUploadSuccess;
+      activeCategory = "all";
+      renderProductCatalog();
+      successBox.textContent = products.length + " " + tr("productsUploadSuccess");
       successBox.classList.remove("hidden");
     } catch (err) {
-      errorBox.textContent = t().productsUploadError;
+      errorBox.textContent = tr("productsUploadError");
       errorBox.classList.remove("hidden");
     }
   };
   reader.onerror = function() {
-    errorBox.textContent = t().productsUploadError;
+    errorBox.textContent = tr("productsUploadError");
     errorBox.classList.remove("hidden");
   };
   reader.readAsText(file);
@@ -920,7 +919,7 @@ function handleCsvUpload(event) {
 }
 
 function downloadSampleCsv() {
-  const sample = "Name,Price,Category,SKU\nCoca Cola 330ml,0.300,Beverages,8901\nWhite Bread,0.450,Bakery,8902\nBottled Water 1.5L,0.200,Beverages,8903\n";
+  const sample = "Name,Price,Category,SKU\nCoca Cola 330ml,0.300,Beverages,8901\nWhite Bread,0.450,Bakery,8902\nBottled Water 1.5L,0.200,Beverages,8903\nPotato Chips,0.350,Snacks,8904\nInstant Noodles,0.250,Snacks,8905\n";
   const blob = new Blob([sample], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -934,53 +933,70 @@ function downloadSampleCsv() {
 
 async function clearProducts() {
   if (!products.length) return;
-  if (!confirm(t().productsClearConfirm)) return;
+  if (!confirm(tr("productsClearConfirm"))) return;
   products = [];
   await saveProducts();
-  renderProducts();
+  activeCategory = "all";
+  renderProductCatalog();
   document.getElementById("csvSuccessBox").classList.add("hidden");
   document.getElementById("csvErrorBox").classList.add("hidden");
 }
 
-/* Adding a product that's already in the cart increases its quantity
-   instead of creating a duplicate line — the line total (qty × price)
-   then recalculates automatically. */
-function addProductToCart(index) {
-  const p = products[index];
-  if (!p) return;
-  const rows = document.querySelectorAll(".item-row");
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const nameInput = row.querySelector(".item-name-input");
-    const priceInput = row.querySelector(".item-price-input");
-    if (nameInput.value === p.name && Math.abs((Number(priceInput.value) || 0) - p.price) < 0.0005) {
-      const qtyInput = row.querySelector(".item-qty-input");
-      qtyInput.value = (Number(qtyInput.value) || 0) + 1;
-      updateReceipt();
-      return;
-    }
-  }
-  addItem(p.name, p.price);
+/* =========================================================
+   PRODUCT CATALOG: categories + list (left panel)
+   ========================================================= */
+function getCategories() {
+  const set = [];
+  products.forEach(function(p) {
+    const cat = (p.category || "").trim();
+    if (cat && set.indexOf(cat) === -1) set.push(cat);
+  });
+  set.sort(function(a, b) { return a.localeCompare(b); });
+  return set;
 }
 
-function renderProducts() {
-  const tr = t();
+function renderCategoryChips() {
+  const container = document.getElementById("categoryChips");
+  const categories = getCategories();
+  container.innerHTML = "";
+
+  const allChip = document.createElement("button");
+  allChip.className = "category-chip" + (activeCategory === "all" ? " active" : "");
+  allChip.textContent = tr("allCategory");
+  allChip.onclick = function() { activeCategory = "all"; renderProductCatalog(); };
+  container.appendChild(allChip);
+
+  categories.forEach(function(cat) {
+    const chip = document.createElement("button");
+    chip.className = "category-chip" + (activeCategory === cat ? " active" : "");
+    chip.textContent = cat;
+    chip.onclick = function() { activeCategory = cat; renderProductCatalog(); };
+    container.appendChild(chip);
+  });
+}
+
+function renderProductCatalog() {
+  renderCategoryChips();
+
   const container = document.getElementById("productsList");
   const emptyState = document.getElementById("productsEmpty");
-  const countLabel = document.getElementById("productsCount");
   const query = (document.getElementById("productSearch").value || "").toLowerCase().trim();
+  const symbol = symbolNow();
 
   container.innerHTML = "";
   emptyState.classList.toggle("hidden", products.length > 0);
-  countLabel.textContent = products.length ? (products.length + " " + tr.productsLoadedSuffix) : "";
+  emptyState.textContent = tr("productsEmptyState");
 
-  const symbol = symbolNow();
-  products.forEach(function(p, index) {
-    if (query && p.name.toLowerCase().indexOf(query) === -1 &&
-        !(p.sku && p.sku.toLowerCase().indexOf(query) !== -1) &&
-        !(p.category && p.category.toLowerCase().indexOf(query) !== -1)) return;
+  const filtered = products.filter(function(p) {
+    if (activeCategory !== "all" && (p.category || "").trim() !== activeCategory) return false;
+    if (!query) return true;
+    return p.name.toLowerCase().indexOf(query) !== -1 ||
+      (p.sku && p.sku.toLowerCase().indexOf(query) !== -1) ||
+      (p.category && p.category.toLowerCase().indexOf(query) !== -1);
+  });
 
-    const inCart = getCartQty(p.name, p.price);
+  filtered.forEach(function(p) {
+    const inCart = getCartQtyFor(p.name, p.price);
     const row = document.createElement("div");
     row.className = "product-item";
     row.innerHTML =
@@ -989,12 +1005,19 @@ function renderProducts() {
         "<div class=\"product-meta\">" +
           (p.category ? "<span class=\"product-category\">" + escapeHtml(p.category) + "</span>" : "") +
           "<span class=\"product-price\">" + escapeHtml(symbol) + " " + p.price.toFixed(3) + "</span>" +
-          (inCart > 0 ? "<span class=\"product-in-cart\">" + escapeHtml(tr.inCartLabel) + " " + inCart + "</span>" : "") +
+          (inCart > 0 ? "<span class=\"product-in-cart\">" + escapeHtml(tr("inCartLabel")) + " " + inCart + "</span>" : "") +
         "</div>" +
       "</div>" +
-      "<button onclick=\"addProductToCart(" + index + ")\">+</button>";
+      "<button>+</button>";
+    row.querySelector("button").onclick = function() { addProductToCart(p); };
     container.appendChild(row);
   });
+
+  updateCartCountBadge();
+}
+
+function updateCartCountBadge() {
+  document.getElementById("cartCountBadge").textContent = cartTotalCount() + " " + tr("cartCountBadge");
 }
 
 /* =========================================================
@@ -1042,11 +1065,8 @@ function updateZoom() {
 function printReceipt() {
   const select = document.getElementById("paperSize");
   let width;
-  if (select.value === "custom") {
-    width = Number(document.getElementById("customWidth").value) || 80;
-  } else {
-    width = Number(select.value);
-  }
+  if (select.value === "custom") width = Number(document.getElementById("customWidth").value) || 80;
+  else width = Number(select.value);
   updatePrintStyle(width);
   window.print();
 }
@@ -1055,19 +1075,34 @@ function printReceipt() {
    DOCUMENT TITLE
    ========================================================= */
 function getDocumentTitle() {
-  const tr = t();
   const type = document.getElementById("documentType").value;
-  if (type === "invoice") return tr.invoice;
-  if (type === "payment") return tr.payment;
-  return tr.receipt;
+  if (type === "invoice") return tr("invoice");
+  if (type === "payment") return tr("payment");
+  return tr("receipt");
 }
 
 /* =========================================================
-   UPDATE RECEIPT
+   TOTALS
+   ========================================================= */
+function computeTotals() {
+  const taxRate = Number(val("taxRate")) || 0;
+  const discountRate = Number(val("discountRate")) || 0;
+  let subtotal = 0;
+  cart.forEach(function(c) { subtotal += (Number(c.qty) || 0) * (Number(c.price) || 0); });
+  const discount = subtotal * discountRate / 100;
+  const afterDiscount = subtotal - discount;
+  const tax = afterDiscount * taxRate / 100;
+  const grandTotal = afterDiscount + tax;
+  return { subtotal: subtotal, discount: discount, tax: tax, grandTotal: grandTotal };
+}
+
+/* =========================================================
+   UPDATE RECEIPT (renders cart + totals + checkout view)
    ========================================================= */
 function updateReceipt() {
-  const tr = t();
   const symbol = symbolNow();
+  const taxName = val("taxName").trim() || tr("tax");
+  const taxRate = Number(val("taxRate")) || 0;
 
   document.getElementById("receiptStoreName").textContent = val("storeName") || "Online POS";
   document.getElementById("receiptStoreDetails").innerHTML = escapeHtml(val("storeDetails")).replace(/\n/g, "<br>");
@@ -1075,51 +1110,51 @@ function updateReceipt() {
   document.getElementById("receiptNumber").textContent = currentReceiptNumber;
   document.getElementById("receiptNumberInput").value = currentReceiptNumber;
 
-  const taxName = val("taxName").trim() || tr.tax;
-  const taxRate = Number(val("taxRate")) || 0;
-  const discountRate = Number(val("discountRate")) || 0;
-
-  const rows = document.querySelectorAll(".item-row");
   const receiptItems = document.getElementById("receiptItems");
+  const emptyHint = document.getElementById("receiptEmptyHint");
   receiptItems.innerHTML = "";
-  let subtotal = 0;
+  emptyHint.textContent = tr("receiptEmptyHint");
+  emptyHint.classList.toggle("hidden", cart.length > 0);
 
-  rows.forEach(function(row) {
-    const name = row.querySelector(".item-name-input").value;
-    const qty = Number(row.querySelector(".item-qty-input").value) || 0;
-    const price = Number(row.querySelector(".item-price-input").value) || 0;
-    const total = qty * price;
-    subtotal += total;
+  cart.forEach(function(c) {
+    const total = (Number(c.qty) || 0) * (Number(c.price) || 0);
+    const div = document.createElement("div");
+    div.className = "receipt-item";
+    div.setAttribute("data-id", c.id);
+    div.innerHTML =
+      "<div class=\"receipt-item-line\">" +
+        "<input class=\"receipt-item-name-input\" value=\"" + escapeAttr(c.name) + "\" placeholder=\"" + escapeAttr(tr("customItemName")) + "\">" +
+        "<span class=\"receipt-item-qty\">" + c.qty + "</span>" +
+        "<span class=\"receipt-item-total\">" + escapeHtml(symbol) + " " + total.toFixed(3) + "</span>" +
+      "</div>" +
+      "<div class=\"receipt-item-detail-print\">" + escapeHtml(symbol) + " " + Number(c.price).toFixed(3) + " × " + c.qty + "</div>" +
+      "<div class=\"receipt-item-controls no-print\">" +
+        "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"0.001\" value=\"" + Number(c.price) + "\">" +
+        "<button type=\"button\" class=\"qty-btn\" data-action=\"dec\">−</button>" +
+        "<button type=\"button\" class=\"qty-btn\" data-action=\"inc\">+</button>" +
+        "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
+      "</div>";
 
-    if (name || qty || price) {
-      const item = document.createElement("div");
-      item.className = "receipt-item";
-      item.innerHTML =
-        "<div class=\"receipt-item-line\">" +
-          "<span class=\"receipt-item-name\">" + escapeHtml(name || tr.item) + "</span>" +
-          "<span class=\"receipt-item-qty\">" + qty + "</span>" +
-          "<span class=\"receipt-item-total\">" + escapeHtml(symbol) + " " + total.toFixed(3) + "</span>" +
-        "</div>" +
-        "<div class=\"receipt-item-detail\">" + escapeHtml(symbol) + " " + price.toFixed(3) + " × " + qty + "</div>";
-      receiptItems.appendChild(item);
-    }
+    div.querySelector(".receipt-item-name-input").addEventListener("input", function() { updateCartField(c.id, "name", this.value); });
+    div.querySelector(".price-input").addEventListener("input", function() { updateCartField(c.id, "price", this.value); });
+    div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
+    div.querySelector("[data-action=\"inc\"]").addEventListener("click", function() { stepCartQty(c.id, 1); });
+    div.querySelector(".remove-cart-btn").addEventListener("click", function() { removeCartItem(c.id); });
+
+    receiptItems.appendChild(div);
   });
 
-  const discount = subtotal * discountRate / 100;
-  const afterDiscount = subtotal - discount;
-  const tax = afterDiscount * taxRate / 100;
-  const grandTotal = afterDiscount + tax;
-
+  const totals = computeTotals();
   const paymentMethod = val("paymentMethod") || "";
   const received = Number(val("amountReceived")) || 0;
-  let change = received - grandTotal;
+  let change = received - totals.grandTotal;
   if (change < 0) change = 0;
 
   document.getElementById("receiptTaxLabel").textContent = taxName + " (" + taxRate + "%)";
-  document.getElementById("subtotal").textContent = symbol + " " + subtotal.toFixed(3);
-  document.getElementById("discountAmount").textContent = symbol + " " + discount.toFixed(3);
-  document.getElementById("taxAmount").textContent = symbol + " " + tax.toFixed(3);
-  document.getElementById("grandTotal").textContent = symbol + " " + grandTotal.toFixed(3);
+  document.getElementById("subtotal").textContent = symbol + " " + totals.subtotal.toFixed(3);
+  document.getElementById("discountAmount").textContent = symbol + " " + totals.discount.toFixed(3);
+  document.getElementById("taxAmount").textContent = symbol + " " + totals.tax.toFixed(3);
+  document.getElementById("grandTotal").textContent = symbol + " " + totals.grandTotal.toFixed(3);
   document.getElementById("receiptPaymentMethod").textContent = paymentMethod;
   document.getElementById("receiptReceived").textContent = symbol + " " + received.toFixed(3);
   document.getElementById("receiptChange").textContent = symbol + " " + change.toFixed(3);
@@ -1127,8 +1162,12 @@ function updateReceipt() {
   document.getElementById("receiptFooter1").textContent = val("footer1");
   document.getElementById("receiptFooter2").textContent = val("footer2");
 
+  document.getElementById("proceedAmount").textContent = symbol + " " + totals.grandTotal.toFixed(3);
+  document.getElementById("checkoutTotalAmount").textContent = symbol + " " + totals.grandTotal.toFixed(3);
+  document.getElementById("proceedBtn").disabled = cart.length === 0;
+
+  updateCartCountBadge();
   saveSettings();
-  renderProducts();
 }
 
 /* =========================================================
@@ -1136,28 +1175,29 @@ function updateReceipt() {
    ========================================================= */
 function changeLanguage() {
   const language = document.getElementById("language").value;
-  const tr = translations[language];
-
   document.documentElement.lang = language;
   document.body.dir = language === "ar" ? "rtl" : "ltr";
 
   const ids = {
     appTitle: "appTitle", appSubtitle: "appSubtitle",
-    languageTitle: "languageTitle", languageLabel: "languageLabel",
-    documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
-    paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
-    zoomLabel: "zoomLabel",
-    currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
+    settingsButtonLabel: "settingsButtonLabel", printButtonLabel: "printButtonLabel", newSaleButtonLabel: "newSaleButtonLabel",
+    catalogHeading: "catalogHeading", customItemLink: "customItemLink", proceedLabel: "proceedLabel",
+    checkoutHeading: "checkoutHeading", totalDueLabel: "totalDueLabel",
+    paymentMethodLabel: "paymentMethodLabel", amountReceivedLabel: "amountReceivedLabel", changeLabelInfo: "changeLabelInfo",
+    backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
+    settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
-    receiptSettingsTitle: "receiptSettingsTitle", receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
+    documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
+    receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
-    paymentTitle: "paymentTitle", paymentMethodLabel: "paymentMethodLabel", amountReceivedLabel: "amountReceivedLabel", changeLabelInfo: "changeLabelInfo",
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
     productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
-    itemsTitle: "itemsTitle", itemsHint: "itemsHint", addItemButton: "addItemButton",
     footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
-    printButton: "printButton", newSaleButton: "newSaleButton",
+    paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
+    zoomLabel: "zoomLabel", zoomValueLabel: "zoomValueLabel",
+    currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
+    languageTitle: "languageTitle", languageLabel: "languageLabel",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
     receiptPaymentMethodLabel: "paymentShort", receiptReceivedLabel: "received", receiptChangeLabel: "change",
@@ -1167,16 +1207,20 @@ function changeLanguage() {
   Object.keys(ids).forEach(function(id) {
     const element = document.getElementById(id);
     if (!element) return;
-    element.textContent = tr[ids[id]];
+    element.textContent = tr(ids[id]);
   });
 
-  const productsEmptyEl = document.getElementById("productsEmpty");
-  if (productsEmptyEl) productsEmptyEl.textContent = tr.productsEmptyState;
-  const productSearchEl = document.getElementById("productSearch");
-  if (productSearchEl) productSearchEl.placeholder = tr.productsSearchPlaceholder;
+  const searchEl = document.getElementById("productSearch");
+  if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
 
-  refreshItemRowLabels();
-  renderProducts();
+  const dt = document.getElementById("documentType");
+  if (dt) {
+    dt.options[0].textContent = tr("receipt");
+    dt.options[1].textContent = tr("invoice");
+    dt.options[2].textContent = tr("payment");
+  }
+
+  renderProductCatalog();
   updateReceipt();
 }
 
@@ -1200,12 +1244,11 @@ async function init() {
   await loadPaymentMethods();
   await loadProductsFromStorage();
   await startFirstSale();
-  addItem();
   changePaperSize();
   updateZoom();
   updateDate();
   changeLanguage();
-  selectTab("items");
+  updateReceipt();
   setInterval(updateDate, 1000);
 }
 init();
