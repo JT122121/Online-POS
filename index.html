@@ -249,6 +249,13 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+</script>
 </head>
 <body>
 
@@ -732,10 +739,10 @@ th: {
 let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
-let products = [];        // catalog, from CSV
-let logoDataUrl = null;   // company logo, persisted in storage
-let cart = [];            // [{id, name, price, qty}]
-let salesHistory = [];    // completed sales: [{receiptNumber, ...totals..., items:[...]}]
+let products = [];
+let logoDataUrl = null;
+let cart = [];
+let salesHistory = [];
 let activeCategory = "all";
 let settingsActiveTab = "store";
 
