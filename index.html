@@ -12,24 +12,39 @@ button, input, textarea, select { font-family: Arial, sans-serif; }
 button { cursor: pointer; }
 .hidden { display: none !important; }
 
-.app { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px; align-items: start; max-width: 1500px; margin: auto; }
+/* ===== HEADER ===== */
+.app-header { max-width: 1800px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.app-header h1 { margin: 0; font-size: 22px; }
+.app-header .subtitle { margin: 4px 0 0; color: #666; font-size: 12px; }
+.header-actions { display: flex; gap: 8px; }
+.header-actions button { padding: 11px 18px; border: 0; border-radius: 6px; font-size: 14px; }
+#printButton { background: #111; color: #fff; }
+#newSaleButton { background: #444; color: #fff; }
 
-.controls { width: 100%; background: #fff; padding: 14px; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
-.controls h1 { margin: 0; font-size: 22px; }
-.subtitle { margin: 4px 0 12px; color: #666; font-size: 12px; }
+.app { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1800px; margin: auto; }
 
-.section { border-top: 1px solid #ddd; margin-top: 8px; }
-.section-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 0; background: transparent; padding: 12px 4px; font-size: 14px; font-weight: bold; color: #111; text-align: left; }
-.section-toggle:hover { background: #f5f5f5; }
-.section-icon { font-size: 18px; font-weight: normal; width: 22px; text-align: center; }
-.section-content { padding: 0 4px 12px; }
-.section-content.collapsed { display: none; }
+/* ===== LEFT TAB SIDEBAR ===== */
+.sidebar { position: sticky; top: 16px; display: flex; align-items: flex-start; }
+
+.tab-rail { display: flex; flex-direction: column; gap: 4px; width: 60px; flex-shrink: 0; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); padding: 8px 6px; max-height: calc(100vh - 32px); overflow-y: auto; }
+.tab-icon { border: 0; background: transparent; border-radius: 8px; font-size: 19px; padding: 11px 0; display: flex; align-items: center; justify-content: center; color: #333; transition: background .15s; }
+.tab-icon:hover { background: #f0f0f0; }
+.tab-icon.active { background: #111; color: #fff; }
+
+.tab-panel { width: 0; overflow: hidden; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); transition: width .18s ease, margin-left .18s ease, padding .18s ease; max-height: calc(100vh - 32px); overflow-y: auto; }
+.tab-panel:not(.open) { box-shadow: none; }
+.tab-panel.open { width: 320px; margin-left: 10px; padding: 14px; }
+
+.panel-content { display: none; }
+.panel-content.active { display: block; }
+.panel-content h3 { margin: 0 0 10px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
 
 label { display: block; margin-top: 9px; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
 input, textarea, select { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 5px; background: #fff; font-size: 13px; }
 textarea { min-height: 100px; resize: vertical; line-height: 1.4; }
 input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-color: #555; }
 input[type="file"] { padding: 8px; font-size: 12px; }
+input[type="range"] { padding: 0; }
 
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
@@ -54,23 +69,22 @@ input[type="file"] { padding: 8px; font-size: 12px; }
 .csv-actions { display: flex; gap: 6px; margin-top: 8px; }
 .csv-actions button { flex: 1; }
 .product-search { margin-top: 10px; }
-.product-list { margin-top: 8px; max-height: 260px; overflow-y: auto; }
+.product-list { margin-top: 8px; max-height: 320px; overflow-y: auto; }
 .product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; }
 .product-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .product-name { font-weight: bold; font-size: 12px; overflow-wrap: break-word; }
-.product-meta { display: flex; gap: 6px; align-items: center; }
+.product-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .product-category { font-size: 9.5px; color: #777; text-transform: uppercase; letter-spacing: .03em; border: 1px solid #ddd; border-radius: 3px; padding: 1px 4px; }
 .product-price { font-size: 11px; color: #333; }
+.product-in-cart { font-size: 10.5px; color: #276438; font-weight: bold; }
 .product-item button { flex-shrink: 0; background: #111; color: #fff; border: 0; border-radius: 5px; width: 32px; height: 32px; font-size: 16px; }
 .products-empty { margin-top: 8px; padding: 12px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
 .products-count { margin-top: 6px; font-size: 11px; color: #666; }
 
 .primary-btn { width: 100%; margin-top: 8px; padding: 11px; border: 0; border-radius: 6px; background: #111; color: white; font-size: 14px; }
-.secondary-btn { width: 100%; margin-top: 7px; padding: 11px; border: 0; border-radius: 6px; background: #444; color: white; font-size: 14px; }
 .small-btn { border: 0; border-radius: 5px; background: #111; color: white; padding: 8px 12px; }
 
-.quick-actions { position: sticky; bottom: 0; background: white; padding-top: 8px; margin-top: 8px; border-top: 1px solid #ddd; }
-
+/* ===== LIVE RECEIPT (wider preview area) ===== */
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
 
 .receipt { width: 80mm; min-height: 100vh; padding: 4mm; background: white; border: 2px solid #000; color: #000; flex-shrink: 0; font-family: "Courier New", monospace; font-size: 10pt; box-shadow: 0 3px 15px rgba(0,0,0,.15); }
@@ -104,8 +118,15 @@ input[type="file"] { padding: 8px; font-size: 12px; }
 
 @media (max-width: 900px) {
   body { padding: 8px; }
+  .app-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .header-actions { width: 100%; }
+  .header-actions button { flex: 1; }
   .app { display: flex; flex-direction: column; gap: 12px; }
-  .controls { position: relative; top: auto; max-height: none; overflow: visible; width: 100%; }
+  .sidebar { position: relative; top: auto; flex-direction: column; width: 100%; }
+  .tab-rail { flex-direction: row; width: 100%; max-height: none; overflow-x: auto; overflow-y: visible; }
+  .tab-icon { flex-shrink: 0; width: 48px; height: 48px; }
+  .tab-panel { max-height: none; }
+  .tab-panel.open { width: 100% !important; margin-left: 0; margin-top: 10px; }
   .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
   .receipt { box-shadow: none; }
 }
@@ -113,191 +134,57 @@ input[type="file"] { padding: 8px; font-size: 12px; }
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .controls { display: none !important; }
+  .app-header, .sidebar { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
-  .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; }
+  .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; }
 }
 </style>
 </head>
 <body>
 
-<div class="app">
-
-<div class="controls">
-
+<header class="app-header">
+<div>
 <h1 id="appTitle">Online POS</h1>
 <div class="subtitle" id="appSubtitle">Simple browser-based point of sale</div>
+</div>
+<div class="header-actions">
+<button id="printButton" onclick="printReceipt()">🖨 Print</button>
+<button id="newSaleButton" onclick="newSale()">+ New Sale</button>
+</div>
+</header>
 
-<!-- LANGUAGE -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>🌐 <span id="languageTitle">Language</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="languageLabel">Select Language</label>
-<select id="language" onchange="changeLanguage(); saveSettings();">
-  <option value="en">English</option>
-  <option value="ar">العربية</option>
-  <option value="fil">Filipino</option>
-  <option value="hi">हिन्दी</option>
-  <option value="es">Español</option>
-  <option value="th">ไทย</option>
-</select>
-</div>
-</div>
+<div class="app">
 
-<!-- DOCUMENT -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>📄 <span id="documentTitle">Document</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="documentTypeLabel">Document Type</label>
-<select id="documentType" onchange="updateReceipt()">
-  <option value="receipt">Receipt</option>
-  <option value="invoice">Invoice</option>
-  <option value="payment">Payment Received</option>
-</select>
-</div>
+<div class="sidebar">
+
+<!-- TAB RAIL -->
+<div class="tab-rail" id="tabRail">
+<button class="tab-icon" data-tab="items" title="Items" onclick="selectTab('items')">🛒</button>
+<button class="tab-icon" data-tab="products" title="Products" onclick="selectTab('products')">📦</button>
+<button class="tab-icon" data-tab="payment" title="Payment" onclick="selectTab('payment')">💵</button>
+<button class="tab-icon" data-tab="document" title="Document" onclick="selectTab('document')">📄</button>
+<button class="tab-icon" data-tab="store" title="Store" onclick="selectTab('store')">🏪</button>
+<button class="tab-icon" data-tab="tax" title="Tax & Discount" onclick="selectTab('tax')">🧮</button>
+<button class="tab-icon" data-tab="paymentMethods" title="Payment Methods" onclick="selectTab('paymentMethods')">💳</button>
+<button class="tab-icon" data-tab="receiptSettings" title="Receipt" onclick="selectTab('receiptSettings')">🧾</button>
+<button class="tab-icon" data-tab="footer" title="Footer" onclick="selectTab('footer')">📝</button>
+<button class="tab-icon" data-tab="paper" title="Paper & Zoom" onclick="selectTab('paper')">📏</button>
+<button class="tab-icon" data-tab="currency" title="Currency" onclick="selectTab('currency')">💱</button>
+<button class="tab-icon" data-tab="language" title="Language" onclick="selectTab('language')">🌐</button>
 </div>
 
-<!-- PAPER -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>📏 <span id="paperTitle">Paper Size</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="paperLabel">Receipt Paper</label>
-<select id="paperSize" onchange="changePaperSize(); saveSettings();">
-  <option value="58">58mm Thermal</option>
-  <option value="80" selected>80mm Thermal</option>
-  <option value="148">A5</option>
-  <option value="210">A4</option>
-  <option value="custom">Custom</option>
-</select>
-<div id="customWidthContainer" class="hidden">
-<label id="customWidthLabel">Custom Width (mm)</label>
-<input id="customWidth" type="number" value="80" min="30" max="500" oninput="changePaperSize(); saveSettings();">
-</div>
-<div class="info">
-<span id="currentWidthLabel">Current width:</span>
-<strong><span id="paperWidthDisplay">80</span> mm</strong>
-</div>
-</div>
+<!-- TAB PANEL -->
+<div class="tab-panel" id="tabPanel">
+
+<div class="panel-content" id="panel-items">
+<h3 id="itemsTitle">Items</h3>
+<div class="items-hint" id="itemsHint">Add products from the Products tab, or add items manually below.</div>
+<div id="itemsContainer"></div>
+<button class="primary-btn" onclick="addItem()" id="addItemButton">+ Add Item</button>
 </div>
 
-<!-- CURRENCY -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>💱 <span id="currencyTitle">Currency</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<div class="two-columns">
-<div>
-<label id="currencyCodeLabel">Currency Code</label>
-<input id="currencyCode" value="BHD" oninput="updateReceipt()">
-</div>
-<div>
-<label id="currencySymbolLabel">Currency Symbol</label>
-<input id="currencySymbol" value="BD" oninput="updateReceipt(); renderProducts();">
-</div>
-</div>
-</div>
-</div>
-
-<!-- STORE -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>🏪 <span id="storeTitle">Store Information</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="storeNameLabel">Store Name</label>
-<input id="storeName" value="NEO Supermarket" oninput="updateReceipt()">
-<label id="storeDetailsLabel">Store Details</label>
-<textarea id="storeDetails" oninput="updateReceipt()">Bldg. 302, Road 1245
-Kingdom of Bahrain
-Tel: +973 XXXXXXXX
-Email: sales@neosupermarket.com
-TRN: 123456789</textarea>
-<div class="info" id="storeInfo">You can enter address, phone, email, TRN, website and other information.</div>
-</div>
-</div>
-
-<!-- RECEIPT -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>🧾 <span id="receiptSettingsTitle">Receipt</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="receiptNumberLabel">Receipt Number</label>
-<input id="receiptNumberInput" readonly>
-<div class="info" id="receiptNumberInfo">The next number is generated when you start a new sale.</div>
-</div>
-</div>
-
-<!-- TAX & DISCOUNT -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>🧮 <span id="taxTitle">Tax & Discount</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="taxNameLabel">Tax Name</label>
-<input id="taxName" value="Tax" oninput="updateReceipt()">
-<label id="taxRateLabel">Tax Rate (%)</label>
-<input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
-<label id="discountLabel">Discount (%)</label>
-<input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
-</div>
-</div>
-
-<!-- PAYMENT METHODS -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>💳 <span id="paymentMethodsTitle">Payment Methods</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<div class="payment-editor">
-<input id="newPaymentMethod" placeholder="Cash">
-<button class="small-btn" onclick="addPaymentMethod()">+</button>
-</div>
-<div id="paymentMethodsList" class="payment-list"></div>
-<div class="info" id="paymentMethodsInfo">Add your own payment methods.</div>
-</div>
-</div>
-
-<!-- PAYMENT -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>💵 <span id="paymentTitle">Payment</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
-<label id="paymentMethodLabel">Payment Method</label>
-<select id="paymentMethod" onchange="updateReceipt()"></select>
-<label id="amountReceivedLabel">Amount Received</label>
-<input id="amountReceived" type="number" min="0" step="0.001" value="0" oninput="updateReceipt()">
-<div class="info">
-<span id="changeLabelInfo">Change:</span>
-<strong id="changePreview">BD 0.000</strong>
-</div>
-</div>
-</div>
-
-<!-- PRODUCTS (CSV) -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>📦 <span id="productsTitle">Products</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
+<div class="panel-content" id="panel-products">
+<h3 id="productsTitle">Products</h3>
 <input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
 <div class="info" id="productsUploadHint">Upload a CSV with columns: Name, Price, and optionally Category and SKU.</div>
 <div id="csvErrorBox" class="error-text hidden"></div>
@@ -309,43 +196,134 @@ TRN: 123456789</textarea>
 <input id="productSearch" class="product-search" type="text" placeholder="Search products..." oninput="renderProducts()">
 <div id="productsCount" class="products-count"></div>
 <div id="productsList" class="product-list"></div>
-<div id="productsEmpty" class="products-empty" id="productsEmptyState">No products yet. Upload a CSV to get started.</div>
+<div id="productsEmpty" class="products-empty">No products yet. Upload a CSV to get started.</div>
+</div>
+
+<div class="panel-content" id="panel-payment">
+<h3 id="paymentTitle">Payment</h3>
+<label id="paymentMethodLabel">Payment Method</label>
+<select id="paymentMethod" onchange="updateReceipt()"></select>
+<label id="amountReceivedLabel">Amount Received</label>
+<input id="amountReceived" type="number" min="0" step="0.001" value="0" oninput="updateReceipt()">
+<div class="info">
+<span id="changeLabelInfo">Change:</span>
+<strong id="changePreview">BD 0.000</strong>
 </div>
 </div>
 
-<!-- ITEMS -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>🛒 <span id="itemsTitle">Items</span></span>
-  <span class="section-icon">−</span>
-</button>
-<div class="section-content">
-<div class="items-hint" id="itemsHint">Add products from the list above, or add items manually below.</div>
-<div id="itemsContainer"></div>
-<button class="primary-btn" onclick="addItem()" id="addItemButton">+ Add Item</button>
-</div>
+<div class="panel-content" id="panel-document">
+<h3 id="documentTitle">Document</h3>
+<label id="documentTypeLabel">Document Type</label>
+<select id="documentType" onchange="updateReceipt()">
+<option value="receipt">Receipt</option>
+<option value="invoice">Invoice</option>
+<option value="payment">Payment Received</option>
+</select>
 </div>
 
-<!-- FOOTER -->
-<div class="section">
-<button class="section-toggle" onclick="toggleSection(this)">
-  <span>📝 <span id="footerTitle">Receipt Footer</span></span>
-  <span class="section-icon">+</span>
-</button>
-<div class="section-content collapsed">
+<div class="panel-content" id="panel-store">
+<h3 id="storeTitle">Store Information</h3>
+<label id="storeNameLabel">Store Name</label>
+<input id="storeName" value="NEO Supermarket" oninput="updateReceipt()">
+<label id="storeDetailsLabel">Store Details</label>
+<textarea id="storeDetails" oninput="updateReceipt()">Bldg. 302, Road 1245
+Kingdom of Bahrain
+Tel: +973 XXXXXXXX
+Email: sales@neosupermarket.com
+TRN: 123456789</textarea>
+<div class="info" id="storeInfo">You can enter address, phone, email, TRN, website and other information.</div>
+</div>
+
+<div class="panel-content" id="panel-tax">
+<h3 id="taxTitle">Tax & Discount</h3>
+<label id="taxNameLabel">Tax Name</label>
+<input id="taxName" value="Tax" oninput="updateReceipt()">
+<label id="taxRateLabel">Tax Rate (%)</label>
+<input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
+<label id="discountLabel">Discount (%)</label>
+<input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
+</div>
+
+<div class="panel-content" id="panel-paymentMethods">
+<h3 id="paymentMethodsTitle">Payment Methods</h3>
+<div class="payment-editor">
+<input id="newPaymentMethod" placeholder="Cash">
+<button class="small-btn" onclick="addPaymentMethod()">+</button>
+</div>
+<div id="paymentMethodsList" class="payment-list"></div>
+<div class="info" id="paymentMethodsInfo">Add your own payment methods.</div>
+</div>
+
+<div class="panel-content" id="panel-receiptSettings">
+<h3 id="receiptSettingsTitle">Receipt</h3>
+<label id="receiptNumberLabel">Receipt Number</label>
+<input id="receiptNumberInput" readonly>
+<div class="info" id="receiptNumberInfo">The next number is generated when you start a new sale.</div>
+</div>
+
+<div class="panel-content" id="panel-footer">
+<h3 id="footerTitle">Receipt Footer</h3>
 <label id="footerLine1Label">Footer Line 1</label>
 <input id="footer1" value="Thank you for shopping with us!" oninput="updateReceipt()">
 <label id="footerLine2Label">Footer Line 2</label>
 <input id="footer2" value="Please come again." oninput="updateReceipt()">
 </div>
+
+<div class="panel-content" id="panel-paper">
+<h3 id="paperTitle">Paper Size</h3>
+<label id="paperLabel">Receipt Paper</label>
+<select id="paperSize" onchange="changePaperSize(); saveSettings();">
+<option value="58">58mm Thermal</option>
+<option value="80" selected>80mm Thermal</option>
+<option value="148">A5</option>
+<option value="210">A4</option>
+<option value="custom">Custom</option>
+</select>
+<div id="customWidthContainer" class="hidden">
+<label id="customWidthLabel">Custom Width (mm)</label>
+<input id="customWidth" type="number" value="80" min="30" max="500" oninput="changePaperSize(); saveSettings();">
+</div>
+<div class="info">
+<span id="currentWidthLabel">Current width:</span>
+<strong><span id="paperWidthDisplay">80</span> mm</strong>
+</div>
+<label id="zoomLabel">Screen Zoom (%)</label>
+<input id="zoomRange" type="range" min="80" max="180" step="5" value="115" oninput="updateZoom()">
+<div class="info">
+<span id="zoomValueLabel">Zoom:</span>
+<strong><span id="zoomValueDisplay">115</span>%</strong>
+<span style="display:block;margin-top:4px;">Screen-only, does not affect the printed size.</span>
+</div>
 </div>
 
-<!-- ACTIONS -->
-<div class="quick-actions">
-<button class="primary-btn" onclick="printReceipt()" id="printButton">🖨 Print</button>
-<button class="secondary-btn" onclick="newSale()" id="newSaleButton">+ New Sale</button>
+<div class="panel-content" id="panel-currency">
+<h3 id="currencyTitle">Currency</h3>
+<div class="two-columns">
+<div>
+<label id="currencyCodeLabel">Currency Code</label>
+<input id="currencyCode" value="BHD" oninput="updateReceipt()">
+</div>
+<div>
+<label id="currencySymbolLabel">Currency Symbol</label>
+<input id="currencySymbol" value="BD" oninput="updateReceipt(); renderProducts();">
+</div>
+</div>
 </div>
 
+<div class="panel-content" id="panel-language">
+<h3 id="languageTitle">Language</h3>
+<label id="languageLabel">Select Language</label>
+<select id="language" onchange="changeLanguage(); saveSettings();">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</div>
+
+</div>
 </div>
 
 <!-- LIVE RECEIPT -->
@@ -398,6 +376,7 @@ en: {
   documentTitle: "Document", documentTypeLabel: "Document Type",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
   paperTitle: "Paper Size", paperLabel: "Receipt Paper", customWidthLabel: "Custom Width (mm)", currentWidthLabel: "Current width:",
+  zoomLabel: "Screen Zoom (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
@@ -410,8 +389,8 @@ en: {
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Upload a CSV to get started.",
   productsLoadedSuffix: "products loaded", productsClearButton: "Clear Products", productsSampleButton: "Download Sample CSV",
   productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
-  productsUploadSuccess: "products loaded from file.",
-  itemsTitle: "Items", itemsHint: "Add products from the list above, or add items manually below.", addItemButton: "+ Add Item",
+  productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
+  itemsTitle: "Items", itemsHint: "Add products from the Products tab, or add items manually below.", addItemButton: "+ Add Item",
   itemNameLabel: "Item Name", quantityLabel: "Quantity", priceLabel: "Price", removeButton: "Remove",
   footerTitle: "Receipt Footer", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   printButton: "🖨 Print", newSaleButton: "+ New Sale",
@@ -428,6 +407,7 @@ ar: {
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
   paperTitle: "حجم الورق", paperLabel: "ورق الإيصال", customWidthLabel: "العرض المخصص (مم)", currentWidthLabel: "العرض الحالي:",
+  zoomLabel: "تكبير الشاشة (%)", zoomValueLabel: "التكبير:",
   currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
   storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
@@ -440,8 +420,8 @@ ar: {
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. ارفع ملف CSV للبدء.",
   productsLoadedSuffix: "منتج تم تحميله", productsClearButton: "مسح المنتجات", productsSampleButton: "تحميل نموذج CSV",
   productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
-  productsUploadSuccess: "منتج تم تحميله من الملف.",
-  itemsTitle: "الأصناف", itemsHint: "أضف منتجات من القائمة أعلاه، أو أضف صنفاً يدوياً أدناه.", addItemButton: "+ إضافة صنف",
+  productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
+  itemsTitle: "الأصناف", itemsHint: "أضف منتجات من تبويب المنتجات، أو أضف صنفاً يدوياً أدناه.", addItemButton: "+ إضافة صنف",
   itemNameLabel: "اسم الصنف", quantityLabel: "الكمية", priceLabel: "السعر", removeButton: "حذف",
   footerTitle: "تذييل الإيصال", footerLine1Label: "السطر الأول", footerLine2Label: "السطر الثاني",
   printButton: "🖨 طباعة", newSaleButton: "+ بيع جديد",
@@ -458,6 +438,7 @@ fil: {
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
   paperTitle: "Laki ng Papel", paperLabel: "Papel ng Resibo", customWidthLabel: "Custom na Lapad (mm)", currentWidthLabel: "Kasalukuyang lapad:",
+  zoomLabel: "Zoom ng Screen (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
@@ -470,8 +451,8 @@ fil: {
   productsSearchPlaceholder: "Maghanap ng produkto...", productsEmptyState: "Wala pang produkto. Mag-upload ng CSV para magsimula.",
   productsLoadedSuffix: "produktong na-load", productsClearButton: "Alisin ang mga Produkto", productsSampleButton: "I-download ang Sample CSV",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
-  productsUploadSuccess: "produktong na-load mula sa file.",
-  itemsTitle: "Mga Item", itemsHint: "Magdagdag ng produkto mula sa listahan sa itaas, o magdagdag ng item nang manu-mano sa ibaba.", addItemButton: "+ Magdagdag ng Item",
+  productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
+  itemsTitle: "Mga Item", itemsHint: "Magdagdag ng produkto mula sa tab ng Products, o magdagdag ng item nang manu-mano sa ibaba.", addItemButton: "+ Magdagdag ng Item",
   itemNameLabel: "Pangalan ng Item", quantityLabel: "Dami", priceLabel: "Presyo", removeButton: "Alisin",
   footerTitle: "Footer ng Resibo", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
   printButton: "🖨 I-print", newSaleButton: "+ Bagong Sale",
@@ -488,6 +469,7 @@ hi: {
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
   paperTitle: "पेपर साइज़", paperLabel: "रसीद पेपर", customWidthLabel: "कस्टम चौड़ाई (मिमी)", currentWidthLabel: "वर्तमान चौड़ाई:",
+  zoomLabel: "स्क्रीन ज़ूम (%)", zoomValueLabel: "ज़ूम:",
   currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
   storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
@@ -500,8 +482,8 @@ hi: {
   productsSearchPlaceholder: "उत्पाद खोजें...", productsEmptyState: "अभी तक कोई उत्पाद नहीं। शुरू करने के लिए CSV अपलोड करें।",
   productsLoadedSuffix: "उत्पाद लोड हुए", productsClearButton: "उत्पाद हटाएं", productsSampleButton: "नमूना CSV डाउनलोड करें",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
-  productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।",
-  itemsTitle: "आइटम", itemsHint: "ऊपर की सूची से उत्पाद जोड़ें, या नीचे मैन्युअल रूप से आइटम जोड़ें।", addItemButton: "+ आइटम जोड़ें",
+  productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
+  itemsTitle: "आइटम", itemsHint: "Products टैब से उत्पाद जोड़ें, या नीचे मैन्युअल रूप से आइटम जोड़ें।", addItemButton: "+ आइटम जोड़ें",
   itemNameLabel: "आइटम का नाम", quantityLabel: "मात्रा", priceLabel: "कीमत", removeButton: "हटाएं",
   footerTitle: "रसीद फुटर", footerLine1Label: "फुटर लाइन 1", footerLine2Label: "फुटर लाइन 2",
   printButton: "🖨 प्रिंट करें", newSaleButton: "+ नई बिक्री",
@@ -518,6 +500,7 @@ es: {
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
   paperTitle: "Tamaño de Papel", paperLabel: "Papel del Recibo", customWidthLabel: "Ancho Personalizado (mm)", currentWidthLabel: "Ancho actual:",
+  zoomLabel: "Zoom de Pantalla (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
   storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
@@ -530,8 +513,8 @@ es: {
   productsSearchPlaceholder: "Buscar productos...", productsEmptyState: "Aún no hay productos. Sube un CSV para comenzar.",
   productsLoadedSuffix: "productos cargados", productsClearButton: "Eliminar Productos", productsSampleButton: "Descargar CSV de Ejemplo",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
-  productsUploadSuccess: "productos cargados desde el archivo.",
-  itemsTitle: "Artículos", itemsHint: "Agrega productos de la lista de arriba, o agrega artículos manualmente abajo.", addItemButton: "+ Agregar Artículo",
+  productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
+  itemsTitle: "Artículos", itemsHint: "Agrega productos desde la pestaña Products, o agrega artículos manualmente abajo.", addItemButton: "+ Agregar Artículo",
   itemNameLabel: "Nombre del Artículo", quantityLabel: "Cantidad", priceLabel: "Precio", removeButton: "Eliminar",
   footerTitle: "Pie del Recibo", footerLine1Label: "Línea de Pie 1", footerLine2Label: "Línea de Pie 2",
   printButton: "🖨 Imprimir", newSaleButton: "+ Nueva Venta",
@@ -548,6 +531,7 @@ th: {
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
   paperTitle: "ขนาดกระดาษ", paperLabel: "กระดาษใบเสร็จ", customWidthLabel: "ความกว้างกำหนดเอง (มม.)", currentWidthLabel: "ความกว้างปัจจุบัน:",
+  zoomLabel: "ซูมหน้าจอ (%)", zoomValueLabel: "ซูม:",
   currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
   storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
@@ -560,8 +544,8 @@ th: {
   productsSearchPlaceholder: "ค้นหาสินค้า...", productsEmptyState: "ยังไม่มีสินค้า อัปโหลดไฟล์ CSV เพื่อเริ่มต้น",
   productsLoadedSuffix: "รายการสินค้าที่โหลด", productsClearButton: "ล้างรายการสินค้า", productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
-  productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์",
-  itemsTitle: "รายการสินค้า", itemsHint: "เพิ่มสินค้าจากรายการด้านบน หรือเพิ่มรายการด้วยตนเองด้านล่าง", addItemButton: "+ เพิ่มรายการ",
+  productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
+  itemsTitle: "รายการสินค้า", itemsHint: "เพิ่มสินค้าจากแท็บ Products หรือเพิ่มรายการด้วยตนเองด้านล่าง", addItemButton: "+ เพิ่มรายการ",
   itemNameLabel: "ชื่อสินค้า", quantityLabel: "จำนวน", priceLabel: "ราคา", removeButton: "ลบ",
   footerTitle: "ท้ายใบเสร็จ", footerLine1Label: "ข้อความท้ายบรรทัด 1", footerLine2Label: "ข้อความท้ายบรรทัด 2",
   printButton: "🖨 พิมพ์", newSaleButton: "+ การขายใหม่",
@@ -581,23 +565,37 @@ let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
 let products = [];
+let activeTab = null;
 
 function val(id) { return document.getElementById(id).value; }
 function symbolNow() { return document.getElementById("currencySymbol").value.trim() || "BD"; }
 function t() { return translations[document.getElementById("language").value]; }
 
 /* =========================================================
-   COLLAPSIBLE SECTIONS
+   LEFT TAB SIDEBAR
    ========================================================= */
-function toggleSection(button) {
-  const content = button.nextElementSibling;
-  const icon = button.querySelector(".section-icon");
-  const collapsed = content.classList.toggle("collapsed");
-  icon.textContent = collapsed ? "+" : "−";
+function selectTab(name) {
+  const panel = document.getElementById("tabPanel");
+  const contents = document.querySelectorAll(".panel-content");
+  const icons = document.querySelectorAll(".tab-icon[data-tab]");
+
+  if (activeTab === name) {
+    activeTab = null;
+    panel.classList.remove("open");
+    contents.forEach(function(c) { c.classList.remove("active"); });
+    icons.forEach(function(i) { i.classList.remove("active"); });
+    return;
+  }
+
+  activeTab = name;
+  panel.classList.add("open");
+  contents.forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
+  icons.forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
 }
 
 /* =========================================================
-   PERSISTENT STORAGE (per-device, no sign-in required)
+   PERSISTENT STORAGE (per-device, survives reloads/new sessions
+   until the browser's site data/cache is cleared)
    ========================================================= */
 async function loadSettings() {
   try {
@@ -618,7 +616,8 @@ async function saveSettings() {
     storeName: val("storeName"), storeDetails: val("storeDetails"),
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
     footer1: val("footer1"), footer2: val("footer2"),
-    language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth")
+    language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
+    zoomRange: val("zoomRange")
   };
   try { await window.storage.set("pos-settings", JSON.stringify(settings), false); }
   catch (e) { console.error("Could not save settings", e); }
@@ -799,6 +798,19 @@ function refreshItemRowLabels() {
   });
 }
 
+/* Sum of quantities already in the cart for a given product (by name + price) */
+function getCartQty(name, price) {
+  let qty = 0;
+  document.querySelectorAll(".item-row").forEach(function(row) {
+    const n = row.querySelector(".item-name-input").value;
+    const p = Number(row.querySelector(".item-price-input").value) || 0;
+    if (n === name && Math.abs(p - price) < 0.0005) {
+      qty += Number(row.querySelector(".item-qty-input").value) || 0;
+    }
+  });
+  return qty;
+}
+
 /* =========================================================
    PRODUCTS: CSV UPLOAD
    ========================================================= */
@@ -903,9 +915,24 @@ async function clearProducts() {
   document.getElementById("csvErrorBox").classList.add("hidden");
 }
 
+/* Adding a product that's already in the cart increases its quantity
+   instead of creating a duplicate line — the line total (qty × price)
+   then recalculates automatically. */
 function addProductToCart(index) {
   const p = products[index];
   if (!p) return;
+  const rows = document.querySelectorAll(".item-row");
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const nameInput = row.querySelector(".item-name-input");
+    const priceInput = row.querySelector(".item-price-input");
+    if (nameInput.value === p.name && Math.abs((Number(priceInput.value) || 0) - p.price) < 0.0005) {
+      const qtyInput = row.querySelector(".item-qty-input");
+      qtyInput.value = (Number(qtyInput.value) || 0) + 1;
+      updateReceipt();
+      return;
+    }
+  }
   addItem(p.name, p.price);
 }
 
@@ -926,6 +953,7 @@ function renderProducts() {
         !(p.sku && p.sku.toLowerCase().indexOf(query) !== -1) &&
         !(p.category && p.category.toLowerCase().indexOf(query) !== -1)) return;
 
+    const inCart = getCartQty(p.name, p.price);
     const row = document.createElement("div");
     row.className = "product-item";
     row.innerHTML =
@@ -934,6 +962,7 @@ function renderProducts() {
         "<div class=\"product-meta\">" +
           (p.category ? "<span class=\"product-category\">" + escapeHtml(p.category) + "</span>" : "") +
           "<span class=\"product-price\">" + escapeHtml(symbol) + " " + p.price.toFixed(3) + "</span>" +
+          (inCart > 0 ? "<span class=\"product-in-cart\">" + escapeHtml(tr.inCartLabel) + " " + inCart + "</span>" : "") +
         "</div>" +
       "</div>" +
       "<button onclick=\"addProductToCart(" + index + ")\">+</button>";
@@ -967,7 +996,17 @@ function updatePrintStyle(width) {
     style.id = "dynamicPrintStyle";
     document.head.appendChild(style);
   }
-  style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; } }";
+  style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; zoom: 1 !important; } }";
+}
+
+/* =========================================================
+   SCREEN ZOOM (on-screen only, never affects print)
+   ========================================================= */
+function updateZoom() {
+  const zoom = Number(document.getElementById("zoomRange").value) || 100;
+  document.getElementById("zoomValueDisplay").textContent = zoom;
+  document.getElementById("receipt").style.zoom = zoom / 100;
+  saveSettings();
 }
 
 /* =========================================================
@@ -1062,6 +1101,7 @@ function updateReceipt() {
   document.getElementById("receiptFooter2").textContent = val("footer2");
 
   saveSettings();
+  renderProducts();
 }
 
 /* =========================================================
@@ -1079,6 +1119,7 @@ function changeLanguage() {
     languageTitle: "languageTitle", languageLabel: "languageLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
+    zoomLabel: "zoomLabel",
     currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
     receiptSettingsTitle: "receiptSettingsTitle", receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
@@ -1134,9 +1175,10 @@ async function init() {
   await startFirstSale();
   addItem();
   changePaperSize();
+  updateZoom();
   updateDate();
   changeLanguage();
-  updateReceipt();
+  selectTab("items");
   setInterval(updateDate, 1000);
 }
 init();
