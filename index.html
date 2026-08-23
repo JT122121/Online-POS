@@ -965,13 +965,17 @@ function renderPaymentMethods() {
   if (paymentMethods.includes(prevSelected)) select.value = prevSelected;
 }
 
-async function newSale() {
-  if (cart.length && !confirm("Start a new sale? The current cart will be cleared.")) return;
+async function startNewSale() {
   currentReceiptNumber = await getNextReceiptNumber();
   cart = [];
   document.getElementById("amountReceived").value = "0";
   backToCatalog();
   updateReceipt();
+}
+
+async function newSale() {
+  if (cart.length && !confirm("Start a new sale? The current cart will be cleared.")) return;
+  await startNewSale();
 }
 
 function goToCheckout() {
@@ -988,6 +992,7 @@ function backToCatalog() {
 async function completeAndPrint() {
   await saveCurrentSaleToHistory();
   printReceipt();
+  await startNewSale();
 }
 
 async function saveCurrentSaleToHistory() {
