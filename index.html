@@ -1,3208 +1,1146 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Online POS</title>
-
 <style>
-
-/* =========================================================
-   GLOBAL
-   ========================================================= */
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: #e5e5e5;
-  color: #111;
-  font-family: Arial, sans-serif;
-  padding: 16px;
-}
-
-button,
-input,
-textarea,
-select {
-  font-family: Arial, sans-serif;
-}
-
-button {
-  cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
-}
-
-
-/* =========================================================
-   APP LAYOUT
-   ========================================================= */
-
-.app {
-  display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-  max-width: 1500px;
-  margin: auto;
-}
-
-
-/* =========================================================
-   CONTROL PANEL
-   ========================================================= */
-
-.controls {
-  width: 100%;
-  background: #fff;
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: 0 3px 15px rgba(0,0,0,.15);
-
-  position: sticky;
-  top: 16px;
-
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-}
-
-.controls h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-.subtitle {
-  margin: 4px 0 12px;
-  color: #666;
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   SETTINGS SECTION
-   ========================================================= */
-
-.section {
-  border-top: 1px solid #ddd;
-  margin-top: 8px;
-}
-
-.section-toggle {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border: 0;
-  background: transparent;
-
-  padding: 12px 4px;
-
-  font-size: 14px;
-  font-weight: bold;
-
-  color: #111;
-  text-align: left;
-}
-
-.section-toggle:hover {
-  background: #f5f5f5;
-}
-
-.section-icon {
-  font-size: 18px;
-  font-weight: normal;
-  width: 22px;
-  text-align: center;
-}
-
-.section-content {
-  padding: 0 4px 12px;
-}
-
-.section-content.collapsed {
-  display: none;
-}
-
-
-/* =========================================================
-   FORMS
-   ========================================================= */
-
-label {
-  display: block;
-  margin-top: 9px;
-  margin-bottom: 4px;
-
-  font-size: 12px;
-  font-weight: bold;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-
-  padding: 9px;
-
-  border: 1px solid #aaa;
-  border-radius: 5px;
-
-  background: #fff;
-
-  font-size: 13px;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-  line-height: 1.4;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: 2px solid #ddd;
-  border-color: #555;
-}
-
-
-/* =========================================================
-   TWO COLUMNS
-   ========================================================= */
-
-.two-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-
-/* =========================================================
-   INFO
-   ========================================================= */
-
-.info {
-  margin-top: 7px;
-  padding: 8px;
-
-  background: #f2f2f2;
-  border-radius: 5px;
-
-  color: #555;
-
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-
-/* =========================================================
-   PAYMENT METHODS
-   ========================================================= */
-
-.payment-editor {
-  display: flex;
-  gap: 6px;
-  margin-top: 7px;
-}
-
-.payment-editor input {
-  flex: 1;
-}
-
-.payment-list {
-  margin-top: 8px;
-}
-
-.payment-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 6px;
-
-  padding: 7px;
-
-  border: 1px solid #ddd;
-  border-radius: 5px;
-
-  margin-bottom: 5px;
-
-  background: #fafafa;
-
-  font-size: 12px;
-}
-
-.payment-item button {
-  background: #ddd;
-  border: 0;
-  padding: 4px 7px;
-  border-radius: 4px;
-}
-
-
-/* =========================================================
-   ITEMS
-   ========================================================= */
-
-.item-row {
-  margin-top: 8px;
-
-  padding: 10px;
-
-  border: 1px solid #ddd;
-  border-radius: 7px;
-
-  background: #fafafa;
-}
-
-.item-row h4 {
-  margin: 0 0 6px;
-  font-size: 13px;
-}
-
-.remove-item {
-  margin-top: 8px;
-
-  background: #ddd;
-  color: #111;
-
-  border: 0;
-
-  padding: 7px 10px;
-
-  border-radius: 5px;
-
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.primary-btn {
-  width: 100%;
-
-  margin-top: 8px;
-
-  padding: 11px;
-
-  border: 0;
-  border-radius: 6px;
-
-  background: #111;
-  color: white;
-
-  font-size: 14px;
-}
-
-.secondary-btn {
-  width: 100%;
-
-  margin-top: 7px;
-
-  padding: 11px;
-
-  border: 0;
-  border-radius: 6px;
-
-  background: #444;
-  color: white;
-
-  font-size: 14px;
-}
-
-.small-btn {
-  border: 0;
-  border-radius: 5px;
-
-  background: #111;
-  color: white;
-
-  padding: 8px 12px;
-}
-
-
-/* =========================================================
-   QUICK ACTIONS
-   ========================================================= */
-
-.quick-actions {
-  position: sticky;
-  bottom: 0;
-
-  background: white;
-
-  padding-top: 8px;
-  margin-top: 8px;
-
-  border-top: 1px solid #ddd;
-}
-
-
-/* =========================================================
-   PREVIEW
-   ========================================================= */
-
-.preview-area {
-  width: 100%;
-
-  min-height: calc(100vh - 32px);
-
-  display: flex;
-
-  justify-content: center;
-  align-items: flex-start;
-
-  overflow: auto;
-
-  padding: 5px;
-}
-
-
-/* =========================================================
-   RECEIPT
-   ========================================================= */
-
-.receipt {
-  width: 80mm;
-
-  min-height: 100vh;
-
-  padding: 4mm;
-
-  background: white;
-
-  border: 2px solid #000;
-
-  color: #000;
-
-  flex-shrink: 0;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: 10pt;
-
-  box-shadow:
-    0 3px 15px rgba(0,0,0,.15);
-}
-
-
-/* =========================================================
-   RECEIPT HEADER
-   ========================================================= */
-
-.receipt-header {
-  text-align: center;
-
-  border-bottom: 1px dashed #000;
-
-  padding-bottom: 3mm;
-
-  margin-bottom: 3mm;
-}
-
-.receipt-header h2 {
-  margin: 0;
-
-  font-size: 15pt;
-
-  word-break: break-word;
-}
-
-.receipt-store-details {
-  margin: 2mm 0;
-
-  font-size: 8.5pt;
-
-  line-height: 1.45;
-
-  word-break: break-word;
-}
-
-.receipt-meta {
-  font-size: 8pt;
-
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   RECEIPT TITLE
-   ========================================================= */
-
-.receipt-document-title {
-  font-size: 11pt;
-
-  font-weight: bold;
-
-  margin-top: 2mm;
-}
-
-
-/* =========================================================
-   RECEIPT ITEMS
-   ========================================================= */
-
-.receipt-column-header {
-  display: grid;
-
-  grid-template-columns:
-    1fr 11mm 23mm;
-
-  border-bottom: 1px solid #000;
-
-  padding-bottom: 1mm;
-
-  margin-bottom: 2mm;
-
-  font-weight: bold;
-}
-
-.receipt-column-header span:nth-child(2) {
-  text-align: center;
-}
-
-.receipt-column-header span:nth-child(3) {
-  text-align: right;
-}
-
-.receipt-item {
-  margin-bottom: 2.5mm;
-}
-
-.receipt-item-line {
-  display: grid;
-
-  grid-template-columns:
-    1fr 11mm 23mm;
-
-  gap: 1mm;
-}
-
-.receipt-item-name {
-  word-break: break-word;
-}
-
-.receipt-item-qty {
-  text-align: center;
-}
-
-.receipt-item-total {
-  text-align: right;
-
-  white-space: nowrap;
-}
-
-.receipt-item-detail {
-  text-align: right;
-
-  font-size: 7.5pt;
-
-  margin-top: .5mm;
-}
-
-
-/* =========================================================
-   DIVIDER
-   ========================================================= */
-
-.dashed-line {
-  border-top: 1px dashed #000;
-
-  margin: 3mm 0;
-}
-
-
-/* =========================================================
-   TOTALS
-   ========================================================= */
-
-.receipt-total-line {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 5px;
-
-  margin: 1.5mm 0;
-}
-
-.receipt-grand-total {
-  font-size: 12pt;
-
-  font-weight: bold;
-
-  margin-top: 2mm;
-}
-
-
-/* =========================================================
-   PAYMENT
-   ========================================================= */
-
-.receipt-payment {
-  margin-top: 3mm;
-}
-
-.receipt-payment-line {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 5px;
-
-  margin: 1.5mm 0;
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.receipt-footer {
-  margin-top: 6mm;
-
-  padding-top: 3mm;
-
-  border-top: 1px dashed #000;
-
-  text-align: center;
-
-  font-size: 8.5pt;
-
-  line-height: 1.5;
-}
-
-.receipt-footer p {
-  margin: 1mm 0;
-
-  word-break: break-word;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e5e5e5; color: #111; font-family: Arial, sans-serif; padding: 16px; }
+button, input, textarea, select { font-family: Arial, sans-serif; }
+button { cursor: pointer; }
+.hidden { display: none !important; }
+
+.app { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px; align-items: start; max-width: 1500px; margin: auto; }
+
+.controls { width: 100%; background: #fff; padding: 14px; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
+.controls h1 { margin: 0; font-size: 22px; }
+.subtitle { margin: 4px 0 12px; color: #666; font-size: 12px; }
+
+.section { border-top: 1px solid #ddd; margin-top: 8px; }
+.section-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 0; background: transparent; padding: 12px 4px; font-size: 14px; font-weight: bold; color: #111; text-align: left; }
+.section-toggle:hover { background: #f5f5f5; }
+.section-icon { font-size: 18px; font-weight: normal; width: 22px; text-align: center; }
+.section-content { padding: 0 4px 12px; }
+.section-content.collapsed { display: none; }
+
+label { display: block; margin-top: 9px; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
+input, textarea, select { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 5px; background: #fff; font-size: 13px; }
+textarea { min-height: 100px; resize: vertical; line-height: 1.4; }
+input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-color: #555; }
+input[type="file"] { padding: 8px; font-size: 12px; }
+
+.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.info { margin-top: 7px; padding: 8px; background: #f2f2f2; border-radius: 5px; color: #555; font-size: 11px; line-height: 1.4; }
+.error-text { margin-top: 7px; padding: 8px; background: #fdecea; border: 1px solid #f3b4ae; border-radius: 5px; color: #a32c22; font-size: 11px; line-height: 1.4; }
+.success-text { margin-top: 7px; padding: 8px; background: #eaf6ec; border: 1px solid #b6e0bd; border-radius: 5px; color: #276438; font-size: 11px; line-height: 1.4; }
+
+.payment-editor { display: flex; gap: 6px; margin-top: 7px; }
+.payment-editor input { flex: 1; }
+.payment-list { margin-top: 8px; }
+.payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; font-size: 12px; }
+.payment-item button { background: #ddd; border: 0; padding: 4px 7px; border-radius: 4px; }
+
+.item-row { margin-top: 8px; padding: 10px; border: 1px solid #ddd; border-radius: 7px; background: #fafafa; }
+.item-row h4 { margin: 0 0 6px; font-size: 13px; }
+.remove-item { margin-top: 8px; background: #ddd; color: #111; border: 0; padding: 7px 10px; border-radius: 5px; font-size: 12px; }
+.qty-stepper { display: flex; align-items: center; gap: 6px; }
+.qty-stepper input { text-align: center; }
+.qty-stepper button { flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #aaa; background: #fff; border-radius: 5px; font-size: 16px; line-height: 1; }
+.items-hint { margin-top: 4px; margin-bottom: 8px; color: #666; font-size: 11px; line-height: 1.4; }
+
+.csv-actions { display: flex; gap: 6px; margin-top: 8px; }
+.csv-actions button { flex: 1; }
+.product-search { margin-top: 10px; }
+.product-list { margin-top: 8px; max-height: 260px; overflow-y: auto; }
+.product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; }
+.product-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.product-name { font-weight: bold; font-size: 12px; overflow-wrap: break-word; }
+.product-meta { display: flex; gap: 6px; align-items: center; }
+.product-category { font-size: 9.5px; color: #777; text-transform: uppercase; letter-spacing: .03em; border: 1px solid #ddd; border-radius: 3px; padding: 1px 4px; }
+.product-price { font-size: 11px; color: #333; }
+.product-item button { flex-shrink: 0; background: #111; color: #fff; border: 0; border-radius: 5px; width: 32px; height: 32px; font-size: 16px; }
+.products-empty { margin-top: 8px; padding: 12px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
+.products-count { margin-top: 6px; font-size: 11px; color: #666; }
+
+.primary-btn { width: 100%; margin-top: 8px; padding: 11px; border: 0; border-radius: 6px; background: #111; color: white; font-size: 14px; }
+.secondary-btn { width: 100%; margin-top: 7px; padding: 11px; border: 0; border-radius: 6px; background: #444; color: white; font-size: 14px; }
+.small-btn { border: 0; border-radius: 5px; background: #111; color: white; padding: 8px 12px; }
+
+.quick-actions { position: sticky; bottom: 0; background: white; padding-top: 8px; margin-top: 8px; border-top: 1px solid #ddd; }
+
+.preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
+
+.receipt { width: 80mm; min-height: 100vh; padding: 4mm; background: white; border: 2px solid #000; color: #000; flex-shrink: 0; font-family: "Courier New", monospace; font-size: 10pt; box-shadow: 0 3px 15px rgba(0,0,0,.15); }
+
+.receipt-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 3mm; margin-bottom: 3mm; }
+.receipt-header h2 { margin: 0; font-size: 15pt; word-break: break-word; }
+.receipt-store-details { margin: 2mm 0; font-size: 8.5pt; line-height: 1.45; word-break: break-word; }
+.receipt-meta { font-size: 8pt; line-height: 1.5; }
+.receipt-document-title { font-size: 11pt; font-weight: bold; margin-top: 2mm; }
+
+.receipt-column-header { display: grid; grid-template-columns: 1fr 11mm 23mm; border-bottom: 1px solid #000; padding-bottom: 1mm; margin-bottom: 2mm; font-weight: bold; }
+.receipt-column-header span:nth-child(2) { text-align: center; }
+.receipt-column-header span:nth-child(3) { text-align: right; }
+.receipt-item { margin-bottom: 2.5mm; }
+.receipt-item-line { display: grid; grid-template-columns: 1fr 11mm 23mm; gap: 1mm; }
+.receipt-item-name { word-break: break-word; }
+.receipt-item-qty { text-align: center; }
+.receipt-item-total { text-align: right; white-space: nowrap; }
+.receipt-item-detail { text-align: right; font-size: 7.5pt; margin-top: .5mm; }
+
+.dashed-line { border-top: 1px dashed #000; margin: 3mm 0; }
+
+.receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
+.receipt-grand-total { font-size: 12pt; font-weight: bold; margin-top: 2mm; }
+
+.receipt-payment { margin-top: 3mm; }
+.receipt-payment-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
+
+.receipt-footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px dashed #000; text-align: center; font-size: 8.5pt; line-height: 1.5; }
+.receipt-footer p { margin: 1mm 0; word-break: break-word; }
 
 @media (max-width: 900px) {
-
-  body {
-    padding: 8px;
-  }
-
-  .app {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 12px;
-  }
-
-  .controls {
-    position: relative;
-
-    top: auto;
-
-    max-height: none;
-
-    overflow: visible;
-
-    width: 100%;
-  }
-
-  .preview-area {
-    min-height: auto;
-
-    justify-content: flex-start;
-
-    overflow-x: auto;
-  }
-
-  .receipt {
-    box-shadow: none;
-  }
-
+  body { padding: 8px; }
+  .app { display: flex; flex-direction: column; gap: 12px; }
+  .controls { position: relative; top: auto; max-height: none; overflow: visible; width: 100%; }
+  .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
+  .receipt { box-shadow: none; }
 }
 
-
-/* =========================================================
-   PRINT
-   ========================================================= */
-
-@page {
-  margin: 0;
-}
-
+@page { margin: 0; }
 @media print {
-
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-
-    background: white;
-  }
-
-  .controls {
-    display: none !important;
-  }
-
-  .preview-area {
-    width: auto;
-
-    min-height: auto;
-
-    display: block;
-
-    overflow: visible;
-
-    padding: 0;
-  }
-
-  .receipt {
-    margin: 0;
-
-    border: none;
-
-    box-shadow: none;
-
-    min-height: auto;
-  }
-
+  html, body { margin: 0; padding: 0; background: white; }
+  .controls { display: none !important; }
+  .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
+  .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; }
 }
-
 </style>
-
 </head>
-
-
 <body>
-
 
 <div class="app">
 
-
-<!-- ======================================================
-     CONTROL PANEL
-     ====================================================== -->
-
 <div class="controls">
 
+<h1 id="appTitle">Online POS</h1>
+<div class="subtitle" id="appSubtitle">Simple browser-based point of sale</div>
 
-<h1 id="appTitle">
-  Online POS
-</h1>
-
-<div class="subtitle"
-     id="appSubtitle">
-
-  Simple browser-based point of sale
-
-</div>
-
-
-<!-- ======================================================
-     LANGUAGE
-     ====================================================== -->
-
+<!-- LANGUAGE -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    🌐 <span id="languageTitle">Language</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>🌐 <span id="languageTitle">Language</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="languageLabel">
-  Select Language
-</label>
-
-<select id="language"
-        onchange="changeLanguage()">
-
-  <option value="en">
-    English
-  </option>
-
-  <option value="ar">
-    العربية
-  </option>
-
-  <option value="fil">
-    Filipino
-  </option>
-
+<label id="languageLabel">Select Language</label>
+<select id="language" onchange="changeLanguage(); saveSettings();">
+  <option value="en">English</option>
+  <option value="ar">العربية</option>
+  <option value="fil">Filipino</option>
+  <option value="hi">हिन्दी</option>
+  <option value="es">Español</option>
+  <option value="th">ไทย</option>
 </select>
-
+</div>
 </div>
 
-</div>
-
-
-<!-- ======================================================
-     DOCUMENT
-     ====================================================== -->
-
+<!-- DOCUMENT -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    📄 <span id="documentTitle">Document</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>📄 <span id="documentTitle">Document</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="documentTypeLabel">
-  Document Type
-</label>
-
-<select id="documentType"
-        onchange="updateReceipt()">
-
-  <option value="receipt">
-    Receipt
-  </option>
-
-  <option value="invoice">
-    Invoice
-  </option>
-
-  <option value="payment">
-    Payment Received
-  </option>
-
+<label id="documentTypeLabel">Document Type</label>
+<select id="documentType" onchange="updateReceipt()">
+  <option value="receipt">Receipt</option>
+  <option value="invoice">Invoice</option>
+  <option value="payment">Payment Received</option>
 </select>
-
+</div>
 </div>
 
-</div>
-
-
-<!-- ======================================================
-     PAPER
-     ====================================================== -->
-
+<!-- PAPER -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    📏 <span id="paperTitle">Paper Size</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>📏 <span id="paperTitle">Paper Size</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="paperLabel">
-  Receipt Paper
-</label>
-
-<select id="paperSize"
-        onchange="changePaperSize()">
-
-  <option value="58">
-    58mm Thermal
-  </option>
-
-  <option value="80"
-          selected>
-    80mm Thermal
-  </option>
-
-  <option value="148">
-    A5
-  </option>
-
-  <option value="210">
-    A4
-  </option>
-
-  <option value="custom">
-    Custom
-  </option>
-
+<label id="paperLabel">Receipt Paper</label>
+<select id="paperSize" onchange="changePaperSize(); saveSettings();">
+  <option value="58">58mm Thermal</option>
+  <option value="80" selected>80mm Thermal</option>
+  <option value="148">A5</option>
+  <option value="210">A4</option>
+  <option value="custom">Custom</option>
 </select>
-
-
-<div id="customWidthContainer"
-     class="hidden">
-
-<label id="customWidthLabel">
-  Custom Width (mm)
-</label>
-
-<input id="customWidth"
-       type="number"
-       value="80"
-       min="30"
-       max="500"
-       oninput="changePaperSize()">
-
+<div id="customWidthContainer" class="hidden">
+<label id="customWidthLabel">Custom Width (mm)</label>
+<input id="customWidth" type="number" value="80" min="30" max="500" oninput="changePaperSize(); saveSettings();">
 </div>
-
-
 <div class="info">
-
-<span id="currentWidthLabel">
-Current width:
-</span>
-
-<strong>
-
-<span id="paperWidthDisplay">
-80
-</span>
-
-mm
-
-</strong>
-
+<span id="currentWidthLabel">Current width:</span>
+<strong><span id="paperWidthDisplay">80</span> mm</strong>
+</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     CURRENCY
-     ====================================================== -->
-
+<!-- CURRENCY -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    💱 <span id="currencyTitle">Currency</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>💱 <span id="currencyTitle">Currency</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
 <div class="two-columns">
-
 <div>
-
-<label id="currencyCodeLabel">
-Currency Code
-</label>
-
-<input id="currencyCode"
-       value="BHD"
-       oninput="updateReceipt()">
-
+<label id="currencyCodeLabel">Currency Code</label>
+<input id="currencyCode" value="BHD" oninput="updateReceipt()">
 </div>
-
-
 <div>
-
-<label id="currencySymbolLabel">
-Currency Symbol
-</label>
-
-<input id="currencySymbol"
-       value="BD"
-       oninput="updateReceipt()">
-
+<label id="currencySymbolLabel">Currency Symbol</label>
+<input id="currencySymbol" value="BD" oninput="updateReceipt(); renderProducts();">
+</div>
+</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     STORE
-     ====================================================== -->
-
+<!-- STORE -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    🏪 <span id="storeTitle">Store Information</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>🏪 <span id="storeTitle">Store Information</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="storeNameLabel">
-Store Name
-</label>
-
-<input id="storeName"
-       value="NEO Supermarket"
-       oninput="updateReceipt()">
-
-
-<label id="storeDetailsLabel">
-Store Details
-</label>
-
-<textarea id="storeDetails">Bldg. 302, Road 1245
+<label id="storeNameLabel">Store Name</label>
+<input id="storeName" value="NEO Supermarket" oninput="updateReceipt()">
+<label id="storeDetailsLabel">Store Details</label>
+<textarea id="storeDetails" oninput="updateReceipt()">Bldg. 302, Road 1245
 Kingdom of Bahrain
 Tel: +973 XXXXXXXX
 Email: sales@neosupermarket.com
 TRN: 123456789</textarea>
-
-
-<div class="info"
-     id="storeInfo">
-
-You can enter address, phone, email,
-TRN, website and other information.
-
+<div class="info" id="storeInfo">You can enter address, phone, email, TRN, website and other information.</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     RECEIPT
-     ====================================================== -->
-
+<!-- RECEIPT -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    🧾 <span id="receiptSettingsTitle">Receipt</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>🧾 <span id="receiptSettingsTitle">Receipt</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="receiptNumberLabel">
-Receipt Number
-</label>
-
-<input id="receiptNumberInput"
-       readonly>
-
-
-<div class="info"
-     id="receiptNumberInfo">
-
-The next number is generated when
-you start a new sale.
-
+<label id="receiptNumberLabel">Receipt Number</label>
+<input id="receiptNumberInput" readonly>
+<div class="info" id="receiptNumberInfo">The next number is generated when you start a new sale.</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     TAX & DISCOUNT
-     ====================================================== -->
-
+<!-- TAX & DISCOUNT -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    🧮 <span id="taxTitle">Tax & Discount</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>🧮 <span id="taxTitle">Tax & Discount</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="taxNameLabel">
-Tax Name
-</label>
-
-<input id="taxName"
-       value="Tax"
-       oninput="updateReceipt()">
-
-
-<label id="taxRateLabel">
-Tax Rate (%)
-</label>
-
-<input id="taxRate"
-       type="number"
-       value="10"
-       min="0"
-       step="0.01"
-       oninput="updateReceipt()">
-
-
-<label id="discountLabel">
-Discount (%)
-</label>
-
-<input id="discountRate"
-       type="number"
-       value="0"
-       min="0"
-       max="100"
-       step="0.01"
-       oninput="updateReceipt()">
-
+<label id="taxNameLabel">Tax Name</label>
+<input id="taxName" value="Tax" oninput="updateReceipt()">
+<label id="taxRateLabel">Tax Rate (%)</label>
+<input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
+<label id="discountLabel">Discount (%)</label>
+<input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
+</div>
 </div>
 
-</div>
-
-
-<!-- ======================================================
-     PAYMENT METHODS
-     ====================================================== -->
-
+<!-- PAYMENT METHODS -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    💳 <span id="paymentMethodsTitle">
-      Payment Methods
-    </span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>💳 <span id="paymentMethodsTitle">Payment Methods</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
 <div class="payment-editor">
-
-<input id="newPaymentMethod"
-       placeholder="Cash">
-
-<button class="small-btn"
-        onclick="addPaymentMethod()">
-
-+
-
-</button>
-
+<input id="newPaymentMethod" placeholder="Cash">
+<button class="small-btn" onclick="addPaymentMethod()">+</button>
+</div>
+<div id="paymentMethodsList" class="payment-list"></div>
+<div class="info" id="paymentMethodsInfo">Add your own payment methods.</div>
+</div>
 </div>
 
-
-<div id="paymentMethodsList"
-     class="payment-list">
-</div>
-
-
-<div class="info"
-     id="paymentMethodsInfo">
-
-Add your own payment methods.
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     PAYMENT
-     ====================================================== -->
-
+<!-- PAYMENT -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    💵 <span id="paymentTitle">Payment</span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>💵 <span id="paymentTitle">Payment</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="paymentMethodLabel">
-Payment Method
-</label>
-
-<select id="paymentMethod"
-        onchange="updateReceipt()">
-</select>
-
-
-<label id="amountReceivedLabel">
-Amount Received
-</label>
-
-<input id="amountReceived"
-       type="number"
-       min="0"
-       step="0.001"
-       value="0"
-       oninput="updateReceipt()">
-
-
+<label id="paymentMethodLabel">Payment Method</label>
+<select id="paymentMethod" onchange="updateReceipt()"></select>
+<label id="amountReceivedLabel">Amount Received</label>
+<input id="amountReceived" type="number" min="0" step="0.001" value="0" oninput="updateReceipt()">
 <div class="info">
-
-<span id="changeLabelInfo">
-Change:
-</span>
-
-<strong id="changePreview">
-BD 0.000
-</strong>
-
+<span id="changeLabelInfo">Change:</span>
+<strong id="changePreview">BD 0.000</strong>
+</div>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     ITEMS
-     ====================================================== -->
-
+<!-- PRODUCTS (CSV) -->
 <div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    🛒 <span id="itemsTitle">Items</span>
-  </span>
-
-  <span class="section-icon">
-    −
-  </span>
-
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>📦 <span id="productsTitle">Products</span></span>
+  <span class="section-icon">+</span>
 </button>
-
-
-<div class="section-content">
-
-
-<div id="itemsContainer">
-</div>
-
-
-<button class="primary-btn"
-        onclick="addItem()"
-        id="addItemButton">
-
-+ Add Item
-
-</button>
-
-</div>
-
-</div>
-
-
-<!-- ======================================================
-     FOOTER
-     ====================================================== -->
-
-<div class="section">
-
-<button class="section-toggle"
-        onclick="toggleSection(this)">
-
-  <span>
-    📝 <span id="footerTitle">
-      Receipt Footer
-    </span>
-  </span>
-
-  <span class="section-icon">
-    +
-  </span>
-
-</button>
-
-
 <div class="section-content collapsed">
-
-
-<label id="footerLine1Label">
-Footer Line 1
-</label>
-
-<input id="footer1"
-       value="Thank you for shopping with us!"
-       oninput="updateReceipt()">
-
-
-<label id="footerLine2Label">
-Footer Line 2
-</label>
-
-<input id="footer2"
-       value="Please come again."
-       oninput="updateReceipt()">
-
+<input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
+<div class="info" id="productsUploadHint">Upload a CSV with columns: Name, Price, and optionally Category and SKU.</div>
+<div id="csvErrorBox" class="error-text hidden"></div>
+<div id="csvSuccessBox" class="success-text hidden"></div>
+<div class="csv-actions">
+<button class="small-btn" style="background:#444;" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
+<button class="small-btn" style="background:#a32c22;" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
+</div>
+<input id="productSearch" class="product-search" type="text" placeholder="Search products..." oninput="renderProducts()">
+<div id="productsCount" class="products-count"></div>
+<div id="productsList" class="product-list"></div>
+<div id="productsEmpty" class="products-empty" id="productsEmptyState">No products yet. Upload a CSV to get started.</div>
+</div>
 </div>
 
+<!-- ITEMS -->
+<div class="section">
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>🛒 <span id="itemsTitle">Items</span></span>
+  <span class="section-icon">−</span>
+</button>
+<div class="section-content">
+<div class="items-hint" id="itemsHint">Add products from the list above, or add items manually below.</div>
+<div id="itemsContainer"></div>
+<button class="primary-btn" onclick="addItem()" id="addItemButton">+ Add Item</button>
+</div>
 </div>
 
+<!-- FOOTER -->
+<div class="section">
+<button class="section-toggle" onclick="toggleSection(this)">
+  <span>📝 <span id="footerTitle">Receipt Footer</span></span>
+  <span class="section-icon">+</span>
+</button>
+<div class="section-content collapsed">
+<label id="footerLine1Label">Footer Line 1</label>
+<input id="footer1" value="Thank you for shopping with us!" oninput="updateReceipt()">
+<label id="footerLine2Label">Footer Line 2</label>
+<input id="footer2" value="Please come again." oninput="updateReceipt()">
+</div>
+</div>
 
-<!-- ======================================================
-     ACTIONS
-     ====================================================== -->
-
+<!-- ACTIONS -->
 <div class="quick-actions">
-
-<button class="primary-btn"
-        onclick="printReceipt()"
-        id="printButton">
-
-🖨 Print
-
-</button>
-
-
-<button class="secondary-btn"
-        onclick="newSale()"
-        id="newSaleButton">
-
-+ New Sale
-
-</button>
+<button class="primary-btn" onclick="printReceipt()" id="printButton">🖨 Print</button>
+<button class="secondary-btn" onclick="newSale()" id="newSaleButton">+ New Sale</button>
+</div>
 
 </div>
 
-
-</div>
-
-
-<!-- ======================================================
-     LIVE RECEIPT
-     ====================================================== -->
-
+<!-- LIVE RECEIPT -->
 <div class="preview-area">
-
-
-<div id="receipt"
-     class="receipt">
-
-
+<div id="receipt" class="receipt">
 <div class="receipt-header">
-
-<h2 id="receiptStoreName">
-NEO Supermarket
-</h2>
-
-
-<div id="receiptStoreDetails"
-     class="receipt-store-details">
-</div>
-
-
-<div id="receiptDocumentTitle"
-     class="receipt-document-title">
-
-Receipt
-
-</div>
-
-
+<h2 id="receiptStoreName">NEO Supermarket</h2>
+<div id="receiptStoreDetails" class="receipt-store-details"></div>
+<div id="receiptDocumentTitle" class="receipt-document-title">Receipt</div>
 <div class="receipt-meta">
-
-<div>
-
-<span id="receiptDateLabel">
-Date:
-</span>
-
-<span id="receiptDate">
-</span>
-
+<div><span id="receiptDateLabel">Date:</span> <span id="receiptDate"></span></div>
+<div><span id="receiptNumberText">Receipt No:</span> <span id="receiptNumber"></span></div>
 </div>
-
-
-<div>
-
-<span id="receiptNumberText">
-Receipt No:
-</span>
-
-<span id="receiptNumber">
-</span>
-
 </div>
-
-</div>
-
-</div>
-
-
 <div class="receipt-column-header">
-
-<span id="receiptItemHeader">
-Item
-</span>
-
-<span id="receiptQtyHeader">
-Qty
-</span>
-
-<span id="receiptTotalHeader">
-Total
-</span>
-
+<span id="receiptItemHeader">Item</span>
+<span id="receiptQtyHeader">Qty</span>
+<span id="receiptTotalHeader">Total</span>
 </div>
-
-
-<div id="receiptItems">
-</div>
-
-
+<div id="receiptItems"></div>
 <div class="dashed-line"></div>
-
-
-<div class="receipt-total-line">
-
-<span id="subtotalLabel">
-Subtotal
-</span>
-
-<span id="subtotal">
-BD 0.000
-</span>
-
-</div>
-
-
-<div class="receipt-total-line">
-
-<span id="receiptDiscountLabel">
-Discount
-</span>
-
-<span id="discountAmount">
-BD 0.000
-</span>
-
-</div>
-
-
-<div class="receipt-total-line">
-
-<span id="receiptTaxLabel">
-Tax
-</span>
-
-<span id="taxAmount">
-BD 0.000
-</span>
-
-</div>
-
-
+<div class="receipt-total-line"><span id="subtotalLabel">Subtotal</span><span id="subtotal">BD 0.000</span></div>
+<div class="receipt-total-line"><span id="receiptDiscountLabel">Discount</span><span id="discountAmount">BD 0.000</span></div>
+<div class="receipt-total-line"><span id="receiptTaxLabel">Tax</span><span id="taxAmount">BD 0.000</span></div>
 <div class="dashed-line"></div>
-
-
-<div class="receipt-total-line receipt-grand-total">
-
-<span id="totalLabel">
-TOTAL
-</span>
-
-<span id="grandTotal">
-BD 0.000
-</span>
-
-</div>
-
-
+<div class="receipt-total-line receipt-grand-total"><span id="totalLabel">TOTAL</span><span id="grandTotal">BD 0.000</span></div>
 <div class="receipt-payment">
-
-<div class="receipt-payment-line">
-
-<span id="receiptPaymentMethodLabel">
-Payment
-</span>
-
-<span id="receiptPaymentMethod">
-Cash
-</span>
-
+<div class="receipt-payment-line"><span id="receiptPaymentMethodLabel">Payment</span><span id="receiptPaymentMethod">Cash</span></div>
+<div class="receipt-payment-line"><span id="receiptReceivedLabel">Received</span><span id="receiptReceived">BD 0.000</span></div>
+<div class="receipt-payment-line"><span id="receiptChangeLabel">Change</span><span id="receiptChange">BD 0.000</span></div>
 </div>
-
-
-<div class="receipt-payment-line">
-
-<span id="receiptReceivedLabel">
-Received
-</span>
-
-<span id="receiptReceived">
-BD 0.000
-</span>
-
-</div>
-
-
-<div class="receipt-payment-line">
-
-<span id="receiptChangeLabel">
-Change
-</span>
-
-<span id="receiptChange">
-BD 0.000
-</span>
-
-</div>
-
-</div>
-
-
 <div class="receipt-footer">
-
-<p id="receiptFooter1">
-Thank you for shopping with us!
-</p>
-
-<p id="receiptFooter2">
-Please come again.
-</p>
-
+<p id="receiptFooter1">Thank you for shopping with us!</p>
+<p id="receiptFooter2">Please come again.</p>
 </div>
-
-
+</div>
 </div>
 
 </div>
-
-</div>
-
 
 <script>
-
 /* =========================================================
    TRANSLATIONS
    ========================================================= */
-
 const translations = {
 
 en: {
-
-appTitle: "Online POS",
-appSubtitle: "Simple browser-based point of sale",
-
-languageTitle: "Language",
-languageLabel: "Select Language",
-
-documentTitle: "Document",
-documentTypeLabel: "Document Type",
-
-receipt: "Receipt",
-invoice: "Invoice",
-payment: "Payment Received",
-
-paperTitle: "Paper Size",
-paperLabel: "Receipt Paper",
-customWidthLabel: "Custom Width (mm)",
-currentWidthLabel: "Current width:",
-
-currencyTitle: "Currency",
-currencyCodeLabel: "Currency Code",
-currencySymbolLabel: "Currency Symbol",
-
-storeTitle: "Store Information",
-storeNameLabel: "Store Name",
-storeDetailsLabel: "Store Details",
-
-storeInfo:
-"You can enter address, phone, email, TRN, website and other information.",
-
-receiptSettingsTitle: "Receipt",
-receiptNumberLabel: "Receipt Number",
-
-receiptNumberInfo:
-"The next number is generated when you start a new sale.",
-
-taxTitle: "Tax & Discount",
-taxNameLabel: "Tax Name",
-taxRateLabel: "Tax Rate (%)",
-
-discountLabel: "Discount (%)",
-
-paymentMethodsTitle: "Payment Methods",
-paymentMethodsInfo: "Add your own payment methods.",
-
-paymentTitle: "Payment",
-paymentMethodLabel: "Payment Method",
-amountReceivedLabel: "Amount Received",
-
-changeLabelInfo: "Change:",
-
-itemsTitle: "Items",
-addItemButton: "+ Add Item",
-
-footerTitle: "Receipt Footer",
-footerLine1Label: "Footer Line 1",
-footerLine2Label: "Footer Line 2",
-
-printButton: "🖨 Print",
-newSaleButton: "+ New Sale",
-
-item: "Item",
-qty: "Qty",
-total: "Total",
-
-subtotal: "Subtotal",
-discount: "Discount",
-tax: "Tax",
-
-received: "Received",
-change: "Change",
-
-paymentShort: "Payment",
-
-receiptNo: "Receipt No:",
-date: "Date:",
-
-thankYou:
-"Thank you for shopping with us!",
-
-comeAgain:
-"Please come again."
-
+  appTitle: "Online POS", appSubtitle: "Simple browser-based point of sale",
+  languageTitle: "Language", languageLabel: "Select Language",
+  documentTitle: "Document", documentTypeLabel: "Document Type",
+  receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
+  paperTitle: "Paper Size", paperLabel: "Receipt Paper", customWidthLabel: "Custom Width (mm)", currentWidthLabel: "Current width:",
+  currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
+  storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
+  storeInfo: "You can enter address, phone, email, TRN, website and other information.",
+  receiptSettingsTitle: "Receipt", receiptNumberLabel: "Receipt Number",
+  receiptNumberInfo: "The next number is generated when you start a new sale.",
+  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
+  paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "Add your own payment methods.",
+  paymentTitle: "Payment", paymentMethodLabel: "Payment Method", amountReceivedLabel: "Amount Received", changeLabelInfo: "Change:",
+  productsTitle: "Products", productsUploadHint: "Upload a CSV with columns: Name, Price, and optionally Category and SKU.",
+  productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Upload a CSV to get started.",
+  productsLoadedSuffix: "products loaded", productsClearButton: "Clear Products", productsSampleButton: "Download Sample CSV",
+  productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
+  productsUploadSuccess: "products loaded from file.",
+  itemsTitle: "Items", itemsHint: "Add products from the list above, or add items manually below.", addItemButton: "+ Add Item",
+  itemNameLabel: "Item Name", quantityLabel: "Quantity", priceLabel: "Price", removeButton: "Remove",
+  footerTitle: "Receipt Footer", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
+  printButton: "🖨 Print", newSaleButton: "+ New Sale",
+  item: "Item", qty: "Qty", total: "Total",
+  subtotal: "Subtotal", discount: "Discount", tax: "Tax",
+  received: "Received", change: "Change", paymentShort: "Payment",
+  receiptNo: "Receipt No:", date: "Date:",
+  thankYou: "Thank you for shopping with us!", comeAgain: "Please come again."
 },
-
 
 ar: {
-
-appTitle: "نظام نقاط البيع",
-
-appSubtitle:
-"نظام نقاط بيع يعمل من المتصفح",
-
-languageTitle: "اللغة",
-languageLabel: "اختر اللغة",
-
-documentTitle: "المستند",
-documentTypeLabel: "نوع المستند",
-
-receipt: "إيصال",
-invoice: "فاتورة",
-payment: "إيصال استلام الدفع",
-
-paperTitle: "حجم الورق",
-paperLabel: "ورق الإيصال",
-
-customWidthLabel:
-"العرض المخصص (مم)",
-
-currentWidthLabel:
-"العرض الحالي:",
-
-currencyTitle: "العملة",
-currencyCodeLabel: "رمز العملة",
-currencySymbolLabel: "رمز العملة",
-
-storeTitle: "معلومات المتجر",
-storeNameLabel: "اسم المتجر",
-storeDetailsLabel: "تفاصيل المتجر",
-
-storeInfo:
-"يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
-
-receiptSettingsTitle: "الإيصال",
-
-receiptNumberLabel:
-"رقم الإيصال",
-
-receiptNumberInfo:
-"يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
-
-taxTitle: "الضريبة والخصم",
-taxNameLabel: "اسم الضريبة",
-taxRateLabel: "نسبة الضريبة (%)",
-
-discountLabel: "الخصم (%)",
-
-paymentMethodsTitle:
-"طرق الدفع",
-
-paymentMethodsInfo:
-"أضف طرق الدفع الخاصة بك.",
-
-paymentTitle: "الدفع",
-
-paymentMethodLabel:
-"طريقة الدفع",
-
-amountReceivedLabel:
-"المبلغ المستلم",
-
-changeLabelInfo:
-"الباقي:",
-
-itemsTitle: "الأصناف",
-
-addItemButton:
-"+ إضافة صنف",
-
-footerTitle:
-"تذييل الإيصال",
-
-footerLine1Label:
-"السطر الأول",
-
-footerLine2Label:
-"السطر الثاني",
-
-printButton:
-"🖨 طباعة",
-
-newSaleButton:
-"+ بيع جديد",
-
-item: "الصنف",
-qty: "الكمية",
-total: "الإجمالي",
-
-subtotal:
-"المجموع الفرعي",
-
-discount:
-"الخصم",
-
-tax:
-"الضريبة",
-
-received:
-"المستلم",
-
-change:
-"الباقي",
-
-paymentShort:
-"الدفع",
-
-receiptNo:
-"رقم الإيصال:",
-
-date:
-"التاريخ:",
-
-thankYou:
-"شكراً لتسوقكم معنا!",
-
-comeAgain:
-"نتمنى زيارتكم مرة أخرى."
-
+  appTitle: "نظام نقاط البيع", appSubtitle: "نظام نقاط بيع يعمل من المتصفح",
+  languageTitle: "اللغة", languageLabel: "اختر اللغة",
+  documentTitle: "المستند", documentTypeLabel: "نوع المستند",
+  receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
+  paperTitle: "حجم الورق", paperLabel: "ورق الإيصال", customWidthLabel: "العرض المخصص (مم)", currentWidthLabel: "العرض الحالي:",
+  currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
+  storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
+  storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
+  receiptSettingsTitle: "الإيصال", receiptNumberLabel: "رقم الإيصال",
+  receiptNumberInfo: "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
+  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
+  paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "أضف طرق الدفع الخاصة بك.",
+  paymentTitle: "الدفع", paymentMethodLabel: "طريقة الدفع", amountReceivedLabel: "المبلغ المستلم", changeLabelInfo: "الباقي:",
+  productsTitle: "المنتجات", productsUploadHint: "قم برفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج.",
+  productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. ارفع ملف CSV للبدء.",
+  productsLoadedSuffix: "منتج تم تحميله", productsClearButton: "مسح المنتجات", productsSampleButton: "تحميل نموذج CSV",
+  productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
+  productsUploadSuccess: "منتج تم تحميله من الملف.",
+  itemsTitle: "الأصناف", itemsHint: "أضف منتجات من القائمة أعلاه، أو أضف صنفاً يدوياً أدناه.", addItemButton: "+ إضافة صنف",
+  itemNameLabel: "اسم الصنف", quantityLabel: "الكمية", priceLabel: "السعر", removeButton: "حذف",
+  footerTitle: "تذييل الإيصال", footerLine1Label: "السطر الأول", footerLine2Label: "السطر الثاني",
+  printButton: "🖨 طباعة", newSaleButton: "+ بيع جديد",
+  item: "الصنف", qty: "الكمية", total: "الإجمالي",
+  subtotal: "المجموع الفرعي", discount: "الخصم", tax: "الضريبة",
+  received: "المستلم", change: "الباقي", paymentShort: "الدفع",
+  receiptNo: "رقم الإيصال:", date: "التاريخ:",
+  thankYou: "شكراً لتسوقكم معنا!", comeAgain: "نتمنى زيارتكم مرة أخرى."
 },
 
-
 fil: {
+  appTitle: "Online POS", appSubtitle: "Simpleng point of sale system",
+  languageTitle: "Wika", languageLabel: "Pumili ng Wika",
+  documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
+  receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
+  paperTitle: "Laki ng Papel", paperLabel: "Papel ng Resibo", customWidthLabel: "Custom na Lapad (mm)", currentWidthLabel: "Kasalukuyang lapad:",
+  currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
+  storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
+  storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
+  receiptSettingsTitle: "Resibo", receiptNumberLabel: "Numero ng Resibo",
+  receiptNumberInfo: "Ang susunod na numero ay ginagawa kapag nagsimula ng bagong sale.",
+  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
+  paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Magdagdag ng sarili mong payment methods.",
+  paymentTitle: "Bayad", paymentMethodLabel: "Paraan ng Pagbabayad", amountReceivedLabel: "Natanggap na Halaga", changeLabelInfo: "Sukli:",
+  productsTitle: "Mga Produkto", productsUploadHint: "Mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU.",
+  productsSearchPlaceholder: "Maghanap ng produkto...", productsEmptyState: "Wala pang produkto. Mag-upload ng CSV para magsimula.",
+  productsLoadedSuffix: "produktong na-load", productsClearButton: "Alisin ang mga Produkto", productsSampleButton: "I-download ang Sample CSV",
+  productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
+  productsUploadSuccess: "produktong na-load mula sa file.",
+  itemsTitle: "Mga Item", itemsHint: "Magdagdag ng produkto mula sa listahan sa itaas, o magdagdag ng item nang manu-mano sa ibaba.", addItemButton: "+ Magdagdag ng Item",
+  itemNameLabel: "Pangalan ng Item", quantityLabel: "Dami", priceLabel: "Presyo", removeButton: "Alisin",
+  footerTitle: "Footer ng Resibo", footerLine1Label: "Footer Line 1", footerLine2Label: "Footer Line 2",
+  printButton: "🖨 I-print", newSaleButton: "+ Bagong Sale",
+  item: "Item", qty: "Qty", total: "Total",
+  subtotal: "Subtotal", discount: "Discount", tax: "Buwis",
+  received: "Natanggap", change: "Sukli", paymentShort: "Bayad",
+  receiptNo: "Resibo No:", date: "Petsa:",
+  thankYou: "Salamat sa inyong pamimili!", comeAgain: "Bumalik po kayo."
+},
 
-appTitle: "Online POS",
+hi: {
+  appTitle: "ऑनलाइन पीओएस", appSubtitle: "सरल ब्राउज़र-आधारित बिक्री प्रणाली",
+  languageTitle: "भाषा", languageLabel: "भाषा चुनें",
+  documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
+  receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
+  paperTitle: "पेपर साइज़", paperLabel: "रसीद पेपर", customWidthLabel: "कस्टम चौड़ाई (मिमी)", currentWidthLabel: "वर्तमान चौड़ाई:",
+  currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
+  storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
+  storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
+  receiptSettingsTitle: "रसीद", receiptNumberLabel: "रसीद नंबर",
+  receiptNumberInfo: "नई बिक्री शुरू करने पर अगला नंबर स्वतः बनता है।",
+  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
+  paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "अपने भुगतान के तरीके जोड़ें।",
+  paymentTitle: "भुगतान", paymentMethodLabel: "भुगतान का तरीका", amountReceivedLabel: "प्राप्त राशि", changeLabelInfo: "बाकी राशि:",
+  productsTitle: "उत्पाद", productsUploadHint: "Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं।",
+  productsSearchPlaceholder: "उत्पाद खोजें...", productsEmptyState: "अभी तक कोई उत्पाद नहीं। शुरू करने के लिए CSV अपलोड करें।",
+  productsLoadedSuffix: "उत्पाद लोड हुए", productsClearButton: "उत्पाद हटाएं", productsSampleButton: "नमूना CSV डाउनलोड करें",
+  productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
+  productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।",
+  itemsTitle: "आइटम", itemsHint: "ऊपर की सूची से उत्पाद जोड़ें, या नीचे मैन्युअल रूप से आइटम जोड़ें।", addItemButton: "+ आइटम जोड़ें",
+  itemNameLabel: "आइटम का नाम", quantityLabel: "मात्रा", priceLabel: "कीमत", removeButton: "हटाएं",
+  footerTitle: "रसीद फुटर", footerLine1Label: "फुटर लाइन 1", footerLine2Label: "फुटर लाइन 2",
+  printButton: "🖨 प्रिंट करें", newSaleButton: "+ नई बिक्री",
+  item: "आइटम", qty: "मात्रा", total: "कुल",
+  subtotal: "उप-योग", discount: "छूट", tax: "कर",
+  received: "प्राप्त", change: "बाकी", paymentShort: "भुगतान",
+  receiptNo: "रसीद नंबर:", date: "दिनांक:",
+  thankYou: "हमारे यहां खरीदारी करने के लिए धन्यवाद!", comeAgain: "फिर से पधारें।"
+},
 
-appSubtitle:
-"Simpleng point of sale system",
+es: {
+  appTitle: "POS en Línea", appSubtitle: "Sistema de punto de venta simple desde el navegador",
+  languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
+  documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
+  receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
+  paperTitle: "Tamaño de Papel", paperLabel: "Papel del Recibo", customWidthLabel: "Ancho Personalizado (mm)", currentWidthLabel: "Ancho actual:",
+  currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
+  storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
+  storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
+  receiptSettingsTitle: "Recibo", receiptNumberLabel: "Número de Recibo",
+  receiptNumberInfo: "El siguiente número se genera al iniciar una nueva venta.",
+  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
+  paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Agrega tus propios métodos de pago.",
+  paymentTitle: "Pago", paymentMethodLabel: "Método de Pago", amountReceivedLabel: "Monto Recibido", changeLabelInfo: "Cambio:",
+  productsTitle: "Productos", productsUploadHint: "Sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU.",
+  productsSearchPlaceholder: "Buscar productos...", productsEmptyState: "Aún no hay productos. Sube un CSV para comenzar.",
+  productsLoadedSuffix: "productos cargados", productsClearButton: "Eliminar Productos", productsSampleButton: "Descargar CSV de Ejemplo",
+  productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
+  productsUploadSuccess: "productos cargados desde el archivo.",
+  itemsTitle: "Artículos", itemsHint: "Agrega productos de la lista de arriba, o agrega artículos manualmente abajo.", addItemButton: "+ Agregar Artículo",
+  itemNameLabel: "Nombre del Artículo", quantityLabel: "Cantidad", priceLabel: "Precio", removeButton: "Eliminar",
+  footerTitle: "Pie del Recibo", footerLine1Label: "Línea de Pie 1", footerLine2Label: "Línea de Pie 2",
+  printButton: "🖨 Imprimir", newSaleButton: "+ Nueva Venta",
+  item: "Artículo", qty: "Cant.", total: "Total",
+  subtotal: "Subtotal", discount: "Descuento", tax: "Impuesto",
+  received: "Recibido", change: "Cambio", paymentShort: "Pago",
+  receiptNo: "N.º de Recibo:", date: "Fecha:",
+  thankYou: "¡Gracias por su compra!", comeAgain: "Vuelva pronto."
+},
 
-languageTitle: "Wika",
-
-languageLabel:
-"Pumili ng Wika",
-
-documentTitle: "Dokumento",
-
-documentTypeLabel:
-"Uri ng Dokumento",
-
-receipt: "Resibo",
-
-invoice: "Invoice",
-
-payment:
-"Katibayan ng Bayad",
-
-paperTitle:
-"Laki ng Papel",
-
-paperLabel:
-"Papel ng Resibo",
-
-customWidthLabel:
-"Custom na Lapad (mm)",
-
-currentWidthLabel:
-"Kasalukuyang lapad:",
-
-currencyTitle:
-"Currency",
-
-currencyCodeLabel:
-"Currency Code",
-
-currencySymbolLabel:
-"Currency Symbol",
-
-storeTitle:
-"Impormasyon ng Tindahan",
-
-storeNameLabel:
-"Pangalan ng Tindahan",
-
-storeDetailsLabel:
-"Detalye ng Tindahan",
-
-storeInfo:
-"Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
-
-receiptSettingsTitle:
-"Resibo",
-
-receiptNumberLabel:
-"Numero ng Resibo",
-
-receiptNumberInfo:
-"Ang susunod na numero ay ginagawa kapag nagsimula ng bagong sale.",
-
-taxTitle:
-"Buwis at Discount",
-
-taxNameLabel:
-"Pangalan ng Buwis",
-
-taxRateLabel:
-"Rate ng Buwis (%)",
-
-discountLabel:
-"Discount (%)",
-
-paymentMethodsTitle:
-"Paraan ng Pagbabayad",
-
-paymentMethodsInfo:
-"Magdagdag ng sarili mong payment methods.",
-
-paymentTitle:
-"Bayad",
-
-paymentMethodLabel:
-"Paraan ng Pagbabayad",
-
-amountReceivedLabel:
-"Natanggap na Halaga",
-
-changeLabelInfo:
-"Sukli:",
-
-itemsTitle:
-"Mga Item",
-
-addItemButton:
-"+ Magdagdag ng Item",
-
-footerTitle:
-"Footer ng Resibo",
-
-footerLine1Label:
-"Footer Line 1",
-
-footerLine2Label:
-"Footer Line 2",
-
-printButton:
-"🖨 I-print",
-
-newSaleButton:
-"+ Bagong Sale",
-
-item:
-"Item",
-
-qty:
-"Qty",
-
-total:
-"Total",
-
-subtotal:
-"Subtotal",
-
-discount:
-"Discount",
-
-tax:
-"Buwis",
-
-received:
-"Natanggap",
-
-change:
-"Sukli",
-
-paymentShort:
-"Bayad",
-
-receiptNo:
-"Resibo No:",
-
-date:
-"Petsa:",
-
-thankYou:
-"Salamat sa inyong pamimili!",
-
-comeAgain:
-"Bumalik po kayo."
-
+th: {
+  appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ระบบขายหน้าร้านผ่านเบราว์เซอร์อย่างง่าย",
+  languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
+  documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
+  receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
+  paperTitle: "ขนาดกระดาษ", paperLabel: "กระดาษใบเสร็จ", customWidthLabel: "ความกว้างกำหนดเอง (มม.)", currentWidthLabel: "ความกว้างปัจจุบัน:",
+  currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
+  storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
+  storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
+  receiptSettingsTitle: "ใบเสร็จ", receiptNumberLabel: "เลขที่ใบเสร็จ",
+  receiptNumberInfo: "หมายเลขถัดไปจะถูกสร้างขึ้นเมื่อเริ่มการขายใหม่",
+  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
+  paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "เพิ่มวิธีการชำระเงินของคุณเอง",
+  paymentTitle: "การชำระเงิน", paymentMethodLabel: "วิธีการชำระเงิน", amountReceivedLabel: "จำนวนเงินที่รับ", changeLabelInfo: "เงินทอน:",
+  productsTitle: "สินค้า", productsUploadHint: "อัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้",
+  productsSearchPlaceholder: "ค้นหาสินค้า...", productsEmptyState: "ยังไม่มีสินค้า อัปโหลดไฟล์ CSV เพื่อเริ่มต้น",
+  productsLoadedSuffix: "รายการสินค้าที่โหลด", productsClearButton: "ล้างรายการสินค้า", productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง",
+  productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
+  productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์",
+  itemsTitle: "รายการสินค้า", itemsHint: "เพิ่มสินค้าจากรายการด้านบน หรือเพิ่มรายการด้วยตนเองด้านล่าง", addItemButton: "+ เพิ่มรายการ",
+  itemNameLabel: "ชื่อสินค้า", quantityLabel: "จำนวน", priceLabel: "ราคา", removeButton: "ลบ",
+  footerTitle: "ท้ายใบเสร็จ", footerLine1Label: "ข้อความท้ายบรรทัด 1", footerLine2Label: "ข้อความท้ายบรรทัด 2",
+  printButton: "🖨 พิมพ์", newSaleButton: "+ การขายใหม่",
+  item: "สินค้า", qty: "จำนวน", total: "รวม",
+  subtotal: "ยอดรวมย่อย", discount: "ส่วนลด", tax: "ภาษี",
+  received: "รับเงิน", change: "เงินทอน", paymentShort: "ชำระเงิน",
+  receiptNo: "เลขที่ใบเสร็จ:", date: "วันที่:",
+  thankYou: "ขอบคุณที่ใช้บริการ!", comeAgain: "แล้วพบกันใหม่"
 }
 
 };
 
-
 /* =========================================================
    VARIABLES
    ========================================================= */
-
 let itemCounter = 0;
-
 let currentReceiptNumber = null;
-
 let paymentMethods = [];
+let products = [];
 
+function val(id) { return document.getElementById(id).value; }
+function symbolNow() { return document.getElementById("currencySymbol").value.trim() || "BD"; }
+function t() { return translations[document.getElementById("language").value]; }
 
 /* =========================================================
    COLLAPSIBLE SECTIONS
    ========================================================= */
-
 function toggleSection(button) {
-
-  const content =
-    button.nextElementSibling;
-
-  const icon =
-    button.querySelector(
-      ".section-icon"
-    );
-
-  const collapsed =
-    content.classList.toggle(
-      "collapsed"
-    );
-
-  icon.textContent =
-    collapsed ? "+" : "−";
-
+  const content = button.nextElementSibling;
+  const icon = button.querySelector(".section-icon");
+  const collapsed = content.classList.toggle("collapsed");
+  icon.textContent = collapsed ? "+" : "−";
 }
 
+/* =========================================================
+   PERSISTENT STORAGE (per-device, no sign-in required)
+   ========================================================= */
+async function loadSettings() {
+  try {
+    const res = await window.storage.get("pos-settings");
+    if (res && res.value) {
+      const s = JSON.parse(res.value);
+      Object.keys(s).forEach(function(key) {
+        const el = document.getElementById(key);
+        if (el) el.value = s[key];
+      });
+    }
+  } catch (e) { /* no saved settings yet, defaults from HTML are used */ }
+}
+
+async function saveSettings() {
+  const settings = {
+    currencyCode: val("currencyCode"), currencySymbol: val("currencySymbol"),
+    storeName: val("storeName"), storeDetails: val("storeDetails"),
+    taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
+    footer1: val("footer1"), footer2: val("footer2"),
+    language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth")
+  };
+  try { await window.storage.set("pos-settings", JSON.stringify(settings), false); }
+  catch (e) { console.error("Could not save settings", e); }
+}
+
+async function loadPaymentMethods() {
+  try {
+    const res = await window.storage.get("pos-payment-methods");
+    paymentMethods = (res && res.value) ? JSON.parse(res.value) : ["Cash", "Card", "Bank Transfer"];
+  } catch (e) { paymentMethods = ["Cash", "Card", "Bank Transfer"]; }
+  renderPaymentMethods();
+}
+
+async function savePaymentMethods() {
+  try { await window.storage.set("pos-payment-methods", JSON.stringify(paymentMethods), false); }
+  catch (e) { console.error("Could not save payment methods", e); }
+}
+
+async function loadProductsFromStorage() {
+  try {
+    const res = await window.storage.get("pos-products");
+    products = (res && res.value) ? JSON.parse(res.value) : [];
+  } catch (e) { products = []; }
+  renderProducts();
+}
+
+async function saveProducts() {
+  try { await window.storage.set("pos-products", JSON.stringify(products), false); }
+  catch (e) { console.error("Could not save products", e); }
+}
+
+async function getNextReceiptNumber() {
+  let last = 0;
+  try {
+    const res = await window.storage.get("pos-receipt-counter");
+    last = (res && res.value) ? (parseInt(res.value, 10) || 0) : 0;
+  } catch (e) { last = 0; }
+  last++;
+  try { await window.storage.set("pos-receipt-counter", String(last), false); }
+  catch (e) { console.error("Could not save receipt counter", e); }
+  return String(last).padStart(6, "0");
+}
+
+async function startFirstSale() {
+  currentReceiptNumber = await getNextReceiptNumber();
+}
 
 /* =========================================================
    PAYMENT METHODS
    ========================================================= */
-
-function loadPaymentMethods() {
-
-  const saved =
-    localStorage.getItem(
-      "POS_PAYMENT_METHODS"
-    );
-
-  if (saved) {
-
-    try {
-
-      paymentMethods =
-        JSON.parse(saved);
-
-    } catch {
-
-      paymentMethods = [
-        "Cash",
-        "Card",
-        "Bank Transfer"
-      ];
-
-    }
-
-  } else {
-
-    paymentMethods = [
-      "Cash",
-      "Card",
-      "Bank Transfer"
-    ];
-
-  }
-
-  renderPaymentMethods();
-
-}
-
-
-function savePaymentMethods() {
-
-  localStorage.setItem(
-    "POS_PAYMENT_METHODS",
-    JSON.stringify(
-      paymentMethods
-    )
-  );
-
-}
-
-
 function addPaymentMethod() {
-
-  const input =
-    document.getElementById(
-      "newPaymentMethod"
-    );
-
-  const value =
-    input.value.trim();
-
+  const input = document.getElementById("newPaymentMethod");
+  const value = input.value.trim();
   if (!value) return;
-
-  if (
-    paymentMethods.includes(
-      value
-    )
-  ) {
-
-    alert(
-      "This payment method already exists."
-    );
-
-    return;
-
-  }
-
+  if (paymentMethods.includes(value)) { alert("This payment method already exists."); return; }
   paymentMethods.push(value);
-
   input.value = "";
-
   savePaymentMethods();
-
   renderPaymentMethods();
-
   updateReceipt();
-
 }
-
 
 function removePaymentMethod(index) {
-
-  paymentMethods.splice(
-    index,
-    1
-  );
-
+  paymentMethods.splice(index, 1);
   savePaymentMethods();
-
   renderPaymentMethods();
-
   updateReceipt();
-
 }
-
 
 function renderPaymentMethods() {
-
-  const list =
-    document.getElementById(
-      "paymentMethodsList"
-    );
-
-  const select =
-    document.getElementById(
-      "paymentMethod"
-    );
-
+  const list = document.getElementById("paymentMethodsList");
+  const select = document.getElementById("paymentMethod");
+  const prevSelected = select.value;
   list.innerHTML = "";
-
   select.innerHTML = "";
-
-  paymentMethods.forEach(
-    function(method, index) {
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-      row.className =
-        "payment-item";
-
-      row.innerHTML = `
-
-        <span>
-          ${escapeHtml(method)}
-        </span>
-
-        <button
-          onclick="removePaymentMethod(${index})"
-        >
-          ×
-        </button>
-
-      `;
-
-      list.appendChild(row);
-
-      const option =
-        document.createElement(
-          "option"
-        );
-
-      option.value =
-        method;
-
-      option.textContent =
-        method;
-
-      select.appendChild(option);
-
-    }
-  );
-
+  paymentMethods.forEach(function(method, index) {
+    const row = document.createElement("div");
+    row.className = "payment-item";
+    row.innerHTML = "<span>" + escapeHtml(method) + "</span><button onclick=\"removePaymentMethod(" + index + ")\">×</button>";
+    list.appendChild(row);
+    const option = document.createElement("option");
+    option.value = method;
+    option.textContent = method;
+    select.appendChild(option);
+  });
+  if (paymentMethods.includes(prevSelected)) select.value = prevSelected;
 }
-
 
 /* =========================================================
-   RECEIPT NUMBER
+   NEW SALE
    ========================================================= */
-
-function getNextReceiptNumber() {
-
-  let last =
-    parseInt(
-      localStorage.getItem(
-        "POS_LAST_RECEIPT"
-      ) || "0",
-      10
-    );
-
-  last++;
-
-  localStorage.setItem(
-    "POS_LAST_RECEIPT",
-    String(last)
-  );
-
-  return String(last)
-    .padStart(6, "0");
-
-}
-
-
-function startFirstSale() {
-
-  currentReceiptNumber =
-    getNextReceiptNumber();
-
-}
-
-
-function newSale() {
-
-  if (
-    !confirm(
-      "Start a new sale?"
-    )
-  ) return;
-
-  currentReceiptNumber =
-    getNextReceiptNumber();
-
+async function newSale() {
+  if (!confirm("Start a new sale?")) return;
+  currentReceiptNumber = await getNextReceiptNumber();
   itemCounter = 0;
-
-  document.getElementById(
-    "itemsContainer"
-  ).innerHTML = "";
-
-  document.getElementById(
-    "amountReceived"
-  ).value = "0";
-
+  document.getElementById("itemsContainer").innerHTML = "";
+  document.getElementById("amountReceived").value = "0";
   addItem();
-
   updateReceipt();
-
 }
-
 
 /* =========================================================
    DATE
    ========================================================= */
-
 function updateDate() {
-
-  const now =
-    new Date();
-
-  const day =
-    String(
-      now.getDate()
-    ).padStart(2, "0");
-
-  const month =
-    String(
-      now.getMonth() + 1
-    ).padStart(2, "0");
-
-  const year =
-    now.getFullYear();
-
-  const hours =
-    String(
-      now.getHours()
-    ).padStart(2, "0");
-
-  const minutes =
-    String(
-      now.getMinutes()
-    ).padStart(2, "0");
-
-  const seconds =
-    String(
-      now.getSeconds()
-    ).padStart(2, "0");
-
-  document.getElementById(
-    "receiptDate"
-  ).textContent =
-
-    `${day}/${month}/${year} ` +
-    `${hours}:${minutes}:${seconds}`;
-
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  document.getElementById("receiptDate").textContent = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
-
 
 /* =========================================================
-   ITEMS
+   ITEMS (manual + added from product catalog)
    ========================================================= */
-
-function addItem() {
-
+function addItem(prefillName, prefillPrice) {
   itemCounter++;
+  const id = itemCounter;
+  const container = document.getElementById("itemsContainer");
+  const div = document.createElement("div");
+  div.className = "item-row";
+  div.id = "item-" + id;
 
-  const container =
-    document.getElementById(
-      "itemsContainer"
-    );
+  const name = prefillName || "";
+  const price = (prefillPrice !== undefined && prefillPrice !== null) ? prefillPrice : 0;
 
-  const div =
-    document.createElement(
-      "div"
-    );
-
-  div.className =
-    "item-row";
-
-  div.id =
-    "item-" +
-    itemCounter;
-
-  div.innerHTML = `
-
-    <h4>
-      Item ${itemCounter}
-    </h4>
-
-    <label>
-      Item Name
-    </label>
-
-    <input
-      class="item-name-input"
-      type="text"
-      placeholder="Example: Coca Cola"
-      oninput="updateReceipt()"
-    >
-
-    <label>
-      Quantity
-    </label>
-
-    <input
-      class="item-qty-input"
-      type="number"
-      value="1"
-      min="0"
-      step="1"
-      oninput="updateReceipt()"
-    >
-
-    <label>
-      Price
-    </label>
-
-    <input
-      class="item-price-input"
-      type="number"
-      value="0"
-      min="0"
-      step="0.001"
-      oninput="updateReceipt()"
-    >
-
-    <button
-      class="remove-item"
-      onclick="removeItem(${itemCounter})"
-    >
-      Remove
-    </button>
-
-  `;
+  div.innerHTML =
+    "<h4 class=\"item-heading\">" + t().item + " " + id + "</h4>" +
+    "<label class=\"item-name-label\">" + t().itemNameLabel + "</label>" +
+    "<input class=\"item-name-input\" type=\"text\" placeholder=\"Example: Coca Cola\" value=\"" + escapeAttr(name) + "\" oninput=\"updateReceipt()\">" +
+    "<label class=\"item-qty-label\">" + t().quantityLabel + "</label>" +
+    "<div class=\"qty-stepper\">" +
+      "<button type=\"button\" onclick=\"stepQty(" + id + ",-1)\">−</button>" +
+      "<input class=\"item-qty-input\" type=\"number\" value=\"1\" min=\"0\" step=\"1\" oninput=\"updateReceipt()\">" +
+      "<button type=\"button\" onclick=\"stepQty(" + id + ",1)\">+</button>" +
+    "</div>" +
+    "<label class=\"item-price-label\">" + t().priceLabel + "</label>" +
+    "<input class=\"item-price-input\" type=\"number\" value=\"" + price + "\" min=\"0\" step=\"0.001\" oninput=\"updateReceipt()\">" +
+    "<button class=\"remove-item item-remove-btn\" onclick=\"removeItem(" + id + ")\">" + t().removeButton + "</button>";
 
   container.appendChild(div);
-
   updateReceipt();
-
 }
 
+function stepQty(id, delta) {
+  const row = document.getElementById("item-" + id);
+  if (!row) return;
+  const input = row.querySelector(".item-qty-input");
+  let v = (parseFloat(input.value) || 0) + delta;
+  if (v < 0) v = 0;
+  input.value = v;
+  updateReceipt();
+}
 
 function removeItem(id) {
-
-  const element =
-    document.getElementById(
-      "item-" + id
-    );
-
-  if (element) {
-
-    element.remove();
-
-  }
-
+  const element = document.getElementById("item-" + id);
+  if (element) element.remove();
+  refreshItemRowLabels();
   updateReceipt();
-
 }
 
+function refreshItemRowLabels() {
+  const tr = t();
+  document.querySelectorAll(".item-row").forEach(function(row, i) {
+    const heading = row.querySelector(".item-heading");
+    if (heading) heading.textContent = tr.item + " " + (i + 1);
+    const nameLabel = row.querySelector(".item-name-label");
+    if (nameLabel) nameLabel.textContent = tr.itemNameLabel;
+    const qtyLabel = row.querySelector(".item-qty-label");
+    if (qtyLabel) qtyLabel.textContent = tr.quantityLabel;
+    const priceLabel = row.querySelector(".item-price-label");
+    if (priceLabel) priceLabel.textContent = tr.priceLabel;
+    const removeBtn = row.querySelector(".item-remove-btn");
+    if (removeBtn) removeBtn.textContent = tr.removeButton;
+  });
+}
+
+/* =========================================================
+   PRODUCTS: CSV UPLOAD
+   ========================================================= */
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === "\"") {
+        if (text[i + 1] === "\"") { field += "\""; i++; } else { inQuotes = false; }
+      } else field += c;
+    } else {
+      if (c === "\"") inQuotes = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(field); field = "";
+        if (row.length > 1 || row[0] !== "") rows.push(row);
+        row = [];
+      } else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function handleCsvUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const errorBox = document.getElementById("csvErrorBox");
+  const successBox = document.getElementById("csvSuccessBox");
+  errorBox.classList.add("hidden");
+  successBox.classList.add("hidden");
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const parsed = parseCSV(String(e.target.result));
+      if (!parsed.length) throw new Error("empty file");
+      const header = parsed[0].map(function(h) { return h.trim().toLowerCase(); });
+      const nameIdx = header.findIndex(function(h) { return ["name", "item", "product", "item name", "product name"].indexOf(h) !== -1; });
+      const priceIdx = header.findIndex(function(h) { return ["price", "unit price", "cost", "amount"].indexOf(h) !== -1; });
+      const catIdx = header.findIndex(function(h) { return ["category", "cat", "type"].indexOf(h) !== -1; });
+      const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
+      if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
+
+      const newProducts = [];
+      for (let i = 1; i < parsed.length; i++) {
+        const row = parsed[i];
+        if (!row || row.every(function(f) { return f.trim() === ""; })) continue;
+        const name = (row[nameIdx] || "").trim();
+        const price = parseFloat(row[priceIdx]) || 0;
+        if (!name) continue;
+        newProducts.push({
+          name: name,
+          price: price,
+          category: catIdx > -1 ? (row[catIdx] || "").trim() : "",
+          sku: skuIdx > -1 ? (row[skuIdx] || "").trim() : ""
+        });
+      }
+      if (!newProducts.length) throw new Error("no valid rows");
+
+      products = newProducts;
+      await saveProducts();
+      renderProducts();
+      successBox.textContent = products.length + " " + t().productsUploadSuccess;
+      successBox.classList.remove("hidden");
+    } catch (err) {
+      errorBox.textContent = t().productsUploadError;
+      errorBox.classList.remove("hidden");
+    }
+  };
+  reader.onerror = function() {
+    errorBox.textContent = t().productsUploadError;
+    errorBox.classList.remove("hidden");
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function downloadSampleCsv() {
+  const sample = "Name,Price,Category,SKU\nCoca Cola 330ml,0.300,Beverages,8901\nWhite Bread,0.450,Bakery,8902\nBottled Water 1.5L,0.200,Beverages,8903\n";
+  const blob = new Blob([sample], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "sample-products.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function clearProducts() {
+  if (!products.length) return;
+  if (!confirm(t().productsClearConfirm)) return;
+  products = [];
+  await saveProducts();
+  renderProducts();
+  document.getElementById("csvSuccessBox").classList.add("hidden");
+  document.getElementById("csvErrorBox").classList.add("hidden");
+}
+
+function addProductToCart(index) {
+  const p = products[index];
+  if (!p) return;
+  addItem(p.name, p.price);
+}
+
+function renderProducts() {
+  const tr = t();
+  const container = document.getElementById("productsList");
+  const emptyState = document.getElementById("productsEmpty");
+  const countLabel = document.getElementById("productsCount");
+  const query = (document.getElementById("productSearch").value || "").toLowerCase().trim();
+
+  container.innerHTML = "";
+  emptyState.classList.toggle("hidden", products.length > 0);
+  countLabel.textContent = products.length ? (products.length + " " + tr.productsLoadedSuffix) : "";
+
+  const symbol = symbolNow();
+  products.forEach(function(p, index) {
+    if (query && p.name.toLowerCase().indexOf(query) === -1 &&
+        !(p.sku && p.sku.toLowerCase().indexOf(query) !== -1) &&
+        !(p.category && p.category.toLowerCase().indexOf(query) !== -1)) return;
+
+    const row = document.createElement("div");
+    row.className = "product-item";
+    row.innerHTML =
+      "<div class=\"product-info\">" +
+        "<span class=\"product-name\">" + escapeHtml(p.name) + "</span>" +
+        "<div class=\"product-meta\">" +
+          (p.category ? "<span class=\"product-category\">" + escapeHtml(p.category) + "</span>" : "") +
+          "<span class=\"product-price\">" + escapeHtml(symbol) + " " + p.price.toFixed(3) + "</span>" +
+        "</div>" +
+      "</div>" +
+      "<button onclick=\"addProductToCart(" + index + ")\">+</button>";
+    container.appendChild(row);
+  });
+}
 
 /* =========================================================
    PAPER SIZE
    ========================================================= */
-
 function changePaperSize() {
-
-  const select =
-    document.getElementById(
-      "paperSize"
-    );
-
-  const custom =
-    document.getElementById(
-      "customWidthContainer"
-    );
-
+  const select = document.getElementById("paperSize");
+  const custom = document.getElementById("customWidthContainer");
   let width;
-
-  if (
-    select.value ===
-    "custom"
-  ) {
-
-    custom.classList.remove(
-      "hidden"
-    );
-
-    width =
-      Number(
-        document.getElementById(
-          "customWidth"
-        ).value
-      ) || 80;
-
+  if (select.value === "custom") {
+    custom.classList.remove("hidden");
+    width = Number(document.getElementById("customWidth").value) || 80;
   } else {
-
-    custom.classList.add(
-      "hidden"
-    );
-
-    width =
-      Number(select.value);
-
+    custom.classList.add("hidden");
+    width = Number(select.value);
   }
-
-  document.getElementById(
-    "receipt"
-  ).style.width =
-    width + "mm";
-
-  document.getElementById(
-    "paperWidthDisplay"
-  ).textContent =
-    width;
-
+  document.getElementById("receipt").style.width = width + "mm";
+  document.getElementById("paperWidthDisplay").textContent = width;
   updatePrintStyle(width);
-
 }
-
 
 function updatePrintStyle(width) {
-
-  let style =
-    document.getElementById(
-      "dynamicPrintStyle"
-    );
-
+  let style = document.getElementById("dynamicPrintStyle");
   if (!style) {
-
-    style =
-      document.createElement(
-        "style"
-      );
-
-    style.id =
-      "dynamicPrintStyle";
-
-    document.head.appendChild(
-      style
-    );
-
+    style = document.createElement("style");
+    style.id = "dynamicPrintStyle";
+    document.head.appendChild(style);
   }
-
-  style.textContent = `
-
-    @media print {
-
-      @page {
-
-        size: ${width}mm auto;
-
-        margin: 0;
-
-      }
-
-      .receipt {
-
-        width: ${width}mm !important;
-
-      }
-
-    }
-
-  `;
-
+  style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; } }";
 }
-
 
 /* =========================================================
    PRINT
    ========================================================= */
-
 function printReceipt() {
-
-  const select =
-    document.getElementById(
-      "paperSize"
-    );
-
+  const select = document.getElementById("paperSize");
   let width;
-
-  if (
-    select.value ===
-    "custom"
-  ) {
-
-    width =
-      Number(
-        document.getElementById(
-          "customWidth"
-        ).value
-      ) || 80;
-
+  if (select.value === "custom") {
+    width = Number(document.getElementById("customWidth").value) || 80;
   } else {
-
-    width =
-      Number(select.value);
-
+    width = Number(select.value);
   }
-
   updatePrintStyle(width);
-
   window.print();
-
 }
-
 
 /* =========================================================
    DOCUMENT TITLE
    ========================================================= */
-
 function getDocumentTitle() {
-
-  const language =
-    document.getElementById(
-      "language"
-    ).value;
-
-  const t =
-    translations[language];
-
-  const type =
-    document.getElementById(
-      "documentType"
-    ).value;
-
-  if (type === "invoice")
-    return t.invoice;
-
-  if (type === "payment")
-    return t.payment;
-
-  return t.receipt;
-
+  const tr = t();
+  const type = document.getElementById("documentType").value;
+  if (type === "invoice") return tr.invoice;
+  if (type === "payment") return tr.payment;
+  return tr.receipt;
 }
-
 
 /* =========================================================
    UPDATE RECEIPT
    ========================================================= */
-
 function updateReceipt() {
+  const tr = t();
+  const symbol = symbolNow();
 
-  const language =
-    document.getElementById(
-      "language"
-    ).value;
+  document.getElementById("receiptStoreName").textContent = val("storeName") || "Online POS";
+  document.getElementById("receiptStoreDetails").innerHTML = escapeHtml(val("storeDetails")).replace(/\n/g, "<br>");
+  document.getElementById("receiptDocumentTitle").textContent = getDocumentTitle();
+  document.getElementById("receiptNumber").textContent = currentReceiptNumber;
+  document.getElementById("receiptNumberInput").value = currentReceiptNumber;
 
-  const t =
-    translations[language];
+  const taxName = val("taxName").trim() || tr.tax;
+  const taxRate = Number(val("taxRate")) || 0;
+  const discountRate = Number(val("discountRate")) || 0;
 
-  const symbol =
-    document.getElementById(
-      "currencySymbol"
-    ).value.trim()
-    || "BD";
-
-
-  /* STORE */
-
-  const storeName =
-    document.getElementById(
-      "storeName"
-    ).value;
-
-  document.getElementById(
-    "receiptStoreName"
-  ).textContent =
-    storeName ||
-    "Online POS";
-
-
-  const details =
-    document.getElementById(
-      "storeDetails"
-    ).value;
-
-  document.getElementById(
-    "receiptStoreDetails"
-  ).innerHTML =
-    escapeHtml(details)
-      .replace(/\n/g, "<br>");
-
-
-  /* DOCUMENT */
-
-  document.getElementById(
-    "receiptDocumentTitle"
-  ).textContent =
-    getDocumentTitle();
-
-
-  /* RECEIPT NUMBER */
-
-  document.getElementById(
-    "receiptNumber"
-  ).textContent =
-    currentReceiptNumber;
-
-  document.getElementById(
-    "receiptNumberInput"
-  ).value =
-    currentReceiptNumber;
-
-
-  /* TAX */
-
-  const taxName =
-    document.getElementById(
-      "taxName"
-    ).value.trim()
-    || t.tax;
-
-  const taxRate =
-    Number(
-      document.getElementById(
-        "taxRate"
-      ).value
-    ) || 0;
-
-
-  /* DISCOUNT */
-
-  const discountRate =
-    Number(
-      document.getElementById(
-        "discountRate"
-      ).value
-    ) || 0;
-
-
-  /* ITEMS */
-
-  const rows =
-    document.querySelectorAll(
-      ".item-row"
-    );
-
-  const receiptItems =
-    document.getElementById(
-      "receiptItems"
-    );
-
+  const rows = document.querySelectorAll(".item-row");
+  const receiptItems = document.getElementById("receiptItems");
   receiptItems.innerHTML = "";
-
   let subtotal = 0;
 
+  rows.forEach(function(row) {
+    const name = row.querySelector(".item-name-input").value;
+    const qty = Number(row.querySelector(".item-qty-input").value) || 0;
+    const price = Number(row.querySelector(".item-price-input").value) || 0;
+    const total = qty * price;
+    subtotal += total;
 
-  rows.forEach(
-    function(row) {
-
-      const name =
-        row.querySelector(
-          ".item-name-input"
-        ).value;
-
-      const qty =
-        Number(
-          row.querySelector(
-            ".item-qty-input"
-          ).value
-        ) || 0;
-
-      const price =
-        Number(
-          row.querySelector(
-            ".item-price-input"
-          ).value
-        ) || 0;
-
-      const total =
-        qty * price;
-
-      subtotal += total;
-
-
-      if (
-        name ||
-        qty ||
-        price
-      ) {
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-        item.className =
-          "receipt-item";
-
-        item.innerHTML = `
-
-          <div class="receipt-item-line">
-
-            <span class="receipt-item-name">
-              ${escapeHtml(
-                name || t.item
-              )}
-            </span>
-
-            <span class="receipt-item-qty">
-              ${qty}
-            </span>
-
-            <span class="receipt-item-total">
-              ${escapeHtml(symbol)}
-              ${total.toFixed(3)}
-            </span>
-
-          </div>
-
-          <div class="receipt-item-detail">
-
-            ${escapeHtml(symbol)}
-            ${price.toFixed(3)}
-            × ${qty}
-
-          </div>
-
-        `;
-
-        receiptItems.appendChild(item);
-
-      }
-
+    if (name || qty || price) {
+      const item = document.createElement("div");
+      item.className = "receipt-item";
+      item.innerHTML =
+        "<div class=\"receipt-item-line\">" +
+          "<span class=\"receipt-item-name\">" + escapeHtml(name || tr.item) + "</span>" +
+          "<span class=\"receipt-item-qty\">" + qty + "</span>" +
+          "<span class=\"receipt-item-total\">" + escapeHtml(symbol) + " " + total.toFixed(3) + "</span>" +
+        "</div>" +
+        "<div class=\"receipt-item-detail\">" + escapeHtml(symbol) + " " + price.toFixed(3) + " × " + qty + "</div>";
+      receiptItems.appendChild(item);
     }
-  );
+  });
 
+  const discount = subtotal * discountRate / 100;
+  const afterDiscount = subtotal - discount;
+  const tax = afterDiscount * taxRate / 100;
+  const grandTotal = afterDiscount + tax;
 
-  /* DISCOUNT */
+  const paymentMethod = val("paymentMethod") || "";
+  const received = Number(val("amountReceived")) || 0;
+  let change = received - grandTotal;
+  if (change < 0) change = 0;
 
-  const discount =
-    subtotal *
-    discountRate /
-    100;
+  document.getElementById("receiptTaxLabel").textContent = taxName + " (" + taxRate + "%)";
+  document.getElementById("subtotal").textContent = symbol + " " + subtotal.toFixed(3);
+  document.getElementById("discountAmount").textContent = symbol + " " + discount.toFixed(3);
+  document.getElementById("taxAmount").textContent = symbol + " " + tax.toFixed(3);
+  document.getElementById("grandTotal").textContent = symbol + " " + grandTotal.toFixed(3);
+  document.getElementById("receiptPaymentMethod").textContent = paymentMethod;
+  document.getElementById("receiptReceived").textContent = symbol + " " + received.toFixed(3);
+  document.getElementById("receiptChange").textContent = symbol + " " + change.toFixed(3);
+  document.getElementById("changePreview").textContent = symbol + " " + change.toFixed(3);
+  document.getElementById("receiptFooter1").textContent = val("footer1");
+  document.getElementById("receiptFooter2").textContent = val("footer2");
 
-
-  const afterDiscount =
-    subtotal -
-    discount;
-
-
-  /* TAX */
-
-  const tax =
-    afterDiscount *
-    taxRate /
-    100;
-
-
-  const grandTotal =
-    afterDiscount +
-    tax;
-
-
-  /* PAYMENT */
-
-  const paymentMethod =
-    document.getElementById(
-      "paymentMethod"
-    ).value ||
-    "";
-
-
-  const received =
-    Number(
-      document.getElementById(
-        "amountReceived"
-      ).value
-    ) || 0;
-
-
-  let change =
-    received -
-    grandTotal;
-
-
-  if (change < 0)
-    change = 0;
-
-
-  /* TAX LABEL */
-
-  document.getElementById(
-    "receiptTaxLabel"
-  ).textContent =
-
-    taxName +
-    " (" +
-    taxRate +
-    "%)";
-
-
-  /* TOTALS */
-
-  document.getElementById(
-    "subtotal"
-  ).textContent =
-
-    symbol +
-    " " +
-    subtotal.toFixed(3);
-
-
-  document.getElementById(
-    "discountAmount"
-  ).textContent =
-
-    symbol +
-    " " +
-    discount.toFixed(3);
-
-
-  document.getElementById(
-    "taxAmount"
-  ).textContent =
-
-    symbol +
-    " " +
-    tax.toFixed(3);
-
-
-  document.getElementById(
-    "grandTotal"
-  ).textContent =
-
-    symbol +
-    " " +
-    grandTotal.toFixed(3);
-
-
-  /* PAYMENT */
-
-  document.getElementById(
-    "receiptPaymentMethod"
-  ).textContent =
-    paymentMethod;
-
-
-  document.getElementById(
-    "receiptReceived"
-  ).textContent =
-
-    symbol +
-    " " +
-    received.toFixed(3);
-
-
-  document.getElementById(
-    "receiptChange"
-  ).textContent =
-
-    symbol +
-    " " +
-    change.toFixed(3);
-
-
-  document.getElementById(
-    "changePreview"
-  ).textContent =
-
-    symbol +
-    " " +
-    change.toFixed(3);
-
-
-  /* FOOTER */
-
-  document.getElementById(
-    "receiptFooter1"
-  ).textContent =
-    document.getElementById(
-      "footer1"
-    ).value;
-
-
-  document.getElementById(
-    "receiptFooter2"
-  ).textContent =
-    document.getElementById(
-      "footer2"
-    ).value;
-
+  saveSettings();
 }
-
 
 /* =========================================================
    LANGUAGE
    ========================================================= */
-
 function changeLanguage() {
+  const language = document.getElementById("language").value;
+  const tr = translations[language];
 
-  const language =
-    document.getElementById(
-      "language"
-    ).value;
-
-  const t =
-    translations[language];
-
-
-  document.documentElement.lang =
-    language;
-
-
-  document.body.dir =
-    language === "ar"
-      ? "rtl"
-      : "ltr";
-
+  document.documentElement.lang = language;
+  document.body.dir = language === "ar" ? "rtl" : "ltr";
 
   const ids = {
-
-    appTitle:
-      "appTitle",
-
-    appSubtitle:
-      "appSubtitle",
-
-    languageTitle:
-      "languageTitle",
-
-    languageLabel:
-      "languageLabel",
-
-    documentTitle:
-      "documentTitle",
-
-    documentTypeLabel:
-      "documentTypeLabel",
-
-    paperTitle:
-      "paperTitle",
-
-    paperLabel:
-      "paperLabel",
-
-    customWidthLabel:
-      "customWidthLabel",
-
-    currentWidthLabel:
-      "currentWidthLabel",
-
-    currencyTitle:
-      "currencyTitle",
-
-    currencyCodeLabel:
-      "currencyCodeLabel",
-
-    currencySymbolLabel:
-      "currencySymbolLabel",
-
-    storeTitle:
-      "storeTitle",
-
-    storeNameLabel:
-      "storeNameLabel",
-
-    storeDetailsLabel:
-      "storeDetailsLabel",
-
-    storeInfo:
-      "storeInfo",
-
-    receiptSettingsTitle:
-      "receiptSettingsTitle",
-
-    receiptNumberLabel:
-      "receiptNumberLabel",
-
-    receiptNumberInfo:
-      "receiptNumberInfo",
-
-    taxTitle:
-      "taxTitle",
-
-    taxNameLabel:
-      "taxNameLabel",
-
-    taxRateLabel:
-      "taxRateLabel",
-
-    discountLabel:
-      "discountLabel",
-
-    paymentMethodsTitle:
-      "paymentMethodsTitle",
-
-    paymentMethodsInfo:
-      "paymentMethodsInfo",
-
-    paymentTitle:
-      "paymentTitle",
-
-    paymentMethodLabel:
-      "paymentMethodLabel",
-
-    amountReceivedLabel:
-      "amountReceivedLabel",
-
-    changeLabelInfo:
-      "changeLabelInfo",
-
-    itemsTitle:
-      "itemsTitle",
-
-    addItemButton:
-      "addItemButton",
-
-    footerTitle:
-      "footerTitle",
-
-    footerLine1Label:
-      "footerLine1Label",
-
-    footerLine2Label:
-      "footerLine2Label",
-
-    printButton:
-      "printButton",
-
-    newSaleButton:
-      "newSaleButton",
-
-    receiptItemHeader:
-      "item",
-
-    receiptQtyHeader:
-      "qty",
-
-    receiptTotalHeader:
-      "total",
-
-    subtotalLabel:
-      "subtotal",
-
-    totalLabel:
-      "total",
-
-    receiptDiscountLabel:
-      "discount",
-
-    receiptPaymentMethodLabel:
-      "paymentShort",
-
-    receiptReceivedLabel:
-      "received",
-
-    receiptChangeLabel:
-      "change",
-
-    receiptNumberText:
-      "receiptNo",
-
-    receiptDateLabel:
-      "date"
-
+    appTitle: "appTitle", appSubtitle: "appSubtitle",
+    languageTitle: "languageTitle", languageLabel: "languageLabel",
+    documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
+    paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
+    currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
+    storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
+    receiptSettingsTitle: "receiptSettingsTitle", receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
+    taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
+    paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
+    paymentTitle: "paymentTitle", paymentMethodLabel: "paymentMethodLabel", amountReceivedLabel: "amountReceivedLabel", changeLabelInfo: "changeLabelInfo",
+    productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
+    productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
+    itemsTitle: "itemsTitle", itemsHint: "itemsHint", addItemButton: "addItemButton",
+    footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
+    printButton: "printButton", newSaleButton: "newSaleButton",
+    receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
+    subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
+    receiptPaymentMethodLabel: "paymentShort", receiptReceivedLabel: "received", receiptChangeLabel: "change",
+    receiptNumberText: "receiptNo", receiptDateLabel: "date"
   };
 
+  Object.keys(ids).forEach(function(id) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    element.textContent = tr[ids[id]];
+  });
 
-  Object.keys(ids).forEach(
-    function(id) {
+  const productsEmptyEl = document.getElementById("productsEmpty");
+  if (productsEmptyEl) productsEmptyEl.textContent = tr.productsEmptyState;
+  const productSearchEl = document.getElementById("productSearch");
+  if (productSearchEl) productSearchEl.placeholder = tr.productsSearchPlaceholder;
 
-      const element =
-        document.getElementById(id);
-
-      if (!element) return;
-
-      const key =
-        ids[id];
-
-      element.textContent =
-        t[key];
-
-    }
-  );
-
-
+  refreshItemRowLabels();
+  renderProducts();
   updateReceipt();
-
 }
 
-
 /* =========================================================
-   ESCAPE HTML
+   ESCAPE HELPERS
    ========================================================= */
-
 function escapeHtml(text) {
-
-  const div =
-    document.createElement(
-      "div"
-    );
-
-  div.textContent =
-    text;
-
+  const div = document.createElement("div");
+  div.textContent = text;
   return div.innerHTML;
-
 }
-
-
-/* =========================================================
-   LOAD SETTINGS
-   ========================================================= */
-
-function loadSettings() {
-
-  const settingsFields = [
-
-    "currencyCode",
-    "currencySymbol",
-    "storeName",
-    "storeDetails",
-    "taxName",
-    "taxRate",
-    "discountRate",
-    "footer1",
-    "footer2"
-
-  ];
-
-
-  settingsFields.forEach(
-    function(id) {
-
-      const element =
-        document.getElementById(
-          id
-        );
-
-      const saved =
-        localStorage.getItem(
-          "POS_" + id
-        );
-
-
-      if (
-        saved !== null
-      ) {
-
-        element.value =
-          saved;
-
-      }
-
-
-      element.addEventListener(
-        "input",
-        function() {
-
-          localStorage.setItem(
-            "POS_" + id,
-            element.value
-          );
-
-        }
-      );
-
-    }
-  );
-
+function escapeAttr(text) {
+  return String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
-
 
 /* =========================================================
    INITIALIZE
    ========================================================= */
-
-loadSettings();
-
-loadPaymentMethods();
-
-startFirstSale();
-
-addItem();
-
-changePaperSize();
-
-updateDate();
-
-changeLanguage();
-
-updateReceipt();
-
-
-/* CLOCK */
-
-setInterval(
-  updateDate,
-  1000
-);
-
+async function init() {
+  await loadSettings();
+  await loadPaymentMethods();
+  await loadProductsFromStorage();
+  await startFirstSale();
+  addItem();
+  changePaperSize();
+  updateDate();
+  changeLanguage();
+  updateReceipt();
+  setInterval(updateDate, 1000);
+}
+init();
 </script>
 
 </body>
-
 </html>
