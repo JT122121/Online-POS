@@ -3,151 +3,221 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Online POS</title>
+<title>Free Online POS – No Signup, No Login | Ring Up Sales &amp; Print Receipts</title>
+<meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login, nothing to install. Add products, ring up sales, and print receipts with your own company details in seconds.">
+<meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#14342B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Online POS – No Signup, No Login">
+<meta property="og:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
+<meta property="og:site_name" content="Go Online POS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Online POS – No Signup, No Login">
+<meta name="twitter:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2314342B'/%3E%3Cpath d='M27 34h46l-5 34a6 6 0 0 1-6 5H38a6 6 0 0 1-6-5z' fill='none' stroke='%23F2C879' stroke-width='6' stroke-linejoin='round'/%3E%3Cline x1='38' y1='47' x2='62' y2='47' stroke='%23F2C879' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='40' y1='58' x2='60' y2='58' stroke='%23F2C879' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --danger: #b3261e;
+  --danger-tint: #fbeae8;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { background: #e5e5e5; color: #111; font-family: Arial, sans-serif; padding: 16px; }
-button, input, textarea, select { font-family: Arial, sans-serif; }
-button { cursor: pointer; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); padding: 20px; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font-family: var(--font-body); }
+button { cursor: pointer; font-family: var(--font-body); transition: background .15s ease, color .15s ease, border-color .15s ease, opacity .15s ease, transform .1s ease; }
+button:active { transform: translateY(1px); }
 .hidden { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.app-header h1 { margin: 0; font-size: 22px; }
-.app-header .subtitle { margin: 4px 0 0; color: #666; font-size: 12px; }
+.app-header { max-width: 1500px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.app-header .brand { display: flex; align-items: center; gap: 12px; }
+.app-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: var(--ink); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); }
+.app-header .brand-mark svg { width: 22px; height: 22px; display: block; }
+.app-header h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 21px; letter-spacing: -.01em; }
+.app-header .subtitle { margin: 3px 0 0; color: var(--muted); font-size: 12.5px; }
 .header-actions { display: flex; gap: 8px; }
-.header-actions button { padding: 11px 16px; border: 0; border-radius: 6px; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-#settingsButton { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
-#printButton { background: #111; color: #fff; }
-#newSaleButton { background: #276438; color: #fff; }
+.header-actions button { padding: 11px 17px; border: 1px solid transparent; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+#settingsButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#settingsButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#printButton { background: var(--ink); color: #fff; }
+#printButton:hover { background: #263832; }
+#newSaleButton { background: var(--accent); color: #fff; }
+#newSaleButton:hover { background: var(--accent-dark); }
 
-.app { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1500px; margin: auto; }
+.app { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 18px; align-items: start; max-width: 1500px; margin: auto; }
 
-.left-panel { position: sticky; top: 16px; background: #fff; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,.15); padding: 14px; max-height: calc(100vh - 32px); overflow-y: auto; display: flex; flex-direction: column; }
+.left-panel { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
 
-.panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.panel-heading h3 { margin: 0; font-size: 16px; }
-.cart-count-badge { background: #111; color: #fff; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 999px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
+.cart-count-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
-.search-box { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 6px; font-size: 13px; margin-bottom: 10px; }
-.search-box:focus { outline: 2px solid #ddd; border-color: #555; }
+.search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 10px; background: #fbfbf8; }
+.search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 
-.category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.category-chip { padding: 6px 11px; border: 1px solid #ccc; border-radius: 999px; background: #fff; font-size: 11.5px; color: #333; }
-.category-chip.active { background: #111; color: #fff; border-color: #111; }
+.category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.category-chip { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 11.5px; font-weight: 600; color: var(--ink-soft); }
+.category-chip:hover { border-color: #c9c6ba; }
+.category-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
 .product-list { flex: 1; overflow-y: auto; margin-bottom: 4px; }
-.product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px; border: 1px solid #e2e2e2; border-radius: 7px; margin-bottom: 6px; background: #fafafa; }
-.product-item:active { background: #f0f0f0; }
-.product-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
-.product-name { font-weight: bold; font-size: 13px; overflow-wrap: break-word; }
+.product-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 7px; background: #fbfbf8; }
+.product-item:hover { border-color: #d7d4c8; background: #f7f6f0; }
+.product-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.product-name { font-weight: 600; font-size: 13px; overflow-wrap: break-word; }
 .product-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.product-category { font-size: 9.5px; color: #777; text-transform: uppercase; letter-spacing: .03em; border: 1px solid #ddd; border-radius: 3px; padding: 1px 4px; }
-.product-price { font-size: 12px; color: #333; }
-.product-in-cart { font-size: 10.5px; color: #276438; font-weight: bold; }
-.product-item button { flex-shrink: 0; background: #111; color: #fff; border: 0; border-radius: 6px; width: 36px; height: 36px; font-size: 18px; }
-.products-empty { margin-top: 8px; padding: 16px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
-.custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #bbb; color: #555; padding: 9px; border-radius: 6px; font-size: 12.5px; margin-top: 4px; }
+.product-category { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
+.product-price { font-size: 12px; color: var(--ink-soft); font-weight: 500; }
+.product-in-cart { font-size: 10.5px; color: var(--accent-dark); font-weight: 700; }
+.product-item button { flex-shrink: 0; background: var(--ink); color: #fff; border: 0; border-radius: var(--radius-sm); width: 34px; height: 34px; font-size: 17px; line-height: 1; }
+.product-item button:hover { background: var(--accent); }
+.products-empty { margin-top: 8px; padding: 20px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
+.custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 10px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; margin-top: 4px; }
+.custom-item-link:hover { border-color: var(--accent); color: var(--accent-dark); }
 
-.proceed-btn { width: 100%; margin-top: 10px; padding: 13px; border: 0; border-radius: 7px; background: #111; color: white; font-size: 14.5px; font-weight: bold; display: flex; align-items: center; justify-content: space-between; }
-.proceed-btn .amt { opacity: .85; }
-.proceed-btn:disabled { background: #ccc; color: #888; }
+.proceed-btn { width: 100%; margin-top: 12px; padding: 14px 16px; border: 0; border-radius: var(--radius-sm); background: var(--accent); color: white; font-size: 14.5px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+.proceed-btn:hover:not(:disabled) { background: var(--accent-dark); }
+.proceed-btn .amt { opacity: .9; font-family: var(--font-mono); }
+.proceed-btn:disabled { background: #e3e1d8; color: #a19d8f; }
 
-.checkout-total-box { background: #111; color: #fff; border-radius: 8px; padding: 14px; text-align: center; margin-bottom: 14px; }
-.checkout-total-box .label { font-size: 11px; opacity: .75; text-transform: uppercase; letter-spacing: .05em; }
-.checkout-total-box .amount { font-size: 26px; font-weight: bold; margin-top: 2px; }
+.checkout-total-box { background: linear-gradient(155deg, var(--ink) 0%, #1e2f28 100%); color: #fff; border-radius: var(--radius); padding: 18px; text-align: center; margin-bottom: 16px; }
+.checkout-total-box .label { font-size: 11px; opacity: .7; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+.checkout-total-box .amount { font-family: var(--font-mono); font-size: 27px; font-weight: 700; margin-top: 4px; }
 
-label { display: block; margin-top: 10px; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
-input, textarea, select { width: 100%; padding: 9px; border: 1px solid #aaa; border-radius: 5px; background: #fff; font-size: 13px; }
-textarea { min-height: 90px; resize: vertical; line-height: 1.4; }
-input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-color: #555; }
+label { display: block; margin-top: 12px; margin-bottom: 5px; font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+input, textarea, select { width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font-size: 13.5px; color: var(--ink); }
+textarea { min-height: 90px; resize: vertical; line-height: 1.45; font-family: var(--font-body); }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
 
-.info { margin-top: 8px; padding: 9px; background: #f2f2f2; border-radius: 5px; color: #555; font-size: 11px; line-height: 1.4; display: flex; justify-content: space-between; }
+.info { margin-top: 9px; padding: 10px 11px; background: #f6f5f0; border-radius: var(--radius-sm); color: var(--ink-soft); font-size: 11.5px; line-height: 1.45; display: flex; justify-content: space-between; gap: 8px; }
 
-.checkout-actions { display: flex; gap: 8px; margin-top: 16px; }
-.checkout-actions button { flex: 1; padding: 12px; border: 0; border-radius: 7px; font-size: 13.5px; }
-.back-btn { background: #eee; color: #111; }
-.complete-btn { background: #276438; color: #fff; font-weight: bold; }
-.complete-btn:disabled { background: #ccc; color: #888; }
+.checkout-actions { display: flex; gap: 8px; margin-top: 18px; }
+.checkout-actions button { flex: 1; padding: 13px; border: 0; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; }
+.back-btn { background: #f0efe8; color: var(--ink); }
+.back-btn:hover { background: #e6e4d9; }
+.complete-btn { background: var(--accent); color: #fff; font-weight: 700; }
+.complete-btn:hover:not(:disabled) { background: var(--accent-dark); }
+.complete-btn:disabled { background: #e3e1d8; color: #a19d8f; }
 
-.settings-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
-.settings-modal { background: #fff; border-radius: 10px; width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
-.settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #eee; }
-.settings-modal-header h2 { margin: 0; font-size: 17px; }
-.settings-modal-header button { background: transparent; border: 0; font-size: 18px; padding: 4px 8px; color: #666; }
+.settings-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+.settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
+.settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
+.settings-modal-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
+.settings-modal-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
+.settings-modal-header button:hover { background: #f2f1ea; color: var(--ink); }
 .settings-modal-body { display: flex; flex: 1; overflow: hidden; }
-.settings-tab-rail { display: flex; flex-direction: column; gap: 2px; width: 150px; flex-shrink: 0; background: #f7f7f7; border-right: 1px solid #eee; padding: 8px; overflow-y: auto; }
-.settings-tab-item { border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; padding: 10px 9px; text-align: left; display: flex; align-items: center; gap: 8px; color: #333; }
-.settings-tab-item:hover { background: #eee; }
-.settings-tab-item.active { background: #111; color: #fff; }
-.settings-tab-panel { flex: 1; overflow-y: auto; padding: 16px 18px; }
+.settings-tab-rail { display: flex; flex-direction: column; gap: 2px; width: 158px; flex-shrink: 0; background: #f8f7f2; border-right: 1px solid var(--line-soft); padding: 8px; overflow-y: auto; }
+.settings-tab-item { border: 0; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 500; padding: 10px 10px; text-align: left; display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+.settings-tab-item:hover { background: #efeee5; }
+.settings-tab-item.active { background: var(--ink); color: #fff; font-weight: 600; }
+.settings-tab-panel { flex: 1; overflow-y: auto; padding: 18px 20px; }
 .settings-panel-content { display: none; }
 .settings-panel-content.active { display: block; }
-.settings-panel-content h3 { margin: 0 0 10px; font-size: 15px; }
+.settings-panel-content h3 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+
+.logo-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(1) contrast(1.1); }
+.logo-preview-box.empty { color: var(--muted); font-size: 9.5px; text-align: center; line-height: 1.3; padding: 4px; }
+.logo-upload-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.logo-upload-actions input[type="file"] { padding: 8px; font-size: 12px; }
+.remove-logo-btn { align-self: flex-start; border: 0; border-radius: var(--radius-sm); background: var(--danger-tint); color: var(--danger); padding: 6px 11px; font-size: 11.5px; font-weight: 600; }
+.remove-logo-btn:hover { background: #f5d5d0; }
+.remove-logo-btn.confirm-pending { background: var(--danger); color: #fff; }
+
+.receipt-logo { display: block; max-width: 42mm; max-height: 20mm; margin: 0 auto 2mm; object-fit: contain; filter: grayscale(1) contrast(1.1); }
 
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.error-text { margin-top: 7px; padding: 8px; background: #fdecea; border: 1px solid #f3b4ae; border-radius: 5px; color: #a32c22; font-size: 11px; line-height: 1.4; }
-.success-text { margin-top: 7px; padding: 8px; background: #eaf6ec; border: 1px solid #b6e0bd; border-radius: 5px; color: #276438; font-size: 11px; line-height: 1.4; }
-.payment-editor { display: flex; gap: 6px; margin-top: 7px; }
+.error-text { margin-top: 8px; padding: 9px 10px; background: var(--danger-tint); border: 1px solid #f0c2bd; border-radius: var(--radius-sm); color: var(--danger); font-size: 11.5px; line-height: 1.45; }
+.success-text { margin-top: 8px; padding: 9px 10px; background: var(--accent-tint); border: 1px solid #bfe0cf; border-radius: var(--radius-sm); color: var(--accent-dark); font-size: 11.5px; line-height: 1.45; }
+.payment-editor { display: flex; gap: 6px; margin-top: 8px; }
 .payment-editor input { flex: 1; }
-.payment-list { margin-top: 8px; }
-.payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 7px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; background: #fafafa; font-size: 12px; }
-.payment-item button { background: #ddd; border: 0; padding: 4px 7px; border-radius: 4px; }
-.csv-actions { display: flex; gap: 6px; margin-top: 8px; }
-.csv-actions button { flex: 1; border: 0; border-radius: 5px; color: #fff; padding: 9px; font-size: 12.5px; }
-.small-btn { border: 0; border-radius: 5px; background: #111; color: white; padding: 8px 12px; }
-.sales-history-list { margin-top: 8px; max-height: 260px; overflow-y: auto; }
-.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 9px; border: 1px solid #e2e2e2; border-radius: 6px; margin-bottom: 5px; background: #fafafa; font-size: 11.5px; }
-.sales-history-row .shr-receipt { font-weight: bold; }
-.sales-history-row .shr-date { color: #777; font-size: 10.5px; }
-.sales-history-row .shr-total { font-weight: bold; text-align: right; }
-.sales-history-empty { padding: 14px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
+.payment-list { margin-top: 9px; }
+.payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; font-size: 12px; font-weight: 500; }
+.payment-item button { background: #eceae0; border: 0; padding: 4px 8px; border-radius: 5px; color: var(--ink-soft); }
+.payment-item button:hover { background: var(--danger-tint); color: var(--danger); }
+.csv-actions { display: flex; gap: 8px; margin-top: 9px; }
+.csv-actions button { flex: 1; border: 0; border-radius: var(--radius-sm); color: #fff; padding: 10px; font-size: 12.5px; font-weight: 600; }
+.small-btn { border: 0; border-radius: var(--radius-sm); background: var(--ink); color: white; padding: 9px 13px; font-weight: 600; }
+.small-btn:hover { background: var(--accent); }
+.sales-history-list { margin-top: 9px; max-height: 260px; overflow-y: auto; }
+.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; font-size: 11.5px; }
+.sales-history-row .shr-receipt { font-weight: 700; font-family: var(--font-mono); }
+.sales-history-row .shr-date { color: var(--muted); font-size: 10.5px; }
+.sales-history-row .shr-total { font-weight: 700; text-align: right; font-family: var(--font-mono); }
+.sales-history-empty { padding: 18px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
 
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
-.receipt { width: 80mm; min-height: 100vh; padding: 4mm; background: white; border: 2px solid #000; color: #000; flex-shrink: 0; font-family: "Courier New", monospace; font-size: 10pt; box-shadow: 0 3px 15px rgba(0,0,0,.15); }
+.receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d8d5c9; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
+.receipt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 8px; background-image: radial-gradient(circle at 6px 0, transparent 5px, white 5.5px); background-size: 12px 8px; background-repeat: repeat-x; }
 
-.receipt-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 3mm; margin-bottom: 3mm; }
-.receipt-header h2 { margin: 0; font-size: 15pt; word-break: break-word; }
-.receipt-store-details { margin: 2mm 0; font-size: 8.5pt; line-height: 1.45; word-break: break-word; }
-.receipt-meta { font-size: 8pt; line-height: 1.5; }
-.receipt-document-title { font-size: 11pt; font-weight: bold; margin-top: 2mm; }
+.receipt-header { text-align: center; border-bottom: 1px dashed #999; padding-bottom: 3mm; margin-bottom: 3mm; }
+.receipt-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 14.5pt; word-break: break-word; letter-spacing: -.01em; }
+.receipt-store-details { margin: 2mm 0; font-size: 8.5pt; line-height: 1.45; word-break: break-word; color: #3c463f; }
+.receipt-meta { font-size: 8pt; line-height: 1.5; color: #3c463f; }
+.receipt-document-title { font-size: 11pt; font-weight: 700; margin-top: 2mm; letter-spacing: .04em; text-transform: uppercase; }
 
-.receipt-column-header { display: grid; grid-template-columns: 1fr 11mm 23mm; border-bottom: 1px solid #000; padding-bottom: 1mm; margin-bottom: 2mm; font-weight: bold; }
+.receipt-column-header { display: grid; grid-template-columns: 1fr 11mm 23mm; border-bottom: 1px solid #14201c; padding-bottom: 1mm; margin-bottom: 2mm; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; font-size: 8pt; }
 .receipt-column-header span:nth-child(2) { text-align: center; }
 .receipt-column-header span:nth-child(3) { text-align: right; }
 .receipt-item { margin-bottom: 2.5mm; }
 .receipt-item-line { display: grid; grid-template-columns: 1fr 11mm 23mm; gap: 1mm; align-items: center; }
-.receipt-item-name-input { border: none; background: transparent; padding: 0; font: inherit; word-break: break-word; white-space: normal; width: 100%; min-height: 1.3em; cursor: text; }
-.receipt-item-name-input:focus { outline: none; border-bottom: 1px dashed #999; }
-.receipt-item-name-input:empty:before { content: attr(data-placeholder); color: #999; }
+.receipt-item-name-input { border: none; background: transparent; padding: 0; font: inherit; font-weight: 600; word-break: break-word; white-space: normal; width: 100%; min-height: 1.3em; cursor: text; }
+.receipt-item-name-input:focus { outline: none; border-bottom: 1px dashed var(--accent); }
+.receipt-item-name-input:empty:before { content: attr(data-placeholder); color: #999; font-weight: 400; }
 .receipt-item-qty { text-align: center; }
-.receipt-item-total { text-align: right; white-space: nowrap; }
-.receipt-item-detail-print { text-align: right; font-size: 7.5pt; margin-top: .5mm; }
-.receipt-item-controls { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 1mm; }
-.receipt-item-controls .price-input { width: 55px; border: 1px solid #ccc; border-radius: 3px; padding: 1px 3px; font-size: 7.5pt; text-align: right; }
-.receipt-item-controls .qty-btn { width: 18px; height: 18px; border: 1px solid #ccc; background: #f5f5f5; border-radius: 3px; font-size: 10px; line-height: 1; padding: 0; }
-.receipt-item-controls .remove-cart-btn { background: #fdecea; color: #a32c22; border: 1px solid #f3b4ae; border-radius: 3px; font-size: 7pt; padding: 1px 5px; }
+.receipt-item-total { text-align: right; white-space: nowrap; font-weight: 600; }
+.receipt-item-detail-print { text-align: right; font-size: 7.5pt; margin-top: .5mm; color: #5b655e; }
+.receipt-item-controls { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 1.5mm; }
+.receipt-item-controls .price-input { width: 55px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; font-size: 7.5pt; text-align: right; font-family: var(--font-mono); }
+.receipt-item-controls .price-input:focus { outline: none; border-color: var(--accent); }
+.receipt-item-controls .qty-btn { width: 19px; height: 19px; border: 1px solid var(--line); background: #f5f4ee; border-radius: 4px; font-size: 10px; line-height: 1; padding: 0; }
+.receipt-item-controls .qty-btn:hover { background: var(--accent-tint); border-color: #bfe0cf; }
+.receipt-item-controls .remove-cart-btn { background: var(--danger-tint); color: var(--danger); border: 1px solid #f0c2bd; border-radius: 4px; font-size: 7pt; font-weight: 600; padding: 2px 6px; }
 
-.dashed-line { border-top: 1px dashed #000; margin: 3mm 0; }
-.receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
-.receipt-grand-total { font-size: 12pt; font-weight: bold; margin-top: 2mm; }
+.dashed-line { border-top: 1px dashed #a9a495; margin: 3mm 0; }
+.receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; color: #3c463f; }
+.receipt-grand-total { font-size: 12.5pt; font-weight: 700; margin-top: 2mm; color: #14201c; }
 .receipt-payment { margin-top: 3mm; }
 .receipt-payment-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
-.receipt-footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px dashed #000; text-align: center; font-size: 8.5pt; line-height: 1.5; }
+.receipt-footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px dashed #a9a495; text-align: center; font-size: 8.5pt; line-height: 1.5; color: #3c463f; }
 .receipt-footer p { margin: 1mm 0; word-break: break-word; }
-.receipt-empty-hint { text-align: center; color: #999; font-size: 8pt; padding: 6mm 0; }
+.receipt-empty-hint { text-align: center; color: #a19d8f; font-size: 8pt; padding: 8mm 0; }
 
 @media (max-width: 900px) {
-  body { padding: 8px; }
-  .app-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  body { padding: 10px; }
+  .app-header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .header-actions { width: 100%; }
   .header-actions button { flex: 1; justify-content: center; }
-  .app { display: flex; flex-direction: column; gap: 12px; }
+  .app { display: flex; flex-direction: column; gap: 14px; }
   .left-panel { position: relative; top: auto; width: 100%; max-height: none; }
   .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
-  .receipt { box-shadow: none; }
+  .receipt { box-shadow: var(--shadow); }
   .settings-modal-body { flex-direction: column; }
-  .settings-tab-rail { flex-direction: row; width: 100%; overflow-x: auto; border-right: 0; border-bottom: 1px solid #eee; }
+  .settings-tab-rail { flex-direction: row; width: 100%; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line-soft); }
   .settings-tab-item { flex-shrink: 0; }
 }
 
@@ -156,18 +226,37 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
   html, body { margin: 0; padding: 0; background: white; }
   .app-header, .left-panel, .settings-overlay { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
-  .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; }
+  .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
+  .receipt::after { display: none; }
+  .receipt-header, .receipt-column-header, .dashed-line, .receipt-footer { border-color: #000 !important; }
+  .receipt-store-details, .receipt-meta, .receipt-total-line, .receipt-item-detail-print, .receipt-footer, .receipt-grand-total { color: #000 !important; }
   .no-print { display: none !important; }
   .receipt-item-name-input { pointer-events: none; border-bottom: none !important; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Go Online POS",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any (runs in the browser)",
+  "description": "A free point-of-sale that runs entirely in the browser. No signup, no login, nothing to install — add products, ring up sales, and print receipts with your own company details.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
 </head>
 <body>
 
 <header class="app-header">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M27 34h46l-5 34a6 6 0 0 1-6 5H38a6 6 0 0 1-6-5z" fill="none" stroke="#F2C879" stroke-width="7" stroke-linejoin="round"/><line x1="38" y1="47" x2="62" y2="47" stroke="#F2C879" stroke-width="7" stroke-linecap="round"/><line x1="40" y1="58" x2="60" y2="58" stroke="#F2C879" stroke-width="7" stroke-linecap="round"/></svg>
+</div>
 <div>
 <h1 id="appTitle">Online POS</h1>
-<div class="subtitle" id="appSubtitle">Simple browser-based point of sale</div>
+<div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
+</div>
 </div>
 <div class="header-actions">
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
@@ -223,6 +312,7 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 <div class="preview-area">
 <div id="receipt" class="receipt">
 <div class="receipt-header">
+<img id="receiptLogo" class="receipt-logo hidden" alt="">
 <h2 id="receiptStoreName">NEO Supermarket</h2>
 <div id="receiptStoreDetails" class="receipt-store-details"></div>
 <div id="receiptDocumentTitle" class="receipt-document-title">Receipt</div>
@@ -290,6 +380,18 @@ Tel: +973 XXXXXXXX
 Email: sales@neosupermarket.com
 TRN: 123456789</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
+        <label id="storeLogoLabel">Company Logo</label>
+        <div class="logo-upload-row">
+          <div class="logo-preview-box empty" id="logoPreviewBox">
+            <span id="logoPreviewEmptyText">No logo</span>
+            <img id="logoPreview" class="hidden" alt="Company logo preview">
+          </div>
+          <div class="logo-upload-actions">
+            <input id="logoFileInput" type="file" accept="image/*" onchange="handleLogoUpload(event)">
+            <button type="button" class="remove-logo-btn hidden" id="removeLogoButton" onclick="removeLogo()">Remove logo</button>
+          </div>
+        </div>
+        <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-document">
@@ -332,8 +434,8 @@ TRN: 123456789</textarea>
         <div id="csvErrorBox" class="error-text hidden"></div>
         <div id="csvSuccessBox" class="success-text hidden"></div>
         <div class="csv-actions">
-          <button style="background:#444;" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
-          <button style="background:#a32c22;" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
+          <button style="background:var(--ink);" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
+          <button style="background:var(--danger);" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
         </div>
       </div>
 
@@ -342,8 +444,8 @@ TRN: 123456789</textarea>
         <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
         <div id="salesHistoryTable" class="sales-history-list"></div>
         <div class="csv-actions">
-          <button style="background:#276438;" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
-          <button style="background:#a32c22;" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
+          <button style="background:var(--accent);" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
+          <button style="background:var(--danger);" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
         </div>
         <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. The download gives you one file with two tabs: "Sales" (one row per sale — totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
       </div>
@@ -420,7 +522,7 @@ TRN: 123456789</textarea>
 const translations = {
 
 en: {
-  appTitle: "Online POS", appSubtitle: "Simple browser-based point of sale",
+  appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
   settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
@@ -433,6 +535,9 @@ en: {
   settingsModalTitle: "Settings",
   storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
+  storeLogoLabel: "Company Logo", logoEmptyLabel: "No logo", removeLogoButton: "Remove logo",
+  storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.",
+  logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
   receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "The next number is generated when you start a new sale.",
@@ -456,7 +561,7 @@ en: {
 },
 
 ar: {
-  appTitle: "نظام نقاط البيع", appSubtitle: "نظام نقاط بيع يعمل من المتصفح",
+  appTitle: "نظام نقاط البيع", appSubtitle: "بدون تسجيل، بدون حساب. افتح الصفحة وابدأ البيع فورًا.",
   settingsButtonLabel: "الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
@@ -469,6 +574,9 @@ ar: {
   settingsModalTitle: "الإعدادات",
   storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
+  storeLogoLabel: "شعار الشركة", logoEmptyLabel: "لا يوجد شعار", removeLogoButton: "إزالة الشعار",
+  storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل — يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
+  logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
   receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "يتم إنشاء الرقم التالي عند بدء عملية بيع جديدة.",
@@ -492,12 +600,15 @@ ar: {
 },
 
 fil: {
-  appTitle: "Online POS", appSubtitle: "Simpleng point of sale system",
+  appTitle: "Online POS", appSubtitle: "Walang sign up, walang login. Buksan lang ang tab at magbenta na.",
   catalogHeading: "Mga Produkto", allCategory: "Lahat",
   checkoutHeading: "Bayad", totalDueLabel: "Kabuuang Babayaran",
   paymentMethodLabel: "Paraan ng Pagbabayad", amountReceivedLabel: "Natanggap na Halaga", changeLabelInfo: "Sukli:",
   storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
+  storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
+  storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload — mawawala lang kung burahin ang data ng site o alisin ito dito.",
+  logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
   taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
@@ -520,12 +631,15 @@ fil: {
 },
 
 hi: {
-  appTitle: "ऑनलाइन पीओएस", appSubtitle: "सरल ब्राउज़र-आधारित बिक्री प्रणाली",
+  appTitle: "ऑनलाइन पीओएस", appSubtitle: "कोई साइनअप नहीं, कोई लॉगिन नहीं। टैब खोलें और बिक्री शुरू करें।",
   catalogHeading: "उत्पाद", allCategory: "सभी",
   checkoutHeading: "भुगतान", totalDueLabel: "कुल देय राशि",
   paymentMethodLabel: "भुगतान का तरीका", amountReceivedLabel: "प्राप्त राशि", changeLabelInfo: "बाकी राशि:",
   storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
+  storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
+  storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है — यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
+  logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
   taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
@@ -548,12 +662,15 @@ hi: {
 },
 
 es: {
-  appTitle: "POS en Línea", appSubtitle: "Sistema de punto de venta simple desde el navegador",
+  appTitle: "POS en Línea", appSubtitle: "Sin registro, sin inicio de sesión. Abre la pestaña y empieza a vender.",
   catalogHeading: "Productos", allCategory: "Todos",
   checkoutHeading: "Pago", totalDueLabel: "Total a Pagar",
   paymentMethodLabel: "Método de Pago", amountReceivedLabel: "Monto Recibido", changeLabelInfo: "Cambio:",
   storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
+  storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
+  storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página — solo desaparece si borras los datos del sitio o lo quitas aquí.",
+  logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
   taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
@@ -576,12 +693,15 @@ es: {
 },
 
 th: {
-  appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ระบบขายหน้าร้านผ่านเบราว์เซอร์อย่างง่าย",
+  appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ไม่ต้องสมัคร ไม่ต้องล็อกอิน เปิดแท็บแล้วเริ่มขายได้เลย",
   catalogHeading: "สินค้า", allCategory: "ทั้งหมด",
   checkoutHeading: "การชำระเงิน", totalDueLabel: "ยอดที่ต้องชำระ",
   paymentMethodLabel: "วิธีการชำระเงิน", amountReceivedLabel: "จำนวนเงินที่รับ", changeLabelInfo: "เงินทอน:",
   storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
+  storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
+  storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า — จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
+  logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
   taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
@@ -609,6 +729,7 @@ let itemCounter = 0;
 let currentReceiptNumber = null;
 let paymentMethods = [];
 let products = [];        // catalog, from CSV
+let logoDataUrl = null;   // company logo, persisted in storage
 let cart = [];            // [{id, name, price, qty}]
 let salesHistory = [];    // completed sales: [{receiptNumber, ...totals..., items:[...]}]
 let activeCategory = "all";
@@ -639,6 +760,13 @@ async function storageSet(key, value) {
     return;
   }
   try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
+}
+async function storageDelete(key) {
+  if (hasArtifactStorage() && typeof window.storage.delete === "function") {
+    try { await window.storage.delete(key, false); } catch (e) { console.error("Could not delete " + key, e); }
+    return;
+  }
+  try { localStorage.removeItem("onlinepos_" + key); } catch (e) { console.error("Could not delete " + key, e); }
 }
 
 function openSettings() {
@@ -690,6 +818,91 @@ async function loadProductsFromStorage() {
   renderProductCatalog();
 }
 async function saveProducts() { await storageSet("pos-products", JSON.stringify(products)); }
+
+async function loadLogo() {
+  const raw = await storageGet("pos-logo");
+  logoDataUrl = raw ? raw : null;
+  renderLogo();
+}
+function renderLogo() {
+  resetRemoveLogoButton();
+  const receiptLogo = document.getElementById("receiptLogo");
+  const previewImg = document.getElementById("logoPreview");
+  const previewBox = document.getElementById("logoPreviewBox");
+  const emptyText = document.getElementById("logoPreviewEmptyText");
+  const removeBtn = document.getElementById("removeLogoButton");
+  const hasLogo = !!logoDataUrl;
+
+  if (receiptLogo) { receiptLogo.src = logoDataUrl || ""; receiptLogo.classList.toggle("hidden", !hasLogo); }
+  if (previewImg) { previewImg.src = logoDataUrl || ""; previewImg.classList.toggle("hidden", !hasLogo); }
+  if (previewBox) previewBox.classList.toggle("empty", !hasLogo);
+  if (emptyText) emptyText.classList.toggle("hidden", hasLogo);
+  if (removeBtn) removeBtn.classList.toggle("hidden", !hasLogo);
+}
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  if (!file.type || file.type.indexOf("image/") !== 0) { alert(tr("logoUploadError")); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = async function() {
+      const maxDim = 320;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      if (w > maxDim || h > maxDim) {
+        const scale = maxDim / Math.max(w, h);
+        w = Math.max(1, Math.round(w * scale));
+        h = Math.max(1, Math.round(h * scale));
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const px = imageData.data;
+      for (let i = 0; i < px.length; i += 4) {
+        const gray = px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114;
+        const contrasted = Math.max(0, Math.min(255, (gray - 128) * 1.12 + 128));
+        px[i] = px[i + 1] = px[i + 2] = contrasted;
+      }
+      ctx.putImageData(imageData, 0, 0);
+      logoDataUrl = canvas.toDataURL("image/png");
+      await storageSet("pos-logo", logoDataUrl);
+      renderLogo();
+    };
+    img.onerror = function() { alert(tr("logoUploadError")); };
+    img.src = String(e.target.result);
+  };
+  reader.onerror = function() { alert(tr("logoUploadError")); };
+  reader.readAsDataURL(file);
+}
+let removeLogoPending = false;
+let removeLogoTimer = null;
+async function removeLogo() {
+  if (!logoDataUrl) return;
+  const btn = document.getElementById("removeLogoButton");
+  if (!removeLogoPending) {
+    removeLogoPending = true;
+    if (btn) { btn.textContent = tr("removeLogoConfirmButton"); btn.classList.add("confirm-pending"); }
+    clearTimeout(removeLogoTimer);
+    removeLogoTimer = setTimeout(function() { resetRemoveLogoButton(); }, 3000);
+    return;
+  }
+  clearTimeout(removeLogoTimer);
+  removeLogoPending = false;
+  logoDataUrl = null;
+  await storageDelete("pos-logo");
+  renderLogo();
+}
+function resetRemoveLogoButton() {
+  removeLogoPending = false;
+  clearTimeout(removeLogoTimer);
+  const btn = document.getElementById("removeLogoButton");
+  if (btn) { btn.textContent = tr("removeLogoButton"); btn.classList.remove("confirm-pending"); }
+}
 async function loadSalesHistory() {
   const raw = await storageGet("pos-sales-history");
   try { salesHistory = raw ? JSON.parse(raw) : []; } catch (e) { salesHistory = []; }
@@ -1313,6 +1526,7 @@ function changeLanguage() {
     backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
+    storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
@@ -1363,6 +1577,7 @@ async function init() {
   await loadSettings();
   await loadPaymentMethods();
   await loadProductsFromStorage();
+  await loadLogo();
   await loadSalesHistory();
   await startFirstSale();
   changePaperSize();
