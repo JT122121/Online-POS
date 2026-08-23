@@ -100,6 +100,12 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
 .csv-actions { display: flex; gap: 6px; margin-top: 8px; }
 .csv-actions button { flex: 1; border: 0; border-radius: 5px; color: #fff; padding: 9px; font-size: 12.5px; }
 .small-btn { border: 0; border-radius: 5px; background: #111; color: white; padding: 8px 12px; }
+.sales-history-list { margin-top: 8px; max-height: 260px; overflow-y: auto; }
+.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 9px; border: 1px solid #e2e2e2; border-radius: 6px; margin-bottom: 5px; background: #fafafa; font-size: 11.5px; }
+.sales-history-row .shr-receipt { font-weight: bold; }
+.sales-history-row .shr-date { color: #777; font-size: 10.5px; }
+.sales-history-row .shr-total { font-weight: bold; text-align: right; }
+.sales-history-empty { padding: 14px 8px; text-align: center; color: #888; font-size: 12px; border: 1px dashed #ccc; border-radius: 6px; }
 
 /* ===== LIVE RECEIPT ===== */
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
@@ -275,6 +281,7 @@ input:focus, textarea:focus, select:focus { outline: 2px solid #ddd; border-colo
       <button class="settings-tab-item" data-tab="tax" onclick="selectSettingsTab('tax')">🧮 <span>Tax &amp; Discount</span></button>
       <button class="settings-tab-item" data-tab="paymentMethods" onclick="selectSettingsTab('paymentMethods')">💳 <span>Payment Methods</span></button>
       <button class="settings-tab-item" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
+      <button class="settings-tab-item" data-tab="salesHistory" onclick="selectSettingsTab('salesHistory')">📊 <span>Sales History</span></button>
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
@@ -338,6 +345,17 @@ TRN: 123456789</textarea>
           <button style="background:#444;" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
           <button style="background:#a32c22;" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
         </div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-salesHistory">
+        <h3 id="salesHistoryTitle">Sales History</h3>
+        <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
+        <div id="salesHistoryTable" class="sales-history-list"></div>
+        <div class="csv-actions">
+          <button style="background:#276438;" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
+          <button style="background:#a32c22;" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
+        </div>
+        <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. The download gives you one file with two tabs: "Sales" (one row per sale — totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
       </div>
 
       <div class="settings-panel-content" id="panel-footer">
@@ -406,6 +424,7 @@ TRN: 123456789</textarea>
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* =========================================================
    TRANSLATIONS
@@ -610,6 +629,7 @@ let currentReceiptNumber = null;
 let paymentMethods = [];
 let products = [];        // catalog, from CSV
 let cart = [];            // [{id, name, price, qty}]
+let salesHistory = [];    // completed sales: [{receiptNumber, ...totals..., items:[...]}]
 let activeCategory = "all";
 let settingsActiveTab = "store";
 
@@ -701,6 +721,12 @@ async function loadProductsFromStorage() {
   renderProductCatalog();
 }
 async function saveProducts() { await storageSet("pos-products", JSON.stringify(products)); }
+async function loadSalesHistory() {
+  const raw = await storageGet("pos-sales-history");
+  try { salesHistory = raw ? JSON.parse(raw) : []; } catch (e) { salesHistory = []; }
+  renderSalesHistoryPanel();
+}
+async function saveSalesHistoryToStorage() { await storageSet("pos-sales-history", JSON.stringify(salesHistory)); }
 async function getNextReceiptNumber() {
   const raw = await storageGet("pos-receipt-counter");
   let last = parseInt(raw, 10) || 0;
@@ -772,8 +798,173 @@ function backToCatalog() {
   document.getElementById("catalogView").classList.remove("hidden");
   renderProductCatalog();
 }
-function completeAndPrint() {
+async function completeAndPrint() {
+  await saveCurrentSaleToHistory();
   printReceipt();
+}
+
+/* =========================================================
+   SALES HISTORY (parent = sale summary, child = line items)
+   Every completed sale is recorded here, keyed by receipt number.
+   Re-printing the same sale updates its existing record instead
+   of creating a duplicate.
+   ========================================================= */
+async function saveCurrentSaleToHistory() {
+  if (cart.length === 0) return;
+  const totals = computeTotals();
+  const record = {
+    receiptNumber: currentReceiptNumber,
+    dateTime: document.getElementById("receiptDate").textContent,
+    documentType: getDocumentTitle(),
+    storeName: val("storeName"),
+    currencyCode: val("currencyCode"),
+    currencySymbol: symbolNow(),
+    taxName: val("taxName").trim() || tr("tax"),
+    taxRate: Number(val("taxRate")) || 0,
+    discountRate: Number(val("discountRate")) || 0,
+    subtotal: totals.subtotal,
+    discount: totals.discount,
+    tax: totals.tax,
+    grandTotal: totals.grandTotal,
+    paymentMethod: val("paymentMethod") || "",
+    amountReceived: Number(val("amountReceived")) || 0,
+    change: Math.max(0, (Number(val("amountReceived")) || 0) - totals.grandTotal),
+    itemCount: cartTotalCount(),
+    items: cart.map(function(c) {
+      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0) };
+    })
+  };
+
+  const idx = salesHistory.findIndex(function(s) { return s.receiptNumber === currentReceiptNumber; });
+  if (idx > -1) salesHistory[idx] = record; else salesHistory.push(record);
+  await saveSalesHistoryToStorage();
+  renderSalesHistoryPanel();
+}
+
+function renderSalesHistoryPanel() {
+  const summary = document.getElementById("salesHistorySummary");
+  const table = document.getElementById("salesHistoryTable");
+  if (!summary || !table) return;
+
+  const count = salesHistory.length;
+  const revenue = salesHistory.reduce(function(sum, s) { return sum + (Number(s.grandTotal) || 0); }, 0);
+  const symbol = symbolNow();
+  summary.textContent = count + " sale" + (count === 1 ? "" : "s") + " recorded" + (count ? " • " + symbol + " " + revenue.toFixed(3) + " total revenue" : "") + ".";
+
+  table.innerHTML = "";
+  if (!count) {
+    const empty = document.createElement("div");
+    empty.className = "sales-history-empty";
+    empty.textContent = "No completed sales yet. They'll appear here once you finish a payment.";
+    table.appendChild(empty);
+    return;
+  }
+
+  salesHistory.slice().reverse().forEach(function(s) {
+    const row = document.createElement("div");
+    row.className = "sales-history-row";
+    row.innerHTML =
+      "<div>" +
+        "<div class=\"shr-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
+        "<div class=\"shr-date\">" + escapeHtml(s.dateTime) + " • " + escapeHtml(s.paymentMethod || "-") + "</div>" +
+      "</div>" +
+      "<div class=\"shr-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(3) + "</div>";
+    table.appendChild(row);
+  });
+}
+
+async function clearSalesHistory() {
+  if (!salesHistory.length) return;
+  if (!confirm("Delete all recorded sales history? This can't be undone.")) return;
+  salesHistory = [];
+  await saveSalesHistoryToStorage();
+  renderSalesHistoryPanel();
+}
+
+function todayStamp() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+function rowsToCsv(rows) {
+  if (!rows.length) return "";
+  const keys = [];
+  rows.forEach(function(r) { Object.keys(r).forEach(function(k) { if (keys.indexOf(k) === -1) keys.push(k); }); });
+  const esc = function(v) {
+    v = (v === undefined || v === null) ? "" : String(v);
+    if (/[",\n]/.test(v)) v = "\"" + v.replace(/"/g, "\"\"") + "\"";
+    return v;
+  };
+  const lines = [keys.map(esc).join(",")];
+  rows.forEach(function(r) { lines.push(keys.map(function(k) { return esc(r[k]); }).join(",")); });
+  return lines.join("\r\n");
+}
+
+function downloadTextFile(filename, text, mime) {
+  const blob = new Blob([text], { type: mime || "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function buildSalesExportRows() {
+  const parentRows = salesHistory.map(function(s) {
+    return {
+      "Receipt No": s.receiptNumber,
+      "Date/Time": s.dateTime,
+      "Document Type": s.documentType,
+      "Store Name": s.storeName,
+      "Item Count": s.itemCount,
+      "Subtotal": s.subtotal.toFixed(3),
+      "Discount": s.discount.toFixed(3),
+      "Tax Name": s.taxName,
+      "Tax Rate %": s.taxRate,
+      "Tax Amount": s.tax.toFixed(3),
+      "Total": s.grandTotal.toFixed(3),
+      "Currency": s.currencyCode,
+      "Payment Method": s.paymentMethod,
+      "Amount Received": s.amountReceived.toFixed(3),
+      "Change": s.change.toFixed(3)
+    };
+  });
+  const childRows = [];
+  salesHistory.forEach(function(s) {
+    s.items.forEach(function(it) {
+      childRows.push({
+        "Receipt No": s.receiptNumber,
+        "Item Name": it.name,
+        "Qty": it.qty,
+        "Unit Price": it.price.toFixed(3),
+        "Line Total": it.lineTotal.toFixed(3)
+      });
+    });
+  });
+  return { parentRows: parentRows, childRows: childRows };
+}
+
+/* Downloads one .xlsx workbook with two tabs: "Sales" (parent, one row
+   per sale) and "Sale Items" (child, one row per product sold, linked
+   back by Receipt No). Falls back to two separate CSV files if the
+   XLSX library couldn't load (e.g. no internet access). */
+function exportSalesToExcel() {
+  if (!salesHistory.length) { alert("No completed sales yet — finish a sale first."); return; }
+  const { parentRows, childRows } = buildSalesExportRows();
+
+  if (typeof XLSX !== "undefined") {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(parentRows), "Sales");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(childRows), "Sale Items");
+    XLSX.writeFile(wb, "sales-report-" + todayStamp() + ".xlsx");
+    return;
+  }
+
+  downloadTextFile("sales-report-parent-" + todayStamp() + ".csv", rowsToCsv(parentRows));
+  downloadTextFile("sales-report-items-" + todayStamp() + ".csv", rowsToCsv(childRows));
 }
 
 /* =========================================================
@@ -1269,6 +1460,7 @@ async function init() {
   await loadSettings();
   await loadPaymentMethods();
   await loadProductsFromStorage();
+  await loadSalesHistory();
   await startFirstSale();
   changePaperSize();
   updateZoom();
