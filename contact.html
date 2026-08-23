@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <style>
 :root {
   --ink: #16211d;
@@ -49,7 +48,10 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 .card h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; letter-spacing: -.01em; margin: 0 0 10px; }
 .card p { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0 0 26px; }
 
-.captcha-wrap { display: flex; justify-content: center; margin: 0 0 22px; }
+.reveal-wrap { display: flex; justify-content: center; margin: 0 0 22px; }
+.reveal-btn { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: #fff; color: var(--ink); font-size: 14.5px; font-weight: 700; padding: 13px 22px; border-radius: var(--radius-sm); box-shadow: var(--shadow); }
+.reveal-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+.reveal-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
 
 .email-reveal { display: none; }
 .email-reveal.shown { display: block; }
@@ -75,10 +77,13 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 <div class="card">
 <div class="icon">✉</div>
 <h2>Get in touch</h2>
-<p>Have a question, found a bug, or just want to say hi? Verify you're human below and we'll show you our email address.</p>
+<p>Have a question, found a bug, or just want to say hi? Click below to see our email address.</p>
 
-<div class="captcha-wrap">
-<div class="g-recaptcha" data-sitekey="RECAPTCHA_SITE_KEY_PLACEHOLDER" data-callback="onCaptchaSuccess"></div>
+<div class="reveal-wrap">
+<button type="button" class="reveal-btn" id="revealBtn">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M22 6l-10 7L2 6"></path></svg>
+<span>Click to view our email</span>
+</button>
 </div>
 
 <div class="email-reveal" id="emailReveal">
@@ -88,19 +93,20 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 <button type="button" class="copy-btn" id="copyBtn">Copy email address</button>
 </div>
 
-<p class="hint">We hide the address behind this check to keep it out of spam bots' hands.</p>
+<p class="hint">We keep the address off the page until you click, to keep it out of spam bots' hands.</p>
 </div>
 
 <script>
   var EMAIL_PARTS = ["joemarie.tayactac1", "gmail.com"];
 
-  function onCaptchaSuccess() {
+  document.getElementById("revealBtn").addEventListener("click", function () {
     var address = EMAIL_PARTS[0] + "@" + EMAIL_PARTS[1];
     var link = document.getElementById("emailLink");
     link.textContent = address;
     link.href = "mailto:" + address + "?subject=GoOnlinePOS%20Website%20Enquiry";
     document.getElementById("emailReveal").classList.add("shown");
-  }
+    document.getElementById("revealBtn").parentElement.classList.add("hidden");
+  });
 
   document.getElementById("copyBtn").addEventListener("click", function () {
     var address = EMAIL_PARTS[0] + "@" + EMAIL_PARTS[1];
