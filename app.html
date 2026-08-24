@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open the App | GoOnlinePOS.com – Free Online POS</title>
+<title>Open the App | GoOnlinePOS.com – Go Online POS</title>
 <meta name="description" content="The live GoOnlinePOS.com app. Add products, ring up sales, and print receipts with your own company details — right in your browser, no signup required.">
 <meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
 <meta name="robots" content="index, follow">
@@ -171,7 +171,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .scanner-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
 .scanner-header button:hover { background: #f2f1ea; color: var(--ink); }
 .scanner-body { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; overflow: hidden; }
-.scanner-body video { width: 100%; height: 100%; object-fit: cover; }
+.scanner-body video { width: 100%; height: 100%; object-fit: contain; background: #000; }
 .scanner-frame { position: absolute; inset: 16% 10%; border: 3px solid var(--gold); border-radius: 12px; box-shadow: 0 0 0 2000px rgba(0,0,0,.35); pointer-events: none; }
 .scanner-hint { text-align: center; font-size: 13px; color: var(--ink-soft); padding: 14px 18px 6px; margin: 0; }
 .scanner-message { margin: 0 18px 18px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; }
@@ -488,6 +488,7 @@ gtag('config', 'G-XXXXXXXXXX');
   <div class="scanner-body">
     <video id="scannerVideo" autoplay playsinline muted></video>
     <div class="scanner-frame"></div>
+    <canvas id="scannerCanvas" class="hidden"></canvas>
   </div>
   <p id="scannerHint" class="scanner-hint">Point the camera at a product's barcode</p>
   <div id="scannerMessage" class="scanner-message hidden"></div>
@@ -1793,7 +1794,7 @@ function addProductToCart(product) {
 }
 
 let barcodeReader = null;
-let scannerControls = null;
+let scannerPollTimer = null;
 let scannerMessageTimeout = null;
 let lastScannedCode = "";
 let lastScanTime = 0;
@@ -1805,7 +1806,6 @@ async function openScanner() {
   overlay.classList.remove("hidden");
   lastScannedCode = "";
   lastScanTime = 0;
-  scannerControls = null;
 
   if (typeof ZXingBrowser === "undefined") {
     showScannerMessage(tr("scannerUnsupported"), "error");
@@ -1817,46 +1817,56 @@ async function openScanner() {
   }
 
   try {
+    const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    const videoEl = document.getElementById("scannerVideo");
+    videoEl.srcObject = stream;
+    await videoEl.play().catch(function() {});
+
+    const track = stream.getVideoTracks()[0];
+    if (track && typeof track.getCapabilities === "function") {
+      try {
+        const caps = track.getCapabilities();
+        if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
+          await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+        }
+      } catch (focusErr) {}
+    }
+
     barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
-
-    let deviceId;
-    try {
-      const devices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
-      if (devices && devices.length) {
-        const backCam = devices.find(function(d) { return /back|rear|environment/i.test(d.label); });
-        deviceId = backCam ? backCam.deviceId : devices[devices.length - 1].deviceId;
-      }
-    } catch (deviceErr) {}
-
-    await barcodeReader.decodeFromVideoDevice(deviceId, "scannerVideo", function(result, err, controls) {
-      if (controls) scannerControls = controls;
-      if (result) handleScannedCode(result.getText());
-    });
-
-    setTimeout(function() {
-      const videoEl = document.getElementById("scannerVideo");
-      const stream = videoEl && videoEl.srcObject;
-      const track = stream && stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
-      if (track && typeof track.getCapabilities === "function") {
-        try {
-          const caps = track.getCapabilities();
-          if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
-            track.applyConstraints({ advanced: [{ focusMode: "continuous" }] }).catch(function() {});
-          }
-        } catch (focusErr) {}
-      }
-    }, 400);
+    clearInterval(scannerPollTimer);
+    scannerPollTimer = setInterval(pollScannerFrame, 350);
   } catch (err) {
     showScannerMessage(tr("scannerNoCamera"), "error");
   }
 }
 
+function pollScannerFrame() {
+  const videoEl = document.getElementById("scannerVideo");
+  if (!videoEl || !videoEl.videoWidth || !barcodeReader) return;
+
+  const vw = videoEl.videoWidth;
+  const vh = videoEl.videoHeight;
+  const cropX = vw * 0.10;
+  const cropY = vh * 0.16;
+  const cropW = vw * 0.80;
+  const cropH = vh * 0.68;
+
+  const canvas = document.getElementById("scannerCanvas");
+  canvas.width = cropW;
+  canvas.height = cropH;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(videoEl, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+
+  barcodeReader.decodeFromCanvas(canvas).then(function(result) {
+    if (result) handleScannedCode(result.getText());
+  }).catch(function() {});
+}
+
 function closeScanner() {
   document.getElementById("scannerOverlay").classList.add("hidden");
-  if (scannerControls) {
-    try { scannerControls.stop(); } catch (e) {}
-    scannerControls = null;
-  }
+  clearInterval(scannerPollTimer);
+  scannerPollTimer = null;
   if (barcodeReader) {
     try { barcodeReader.reset(); } catch (e) {}
     barcodeReader = null;
