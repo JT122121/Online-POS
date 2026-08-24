@@ -79,6 +79,14 @@ button:active { transform: translateY(1px); }
 .site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
 .site-footer span { margin: 0 8px; }
 
+.backup-notice { max-width: 1500px; margin: 0 auto 16px; background: var(--gold-tint); border: 1px solid #f0dfb0; border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.bn-text { font-size: 13px; color: #6b4f12; line-height: 1.5; flex: 1; min-width: 220px; }
+.bn-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.bn-backup-btn { border: 0; background: var(--gold); color: var(--ink); font-size: 12.5px; font-weight: 700; padding: 9px 15px; border-radius: 7px; white-space: nowrap; }
+.bn-backup-btn:hover { background: #cf9631; }
+.bn-dismiss-btn { border: 0; background: transparent; color: #6b4f12; font-size: 19px; line-height: 1; padding: 4px 7px; opacity: .65; border-radius: 6px; }
+.bn-dismiss-btn:hover { opacity: 1; background: rgba(0,0,0,.05); }
+
 .sales-summary-panel { max-width: 1500px; margin: 0 auto 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
 .ssp-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .ssp-header h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
@@ -104,7 +112,10 @@ button:active { transform: translateY(1px); }
 .panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
 .cart-count-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
-.search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 10px; background: #fbfbf8; }
+.search-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fbfbf8; }
+.scan-btn { flex-shrink: 0; width: 42px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fbfbf8; font-size: 17px; display: flex; align-items: center; justify-content: center; }
+.scan-btn:hover { background: var(--accent-tint); border-color: #bfe0cf; }
 .search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 
 .category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
@@ -151,6 +162,20 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .complete-btn:hover:not(:disabled) { background: var(--accent-dark); }
 .complete-btn:disabled { background: #e3e1d8; color: #a19d8f; }
 
+.scanner-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.7); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 110; padding: 16px; }
+.scanner-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 420px; overflow: hidden; box-shadow: var(--shadow-lg); }
+.scanner-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
+.scanner-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
+.scanner-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
+.scanner-header button:hover { background: #f2f1ea; color: var(--ink); }
+.scanner-body { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; overflow: hidden; }
+.scanner-body video { width: 100%; height: 100%; object-fit: cover; }
+.scanner-frame { position: absolute; inset: 16% 10%; border: 3px solid var(--gold); border-radius: 12px; box-shadow: 0 0 0 2000px rgba(0,0,0,.35); pointer-events: none; }
+.scanner-hint { text-align: center; font-size: 13px; color: var(--ink-soft); padding: 14px 18px 6px; margin: 0; }
+.scanner-message { margin: 0 18px 18px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; }
+.scanner-message.success { background: var(--accent-tint); color: var(--accent-dark); }
+.scanner-message.error { background: var(--danger-tint); color: var(--danger); }
+
 .settings-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
 .settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
 .settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
@@ -180,6 +205,18 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-logo { display: block; max-width: 58mm; max-height: 16mm; margin: 0 auto 3.5mm; object-fit: contain; }
 
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
+.toggle-row.compact { padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); background: #fbfbf8; }
+.toggle-row.compact .toggle-label { font-size: 12.5px; }
+.toggle-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+.toggle-sublabel { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+.toggle-switch { position: relative; width: 44px; height: 25px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-slider { position: absolute; inset: 0; background: #d8d5c9; border-radius: 999px; cursor: pointer; transition: background .2s ease; }
+.toggle-slider::before { content: ""; position: absolute; width: 19px; height: 19px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s ease; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(19px); }
+.toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--accent); outline-offset: 2px; }
 .error-text { margin-top: 8px; padding: 9px 10px; background: var(--danger-tint); border: 1px solid #f0c2bd; border-radius: var(--radius-sm); color: var(--danger); font-size: 11.5px; line-height: 1.45; }
 .success-text { margin-top: 8px; padding: 9px 10px; background: var(--accent-tint); border: 1px solid #bfe0cf; border-radius: var(--radius-sm); color: var(--accent-dark); font-size: 11.5px; line-height: 1.45; }
 .payment-editor { display: flex; gap: 6px; margin-top: 8px; }
@@ -266,7 +303,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel { display: none !important; }
+  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel, .backup-notice { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -306,6 +343,14 @@ gtag('config', 'G-XXXXXXXXXX');
 </div>
 </header>
 
+<div id="backupNotice" class="backup-notice hidden">
+<div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.</span></div>
+<div class="bn-actions">
+<button type="button" class="bn-backup-btn" onclick="downloadFullBackup()" id="backupNoticeButton">Download Backup</button>
+<button type="button" class="bn-dismiss-btn" onclick="dismissBackupNotice()" aria-label="Dismiss">×</button>
+</div>
+</div>
+
 <div id="salesSummaryPanel" class="sales-summary-panel hidden">
 <div class="ssp-header">
 <h3 id="salesSummaryTitle">Sales Summary</h3>
@@ -331,7 +376,17 @@ gtag('config', 'G-XXXXXXXXXX');
       <h3 id="catalogHeading">Products</h3>
       <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
     </div>
+    <div class="toggle-row compact">
+      <div class="toggle-label">📷 <span id="barcodeScannerToggleLabel">Barcode Scanner</span></div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="barcodeScannerToggle" onchange="toggleBarcodeScannerSetting()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="search-row">
     <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
+    <button type="button" class="scan-btn hidden" id="scanBtn" onclick="openScanner()" title="Scan barcode">📷</button>
+    </div>
     <div id="categoryChips" class="category-chips"></div>
     <div id="productsList" class="product-list"></div>
     <div id="productsEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
@@ -421,6 +476,21 @@ gtag('config', 'G-XXXXXXXXXX');
 <a href="contact.html">Contact</a>
 </footer>
 
+<div id="scannerOverlay" class="scanner-overlay hidden" onclick="if(event.target===this) closeScanner()">
+<div class="scanner-modal">
+  <div class="scanner-header">
+    <h2 id="scannerTitle">Scan Barcode</h2>
+    <button onclick="closeScanner()">✕</button>
+  </div>
+  <div class="scanner-body">
+    <video id="scannerVideo" autoplay playsinline muted></video>
+    <div class="scanner-frame"></div>
+  </div>
+  <p id="scannerHint" class="scanner-hint">Point the camera at a product's barcode</p>
+  <div id="scannerMessage" class="scanner-message hidden"></div>
+</div>
+</div>
+
 <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
 <div class="settings-modal">
   <div class="settings-modal-header">
@@ -440,6 +510,7 @@ gtag('config', 'G-XXXXXXXXXX');
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
       <button class="settings-tab-item" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
+      <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
     </div>
     <div class="settings-tab-panel">
 
@@ -616,12 +687,22 @@ TRN: 100000000000000</textarea>
         </select>
       </div>
 
+      <div class="settings-panel-content" id="panel-backup">
+        <h3 id="backupTitle">Backup & Restore</h3>
+        <div class="info" id="backupInfo" style="display:block;">Everything here — products, sales history, settings, your logo, cashiers, and payment methods — is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.</div>
+        <button type="button" class="small-btn" onclick="downloadFullBackup()" style="width:100%; margin-top:12px;">⬇ Download Full Backup</button>
+        <label id="restoreBackupLabel" style="margin-top:20px;">Restore from Backup</label>
+        <input id="backupFileInput" type="file" accept=".json,application/json" onchange="handleBackupFileSelect(event)">
+        <div class="info" id="restoreInfo" style="display:block;">This replaces everything currently saved with what's in the backup file. The page will reload after restoring.</div>
+      </div>
+
     </div>
   </div>
 </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
 <script>
 
 const translations = {
@@ -631,6 +712,8 @@ en: {
   settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
+  scannerTitle: "Scan Barcode", scannerHint: "Point the camera at a product's barcode", scannerUnsupported: "Barcode scanning isn't available in this browser.",
+  scannerNoCamera: "Couldn't access the camera. Check permissions and try again.", scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
   customItemLink: "+ Add a custom item", proceedLabel: "Proceed to Payment",
   checkoutHeading: "Payment", totalDueLabel: "Total Due",
   paymentMethodLabel: "Payment Method", amountReceivedLabel: "Amount Received", changeLabelInfo: "Change:",
@@ -654,6 +737,7 @@ en: {
   taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
   productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Adds a scan button next to search on the main screen, to add items by SKU using your camera.",
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
   addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
   manageProductsEmpty: "No products yet — add one above or upload a CSV below.",
@@ -666,6 +750,11 @@ en: {
   zoomLabel: "Screen Zoom (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   languageTitle: "Language", languageLabel: "Select Language",
+  backupTitle: "Backup & Restore", backupInfo: "Everything here — products, sales history, settings, your logo, cashiers, and payment methods — is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.",
+  restoreBackupLabel: "Restore from Backup", restoreInfo: "This replaces everything currently saved with what's in the backup file. The page will reload after restoring.",
+  backupNoticeText: "Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.", backupNoticeButton: "Download Backup",
+  restoreConfirm: "This will replace all current products, sales history, and settings with the backup file. Continue?",
+  restoreSuccess: "Backup restored. The page will now reload.", restoreError: "Couldn't read that backup file. Make sure it's an unmodified .json file downloaded from here.",
   item: "Item", qty: "Qty", total: "Total",
   subtotal: "Subtotal", discount: "Discount", tax: "Tax",
   received: "Received", change: "Change", paymentShort: "Payment",
@@ -679,6 +768,8 @@ ar: {
   settingsButtonLabel: "الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
+  scannerTitle: "مسح الباركود", scannerHint: "وجّه الكاميرا نحو باركود المنتج", scannerUnsupported: "مسح الباركود غير متاح في هذا المتصفح.",
+  scannerNoCamera: "تعذّر الوصول إلى الكاميرا. تحقق من الأذونات وحاول مرة أخرى.", scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
   customItemLink: "+ إضافة صنف مخصص", proceedLabel: "المتابعة إلى الدفع",
   checkoutHeading: "الدفع", totalDueLabel: "المبلغ المستحق",
   paymentMethodLabel: "طريقة الدفع", amountReceivedLabel: "المبلغ المستلم", changeLabelInfo: "الباقي:",
@@ -702,6 +793,7 @@ ar: {
   taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
   productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
+  barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "يضيف زر مسح بجانب البحث في الشاشة الرئيسية، لإضافة الأصناف عبر رمز المنتج باستخدام الكاميرا.",
   addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
   addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
   manageProductsEmpty: "لا توجد منتجات بعد — أضف واحداً أعلاه أو ارفع ملف CSV أدناه.",
@@ -714,6 +806,11 @@ ar: {
   zoomLabel: "تكبير الشاشة (%)", zoomValueLabel: "التكبير:",
   currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
   languageTitle: "اللغة", languageLabel: "اختر اللغة",
+  backupTitle: "النسخ الاحتياطي والاستعادة", backupInfo: "كل شيء هنا — المنتجات، سجل المبيعات، الإعدادات، شعارك، الكاشيرون، وطرق الدفع — محفوظ فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية كاملة بانتظام، خاصة قبل مسح بيانات المتصفح أو تغيير الجهاز.",
+  restoreBackupLabel: "الاستعادة من نسخة احتياطية", restoreInfo: "سيستبدل هذا كل ما هو محفوظ حالياً بما في ملف النسخة الاحتياطية. سيتم إعادة تحميل الصفحة بعد الاستعادة.",
+  backupNoticeText: "بياناتك محفوظة فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية بانتظام حتى لا يضيع شيء إذا تم مسح ذاكرة التخزين المؤقت.", backupNoticeButton: "تنزيل نسخة احتياطية",
+  restoreConfirm: "سيؤدي هذا إلى استبدال جميع المنتجات وسجل المبيعات والإعدادات الحالية بملف النسخة الاحتياطية. هل تريد المتابعة؟",
+  restoreSuccess: "تمت استعادة النسخة الاحتياطية. سيتم الآن إعادة تحميل الصفحة.", restoreError: "تعذّرت قراءة ملف النسخة الاحتياطية. تأكد أنه ملف json غير معدّل تم تنزيله من هنا.",
   item: "الصنف", qty: "الكمية", total: "الإجمالي",
   subtotal: "المجموع الفرعي", discount: "الخصم", tax: "الضريبة",
   received: "المستلم", change: "الباقي", paymentShort: "الدفع",
@@ -742,8 +839,11 @@ fil: {
   taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
   productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Nagdaragdag ng scan button sa tabi ng search sa main screen, para magdagdag ng item gamit ang SKU at camera.",
   addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
+  scannerTitle: "I-scan ang Barcode", scannerHint: "Itutok ang camera sa barcode ng produkto", scannerUnsupported: "Hindi available ang pag-scan ng barcode sa browser na ito.",
+  scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
   manageProductsEmpty: "Wala pang produkto — magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
   productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
@@ -754,6 +854,11 @@ fil: {
   zoomLabel: "Zoom ng Screen (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   languageTitle: "Wika", languageLabel: "Pumili ng Wika",
+  backupTitle: "Backup at Pagbawi", backupInfo: "Lahat dito — mga produkto, kasaysayan ng benta, settings, logo mo, mga kahero, at paraan ng pagbabayad — naka-save lang sa browser na ito. Mag-download ng buong backup nang regular, lalo na bago burahin ang data ng browser o lumipat ng device.",
+  restoreBackupLabel: "Ibalik mula sa Backup", restoreInfo: "Papalitan nito ang lahat ng kasalukuyang naka-save ng laman ng backup file. Mag-re-reload ang page pagkatapos ibalik.",
+  backupNoticeText: "Naka-save lang ang data mo sa browser na ito. Mag-download ng backup nang regular para walang mawala kapag na-clear ang cache mo.", backupNoticeButton: "I-download ang Backup",
+  restoreConfirm: "Papalitan nito ang lahat ng kasalukuyang produkto, kasaysayan ng benta, at settings ng backup file. Magpatuloy?",
+  restoreSuccess: "Naibalik na ang backup. Magre-reload na ang page.", restoreError: "Hindi mabasa ang backup file na iyon. Siguraduhing hindi ito binago at .json file na na-download mula rito.",
   item: "Item", qty: "Qty", total: "Total",
   subtotal: "Subtotal", discount: "Discount", tax: "Buwis",
   received: "Natanggap", change: "Sukli", paymentShort: "Bayad",
@@ -782,8 +887,11 @@ hi: {
   taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
   productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
+  barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "मुख्य स्क्रीन पर सर्च के पास एक स्कैन बटन जोड़ता है, ताकि कैमरे से SKU द्वारा आइटम जोड़े जा सकें।",
   addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
+  scannerTitle: "बारकोड स्कैन करें", scannerHint: "कैमरे को उत्पाद के बारकोड की ओर करें", scannerUnsupported: "इस ब्राउज़र में बारकोड स्कैनिंग उपलब्ध नहीं है।",
+  scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
   manageProductsEmpty: "अभी कोई उत्पाद नहीं है — ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
   productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
@@ -794,6 +902,11 @@ hi: {
   zoomLabel: "स्क्रीन ज़ूम (%)", zoomValueLabel: "ज़ूम:",
   currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
   languageTitle: "भाषा", languageLabel: "भाषा चुनें",
+  backupTitle: "बैकअप और पुनर्स्थापना", backupInfo: "यहां सब कुछ — उत्पाद, बिक्री इतिहास, सेटिंग्स, आपका लोगो, कैशियर, और भुगतान के तरीके — केवल इस ब्राउज़र में सेव है। नियमित रूप से पूरा बैकअप डाउनलोड करें, खासकर ब्राउज़र डेटा साफ़ करने या डिवाइस बदलने से पहले।",
+  restoreBackupLabel: "बैकअप से पुनर्स्थापित करें", restoreInfo: "यह वर्तमान में सेव सब कुछ बैकअप फ़ाइल की सामग्री से बदल देगा। पुनर्स्थापना के बाद पेज रीलोड होगा।",
+  backupNoticeText: "आपका डेटा केवल इस ब्राउज़र में सेव है। नियमित रूप से बैकअप डाउनलोड करें ताकि कैश साफ़ होने पर कुछ भी न खोए।", backupNoticeButton: "बैकअप डाउनलोड करें",
+  restoreConfirm: "यह सभी मौजूदा उत्पाद, बिक्री इतिहास, और सेटिंग्स को बैकअप फ़ाइल से बदल देगा। जारी रखें?",
+  restoreSuccess: "बैकअप पुनर्स्थापित हो गया। पेज अब रीलोड होगा।", restoreError: "वह बैकअप फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह यहां से डाउनलोड की गई एक अपरिवर्तित .json फ़ाइल है।",
   item: "आइटम", qty: "मात्रा", total: "कुल",
   subtotal: "उप-योग", discount: "छूट", tax: "कर",
   received: "प्राप्त", change: "बाकी", paymentShort: "भुगतान",
@@ -822,8 +935,11 @@ es: {
   taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
   productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
+  barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Agrega un botón de escaneo junto a la búsqueda en la pantalla principal, para añadir artículos por SKU usando la cámara.",
   addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
+  scannerTitle: "Escanear Código de Barras", scannerHint: "Apunta la cámara al código de barras del producto", scannerUnsupported: "El escaneo de códigos de barras no está disponible en este navegador.",
+  scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
   manageProductsEmpty: "Aún no hay productos — agrega uno arriba o sube un CSV abajo.",
   productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
@@ -834,6 +950,11 @@ es: {
   zoomLabel: "Zoom de Pantalla (%)", zoomValueLabel: "Zoom:",
   currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
   languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
+  backupTitle: "Copia de Seguridad y Restauración", backupInfo: "Todo aquí — productos, historial de ventas, configuración, tu logo, cajeros y métodos de pago — se guarda solo en este navegador. Descarga una copia de seguridad completa regularmente, especialmente antes de borrar los datos del navegador o cambiar de dispositivo.",
+  restoreBackupLabel: "Restaurar desde Copia de Seguridad", restoreInfo: "Esto reemplaza todo lo guardado actualmente con el contenido del archivo de copia de seguridad. La página se recargará después de restaurar.",
+  backupNoticeText: "Tus datos se guardan solo en este navegador. Descarga una copia de seguridad regularmente para no perder nada si se borra la caché.", backupNoticeButton: "Descargar Copia de Seguridad",
+  restoreConfirm: "Esto reemplazará todos los productos, historial de ventas y configuración actuales con el archivo de copia de seguridad. ¿Continuar?",
+  restoreSuccess: "Copia de seguridad restaurada. La página se recargará ahora.", restoreError: "No se pudo leer ese archivo de copia de seguridad. Asegúrate de que sea un archivo .json sin modificar descargado desde aquí.",
   item: "Artículo", qty: "Cant.", total: "Total",
   subtotal: "Subtotal", discount: "Descuento", tax: "Impuesto",
   received: "Recibido", change: "Cambio", paymentShort: "Pago",
@@ -862,8 +983,11 @@ th: {
   taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
   productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
+  barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เพิ่มปุ่มสแกนข้างช่องค้นหาในหน้าหลัก เพื่อเพิ่มสินค้าโดยใช้ SKU ผ่านกล้อง",
   addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
+  scannerTitle: "สแกนบาร์โค้ด", scannerHint: "เล็งกล้องไปที่บาร์โค้ดของสินค้า", scannerUnsupported: "การสแกนบาร์โค้ดไม่รองรับในเบราว์เซอร์นี้",
+  scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
   manageProductsEmpty: "ยังไม่มีสินค้า — เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
   productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
@@ -874,6 +998,11 @@ th: {
   zoomLabel: "ซูมหน้าจอ (%)", zoomValueLabel: "ซูม:",
   currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
   languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
+  backupTitle: "สำรองข้อมูลและกู้คืน", backupInfo: "ทุกอย่างที่นี่ — สินค้า ประวัติการขาย การตั้งค่า โลโก้ของคุณ แคชเชียร์ และวิธีการชำระเงิน — ถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองแบบเต็มเป็นประจำ โดยเฉพาะก่อนล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนอุปกรณ์",
+  restoreBackupLabel: "กู้คืนจากไฟล์สำรอง", restoreInfo: "การดำเนินการนี้จะแทนที่ทุกอย่างที่บันทึกไว้ในปัจจุบันด้วยเนื้อหาในไฟล์สำรอง หน้าเว็บจะโหลดใหม่หลังจากกู้คืน",
+  backupNoticeText: "ข้อมูลของคุณถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองเป็นประจำเพื่อไม่ให้ข้อมูลสูญหายหากแคชถูกล้าง", backupNoticeButton: "ดาวน์โหลดข้อมูลสำรอง",
+  restoreConfirm: "การดำเนินการนี้จะแทนที่สินค้า ประวัติการขาย และการตั้งค่าปัจจุบันทั้งหมดด้วยไฟล์สำรอง ต้องการดำเนินการต่อหรือไม่?",
+  restoreSuccess: "กู้คืนข้อมูลสำรองแล้ว หน้าเว็บจะโหลดใหม่ตอนนี้", restoreError: "ไม่สามารถอ่านไฟล์สำรองนั้นได้ ตรวจสอบว่าเป็นไฟล์ .json ที่ไม่ถูกแก้ไขซึ่งดาวน์โหลดจากที่นี่",
   item: "สินค้า", qty: "จำนวน", total: "รวม",
   subtotal: "ยอดรวมย่อย", discount: "ส่วนลด", tax: "ภาษี",
   received: "รับเงิน", change: "เงินทอน", paymentShort: "ชำระเงิน",
@@ -944,10 +1073,13 @@ async function loadSettings() {
       const s = JSON.parse(raw);
       Object.keys(s).forEach(function(key) {
         const el = document.getElementById(key);
-        if (el) el.value = s[key];
+        if (el && el.type !== "checkbox") el.value = s[key];
       });
+      const scannerToggle = document.getElementById("barcodeScannerToggle");
+      if (scannerToggle) scannerToggle.checked = !!s.barcodeScannerEnabled;
     } catch (e) {  }
   }
+  syncScanButtonVisibility();
 }
 async function saveSettings() {
   const settings = {
@@ -956,9 +1088,19 @@ async function saveSettings() {
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
     footer1: val("footer1"), footer2: val("footer2"),
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
-    zoomRange: val("zoomRange"), documentType: val("documentType")
+    zoomRange: val("zoomRange"), documentType: val("documentType"),
+    barcodeScannerEnabled: document.getElementById("barcodeScannerToggle").checked
   };
   await storageSet("pos-settings", JSON.stringify(settings));
+}
+function syncScanButtonVisibility() {
+  const toggle = document.getElementById("barcodeScannerToggle");
+  const scanBtn = document.getElementById("scanBtn");
+  if (toggle && scanBtn) scanBtn.classList.toggle("hidden", !toggle.checked);
+}
+function toggleBarcodeScannerSetting() {
+  syncScanButtonVisibility();
+  saveSettings();
 }
 async function loadPaymentMethods() {
   const raw = await storageGet("pos-payment-methods");
@@ -1476,6 +1618,66 @@ function downloadTextFile(filename, text, mime) {
   URL.revokeObjectURL(url);
 }
 
+async function downloadFullBackup() {
+  const backup = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    settings: JSON.parse((await storageGet("pos-settings")) || "{}"),
+    paymentMethods: JSON.parse((await storageGet("pos-payment-methods")) || "[]"),
+    cashiers: JSON.parse((await storageGet("pos-cashiers")) || "[]"),
+    activeCashier: (await storageGet("pos-active-cashier")) || "",
+    products: JSON.parse((await storageGet("pos-products")) || "[]"),
+    logo: (await storageGet("pos-logo")) || "",
+    salesHistory: JSON.parse((await storageGet("pos-sales-history")) || "[]"),
+    receiptCounter: (await storageGet("pos-receipt-counter")) || "0"
+  };
+  downloadTextFile("goonlinepos-backup-" + todayStamp() + ".json", JSON.stringify(backup, null, 2), "application/json");
+}
+
+function handleBackupFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    let backup;
+    try {
+      backup = JSON.parse(String(e.target.result));
+      if (!backup || typeof backup !== "object") throw new Error("invalid");
+    } catch (err) {
+      alert(tr("restoreError"));
+      event.target.value = "";
+      return;
+    }
+    if (!confirm(tr("restoreConfirm"))) { event.target.value = ""; return; }
+
+    if (backup.settings) await storageSet("pos-settings", JSON.stringify(backup.settings));
+    if (backup.paymentMethods) await storageSet("pos-payment-methods", JSON.stringify(backup.paymentMethods));
+    if (backup.cashiers) await storageSet("pos-cashiers", JSON.stringify(backup.cashiers));
+    if (backup.activeCashier !== undefined) await storageSet("pos-active-cashier", backup.activeCashier);
+    if (backup.products) await storageSet("pos-products", JSON.stringify(backup.products));
+    if (backup.logo) await storageSet("pos-logo", backup.logo);
+    if (backup.salesHistory) await storageSet("pos-sales-history", JSON.stringify(backup.salesHistory));
+    if (backup.receiptCounter !== undefined) await storageSet("pos-receipt-counter", backup.receiptCounter);
+
+    alert(tr("restoreSuccess"));
+    location.reload();
+  };
+  reader.onerror = function() { alert(tr("restoreError")); event.target.value = ""; };
+  reader.readAsText(file);
+}
+
+async function loadBackupNoticeState() {
+  const dismissed = await storageGet("pos-backup-notice-dismissed");
+  const notice = document.getElementById("backupNotice");
+  if (!dismissed && (products.length > 0 || salesHistory.length > 0)) {
+    notice.classList.remove("hidden");
+  }
+}
+async function dismissBackupNotice() {
+  document.getElementById("backupNotice").classList.add("hidden");
+  await storageSet("pos-backup-notice-dismissed", "1");
+}
+
 function buildSalesExportRows() {
   const parentRows = salesHistory.map(function(s) {
     return {
@@ -1548,6 +1750,74 @@ function addProductToCart(product) {
   if (idx > -1) { cart[idx].qty += 1; }
   else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1 }); }
   updateReceipt();
+}
+
+let barcodeReader = null;
+let scannerMessageTimeout = null;
+let lastScannedCode = "";
+let lastScanTime = 0;
+
+async function openScanner() {
+  const overlay = document.getElementById("scannerOverlay");
+  const messageEl = document.getElementById("scannerMessage");
+  messageEl.classList.add("hidden");
+  overlay.classList.remove("hidden");
+  lastScannedCode = "";
+  lastScanTime = 0;
+
+  if (typeof ZXing === "undefined") {
+    showScannerMessage(tr("scannerUnsupported"), "error");
+    return;
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showScannerMessage(tr("scannerNoCamera"), "error");
+    return;
+  }
+
+  try {
+    barcodeReader = new ZXing.BrowserMultiFormatReader();
+    const constraints = { video: { facingMode: "environment" } };
+    await barcodeReader.decodeFromConstraints(constraints, "scannerVideo", function(result) {
+      if (result) handleScannedCode(result.getText());
+    });
+  } catch (err) {
+    showScannerMessage(tr("scannerNoCamera"), "error");
+  }
+}
+
+function closeScanner() {
+  document.getElementById("scannerOverlay").classList.add("hidden");
+  if (barcodeReader) {
+    try { barcodeReader.reset(); } catch (e) {}
+    barcodeReader = null;
+  }
+}
+
+function showScannerMessage(text, type) {
+  const messageEl = document.getElementById("scannerMessage");
+  messageEl.textContent = text;
+  messageEl.className = "scanner-message " + type;
+  messageEl.classList.remove("hidden");
+  clearTimeout(scannerMessageTimeout);
+  if (type === "success") {
+    scannerMessageTimeout = setTimeout(function() { messageEl.classList.add("hidden"); }, 1800);
+  }
+}
+
+function handleScannedCode(code) {
+  const now = Date.now();
+  if (code === lastScannedCode && (now - lastScanTime) < 2000) return;
+  lastScannedCode = code;
+  lastScanTime = now;
+
+  const match = products.find(function(p) { return p.sku && p.sku.trim() !== "" && p.sku.trim() === code.trim(); });
+  if (match) {
+    addProductToCart(match);
+    showScannerMessage(tr("scannerFound") + " " + match.name, "success");
+    if (navigator.vibrate) navigator.vibrate(80);
+  } else {
+    showScannerMessage(tr("scannerNotFound") + " " + code, "error");
+  }
 }
 function addCustomItem() {
   itemCounter++;
@@ -2013,6 +2283,7 @@ function changeLanguage() {
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
+    barcodeScannerToggleLabel: "barcodeScannerToggleLabel",
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
     addProductButton: "addProductButton",
     productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
@@ -2021,7 +2292,10 @@ function changeLanguage() {
     zoomLabel: "zoomLabel", zoomValueLabel: "zoomValueLabel",
     currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
     languageTitle: "languageTitle", languageLabel: "languageLabel",
+    backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
+    backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
+    scannerTitle: "scannerTitle", scannerHint: "scannerHint",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
     receiptPaymentMethodLabel: "paymentShort", receiptReceivedLabel: "received", receiptChangeLabel: "change",
     receiptNumberText: "receiptNo", receiptDateLabel: "date"
@@ -2075,6 +2349,7 @@ async function init() {
   await loadProductsFromStorage();
   await loadLogo();
   await loadSalesHistory();
+  await loadBackupNoticeState();
   await startFirstSale();
   changePaperSize();
   updateZoom();
