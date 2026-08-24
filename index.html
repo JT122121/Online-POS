@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Go Online POS – No Signup, No Login | GoOnlinePOS.com</title>
-<meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login, nothing to install. See how it works, then start ringing up sales in seconds.">
-<meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
+<meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login, nothing to install. Full backup and restore keeps your data safe. See how it works, then start ringing up sales in seconds.">
+<meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app, pos data backup, pos backup and restore">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://goonlinepos.com/">
 <meta name="theme-color" content="#16211d">
@@ -89,9 +89,7 @@ img { max-width: 100%; display: block; }
 .feature-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
 .feature-card .fc-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
 .feature-card .fc-icon svg { width: 20px; height: 20px; }
-.feature-card:nth-child(2) .fc-icon { background: var(--gold-tint); color: #8a6417; }
-.feature-card:nth-child(4) .fc-icon { background: var(--gold-tint); color: #8a6417; }
-.feature-card:nth-child(6) .fc-icon { background: var(--gold-tint); color: #8a6417; }
+.feature-card:nth-child(even) .fc-icon { background: var(--gold-tint); color: #8a6417; }
 .feature-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; margin: 0 0 6px; }
 .feature-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
 
@@ -132,7 +130,7 @@ img { max-width: 100%; display: block; }
   "url": "https://goonlinepos.com/",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Any (runs in the browser)",
-  "description": "A free point-of-sale that runs entirely in the browser. No signup, no login, nothing to install — add products, ring up sales, and print receipts with your own company details.",
+  "description": "A free point-of-sale that runs entirely in the browser. No signup, no login, nothing to install — add products, ring up sales, print receipts with your own company details, and back up or restore all your data anytime.",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
 </script>
@@ -235,6 +233,11 @@ img { max-width: 100%; display: block; }
 <h3>Sales history export</h3>
 <p>Download a two-tab Excel report of every sale and every item sold, whenever you need your own records.</p>
 </div>
+<div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"></path><polyline points="8 11 12 15 16 11"></polyline><path d="M20 21H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h2.5"></path><path d="M17.5 13H20a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"></path></svg></div>
+<h3>Full backup & restore</h3>
+<p>Since everything lives in your browser, download a complete backup anytime from Settings → Backup — products, sales, logo, and all — and restore it instantly if you ever need to.</p>
+</div>
 </div>
 </section>
 
@@ -247,7 +250,7 @@ img { max-width: 100%; display: block; }
 </details>
 <details>
 <summary>Where is my data stored?</summary>
-<p>Everything — products, sales history, your logo, and settings — is saved locally in your own browser. Nothing is sent to a server. That also means clearing your browser's site data will erase it, so download your sales report regularly as a backup.</p>
+<p>Everything — products, sales history, your logo, and settings — is saved locally in your own browser. Nothing is sent to a server. That also means clearing your browser's site data will erase it, so use Settings → Backup to download a full backup regularly. If anything's ever lost, restoring that same file brings everything back exactly as it was.</p>
 </details>
 <details>
 <summary>Will it work with my printer?</summary>
@@ -275,8 +278,6 @@ img { max-width: 100%; display: block; }
 </div>
 
 <footer class="site-footer">
-<a href="app.html">Open the App</a>
-<span>·</span>
 <a href="about.html">About</a>
 <span>·</span>
 <a href="privacy.html">Privacy Policy</a>
