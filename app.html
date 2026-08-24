@@ -1794,6 +1794,7 @@ function addProductToCart(product) {
 
 let barcodeReader = null;
 let scannerControls = null;
+let scannerStream = null;
 let scannerMessageTimeout = null;
 let lastScannedCode = "";
 let lastScanTime = 0;
@@ -1817,9 +1818,21 @@ async function openScanner() {
   }
 
   try {
-    barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
     const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
-    await barcodeReader.decodeFromConstraints(constraints, "scannerVideo", function(result, err, controls) {
+    scannerStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+    const track = scannerStream.getVideoTracks()[0];
+    if (track && typeof track.getCapabilities === "function") {
+      try {
+        const caps = track.getCapabilities();
+        if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
+          await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+        }
+      } catch (focusErr) {}
+    }
+
+    barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
+    await barcodeReader.decodeFromStream(scannerStream, "scannerVideo", function(result, err, controls) {
       if (controls) scannerControls = controls;
       if (result) handleScannedCode(result.getText());
     });
@@ -1837,6 +1850,10 @@ function closeScanner() {
   if (barcodeReader) {
     try { barcodeReader.reset(); } catch (e) {}
     barcodeReader = null;
+  }
+  if (scannerStream) {
+    try { scannerStream.getTracks().forEach(function(t) { t.stop(); }); } catch (e) {}
+    scannerStream = null;
   }
 }
 
