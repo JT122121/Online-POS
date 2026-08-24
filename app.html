@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open the App | GoOnlinePOS.com – Go Online POS</title>
+<title>Open the App | GoOnlinePOS.com – Free Online POS</title>
 <meta name="description" content="The live GoOnlinePOS.com app. Add products, ring up sales, and print receipts with your own company details — right in your browser, no signup required.">
 <meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
 <meta name="robots" content="index, follow">
@@ -1794,7 +1794,6 @@ function addProductToCart(product) {
 
 let barcodeReader = null;
 let scannerControls = null;
-let scannerStream = null;
 let scannerMessageTimeout = null;
 let lastScannedCode = "";
 let lastScanTime = 0;
@@ -1818,24 +1817,35 @@ async function openScanner() {
   }
 
   try {
-    const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
-    scannerStream = await navigator.mediaDevices.getUserMedia(constraints);
-
-    const track = scannerStream.getVideoTracks()[0];
-    if (track && typeof track.getCapabilities === "function") {
-      try {
-        const caps = track.getCapabilities();
-        if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
-          await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
-        }
-      } catch (focusErr) {}
-    }
-
     barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
-    await barcodeReader.decodeFromStream(scannerStream, "scannerVideo", function(result, err, controls) {
+
+    let deviceId;
+    try {
+      const devices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
+      if (devices && devices.length) {
+        const backCam = devices.find(function(d) { return /back|rear|environment/i.test(d.label); });
+        deviceId = backCam ? backCam.deviceId : devices[devices.length - 1].deviceId;
+      }
+    } catch (deviceErr) {}
+
+    await barcodeReader.decodeFromVideoDevice(deviceId, "scannerVideo", function(result, err, controls) {
       if (controls) scannerControls = controls;
       if (result) handleScannedCode(result.getText());
     });
+
+    setTimeout(function() {
+      const videoEl = document.getElementById("scannerVideo");
+      const stream = videoEl && videoEl.srcObject;
+      const track = stream && stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
+      if (track && typeof track.getCapabilities === "function") {
+        try {
+          const caps = track.getCapabilities();
+          if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
+            track.applyConstraints({ advanced: [{ focusMode: "continuous" }] }).catch(function() {});
+          }
+        } catch (focusErr) {}
+      }
+    }, 400);
   } catch (err) {
     showScannerMessage(tr("scannerNoCamera"), "error");
   }
@@ -1851,9 +1861,10 @@ function closeScanner() {
     try { barcodeReader.reset(); } catch (e) {}
     barcodeReader = null;
   }
-  if (scannerStream) {
-    try { scannerStream.getTracks().forEach(function(t) { t.stop(); }); } catch (e) {}
-    scannerStream = null;
+  const videoEl = document.getElementById("scannerVideo");
+  if (videoEl && videoEl.srcObject) {
+    try { videoEl.srcObject.getTracks().forEach(function(t) { t.stop(); }); } catch (e) {}
+    videoEl.srcObject = null;
   }
 }
 
