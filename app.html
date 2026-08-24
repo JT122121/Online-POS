@@ -1,27 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7WMTJVB3VY');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Online POS – No Signup, No Login | GoOnlinePOS.com</title>
-<meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login, nothing to install. Full backup and restore keeps your data safe. See how it works, then start ringing up sales in seconds.">
-<meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app, pos data backup, pos backup and restore">
-<meta name="robots" content="index, follow">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open the App | GoOnlinePOS.com – Go Online POS</title>
+<title>Open the App | GoOnlinePOS.com – Free Online POS</title>
 <meta name="description" content="The live GoOnlinePOS.com app. Add products, ring up sales, and print receipts with your own company details — right in your browser, no signup required.">
 <meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
 <meta name="robots" content="index, follow">
@@ -173,6 +155,14 @@ textarea { min-height: 90px; resize: vertical; line-height: 1.45; font-family: v
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
 
 .info { margin-top: 9px; padding: 10px 11px; background: #f6f5f0; border-radius: var(--radius-sm); color: var(--ink-soft); font-size: 11.5px; line-height: 1.45; display: flex; justify-content: space-between; gap: 8px; }
+
+.payment-row { display: flex; gap: 6px; margin-top: 8px; }
+.payment-row select { flex: 1.3; }
+.payment-row input { flex: 1; }
+.payment-row-remove { flex-shrink: 0; width: 38px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--danger-tint); color: var(--danger); font-size: 16px; }
+.payment-row-remove:hover { background: #f5d5d0; }
+.split-payment-btn { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 9px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-top: 8px; }
+.split-payment-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
 
 .checkout-actions { display: flex; gap: 8px; margin-top: 18px; }
 .checkout-actions button { flex: 1; padding: 13px; border: 0; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; }
@@ -429,9 +419,12 @@ gtag('config', 'G-XXXXXXXXXX');
     <label id="customerNameLabel">Customer Name</label>
     <input id="customerName" placeholder="Optional" oninput="updateReceipt()">
     <label id="paymentMethodLabel">Payment Method</label>
-    <select id="paymentMethod" onchange="updateReceipt()"></select>
-    <label id="amountReceivedLabel">Amount Received</label>
-    <input id="amountReceived" type="number" min="0" step="0.01" value="0" oninput="updateReceipt()">
+    <div id="paymentRowsContainer"></div>
+    <button type="button" class="split-payment-btn" onclick="addPaymentRow()" id="addPaymentRowBtn">+ Split Payment</button>
+    <div class="info">
+      <span id="totalEnteredLabel">Entered:</span>
+      <strong id="totalEnteredPreview">BD 0.000</strong>
+    </div>
     <div class="info">
       <span id="changeLabelInfo">Change:</span>
       <strong id="changePreview">BD 0.000</strong>
@@ -472,7 +465,7 @@ gtag('config', 'G-XXXXXXXXXX');
 <div class="dashed-line"></div>
 <div class="receipt-total-line receipt-grand-total"><span id="totalLabel">TOTAL</span><span id="grandTotal">BD 0.000</span></div>
 <div class="receipt-payment">
-<div class="receipt-payment-line"><span id="receiptPaymentMethodLabel">Payment</span><span id="receiptPaymentMethod">Cash</span></div>
+<div id="receiptPaymentLines"></div>
 <div class="receipt-payment-line"><span id="receiptReceivedLabel">Received</span><span id="receiptReceived">BD 0.000</span></div>
 <div class="receipt-payment-line"><span id="receiptChangeLabel">Change</span><span id="receiptChange">BD 0.000</span></div>
 </div>
@@ -741,7 +734,7 @@ en: {
   scannerNoCamera: "Couldn't access the camera. Check permissions and try again.", scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
   customItemLink: "+ Add a custom item", proceedLabel: "Proceed to Payment",
   checkoutHeading: "Payment", totalDueLabel: "Total Due",
-  paymentMethodLabel: "Payment Method", amountReceivedLabel: "Amount Received", changeLabelInfo: "Change:",
+  paymentMethodLabel: "Payment Method", totalEnteredLabel: "Entered:", changeLabelInfo: "Change:", addPaymentRowBtn: "+ Split Payment",
   backToCatalogBtn: "← Back", completeBtnLabel: "Complete & Print",
   cartEmptyAlert: "Add at least one item before proceeding to payment.",
   receiptEmptyHint: "Cart is empty — add products from the left panel.",
@@ -799,7 +792,7 @@ ar: {
   scannerNoCamera: "تعذّر الوصول إلى الكاميرا. تحقق من الأذونات وحاول مرة أخرى.", scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
   customItemLink: "+ إضافة صنف مخصص", proceedLabel: "المتابعة إلى الدفع",
   checkoutHeading: "الدفع", totalDueLabel: "المبلغ المستحق",
-  paymentMethodLabel: "طريقة الدفع", amountReceivedLabel: "المبلغ المستلم", changeLabelInfo: "الباقي:",
+  paymentMethodLabel: "طريقة الدفع", totalEnteredLabel: "المُدخل:", changeLabelInfo: "الباقي:", addPaymentRowBtn: "+ تقسيم الدفع",
   backToCatalogBtn: "← رجوع", completeBtnLabel: "إتمام وطباعة",
   cartEmptyAlert: "أضف صنفاً واحداً على الأقل قبل المتابعة إلى الدفع.",
   receiptEmptyHint: "السلة فارغة — أضف منتجات من اللوحة اليسرى.",
@@ -852,7 +845,7 @@ fil: {
   appTitle: "Online POS", appSubtitle: "Walang sign up, walang login. Buksan lang ang tab at magbenta na.",
   catalogHeading: "Mga Produkto", allCategory: "Lahat",
   checkoutHeading: "Bayad", totalDueLabel: "Kabuuang Babayaran",
-  paymentMethodLabel: "Paraan ng Pagbabayad", amountReceivedLabel: "Natanggap na Halaga", changeLabelInfo: "Sukli:",
+  paymentMethodLabel: "Paraan ng Pagbabayad", totalEnteredLabel: "Ipinasok:", changeLabelInfo: "Sukli:", addPaymentRowBtn: "+ Hatiin ang Bayad",
   storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
@@ -902,7 +895,7 @@ hi: {
   appTitle: "ऑनलाइन पीओएस", appSubtitle: "कोई साइनअप नहीं, कोई लॉगिन नहीं। टैब खोलें और बिक्री शुरू करें।",
   catalogHeading: "उत्पाद", allCategory: "सभी",
   checkoutHeading: "भुगतान", totalDueLabel: "कुल देय राशि",
-  paymentMethodLabel: "भुगतान का तरीका", amountReceivedLabel: "प्राप्त राशि", changeLabelInfo: "बाकी राशि:",
+  paymentMethodLabel: "भुगतान का तरीका", totalEnteredLabel: "दर्ज राशि:", changeLabelInfo: "बाकी राशि:", addPaymentRowBtn: "+ भुगतान विभाजित करें",
   storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
@@ -952,7 +945,7 @@ es: {
   appTitle: "POS en Línea", appSubtitle: "Sin registro, sin inicio de sesión. Abre la pestaña y empieza a vender.",
   catalogHeading: "Productos", allCategory: "Todos",
   checkoutHeading: "Pago", totalDueLabel: "Total a Pagar",
-  paymentMethodLabel: "Método de Pago", amountReceivedLabel: "Monto Recibido", changeLabelInfo: "Cambio:",
+  paymentMethodLabel: "Método de Pago", totalEnteredLabel: "Ingresado:", changeLabelInfo: "Cambio:", addPaymentRowBtn: "+ Dividir Pago",
   storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
@@ -1002,7 +995,7 @@ th: {
   appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ไม่ต้องสมัคร ไม่ต้องล็อกอิน เปิดแท็บแล้วเริ่มขายได้เลย",
   catalogHeading: "สินค้า", allCategory: "ทั้งหมด",
   checkoutHeading: "การชำระเงิน", totalDueLabel: "ยอดที่ต้องชำระ",
-  paymentMethodLabel: "วิธีการชำระเงิน", amountReceivedLabel: "จำนวนเงินที่รับ", changeLabelInfo: "เงินทอน:",
+  paymentMethodLabel: "วิธีการชำระเงิน", totalEnteredLabel: "จำนวนที่กรอก:", changeLabelInfo: "เงินทอน:", addPaymentRowBtn: "+ แยกการชำระเงิน",
   storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
@@ -1075,9 +1068,8 @@ function amountStep() {
   return d === 0 ? "1" : "0." + "0".repeat(d - 1) + "1";
 }
 function handleDecimalPlacesChange() {
-  const step = amountStep();
-  document.getElementById("amountReceived").step = step;
-  document.getElementById("newProductPrice").step = step;
+  document.getElementById("newProductPrice").step = amountStep();
+  renderPaymentRows();
   updateReceipt();
 }
 function currentLang() { return document.getElementById("language").value; }
@@ -1136,9 +1128,7 @@ async function loadSettings() {
     } catch (e) {  }
   }
   syncScanButtonVisibility();
-  const step = amountStep();
-  document.getElementById("amountReceived").step = step;
-  document.getElementById("newProductPrice").step = step;
+  document.getElementById("newProductPrice").step = amountStep();
 }
 async function saveSettings() {
   const settings = {
@@ -1372,27 +1362,66 @@ function removePaymentMethod(index) {
 }
 function renderPaymentMethods() {
   const list = document.getElementById("paymentMethodsList");
-  const select = document.getElementById("paymentMethod");
-  const prevSelected = select.value;
   list.innerHTML = "";
-  select.innerHTML = "";
   paymentMethods.forEach(function(method, index) {
     const row = document.createElement("div");
     row.className = "payment-item";
     row.innerHTML = "<span>" + escapeHtml(method) + "</span><button onclick=\"removePaymentMethod(" + index + ")\">×</button>";
     list.appendChild(row);
-    const option = document.createElement("option");
-    option.value = method;
-    option.textContent = method;
-    select.appendChild(option);
   });
-  if (paymentMethods.includes(prevSelected)) select.value = prevSelected;
+  renderPaymentRows();
+}
+
+let paymentRows = [{ method: "", amount: 0 }];
+function renderPaymentRows() {
+  const container = document.getElementById("paymentRowsContainer");
+  if (!container) return;
+  const removeBtnLabel = tr("removeButton");
+  container.innerHTML = "";
+  paymentRows.forEach(function(row, index) {
+    if (paymentMethods.length && !paymentMethods.includes(row.method)) {
+      row.method = paymentMethods[0];
+    }
+    const rowEl = document.createElement("div");
+    rowEl.className = "payment-row";
+    let methodOptions = "";
+    paymentMethods.forEach(function(m) {
+      methodOptions += "<option value=\"" + escapeHtml(m) + "\"" + (row.method === m ? " selected" : "") + ">" + escapeHtml(m) + "</option>";
+    });
+    rowEl.innerHTML =
+      "<select class=\"pr-method\">" + methodOptions + "</select>" +
+      "<input class=\"pr-amount\" type=\"number\" min=\"0\" step=\"" + amountStep() + "\" placeholder=\"0.00\" value=\"" + (row.amount ? row.amount : "") + "\">" +
+      (index > 0 ? "<button type=\"button\" class=\"payment-row-remove\" title=\"" + escapeAttr(removeBtnLabel) + "\">×</button>" : "");
+    const methodSel = rowEl.querySelector(".pr-method");
+    const amountInput = rowEl.querySelector(".pr-amount");
+    methodSel.addEventListener("change", function() { paymentRows[index].method = methodSel.value; updateTotalsAndHeader(); });
+    amountInput.addEventListener("input", function() { paymentRows[index].amount = Number(amountInput.value) || 0; updateTotalsAndHeader(); });
+    if (index > 0) {
+      rowEl.querySelector(".payment-row-remove").addEventListener("click", function() { removePaymentRow(index); });
+    }
+    container.appendChild(rowEl);
+  });
+}
+function addPaymentRow() {
+  paymentRows.push({ method: paymentMethods[0] || "", amount: 0 });
+  renderPaymentRows();
+  updateTotalsAndHeader();
+}
+function removePaymentRow(index) {
+  if (paymentRows.length <= 1) return;
+  paymentRows.splice(index, 1);
+  renderPaymentRows();
+  updateTotalsAndHeader();
+}
+function totalEntered() {
+  return paymentRows.reduce(function(sum, r) { return sum + (Number(r.amount) || 0); }, 0);
 }
 
 async function startNewSale() {
   currentReceiptNumber = await getNextReceiptNumber();
   cart = [];
-  document.getElementById("amountReceived").value = "0";
+  paymentRows = [{ method: paymentMethods[0] || "", amount: 0 }];
+  renderPaymentRows();
   document.getElementById("customerName").value = "";
   backToCatalog();
   updateReceipt();
@@ -1439,9 +1468,10 @@ async function saveCurrentSaleToHistory() {
     discount: totals.discount,
     tax: totals.tax,
     grandTotal: totals.grandTotal,
-    paymentMethod: val("paymentMethod") || "",
-    amountReceived: Number(val("amountReceived")) || 0,
-    change: Math.max(0, (Number(val("amountReceived")) || 0) - totals.grandTotal),
+    paymentMethod: paymentRows.filter(function(r) { return Number(r.amount) > 0; }).map(function(r) { return r.method; }).join(" + ") || (paymentMethods[0] || ""),
+    payments: paymentRows.filter(function(r) { return Number(r.amount) > 0; }).map(function(r) { return { method: r.method, amount: Number(r.amount) || 0 }; }),
+    amountReceived: totalEntered(),
+    change: Math.max(0, totalEntered() - totals.grandTotal),
     itemCount: cartTotalCount(),
     items: cart.map(function(c) {
       return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0) };
@@ -1549,6 +1579,13 @@ function toggleSalesSummary() {
   }
 }
 
+function saleMethodBreakdown(s) {
+  if (s.payments && s.payments.length) {
+    return s.payments.map(function(p) { return { method: p.method || tr("summaryNoMethodLabel"), amount: Number(p.amount) || 0 }; });
+  }
+  return [{ method: s.paymentMethod || tr("summaryNoMethodLabel"), amount: Number(s.grandTotal) || 0 }];
+}
+
 function renderSalesSummary() {
   const dateInput = document.getElementById("summaryDateInput");
   if (!dateInput.value) dateInput.value = todayDateInputValue();
@@ -1560,8 +1597,9 @@ function renderSalesSummary() {
   const totalsByMethod = {};
   let overallTotal = 0;
   salesForDate.forEach(function(s) {
-    const method = s.paymentMethod || tr("summaryNoMethodLabel");
-    totalsByMethod[method] = (totalsByMethod[method] || 0) + (Number(s.grandTotal) || 0);
+    saleMethodBreakdown(s).forEach(function(p) {
+      totalsByMethod[p.method] = (totalsByMethod[p.method] || 0) + p.amount;
+    });
     overallTotal += Number(s.grandTotal) || 0;
   });
 
@@ -1598,8 +1636,9 @@ function renderSalesSummary() {
       const cashierKey = s.cashierName || tr("summaryNoCashierLabel");
       if (!byCashier[cashierKey]) byCashier[cashierKey] = { total: 0, methods: {} };
       byCashier[cashierKey].total += Number(s.grandTotal) || 0;
-      const method = s.paymentMethod || tr("summaryNoMethodLabel");
-      byCashier[cashierKey].methods[method] = (byCashier[cashierKey].methods[method] || 0) + (Number(s.grandTotal) || 0);
+      saleMethodBreakdown(s).forEach(function(p) {
+        byCashier[cashierKey].methods[p.method] = (byCashier[cashierKey].methods[p.method] || 0) + p.amount;
+      });
     });
 
     Object.keys(byCashier).sort().forEach(function(cashierKey) {
@@ -2333,20 +2372,30 @@ function updateTotalsAndHeader() {
   });
 
   const totals = computeTotals();
-  const paymentMethod = val("paymentMethod") || "";
-  const received = Number(val("amountReceived")) || 0;
+  const received = totalEntered();
   let change = received - totals.grandTotal;
   if (change < 0) change = 0;
+
+  const paymentLinesEl = document.getElementById("receiptPaymentLines");
+  paymentLinesEl.innerHTML = "";
+  const activeRows = paymentRows.filter(function(r) { return Number(r.amount) > 0; });
+  const rowsToShow = activeRows.length ? activeRows : (paymentRows[0] ? [paymentRows[0]] : []);
+  rowsToShow.forEach(function(r) {
+    const line = document.createElement("div");
+    line.className = "receipt-payment-line";
+    line.innerHTML = "<span>" + escapeHtml(r.method || "") + "</span><span>" + escapeHtml(symbol) + " " + (Number(r.amount) || 0).toFixed(decimalsNow()) + "</span>";
+    paymentLinesEl.appendChild(line);
+  });
 
   document.getElementById("receiptTaxLabel").textContent = taxName + " (" + taxRate + "%)";
   document.getElementById("subtotal").textContent = symbol + " " + totals.subtotal.toFixed(decimalsNow());
   document.getElementById("discountAmount").textContent = symbol + " " + totals.discount.toFixed(decimalsNow());
   document.getElementById("taxAmount").textContent = symbol + " " + totals.tax.toFixed(decimalsNow());
   document.getElementById("grandTotal").textContent = symbol + " " + totals.grandTotal.toFixed(decimalsNow());
-  document.getElementById("receiptPaymentMethod").textContent = paymentMethod;
   document.getElementById("receiptReceived").textContent = symbol + " " + received.toFixed(decimalsNow());
   document.getElementById("receiptChange").textContent = symbol + " " + change.toFixed(decimalsNow());
   document.getElementById("changePreview").textContent = symbol + " " + change.toFixed(decimalsNow());
+  document.getElementById("totalEnteredPreview").textContent = symbol + " " + received.toFixed(decimalsNow());
   document.getElementById("receiptFooter1").textContent = val("footer1");
   document.getElementById("receiptFooter2").textContent = val("footer2");
 
@@ -2373,7 +2422,7 @@ function changeLanguage() {
     settingsButtonLabel: "settingsButtonLabel", printButtonLabel: "printButtonLabel", newSaleButtonLabel: "newSaleButtonLabel",
     catalogHeading: "catalogHeading", customItemLink: "customItemLink", proceedLabel: "proceedLabel",
     checkoutHeading: "checkoutHeading", totalDueLabel: "totalDueLabel",
-    paymentMethodLabel: "paymentMethodLabel", amountReceivedLabel: "amountReceivedLabel", changeLabelInfo: "changeLabelInfo",
+    paymentMethodLabel: "paymentMethodLabel", totalEnteredLabel: "totalEnteredLabel", changeLabelInfo: "changeLabelInfo", addPaymentRowBtn: "addPaymentRowBtn",
     backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
@@ -2402,7 +2451,7 @@ function changeLanguage() {
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     scannerTitle: "scannerTitle", scannerHint: "scannerHint",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
-    receiptPaymentMethodLabel: "paymentShort", receiptReceivedLabel: "received", receiptChangeLabel: "change",
+    receiptReceivedLabel: "received", receiptChangeLabel: "change",
     receiptNumberText: "receiptNo", receiptDateLabel: "date"
   };
 
