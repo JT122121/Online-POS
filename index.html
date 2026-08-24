@@ -75,6 +75,31 @@ img { max-width: 100%; display: block; }
 .about-teaser a { font-size: 13.5px; font-weight: 700; color: var(--accent-dark); text-decoration: none; }
 .about-teaser a:hover { text-decoration: underline; }
 
+.app-preview { max-width: 780px; margin: 0 auto 8px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 18px; display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
+.ap-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
+.ap-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.ap-panel-title { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; }
+.ap-cart-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+.ap-search { border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; font-size: 11.5px; color: var(--muted); background: #fbfbf8; margin-bottom: 9px; }
+.ap-chips { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
+.ap-chip { font-size: 9.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
+.ap-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.ap-product { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 7px; margin-bottom: 6px; background: #fbfbf8; }
+.ap-product.highlighted { background: var(--accent-tint); border-color: #bfe0cf; }
+.ap-product-name { font-size: 11px; font-weight: 700; display: block; margin-bottom: 3px; }
+.ap-product-meta { display: flex; gap: 6px; align-items: center; font-size: 9.5px; color: var(--ink-soft); flex-wrap: wrap; }
+.ap-product-cat { border: 1px solid var(--line); border-radius: 3px; padding: 1px 4px; font-size: 8.5px; text-transform: uppercase; color: var(--muted); }
+.ap-in-cart { color: var(--accent-dark); font-weight: 700; }
+.ap-add-btn { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.ap-receipt { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 18px 16px; font-family: var(--font-mono); }
+.ap-receipt-store { font-family: var(--font-display); font-weight: 700; font-size: 14px; text-align: center; margin-bottom: 4px; }
+.ap-receipt-details { font-size: 9px; color: var(--ink-soft); text-align: center; line-height: 1.5; margin-bottom: 10px; }
+.ap-receipt-meta { font-size: 9.5px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+.ap-receipt-line { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-soft); margin: 5px 0; }
+.ap-receipt-line em { font-style: normal; color: var(--muted); }
+.ap-receipt-dash { border-top: 1px dashed var(--line); margin: 8px 0; }
+.ap-receipt-total { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+
 .section { padding: 44px 0; }
 .section-title { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -.01em; margin: 0 0 8px; }
 .section-sub { text-align: center; color: var(--muted); font-size: 14.5px; max-width: 480px; margin: 0 auto 36px; line-height: 1.6; }
@@ -116,6 +141,7 @@ img { max-width: 100%; display: block; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .hero h2 { font-size: 32px; }
+  .app-preview { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
   .steps { grid-template-columns: 1fr; }
@@ -156,6 +182,41 @@ img { max-width: 100%; display: block; }
 <a class="btn-secondary" href="#how-it-works">See how it works</a>
 </div>
 </section>
+
+<div class="app-preview">
+<div class="ap-panel">
+<div class="ap-panel-head">
+<span class="ap-panel-title">Products</span>
+<span class="ap-cart-badge">2 in cart</span>
+</div>
+<div class="ap-search">Search products...</div>
+<div class="ap-chips"><span class="ap-chip active">All</span><span class="ap-chip">Bakery</span><span class="ap-chip">Beverages</span></div>
+<div class="ap-product">
+<div><span class="ap-product-name">Coca Cola 330ml</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.50</span></div></div>
+<span class="ap-add-btn">+</span>
+</div>
+<div class="ap-product">
+<div><span class="ap-product-name">White Bread</span><div class="ap-product-meta"><span class="ap-product-cat">Bakery</span><span>$3.25</span></div></div>
+<span class="ap-add-btn">+</span>
+</div>
+<div class="ap-product highlighted">
+<div><span class="ap-product-name">Bottled Water 1.5L</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.00</span><span class="ap-in-cart">In cart: 1</span></div></div>
+<span class="ap-add-btn">+</span>
+</div>
+</div>
+<div class="ap-receipt">
+<div class="ap-receipt-store">GoOnlinePOS.com</div>
+<div class="ap-receipt-details">123 Main Street, Suite 4<br>Austin, TX 78701, USA<br>Tel: +1 (555) 123-4567 · info@goonlinepos.com</div>
+<div class="ap-receipt-meta">Receipt No: 000048</div>
+<div class="ap-receipt-line"><span>Coca Cola 330ml <em>× 2</em></span><span>$3.00</span></div>
+<div class="ap-receipt-line"><span>Bottled Water 1.5L</span><span>$1.00</span></div>
+<div class="ap-receipt-dash"></div>
+<div class="ap-receipt-line"><span>Subtotal</span><span>$4.00</span></div>
+<div class="ap-receipt-line"><span>Tax (10%)</span><span>$0.40</span></div>
+<div class="ap-receipt-dash"></div>
+<div class="ap-receipt-total"><span>TOTAL</span><span>$4.40</span></div>
+</div>
+</div>
 
 </div>
 
