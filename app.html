@@ -1818,7 +1818,7 @@ async function openScanner() {
 
   try {
     barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
-    const constraints = { video: { facingMode: "environment" } };
+    const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
     await barcodeReader.decodeFromConstraints(constraints, "scannerVideo", function(result, err, controls) {
       if (controls) scannerControls = controls;
       if (result) handleScannedCode(result.getText());
