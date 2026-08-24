@@ -76,10 +76,24 @@ img { max-width: 100%; display: block; }
 .about-teaser a:hover { text-decoration: underline; }
 
 .app-preview { max-width: 780px; margin: 0 auto 8px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 18px; display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
+.ap-toolbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; }
+.ap-cashier-select { font-size: 10.5px; font-weight: 600; color: var(--ink); background: #fbfbf8; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; }
+.ap-cashier-select em { font-style: normal; color: var(--muted); }
+.ap-toolbar-spacer { flex: 1; }
+.ap-toolbar-icon { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.ap-toolbar-btn { font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 6px 10px; }
 .ap-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
 .ap-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .ap-panel-title { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; }
 .ap-cart-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+.ap-scanner-toggle { display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 600; color: var(--ink); background: #fbfbf8; border: 1px solid var(--line-soft); border-radius: 7px; padding: 6px 9px; margin-bottom: 9px; }
+.ap-toggle-pill { width: 26px; height: 15px; border-radius: 999px; background: var(--line); position: relative; }
+.ap-toggle-pill em { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff; top: 2px; left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.ap-toggle-pill.on { background: var(--accent); }
+.ap-toggle-pill.on em { left: 13px; }
+.ap-search-row { display: flex; gap: 6px; margin-bottom: 9px; }
+.ap-search-row .ap-search { flex: 1; margin-bottom: 0; }
+.ap-scan-btn { flex-shrink: 0; width: 32px; border: 1px solid var(--line); border-radius: 7px; background: #fbfbf8; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 .ap-search { border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; font-size: 11.5px; color: var(--muted); background: #fbfbf8; margin-bottom: 9px; }
 .ap-chips { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
 .ap-chip { font-size: 9.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
@@ -184,12 +198,24 @@ img { max-width: 100%; display: block; }
 </section>
 
 <div class="app-preview">
+<div class="ap-toolbar">
+<span class="ap-cashier-select">Cashier: Alex <em>▾</em></span>
+<span class="ap-toolbar-spacer"></span>
+<span class="ap-toolbar-icon">⚙</span>
+<span class="ap-toolbar-icon">📊</span>
+<span class="ap-toolbar-icon">🖨</span>
+<span class="ap-toolbar-btn">+ New Sale</span>
+</div>
 <div class="ap-panel">
 <div class="ap-panel-head">
 <span class="ap-panel-title">Products</span>
 <span class="ap-cart-badge">2 in cart</span>
 </div>
+<div class="ap-scanner-toggle"><span>📷 Barcode Scanner</span><span class="ap-toggle-pill on"><em></em></span></div>
+<div class="ap-search-row">
 <div class="ap-search">Search products...</div>
+<span class="ap-scan-btn">📷</span>
+</div>
 <div class="ap-chips"><span class="ap-chip active">All</span><span class="ap-chip">Bakery</span><span class="ap-chip">Beverages</span></div>
 <div class="ap-product">
 <div><span class="ap-product-name">Coca Cola 330ml</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.50</span></div></div>
@@ -207,7 +233,7 @@ img { max-width: 100%; display: block; }
 <div class="ap-receipt">
 <div class="ap-receipt-store">GoOnlinePOS.com</div>
 <div class="ap-receipt-details">123 Main Street, Suite 4<br>Austin, TX 78701, USA<br>Tel: +1 (555) 123-4567 · info@goonlinepos.com</div>
-<div class="ap-receipt-meta">Receipt No: 000048</div>
+<div class="ap-receipt-meta">Receipt No: 000048<br>Cashier: Alex</div>
 <div class="ap-receipt-line"><span>Coca Cola 330ml <em>× 2</em></span><span>$3.00</span></div>
 <div class="ap-receipt-line"><span>Bottled Water 1.5L</span><span>$1.00</span></div>
 <div class="ap-receipt-dash"></div>
