@@ -252,6 +252,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .inv-row.low-stock { background: var(--danger-tint); border-color: #f0c2bd; }
 .inv-row-info { min-width: 0; flex: 1; }
 .inv-row-name { font-weight: 600; font-size: 12.5px; overflow-wrap: break-word; }
+.inv-row-sub { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
+.inv-row-sku { font-size: 10.5px; color: var(--muted); font-family: var(--font-mono); }
+.inv-row-value { font-size: 10.5px; color: var(--accent-dark); font-weight: 600; font-family: var(--font-mono); }
 .inv-row-cat { font-size: 10.5px; color: var(--muted); }
 .inv-row-stock { flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
 .inv-row-stock label { margin: 0; font-size: 10.5px; color: var(--muted); font-weight: 500; }
@@ -690,7 +693,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <label id="storeNameLabel">Store Name</label>
         <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
-        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Name:
+        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
 Tel: +1  123-4567
 Email: example@goonlinepos.com
 Website: goonlinepos.com</textarea>
@@ -896,7 +899,7 @@ Website: goonlinepos.com</textarea>
 const translations = {
 
 en: {
-  appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
+  appTitle: "Go Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
   settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
@@ -922,7 +925,7 @@ en: {
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
-  inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report",
+  inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
   inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
   inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -995,7 +998,7 @@ ar: {
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
-  inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون",
+  inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
   inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
   inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم",
@@ -1060,7 +1063,7 @@ fil: {
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
-  inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report",
+  inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
   inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
   inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -1125,7 +1128,7 @@ hi: {
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
-  inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें",
+  inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
   inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
   inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम",
@@ -1190,7 +1193,7 @@ es: {
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
-  inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario",
+  inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
   inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
   inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -1255,7 +1258,7 @@ th: {
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
-  inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า",
+  inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
   inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
   inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม",
@@ -2420,12 +2423,14 @@ function exportInventoryToExcel() {
   });
 
   const rows = sorted.map(function(p) {
+    const hasStock = p.stock !== null && p.stock !== undefined;
     return {
       "Category": (p.category || "").trim() || tr("inventoryUncategorized"),
       "Name": p.name,
       "SKU": p.sku || "",
       "Price": Number(p.price).toFixed(decimalsNow()),
-      "Stock": (p.stock === null || p.stock === undefined) ? "" : p.stock
+      "Stock": hasStock ? p.stock : "",
+      "Total Value": hasStock ? (Number(p.stock) * (Number(p.price) || 0)).toFixed(decimalsNow()) : ""
     };
   });
 
@@ -2483,6 +2488,7 @@ function broadcastCustomerScreenOrder() {
   const totals = computeTotals();
   broadcastCustomerScreenState({
     stage: "ordering",
+    lang: currentLang(),
     storeName: val("storeName") || "GoOnlinePOS.com",
     logo: logoDataUrl || "",
     symbol: symbolNow(),
@@ -2499,6 +2505,7 @@ function broadcastCustomerScreenOrder() {
 function broadcastCustomerScreenCompleted(record) {
   broadcastCustomerScreenState({
     stage: "completed",
+    lang: currentLang(),
     storeName: record.storeName || "GoOnlinePOS.com",
     logo: logoDataUrl || "",
     symbol: record.currencySymbol || "$",
@@ -2877,11 +2884,17 @@ function renderInventoryList() {
       const realIndex = products.indexOf(p);
       const hasStock = p.stock !== null && p.stock !== undefined;
       const isLow = hasStock && Number(p.stock) <= 5;
+      const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
+      const symbol = symbolNow();
       const row = document.createElement("div");
       row.className = "inv-row" + (isLow ? " low-stock" : "");
       row.innerHTML =
         "<div class=\"inv-row-info\">" +
           "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
+          "<div class=\"inv-row-sub\">" +
+            (p.sku ? "<span class=\"inv-row-sku\">SKU: " + escapeHtml(p.sku) + "</span>" : "") +
+            (totalValue !== null ? "<span class=\"inv-row-value\">" + escapeHtml(tr("inventoryValueLabel")) + " " + escapeHtml(symbol) + " " + totalValue.toFixed(decimalsNow()) + "</span>" : "") +
+          "</div>" +
         "</div>" +
         "<div class=\"inv-row-stock\">" +
           "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
