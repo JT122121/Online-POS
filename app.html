@@ -368,7 +368,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <img src="favicon.png" alt="">
 </div>
 <div>
-<h1 id="appTitle">Online POS</h1>
+<h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span></h1>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
 </a>
@@ -693,9 +693,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <label id="storeNameLabel">Store Name</label>
         <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
-        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
-Tel: +1  123-4567
-Email: example@goonlinepos.com
+        <textarea id="storeDetails" oninput="updateReceipt()">123 Main Street, Suite 4
+Austin, TX 78701, USA
+Tel: +1 (555) 123-4567
+Email: info@goonlinepos.com
 Website: goonlinepos.com</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
         <label><span id="storeLogoLabel">Company Logo</span> <span class="premium-badge" id="premiumBadgeLogo">Premium</span></label>
@@ -899,7 +900,7 @@ Website: goonlinepos.com</textarea>
 const translations = {
 
 en: {
-  appTitle: "Go Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
+  appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
   settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
@@ -3262,7 +3263,7 @@ function changeLanguage() {
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     inventoryShortcutLabel: "inventoryShortcutLabel", customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
-    premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
+    premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel", premiumBadgeAppTitle: "premiumBadgeLabel",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",
     customerScreenGuideBtnLabel: "customerScreenGuideBtnLabel", customerScreenGuideTitle: "customerScreenGuideTitle",
     guideMethod1Title: "guideMethod1Title", guideMethod2Title: "guideMethod2Title",
