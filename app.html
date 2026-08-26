@@ -9,6 +9,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-7WMTJVB3VY');
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open the App | GoOnlinePOS.com – Free Online POS</title>
@@ -245,6 +246,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .error-text { margin-top: 8px; padding: 9px 10px; background: var(--danger-tint); border: 1px solid #f0c2bd; border-radius: var(--radius-sm); color: var(--danger); font-size: 11.5px; line-height: 1.45; }
 .success-text { margin-top: 8px; padding: 9px 10px; background: var(--accent-tint); border: 1px solid #bfe0cf; border-radius: var(--radius-sm); color: var(--accent-dark); font-size: 11.5px; line-height: 1.45; }
 .inv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; }
+.inv-group-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; margin: 12px 0 6px; font-family: var(--font-display); font-weight: 600; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
+.inv-group-header:first-child { margin-top: 0; }
+.inv-group-count { background: var(--line-soft); color: var(--ink-soft); font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: none; letter-spacing: 0; }
 .inv-row.low-stock { background: var(--danger-tint); border-color: #f0c2bd; }
 .inv-row-info { min-width: 0; flex: 1; }
 .inv-row-name { font-weight: 600; font-size: 12.5px; overflow-wrap: break-word; }
@@ -258,6 +262,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .payment-list { margin-top: 9px; }
 .payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; font-size: 12px; font-weight: 500; }
 .payment-item button { background: #eceae0; border: 0; padding: 4px 8px; border-radius: 5px; color: var(--ink-soft); }
+.mp-name-input { flex-shrink: 0; width: auto; max-width: 130px; border: 1px solid transparent; background: transparent; padding: 3px 5px; font-size: 12px; font-weight: 600; color: var(--ink); border-radius: 5px; }
+.mp-name-input:hover { border-color: var(--line); background: #fff; }
+.mp-name-input:focus { border-color: var(--accent); background: #fff; box-shadow: none; }
+.mp-meta { flex: 1; font-size: 12px; color: var(--ink-soft); overflow-wrap: break-word; }
 .payment-item button:hover { background: var(--danger-tint); color: var(--danger); }
 .csv-actions { display: flex; gap: 8px; margin-top: 9px; }
 .csv-actions button { flex: 1; border: 0; border-radius: var(--radius-sm); color: #fff; padding: 10px; font-size: 12.5px; font-weight: 600; }
@@ -676,6 +684,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
     </div>
     <div class="settings-tab-panel">
+
       <div class="settings-panel-content" id="panel-store">
         <h3 id="storeTitle">Store Information</h3>
         <label id="storeNameLabel">Store Name</label>
@@ -787,6 +796,7 @@ Website: goonlinepos.com</textarea>
         <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
         <div id="inventoryList" class="payment-list" style="margin-top:9px;"></div>
         <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
+        <button type="button" class="small-btn" onclick="exportInventoryToExcel()" id="inventoryExportButton" style="width:100%; margin-top:12px; background:var(--accent);">⬇ <span id="inventoryExportButtonLabel">Download Inventory Report</span></button>
       </div>
 
       <div class="settings-panel-content" id="panel-salesHistory">
@@ -912,6 +922,7 @@ en: {
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
+  inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
   inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
   inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -984,6 +995,7 @@ ar: {
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
+  inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
   inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
   inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم",
@@ -1048,6 +1060,7 @@ fil: {
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
+  inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
   inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
   inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -1112,6 +1125,7 @@ hi: {
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
+  inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
   inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
   inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम",
@@ -1176,6 +1190,7 @@ es: {
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
+  inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
   inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
   inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium",
@@ -1240,6 +1255,7 @@ th: {
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
+  inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
   inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
   inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม",
@@ -2050,10 +2066,12 @@ function openSaleDetail(receiptNumber) {
   renderSaleDetailPayments();
   recomputeSaleDetailTotals();
 
+  document.getElementById("settingsOverlay").classList.add("hidden");
   document.getElementById("saleDetailOverlay").classList.remove("hidden");
 }
 function closeSaleDetail() {
   document.getElementById("saleDetailOverlay").classList.add("hidden");
+  document.getElementById("settingsOverlay").classList.remove("hidden");
   editingSaleRecord = null;
 }
 
@@ -2389,6 +2407,36 @@ function buildSalesExportRows() {
     });
   });
   return { parentRows: parentRows, childRows: childRows };
+}
+
+function exportInventoryToExcel() {
+  if (!products.length) { alert(tr("inventoryExportEmptyAlert")); return; }
+
+  const sorted = products.slice().sort(function(a, b) {
+    const catA = (a.category || "").trim() || tr("inventoryUncategorized");
+    const catB = (b.category || "").trim() || tr("inventoryUncategorized");
+    if (catA !== catB) return catA.localeCompare(catB);
+    return a.name.localeCompare(b.name);
+  });
+
+  const rows = sorted.map(function(p) {
+    return {
+      "Category": (p.category || "").trim() || tr("inventoryUncategorized"),
+      "Name": p.name,
+      "SKU": p.sku || "",
+      "Price": Number(p.price).toFixed(decimalsNow()),
+      "Stock": (p.stock === null || p.stock === undefined) ? "" : p.stock
+    };
+  });
+
+  if (typeof XLSX !== "undefined") {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Inventory");
+    XLSX.writeFile(wb, "inventory-report-" + todayStamp() + ".xlsx");
+    return;
+  }
+
+  downloadTextFile("inventory-report-" + todayStamp() + ".csv", rowsToCsv(rows));
 }
 
 function exportSalesToExcel() {
@@ -2810,23 +2858,38 @@ function renderInventoryList() {
     return p.name.toLowerCase().indexOf(query) !== -1 || (p.category && p.category.toLowerCase().indexOf(query) !== -1);
   });
 
+  const groups = {};
+  const groupOrder = [];
   filtered.forEach(function(p) {
-    const realIndex = products.indexOf(p);
-    const hasStock = p.stock !== null && p.stock !== undefined;
-    const isLow = hasStock && Number(p.stock) <= 5;
-    const row = document.createElement("div");
-    row.className = "inv-row" + (isLow ? " low-stock" : "");
-    row.innerHTML =
-      "<div class=\"inv-row-info\">" +
-        "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
-        (p.category ? "<div class=\"inv-row-cat\">" + escapeHtml(p.category) + "</div>" : "") +
-      "</div>" +
-      "<div class=\"inv-row-stock\">" +
-        "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
-        "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"—\">" +
-      "</div>";
-    row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(realIndex, this.value); });
-    list.appendChild(row);
+    const cat = (p.category || "").trim() || tr("inventoryUncategorized");
+    if (!groups[cat]) { groups[cat] = []; groupOrder.push(cat); }
+    groups[cat].push(p);
+  });
+  groupOrder.sort(function(a, b) { return a.localeCompare(b); });
+
+  groupOrder.forEach(function(cat) {
+    const groupHeader = document.createElement("div");
+    groupHeader.className = "inv-group-header";
+    groupHeader.innerHTML = "<span>" + escapeHtml(cat) + "</span><span class=\"inv-group-count\">" + groups[cat].length + "</span>";
+    list.appendChild(groupHeader);
+
+    groups[cat].forEach(function(p) {
+      const realIndex = products.indexOf(p);
+      const hasStock = p.stock !== null && p.stock !== undefined;
+      const isLow = hasStock && Number(p.stock) <= 5;
+      const row = document.createElement("div");
+      row.className = "inv-row" + (isLow ? " low-stock" : "");
+      row.innerHTML =
+        "<div class=\"inv-row-info\">" +
+          "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
+        "</div>" +
+        "<div class=\"inv-row-stock\">" +
+          "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
+          "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"—\">" +
+        "</div>";
+      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(realIndex, this.value); });
+      list.appendChild(row);
+    });
   });
 }
 
@@ -2834,6 +2897,15 @@ async function handleInventoryStockEdit(index, rawValue) {
   const trimmed = String(rawValue).trim();
   products[index].stock = trimmed === "" ? null : Math.max(0, parseFloat(trimmed) || 0);
   await saveProducts();
+  renderInventoryList();
+}
+
+async function handleProductNameEdit(index, newName) {
+  const trimmed = newName.trim();
+  if (!trimmed) { renderManageProductsList(); return; }
+  products[index].name = trimmed;
+  await saveProducts();
+  renderProductCatalog();
   renderInventoryList();
 }
 
@@ -2851,9 +2923,11 @@ function renderManageProductsList() {
     const row = document.createElement("div");
     row.className = "payment-item";
     row.innerHTML =
-      "<span>" + escapeHtml(p.name) + " — " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
+      "<input class=\"mp-name-input\" type=\"text\" value=\"" + escapeAttr(p.name) + "\">" +
+      "<span class=\"mp-meta\">— " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
       (p.category ? " <span style=\"color:var(--muted);\">(" + escapeHtml(p.category) + ")</span>" : "") + "</span>" +
       "<button onclick=\"removeProduct(" + index + ")\">×</button>";
+    row.querySelector(".mp-name-input").addEventListener("change", function() { handleProductNameEdit(index, this.value); });
     list.appendChild(row);
   });
 }
@@ -3185,7 +3259,7 @@ function changeLanguage() {
     saleDetailDiscountLabel: "saleDetailDiscountLabel", saleDetailPaymentsLabel: "saleDetailPaymentsLabel", saleDetailAddPaymentBtn: "saleDetailAddPaymentBtn",
     saleDetailSubtotalLabel: "saleDetailSubtotalLabel", saleDetailDiscountAmtLabel: "saleDetailDiscountAmtLabel", saleDetailTaxAmtLabel: "saleDetailTaxAmtLabel",
     saleDetailGrandLabel: "saleDetailGrandLabel", saleDetailReceivedLabel: "saleDetailReceivedLabel", saleDetailChangeLabel: "saleDetailChangeLabel",
-    saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel",
+    saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel", inventoryExportButtonLabel: "inventoryExportButtonLabel",
     scannerTitle: "scannerTitle", scannerHint: "scannerHint",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
     receiptReceivedLabel: "received", receiptChangeLabel: "change",
