@@ -9,6 +9,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-7WMTJVB3VY');
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open the App | GoOnlinePOS.com – Free Online POS</title>
@@ -585,12 +586,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <label id="storeNameLabel">Store Name</label>
         <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
-        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address
-Telephone : +1 123-4567
+        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
 Email: example@goonlinepos.com
-Website: goonlinepos.com
-TRN# 123456789          
-        </textarea>
+Website: goonlinepos.com</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
         <label><span id="storeLogoLabel">Company Logo</span> <span class="premium-badge">Premium</span></label>
         <div class="logo-upload-row">
@@ -1990,7 +1988,8 @@ function broadcastCustomerScreenOrder() {
     subtotal: totals.subtotal,
     discount: totals.discount,
     tax: totals.tax,
-    grandTotal: totals.grandTotal
+    grandTotal: totals.grandTotal,
+    payments: (typeof paymentRows !== "undefined" ? paymentRows : []).filter(function(r) { return Number(r.amount) > 0; }).map(function(r) { return { method: r.method, amount: Number(r.amount) || 0 }; })
   });
 }
 
@@ -2002,7 +2001,8 @@ function broadcastCustomerScreenCompleted(record) {
     symbol: record.currencySymbol || "$",
     decimals: decimalsNow(),
     grandTotal: record.grandTotal,
-    change: record.change
+    change: record.change,
+    payments: record.payments || []
   });
 }
 
