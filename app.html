@@ -196,6 +196,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .scanner-body { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; overflow: hidden; }
 .scanner-body video { width: 100%; height: 100%; object-fit: contain; background: #000; }
 .scanner-frame { position: absolute; inset: 16% 10%; border: 3px solid var(--gold); border-radius: 12px; box-shadow: 0 0 0 2000px rgba(0,0,0,.35); pointer-events: none; }
+.scanner-torch-btn { position: absolute; bottom: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 5; }
+.scanner-torch-btn.torch-active { background: var(--gold); }
+.scanner-torch-btn:hover { background: rgba(0,0,0,.7); }
+.scanner-torch-btn.torch-active:hover { background: #cf9631; }
 .scanner-hint { text-align: center; font-size: 13px; color: var(--ink-soft); padding: 14px 18px 6px; margin: 0; }
 .scanner-message { margin: 0 18px 18px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; }
 .scanner-message.success { background: var(--accent-tint); color: var(--accent-dark); }
@@ -531,6 +535,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   <div class="scanner-body">
     <video id="scannerVideo" autoplay playsinline muted></video>
     <div class="scanner-frame"></div>
+    <button type="button" id="scannerTorchBtn" class="scanner-torch-btn hidden" onclick="toggleTorch()" title="Toggle flashlight">🔦</button>
     <canvas id="scannerCanvas" class="hidden"></canvas>
   </div>
   <p id="scannerHint" class="scanner-hint">Point the camera at a product's barcode</p>
@@ -545,6 +550,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
     <button onclick="closeCustomerScreenPanel()">✕</button>
   </div>
   <div style="padding:18px 20px;">
+    <div id="customerScreenLockMsg" class="error-text hidden">🔒 <span id="customerScreenLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.</span></div>
+    <div id="customerScreenUnlockedContent">
     <p id="customerScreenIntro" style="margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.55;">Open this link in a second window, monitor, or tablet facing your customer — it updates live as you ring up a sale.</p>
     <div style="display:flex; gap:8px;">
       <input id="customerScreenUrlInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px;">
@@ -552,6 +559,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
     </div>
     <div id="customerScreenCopiedMsg" class="success-text hidden" style="margin-top:8px;">Copied!</div>
     <button type="button" class="custom-item-link" onclick="openCustomerScreenGuide()" id="customerScreenGuideBtn" style="margin-top:16px;">📖 <span id="customerScreenGuideBtnLabel">Guide Me — How to Set This Up</span></button>
+    </div>
   </div>
 </div>
 </div>
@@ -685,6 +693,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
       <button class="settings-tab-item" data-tab="inventory" onclick="selectSettingsTab('inventory')">📦 <span>Inventory</span></button>
       <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
+      <button class="settings-tab-item" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
     </div>
     <div class="settings-tab-panel">
 
@@ -694,7 +703,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
         <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
-Tel: +1 123-4567
+Tel: +1  123-4567
 Email: example@goonlinepos.com
 Website: goonlinepos.com</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
@@ -710,6 +719,7 @@ Website: goonlinepos.com</textarea>
           </div>
         </div>
         <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.</div>
+        <div id="logoLockMsg" class="error-text hidden">🔒 <span id="logoLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.</span></div>
       </div>
 
       <div class="settings-panel-content" id="panel-document">
@@ -727,6 +737,7 @@ Website: goonlinepos.com</textarea>
         <label><span id="receiptPrefixLabel">Receipt Number Prefix</span> <span class="premium-badge" id="premiumBadgeReceiptPrefix">Premium</span></label>
         <input id="receiptPrefixInput" maxlength="8" placeholder="e.g. INV-" oninput="handleReceiptPrefixEdit(this)">
         <div class="info" id="receiptPrefixInfo" style="display:block;">Combined with the number above — e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.</div>
+        <div id="receiptNumberLockMsg" class="error-text hidden">🔒 <span id="receiptNumberLockMsgText">These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.</span></div>
       </div>
 
       <div class="settings-panel-content" id="panel-tax">
@@ -796,6 +807,7 @@ Website: goonlinepos.com</textarea>
       <div class="settings-panel-content" id="panel-inventory">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><h3 id="inventoryTitle" style="margin:0;">Inventory</h3> <span class="premium-badge" id="premiumBadgeInventory">Premium</span></div>
         <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.</div>
+        <div id="inventoryLockMsg" class="error-text hidden">🔒 <span id="inventoryLockMsgText">Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.</span></div>
         <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
         <div id="inventoryList" class="payment-list" style="margin-top:9px;"></div>
         <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
@@ -887,6 +899,22 @@ Website: goonlinepos.com</textarea>
         <div class="info" id="restoreInfo" style="display:block;">This replaces everything currently saved with what's in the backup file. The page will reload after restoring.</div>
       </div>
 
+      <div class="settings-panel-content" id="panel-premium">
+        <h3 id="premiumPanelTitle">Premium</h3>
+        <div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>
+
+        <div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">✅ <span id="premiumActiveLabel">Premium is active on this device.</span></div>
+
+        <div id="premiumCodeForm">
+          <label id="premiumCodeLabel">Premium Code</label>
+          <div style="display:flex; gap:8px;">
+            <input id="premiumCodeInput" type="text" placeholder="Enter code" style="flex:1;">
+            <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="flex-shrink:0;">Activate</button>
+          </div>
+          <div id="premiumCodeError" class="error-text hidden"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -925,6 +953,12 @@ en: {
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.",
+  premiumActiveLabel: "Premium is active on this device.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "Activate", premiumCodeInvalid: "That code isn't valid. Check it and try again.",
+  logoLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.",
+  receiptNumberLockMsgText: "These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.",
+  inventoryLockMsgText: "Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.",
+  customerScreenLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.",
   inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
   inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
@@ -998,6 +1032,12 @@ ar: {
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
+  premiumTabLabel: "بريميوم", premiumPanelTitle: "بريميوم", premiumPanelInfo: "الميزات التي تحمل شارة بريميوم الذهبية — شعار الشركة، أرقام الإيصالات القابلة للتعديل، بادئة رقم الإيصال، شاشة العميل، والمخزون — تبقى مرئية لكنها مقفلة حتى تفعّل رمزاً. أدخله أدناه لفتحها على هذا الجهاز.",
+  premiumActiveLabel: "بريميوم مفعّل على هذا الجهاز.", premiumCodeLabel: "رمز بريميوم", premiumActivateBtn: "تفعيل", premiumCodeInvalid: "هذا الرمز غير صالح. تحقق منه وحاول مرة أخرى.",
+  logoLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لرفع شعار.",
+  receiptNumberLockMsgText: "هذه ميزات بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتعديل رقم الإيصال والبادئة.",
+  inventoryLockMsgText: "تعديل المخزون وتنزيل التقارير ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتحها. لا يزال بإمكانك تصفح مخزونك أدناه.",
+  customerScreenLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتح شاشة العميل.",
   inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
   inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
@@ -1063,6 +1103,12 @@ fil: {
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Ang mga feature na may gold na Premium badge — Company Logo, na-e-edit na Receipt Number, Receipt Number Prefix, Customer Screen, at Inventory — nananatiling makikita pero naka-lock hanggang i-activate mo ang code. Ilagay ito sa ibaba para i-unlock ang mga ito sa device na ito.",
+  premiumActiveLabel: "Aktibo ang Premium sa device na ito.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "I-activate", premiumCodeInvalid: "Hindi valid ang code na iyon. Suriin at subukan ulit.",
+  logoLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para mag-upload ng logo.",
+  receiptNumberLockMsgText: "Premium features ito. I-activate ang Premium code sa Settings → Premium para i-edit ang receipt number at prefix.",
+  inventoryLockMsgText: "Premium feature ang pag-edit ng stock at pag-download ng report. I-activate ang Premium code sa Settings → Premium para ito ma-unlock. Puwede mo pa ring tingnan ang imbentaryo sa ibaba.",
+  customerScreenLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para i-unlock ang Customer Screen.",
   inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
   inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
@@ -1128,6 +1174,12 @@ hi: {
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
+  premiumTabLabel: "प्रीमियम", premiumPanelTitle: "प्रीमियम", premiumPanelInfo: "सुनहरे प्रीमियम बैज वाली सुविधाएं — कंपनी लोगो, संपादन योग्य रसीद नंबर, रसीद नंबर प्रीफ़िक्स, कस्टमर स्क्रीन, और इन्वेंटरी — तब तक दिखाई देती रहेंगी लेकिन लॉक रहेंगी जब तक आप कोड सक्रिय नहीं करते। इस डिवाइस पर अनलॉक करने के लिए नीचे कोड दर्ज करें।",
+  premiumActiveLabel: "इस डिवाइस पर प्रीमियम सक्रिय है।", premiumCodeLabel: "प्रीमियम कोड", premiumActivateBtn: "सक्रिय करें", premiumCodeInvalid: "वह कोड मान्य नहीं है। जांचें और फिर से प्रयास करें।",
+  logoLockMsgText: "यह एक प्रीमियम सुविधा है। लोगो अपलोड करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
+  receiptNumberLockMsgText: "ये प्रीमियम सुविधाएं हैं। रसीद नंबर और प्रीफ़िक्स संपादित करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
+  inventoryLockMsgText: "स्टॉक संपादित करना और रिपोर्ट डाउनलोड करना एक प्रीमियम सुविधा है। इसे अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें। आप अभी भी नीचे अपनी इन्वेंटरी देख सकते हैं।",
+  customerScreenLockMsgText: "यह एक प्रीमियम सुविधा है। कस्टमर स्क्रीन अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
   inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
@@ -1193,6 +1245,12 @@ es: {
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Las funciones con la insignia dorada Premium — Logo de la Empresa, Números de Recibo editables, Prefijo del Número de Recibo, Pantalla del Cliente e Inventario — permanecen visibles pero bloqueadas hasta que actives un código. Ingrésalo abajo para desbloquearlas en este dispositivo.",
+  premiumActiveLabel: "Premium está activo en este dispositivo.", premiumCodeLabel: "Código Premium", premiumActivateBtn: "Activar", premiumCodeInvalid: "Ese código no es válido. Revísalo e intenta de nuevo.",
+  logoLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para subir un logo.",
+  receiptNumberLockMsgText: "Estas son funciones Premium. Activa un código Premium en Configuración → Premium para editar el número de recibo y el prefijo.",
+  inventoryLockMsgText: "Editar el stock y descargar reportes es una función Premium. Activa un código Premium en Configuración → Premium para desbloquearla. Aún puedes explorar tu inventario abajo.",
+  customerScreenLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para desbloquear la Pantalla del Cliente.",
   inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
   inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
@@ -1258,6 +1316,12 @@ th: {
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
+  premiumTabLabel: "พรีเมียม", premiumPanelTitle: "พรีเมียม", premiumPanelInfo: "ฟีเจอร์ที่มีป้ายพรีเมียมสีทอง — โลโก้บริษัท เลขที่ใบเสร็จที่แก้ไขได้ คำนำหน้าเลขที่ใบเสร็จ หน้าจอลูกค้า และคลังสินค้า — จะยังคงมองเห็นได้แต่ถูกล็อกไว้จนกว่าคุณจะเปิดใช้งานรหัส กรอกรหัสด้านล่างเพื่อปลดล็อกบนอุปกรณ์นี้",
+  premiumActiveLabel: "พรีเมียมเปิดใช้งานอยู่บนอุปกรณ์นี้", premiumCodeLabel: "รหัสพรีเมียม", premiumActivateBtn: "เปิดใช้งาน", premiumCodeInvalid: "รหัสนั้นไม่ถูกต้อง ตรวจสอบแล้วลองอีกครั้ง",
+  logoLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่ออัปโหลดโลโก้",
+  receiptNumberLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อแก้ไขเลขที่ใบเสร็จและคำนำหน้า",
+  inventoryLockMsgText: "การแก้ไขสต็อกและการดาวน์โหลดรายงานเป็นฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อก คุณยังสามารถเรียกดูคลังสินค้าของคุณด้านล่างได้",
+  customerScreenLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อกหน้าจอลูกค้า",
   inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
   inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
@@ -1542,6 +1606,71 @@ async function loadSalesHistory() {
   renderSalesHistoryPanel();
 }
 async function saveSalesHistoryToStorage() { await storageSet("pos-sales-history", JSON.stringify(salesHistory)); }
+const PREMIUM_CODE = "PROMO1";
+let premiumUnlocked = false;
+
+async function loadPremiumStatus() {
+  const raw = await storageGet("pos-premium-unlocked");
+  if (raw === null) {
+    // No status saved yet — PROMO1 is the default, no-expiration code, so start unlocked.
+    premiumUnlocked = true;
+    await storageSet("pos-premium-unlocked", "1");
+  } else {
+    premiumUnlocked = raw === "1";
+  }
+  renderPremiumStatus();
+  applyPremiumLocks();
+}
+async function activatePremiumCode() {
+  const input = document.getElementById("premiumCodeInput");
+  const errorBox = document.getElementById("premiumCodeError");
+  errorBox.classList.add("hidden");
+  const entered = input.value.trim().toUpperCase();
+  if (entered === PREMIUM_CODE) {
+    premiumUnlocked = true;
+    await storageSet("pos-premium-unlocked", "1");
+    input.value = "";
+    renderPremiumStatus();
+    applyPremiumLocks();
+  } else {
+    errorBox.textContent = tr("premiumCodeInvalid");
+    errorBox.classList.remove("hidden");
+  }
+}
+function renderPremiumStatus() {
+  const statusBox = document.getElementById("premiumStatusBox");
+  const form = document.getElementById("premiumCodeForm");
+  if (!statusBox || !form) return;
+  statusBox.classList.toggle("hidden", !premiumUnlocked);
+  form.classList.toggle("hidden", premiumUnlocked);
+}
+function applyPremiumLocks() {
+  const logoInput = document.getElementById("logoFileInput");
+  if (logoInput) logoInput.disabled = !premiumUnlocked;
+  const logoLockMsg = document.getElementById("logoLockMsg");
+  if (logoLockMsg) logoLockMsg.classList.toggle("hidden", premiumUnlocked);
+
+  const receiptNumInput = document.getElementById("receiptNumberInput");
+  const receiptPrefixInput = document.getElementById("receiptPrefixInput");
+  if (receiptNumInput) receiptNumInput.disabled = !premiumUnlocked;
+  if (receiptPrefixInput) receiptPrefixInput.disabled = !premiumUnlocked;
+  const receiptLockMsg = document.getElementById("receiptNumberLockMsg");
+  if (receiptLockMsg) receiptLockMsg.classList.toggle("hidden", premiumUnlocked);
+
+  const invExportBtn = document.getElementById("inventoryExportButton");
+  if (invExportBtn) invExportBtn.disabled = !premiumUnlocked;
+  const invLockMsg = document.getElementById("inventoryLockMsg");
+  if (invLockMsg) invLockMsg.classList.toggle("hidden", premiumUnlocked);
+  document.querySelectorAll(".inv-row-stock input").forEach(function(inp) { inp.disabled = !premiumUnlocked; });
+
+  const csLockMsg = document.getElementById("customerScreenLockMsg");
+  const csContent = document.getElementById("customerScreenUnlockedContent");
+  if (csLockMsg && csContent) {
+    csLockMsg.classList.toggle("hidden", premiumUnlocked);
+    csContent.classList.toggle("hidden", !premiumUnlocked);
+  }
+}
+
 let receiptPrefix = "";
 let receiptCounterValue = 0;
 
@@ -2485,6 +2614,7 @@ function broadcastCustomerScreenState(state) {
 }
 
 function broadcastCustomerScreenOrder() {
+  if (!premiumUnlocked) return;
   const totals = computeTotals();
   broadcastCustomerScreenState({
     stage: "ordering",
@@ -2503,6 +2633,7 @@ function broadcastCustomerScreenOrder() {
 }
 
 function broadcastCustomerScreenCompleted(record) {
+  if (!premiumUnlocked) return;
   broadcastCustomerScreenState({
     stage: "completed",
     lang: currentLang(),
@@ -2524,6 +2655,7 @@ function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
   document.getElementById("customerScreenOverlay").classList.remove("hidden");
+  applyPremiumLocks();
   broadcastCustomerScreenOrder();
 }
 function closeCustomerScreenPanel() {
@@ -2575,6 +2707,9 @@ async function openScanner() {
   overlay.classList.remove("hidden");
   lastScannedCode = "";
   lastScanTime = 0;
+  scannerPollCount = 0;
+  torchOn = false;
+  updateTorchButton();
 
   if (typeof ZXingBrowser === "undefined") {
     showScannerMessage(tr("scannerUnsupported"), "error");
@@ -2586,46 +2721,90 @@ async function openScanner() {
   }
 
   try {
-    const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
+    const constraints = { video: { facingMode: "environment", width: { ideal: 3840 }, height: { ideal: 2160 } } };
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     const videoEl = document.getElementById("scannerVideo");
     videoEl.srcObject = stream;
     await videoEl.play().catch(function() {});
 
     const track = stream.getVideoTracks()[0];
+    applyContinuousFocus(track);
+    setTimeout(function() { applyContinuousFocus(track); }, 400);
+
     if (track && typeof track.getCapabilities === "function") {
       try {
         const caps = track.getCapabilities();
-        if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
-          await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
-        }
-      } catch (focusErr) {}
+        const torchBtn = document.getElementById("scannerTorchBtn");
+        if (caps.torch && torchBtn) torchBtn.classList.remove("hidden");
+        else if (torchBtn) torchBtn.classList.add("hidden");
+      } catch (capsErr) {}
     }
 
     barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
     clearInterval(scannerPollTimer);
-    scannerPollTimer = setInterval(pollScannerFrame, 350);
+    scannerPollTimer = setInterval(pollScannerFrame, 200);
   } catch (err) {
     showScannerMessage(tr("scannerNoCamera"), "error");
   }
 }
 
+function applyContinuousFocus(track) {
+  if (!track || typeof track.getCapabilities !== "function") return;
+  try {
+    const caps = track.getCapabilities();
+    if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
+      track.applyConstraints({ advanced: [{ focusMode: "continuous" }] }).catch(function() {});
+    }
+  } catch (focusErr) {}
+}
+
+let torchOn = false;
+function toggleTorch() {
+  const videoEl = document.getElementById("scannerVideo");
+  if (!videoEl || !videoEl.srcObject) return;
+  const track = videoEl.srcObject.getVideoTracks()[0];
+  if (!track) return;
+  torchOn = !torchOn;
+  track.applyConstraints({ advanced: [{ torch: torchOn }] }).catch(function() { torchOn = !torchOn; });
+  updateTorchButton();
+}
+function updateTorchButton() {
+  const btn = document.getElementById("scannerTorchBtn");
+  if (btn) btn.classList.toggle("torch-active", torchOn);
+}
+
+let scannerPollCount = 0;
 function pollScannerFrame() {
   const videoEl = document.getElementById("scannerVideo");
   if (!videoEl || !videoEl.videoWidth || !barcodeReader) return;
+  scannerPollCount++;
 
   const vw = videoEl.videoWidth;
   const vh = videoEl.videoHeight;
-  const cropX = vw * 0.10;
-  const cropY = vh * 0.16;
-  const cropW = vw * 0.80;
-  const cropH = vh * 0.68;
+  const tight = (scannerPollCount % 3 === 0);
+  const insetX = tight ? 0.22 : 0.10;
+  const insetY = tight ? 0.26 : 0.16;
+  const cropX = vw * insetX;
+  const cropY = vh * insetY;
+  const cropW = vw * (1 - insetX * 2);
+  const cropH = vh * (1 - insetY * 2);
 
   const canvas = document.getElementById("scannerCanvas");
   canvas.width = cropW;
   canvas.height = cropH;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(videoEl, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+
+  try {
+    const imageData = ctx.getImageData(0, 0, cropW, cropH);
+    const px = imageData.data;
+    for (let i = 0; i < px.length; i += 4) {
+      const gray = px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114;
+      const contrasted = Math.max(0, Math.min(255, (gray - 128) * 1.5 + 128));
+      px[i] = px[i + 1] = px[i + 2] = contrasted;
+    }
+    ctx.putImageData(imageData, 0, 0);
+  } catch (enhanceErr) {}
 
   barcodeReader.decodeFromCanvas(canvas).then(function(result) {
     if (result) handleScannedCode(result.getText());
@@ -2904,6 +3083,8 @@ function renderInventoryList() {
       list.appendChild(row);
     });
   });
+
+  document.querySelectorAll(".inv-row-stock input").forEach(function(inp) { inp.disabled = !premiumUnlocked; });
 }
 
 async function handleInventoryStockEdit(index, rawValue) {
@@ -3273,6 +3454,9 @@ function changeLanguage() {
     saleDetailSubtotalLabel: "saleDetailSubtotalLabel", saleDetailDiscountAmtLabel: "saleDetailDiscountAmtLabel", saleDetailTaxAmtLabel: "saleDetailTaxAmtLabel",
     saleDetailGrandLabel: "saleDetailGrandLabel", saleDetailReceivedLabel: "saleDetailReceivedLabel", saleDetailChangeLabel: "saleDetailChangeLabel",
     saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel", inventoryExportButtonLabel: "inventoryExportButtonLabel",
+    premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
+    premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
+    logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     scannerTitle: "scannerTitle", scannerHint: "scannerHint",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
     receiptReceivedLabel: "received", receiptChangeLabel: "change",
@@ -3341,6 +3525,7 @@ async function init() {
   await loadSalesHistory();
   await loadBackupNoticeState();
   await loadReceiptPrefix();
+  await loadPremiumStatus();
   await startFirstSale();
   changePaperSize();
   updateZoom();
