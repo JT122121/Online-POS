@@ -80,6 +80,8 @@ button:active { transform: translateY(1px); }
 #settingsButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #printButton { background: var(--ink); color: #fff; }
 #printButton:hover { background: #263832; }
+#customerScreenButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 
@@ -353,6 +355,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
 <button id="summaryButton" onclick="toggleSalesSummary()">📊 <span id="summaryButtonLabel">Summary</span></button>
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
+<button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
 </div>
 </header>
@@ -511,6 +514,50 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 </div>
 
+<div id="customerScreenOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeCustomerScreenPanel()">
+<div class="scanner-modal" style="max-width:480px;">
+  <div class="scanner-header">
+    <h2 id="customerScreenTitle">Customer Screen</h2>
+    <button onclick="closeCustomerScreenPanel()">✕</button>
+  </div>
+  <div style="padding:18px 20px;">
+    <p id="customerScreenIntro" style="margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.55;">Open this link in a second window, monitor, or tablet facing your customer — it updates live as you ring up a sale.</p>
+    <div style="display:flex; gap:8px;">
+      <input id="customerScreenUrlInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px;">
+      <button type="button" class="small-btn" onclick="copyCustomerScreenUrl()" id="copyCustomerScreenUrlBtn" style="flex-shrink:0;">Copy</button>
+    </div>
+    <div id="customerScreenCopiedMsg" class="success-text hidden" style="margin-top:8px;">Copied!</div>
+    <button type="button" class="custom-item-link" onclick="openCustomerScreenGuide()" id="customerScreenGuideBtn" style="margin-top:16px;">📖 Guide Me — How to Set This Up</button>
+  </div>
+</div>
+</div>
+
+<div id="customerScreenGuideOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeCustomerScreenGuide()">
+<div class="scanner-modal" style="max-width:560px; max-height:85vh; display:flex; flex-direction:column;">
+  <div class="scanner-header">
+    <h2 id="customerScreenGuideTitle">Setting Up the Customer Screen</h2>
+    <button onclick="closeCustomerScreenGuide()">✕</button>
+  </div>
+  <div style="padding:18px 20px; overflow-y:auto;">
+    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod1Title">Method 1 — Second Monitor</h3>
+    <ol style="margin:0 0 20px; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="guideMethod1List">
+      <li>Connect a second monitor to this computer with a cable.</li>
+      <li>Set your display to <strong>"Extend"</strong>, not "Duplicate/Mirror" — on Windows: Display Settings → Multiple displays → Extend. On Mac: Displays → uncheck Mirror Displays.</li>
+      <li>Copy the link above, open it in a new browser window here on this computer.</li>
+      <li>Drag that window onto the second monitor and make it full-screen.</li>
+      <li>Angle the monitor to face your customer.</li>
+    </ol>
+    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod2Title">Method 2 — Tablet or TV (Screen Mirroring)</h3>
+    <p style="font-size:12.5px; color:#6b4f12; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px; padding:10px 12px; margin:0 0 12px; line-height:1.55;" id="guideMethod2Note">Important: the tablet needs to <strong>mirror</strong> this computer's screen. Opening the link directly in the tablet's own browser won't show live updates — it only syncs between windows on this same computer.</p>
+    <ol style="margin:0; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="guideMethod2List">
+      <li>First, follow Method 1 above to open the Customer Screen in its own window here on this computer.</li>
+      <li>Mirror that window to your tablet or TV — Windows: press Win+K, or Settings → System → Display → "Connect to a wireless display." Mac: Control Center → Screen Mirroring (AirPlay).</li>
+      <li>Make the mirrored window full-screen. Your tablet or TV now shows a live copy of it.</li>
+    </ol>
+  </div>
+</div>
+</div>
+
 <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
 <div class="settings-modal">
   <div class="settings-modal-header">
@@ -539,11 +586,11 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <label id="storeNameLabel">Store Name</label>
         <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
-        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
-Telephone: +1 12345-6789
+        <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address
+Telephone : +1 123-4567
 Email: example@goonlinepos.com
 Website: goonlinepos.com
-TAX#:           
+TRN# 123456789          
         </textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
         <label><span id="storeLogoLabel">Company Logo</span> <span class="premium-badge">Premium</span></label>
@@ -1551,6 +1598,7 @@ async function saveCurrentSaleToHistory() {
     payment_type: record.paymentMethod || "",
     items: record.items.map(function(it) { return { item_name: it.name, price: it.price, quantity: it.qty }; })
   });
+  broadcastCustomerScreenCompleted(record);
 }
 
 function saleDateKey(dateTimeStr) {
@@ -1921,6 +1969,73 @@ function updateDate() {
 function findCartIndexByNamePrice(name, price) {
   return cart.findIndex(function(c) { return c.name === name && Math.abs(c.price - price) < 0.0005; });
 }
+let customerScreenChannel = null;
+try { customerScreenChannel = new BroadcastChannel("goonlinepos-customer-screen"); } catch (e) { customerScreenChannel = null; }
+
+function broadcastCustomerScreenState(state) {
+  try { localStorage.setItem("goonlinepos-customer-screen-state", JSON.stringify(state)); } catch (e) {}
+  if (customerScreenChannel) {
+    try { customerScreenChannel.postMessage(state); } catch (e) {}
+  }
+}
+
+function broadcastCustomerScreenOrder() {
+  const totals = computeTotals();
+  broadcastCustomerScreenState({
+    stage: "ordering",
+    storeName: val("storeName") || "GoOnlinePOS.com",
+    logo: logoDataUrl || "",
+    symbol: symbolNow(),
+    decimals: decimalsNow(),
+    items: cart.map(function(c) { return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0 }; }),
+    subtotal: totals.subtotal,
+    discount: totals.discount,
+    tax: totals.tax,
+    grandTotal: totals.grandTotal
+  });
+}
+
+function broadcastCustomerScreenCompleted(record) {
+  broadcastCustomerScreenState({
+    stage: "completed",
+    storeName: record.storeName || "GoOnlinePOS.com",
+    logo: logoDataUrl || "",
+    symbol: record.currencySymbol || "$",
+    decimals: decimalsNow(),
+    grandTotal: record.grandTotal,
+    change: record.change
+  });
+}
+
+function customerScreenUrl() {
+  return location.origin + location.pathname.replace(/[^/]*$/, "") + "customer.html";
+}
+
+function openCustomerScreenPanel() {
+  document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
+  document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
+  document.getElementById("customerScreenOverlay").classList.remove("hidden");
+  broadcastCustomerScreenOrder();
+}
+function closeCustomerScreenPanel() {
+  document.getElementById("customerScreenOverlay").classList.add("hidden");
+}
+function copyCustomerScreenUrl() {
+  const input = document.getElementById("customerScreenUrlInput");
+  input.select();
+  navigator.clipboard.writeText(input.value).then(function() {
+    const msg = document.getElementById("customerScreenCopiedMsg");
+    msg.classList.remove("hidden");
+    setTimeout(function() { msg.classList.add("hidden"); }, 2000);
+  }).catch(function() {});
+}
+function openCustomerScreenGuide() {
+  document.getElementById("customerScreenGuideOverlay").classList.remove("hidden");
+}
+function closeCustomerScreenGuide() {
+  document.getElementById("customerScreenGuideOverlay").classList.add("hidden");
+}
+
 function trackEvent(name, params) {
   if (typeof gtag === "function") {
     try { gtag("event", name, params || {}); } catch (e) {}
@@ -2503,6 +2618,7 @@ function updateTotalsAndHeader() {
 
   renderProductCatalog();
   saveSettings();
+  broadcastCustomerScreenOrder();
 }
 
 function updateReceipt() {
