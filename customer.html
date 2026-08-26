@@ -56,6 +56,11 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 .cs-grand-label { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
 .cs-grand-amount { font-family: var(--font-mono); font-weight: 700; font-size: 34px; color: var(--accent-dark); }
 
+.cs-payment-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; color: var(--ink); margin: 6px 0; }
+.cs-payment-row span:last-child { font-family: var(--font-mono); }
+.cs-payment-row-done { display: flex; justify-content: space-between; font-size: 22px; font-weight: 700; color: var(--accent-dark); margin: 8px 0; }
+.cs-payment-row-done span:last-child { font-family: var(--font-mono); }
+
 .cs-thankyou { text-align: center; max-width: 460px; }
 .cs-thankyou .icon { width: 88px; height: 88px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; font-size: 44px; margin: 0 auto 20px; }
 .cs-thankyou h2 { font-family: var(--font-display); font-weight: 700; font-size: 30px; margin: 0 0 14px; }
@@ -91,12 +96,15 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 <div class="cs-total-row hidden" id="csTaxRow"><span>Tax</span><span id="csTax">$0.00</span></div>
 <div class="cs-grand-row"><span class="cs-grand-label">Total</span><span class="cs-grand-amount" id="csGrandTotal">$0.00</span></div>
 </div>
+<div id="csPaymentsBox" class="cs-totals hidden" style="margin-top:14px;">
+<div id="csPaymentsList"></div>
+</div>
 </div>
 
 <div id="csThankYou" class="cs-thankyou hidden">
 <div class="icon">✓</div>
 <h2>Thank you!</h2>
-<div class="amount-paid" id="csPaidAmount">$0.00</div>
+<div id="csPaymentsListDone" style="margin-bottom:14px;"></div>
 <div class="change-line" id="csChangeLine"></div>
 </div>
 
@@ -145,7 +153,24 @@ function render(state) {
     thankYou.classList.remove("hidden");
     var symbol = state.symbol || "$";
     var d = (typeof state.decimals === "number") ? state.decimals : 2;
-    document.getElementById("csPaidAmount").textContent = symbol + " " + Number(state.grandTotal || 0).toFixed(d);
+
+    var doneList = document.getElementById("csPaymentsListDone");
+    doneList.innerHTML = "";
+    var donePayments = state.payments || [];
+    if (donePayments.length) {
+      donePayments.forEach(function(p) {
+        var row = document.createElement("div");
+        row.className = "cs-payment-row-done";
+        row.innerHTML = "<span>" + esc(p.method || "Payment") + "</span><span>" + esc(symbol) + " " + Number(p.amount || 0).toFixed(d) + "</span>";
+        doneList.appendChild(row);
+      });
+    } else {
+      var fallbackRow = document.createElement("div");
+      fallbackRow.className = "cs-payment-row-done";
+      fallbackRow.innerHTML = "<span>Total Paid</span><span>" + esc(symbol) + " " + Number(state.grandTotal || 0).toFixed(d) + "</span>";
+      doneList.appendChild(fallbackRow);
+    }
+
     var changeLine = document.getElementById("csChangeLine");
     var change = Number(state.change || 0);
     if (change > 0) {
@@ -202,6 +227,22 @@ function render(state) {
   }
 
   document.getElementById("csGrandTotal").textContent = symbol2 + " " + Number(state.grandTotal || 0).toFixed(d2);
+
+  var paymentsBox = document.getElementById("csPaymentsBox");
+  var paymentsList = document.getElementById("csPaymentsList");
+  var payments = state.payments || [];
+  if (payments.length) {
+    paymentsBox.classList.remove("hidden");
+    paymentsList.innerHTML = "";
+    payments.forEach(function(p) {
+      var row = document.createElement("div");
+      row.className = "cs-payment-row";
+      row.innerHTML = "<span>" + esc(p.method || "Payment") + "</span><span>" + esc(symbol2) + " " + Number(p.amount || 0).toFixed(d2) + "</span>";
+      paymentsList.appendChild(row);
+    });
+  } else {
+    paymentsBox.classList.add("hidden");
+  }
 }
 
 function loadInitialState() {
