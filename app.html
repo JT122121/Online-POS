@@ -1000,10 +1000,12 @@ Website: goonlinepos.com</textarea>
 
         <div id="premiumCodeForm">
           <label id="premiumCodeLabel">Premium Code</label>
-          <div style="display:flex; gap:8px;">
-            <input id="premiumCodeInput" type="text" placeholder="Enter code" style="flex:1;">
-            <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="flex-shrink:0;">Activate</button>
-          </div>
+          <select id="premiumCodeSelect" onchange="handlePremiumCodeSelectChange()" style="width:100%; margin-bottom:8px;">
+            <!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START --><option value="PROMO1" id="premiumCodeDefaultOption">PROMO1 (default)</option><!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:END -->
+            <option value="__other__" id="premiumCodeOtherOption">Enter a different code…</option>
+          </select>
+          <input id="premiumCodeInput" type="text" placeholder="Enter code" class="hidden" style="width:100%; margin-bottom:8px;">
+          <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="width:100%;">Activate</button>
           <div id="premiumCodeError" class="error-text hidden"></div>
         </div>
       </div>
@@ -1084,6 +1086,7 @@ en: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.",
   premiumActiveLabel: "Premium is active on this device.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "Activate", premiumCodeInvalid: "That code isn't valid. Check it and try again.",
   premiumCodeSeatLimit: "This code has reached its device limit. Contact us for help.", premiumCodeNetworkError: "Couldn't reach the activation server. Check your connection and try again.", premiumValidityLabel: "Valid until:",
+  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Enter a different code…",
   logoLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.",
   receiptNumberLockMsgText: "These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.",
   inventoryLockMsgText: "Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.",
@@ -1172,6 +1175,7 @@ ar: {
   premiumTabLabel: "بريميوم", premiumPanelTitle: "بريميوم", premiumPanelInfo: "الميزات التي تحمل شارة بريميوم الذهبية — شعار الشركة، أرقام الإيصالات القابلة للتعديل، بادئة رقم الإيصال، شاشة العميل، والمخزون — تبقى مرئية لكنها مقفلة حتى تفعّل رمزاً. أدخله أدناه لفتحها على هذا الجهاز.",
   premiumActiveLabel: "بريميوم مفعّل على هذا الجهاز.", premiumCodeLabel: "رمز بريميوم", premiumActivateBtn: "تفعيل", premiumCodeInvalid: "هذا الرمز غير صالح. تحقق منه وحاول مرة أخرى.",
   premiumCodeSeatLimit: "وصل هذا الرمز إلى الحد الأقصى لعدد الأجهزة. تواصل معنا للمساعدة.", premiumCodeNetworkError: "تعذّر الوصول إلى خادم التفعيل. تحقق من اتصالك وحاول مرة أخرى.", premiumValidityLabel: "صالح حتى:",
+  premiumCodeDefaultLabel: "افتراضي", premiumCodeOtherOption: "إدخال رمز مختلف…",
   logoLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لرفع شعار.",
   receiptNumberLockMsgText: "هذه ميزات بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتعديل رقم الإيصال والبادئة.",
   inventoryLockMsgText: "تعديل المخزون وتنزيل التقارير ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتحها. لا يزال بإمكانك تصفح مخزونك أدناه.",
@@ -1252,6 +1256,7 @@ fil: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Ang mga feature na may gold na Premium badge — Company Logo, na-e-edit na Receipt Number, Receipt Number Prefix, Customer Screen, at Inventory — nananatiling makikita pero naka-lock hanggang i-activate mo ang code. Ilagay ito sa ibaba para i-unlock ang mga ito sa device na ito.",
   premiumActiveLabel: "Aktibo ang Premium sa device na ito.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "I-activate", premiumCodeInvalid: "Hindi valid ang code na iyon. Suriin at subukan ulit.",
   premiumCodeSeatLimit: "Naabot na ng code na ito ang limitasyon sa bilang ng device. Makipag-ugnayan sa amin para sa tulong.", premiumCodeNetworkError: "Hindi maabot ang activation server. Tingnan ang iyong koneksyon at subukan ulit.", premiumValidityLabel: "Valid hanggang:",
+  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Maglagay ng ibang code…",
   logoLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para mag-upload ng logo.",
   receiptNumberLockMsgText: "Premium features ito. I-activate ang Premium code sa Settings → Premium para i-edit ang receipt number at prefix.",
   inventoryLockMsgText: "Premium feature ang pag-edit ng stock at pag-download ng report. I-activate ang Premium code sa Settings → Premium para ito ma-unlock. Puwede mo pa ring tingnan ang imbentaryo sa ibaba.",
@@ -1332,6 +1337,7 @@ hi: {
   premiumTabLabel: "प्रीमियम", premiumPanelTitle: "प्रीमियम", premiumPanelInfo: "सुनहरे प्रीमियम बैज वाली सुविधाएं — कंपनी लोगो, संपादन योग्य रसीद नंबर, रसीद नंबर प्रीफ़िक्स, कस्टमर स्क्रीन, और इन्वेंटरी — तब तक दिखाई देती रहेंगी लेकिन लॉक रहेंगी जब तक आप कोड सक्रिय नहीं करते। इस डिवाइस पर अनलॉक करने के लिए नीचे कोड दर्ज करें।",
   premiumActiveLabel: "इस डिवाइस पर प्रीमियम सक्रिय है।", premiumCodeLabel: "प्रीमियम कोड", premiumActivateBtn: "सक्रिय करें", premiumCodeInvalid: "वह कोड मान्य नहीं है। जांचें और फिर से प्रयास करें।",
   premiumCodeSeatLimit: "इस कोड ने डिवाइस की सीमा पूरी कर ली है। सहायता के लिए हमसे संपर्क करें।", premiumCodeNetworkError: "एक्टिवेशन सर्वर तक नहीं पहुंचा जा सका। अपना कनेक्शन जांचें और फिर से प्रयास करें।", premiumValidityLabel: "इस तक मान्य:",
+  premiumCodeDefaultLabel: "डिफ़ॉल्ट", premiumCodeOtherOption: "एक अलग कोड दर्ज करें…",
   logoLockMsgText: "यह एक प्रीमियम सुविधा है। लोगो अपलोड करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   receiptNumberLockMsgText: "ये प्रीमियम सुविधाएं हैं। रसीद नंबर और प्रीफ़िक्स संपादित करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   inventoryLockMsgText: "स्टॉक संपादित करना और रिपोर्ट डाउनलोड करना एक प्रीमियम सुविधा है। इसे अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें। आप अभी भी नीचे अपनी इन्वेंटरी देख सकते हैं।",
@@ -1412,6 +1418,7 @@ es: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Las funciones con la insignia dorada Premium — Logo de la Empresa, Números de Recibo editables, Prefijo del Número de Recibo, Pantalla del Cliente e Inventario — permanecen visibles pero bloqueadas hasta que actives un código. Ingrésalo abajo para desbloquearlas en este dispositivo.",
   premiumActiveLabel: "Premium está activo en este dispositivo.", premiumCodeLabel: "Código Premium", premiumActivateBtn: "Activar", premiumCodeInvalid: "Ese código no es válido. Revísalo e intenta de nuevo.",
   premiumCodeSeatLimit: "Este código alcanzó su límite de dispositivos. Contáctanos para obtener ayuda.", premiumCodeNetworkError: "No se pudo conectar con el servidor de activación. Revisa tu conexión e inténtalo de nuevo.", premiumValidityLabel: "Válido hasta:",
+  premiumCodeDefaultLabel: "predeterminado", premiumCodeOtherOption: "Ingresar un código diferente…",
   logoLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para subir un logo.",
   receiptNumberLockMsgText: "Estas son funciones Premium. Activa un código Premium en Configuración → Premium para editar el número de recibo y el prefijo.",
   inventoryLockMsgText: "Editar el stock y descargar reportes es una función Premium. Activa un código Premium en Configuración → Premium para desbloquearla. Aún puedes explorar tu inventario abajo.",
@@ -1492,6 +1499,7 @@ th: {
   premiumTabLabel: "พรีเมียม", premiumPanelTitle: "พรีเมียม", premiumPanelInfo: "ฟีเจอร์ที่มีป้ายพรีเมียมสีทอง — โลโก้บริษัท เลขที่ใบเสร็จที่แก้ไขได้ คำนำหน้าเลขที่ใบเสร็จ หน้าจอลูกค้า และคลังสินค้า — จะยังคงมองเห็นได้แต่ถูกล็อกไว้จนกว่าคุณจะเปิดใช้งานรหัส กรอกรหัสด้านล่างเพื่อปลดล็อกบนอุปกรณ์นี้",
   premiumActiveLabel: "พรีเมียมเปิดใช้งานอยู่บนอุปกรณ์นี้", premiumCodeLabel: "รหัสพรีเมียม", premiumActivateBtn: "เปิดใช้งาน", premiumCodeInvalid: "รหัสนั้นไม่ถูกต้อง ตรวจสอบแล้วลองอีกครั้ง",
   premiumCodeSeatLimit: "รหัสนี้ถึงขีดจำกัดจำนวนอุปกรณ์แล้ว ติดต่อเราเพื่อขอความช่วยเหลือ", premiumCodeNetworkError: "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์เปิดใช้งานได้ ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง", premiumValidityLabel: "ใช้ได้ถึง:",
+  premiumCodeDefaultLabel: "ค่าเริ่มต้น", premiumCodeOtherOption: "ป้อนรหัสอื่น…",
   logoLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่ออัปโหลดโลโก้",
   receiptNumberLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อแก้ไขเลขที่ใบเสร็จและคำนำหน้า",
   inventoryLockMsgText: "การแก้ไขสต็อกและการดาวน์โหลดรายงานเป็นฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อก คุณยังสามารถเรียกดูคลังสินค้าของคุณด้านล่างได้",
@@ -1801,6 +1809,38 @@ async function loadPremiumStatus() {
   /* OFFLINE-STRIP:HEARTBEAT:END */
 }
 
+// Shared by both the online and offline builds — reads whichever of the
+// dropdown/custom-input the user is using, and applies a successful
+// unlock to local storage. What counts as a *valid* code differs between
+// builds (see the OFFLINE-SWAP:PREMIUM-ACTIVATION block below), but how a
+// valid one gets applied locally doesn't.
+function handlePremiumCodeSelectChange() {
+  const select = document.getElementById("premiumCodeSelect");
+  const input = document.getElementById("premiumCodeInput");
+  const isOther = select.value === "__other__";
+  input.classList.toggle("hidden", !isOther);
+  if (isOther) input.focus();
+}
+
+function getEnteredPremiumCode() {
+  const select = document.getElementById("premiumCodeSelect");
+  if (select && select.value !== "__other__") return select.value;
+  const input = document.getElementById("premiumCodeInput");
+  return input ? input.value.trim().toUpperCase() : "";
+}
+
+async function unlockPremiumLocally(code, validity) {
+  premiumUnlocked = true;
+  await storageSet("pos-premium-unlocked", "1");
+  await storageSet("pos-premium-code-used", code);
+  await storageSet("pos-premium-validity", validity || "");
+  const input = document.getElementById("premiumCodeInput");
+  if (input) input.value = "";
+  renderPremiumStatus();
+  renderPremiumValidity();
+  applyPremiumLocks();
+}
+
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:START */
 // Codes live in a Google Sheet, not in this file — validated through a small
 // Google Apps Script Web App deployed on top of that sheet (Apps Script is a
@@ -1832,26 +1872,29 @@ async function checkPremiumCode(code) {
   return res.json();
 }
 
+const DEFAULT_PREMIUM_CODE = "PROMO1";
+
 async function activatePremiumCode() {
-  const input = document.getElementById("premiumCodeInput");
   const errorBox = document.getElementById("premiumCodeError");
   const activateBtn = document.getElementById("premiumActivateBtn");
   errorBox.classList.add("hidden");
-  const entered = input.value.trim().toUpperCase();
+  const entered = getEnteredPremiumCode();
   if (!entered) { errorBox.textContent = tr("premiumCodeInvalid"); errorBox.classList.remove("hidden"); return; }
+
+  // PROMO1 is a permanent local default — it always works, with no network
+  // call at all, so it can never fail with a "server unreachable" error and
+  // doesn't depend on the Google Sheet / Apps Script being reachable or even
+  // configured yet. Anything else goes through the real sheet-backed check.
+  if (entered === DEFAULT_PREMIUM_CODE) {
+    await unlockPremiumLocally(entered, "");
+    return;
+  }
 
   activateBtn.disabled = true;
   try {
     const result = await checkPremiumCode(entered);
     if (result && result.ok) {
-      premiumUnlocked = true;
-      await storageSet("pos-premium-unlocked", "1");
-      await storageSet("pos-premium-code-used", entered);
-      await storageSet("pos-premium-validity", result.validity || "");
-      input.value = "";
-      renderPremiumStatus();
-      renderPremiumValidity();
-      applyPremiumLocks();
+      await unlockPremiumLocally(entered, result.validity || "");
     } else if (result && result.reason === "seat_limit") {
       errorBox.textContent = tr("premiumCodeSeatLimit");
       errorBox.classList.remove("hidden");
@@ -2926,16 +2969,11 @@ function buildOfflineAppHtml(html) {
   // required being Premium online, so this is just carrying that over.
   const offlineActivationJs = [
     'async function activatePremiumCode() {',
-    '  const input = document.getElementById("premiumCodeInput");',
     '  const errorBox = document.getElementById("premiumCodeError");',
     '  errorBox.classList.add("hidden");',
-    '  const entered = input.value.trim().toUpperCase();',
+    '  const entered = getEnteredPremiumCode();',
     '  if (entered === "' + OFFLINE_PREMIUM_CODE + '") {',
-    '    premiumUnlocked = true;',
-    '    await storageSet("pos-premium-unlocked", "1");',
-    '    input.value = "";',
-    '    renderPremiumStatus();',
-    '    applyPremiumLocks();',
+    '    await unlockPremiumLocally(entered, "");',
     '  } else {',
     '    errorBox.textContent = tr("premiumCodeInvalid");',
     '    errorBox.classList.remove("hidden");',
@@ -2944,6 +2982,12 @@ function buildOfflineAppHtml(html) {
   ].join("\n");
   const activationRe = /\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:START \*\/[\s\S]*?\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:END \*\//;
   html = activationRe.test(html) ? html.replace(activationRe, offlineActivationJs) : (console.warn("Offline package: premium-activation marker not found"), html);
+
+  // The dropdown's default option should offer the offline copy's own code,
+  // not the live site's PROMO1.
+  const defaultOptionRe = /<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START -->[\s\S]*?<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:END -->/;
+  const offlineDefaultOption = '<option value="' + OFFLINE_PREMIUM_CODE + '" id="premiumCodeDefaultOption">' + OFFLINE_PREMIUM_CODE + '</option>';
+  html = defaultOptionRe.test(html) ? html.replace(defaultOptionRe, offlineDefaultOption) : (console.warn("Offline package: default-code-option marker not found"), html);
 
   // Strip this whole download-building machinery out of the offline copy too —
   // it has nothing to download from once it's already the offline copy.
@@ -3927,6 +3971,13 @@ function changeLanguage() {
   if (offlineAgree) offlineAgree.innerHTML = tr("offlineAgreeLabel");
   const offlineProgress = document.getElementById("offlineDownloadProgress");
   if (offlineProgress) offlineProgress.textContent = tr("offlineDownloadPreparing");
+
+  // Reads .value rather than hardcoding a code, so this works whether it's
+  // showing the live site's default (PROMO1) or the offline package's own.
+  const defaultCodeOption = document.getElementById("premiumCodeDefaultOption");
+  if (defaultCodeOption) defaultCodeOption.textContent = defaultCodeOption.value + " (" + tr("premiumCodeDefaultLabel") + ")";
+  const otherCodeOption = document.getElementById("premiumCodeOtherOption");
+  if (otherCodeOption) otherCodeOption.textContent = tr("premiumCodeOtherOption");
 
   const dt = document.getElementById("documentType");
   if (dt) {

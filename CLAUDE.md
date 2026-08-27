@@ -132,6 +132,24 @@ edits directly, not in this file. Full setup/schema/deployment steps are
 in `premium-validation/README.md` and `premium-validation/AppsScript.gs`;
 short version:
 
+- **`DEFAULT_PREMIUM_CODE` ("PROMO1") is a permanent local fallback that
+  never touches the network** — `activatePremiumCode()` checks for it
+  before calling out anywhere, so it always works even if
+  `PREMIUM_VALIDATION_URL` is unreachable, misconfigured, or still the
+  placeholder. Everything else (real sheet-issued codes) goes through the
+  Apps Script and is subject to the seat limit below; PROMO1 deliberately
+  is not. `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
+  `unlockPremiumLocally()` are shared with the offline build (they live
+  outside the `PREMIUM-ACTIVATION` swap block) — only *which* code counts
+  as valid, and whether checking one touches the network, differs
+  per-build.
+- Settings → Premium is a `<select id="premiumCodeSelect">` defaulting to
+  PROMO1 (offline build: its own `OFFLINE_PREMIUM_CODE`, swapped in via
+  the `<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START/END -->` marker so the
+  dropdown never advertises the wrong code for the build), with an
+  "Enter a different code…" option that reveals `#premiumCodeInput` for
+  anything else — added so a user who's forgotten the exact code text can
+  just pick the default instead of mistyping it.
 - `PREMIUM_VALIDATION_URL` (near the top of the marked block) is a
   placeholder — **must be replaced with your deployed Apps Script's `/exec`
   URL** before this works. It's fine for this URL to be public (it's a
@@ -167,7 +185,11 @@ short version:
   reload, and the Apps Script's own seat-accounting logic (`findCode`,
   `checkOrClaimSeat`) is unit-tested in isolation against mocked Sheets
   objects (seat cap, rolling-window expiry, a returning device always
-  reclaiming its own seat, independent pools per code).
+  reclaiming its own seat, independent pools per code). Separately
+  confirmed PROMO1 unlocks with the validation URL pointed at an address
+  nothing is listening on and network requests to it actively blocked —
+  zero calls made, confirming the local-fallback path never touches the
+  network at all.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
