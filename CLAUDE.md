@@ -105,6 +105,12 @@ zero network calls.
   cleared (never re-locked automatically). How a code gets *accepted* is
   now two entirely different mechanisms depending on build — see
   "Premium code validation" and "Download Offline POS" below.
+  `applyPremiumLocks()` also calls `renderAppTitleBadge()`, which reflects
+  actual status in the header — `#premiumBadgeAppTitle` reads "Premium"
+  (gold `.premium-badge`) only once really unlocked, "Basic" (gray
+  `.basic-badge`) otherwise; it used to always read "Premium" regardless
+  of status. `changeLanguage()` also calls it directly, so it re-translates
+  on a language switch without needing a status change.
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
