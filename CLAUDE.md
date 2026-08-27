@@ -284,11 +284,14 @@ short version:
 - **"Buy Premium Code"** — a `.small-btn` (`#buyPremiumBtn`) under the
   code-entry form in Settings → Premium opens a small info modal
   (`#buyPremiumOverlay`, `openBuyPremiumModal()`/`closeBuyPremiumModal()`)
-  showing the price ($9.99 USD, one-time), three bullet features (no
-  expiration, up to 5 active browsers, non-refundable), and a line
-  linking out to `contact.html` to actually buy — this repo has no
-  payment processing, purchasing is handled manually by the site owner
-  via that contact form. Purely informational; doesn't touch
+  that leads with **why** — a "Why go Premium?" bullet list of the
+  actual gated features (company logo, editable receipt numbers/prefix,
+  customer screen, inventory tracking with export, the downloadable
+  offline version) — before the price ($9.99 USD, one-time), three
+  terms bullets (no expiration, up to 5 active browsers, non-refundable),
+  and a line linking out to `contact.html` to actually buy — this repo
+  has no payment processing, purchasing is handled manually by the site
+  owner via that contact form. Purely informational; doesn't touch
   `activatePremiumCode()` or any validation logic. The whole feature
   (button + modal + its two JS functions) lives inside its own
   `OFFLINE-STRIP:BUY-PREMIUM-BUTTON`/`BUY-PREMIUM-MODAL`/`BUY-PREMIUM-JS`
