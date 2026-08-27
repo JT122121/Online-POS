@@ -30,8 +30,10 @@ almost entirely through the GitHub web UI, not a local dev workflow.
 
 ## `app.html` — architecture
 
-Client-only, no server, no `fetch`/API calls anywhere. All persistence is
-local to the browser.
+Client-only, no server. All persistence is local to the browser. The one
+exception is Premium code activation, which calls out to a Google Apps
+Script — see "Premium code validation" below; everything else still has
+zero network calls.
 
 - **Storage abstraction** (`hasArtifactStorage`, `storageGet`/`storageSet`):
   prefers `window.storage.get/set` if present (an injected host API — this
@@ -91,17 +93,18 @@ local to the browser.
   a second window/extended monitor or OS-level screen mirroring on the
   *same computer* — not a genuinely separate device — and the in-app guide
   (`openCustomerScreenGuide`) says this explicitly.
-- **"Premium" gating:** a client-side-only paywall.
-  `PREMIUM_CODE = "PROMO1"` is hardcoded in the page source, and
-  `loadPremiumStatus()` **auto-unlocks premium by default** the first
-  time a browser has no saved status (comment in code: "PROMO1 is the
-  default, no-expiration code, so start unlocked"). `applyPremiumLocks()`
-  just toggles `disabled`/hidden classes on DOM elements (logo upload,
-  receipt number/prefix editing, inventory stock editing/export, customer
-  screen, downloading the offline package). This is UI-level gating only,
-  not a real entitlement check — worth keeping in mind before treating it
-  as a security boundary. The downloadable offline copy runs this same
-  mechanism with different defaults — see "Download Offline POS" below.
+- **"Premium" gating:** `premiumUnlocked` gates the same set of features
+  it always has (logo upload, receipt number/prefix editing, inventory
+  stock editing/export, customer screen, downloading the offline
+  package) via `applyPremiumLocks()`, which just toggles `disabled`/
+  hidden classes on DOM elements — UI-level gating, not a real
+  entitlement check. There is **no auto-unlock** — `loadPremiumStatus()`
+  reads the stored `pos-premium-unlocked` flag as-is, so a fresh browser
+  starts locked and stays that way until a code is activated; once
+  activated it stays unlocked locally until that browser's site data is
+  cleared (never re-locked automatically). How a code gets *accepted* is
+  now two entirely different mechanisms depending on build — see
+  "Premium code validation" and "Download Offline POS" below.
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
@@ -118,6 +121,53 @@ registry (`vendor/LICENSES.txt` has versions/licenses/attribution).
 dependency. `customer.html` needs none of them. `jszip.min.js` is used
 only by the "Download Offline POS" feature below; the other two are also
 what gets pulled into the generated offline package.
+
+## Premium code validation (live site only)
+
+Entering a code in Settings → Premium calls out to a Google Apps Script
+Web App (`activatePremiumCode()`, inside the `/* OFFLINE-SWAP:
+PREMIUM-ACTIVATION:START/END */` marked block) instead of comparing
+against a hardcoded string — codes live in a Google Sheet the site owner
+edits directly, not in this file. Full setup/schema/deployment steps are
+in `premium-validation/README.md` and `premium-validation/AppsScript.gs`;
+short version:
+
+- `PREMIUM_VALIDATION_URL` (near the top of the marked block) is a
+  placeholder — **must be replaced with your deployed Apps Script's `/exec`
+  URL** before this works. It's fine for this URL to be public (it's a
+  validation proxy, not the spreadsheet) — the actual sheet ID/URL never
+  appears anywhere in this repo or in `app.html`; the Apps Script reaches
+  its bound sheet via `SpreadsheetApp.getActiveSpreadsheet()`.
+- Each browser gets a random, persisted `pos-device-id`
+  (`getDeviceId()`). A code is capped at `MAX_SEATS` (5) simultaneously
+  active devices, on a `SEAT_WINDOW_DAYS` (30-day) rolling window enforced
+  server-side in the Apps Script — a device that stops checking in for
+  that long silently frees its seat. This exists to blunt one purchased
+  code being shared/leaked indefinitely, not to build real license
+  management.
+- The sheet's Validity column is returned and shown to the user
+  ("Valid until: …" — `renderPremiumValidity()`, `pos-premium-validity`
+  storage key) but is **informational only, never enforced**: codes don't
+  expire, and once accepted on a browser it stays unlocked locally
+  (`pos-premium-unlocked`) until that browser's storage is cleared — this
+  endpoint is never consulted to decide whether to lock someone back out.
+  `heartbeatPremiumCode()` pings it in the background on load purely to
+  keep an already-active seat "warm" (refresh `LastSeen` server-side);
+  its result — success, failure, or unreachable — is deliberately never
+  used to change local unlock state.
+- Failure modes are split three ways in the UI: unknown code
+  (`premiumCodeInvalid`), code found but at its device cap
+  (`premiumCodeSeatLimit`), and the endpoint being unreachable
+  (`premiumCodeNetworkError` — this is the one that fires if
+  `PREMIUM_VALIDATION_URL` is still the placeholder).
+- Verified against a mock endpoint standing in for the real Apps Script
+  (can't deploy the real one without the site owner's Google account):
+  fresh browser starts locked, invalid/seat-limited/unreachable each show
+  their own message, a valid code unlocks + shows validity + survives a
+  reload, and the Apps Script's own seat-accounting logic (`findCode`,
+  `checkOrClaimSeat`) is unit-tested in isolation against mocked Sheets
+  objects (seat cap, rolling-window expiry, a returning device always
+  reclaiming its own seat, independent pools per code).
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
@@ -148,20 +198,24 @@ remember. The whole mechanism lives inside `app.html` itself:
   if a marker goes missing, but nothing hard-fails). Currently stripped:
   Google Fonts links, the cookie-consent/GA/AdSense bootstrap + banner,
   the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
-  download section/modal HTML, and the whole download-building JS block
+  download section/modal HTML, the Premium heartbeat call site (no
+  network calls offline), and the whole download-building JS block
   itself (dead code once there's no button to trigger it).
 - **Gate B — the offline copy's own Premium lock is separate from the
-  live site's.** Two more markers handle this: `/* OFFLINE-SWAP:PREMIUM_CODE
-  */` swaps `PREMIUM_CODE` to `OFFLINE_PREMIUM_CODE` (a different code
-  than the live site's `PROMO1`), and `/* OFFLINE-STRIP:AUTO-UNLOCK:...
-  */` removes the auto-unlock-on-first-load branch, so a freshly
-  downloaded offline copy starts **locked** and needs
-  `OFFLINE_PREMIUM_CODE` entered once. `OFFLINE_PREMIUM_CODE` is a
+  live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
+  marked block (the live site's Google-Sheet-validated activation flow —
+  see "Premium code validation" above) gets replaced wholesale with a
+  simple local `entered === OFFLINE_PREMIUM_CODE` string compare, so a
+  downloaded copy needs zero network to unlock — it never even starts out
+  auto-unlocked (same as the live site). `OFFLINE_PREMIUM_CODE` is a
   placeholder value in the source — **change it to something not published
-  anywhere before distributing**. Like `PREMIUM_CODE`, it's a plain string
-  compared client-side inside a file every offline copy ships with, so
-  it's a soft/honor-system gate, not real DRM — anyone with dev tools open
-  on an offline copy can read it.
+  anywhere before distributing**. It's a plain string compared
+  client-side inside a file every offline copy ships with, so it's a
+  soft/honor-system gate, not real DRM — anyone with dev tools open on an
+  offline copy can read it. This is deliberately disconnected from the
+  live site's sheet/seat-limit system (per design: the download button
+  itself already required being Premium online, so the offline copy
+  doesn't need to re-prove that against the network).
 - `offline/README.txt` + `offline/start-server.sh` / `-mac.command` /
   `.bat` are static, rarely-changing files (not generated) that get pulled
   into the zip as-is. The launchers run a local Python `http.server` and
@@ -181,9 +235,10 @@ remember. The whole mechanism lives inside `app.html` itself:
   a valid zip (correct files, correct unix exec permissions on the
   launcher scripts via `generateAsync({ platform: "UNIX" })` — that option
   is required or the shell scripts extract non-executable); the generated
-  offline `app.html` has zero leftover `OFFLINE-STRIP` markers, starts
-  Premium-locked, rejects the live site's `PROMO1` code, accepts
-  `OFFLINE_PREMIUM_CODE`, and has no download button/modal of its own.
+  offline `app.html` has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP`
+  markers, starts Premium-locked, rejects a live-site sheet code, accepts
+  `OFFLINE_PREMIUM_CODE` with zero network calls, and has no download
+  button/modal of its own.
 
 ## `customer.html`
 
