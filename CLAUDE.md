@@ -90,6 +90,15 @@ zero network calls.
   `.app` already switches to a vertical flex stack, so
   `.panel-resize-handle` is simply hidden there — dragging left/right
   makes no sense once the panels aren't side-by-side.
+- **Header brand mark is not a link.** `.brand` (logo + title + Premium
+  badge) is a plain `<div>`, not an `<a href="index.html">` — it used to
+  double as an unguarded way back to the homepage, but that bypassed
+  the in-progress-cart safety check entirely (`cart` is in-memory only,
+  never persisted — navigating away loses it) and was easy to trigger
+  by accident. The only way back to the homepage now is the explicit
+  **`#homeShortcutButton`** ("🏠 Home", last item in the header
+  toolbar) → `goHome()`, which confirms first via `goHomeConfirm` if
+  `cart.length` is non-zero, then navigates.
 - **Product photos:** each `products[]` entry has an optional `photo`
   field (a compressed JPEG data URL) alongside `name`/`price`/
   `category`/`sku`/`stock`. `compressProductPhoto(file)` downsizes any
@@ -129,7 +138,17 @@ zero network calls.
   Sample CSV" and "Clear Products" actions exist.
 - **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
   (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
-  CSV/text export path (`rowsToCsv`, `downloadTextFile`).
+  CSV/text export path (`rowsToCsv`, `downloadTextFile`). Sales History
+  (Settings → Sales History) has optional `#salesExportFrom`/
+  `#salesExportTo` date pickers, both blank by default (= export
+  everything, the original behavior) — `filterSalesHistoryByDateRange()`
+  filters `salesHistory` by `saleDateKey()` before
+  `buildSalesExportRows()` builds the sheet, so both the `.xlsx` path
+  and its CSV fallback respect the same range; `salesExportFileSuffix()`
+  names the downloaded file after the chosen range (e.g.
+  `sales-report-2026-08-01_to_2026-08-31.xlsx`) instead of just today's
+  date when a range is set. A range matching zero sales shows
+  `salesExportRangeEmptyAlert` rather than downloading an empty file.
 - **Barcode scanning:** `@zxing/browser` drives a camera-based scanner
   (`barcodeReader`), toggleable in Settings; matches scanned code against
   product SKU.

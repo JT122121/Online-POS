@@ -460,7 +460,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <body>
 
 <header class="app-header">
-<a class="brand" href="index.html">
+<div class="brand">
 <div class="brand-mark" aria-hidden="true">
 <img src="favicon.png" alt="">
 </div>
@@ -468,7 +468,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span> <span class="special-access-badge hidden" id="specialAccessBadge"></span></h1>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
-</a>
+</div>
 <div class="header-actions">
 <button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
 <div class="header-actions-group" id="headerActionsGroup">
@@ -481,6 +481,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
+<button id="homeShortcutButton" onclick="goHome()" style="background:transparent; border:1px solid var(--line); color:var(--ink-soft);" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
 </div>
 </div>
 </header>
@@ -939,6 +940,16 @@ Website: goonlinepos.com</textarea>
         <h3 id="salesHistoryTitle">Sales History</h3>
         <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
         <div id="salesHistoryTable" class="sales-history-list"></div>
+        <div class="two-columns" style="margin-top:10px;">
+          <div>
+            <label id="salesExportFromLabel">From (optional)</label>
+            <input id="salesExportFrom" type="date">
+          </div>
+          <div>
+            <label id="salesExportToLabel">To (optional)</label>
+            <input id="salesExportTo" type="date">
+          </div>
+        </div>
         <div class="csv-actions">
           <button style="background:var(--accent);" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
           <button style="background:var(--danger);" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
@@ -1157,6 +1168,7 @@ en: {
   customerNameLabel: "Customer Name", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
   summaryButtonLabel: "Summary", salesSummaryTitle: "Sales Summary", summaryTotalLabel: "Overall Total",
   backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium", toolbarHideLabel: "Hide Toolbar", toolbarShowLabel: "Show Toolbar",
+  homeShortcutLabel: "Home", goHomeConfirm: "Leave this page? Your current cart will be cleared.",
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
@@ -1171,6 +1183,7 @@ en: {
   inventoryLockMsgText: "Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.",
   customerScreenLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.",
   inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
+  salesExportFromLabel: "From (optional)", salesExportToLabel: "To (optional)", salesExportRangeEmptyAlert: "No sales found in that date range.",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
   inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
   inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
@@ -1250,6 +1263,7 @@ ar: {
   customerNameLabel: "اسم العميل", customerNamePlaceholder: "اختياري", customerLabelText: "العميل:",
   summaryButtonLabel: "الملخص", salesSummaryTitle: "ملخص المبيعات", summaryTotalLabel: "الإجمالي الكلي",
   backupShortcutLabel: "نسخة احتياطية", premiumShortcutLabel: "بريميوم", toolbarHideLabel: "إخفاء شريط الأدوات", toolbarShowLabel: "إظهار شريط الأدوات",
+  homeShortcutLabel: "الرئيسية", goHomeConfirm: "مغادرة هذه الصفحة؟ سيتم مسح سلة التسوق الحالية.",
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
@@ -1264,6 +1278,7 @@ ar: {
   inventoryLockMsgText: "تعديل المخزون وتنزيل التقارير ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتحها. لا يزال بإمكانك تصفح مخزونك أدناه.",
   customerScreenLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتح شاشة العميل.",
   inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
+  salesExportFromLabel: "من (اختياري)", salesExportToLabel: "إلى (اختياري)", salesExportRangeEmptyAlert: "لا توجد مبيعات في هذا النطاق الزمني.",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
   inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
   inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم", basicBadgeLabel: "أساسي", specialAccessBadge: "وصول خاص",
@@ -1335,6 +1350,7 @@ fil: {
   customerNameLabel: "Pangalan ng Customer", customerNamePlaceholder: "Opsyonal", customerLabelText: "Customer:",
   summaryButtonLabel: "Buod", salesSummaryTitle: "Buod ng Benta", summaryTotalLabel: "Kabuuang Total",
   backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium", toolbarHideLabel: "Itago ang Toolbar", toolbarShowLabel: "Ipakita ang Toolbar",
+  homeShortcutLabel: "Home", goHomeConfirm: "Umalis sa page na ito? Mabubura ang kasalukuyang cart.",
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
@@ -1349,6 +1365,7 @@ fil: {
   inventoryLockMsgText: "Premium feature ang pag-edit ng stock at pag-download ng report. I-activate ang Premium code sa Settings → Premium para ito ma-unlock. Puwede mo pa ring tingnan ang imbentaryo sa ibaba.",
   customerScreenLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para i-unlock ang Customer Screen.",
   inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
+  salesExportFromLabel: "Mula (opsyonal)", salesExportToLabel: "Hanggang (opsyonal)", salesExportRangeEmptyAlert: "Walang benta na natagpuan sa hanay ng petsang iyon.",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
   inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
   inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
@@ -1420,6 +1437,7 @@ hi: {
   customerNameLabel: "ग्राहक का नाम", customerNamePlaceholder: "वैकल्पिक", customerLabelText: "ग्राहक:",
   summaryButtonLabel: "सारांश", salesSummaryTitle: "बिक्री सारांश", summaryTotalLabel: "कुल योग",
   backupShortcutLabel: "बैकअप", premiumShortcutLabel: "प्रीमियम", toolbarHideLabel: "टूलबार छुपाएं", toolbarShowLabel: "टूलबार दिखाएं",
+  homeShortcutLabel: "होम", goHomeConfirm: "इस पेज को छोड़ें? आपकी मौजूदा कार्ट खाली हो जाएगी।",
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
@@ -1434,6 +1452,7 @@ hi: {
   inventoryLockMsgText: "स्टॉक संपादित करना और रिपोर्ट डाउनलोड करना एक प्रीमियम सुविधा है। इसे अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें। आप अभी भी नीचे अपनी इन्वेंटरी देख सकते हैं।",
   customerScreenLockMsgText: "यह एक प्रीमियम सुविधा है। कस्टमर स्क्रीन अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
+  salesExportFromLabel: "से (वैकल्पिक)", salesExportToLabel: "तक (वैकल्पिक)", salesExportRangeEmptyAlert: "उस दिनांक सीमा में कोई बिक्री नहीं मिली।",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
   inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
   inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम", basicBadgeLabel: "बेसिक", specialAccessBadge: "विशेष पहुँच",
@@ -1505,6 +1524,7 @@ es: {
   customerNameLabel: "Nombre del Cliente", customerNamePlaceholder: "Opcional", customerLabelText: "Cliente:",
   summaryButtonLabel: "Resumen", salesSummaryTitle: "Resumen de Ventas", summaryTotalLabel: "Total General",
   backupShortcutLabel: "Respaldo", premiumShortcutLabel: "Premium", toolbarHideLabel: "Ocultar Barra", toolbarShowLabel: "Mostrar Barra",
+  homeShortcutLabel: "Inicio", goHomeConfirm: "¿Salir de esta página? Se vaciará el carrito actual.",
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
@@ -1519,6 +1539,7 @@ es: {
   inventoryLockMsgText: "Editar el stock y descargar reportes es una función Premium. Activa un código Premium en Configuración → Premium para desbloquearla. Aún puedes explorar tu inventario abajo.",
   customerScreenLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para desbloquear la Pantalla del Cliente.",
   inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
+  salesExportFromLabel: "Desde (opcional)", salesExportToLabel: "Hasta (opcional)", salesExportRangeEmptyAlert: "No se encontraron ventas en ese rango de fechas.",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
   inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
   inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Básico", specialAccessBadge: "Acceso Especial",
@@ -1590,6 +1611,7 @@ th: {
   customerNameLabel: "ชื่อลูกค้า", customerNamePlaceholder: "ไม่บังคับ", customerLabelText: "ลูกค้า:",
   summaryButtonLabel: "สรุปยอด", salesSummaryTitle: "สรุปยอดขาย", summaryTotalLabel: "ยอดรวมทั้งหมด",
   backupShortcutLabel: "สำรองข้อมูล", premiumShortcutLabel: "พรีเมียม", toolbarHideLabel: "ซ่อนแถบเครื่องมือ", toolbarShowLabel: "แสดงแถบเครื่องมือ",
+  homeShortcutLabel: "หน้าแรก", goHomeConfirm: "ออกจากหน้านี้หรือไม่? ตะกร้าปัจจุบันจะถูกล้าง",
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
@@ -1604,6 +1626,7 @@ th: {
   inventoryLockMsgText: "การแก้ไขสต็อกและการดาวน์โหลดรายงานเป็นฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อก คุณยังสามารถเรียกดูคลังสินค้าของคุณด้านล่างได้",
   customerScreenLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อกหน้าจอลูกค้า",
   inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
+  salesExportFromLabel: "จาก (ไม่บังคับ)", salesExportToLabel: "ถึง (ไม่บังคับ)", salesExportRangeEmptyAlert: "ไม่พบยอดขายในช่วงวันที่นั้น",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
   inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
   inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม", basicBadgeLabel: "พื้นฐาน", specialAccessBadge: "สิทธิ์พิเศษ",
@@ -2416,6 +2439,11 @@ async function newSale() {
   await startNewSale();
 }
 
+function goHome() {
+  if (cart.length && !confirm(tr("goHomeConfirm"))) return;
+  location.href = "index.html";
+}
+
 function goToCheckout() {
   if (cart.length === 0) { alert(tr("cartEmptyAlert")); return; }
   document.getElementById("catalogView").classList.add("hidden");
@@ -3073,8 +3101,9 @@ async function activateFreePremiumFromNotice() {
   await activatePremiumCode();
 }
 
-function buildSalesExportRows() {
-  const parentRows = salesHistory.map(function(s) {
+function buildSalesExportRows(list) {
+  const source = list || salesHistory;
+  const parentRows = source.map(function(s) {
     return {
       "Receipt No": s.receiptNumber,
       "Date/Time": s.dateTime,
@@ -3096,7 +3125,7 @@ function buildSalesExportRows() {
     };
   });
   const childRows = [];
-  salesHistory.forEach(function(s) {
+  source.forEach(function(s) {
     s.items.forEach(function(it) {
       childRows.push({
         "Receipt No": s.receiptNumber,
@@ -3108,6 +3137,28 @@ function buildSalesExportRows() {
     });
   });
   return { parentRows: parentRows, childRows: childRows };
+}
+
+function filterSalesHistoryByDateRange(list) {
+  const fromEl = document.getElementById("salesExportFrom");
+  const toEl = document.getElementById("salesExportTo");
+  const from = fromEl && fromEl.value ? fromEl.value : null;
+  const to = toEl && toEl.value ? toEl.value : null;
+  if (!from && !to) return list;
+  return list.filter(function(s) {
+    const key = saleDateKey(s.dateTime);
+    if (from && key < from) return false;
+    if (to && key > to) return false;
+    return true;
+  });
+}
+function salesExportFileSuffix() {
+  const fromEl = document.getElementById("salesExportFrom");
+  const toEl = document.getElementById("salesExportTo");
+  const from = fromEl && fromEl.value;
+  const to = toEl && toEl.value;
+  if (!from && !to) return todayStamp();
+  return (from || "start") + "_to_" + (to || "now");
 }
 
 function exportInventoryToExcel() {
@@ -3144,18 +3195,21 @@ function exportInventoryToExcel() {
 
 function exportSalesToExcel() {
   if (!salesHistory.length) { alert("No completed sales yet — finish a sale first."); return; }
-  const { parentRows, childRows } = buildSalesExportRows();
+  const filtered = filterSalesHistoryByDateRange(salesHistory);
+  if (!filtered.length) { alert(tr("salesExportRangeEmptyAlert")); return; }
+  const { parentRows, childRows } = buildSalesExportRows(filtered);
+  const suffix = salesExportFileSuffix();
 
   if (typeof XLSX !== "undefined") {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(parentRows), "Sales");
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(childRows), "Sale Items");
-    XLSX.writeFile(wb, "sales-report-" + todayStamp() + ".xlsx");
+    XLSX.writeFile(wb, "sales-report-" + suffix + ".xlsx");
     return;
   }
 
-  downloadTextFile("sales-report-parent-" + todayStamp() + ".csv", rowsToCsv(parentRows));
-  downloadTextFile("sales-report-items-" + todayStamp() + ".csv", rowsToCsv(childRows));
+  downloadTextFile("sales-report-parent-" + suffix + ".csv", rowsToCsv(parentRows));
+  downloadTextFile("sales-report-items-" + suffix + ".csv", rowsToCsv(childRows));
 }
 
 /* OFFLINE-STRIP:DOWNLOAD-JS:START */
@@ -4206,7 +4260,7 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     summaryButtonLabel: "summaryButtonLabel", salesSummaryTitle: "salesSummaryTitle", summaryTotalLabel: "summaryTotalLabel",
-    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
+    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel", homeShortcutLabel: "homeShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
@@ -4240,6 +4294,7 @@ function changeLanguage() {
     saleDetailSubtotalLabel: "saleDetailSubtotalLabel", saleDetailDiscountAmtLabel: "saleDetailDiscountAmtLabel", saleDetailTaxAmtLabel: "saleDetailTaxAmtLabel",
     saleDetailGrandLabel: "saleDetailGrandLabel", saleDetailReceivedLabel: "saleDetailReceivedLabel", saleDetailChangeLabel: "saleDetailChangeLabel",
     saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel", inventoryExportButtonLabel: "inventoryExportButtonLabel",
+    salesExportFromLabel: "salesExportFromLabel", salesExportToLabel: "salesExportToLabel",
     premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
     premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
     premiumChangeCodeLabel: "premiumChangeCodeLabel", premiumCancelEditLabel: "offlineCancelBtnLabel",
