@@ -139,10 +139,10 @@ short version:
   placeholder. Everything else (real sheet-issued codes) goes through the
   Apps Script and is subject to the seat limit below; PROMO1 deliberately
   is not. `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
-  `unlockPremiumLocally()` are shared with the offline build (they live
-  outside the `PREMIUM-ACTIVATION` swap block) — only *which* code counts
-  as valid, and whether checking one touches the network, differs
-  per-build.
+  `unlockPremiumLocally()`/`openPremiumCodeEdit()`/`cancelPremiumCodeEdit()`
+  are shared with the offline build (they live outside the
+  `PREMIUM-ACTIVATION` swap block) — only *which* code counts as valid,
+  and whether checking one touches the network, differs per-build.
 - Settings → Premium is a `<select id="premiumCodeSelect">` defaulting to
   PROMO1 (offline build: its own `OFFLINE_PREMIUM_CODE`, swapped in via
   the `<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START/END -->` marker so the
@@ -150,6 +150,14 @@ short version:
   "Enter a different code…" option that reveals `#premiumCodeInput` for
   anything else — added so a user who's forgotten the exact code text can
   just pick the default instead of mistyping it.
+- Once unlocked, a "Change code" link next to the "Premium is active"
+  status re-reveals the form (`openPremiumCodeEdit()`, gated by the
+  in-memory `premiumEditMode` flag — not persisted) so someone can switch
+  to a different code — e.g. swap PROMO1 for a real purchased one —
+  without clearing the browser's site data. `#premiumCancelEditBtn`
+  backs out without changing anything; successfully activating any code
+  (`unlockPremiumLocally()`) always clears edit mode back to the plain
+  status view.
 - `PREMIUM_VALIDATION_URL` (near the top of the marked block) is a
   placeholder — **must be replaced with your deployed Apps Script's `/exec`
   URL** before this works. It's fine for this URL to be public (it's a
@@ -177,7 +185,12 @@ short version:
   (`premiumCodeInvalid`), code found but at its device cap
   (`premiumCodeSeatLimit`), and the endpoint being unreachable
   (`premiumCodeNetworkError` — this is the one that fires if
-  `PREMIUM_VALIDATION_URL` is still the placeholder).
+  `PREMIUM_VALIDATION_URL` is still the placeholder). `AppsScript.gs` also
+  defines a `doGet()` that returns a plain "this endpoint only accepts
+  POST" message — the app itself never triggers it (it always POSTs), it
+  only exists so visiting the deployed `/exec` URL directly in a browser
+  doesn't show Apps Script's raw "Script function not found: doGet"
+  error.
 - Verified against a mock endpoint standing in for the real Apps Script
   (can't deploy the real one without the site owner's Google account):
   fresh browser starts locked, invalid/seat-limited/unreachable each show

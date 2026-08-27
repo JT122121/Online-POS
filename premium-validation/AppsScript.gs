@@ -70,6 +70,14 @@ var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
 
+// The app never calls this — it always POSTs. This only exists so that
+// visiting the deployed URL directly in a browser (a GET request) shows a
+// clear message instead of Apps Script's default "Script function not
+// found: doGet" error.
+function doGet(e) {
+  return jsonOut({ ok: false, reason: "get_not_supported", message: "This endpoint only accepts POST requests from the GoOnlinePOS app." });
+}
+
 function doPost(e) {
   var body;
   try {

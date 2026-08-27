@@ -995,7 +995,10 @@ Website: goonlinepos.com</textarea>
         <h3 id="premiumPanelTitle">Premium</h3>
         <div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>
 
-        <div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">✅ <span id="premiumActiveLabel">Premium is active on this device.</span></div>
+        <div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">
+          ✅ <span id="premiumActiveLabel">Premium is active on this device.</span>
+          <a href="#" onclick="openPremiumCodeEdit(); return false;" id="premiumChangeCodeLink" style="margin-left:6px;"><span id="premiumChangeCodeLabel">Change code</span></a>
+        </div>
         <div id="premiumValidityText" class="info hidden" style="margin-top:8px;"></div>
 
         <div id="premiumCodeForm">
@@ -1006,6 +1009,7 @@ Website: goonlinepos.com</textarea>
           </select>
           <input id="premiumCodeInput" type="text" placeholder="Enter code" class="hidden" style="width:100%; margin-bottom:8px;">
           <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="width:100%;">Activate</button>
+          <button type="button" class="small-btn hidden" onclick="cancelPremiumCodeEdit()" id="premiumCancelEditBtn" style="width:100%; margin-top:8px; background:transparent; color:var(--ink-soft);"><span id="premiumCancelEditLabel">Cancel</span></button>
           <div id="premiumCodeError" class="error-text hidden"></div>
         </div>
       </div>
@@ -1086,7 +1090,7 @@ en: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.",
   premiumActiveLabel: "Premium is active on this device.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "Activate", premiumCodeInvalid: "That code isn't valid. Check it and try again.",
   premiumCodeSeatLimit: "This code has reached its device limit. Contact us for help.", premiumCodeNetworkError: "Couldn't reach the activation server. Check your connection and try again.", premiumValidityLabel: "Valid until:",
-  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Enter a different code…",
+  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Enter a different code…", premiumChangeCodeLabel: "Change code",
   logoLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.",
   receiptNumberLockMsgText: "These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.",
   inventoryLockMsgText: "Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.",
@@ -1175,7 +1179,7 @@ ar: {
   premiumTabLabel: "بريميوم", premiumPanelTitle: "بريميوم", premiumPanelInfo: "الميزات التي تحمل شارة بريميوم الذهبية — شعار الشركة، أرقام الإيصالات القابلة للتعديل، بادئة رقم الإيصال، شاشة العميل، والمخزون — تبقى مرئية لكنها مقفلة حتى تفعّل رمزاً. أدخله أدناه لفتحها على هذا الجهاز.",
   premiumActiveLabel: "بريميوم مفعّل على هذا الجهاز.", premiumCodeLabel: "رمز بريميوم", premiumActivateBtn: "تفعيل", premiumCodeInvalid: "هذا الرمز غير صالح. تحقق منه وحاول مرة أخرى.",
   premiumCodeSeatLimit: "وصل هذا الرمز إلى الحد الأقصى لعدد الأجهزة. تواصل معنا للمساعدة.", premiumCodeNetworkError: "تعذّر الوصول إلى خادم التفعيل. تحقق من اتصالك وحاول مرة أخرى.", premiumValidityLabel: "صالح حتى:",
-  premiumCodeDefaultLabel: "افتراضي", premiumCodeOtherOption: "إدخال رمز مختلف…",
+  premiumCodeDefaultLabel: "افتراضي", premiumCodeOtherOption: "إدخال رمز مختلف…", premiumChangeCodeLabel: "تغيير الرمز",
   logoLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لرفع شعار.",
   receiptNumberLockMsgText: "هذه ميزات بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتعديل رقم الإيصال والبادئة.",
   inventoryLockMsgText: "تعديل المخزون وتنزيل التقارير ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتحها. لا يزال بإمكانك تصفح مخزونك أدناه.",
@@ -1256,7 +1260,7 @@ fil: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Ang mga feature na may gold na Premium badge — Company Logo, na-e-edit na Receipt Number, Receipt Number Prefix, Customer Screen, at Inventory — nananatiling makikita pero naka-lock hanggang i-activate mo ang code. Ilagay ito sa ibaba para i-unlock ang mga ito sa device na ito.",
   premiumActiveLabel: "Aktibo ang Premium sa device na ito.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "I-activate", premiumCodeInvalid: "Hindi valid ang code na iyon. Suriin at subukan ulit.",
   premiumCodeSeatLimit: "Naabot na ng code na ito ang limitasyon sa bilang ng device. Makipag-ugnayan sa amin para sa tulong.", premiumCodeNetworkError: "Hindi maabot ang activation server. Tingnan ang iyong koneksyon at subukan ulit.", premiumValidityLabel: "Valid hanggang:",
-  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Maglagay ng ibang code…",
+  premiumCodeDefaultLabel: "default", premiumCodeOtherOption: "Maglagay ng ibang code…", premiumChangeCodeLabel: "Palitan ang code",
   logoLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para mag-upload ng logo.",
   receiptNumberLockMsgText: "Premium features ito. I-activate ang Premium code sa Settings → Premium para i-edit ang receipt number at prefix.",
   inventoryLockMsgText: "Premium feature ang pag-edit ng stock at pag-download ng report. I-activate ang Premium code sa Settings → Premium para ito ma-unlock. Puwede mo pa ring tingnan ang imbentaryo sa ibaba.",
@@ -1337,7 +1341,7 @@ hi: {
   premiumTabLabel: "प्रीमियम", premiumPanelTitle: "प्रीमियम", premiumPanelInfo: "सुनहरे प्रीमियम बैज वाली सुविधाएं — कंपनी लोगो, संपादन योग्य रसीद नंबर, रसीद नंबर प्रीफ़िक्स, कस्टमर स्क्रीन, और इन्वेंटरी — तब तक दिखाई देती रहेंगी लेकिन लॉक रहेंगी जब तक आप कोड सक्रिय नहीं करते। इस डिवाइस पर अनलॉक करने के लिए नीचे कोड दर्ज करें।",
   premiumActiveLabel: "इस डिवाइस पर प्रीमियम सक्रिय है।", premiumCodeLabel: "प्रीमियम कोड", premiumActivateBtn: "सक्रिय करें", premiumCodeInvalid: "वह कोड मान्य नहीं है। जांचें और फिर से प्रयास करें।",
   premiumCodeSeatLimit: "इस कोड ने डिवाइस की सीमा पूरी कर ली है। सहायता के लिए हमसे संपर्क करें।", premiumCodeNetworkError: "एक्टिवेशन सर्वर तक नहीं पहुंचा जा सका। अपना कनेक्शन जांचें और फिर से प्रयास करें।", premiumValidityLabel: "इस तक मान्य:",
-  premiumCodeDefaultLabel: "डिफ़ॉल्ट", premiumCodeOtherOption: "एक अलग कोड दर्ज करें…",
+  premiumCodeDefaultLabel: "डिफ़ॉल्ट", premiumCodeOtherOption: "एक अलग कोड दर्ज करें…", premiumChangeCodeLabel: "कोड बदलें",
   logoLockMsgText: "यह एक प्रीमियम सुविधा है। लोगो अपलोड करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   receiptNumberLockMsgText: "ये प्रीमियम सुविधाएं हैं। रसीद नंबर और प्रीफ़िक्स संपादित करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   inventoryLockMsgText: "स्टॉक संपादित करना और रिपोर्ट डाउनलोड करना एक प्रीमियम सुविधा है। इसे अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें। आप अभी भी नीचे अपनी इन्वेंटरी देख सकते हैं।",
@@ -1418,7 +1422,7 @@ es: {
   premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Las funciones con la insignia dorada Premium — Logo de la Empresa, Números de Recibo editables, Prefijo del Número de Recibo, Pantalla del Cliente e Inventario — permanecen visibles pero bloqueadas hasta que actives un código. Ingrésalo abajo para desbloquearlas en este dispositivo.",
   premiumActiveLabel: "Premium está activo en este dispositivo.", premiumCodeLabel: "Código Premium", premiumActivateBtn: "Activar", premiumCodeInvalid: "Ese código no es válido. Revísalo e intenta de nuevo.",
   premiumCodeSeatLimit: "Este código alcanzó su límite de dispositivos. Contáctanos para obtener ayuda.", premiumCodeNetworkError: "No se pudo conectar con el servidor de activación. Revisa tu conexión e inténtalo de nuevo.", premiumValidityLabel: "Válido hasta:",
-  premiumCodeDefaultLabel: "predeterminado", premiumCodeOtherOption: "Ingresar un código diferente…",
+  premiumCodeDefaultLabel: "predeterminado", premiumCodeOtherOption: "Ingresar un código diferente…", premiumChangeCodeLabel: "Cambiar código",
   logoLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para subir un logo.",
   receiptNumberLockMsgText: "Estas son funciones Premium. Activa un código Premium en Configuración → Premium para editar el número de recibo y el prefijo.",
   inventoryLockMsgText: "Editar el stock y descargar reportes es una función Premium. Activa un código Premium en Configuración → Premium para desbloquearla. Aún puedes explorar tu inventario abajo.",
@@ -1499,7 +1503,7 @@ th: {
   premiumTabLabel: "พรีเมียม", premiumPanelTitle: "พรีเมียม", premiumPanelInfo: "ฟีเจอร์ที่มีป้ายพรีเมียมสีทอง — โลโก้บริษัท เลขที่ใบเสร็จที่แก้ไขได้ คำนำหน้าเลขที่ใบเสร็จ หน้าจอลูกค้า และคลังสินค้า — จะยังคงมองเห็นได้แต่ถูกล็อกไว้จนกว่าคุณจะเปิดใช้งานรหัส กรอกรหัสด้านล่างเพื่อปลดล็อกบนอุปกรณ์นี้",
   premiumActiveLabel: "พรีเมียมเปิดใช้งานอยู่บนอุปกรณ์นี้", premiumCodeLabel: "รหัสพรีเมียม", premiumActivateBtn: "เปิดใช้งาน", premiumCodeInvalid: "รหัสนั้นไม่ถูกต้อง ตรวจสอบแล้วลองอีกครั้ง",
   premiumCodeSeatLimit: "รหัสนี้ถึงขีดจำกัดจำนวนอุปกรณ์แล้ว ติดต่อเราเพื่อขอความช่วยเหลือ", premiumCodeNetworkError: "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์เปิดใช้งานได้ ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง", premiumValidityLabel: "ใช้ได้ถึง:",
-  premiumCodeDefaultLabel: "ค่าเริ่มต้น", premiumCodeOtherOption: "ป้อนรหัสอื่น…",
+  premiumCodeDefaultLabel: "ค่าเริ่มต้น", premiumCodeOtherOption: "ป้อนรหัสอื่น…", premiumChangeCodeLabel: "เปลี่ยนรหัส",
   logoLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่ออัปโหลดโลโก้",
   receiptNumberLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อแก้ไขเลขที่ใบเสร็จและคำนำหน้า",
   inventoryLockMsgText: "การแก้ไขสต็อกและการดาวน์โหลดรายงานเป็นฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อก คุณยังสามารถเรียกดูคลังสินค้าของคุณด้านล่างได้",
@@ -1829,8 +1833,27 @@ function getEnteredPremiumCode() {
   return input ? input.value.trim().toUpperCase() : "";
 }
 
+// Once unlocked, the code form is normally hidden in favor of the "Premium
+// is active" status line — this lets someone switch to a different code
+// (e.g. swap PROMO1 for a real purchased one) without clearing their
+// browser's site data. Purely in-memory UI state, not persisted.
+let premiumEditMode = false;
+function openPremiumCodeEdit() {
+  premiumEditMode = true;
+  const select = document.getElementById("premiumCodeSelect");
+  if (select) { select.selectedIndex = 0; handlePremiumCodeSelectChange(); }
+  document.getElementById("premiumCodeError").classList.add("hidden");
+  renderPremiumStatus();
+}
+function cancelPremiumCodeEdit() {
+  premiumEditMode = false;
+  document.getElementById("premiumCodeError").classList.add("hidden");
+  renderPremiumStatus();
+}
+
 async function unlockPremiumLocally(code, validity) {
   premiumUnlocked = true;
+  premiumEditMode = false;
   await storageSet("pos-premium-unlocked", "1");
   await storageSet("pos-premium-code-used", code);
   await storageSet("pos-premium-validity", validity || "");
@@ -1928,9 +1951,12 @@ async function heartbeatPremiumCode() {
 function renderPremiumStatus() {
   const statusBox = document.getElementById("premiumStatusBox");
   const form = document.getElementById("premiumCodeForm");
+  const cancelBtn = document.getElementById("premiumCancelEditBtn");
   if (!statusBox || !form) return;
-  statusBox.classList.toggle("hidden", !premiumUnlocked);
-  form.classList.toggle("hidden", premiumUnlocked);
+  const editing = premiumUnlocked && premiumEditMode;
+  statusBox.classList.toggle("hidden", !premiumUnlocked || editing);
+  form.classList.toggle("hidden", premiumUnlocked && !editing);
+  if (cancelBtn) cancelBtn.classList.toggle("hidden", !editing);
 }
 async function renderPremiumValidity() {
   const el = document.getElementById("premiumValidityText");
@@ -3932,6 +3958,7 @@ function changeLanguage() {
     saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel", inventoryExportButtonLabel: "inventoryExportButtonLabel",
     premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
     premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
+    premiumChangeCodeLabel: "premiumChangeCodeLabel", premiumCancelEditLabel: "offlineCancelBtnLabel",
     logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
     premiumBadgeOffline: "premiumBadgeLabel",
