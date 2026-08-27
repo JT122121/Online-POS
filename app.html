@@ -1891,8 +1891,22 @@ async function checkPremiumCode(code) {
     headers: { "Content-Type": "text/plain;charset=utf-8" }, // avoids a CORS preflight against Apps Script
     body: JSON.stringify({ code: code, deviceId: deviceId })
   });
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return res.json();
+  // Read the body as text once (works whether or not it parses as JSON), so
+  // a failure either way can be logged with what the server actually sent —
+  // the only way to tell a CORS/network failure (fetch() itself throws,
+  // never reaches here) apart from Apps Script returning a non-2xx status
+  // or a non-JSON error/login page (HTTP is "ok" but body isn't valid JSON).
+  const bodyText = await res.text();
+  if (!res.ok) {
+    console.error("Premium validation: server responded HTTP " + res.status + " — body:", bodyText);
+    throw new Error("HTTP " + res.status);
+  }
+  try {
+    return JSON.parse(bodyText);
+  } catch (parseErr) {
+    console.error("Premium validation: response wasn't valid JSON — body:", bodyText);
+    throw parseErr;
+  }
 }
 
 const DEFAULT_PREMIUM_CODE = "PROMO1";
@@ -1926,6 +1940,7 @@ async function activatePremiumCode() {
       errorBox.classList.remove("hidden");
     }
   } catch (e) {
+    console.error("Premium code activation failed:", e);
     errorBox.textContent = tr("premiumCodeNetworkError");
     errorBox.classList.remove("hidden");
   } finally {
@@ -1944,7 +1959,7 @@ async function heartbeatPremiumCode() {
     if (!code) return;
     const result = await checkPremiumCode(code);
     if (result && result.ok && result.validity) await storageSet("pos-premium-validity", result.validity);
-  } catch (e) { /* ignore */ }
+  } catch (e) { console.warn("Premium heartbeat failed (harmless, local access unaffected):", e); }
 }
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:END */
 
