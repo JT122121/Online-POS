@@ -281,6 +281,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 
 .premium-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
 .basic-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
+.special-access-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #1a5c7a; background: #e3f2fa; border: 1px solid #b8e0f0; padding: 2px 7px; border-radius: 999px; vertical-align: middle; margin-left: 4px; }
 .logo-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
 .logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
 .logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -450,7 +451,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <img src="favicon.png" alt="">
 </div>
 <div>
-<h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span></h1>
+<h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span> <span class="special-access-badge hidden" id="specialAccessBadge"></span></h1>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
 </a>
@@ -1107,7 +1108,7 @@ en: {
   inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
   inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
-  inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic",
+  inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
   customerScreenTitle: "Customer Screen", customerScreenIntro: "Open this link in a second window, monitor, or tablet facing your customer — it updates live as you ring up a sale.",
   copyCustomerScreenUrlBtn: "Copy", customerScreenCopiedMsg: "Copied!", customerScreenGuideBtnLabel: "Guide Me — How to Set This Up", customerScreenGuideTitle: "Setting Up the Customer Screen",
   guideMethod1Title: "Method 1 — Second Monitor", guideMethod2Title: "Method 2 — Tablet or TV (Screen Mirroring)",
@@ -1197,7 +1198,7 @@ ar: {
   inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
   inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
-  inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم", basicBadgeLabel: "أساسي",
+  inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم", basicBadgeLabel: "أساسي", specialAccessBadge: "وصول خاص",
   customerScreenTitle: "شاشة العميل", customerScreenIntro: "افتح هذا الرابط في نافذة ثانية، أو شاشة، أو جهاز لوحي يواجه عميلك — يتحدث مباشرة أثناء إتمام عملية البيع.",
   copyCustomerScreenUrlBtn: "نسخ", customerScreenCopiedMsg: "تم النسخ!", customerScreenGuideBtnLabel: "دليل الإعداد — كيفية التهيئة", customerScreenGuideTitle: "إعداد شاشة العميل",
   guideMethod1Title: "الطريقة الأولى — شاشة ثانية", guideMethod2Title: "الطريقة الثانية — جهاز لوحي أو تلفاز (عكس الشاشة)",
@@ -1279,7 +1280,7 @@ fil: {
   inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
   inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
-  inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic",
+  inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
   customerScreenTitle: "Customer Screen", customerScreenIntro: "Buksan ang link na ito sa pangalawang window, monitor, o tablet na nakaharap sa customer — nag-a-update ito nang live habang nagbebenta ka.",
   copyCustomerScreenUrlBtn: "Kopyahin", customerScreenCopiedMsg: "Nakopya!", customerScreenGuideBtnLabel: "Gabayan Mo Ako — Paano I-set Up Ito", customerScreenGuideTitle: "Pag-set Up ng Customer Screen",
   guideMethod1Title: "Paraan 1 — Pangalawang Monitor", guideMethod2Title: "Paraan 2 — Tablet o TV (Screen Mirroring)",
@@ -1361,7 +1362,7 @@ hi: {
   inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
   inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
-  inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम", basicBadgeLabel: "बेसिक",
+  inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम", basicBadgeLabel: "बेसिक", specialAccessBadge: "विशेष पहुँच",
   customerScreenTitle: "कस्टमर स्क्रीन", customerScreenIntro: "इस लिंक को अपने ग्राहक के सामने वाली दूसरी विंडो, मॉनिटर, या टैबलेट में खोलें — बिक्री करते समय यह लाइव अपडेट होता है।",
   copyCustomerScreenUrlBtn: "कॉपी करें", customerScreenCopiedMsg: "कॉपी हो गया!", customerScreenGuideBtnLabel: "मुझे मार्गदर्शन करें — इसे कैसे सेट करें", customerScreenGuideTitle: "कस्टमर स्क्रीन सेट करना",
   guideMethod1Title: "तरीका 1 — दूसरा मॉनिटर", guideMethod2Title: "तरीका 2 — टैबलेट या टीवी (स्क्रीन मिररिंग)",
@@ -1443,7 +1444,7 @@ es: {
   inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
   inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
-  inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Básico",
+  inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Básico", specialAccessBadge: "Acceso Especial",
   customerScreenTitle: "Pantalla del Cliente", customerScreenIntro: "Abre este enlace en una segunda ventana, monitor o tableta frente a tu cliente — se actualiza en vivo mientras registras una venta.",
   copyCustomerScreenUrlBtn: "Copiar", customerScreenCopiedMsg: "¡Copiado!", customerScreenGuideBtnLabel: "Guíame — Cómo Configurarlo", customerScreenGuideTitle: "Configurando la Pantalla del Cliente",
   guideMethod1Title: "Método 1 — Segundo Monitor", guideMethod2Title: "Método 2 — Tableta o TV (Duplicación de Pantalla)",
@@ -1525,7 +1526,7 @@ th: {
   inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
   inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
-  inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม", basicBadgeLabel: "พื้นฐาน",
+  inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม", basicBadgeLabel: "พื้นฐาน", specialAccessBadge: "สิทธิ์พิเศษ",
   customerScreenTitle: "หน้าจอลูกค้า", customerScreenIntro: "เปิดลิงก์นี้ในหน้าต่างที่สอง จอมอนิเตอร์ หรือแท็บเล็ตที่หันหน้าเข้าหาลูกค้า — จะอัปเดตแบบเรียลไทม์ขณะที่คุณคิดเงิน",
   copyCustomerScreenUrlBtn: "คัดลอก", customerScreenCopiedMsg: "คัดลอกแล้ว!", customerScreenGuideBtnLabel: "แนะนำฉัน — วิธีตั้งค่า", customerScreenGuideTitle: "การตั้งค่าหน้าจอลูกค้า",
   guideMethod1Title: "วิธีที่ 1 — จอมอนิเตอร์ที่สอง", guideMethod2Title: "วิธีที่ 2 — แท็บเล็ตหรือทีวี (การสะท้อนหน้าจอ)",
@@ -2013,12 +2014,20 @@ function applyPremiumLocks() {
 
   renderAppTitleBadge();
 }
-function renderAppTitleBadge() {
+async function renderAppTitleBadge() {
   const badge = document.getElementById("premiumBadgeAppTitle");
-  if (!badge) return;
-  badge.textContent = premiumUnlocked ? tr("premiumBadgeLabel") : tr("basicBadgeLabel");
-  badge.classList.toggle("premium-badge", premiumUnlocked);
-  badge.classList.toggle("basic-badge", !premiumUnlocked);
+  if (badge) {
+    badge.textContent = premiumUnlocked ? tr("premiumBadgeLabel") : tr("basicBadgeLabel");
+    badge.classList.toggle("premium-badge", premiumUnlocked);
+    badge.classList.toggle("basic-badge", !premiumUnlocked);
+  }
+  const specialBadge = document.getElementById("specialAccessBadge");
+  if (specialBadge) {
+    const codeUsed = premiumUnlocked ? await storageGet("pos-premium-code-used") : null;
+    const isSpecialAccess = codeUsed === "PROMO1";
+    specialBadge.textContent = isSpecialAccess ? tr("specialAccessBadge") : "";
+    specialBadge.classList.toggle("hidden", !isSpecialAccess);
+  }
 }
 
 let receiptPrefix = "";

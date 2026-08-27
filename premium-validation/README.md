@@ -23,11 +23,13 @@ sheet and is what `app.html` calls to check a code.
 
 The script creates a second tab, `Active Sessions`, on its own the first
 time it runs — you don't need to create it. That's where it tracks which
-browsers ("devices") have activated which code, to enforce the per-code
-seat limit (`MAX_SEATS`, currently 5) on a rolling window
-(`SEAT_WINDOW_DAYS`, currently 30 days — a browser that goes quiet longer
-than that frees its seat automatically). Both are constants at the top of
-`AppsScript.gs` if you want to change them.
+browsers ("devices") have activated which code, to enforce a per-code
+seat limit on a rolling window (`SEAT_WINDOW_DAYS`, currently 30 days —
+a browser that goes quiet longer than that frees its seat
+automatically). The default limit is `MAX_SEATS` (5); `CODE_SEAT_LIMITS`
+overrides it for specific codes (currently `{ "PROMO1": 30 }`). All
+three are constants at the top of `AppsScript.gs` if you want to change
+them.
 
 **What this does and doesn't gate:**
 
@@ -48,12 +50,21 @@ than that frees its seat automatically). Both are constants at the top of
   like `Life Time Access`. A date-typed cell is formatted as `dd-MMM-yyyy`
   for display; anything else is shown exactly as typed. A blank cell
   shows nothing.
-- `UNLIMITED_CODES` (currently just `PROMO1`) is exempt from the per-code
-  seat cap — it's the site's universal free default, auto-granted to
-  every new visitor, so it can't be limited to `MAX_SEATS` concurrent
-  devices the way a real purchased code is. Every other code is capped
-  at `MAX_SEATS` to blunt one purchased code being shared/leaked
-  indefinitely.
+- `CODE_SEAT_LIMITS` (currently `{ "PROMO1": 30 }`) overrides the
+  default `MAX_SEATS` (5) cap for specific codes — PROMO1 gets a higher
+  cap since it's auto-granted to every new visitor and the default 5
+  would lock the site out after only 5 visitors ever. This is a soft
+  cap chosen deliberately while the site is new, not full exemption —
+  raise the number, or remove the `PROMO1` entry entirely (reverting it
+  to the default 5), as traffic grows. Every other code uses the
+  default `MAX_SEATS` unless added to `CODE_SEAT_LIMITS`, to blunt one
+  purchased code being shared/leaked indefinitely.
+- A small "Special Access" badge next to the header's Premium badge
+  (`#specialAccessBadge` in `app.html`) shows only when the code that
+  unlocked Premium was specifically `PROMO1` — flagging that this
+  particular unlock came through the free/promotional program, not a
+  real purchase. It's a deliberate temporary placeholder while the site
+  is building an audience; the site owner plans to remove it later.
 
 **Debugging "code isn't valid" from the Apps Script editor:** don't run
 `findCode`, `createSessionsSheet`, `checkOrClaimSeat`, etc. directly from

@@ -193,15 +193,32 @@ short version:
   Apps Script reaches its bound sheet via
   `SpreadsheetApp.getActiveSpreadsheet()`.
 - Each browser gets a random, persisted `pos-device-id`
-  (`getDeviceId()`). A code is capped at `MAX_SEATS` (5) simultaneously
-  active devices, on a `SEAT_WINDOW_DAYS` (30-day) rolling window enforced
-  server-side in the Apps Script — a device that stops checking in for
-  that long silently frees its seat. **PROMO1 (`UNLIMITED_CODES` in
-  `AppsScript.gs`) is exempt from this cap** — since every new visitor
-  auto-activates it over the network, capping it at 5 devices would lock
-  out the site after its 5th visitor. Real sheet-issued codes are not
-  exempt, and this exists to blunt one purchased code being
-  shared/leaked indefinitely, not to build real license management.
+  (`getDeviceId()`). A code is capped at a maximum number of
+  simultaneously active devices, on a `SEAT_WINDOW_DAYS` (30-day) rolling
+  window enforced server-side in the Apps Script — a device that stops
+  checking in for that long silently frees its seat. The cap is
+  `MAX_SEATS` (5) by default, except for entries in `CODE_SEAT_LIMITS`
+  (`AppsScript.gs`) which override it per-code — currently just
+  `{ "PROMO1": 30 }`, since every new visitor auto-activates PROMO1 over
+  the network and a 5-device cap would lock out the site after only 5
+  visitors ever. This is a deliberate soft cap while the site is new
+  (chosen over full exemption), not full unlimited — the site owner can
+  raise it, lower it, or remove PROMO1 from `CODE_SEAT_LIMITS` entirely
+  (reverting it to the default 5) as traffic grows. Real purchased codes
+  get the default `MAX_SEATS` (5) unless explicitly added to
+  `CODE_SEAT_LIMITS`, to blunt one code being shared/leaked indefinitely
+  — not to build real license management.
+- **`#specialAccessBadge`** — a small blue pill next to the header's
+  Premium badge, reading "Special Access", shown only when the code
+  actually used to unlock (`pos-premium-code-used`, checked in
+  `renderAppTitleBadge()`) is literally `"PROMO1"` — i.e. it marks
+  access granted through the free/promotional program specifically, not
+  a real purchased code, and never shows on the offline build (whose own
+  default code is a different string). Explicitly a **temporary
+  placeholder** while the site is new and building an audience — the
+  site owner intends to remove it later once they decide; it's isolated
+  to one CSS class, one HTML element, and a few lines in
+  `renderAppTitleBadge()`, deliberately kept simple to delete later.
 - **Codes never expire.** The sheet's Validity column is purely
   informational — shown to the user as "Valid until: …" via
   `renderPremiumValidity()` — and is never checked against today's date.

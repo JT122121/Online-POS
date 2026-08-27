@@ -2,7 +2,7 @@ var CODES_SHEET_NAME = "Premium Code";
 var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
-var UNLIMITED_CODES = ["PROMO1"];
+var CODE_SEAT_LIMITS = { "PROMO1": 30 };
 
 function doGet(e) {
   var params = (e && e.parameter) || {};
@@ -30,18 +30,17 @@ function validateCode(rawCode, rawDeviceId) {
   var validity = findCode(codesSheet, code);
   if (validity === null) return jsonOut({ ok: false, reason: "invalid" });
 
-  if (UNLIMITED_CODES.indexOf(code) === -1) {
-    var sessionsSheet = ss.getSheetByName(SESSIONS_SHEET_NAME) || createSessionsSheet(ss);
-    var lock = LockService.getScriptLock();
-    var claimed = false;
-    try {
-      lock.waitLock(10000);
-      claimed = checkOrClaimSeat(sessionsSheet, code, deviceId);
-    } finally {
-      lock.releaseLock();
-    }
-    if (!claimed) return jsonOut({ ok: false, reason: "seat_limit" });
+  var seatLimit = CODE_SEAT_LIMITS.hasOwnProperty(code) ? CODE_SEAT_LIMITS[code] : MAX_SEATS;
+  var sessionsSheet = ss.getSheetByName(SESSIONS_SHEET_NAME) || createSessionsSheet(ss);
+  var lock = LockService.getScriptLock();
+  var claimed = false;
+  try {
+    lock.waitLock(10000);
+    claimed = checkOrClaimSeat(sessionsSheet, code, deviceId, seatLimit);
+  } finally {
+    lock.releaseLock();
   }
+  if (!claimed) return jsonOut({ ok: false, reason: "seat_limit" });
 
   return jsonOut({ ok: true, validity: validity });
 }
@@ -66,7 +65,7 @@ function createSessionsSheet(ss) {
   return sheet;
 }
 
-function checkOrClaimSeat(sheet, code, deviceId) {
+function checkOrClaimSeat(sheet, code, deviceId, seatLimit) {
   var data = sheet.getDataRange().getValues();
   var cutoff = new Date(Date.now() - SEAT_WINDOW_DAYS * 24 * 60 * 60 * 1000);
   var activeOthers = 0;
@@ -93,7 +92,7 @@ function checkOrClaimSeat(sheet, code, deviceId) {
     return true;
   }
 
-  if (activeOthers >= MAX_SEATS) return false;
+  if (activeOthers >= seatLimit) return false;
 
   sheet.appendRow([code, deviceId, now]);
   return true;
