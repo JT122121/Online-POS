@@ -171,8 +171,13 @@ img { max-width: 100%; display: block; }
 .ap-chips { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
 .ap-chip { font-size: 9.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
 .ap-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
-.ap-product { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 7px; margin-bottom: 6px; background: #fbfbf8; }
+.ap-product { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 7px; margin-bottom: 6px; background: #fbfbf8; }
 .ap-product.highlighted { background: var(--accent-tint); border-color: #bfe0cf; }
+.ap-product-info { flex: 1; min-width: 0; }
+.ap-product-thumb { flex-shrink: 0; width: 28px; height: 28px; border-radius: 6px; background: #eceae0; border: 1px solid var(--line-soft); display: flex; align-items: center; justify-content: center; font-size: 12px; background-size: cover; background-position: center; }
+.ap-thumb-cola { background-image: linear-gradient(145deg, #7a1618, #3d0a0b); }
+.ap-thumb-bread { background-image: linear-gradient(145deg, #e0b876, #b8873f); }
+.ap-thumb-placeholder { background: #eceae0; }
 .ap-product-name { font-size: 11px; font-weight: 700; display: block; margin-bottom: 3px; }
 .ap-product-meta { display: flex; gap: 6px; align-items: center; font-size: 9.5px; color: var(--ink-soft); flex-wrap: wrap; }
 .ap-product-cat { border: 1px solid var(--line); border-radius: 3px; padding: 1px 4px; font-size: 8.5px; text-transform: uppercase; color: var(--muted); }
@@ -335,15 +340,18 @@ img { max-width: 100%; display: block; }
 </div>
 <div class="ap-chips"><span class="ap-chip active">All</span><span class="ap-chip">Bakery</span><span class="ap-chip">Beverages</span></div>
 <div class="ap-product">
-<div><span class="ap-product-name">Coca Cola 330ml</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.50</span></div></div>
+<span class="ap-product-thumb ap-thumb-cola" aria-hidden="true"></span>
+<div class="ap-product-info"><span class="ap-product-name">Coca Cola 330ml</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.50</span></div></div>
 <span class="ap-add-btn">+</span>
 </div>
 <div class="ap-product">
-<div><span class="ap-product-name">White Bread</span><div class="ap-product-meta"><span class="ap-product-cat">Bakery</span><span>$3.25</span></div></div>
+<span class="ap-product-thumb ap-thumb-bread" aria-hidden="true"></span>
+<div class="ap-product-info"><span class="ap-product-name">White Bread</span><div class="ap-product-meta"><span class="ap-product-cat">Bakery</span><span>$3.25</span></div></div>
 <span class="ap-add-btn">+</span>
 </div>
 <div class="ap-product highlighted">
-<div><span class="ap-product-name">Bottled Water 1.5L</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.00</span><span class="ap-in-cart">In cart: 1</span></div></div>
+<span class="ap-product-thumb ap-thumb-placeholder" aria-hidden="true">📦</span>
+<div class="ap-product-info"><span class="ap-product-name">Bottled Water 1.5L</span><div class="ap-product-meta"><span class="ap-product-cat">Beverages</span><span>$1.00</span><span class="ap-in-cart">In cart: 1</span></div></div>
 <span class="ap-add-btn">+</span>
 </div>
 </div>
