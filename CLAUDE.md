@@ -252,6 +252,19 @@ short version:
   → Manage deployments → edit → New version) before it takes effect on
   the existing `/exec` URL — the URL itself doesn't change, but the code
   behind it does nothing until redeployed.
+- `renewFreeCodes()` + `installRenewalTrigger()` (in `AppsScript.gs`)
+  keep every sheet row's Validity date from ever landing in the past —
+  a time-driven trigger (installed once by running
+  `installRenewalTrigger` manually, not via deployment) runs
+  `renewFreeCodes()` every 3 hours, pushing every row's Validity date
+  (any cell that's an actual date) out to `FREE_CODE_RENEWAL_DAYS` (90)
+  days from whenever it last ran. Applies to every code, no exceptions —
+  a code only opts out by leaving its Validity cell blank in the sheet
+  (which already means "never expires"). This means in practice no code
+  with a date ever actually reaches its expiration in production, as
+  long as the trigger keeps running — the `expired` check in
+  `validateCode()` still exists and is still unit-tested, but is now a
+  safety net rather than something real codes are expected to hit.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 

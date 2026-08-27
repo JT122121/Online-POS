@@ -56,6 +56,21 @@ than that frees its seat automatically). Both are constants at the top of
   devices the way a real purchased code is. It's still subject to the
   expiration check above.
 
+**Keeping every code's Validity date from going stale:** rather than
+manually re-editing dates in the sheet, run **`installRenewalTrigger`**
+once from the function dropdown (Run, then authorize if prompted). It
+sets up a time-driven trigger that runs `renewFreeCodes()` every 3
+hours, pushing every row's Validity date (any cell that's an actual
+date, i.e. not left blank) out to `FREE_CODE_RENEWAL_DAYS` (90) days
+from whenever it last ran, so none of them land in the past. This
+applies to every code in the sheet, no exceptions — a code only
+avoids renewal by leaving its Validity cell blank in the first place
+(which already means "never expires" and needs no renewal). Re-running
+`installRenewalTrigger` is safe — it clears any previous trigger for
+the same function before creating a new one, so it won't create
+duplicates. Check **Triggers** (clock icon) in the Apps Script editor's
+left sidebar to confirm it's listed, or to remove it later.
+
 **Debugging "code isn't valid" from the Apps Script editor:** don't run
 `findCode`, `createSessionsSheet`, `checkOrClaimSeat`, etc. directly from
 the function dropdown — they're internal helpers that expect arguments

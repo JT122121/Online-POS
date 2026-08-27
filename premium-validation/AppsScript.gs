@@ -3,6 +3,7 @@ var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
 var UNLIMITED_CODES = ["PROMO1"];
+var FREE_CODE_RENEWAL_DAYS = 90;
 
 function doGet(e) {
   var params = (e && e.parameter) || {};
@@ -107,6 +108,36 @@ function checkOrClaimSeat(sheet, code, deviceId) {
 
 function jsonOut(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// Keeps every code's Validity date from ever landing in the past --
+// pushes each row's Validity cell out to FREE_CODE_RENEWAL_DAYS from
+// now. Meant to run on a time-driven trigger (see installRenewalTrigger
+// below), not manually. Applies to every code in the sheet, no
+// exceptions -- a blank Validity cell (never-expires) is left blank.
+function renewFreeCodes() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(CODES_SHEET_NAME);
+  if (!sheet) return;
+  var data = sheet.getDataRange().getValues();
+  var target = new Date(Date.now() + FREE_CODE_RENEWAL_DAYS * 24 * 60 * 60 * 1000);
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][1] instanceof Date) {
+      sheet.getRange(i + 1, 2).setValue(target);
+    }
+  }
+}
+
+// Run this ONCE from the function dropdown to schedule renewFreeCodes()
+// to run automatically every 3 hours from then on. Safe to re-run --
+// clears any existing trigger for renewFreeCodes first, so it never
+// creates duplicates.
+function installRenewalTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === "renewFreeCodes") ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger("renewFreeCodes").timeBased().everyHours(3).create();
+  renewFreeCodes();
 }
 
 // Manual test helper. Select "testLookupCode" in the function dropdown
