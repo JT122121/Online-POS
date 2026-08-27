@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Screen | GoOnlinePOS.com</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
+
+.cs-header { text-align: center; padding: 28px 20px 18px; }
+.cs-logo { width: 64px; height: 64px; border-radius: 14px; background: #fff; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.2); }
+.cs-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.cs-store-name { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -.01em; margin: 0; }
+
+.cs-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+
+.cs-waiting { text-align: center; max-width: 420px; }
+.cs-waiting .icon { font-size: 52px; margin-bottom: 18px; }
+.cs-waiting h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0 0 10px; }
+.cs-waiting p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; margin: 0; }
+
+.cs-order { width: 100%; max-width: 560px; }
+.cs-items { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 2px 4px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.2); padding: 10px 24px; margin-bottom: 18px; max-height: 46vh; overflow-y: auto; }
+.cs-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line-soft); font-size: 17px; }
+.cs-item:last-child { border-bottom: none; }
+.cs-item-name { font-weight: 600; }
+.cs-item-qty { color: var(--muted); font-size: 14px; margin-left: 6px; }
+.cs-item-total { font-family: var(--font-mono); font-weight: 700; white-space: nowrap; }
+
+.cs-totals { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 2px 4px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.2); padding: 20px 24px; }
+.cs-total-row { display: flex; justify-content: space-between; font-size: 15px; color: var(--ink-soft); margin: 6px 0; }
+.cs-grand-row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.cs-grand-label { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
+.cs-grand-amount { font-family: var(--font-mono); font-weight: 700; font-size: 34px; color: var(--accent-dark); }
+
+.cs-payment-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; color: var(--ink); margin: 6px 0; }
+.cs-payment-row span:last-child { font-family: var(--font-mono); }
+.cs-payment-row-done { display: flex; justify-content: space-between; font-size: 22px; font-weight: 700; color: var(--accent-dark); margin: 8px 0; }
+.cs-payment-row-done span:last-child { font-family: var(--font-mono); }
+
+.cs-thankyou { text-align: center; max-width: 460px; }
+.cs-thankyou .icon { width: 88px; height: 88px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; font-size: 44px; margin: 0 auto 20px; }
+.cs-thankyou h2 { font-family: var(--font-display); font-weight: 700; font-size: 30px; margin: 0 0 14px; }
+.cs-thankyou .amount-paid { font-family: var(--font-mono); font-size: 30px; font-weight: 700; color: var(--accent-dark); margin-bottom: 10px; }
+.cs-thankyou .change-line { font-size: 16px; color: var(--ink-soft); }
+.cs-thankyou .change-line strong { color: var(--ink); font-family: var(--font-mono); }
+
+.cs-footer { text-align: center; padding: 14px; font-size: 11.5px; color: var(--muted); }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="cs-header">
+<div class="cs-logo" id="csLogoBox"><img id="csLogo" class="hidden" alt=""></div>
+<h1 class="cs-store-name" id="csStoreName">GoOnlinePOS.com</h1>
+</div>
+
+<div class="cs-body">
+
+<div id="csWaiting" class="cs-waiting">
+<div class="icon">🛒</div>
+<h2 id="csWaitingTitle">Welcome!</h2>
+<p id="csWaitingText">Waiting for your order to start...</p>
+</div>
+
+<div id="csOrder" class="cs-order hidden">
+<div class="cs-items" id="csItems"></div>
+<div class="cs-totals">
+<div class="cs-total-row" id="csSubtotalRow"><span id="csSubtotalLabel">Subtotal</span><span id="csSubtotal">$0.00</span></div>
+<div class="cs-total-row hidden" id="csDiscountRow"><span id="csDiscountLabel">Discount</span><span id="csDiscount">$0.00</span></div>
+<div class="cs-total-row hidden" id="csTaxRow"><span id="csTaxLabel">Tax</span><span id="csTax">$0.00</span></div>
+<div class="cs-grand-row"><span class="cs-grand-label" id="csGrandLabel">Total</span><span class="cs-grand-amount" id="csGrandTotal">$0.00</span></div>
+</div>
+<div id="csPaymentsBox" class="cs-totals hidden" style="margin-top:14px;">
+<div id="csPaymentsList"></div>
+</div>
+</div>
+
+<div id="csThankYou" class="cs-thankyou hidden">
+<div class="icon">✓</div>
+<h2 id="csThankYouTitle">Thank you!</h2>
+<div id="csPaymentsListDone" style="margin-bottom:14px;"></div>
+<div class="change-line" id="csChangeLine"></div>
+</div>
+
+</div>
+
+<div class="cs-footer">Powered by GoOnlinePOS.com</div>
+
+<script>
+var translations = {
+  en: { waitingTitle: "Welcome!", waitingText: "Waiting for your order to start...", thankYouTitle: "Thank you!", changeDueLabel: "Change due:", totalPaidLabel: "Total Paid", paymentFallback: "Payment", itemFallback: "Item", subtotalLabel: "Subtotal", discountLabel: "Discount", taxLabel: "Tax", totalLabel: "Total" },
+  ar: { waitingTitle: "أهلاً بك!", waitingText: "بانتظار بدء طلبك...", thankYouTitle: "شكراً لك!", changeDueLabel: "الباقي المستحق:", totalPaidLabel: "إجمالي المدفوع", paymentFallback: "الدفع", itemFallback: "صنف", subtotalLabel: "المجموع الفرعي", discountLabel: "الخصم", taxLabel: "الضريبة", totalLabel: "الإجمالي" },
+  fil: { waitingTitle: "Maligayang pagdating!", waitingText: "Naghihintay ang iyong order...", thankYouTitle: "Salamat!", changeDueLabel: "Sukli:", totalPaidLabel: "Kabuuang Bayad", paymentFallback: "Bayad", itemFallback: "Item", subtotalLabel: "Subtotal", discountLabel: "Discount", taxLabel: "Buwis", totalLabel: "Total" },
+  hi: { waitingTitle: "स्वागत है!", waitingText: "आपके ऑर्डर की प्रतीक्षा है...", thankYouTitle: "धन्यवाद!", changeDueLabel: "बाकी राशि:", totalPaidLabel: "कुल भुगतान", paymentFallback: "भुगतान", itemFallback: "आइटम", subtotalLabel: "उप-योग", discountLabel: "छूट", taxLabel: "कर", totalLabel: "कुल" },
+  es: { waitingTitle: "¡Bienvenido!", waitingText: "Esperando que comience tu pedido...", thankYouTitle: "¡Gracias!", changeDueLabel: "Cambio a entregar:", totalPaidLabel: "Total Pagado", paymentFallback: "Pago", itemFallback: "Artículo", subtotalLabel: "Subtotal", discountLabel: "Descuento", taxLabel: "Impuesto", totalLabel: "Total" },
+  th: { waitingTitle: "ยินดีต้อนรับ!", waitingText: "กำลังรอคำสั่งซื้อของคุณ...", thankYouTitle: "ขอบคุณค่ะ/ครับ!", changeDueLabel: "เงินทอน:", totalPaidLabel: "ยอดชำระทั้งหมด", paymentFallback: "การชำระเงิน", itemFallback: "สินค้า", subtotalLabel: "ยอดรวมย่อย", discountLabel: "ส่วนลด", taxLabel: "ภาษี", totalLabel: "รวม" }
+};
+function tr(lang, key) {
+  var dict = translations[lang] || translations.en;
+  return dict[key] !== undefined ? dict[key] : translations.en[key];
+}
+
+var STATE_KEY = "goonlinepos-customer-screen-state";
+var channel = null;
+var holdCompletedUntil = 0;
+try { channel = new BroadcastChannel("goonlinepos-customer-screen"); } catch (e) { channel = null; }
+
+function esc(text) {
+  var div = document.createElement("div");
+  div.textContent = text == null ? "" : String(text);
+  return div.innerHTML;
+}
+
+function render(state) {
+  if (!state) return;
+  var now = Date.now();
+
+  var lang = state.lang || "en";
+  document.documentElement.lang = lang;
+  document.body.dir = lang === "ar" ? "rtl" : "ltr";
+  document.getElementById("csWaitingTitle").textContent = tr(lang, "waitingTitle");
+  document.getElementById("csWaitingText").textContent = tr(lang, "waitingText");
+  document.getElementById("csThankYouTitle").textContent = tr(lang, "thankYouTitle");
+  document.getElementById("csSubtotalLabel").textContent = tr(lang, "subtotalLabel");
+  document.getElementById("csDiscountLabel").textContent = tr(lang, "discountLabel");
+  document.getElementById("csTaxLabel").textContent = tr(lang, "taxLabel");
+  document.getElementById("csGrandLabel").textContent = tr(lang, "totalLabel");
+
+  if (state.stage === "completed") {
+    holdCompletedUntil = now + 6000;
+  } else if (now < holdCompletedUntil) {
+    return;
+  }
+
+  document.getElementById("csStoreName").textContent = state.storeName || "GoOnlinePOS.com";
+  var logoImg = document.getElementById("csLogo");
+  if (state.logo) {
+    logoImg.src = state.logo;
+    logoImg.classList.remove("hidden");
+  } else {
+    logoImg.classList.add("hidden");
+  }
+
+  var waiting = document.getElementById("csWaiting");
+  var order = document.getElementById("csOrder");
+  var thankYou = document.getElementById("csThankYou");
+
+  if (state.stage === "completed") {
+    waiting.classList.add("hidden");
+    order.classList.add("hidden");
+    thankYou.classList.remove("hidden");
+    var symbol = state.symbol || "$";
+    var d = (typeof state.decimals === "number") ? state.decimals : 2;
+
+    var doneList = document.getElementById("csPaymentsListDone");
+    doneList.innerHTML = "";
+    var donePayments = state.payments || [];
+    if (donePayments.length) {
+      donePayments.forEach(function(p) {
+        var row = document.createElement("div");
+        row.className = "cs-payment-row-done";
+        row.innerHTML = "<span>" + esc(p.method || tr(lang, "paymentFallback")) + "</span><span>" + esc(symbol) + " " + Number(p.amount || 0).toFixed(d) + "</span>";
+        doneList.appendChild(row);
+      });
+    } else {
+      var fallbackRow = document.createElement("div");
+      fallbackRow.className = "cs-payment-row-done";
+      fallbackRow.innerHTML = "<span>" + esc(tr(lang, "totalPaidLabel")) + "</span><span>" + esc(symbol) + " " + Number(state.grandTotal || 0).toFixed(d) + "</span>";
+      doneList.appendChild(fallbackRow);
+    }
+
+    var changeLine = document.getElementById("csChangeLine");
+    var change = Number(state.change || 0);
+    if (change > 0) {
+      changeLine.innerHTML = esc(tr(lang, "changeDueLabel")) + " <strong>" + esc(symbol) + " " + change.toFixed(d) + "</strong>";
+    } else {
+      changeLine.textContent = "";
+    }
+    return;
+  }
+
+  var items = state.items || [];
+  if (!items.length) {
+    waiting.classList.remove("hidden");
+    order.classList.add("hidden");
+    thankYou.classList.add("hidden");
+    return;
+  }
+
+  waiting.classList.add("hidden");
+  order.classList.remove("hidden");
+  thankYou.classList.add("hidden");
+
+  var symbol2 = state.symbol || "$";
+  var d2 = (typeof state.decimals === "number") ? state.decimals : 2;
+  var itemsEl = document.getElementById("csItems");
+  itemsEl.innerHTML = "";
+  items.forEach(function(it) {
+    var qty = Number(it.qty) || 0;
+    var price = Number(it.price) || 0;
+    var row = document.createElement("div");
+    row.className = "cs-item";
+    row.innerHTML =
+      "<span class=\"cs-item-name\">" + esc(it.name || tr(lang, "itemFallback")) + (qty > 1 ? "<span class=\"cs-item-qty\">× " + qty + "</span>" : "") + "</span>" +
+      "<span class=\"cs-item-total\">" + esc(symbol2) + " " + (qty * price).toFixed(d2) + "</span>";
+    itemsEl.appendChild(row);
+  });
+
+  document.getElementById("csSubtotal").textContent = symbol2 + " " + Number(state.subtotal || 0).toFixed(d2);
+
+  var discountRow = document.getElementById("csDiscountRow");
+  if (Number(state.discount) > 0) {
+    discountRow.classList.remove("hidden");
+    document.getElementById("csDiscount").textContent = "− " + symbol2 + " " + Number(state.discount).toFixed(d2);
+  } else {
+    discountRow.classList.add("hidden");
+  }
+
+  var taxRow = document.getElementById("csTaxRow");
+  if (Number(state.tax) > 0) {
+    taxRow.classList.remove("hidden");
+    document.getElementById("csTax").textContent = symbol2 + " " + Number(state.tax).toFixed(d2);
+  } else {
+    taxRow.classList.add("hidden");
+  }
+
+  document.getElementById("csGrandTotal").textContent = symbol2 + " " + Number(state.grandTotal || 0).toFixed(d2);
+
+  var paymentsBox = document.getElementById("csPaymentsBox");
+  var paymentsList = document.getElementById("csPaymentsList");
+  var payments = state.payments || [];
+  if (payments.length) {
+    paymentsBox.classList.remove("hidden");
+    paymentsList.innerHTML = "";
+    payments.forEach(function(p) {
+      var row = document.createElement("div");
+      row.className = "cs-payment-row";
+      row.innerHTML = "<span>" + esc(p.method || tr(lang, "paymentFallback")) + "</span><span>" + esc(symbol2) + " " + Number(p.amount || 0).toFixed(d2) + "</span>";
+      paymentsList.appendChild(row);
+    });
+  } else {
+    paymentsBox.classList.add("hidden");
+  }
+}
+
+function loadInitialState() {
+  try {
+    var raw = localStorage.getItem(STATE_KEY);
+    if (raw) render(JSON.parse(raw));
+  } catch (e) {}
+}
+
+if (channel) {
+  channel.onmessage = function(e) { render(e.data); };
+}
+window.addEventListener("storage", function(e) {
+  if (e.key === STATE_KEY && e.newValue) {
+    try { render(JSON.parse(e.newValue)); } catch (err) {}
+  }
+});
+
+loadInitialState();
+</script>
+
+</body>
+</html>

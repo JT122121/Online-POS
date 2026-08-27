@@ -105,6 +105,35 @@ local to the browser.
   bottom of the file, separate from the app's own `onlinepos_*` storage
   keys).
 
+## `offline/` — downloadable offline package
+
+A self-contained, zero-network copy of the app for users who want to
+download and run GoOnlinePOS without internet access.
+
+- `offline/app.html` / `offline/customer.html` are **generated**, not
+  hand-edited — derived from the root `app.html`/`customer.html` by
+  `offline/build-offline.py`. Re-run that script after changing the root
+  files to keep the offline copies in sync (it asserts on each expected
+  edit point, so it fails loudly rather than silently drifting).
+- The script: (1) points the `xlsx`/`@zxing/browser` `<script src>` tags
+  at `offline/vendor/` instead of cdnjs/unpkg — those two files are
+  vendored, unmodified builds pulled from the npm registry (see
+  `offline/vendor/LICENSES.txt`); (2) strips the Google Fonts `<link>`
+  tags (the CSS already has system-font fallbacks, so this is cosmetic
+  only); (3) strips the cookie-consent/GA/AdSense bootstrap script and
+  banner markup from `app.html` (nothing to track offline).
+- `offline/start-server.sh` / `-mac.command` / `.bat` run a local Python
+  `http.server` and open the app at `http://localhost:8080/app.html`.
+  This is what makes the customer-screen broadcast
+  (`BroadcastChannel`/`localStorage`) and the camera barcode scanner
+  reliable across browsers offline — double-clicking `app.html` directly
+  via `file://` works too (confirmed in Chromium), but Firefox/Safari can
+  isolate separate double-clicked local files from each other, breaking
+  cross-tab sync. `offline/README.txt` explains both paths to end users.
+- Verified end-to-end with a headless-Chromium smoke test (vendored libs
+  load, cart math, checkout, and live customer-screen mirroring across
+  two localhost tabs) — zero console/page errors.
+
 ## `customer.html`
 
 Minimal receiver page: opens a `BroadcastChannel("goonlinepos-customer-screen")`
