@@ -102,14 +102,6 @@ function jsonOut(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// If you previously ran installRenewalTrigger, open the Triggers (clock
-// icon) panel in the Apps Script editor and delete the renewFreeCodes
-// trigger -- it's no longer needed now that expiration isn't enforced.
-
-// Manual test helper. Select "testLookupCode" in the function dropdown
-// above and click Run, then View > Logs (or Ctrl+Enter). Edit the code
-// below to whatever you're testing. Safe to run directly -- unlike
-// findCode/validateCode it doesn't need arguments from doGet/doPost.
 function testLookupCode() {
   var codeToTest = "PROMO1";
   var ss = SpreadsheetApp.getActiveSpreadsheet();
