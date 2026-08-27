@@ -11,7 +11,9 @@ sheet and is what `app.html` calls to check a code.
    only — see below) validity date in column B.
 2. Extensions → Apps Script in that sheet, paste in `AppsScript.gs`,
    then Deploy → New deployment → **Web app** → Execute as **Me** →
-   Who has access **Anyone** → Deploy. Copy the resulting URL (ends in
+   Who has access **Anyone** (must be exactly this — "Anyone with a
+   Google account" or "Only myself" makes every cross-origin request
+   from the website fail) → Deploy. Copy the resulting URL (ends in
    `/exec`).
 3. In `app.html`, search for `PREMIUM_VALIDATION_URL` and replace the
    placeholder with that URL.
@@ -45,3 +47,14 @@ No spreadsheet URL or ID appears anywhere in this repo — the script is
 bound directly to the sheet (`SpreadsheetApp.getActiveSpreadsheet()`), so
 it never needs to reference it, and `PREMIUM_VALIDATION_URL` in `app.html`
 is the Apps Script's own URL, not the sheet's.
+
+**Why the app calls this with GET, not POST:** Google Apps Script Web
+Apps have a long-documented history of not reliably sending CORS headers
+back on POST responses — the browser blocks the response with "CORS
+request was blocked because of invalid or missing response headers,"
+even though the exact same call works fine as a direct browser visit or
+via a tool that doesn't enforce CORS (curl, Postman). GET requests don't
+have this problem, so `checkPremiumCode()` in `app.html` sends
+`?code=...&deviceId=...` as query params and `AppsScript.gs`'s `doGet()`
+is the real handler; `doPost()` is kept only as a fallback and will hit
+the same CORS issue if actually called cross-origin.

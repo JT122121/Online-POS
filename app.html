@@ -466,6 +466,14 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 </header>
 
+<div id="premiumPromoNotice" class="backup-notice hidden">
+<div class="bn-text">🎁 <span id="premiumPromoNoticeText">Activate Your Free Premium Now</span></div>
+<div class="bn-actions">
+<button type="button" class="bn-backup-btn" onclick="activateFreePremiumFromNotice()" id="premiumPromoNoticeButton">Activate</button>
+<button type="button" class="bn-dismiss-btn" onclick="dismissPremiumPromoNotice()" aria-label="Dismiss">×</button>
+</div>
+</div>
+
 <div id="backupNotice" class="backup-notice hidden">
 <div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.</span></div>
 <div class="bn-actions">
@@ -1133,6 +1141,7 @@ en: {
   backupTitle: "Backup & Restore", backupInfo: "Everything here — products, sales history, settings, your logo, cashiers, and payment methods — is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.",
   restoreBackupLabel: "Restore from Backup", restoreInfo: "This replaces everything currently saved with what's in the backup file. The page will reload after restoring.",
   backupNoticeText: "Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.", backupNoticeButton: "Download Backup",
+  premiumPromoNoticeText: "Activate Your Free Premium Now",
   restoreConfirm: "This will replace all current products, sales history, and settings with the backup file. Continue?",
   restoreSuccess: "Backup restored. The page will now reload.", restoreError: "Couldn't read that backup file. Make sure it's an unmodified .json file downloaded from here.",
   item: "Item", qty: "Qty", total: "Total",
@@ -1222,6 +1231,7 @@ ar: {
   backupTitle: "النسخ الاحتياطي والاستعادة", backupInfo: "كل شيء هنا — المنتجات، سجل المبيعات، الإعدادات، شعارك، الكاشيرون، وطرق الدفع — محفوظ فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية كاملة بانتظام، خاصة قبل مسح بيانات المتصفح أو تغيير الجهاز.",
   restoreBackupLabel: "الاستعادة من نسخة احتياطية", restoreInfo: "سيستبدل هذا كل ما هو محفوظ حالياً بما في ملف النسخة الاحتياطية. سيتم إعادة تحميل الصفحة بعد الاستعادة.",
   backupNoticeText: "بياناتك محفوظة فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية بانتظام حتى لا يضيع شيء إذا تم مسح ذاكرة التخزين المؤقت.", backupNoticeButton: "تنزيل نسخة احتياطية",
+  premiumPromoNoticeText: "فعّل بريميوم المجاني الآن",
   restoreConfirm: "سيؤدي هذا إلى استبدال جميع المنتجات وسجل المبيعات والإعدادات الحالية بملف النسخة الاحتياطية. هل تريد المتابعة؟",
   restoreSuccess: "تمت استعادة النسخة الاحتياطية. سيتم الآن إعادة تحميل الصفحة.", restoreError: "تعذّرت قراءة ملف النسخة الاحتياطية. تأكد أنه ملف json غير معدّل تم تنزيله من هنا.",
   item: "الصنف", qty: "الكمية", total: "الإجمالي",
@@ -1303,6 +1313,7 @@ fil: {
   backupTitle: "Backup at Pagbawi", backupInfo: "Lahat dito — mga produkto, kasaysayan ng benta, settings, logo mo, mga kahero, at paraan ng pagbabayad — naka-save lang sa browser na ito. Mag-download ng buong backup nang regular, lalo na bago burahin ang data ng browser o lumipat ng device.",
   restoreBackupLabel: "Ibalik mula sa Backup", restoreInfo: "Papalitan nito ang lahat ng kasalukuyang naka-save ng laman ng backup file. Mag-re-reload ang page pagkatapos ibalik.",
   backupNoticeText: "Naka-save lang ang data mo sa browser na ito. Mag-download ng backup nang regular para walang mawala kapag na-clear ang cache mo.", backupNoticeButton: "I-download ang Backup",
+  premiumPromoNoticeText: "I-activate ang Libreng Premium Mo Ngayon",
   restoreConfirm: "Papalitan nito ang lahat ng kasalukuyang produkto, kasaysayan ng benta, at settings ng backup file. Magpatuloy?",
   restoreSuccess: "Naibalik na ang backup. Magre-reload na ang page.", restoreError: "Hindi mabasa ang backup file na iyon. Siguraduhing hindi ito binago at .json file na na-download mula rito.",
   item: "Item", qty: "Qty", total: "Total",
@@ -1384,6 +1395,7 @@ hi: {
   backupTitle: "बैकअप और पुनर्स्थापना", backupInfo: "यहां सब कुछ — उत्पाद, बिक्री इतिहास, सेटिंग्स, आपका लोगो, कैशियर, और भुगतान के तरीके — केवल इस ब्राउज़र में सेव है। नियमित रूप से पूरा बैकअप डाउनलोड करें, खासकर ब्राउज़र डेटा साफ़ करने या डिवाइस बदलने से पहले।",
   restoreBackupLabel: "बैकअप से पुनर्स्थापित करें", restoreInfo: "यह वर्तमान में सेव सब कुछ बैकअप फ़ाइल की सामग्री से बदल देगा। पुनर्स्थापना के बाद पेज रीलोड होगा।",
   backupNoticeText: "आपका डेटा केवल इस ब्राउज़र में सेव है। नियमित रूप से बैकअप डाउनलोड करें ताकि कैश साफ़ होने पर कुछ भी न खोए।", backupNoticeButton: "बैकअप डाउनलोड करें",
+  premiumPromoNoticeText: "अभी अपना मुफ़्त प्रीमियम सक्रिय करें",
   restoreConfirm: "यह सभी मौजूदा उत्पाद, बिक्री इतिहास, और सेटिंग्स को बैकअप फ़ाइल से बदल देगा। जारी रखें?",
   restoreSuccess: "बैकअप पुनर्स्थापित हो गया। पेज अब रीलोड होगा।", restoreError: "वह बैकअप फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह यहां से डाउनलोड की गई एक अपरिवर्तित .json फ़ाइल है।",
   item: "आइटम", qty: "मात्रा", total: "कुल",
@@ -1465,6 +1477,7 @@ es: {
   backupTitle: "Copia de Seguridad y Restauración", backupInfo: "Todo aquí — productos, historial de ventas, configuración, tu logo, cajeros y métodos de pago — se guarda solo en este navegador. Descarga una copia de seguridad completa regularmente, especialmente antes de borrar los datos del navegador o cambiar de dispositivo.",
   restoreBackupLabel: "Restaurar desde Copia de Seguridad", restoreInfo: "Esto reemplaza todo lo guardado actualmente con el contenido del archivo de copia de seguridad. La página se recargará después de restaurar.",
   backupNoticeText: "Tus datos se guardan solo en este navegador. Descarga una copia de seguridad regularmente para no perder nada si se borra la caché.", backupNoticeButton: "Descargar Copia de Seguridad",
+  premiumPromoNoticeText: "Activa tu Premium Gratis Ahora",
   restoreConfirm: "Esto reemplazará todos los productos, historial de ventas y configuración actuales con el archivo de copia de seguridad. ¿Continuar?",
   restoreSuccess: "Copia de seguridad restaurada. La página se recargará ahora.", restoreError: "No se pudo leer ese archivo de copia de seguridad. Asegúrate de que sea un archivo .json sin modificar descargado desde aquí.",
   item: "Artículo", qty: "Cant.", total: "Total",
@@ -1546,6 +1559,7 @@ th: {
   backupTitle: "สำรองข้อมูลและกู้คืน", backupInfo: "ทุกอย่างที่นี่ — สินค้า ประวัติการขาย การตั้งค่า โลโก้ของคุณ แคชเชียร์ และวิธีการชำระเงิน — ถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองแบบเต็มเป็นประจำ โดยเฉพาะก่อนล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนอุปกรณ์",
   restoreBackupLabel: "กู้คืนจากไฟล์สำรอง", restoreInfo: "การดำเนินการนี้จะแทนที่ทุกอย่างที่บันทึกไว้ในปัจจุบันด้วยเนื้อหาในไฟล์สำรอง หน้าเว็บจะโหลดใหม่หลังจากกู้คืน",
   backupNoticeText: "ข้อมูลของคุณถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองเป็นประจำเพื่อไม่ให้ข้อมูลสูญหายหากแคชถูกล้าง", backupNoticeButton: "ดาวน์โหลดข้อมูลสำรอง",
+  premiumPromoNoticeText: "เปิดใช้งานพรีเมียมฟรีของคุณตอนนี้",
   restoreConfirm: "การดำเนินการนี้จะแทนที่สินค้า ประวัติการขาย และการตั้งค่าปัจจุบันทั้งหมดด้วยไฟล์สำรอง ต้องการดำเนินการต่อหรือไม่?",
   restoreSuccess: "กู้คืนข้อมูลสำรองแล้ว หน้าเว็บจะโหลดใหม่ตอนนี้", restoreError: "ไม่สามารถอ่านไฟล์สำรองนั้นได้ ตรวจสอบว่าเป็นไฟล์ .json ที่ไม่ถูกแก้ไขซึ่งดาวน์โหลดจากที่นี่",
   item: "สินค้า", qty: "จำนวน", total: "รวม",
@@ -1809,6 +1823,7 @@ async function loadPremiumStatus() {
   renderPremiumStatus();
   renderPremiumValidity();
   applyPremiumLocks();
+  refreshPremiumPromoNotice();
   /* OFFLINE-STRIP:HEARTBEAT:START */
   if (premiumUnlocked) heartbeatPremiumCode();
   /* OFFLINE-STRIP:HEARTBEAT:END */
@@ -1863,6 +1878,7 @@ async function unlockPremiumLocally(code, validity) {
   renderPremiumStatus();
   renderPremiumValidity();
   applyPremiumLocks();
+  refreshPremiumPromoNotice();
 }
 
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:START */
@@ -1887,27 +1903,14 @@ async function getDeviceId() {
 
 async function checkPremiumCode(code) {
   const deviceId = await getDeviceId();
-  const res = await fetch(PREMIUM_VALIDATION_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" }, // avoids a CORS preflight against Apps Script
-    body: JSON.stringify({ code: code, deviceId: deviceId })
-  });
-  // Read the body as text once (works whether or not it parses as JSON), so
-  // a failure either way can be logged with what the server actually sent —
-  // the only way to tell a CORS/network failure (fetch() itself throws,
-  // never reaches here) apart from Apps Script returning a non-2xx status
-  // or a non-JSON error/login page (HTTP is "ok" but body isn't valid JSON).
-  const bodyText = await res.text();
-  if (!res.ok) {
-    console.error("Premium validation: server responded HTTP " + res.status + " — body:", bodyText);
-    throw new Error("HTTP " + res.status);
-  }
-  try {
-    return JSON.parse(bodyText);
-  } catch (parseErr) {
-    console.error("Premium validation: response wasn't valid JSON — body:", bodyText);
-    throw parseErr;
-  }
+  // GET, not POST — Apps Script Web Apps have historically been unreliable
+  // about sending CORS headers on POST responses (fails with "invalid or
+  // missing response headers" in the browser), while a plain GET works
+  // consistently. See premium-validation/AppsScript.gs (doGet).
+  const url = PREMIUM_VALIDATION_URL + "?code=" + encodeURIComponent(code) + "&deviceId=" + encodeURIComponent(deviceId);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return res.json();
 }
 
 const DEFAULT_PREMIUM_CODE = "PROMO1";
@@ -1941,7 +1944,6 @@ async function activatePremiumCode() {
       errorBox.classList.remove("hidden");
     }
   } catch (e) {
-    console.error("Premium code activation failed:", e);
     errorBox.textContent = tr("premiumCodeNetworkError");
     errorBox.classList.remove("hidden");
   } finally {
@@ -1960,7 +1962,7 @@ async function heartbeatPremiumCode() {
     if (!code) return;
     const result = await checkPremiumCode(code);
     if (result && result.ok && result.validity) await storageSet("pos-premium-validity", result.validity);
-  } catch (e) { console.warn("Premium heartbeat failed (harmless, local access unaffected):", e); }
+  } catch (e) { /* ignore */ }
 }
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:END */
 
@@ -2860,6 +2862,33 @@ async function loadBackupNoticeState() {
 async function dismissBackupNotice() {
   document.getElementById("backupNotice").classList.add("hidden");
   await storageSet("pos-backup-notice-dismissed", "1");
+}
+
+// Nudges a not-yet-Premium visitor toward the free default code. Only shown
+// while there's actually a default code to offer (the dropdown's first
+// option has a value — true for PROMO1 online and OFFLINE_PREMIUM_CODE
+// offline) and premium isn't already unlocked; re-checked (not just
+// re-shown) every time premium status changes, so it disappears the moment
+// someone activates any code, not only via this banner's own button.
+async function refreshPremiumPromoNotice() {
+  const notice = document.getElementById("premiumPromoNotice");
+  if (!notice) return;
+  if (premiumUnlocked) { notice.classList.add("hidden"); return; }
+  const dismissed = await storageGet("pos-premium-promo-dismissed");
+  const defaultOption = document.getElementById("premiumCodeDefaultOption");
+  const hasDefaultCode = !!(defaultOption && defaultOption.value);
+  notice.classList.toggle("hidden", !!dismissed || !hasDefaultCode);
+}
+async function dismissPremiumPromoNotice() {
+  document.getElementById("premiumPromoNotice").classList.add("hidden");
+  await storageSet("pos-premium-promo-dismissed", "1");
+}
+async function activateFreePremiumFromNotice() {
+  document.getElementById("settingsOverlay").classList.remove("hidden");
+  selectSettingsTab("premium");
+  const select = document.getElementById("premiumCodeSelect");
+  if (select) { select.selectedIndex = 0; handlePremiumCodeSelectChange(); }
+  await activatePremiumCode();
 }
 
 function buildSalesExportRows() {
@@ -3970,6 +3999,7 @@ function changeLanguage() {
     languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
+    premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     inventoryShortcutLabel: "inventoryShortcutLabel", customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",

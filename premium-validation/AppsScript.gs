@@ -51,7 +51,15 @@
  * 3. Delete any starter code in Code.gs, paste this file's contents in.
  * 4. Deploy -> New deployment -> select type "Web app".
  *      Execute as: Me
- *      Who has access: Anyone
+ *      Who has access: Anyone         <- must be exactly this. "Anyone
+ *                                         with a Google account" or "Only
+ *                                         myself" will make every
+ *                                         cross-origin request from the
+ *                                         website fail (it gets redirected
+ *                                         to a Google sign-in page instead
+ *                                         of running the script, which
+ *                                         then fails as a CORS error in
+ *                                         the browser).
  * 5. Deploy, authorize when prompted, then copy the Web app URL — it
  *    ends in /exec.
  * 6. Paste that URL into PREMIUM_VALIDATION_URL in app.html (search for
@@ -63,6 +71,19 @@
  * This script never hardcodes the sheet's URL or ID — being bound to the
  * sheet, it reaches it via SpreadsheetApp.getActiveSpreadsheet(), so the
  * sheet's own URL never needs to appear here or in the website's code.
+ *
+ * WHY GET, NOT POST
+ * ------------------
+ * The app calls this with a plain GET (?code=...&deviceId=...), not a
+ * POST with a JSON body. Apps Script Web Apps have a long-documented
+ * history of not reliably sending CORS headers back on POST responses —
+ * cross-origin fetch() calls fail in the browser with "CORS request was
+ * blocked because of invalid or missing response headers," even though
+ * the exact same request works fine as a same-tab navigation or via a
+ * tool like curl that doesn't enforce CORS. GET requests don't have this
+ * problem. doPost() is kept below only as a fallback for any caller that
+ * still POSTs (e.g. an older cached copy of app.html) — it will hit the
+ * same CORS issue if called cross-origin, so it isn't a real substitute.
  */
 
 var CODES_SHEET_NAME = "Premium Code";
@@ -70,24 +91,24 @@ var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
 
-// The app never calls this — it always POSTs. This only exists so that
-// visiting the deployed URL directly in a browser (a GET request) shows a
-// clear message instead of Apps Script's default "Script function not
-// found: doGet" error.
 function doGet(e) {
-  return jsonOut({ ok: false, reason: "get_not_supported", message: "This endpoint only accepts POST requests from the GoOnlinePOS app." });
+  var params = (e && e.parameter) || {};
+  if (!params.code || !params.deviceId) {
+    return jsonOut({ ok: false, reason: "bad_request", message: "This endpoint validates GoOnlinePOS Premium codes. Expected query params: code, deviceId." });
+  }
+  return validateCode(params.code, params.deviceId);
 }
 
+// Fallback only — see "WHY GET, NOT POST" above. app.html doesn't call this.
 function doPost(e) {
-  var body;
-  try {
-    body = JSON.parse(e.postData.contents);
-  } catch (err) {
-    return jsonOut({ ok: false, reason: "bad_request" });
-  }
+  var body = {};
+  try { body = JSON.parse(e.postData.contents); } catch (err) { /* leave body empty -> bad_request below */ }
+  return validateCode(body.code, body.deviceId);
+}
 
-  var code = String(body.code || "").trim().toUpperCase();
-  var deviceId = String(body.deviceId || "").trim();
+function validateCode(rawCode, rawDeviceId) {
+  var code = String(rawCode || "").trim().toUpperCase();
+  var deviceId = String(rawDeviceId || "").trim();
   if (!code || !deviceId) return jsonOut({ ok: false, reason: "bad_request" });
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();

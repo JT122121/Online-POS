@@ -111,6 +111,21 @@ zero network calls.
   `.basic-badge`) otherwise; it used to always read "Premium" regardless
   of status. `changeLanguage()` also calls it directly, so it re-translates
   on a language switch without needing a status change.
+- **`#premiumPromoNotice`** — a dismissible "Activate Your Free Premium
+  Now" banner, styled/behaving exactly like the pre-existing
+  `#backupNotice` (same `.backup-notice`/`.bn-*` classes, same
+  dismiss-persists-via-storage pattern — `pos-premium-promo-dismissed`).
+  Shown only while premium isn't unlocked, there's a default code to
+  offer (`#premiumCodeDefaultOption` has a value — true for both builds),
+  and it hasn't been dismissed; `refreshPremiumPromoNotice()` re-evaluates
+  this from both `loadPremiumStatus()` and `unlockPremiumLocally()`, so it
+  disappears the moment premium is unlocked through *any* path, not only
+  by clicking this banner. Its own button
+  (`activateFreePremiumFromNotice()`) is a single click that opens
+  Settings, switches to the Premium tab, and immediately activates
+  whatever the dropdown's default option is — safe to do unprompted since
+  that default is always the local/no-network code (PROMO1 online,
+  `OFFLINE_PREMIUM_CODE` offline).
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
@@ -191,12 +206,25 @@ short version:
   (`premiumCodeInvalid`), code found but at its device cap
   (`premiumCodeSeatLimit`), and the endpoint being unreachable
   (`premiumCodeNetworkError` — this is the one that fires if
-  `PREMIUM_VALIDATION_URL` is still the placeholder). `AppsScript.gs` also
-  defines a `doGet()` that returns a plain "this endpoint only accepts
-  POST" message — the app itself never triggers it (it always POSTs), it
-  only exists so visiting the deployed `/exec` URL directly in a browser
-  doesn't show Apps Script's raw "Script function not found: doGet"
-  error.
+  `PREMIUM_VALIDATION_URL` is still the placeholder, or if the deployment
+  isn't reachable for some other reason).
+- **`checkPremiumCode()` calls the Apps Script with GET, not POST** —
+  `?code=...&deviceId=...` query params, handled by `AppsScript.gs`'s
+  `doGet()` (the real handler; `doPost()` is kept only as a fallback).
+  This was a deliberate fix, not the original design: Apps Script Web
+  Apps have a documented history of not reliably sending CORS headers
+  back on POST responses, so a cross-origin `fetch()` POST fails in the
+  browser with "CORS request was blocked because of invalid or missing
+  response headers" even though the identical request works fine as a
+  direct browser visit or via curl (neither enforces CORS). GET doesn't
+  have this problem. Confirmed live against the site owner's actual
+  deployment — the POST version hit exactly this CORS error in
+  production; switching to GET was the fix. If `PREMIUM_VALIDATION_URL`
+  is reachable but every code still fails with the network-error message,
+  re-check the deployment's access setting is exactly **Anyone** (not
+  "Anyone with a Google account" or "Only myself") — either of those
+  redirects requests to a Google sign-in page instead of running the
+  script, which fails the same way.
 - Verified against a mock endpoint standing in for the real Apps Script
   (can't deploy the real one without the site owner's Google account):
   fresh browser starts locked, invalid/seat-limited/unreachable each show
