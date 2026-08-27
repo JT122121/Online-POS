@@ -1,95 +1,8 @@
-/**
- * GoOnlinePOS — Premium code validation backend.
- *
- * This is a Google Apps Script bound to the "Premium Code" Google Sheet.
- * It's what app.html's PREMIUM_VALIDATION_URL calls to check a code, so
- * codes can live in a spreadsheet you edit instead of being hardcoded in
- * the page source.
- *
- * SHEET LAYOUT
- * ------------
- * Tab "Premium Code" (must be named exactly this):
- *   Column A: Code
- *   Column B: Validity   (shown to the user — NOT enforced; codes never
- *                          expire on their own, see PROJECT NOTES below)
- *   Column C: Purchase Date (optional, informational — not read by this
- *                             script)
- *   Row 1 is a header row and is skipped.
- *
- * A second tab, "Active Sessions", tracks which browsers have activated
- * which code, to enforce the per-code device limit. This script creates
- * it automatically on first run if it doesn't already exist — you don't
- * need to set it up yourself. Columns: Code | DeviceID | LastSeen.
- *
- * HOW THE SEAT LIMIT WORKS
- * -------------------------
- * Each code allows up to MAX_SEATS distinct browsers "active" at once.
- * A browser counts as active if it has checked in (activated, or sent a
- * background heartbeat) within SEAT_WINDOW_DAYS days. A browser that goes
- * quiet for longer than that silently drops out of the count, freeing a
- * seat for someone else — nothing needs to be manually cleaned up in the
- * sheet. A browser re-using its own DeviceID always succeeds (it's
- * refreshing its own seat, not claiming a new one), even after being
- * away past the window.
- *
- * PROJECT NOTES (see CLAUDE.md in the repo for the full picture)
- * ----------------------------------------------------------------
- * - The Validity column (B) is returned to the client and shown to the
- *   user as "Valid until: <value>" — purely informational. This script
- *   never rejects a code for being past its validity date. Once a code
- *   is accepted on a browser, that browser stays unlocked locally (in
- *   its own storage) until its site data is cleared — this script is
- *   never re-consulted to decide whether to lock someone back out.
- * - The downloadable offline package does NOT use this at all — it has
- *   its own separate, fully local code check (OFFLINE_PREMIUM_CODE in
- *   app.html), since it needs to work with zero internet.
- *
- * DEPLOYMENT
- * ----------
- * 1. Open the "Premium Code" Google Sheet.
- * 2. Extensions -> Apps Script.
- * 3. Delete any starter code in Code.gs, paste this file's contents in.
- * 4. Deploy -> New deployment -> select type "Web app".
- *      Execute as: Me
- *      Who has access: Anyone         <- must be exactly this. "Anyone
- *                                         with a Google account" or "Only
- *                                         myself" will make every
- *                                         cross-origin request from the
- *                                         website fail (it gets redirected
- *                                         to a Google sign-in page instead
- *                                         of running the script, which
- *                                         then fails as a CORS error in
- *                                         the browser).
- * 5. Deploy, authorize when prompted, then copy the Web app URL — it
- *    ends in /exec.
- * 6. Paste that URL into PREMIUM_VALIDATION_URL in app.html (search for
- *    it — currently a REPLACE_WITH_YOUR_DEPLOYMENT_ID placeholder).
- * 7. Every time you edit this script afterward, you must create a NEW
- *    deployment version (Deploy -> Manage deployments -> edit -> new
- *    version) for the changes to take effect on the existing URL.
- *
- * This script never hardcodes the sheet's URL or ID — being bound to the
- * sheet, it reaches it via SpreadsheetApp.getActiveSpreadsheet(), so the
- * sheet's own URL never needs to appear here or in the website's code.
- *
- * WHY GET, NOT POST
- * ------------------
- * The app calls this with a plain GET (?code=...&deviceId=...), not a
- * POST with a JSON body. Apps Script Web Apps have a long-documented
- * history of not reliably sending CORS headers back on POST responses —
- * cross-origin fetch() calls fail in the browser with "CORS request was
- * blocked because of invalid or missing response headers," even though
- * the exact same request works fine as a same-tab navigation or via a
- * tool like curl that doesn't enforce CORS. GET requests don't have this
- * problem. doPost() is kept below only as a fallback for any caller that
- * still POSTs (e.g. an older cached copy of app.html) — it will hit the
- * same CORS issue if called cross-origin, so it isn't a real substitute.
- */
-
 var CODES_SHEET_NAME = "Premium Code";
 var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
+var UNLIMITED_CODES = ["PROMO1"];
 
 function doGet(e) {
   var params = (e && e.parameter) || {};
@@ -99,10 +12,9 @@ function doGet(e) {
   return validateCode(params.code, params.deviceId);
 }
 
-// Fallback only — see "WHY GET, NOT POST" above. app.html doesn't call this.
 function doPost(e) {
   var body = {};
-  try { body = JSON.parse(e.postData.contents); } catch (err) { /* leave body empty -> bad_request below */ }
+  try { body = JSON.parse(e.postData.contents); } catch (err) {}
   return validateCode(body.code, body.deviceId);
 }
 
@@ -118,33 +30,37 @@ function validateCode(rawCode, rawDeviceId) {
   var codeRow = findCode(codesSheet, code);
   if (!codeRow) return jsonOut({ ok: false, reason: "invalid" });
 
-  var sessionsSheet = ss.getSheetByName(SESSIONS_SHEET_NAME) || createSessionsSheet(ss);
-
-  // A script-wide lock avoids two near-simultaneous activations both
-  // reading the seat count before either has written its new row.
-  var lock = LockService.getScriptLock();
-  var claimed = false;
-  try {
-    lock.waitLock(10000);
-    claimed = checkOrClaimSeat(sessionsSheet, code, deviceId);
-  } finally {
-    lock.releaseLock();
+  if (codeRow.validityDate && codeRow.validityDate.getTime() < Date.now()) {
+    return jsonOut({ ok: false, reason: "expired", validity: codeRow.validity });
   }
 
-  if (!claimed) return jsonOut({ ok: false, reason: "seat_limit" });
+  if (UNLIMITED_CODES.indexOf(code) === -1) {
+    var sessionsSheet = ss.getSheetByName(SESSIONS_SHEET_NAME) || createSessionsSheet(ss);
+    var lock = LockService.getScriptLock();
+    var claimed = false;
+    try {
+      lock.waitLock(10000);
+      claimed = checkOrClaimSeat(sessionsSheet, code, deviceId);
+    } finally {
+      lock.releaseLock();
+    }
+    if (!claimed) return jsonOut({ ok: false, reason: "seat_limit" });
+  }
+
   return jsonOut({ ok: true, validity: codeRow.validity });
 }
 
 function findCode(sheet, code) {
-  var data = sheet.getDataRange().getValues(); // [Code, Validity, Purchase Date]
+  var data = sheet.getDataRange().getValues();
   for (var i = 1; i < data.length; i++) {
     var rowCode = String(data[i][0] || "").trim().toUpperCase();
     if (rowCode === code) {
       var cell = data[i][1];
-      var validity = cell instanceof Date
-        ? Utilities.formatDate(cell, Session.getScriptTimeZone(), "dd-MMM-yyyy")
+      var validityDate = cell instanceof Date ? cell : null;
+      var validity = validityDate
+        ? Utilities.formatDate(validityDate, Session.getScriptTimeZone(), "dd-MMM-yyyy")
         : String(cell || "");
-      return { validity: validity };
+      return { validity: validity, validityDate: validityDate };
     }
   }
   return null;
@@ -156,7 +72,6 @@ function createSessionsSheet(ss) {
   return sheet;
 }
 
-// Returns true if `deviceId` has (or now has) a seat for `code`.
 function checkOrClaimSeat(sheet, code, deviceId) {
   var data = sheet.getDataRange().getValues();
   var cutoff = new Date(Date.now() - SEAT_WINDOW_DAYS * 24 * 60 * 60 * 1000);
@@ -169,7 +84,7 @@ function checkOrClaimSeat(sheet, code, deviceId) {
 
     var rowDevice = String(data[i][1] || "").trim();
     if (rowDevice === deviceId) {
-      existingRow = i + 1; // 1-indexed sheet row
+      existingRow = i + 1;
       continue;
     }
 

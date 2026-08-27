@@ -35,13 +35,26 @@ than that frees its seat automatically). Both are constants at the top of
 - The downloadable offline package has its own separate, fully local code
   (`OFFLINE_PREMIUM_CODE` in `app.html`) and never calls this — it has no
   internet to call it with. See `CLAUDE.md`.
-- The Validity column is shown to the user ("Valid until: …") but isn't
-  enforced — a code doesn't stop working when that date passes. Once a
-  browser has successfully activated a code, it stays unlocked locally
-  until that browser's site data is cleared; this script is never
-  consulted again to decide whether to lock it back out (a background
-  heartbeat pings it occasionally just to keep the seat "warm," but its
-  result is never used to revoke local access).
+- A brand-new visitor is auto-granted Premium on first load using PROMO1 —
+  no manual activation needed. That auto-grant looks PROMO1 up against the
+  sheet first, so the real validity date from column B shows immediately;
+  if the lookup can't be reached, it falls back to a local-only grant with
+  no validity shown, so a visitor is never blocked by an infrastructure
+  hiccup. "Change code" (next to the Premium status once unlocked) lets
+  anyone still switch to a different code without clearing site data.
+- The Validity column **is** enforced, but only at the moment a code is
+  looked up — auto-grant, a manual Activate, or the background heartbeat.
+  A past date there makes that lookup return "expired" instead of "ok."
+  It is **not** retroactive: once a browser has successfully activated a
+  code, it stays unlocked locally until that browser's site data is
+  cleared, even if the code expires later — an "expired" response never
+  revokes access already granted, it only blocks a *new* activation.
+  Leave the Validity cell blank for a code that should never expire.
+- `UNLIMITED_CODES` (currently just `PROMO1`) is exempt from the per-code
+  seat cap — it's the site's universal free default, auto-granted to
+  every new visitor, so it can't be limited to `MAX_SEATS` concurrent
+  devices the way a real purchased code is. It's still subject to the
+  expiration check above.
 
 No spreadsheet URL or ID appears anywhere in this repo — the script is
 bound directly to the sheet (`SpreadsheetApp.getActiveSpreadsheet()`), so

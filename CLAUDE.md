@@ -145,21 +145,29 @@ what gets pulled into the generated offline package.
 
 ## Premium code validation (live site only)
 
-Entering a code in Settings → Premium calls out to a Google Apps Script
-Web App (`activatePremiumCode()`, inside the `/* OFFLINE-SWAP:
-PREMIUM-ACTIVATION:START/END */` marked block) instead of comparing
-against a hardcoded string — codes live in a Google Sheet the site owner
-edits directly, not in this file. Full setup/schema/deployment steps are
-in `premium-validation/README.md` and `premium-validation/AppsScript.gs`;
+The live site auto-grants Premium to every visitor — no code entry
+required — while still validating that grant against a Google Sheet the
+site owner edits directly (not hardcoded in this file), through a Google
+Apps Script Web App (`activatePremiumCode()`/`autoGrantDefaultPremium()`,
+inside the `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */` marked
+block). Full setup/schema/deployment steps are in
+`premium-validation/README.md` and `premium-validation/AppsScript.gs`;
 short version:
 
-- **`DEFAULT_PREMIUM_CODE` ("PROMO1") is a permanent local fallback that
-  never touches the network** — `activatePremiumCode()` checks for it
-  before calling out anywhere, so it always works even if
-  `PREMIUM_VALIDATION_URL` is unreachable, misconfigured, or still the
-  placeholder. Everything else (real sheet-issued codes) goes through the
-  Apps Script and is subject to the seat limit below; PROMO1 deliberately
-  is not. `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
+- **`loadPremiumStatus()` auto-grants Premium on a brand-new visit** — it
+  calls `autoGrantDefaultPremium()` whenever the stored
+  `pos-premium-unlocked` flag is `null` (i.e. truly first-ever visit, or a
+  fresh offline install), with zero clicks required. That function looks
+  `DEFAULT_PREMIUM_CODE` ("PROMO1") up against the sheet first so the real
+  "Valid until" date from column B shows immediately, falling back to a
+  local-only grant (no validity shown) only if the lookup can't be
+  reached — so a visitor is never blocked by an infrastructure hiccup. A
+  lookup that succeeds but comes back expired/seat-limited/invalid does
+  **not** auto-grant; the visitor is simply left in the normal locked
+  state. `activatePremiumCode()` (manual entry) gives PROMO1 the same
+  network-first-with-local-fallback treatment; any other code has no such
+  fallback and shows the network-error message if unreachable.
+  `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
   `unlockPremiumLocally()`/`openPremiumCodeEdit()`/`cancelPremiumCodeEdit()`
   are shared with the offline build (they live outside the
   `PREMIUM-ACTIVATION` swap block) — only *which* code counts as valid,
@@ -169,45 +177,49 @@ short version:
   the `<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START/END -->` marker so the
   dropdown never advertises the wrong code for the build), with an
   "Enter a different code…" option that reveals `#premiumCodeInput` for
-  anything else — added so a user who's forgotten the exact code text can
-  just pick the default instead of mistyping it.
-- Once unlocked, a "Change code" link next to the "Premium is active"
-  status re-reveals the form (`openPremiumCodeEdit()`, gated by the
-  in-memory `premiumEditMode` flag — not persisted) so someone can switch
-  to a different code — e.g. swap PROMO1 for a real purchased one —
-  without clearing the browser's site data. `#premiumCancelEditBtn`
+  anything else.
+- A "Change code" link next to the "Premium is active" status re-reveals
+  the form (`openPremiumCodeEdit()`, gated by the in-memory
+  `premiumEditMode` flag — not persisted) so someone can switch to a
+  different code — e.g. swap the auto-granted PROMO1 for a real purchased
+  one — without clearing the browser's site data. `#premiumCancelEditBtn`
   backs out without changing anything; successfully activating any code
   (`unlockPremiumLocally()`) always clears edit mode back to the plain
   status view.
-- `PREMIUM_VALIDATION_URL` (near the top of the marked block) is a
-  placeholder — **must be replaced with your deployed Apps Script's `/exec`
-  URL** before this works. It's fine for this URL to be public (it's a
-  validation proxy, not the spreadsheet) — the actual sheet ID/URL never
-  appears anywhere in this repo or in `app.html`; the Apps Script reaches
-  its bound sheet via `SpreadsheetApp.getActiveSpreadsheet()`.
+- `PREMIUM_VALIDATION_URL` (near the top of the marked block) must be
+  your deployed Apps Script's `/exec` URL. It's fine for this URL to be
+  public (it's a validation proxy, not the spreadsheet) — the actual
+  sheet ID/URL never appears anywhere in this repo or in `app.html`; the
+  Apps Script reaches its bound sheet via
+  `SpreadsheetApp.getActiveSpreadsheet()`.
 - Each browser gets a random, persisted `pos-device-id`
   (`getDeviceId()`). A code is capped at `MAX_SEATS` (5) simultaneously
   active devices, on a `SEAT_WINDOW_DAYS` (30-day) rolling window enforced
   server-side in the Apps Script — a device that stops checking in for
-  that long silently frees its seat. This exists to blunt one purchased
-  code being shared/leaked indefinitely, not to build real license
-  management.
-- The sheet's Validity column is returned and shown to the user
-  ("Valid until: …" — `renderPremiumValidity()`, `pos-premium-validity`
-  storage key) but is **informational only, never enforced**: codes don't
-  expire, and once accepted on a browser it stays unlocked locally
-  (`pos-premium-unlocked`) until that browser's storage is cleared — this
-  endpoint is never consulted to decide whether to lock someone back out.
-  `heartbeatPremiumCode()` pings it in the background on load purely to
-  keep an already-active seat "warm" (refresh `LastSeen` server-side);
-  its result — success, failure, or unreachable — is deliberately never
-  used to change local unlock state.
-- Failure modes are split three ways in the UI: unknown code
-  (`premiumCodeInvalid`), code found but at its device cap
+  that long silently frees its seat. **PROMO1 (`UNLIMITED_CODES` in
+  `AppsScript.gs`) is exempt from this cap** — since every new visitor
+  auto-activates it over the network, capping it at 5 devices would lock
+  out the site after its 5th visitor. Real sheet-issued codes are not
+  exempt, and this exists to blunt one purchased code being
+  shared/leaked indefinitely, not to build real license management.
+- The sheet's Validity column **is enforced, but only at the moment a
+  code is looked up** — auto-grant, a manual Activate, or the background
+  heartbeat. A date in the past there makes that lookup return `expired`
+  instead of `ok` (shown via the `premiumCodeExpired` message). This is
+  **not retroactive**: once a code has been successfully accepted on a
+  browser, that browser stays unlocked locally (`pos-premium-unlocked`)
+  until its site data is cleared, even if the code expires later — an
+  expired/error response from a later lookup (e.g. the heartbeat) never
+  revokes access already granted, it only blocks a *new* activation.
+  Leave the sheet's Validity cell blank for a code that should never
+  expire. `heartbeatPremiumCode()` pings the endpoint in the background
+  on load purely to keep an already-active seat "warm" (refresh
+  `LastSeen` server-side).
+- Failure modes are split four ways in the UI: unknown code
+  (`premiumCodeInvalid`), code found but past its Validity date
+  (`premiumCodeExpired`), code found but at its device cap
   (`premiumCodeSeatLimit`), and the endpoint being unreachable
-  (`premiumCodeNetworkError` — this is the one that fires if
-  `PREMIUM_VALIDATION_URL` is still the placeholder, or if the deployment
-  isn't reachable for some other reason).
+  (`premiumCodeNetworkError`).
 - **`checkPremiumCode()` calls the Apps Script with GET, not POST** —
   `?code=...&deviceId=...` query params, handled by `AppsScript.gs`'s
   `doGet()` (the real handler; `doPost()` is kept only as a fallback).
@@ -218,25 +230,28 @@ short version:
   response headers" even though the identical request works fine as a
   direct browser visit or via curl (neither enforces CORS). GET doesn't
   have this problem. Confirmed live against the site owner's actual
-  deployment — the POST version hit exactly this CORS error in
-  production; switching to GET was the fix. If `PREMIUM_VALIDATION_URL`
-  is reachable but every code still fails with the network-error message,
-  re-check the deployment's access setting is exactly **Anyone** (not
-  "Anyone with a Google account" or "Only myself") — either of those
-  redirects requests to a Google sign-in page instead of running the
-  script, which fails the same way.
-- Verified against a mock endpoint standing in for the real Apps Script
-  (can't deploy the real one without the site owner's Google account):
-  fresh browser starts locked, invalid/seat-limited/unreachable each show
-  their own message, a valid code unlocks + shows validity + survives a
-  reload, and the Apps Script's own seat-accounting logic (`findCode`,
-  `checkOrClaimSeat`) is unit-tested in isolation against mocked Sheets
-  objects (seat cap, rolling-window expiry, a returning device always
-  reclaiming its own seat, independent pools per code). Separately
-  confirmed PROMO1 unlocks with the validation URL pointed at an address
-  nothing is listening on and network requests to it actively blocked —
-  zero calls made, confirming the local-fallback path never touches the
-  network at all.
+  deployment. If `PREMIUM_VALIDATION_URL` is reachable but every code
+  still fails with the network-error message, re-check the deployment's
+  access setting is exactly **Anyone** (not "Anyone with a Google
+  account" or "Only myself") — either of those redirects requests to a
+  Google sign-in page instead of running the script, which fails the
+  same way.
+- Verified end-to-end against a mock endpoint standing in for the real
+  Apps Script (can't deploy the real one without the site owner's Google
+  account): a fresh visit auto-grants Premium with zero clicks and shows
+  the real validity date, a validation-URL-unreachable fresh visit still
+  auto-grants PROMO1 locally with no validity shown, a fresh visit where
+  the lookup reports PROMO1 expired does **not** auto-grant and the badge
+  stays "Basic", and manually activating an expired code shows the
+  expired message. The Apps Script's own logic (`findCode`,
+  `checkOrClaimSeat`, `validateCode` — expiration, blank-validity-never-
+  expires, PROMO1's unlimited seats, a real code still capped at 5) is
+  separately unit-tested in isolation against mocked Sheets/Lock/Content
+  objects.
+- Every `AppsScript.gs` edit requires deploying a **new version** (Deploy
+  → Manage deployments → edit → New version) before it takes effect on
+  the existing `/exec` URL — the URL itself doesn't change, but the code
+  behind it does nothing until redeployed.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
