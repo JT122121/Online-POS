@@ -1,14 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967" crossorigin="anonymous"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY"></script>
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-7WMTJVB3VY');
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-7WMTJVB3VY');
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+  };
+  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+  window.acceptCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "accepted"); } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+  window.declineCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "declined"); } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+  window.closeCookieBanner = function() { hideBanner(); };
+
+  var consent = null, seen = null;
+  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+  }
+})();
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | GoOnlinePOS.com</title>
@@ -75,6 +130,25 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
 .site-footer span { margin: 0 8px; }
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+.cookie-consent.hidden { display: none !important; }
+.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
+.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
+.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cookie-notice-view.hidden { display: none !important; }
+.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
+.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-choice-view.hidden { display: none !important; }
+.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
+.cc-decline:hover { border-color: rgba(255,255,255,.6); }
+.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
+.cc-accept:hover { background: #cf9631; }
+.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-declined-view.hidden { display: none !important; }
+.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+.cc-close:hover { background: #e6e4d9; }
 </style>
 </head>
 <body>
@@ -139,12 +213,34 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 <span>·</span>
 <a href="about.html">About</a>
 <span>·</span>
+<a href="blog.html">Blog</a>
+<span>·</span>
 <a href="privacy.html">Privacy Policy</a>
 <span>·</span>
 <a href="terms.html">Terms of Service</a>
-  <span>·</span>
+<span>·</span>
 <a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">Facebook</a>
+<span>·</span>
+<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
 </footer>
+
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+<div id="cookieNoticeView" class="cookie-notice-view">
+<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+</div>
+<div id="cookieChoiceView" class="cc-choice-view hidden">
+<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy.html">Learn more</a></div>
+<div class="cc-actions">
+<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
+<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+</div>
+</div>
+<div id="cookieDeclinedView" class="cc-declined-view hidden">
+<div class="cc-text">Got it — analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+</div>
+</div>
 
 </body>
 </html>
