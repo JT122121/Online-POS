@@ -458,6 +458,20 @@ and also reads `localStorage["goonlinepos-customer-screen-state"]` (the
 `STATE_KEY`) as a fallback/initial-state source, then renders whatever
 order/payment/completed state `app.html` last broadcast.
 
+Has Google Analytics (same `G-7WMTJVB3VY` measurement ID as the rest of
+the site) but deliberately **no AdSense** — a customer standing at
+checkout shouldn't see ads on the receipt-preview screen they're being
+shown, but the site owner still wants visibility into whether/how often
+this feature actually gets used, which a plain pageview already answers
+(`gtag('config', ...)`'s automatic page_view). Gated by the same
+`goonlinepos-cookie-consent` localStorage key `app.html`'s cookie banner
+already writes — same origin, same browser, so no separate consent UI
+is needed on this page; it silently does nothing if that key isn't
+`"accepted"`. Lives inside its own `<!-- OFFLINE-STRIP:CUSTOMER-ANALYTICS
+-->` marker, stripped by `buildOfflineCustomerHtml()` for the same reason
+every other analytics/ads script is stripped from the offline package —
+zero network calls there.
+
 ## Conventions / working on this repo
 
 - No build/test/lint tooling exists — verify changes by opening the HTML

@@ -11,6 +11,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <!-- OFFLINE-STRIP:GOOGLE-FONTS:END -->
+<!-- OFFLINE-STRIP:CUSTOMER-ANALYTICS:START -->
+<script>
+(function() {
+  var consent = null;
+  try { consent = localStorage.getItem("goonlinepos-cookie-consent"); } catch (e) {}
+  if (consent !== "accepted") return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function() { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", "G-7WMTJVB3VY");
+  var gtagScript = document.createElement("script");
+  gtagScript.async = true;
+  gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+  document.head.appendChild(gtagScript);
+})();
+</script>
+<!-- OFFLINE-STRIP:CUSTOMER-ANALYTICS:END -->
 <style>
 :root {
   --ink: #16211d;

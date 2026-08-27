@@ -3302,7 +3302,9 @@ function buildOfflineAppHtml(html) {
   return html;
 }
 function buildOfflineCustomerHtml(html) {
-  return stripMarked(html, "GOOGLE-FONTS", "customer.html google fonts links");
+  html = stripMarked(html, "GOOGLE-FONTS", "customer.html google fonts links");
+  html = stripMarked(html, "CUSTOMER-ANALYTICS", "customer.html analytics script");
+  return html;
 }
 
 async function confirmOfflineDownload() {
