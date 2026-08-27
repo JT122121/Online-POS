@@ -72,6 +72,46 @@ zero network calls.
   last time; `renderToolbarToggle()` keeps the button's own label
   (`toolbarHideLabel`/`toolbarShowLabel`) in sync with its current state
   and re-syncs it on every language switch.
+- **Resizable product/receipt split:** `.app` is a 3-column CSS grid —
+  `.left-panel` (catalog/checkout), `#panelResizeHandle` (a thin
+  draggable divider), `.preview-area` (the receipt) — sized via the
+  `--catalog-width` CSS custom property, defaulting to **75%** for the
+  product side (`.app { grid-template-columns: minmax(320px,
+  var(--catalog-width, 75%)) 14px minmax(220px, 1fr); }`). Chosen
+  because `.receipt` has a fixed `width: 80mm` regardless of its
+  container, so giving the receipt more than ~25% of a wide desktop
+  screen is empty background space better spent on the catalog —
+  especially now that products can carry photos. `initPanelResize()`
+  wires mouse **and touch** drag (POS terminals are often touchscreens)
+  on the handle, clamping the product side to 35%–85%; double-clicking
+  the handle resets it to 75%. The chosen ratio **persists** via
+  `storageGet`/`storageSet("pos-catalog-width")` and is applied by
+  `loadPanelSplit()` before first paint. On mobile (`max-width: 900px`)
+  `.app` already switches to a vertical flex stack, so
+  `.panel-resize-handle` is simply hidden there — dragging left/right
+  makes no sense once the panels aren't side-by-side.
+- **Product photos:** each `products[]` entry has an optional `photo`
+  field (a compressed JPEG data URL) alongside `name`/`price`/
+  `category`/`sku`/`stock`. `compressProductPhoto(file)` downsizes any
+  upload to a max **160px** dimension and re-encodes at JPEG quality
+  0.72 via canvas before it's ever stored — a typical photo lands
+  around 1KB as a data URL, keeping the whole catalog well within
+  localStorage's ~5-10MB budget even with photos on every product.
+  `productThumbHtml(photo, sizeClass)` is the single shared renderer
+  used by the main catalog (`renderProductCatalog`), Settings →
+  Inventory (`renderInventoryList`), and Settings → Products'
+  editable list (`renderManageProductsList`) — it renders the `<img>`
+  when `photo` is set, or a `.product-thumb-placeholder` (a plain 📦
+  emoji, zero extra bytes, no asset file) when it's empty. CSV-imported
+  products always get `photo: ""`, since there's no practical way to
+  carry binary image data through a CSV a shop owner edits in a
+  spreadsheet — they fall back to the placeholder automatically, same
+  as any manually-added product that skipped the photo step. Settings →
+  Products has a photo upload row above the "Add Product" form
+  (`newProductPhotoDataUrl`, reset after each add); each existing
+  product's thumbnail in the manage-list is itself a clickable
+  `<label>` wrapping a hidden file input (`handleExistingProductPhotoUpload`)
+  so re-uploading is a single click, no separate "edit" mode needed.
 - **Cart/checkout:** `addProductToCart` → `computeTotals()` (subtotal →
   discount% → tax% → grand total, all straight percentage math, no
   per-item tax) → `goToCheckout` → split payments via `paymentRows` →

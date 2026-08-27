@@ -147,7 +147,12 @@ button:active { transform: translateY(1px); }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 
-.app { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 18px; align-items: start; max-width: 1500px; margin: auto; }
+.app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(220px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
+.app .left-panel { margin-right: 4px; }
+.app .preview-area { margin-left: 4px; }
+.panel-resize-handle { align-self: stretch; cursor: col-resize; position: relative; touch-action: none; }
+.panel-resize-handle::after { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--line); transform: translateX(-50%); transition: background .15s ease; }
+.panel-resize-handle:hover::after, .panel-resize-handle.dragging::after { background: var(--accent); }
 
 .site-footer { max-width: 1500px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); }
 .site-footer a { color: var(--muted); text-decoration: none; }
@@ -210,6 +215,11 @@ button:active { transform: translateY(1px); }
 .product-stock { font-size: 10.5px; color: var(--muted); font-weight: 600; }
 .product-stock.low { color: var(--danger); }
 .product-item button { flex-shrink: 0; background: var(--ink); color: #fff; border: 0; border-radius: var(--radius-sm); width: 34px; height: 34px; font-size: 17px; line-height: 1; }
+.product-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eceae0; border: 1px solid var(--line-soft); }
+.product-thumb-placeholder { display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.product-thumb.small { width: 30px; height: 30px; border-radius: 6px; font-size: 13px; }
+.mp-photo-label { cursor: pointer; display: inline-flex; flex-shrink: 0; }
+.new-product-photo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .product-item button:hover { background: var(--accent); }
 .products-empty { margin-top: 8px; padding: 20px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
 .custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 10px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; margin-top: 4px; }
@@ -404,8 +414,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   .header-actions button, .header-actions select { flex: 1; justify-content: center; }
   .header-actions .toolbar-toggle-btn { flex: 0 0 100%; }
   .app { display: flex; flex-direction: column; gap: 14px; }
-  .left-panel { position: relative; top: auto; width: 100%; max-height: none; }
-  .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
+  .left-panel { position: relative; top: auto; width: 100%; max-height: none; margin-right: 0; }
+  .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; margin-left: 0; }
+  .panel-resize-handle { display: none; }
   .receipt { box-shadow: var(--shadow); }
   .settings-modal-body { flex-direction: column; }
   .settings-tab-rail { flex-direction: row; width: 100%; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line-soft); }
@@ -564,6 +575,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   </div>
 
 </div>
+
+<div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
 <div id="receipt" class="receipt">
@@ -872,6 +885,14 @@ Website: goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-products">
         <h3 id="productsTitle">Products</h3>
+        <label id="addProductPhotoLabel">Photo (optional)</label>
+        <div class="new-product-photo-row">
+          <label class="mp-photo-label" title="Upload a photo">
+            <span id="newProductPhotoPreview"><div class="product-thumb product-thumb-placeholder">📦</div></span>
+            <input type="file" accept="image/*" class="hidden" onchange="handleNewProductPhotoUpload(event)">
+          </label>
+          <button type="button" class="small-btn hidden" id="newProductPhotoRemoveBtn" onclick="removeNewProductPhoto()" style="background:transparent; color:var(--ink-soft); width:auto;">✕ <span id="removePhotoLabel">Remove</span></button>
+        </div>
         <label id="addProductNameLabel">Product Name</label>
         <input id="newProductName" placeholder="e.g. Coca Cola 330ml">
         <div class="two-columns">
@@ -1171,6 +1192,7 @@ en: {
   productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.",
   barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Adds a scan button next to search on the main screen, to add items by SKU using your camera.",
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
+  addProductPhotoLabel: "Photo (optional)", productPhotoUploadError: "Couldn't load that image. Try a different file.", productPhotoChangeTitle: "Click to change photo", removePhotoLabel: "Remove",
   addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
   manageProductsEmpty: "No products yet — add one above or upload a CSV below.",
   productsSampleButton: "Download Sample CSV", productsClearButton: "Clear Products",
@@ -1263,6 +1285,7 @@ ar: {
   productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
   barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "يضيف زر مسح بجانب البحث في الشاشة الرئيسية، لإضافة الأصناف عبر رمز المنتج باستخدام الكاميرا.",
   addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
+  addProductPhotoLabel: "صورة (اختياري)", productPhotoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملفًا آخر.", productPhotoChangeTitle: "انقر لتغيير الصورة", removePhotoLabel: "إزالة",
   addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
   manageProductsEmpty: "لا توجد منتجات بعد — أضف واحداً أعلاه أو ارفع ملف CSV أدناه.",
   productsSampleButton: "تحميل نموذج CSV", productsClearButton: "مسح المنتجات",
@@ -1345,6 +1368,7 @@ fil: {
   productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
   barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Nagdaragdag ng scan button sa tabi ng search sa main screen, para magdagdag ng item gamit ang SKU at camera.",
   addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
+  addProductPhotoLabel: "Larawan (opsyonal)", productPhotoUploadError: "Hindi ma-load ang larawang iyon. Subukan ang ibang file.", productPhotoChangeTitle: "I-click para palitan ang larawan", removePhotoLabel: "Alisin",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
   scannerTitle: "I-scan ang Barcode", scannerHint: "Itutok ang camera sa barcode ng produkto", scannerUnsupported: "Hindi available ang pag-scan ng barcode sa browser na ito.",
   scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
@@ -1429,6 +1453,7 @@ hi: {
   productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
   barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "मुख्य स्क्रीन पर सर्च के पास एक स्कैन बटन जोड़ता है, ताकि कैमरे से SKU द्वारा आइटम जोड़े जा सकें।",
   addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
+  addProductPhotoLabel: "फ़ोटो (वैकल्पिक)", productPhotoUploadError: "वह इमेज लोड नहीं हो सकी। दूसरी फ़ाइल आज़माएं।", productPhotoChangeTitle: "फ़ोटो बदलने के लिए क्लिक करें", removePhotoLabel: "हटाएं",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
   scannerTitle: "बारकोड स्कैन करें", scannerHint: "कैमरे को उत्पाद के बारकोड की ओर करें", scannerUnsupported: "इस ब्राउज़र में बारकोड स्कैनिंग उपलब्ध नहीं है।",
   scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
@@ -1513,6 +1538,7 @@ es: {
   productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
   barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Agrega un botón de escaneo junto a la búsqueda en la pantalla principal, para añadir artículos por SKU usando la cámara.",
   addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
+  addProductPhotoLabel: "Foto (opcional)", productPhotoUploadError: "No se pudo cargar esa imagen. Prueba con otro archivo.", productPhotoChangeTitle: "Haz clic para cambiar la foto", removePhotoLabel: "Quitar",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
   scannerTitle: "Escanear Código de Barras", scannerHint: "Apunta la cámara al código de barras del producto", scannerUnsupported: "El escaneo de códigos de barras no está disponible en este navegador.",
   scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
@@ -1597,6 +1623,7 @@ th: {
   productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
   barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เพิ่มปุ่มสแกนข้างช่องค้นหาในหน้าหลัก เพื่อเพิ่มสินค้าโดยใช้ SKU ผ่านกล้อง",
   addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
+  addProductPhotoLabel: "รูปภาพ (ไม่บังคับ)", productPhotoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองไฟล์อื่น", productPhotoChangeTitle: "คลิกเพื่อเปลี่ยนรูปภาพ", removePhotoLabel: "ลบ",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
   scannerTitle: "สแกนบาร์โค้ด", scannerHint: "เล็งกล้องไปที่บาร์โค้ดของสินค้า", scannerUnsupported: "การสแกนบาร์โค้ดไม่รองรับในเบราว์เซอร์นี้",
   scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
@@ -1718,6 +1745,61 @@ function renderToolbarToggle() {
   const collapsed = group.classList.contains("hidden");
   label.textContent = tr(collapsed ? "toolbarShowLabel" : "toolbarHideLabel");
   btn.title = label.textContent;
+}
+async function loadPanelSplit() {
+  const saved = await storageGet("pos-catalog-width");
+  const percent = saved ? parseFloat(saved) : NaN;
+  document.documentElement.style.setProperty("--catalog-width", (isNaN(percent) ? 75 : percent) + "%");
+}
+function initPanelResize() {
+  const handle = document.getElementById("panelResizeHandle");
+  const appEl = document.querySelector(".app");
+  if (!handle || !appEl) return;
+  let startX = 0, startPercent = 75, dragging = false;
+
+  function clientXOf(e) { return e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX; }
+
+  function onMove(e) {
+    if (!dragging) return;
+    const totalWidth = appEl.getBoundingClientRect().width;
+    if (!totalWidth) return;
+    const deltaPx = clientXOf(e) - startX;
+    let newPercent = startPercent + (deltaPx / totalWidth) * 100;
+    newPercent = Math.max(35, Math.min(85, newPercent));
+    document.documentElement.style.setProperty("--catalog-width", newPercent + "%");
+    e.preventDefault();
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove("dragging");
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onEnd);
+    document.removeEventListener("touchmove", onMove);
+    document.removeEventListener("touchend", onEnd);
+    const current = document.documentElement.style.getPropertyValue("--catalog-width").trim();
+    if (current) storageSet("pos-catalog-width", current);
+  }
+  function onStart(e) {
+    dragging = true;
+    handle.classList.add("dragging");
+    startX = clientXOf(e);
+    const currentVar = document.documentElement.style.getPropertyValue("--catalog-width").trim();
+    startPercent = currentVar ? parseFloat(currentVar) : 75;
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onEnd);
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
+    e.preventDefault();
+  }
+  function onDoubleClick() {
+    document.documentElement.style.setProperty("--catalog-width", "75%");
+    storageSet("pos-catalog-width", "75");
+  }
+
+  handle.addEventListener("mousedown", onStart);
+  handle.addEventListener("touchstart", onStart, { passive: false });
+  handle.addEventListener("dblclick", onDoubleClick);
 }
 function closeSettings() {
   document.getElementById("settingsOverlay").classList.add("hidden");
@@ -1856,6 +1938,42 @@ function handleLogoUpload(event) {
   };
   reader.onerror = function() { alert(tr("logoUploadError")); };
   reader.readAsDataURL(file);
+}
+
+function compressProductPhoto(file) {
+  return new Promise(function(resolve, reject) {
+    if (!file || !file.type || file.type.indexOf("image/") !== 0) { reject(new Error("not an image")); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const maxDim = 160;
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w > maxDim || h > maxDim) {
+          const scale = maxDim / Math.max(w, h);
+          w = Math.max(1, Math.round(w * scale));
+          h = Math.max(1, Math.round(h * scale));
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.72));
+      };
+      img.onerror = function() { reject(new Error("bad image")); };
+      img.src = String(e.target.result);
+    };
+    reader.onerror = function() { reject(new Error("read error")); };
+    reader.readAsDataURL(file);
+  });
+}
+function productThumbHtml(photo, sizeClass) {
+  const cls = "product-thumb" + (sizeClass ? " " + sizeClass : "");
+  if (photo) return "<img class=\"" + cls + "\" src=\"" + escapeAttr(photo) + "\" alt=\"\">";
+  return "<div class=\"" + cls + " product-thumb-placeholder\">📦</div>";
 }
 let removeLogoPending = false;
 let removeLogoTimer = null;
@@ -3570,7 +3688,8 @@ function handleCsvUpload(event) {
           price: price,
           category: catIdx > -1 ? (row[catIdx] || "").trim() : "",
           sku: skuIdx > -1 ? (row[skuIdx] || "").trim() : "",
-          stock: stock
+          stock: stock,
+          photo: ""
         });
       }
       if (!newProducts.length) throw new Error("no valid rows");
@@ -3628,7 +3747,8 @@ async function addSingleProduct() {
     price: price,
     category: categoryEl.value.trim(),
     sku: skuEl.value.trim(),
-    stock: stockRaw === "" ? null : (parseFloat(stockRaw) || 0)
+    stock: stockRaw === "" ? null : (parseFloat(stockRaw) || 0),
+    photo: newProductPhotoDataUrl
   });
   await saveProducts();
   renderProductCatalog();
@@ -3638,7 +3758,46 @@ async function addSingleProduct() {
   categoryEl.value = "";
   skuEl.value = "";
   stockEl.value = "";
+  newProductPhotoDataUrl = "";
+  renderNewProductPhotoPreview();
   nameEl.focus();
+}
+
+let newProductPhotoDataUrl = "";
+async function handleNewProductPhotoUpload(event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  try {
+    newProductPhotoDataUrl = await compressProductPhoto(file);
+    renderNewProductPhotoPreview();
+  } catch (e) {
+    alert(tr("productPhotoUploadError"));
+  }
+}
+function removeNewProductPhoto() {
+  newProductPhotoDataUrl = "";
+  renderNewProductPhotoPreview();
+}
+function renderNewProductPhotoPreview() {
+  const preview = document.getElementById("newProductPhotoPreview");
+  const removeBtn = document.getElementById("newProductPhotoRemoveBtn");
+  if (!preview) return;
+  preview.innerHTML = productThumbHtml(newProductPhotoDataUrl);
+  if (removeBtn) removeBtn.classList.toggle("hidden", !newProductPhotoDataUrl);
+}
+async function handleExistingProductPhotoUpload(index, event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  try {
+    products[index].photo = await compressProductPhoto(file);
+    await saveProducts();
+    renderProductCatalog();
+    renderInventoryList();
+  } catch (e) {
+    alert(tr("productPhotoUploadError"));
+  }
 }
 
 async function removeProduct(index) {
@@ -3686,6 +3845,7 @@ function renderInventoryList() {
       const row = document.createElement("div");
       row.className = "inv-row" + (isLow ? " low-stock" : "");
       row.innerHTML =
+        productThumbHtml(p.photo, "small") +
         "<div class=\"inv-row-info\">" +
           "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
           "<div class=\"inv-row-sub\">" +
@@ -3735,11 +3895,16 @@ function renderManageProductsList() {
     const row = document.createElement("div");
     row.className = "payment-item";
     row.innerHTML =
+      "<label class=\"mp-photo-label\" title=\"" + escapeAttr(tr("productPhotoChangeTitle")) + "\">" +
+        productThumbHtml(p.photo, "small") +
+        "<input type=\"file\" accept=\"image/*\" class=\"hidden\">" +
+      "</label>" +
       "<input class=\"mp-name-input\" type=\"text\" value=\"" + escapeAttr(p.name) + "\">" +
       "<span class=\"mp-meta\">— " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
       (p.category ? " <span style=\"color:var(--muted);\">(" + escapeHtml(p.category) + ")</span>" : "") + "</span>" +
       "<button onclick=\"removeProduct(" + index + ")\">×</button>";
     row.querySelector(".mp-name-input").addEventListener("change", function() { handleProductNameEdit(index, this.value); });
+    row.querySelector(".mp-photo-label input").addEventListener("change", function(e) { handleExistingProductPhotoUpload(index, e); });
     list.appendChild(row);
   });
 }
@@ -3812,6 +3977,7 @@ function renderProductCatalog() {
     const row = document.createElement("div");
     row.className = "product-item";
     row.innerHTML =
+      productThumbHtml(p.photo) +
       "<div class=\"product-info\">" +
         "<span class=\"product-name\">" + escapeHtml(p.name) + "</span>" +
         "<div class=\"product-meta\">" +
@@ -4048,6 +4214,7 @@ function changeLanguage() {
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
     barcodeScannerToggleLabel: "barcodeScannerToggleLabel",
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
+    addProductPhotoLabel: "addProductPhotoLabel", removePhotoLabel: "removePhotoLabel",
     addProductButton: "addProductButton",
     productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
     footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
@@ -4171,12 +4338,14 @@ async function init() {
   await loadBackupNoticeState();
   await loadReceiptPrefix();
   await loadPremiumStatus();
+  await loadPanelSplit();
   await startFirstSale();
   changePaperSize();
   updateZoom();
   updateDate();
   changeLanguage();
   updateReceipt();
+  initPanelResize();
   setInterval(updateDate, 1000);
 }
 init();
