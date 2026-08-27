@@ -115,13 +115,13 @@ a { color: inherit; }
 .back-link { font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
 .back-link:hover { color: var(--accent-dark); }
 
-.featured-post { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: center; padding: 28px 0 36px; border-bottom: 1px solid var(--line); margin-bottom: 30px; }
-.featured-post .fp-art { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; font-size: 56px; }
+.featured-post { max-width: 780px; margin: 0 auto 30px; padding: 28px 0 36px; border-bottom: 1px solid var(--line); text-align: center; }
+.featured-post .fp-img { width: 100%; max-width: 640px; border-radius: var(--radius); box-shadow: var(--shadow-lg); margin: 0 auto 22px; display: block; }
 .featured-post .fp-tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 4px 11px; border-radius: 999px; margin-bottom: 12px; }
 .featured-post h2 { font-family: var(--font-display); font-weight: 700; font-size: 27px; line-height: 1.25; letter-spacing: -.01em; margin: 0 0 12px; }
 .featured-post h2 a { text-decoration: none; color: var(--ink); }
 .featured-post h2 a:hover { color: var(--accent-dark); }
-.featured-post p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.65; margin: 0 0 14px; }
+.featured-post p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.65; margin: 0 auto 14px; max-width: 560px; }
 .post-meta { font-size: 11.5px; color: var(--muted); font-weight: 600; }
 
 .post-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; margin-bottom: 30px; }
@@ -144,7 +144,6 @@ a { color: inherit; }
 
 @media (max-width: 720px) {
   .masthead h1 { font-size: 32px; }
-  .featured-post { grid-template-columns: 1fr; }
   .post-grid { grid-template-columns: 1fr; }
 }
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
@@ -190,13 +189,11 @@ a { color: inherit; }
 </div>
 
 <article class="featured-post">
-<div class="fp-art">🧾</div>
-<div>
+<img class="fp-img" src="blog-hero-illustration.svg" alt="Illustration of a point-of-sale checkout screen, card reader, and printed receipt">
 <span class="fp-tag">Getting Started</span>
 <h2><a href="blog-why-your-business-needs-a-pos.html">Why Every Business Needs a POS System (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)</a></h2>
 <p>If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you — and why a proper point-of-sale system stopped being a luxury a long time ago.</p>
 <div class="post-meta">FEATURED · 5 MIN READ</div>
-</div>
 </article>
 
 <div class="post-grid">
