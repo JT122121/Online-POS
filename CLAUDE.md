@@ -58,6 +58,20 @@ zero network calls.
   `fil`, `hi`, `es`, `th` — each a flat string dictionary. `tr(key)` looks
   up `currentLang()` and falls back to `en`. New user-facing strings must
   be added to **all six** language blocks (or at least `en` as fallback).
+- **Header toolbar toggle:** `.header-actions` wraps its 8 shortcut
+  buttons (Premium/Backup/Settings/Summary/Print/Inventory/Customer
+  Screen/New Sale) in `#headerActionsGroup` (`display: contents`, so it
+  doesn't affect the flex layout), preceded by `#toolbarToggleBtn`
+  (`toggleToolbar()`) which toggles `.hidden` on that group to collapse
+  the whole row down to just itself — reclaiming vertical space for the
+  product grid/receipt below. Deliberately **collapses all 8 buttons
+  together, including Print and New Sale** (not just the occasional/
+  admin ones) per an explicit choice to prioritize maximum space over
+  keeping per-sale actions always pinned. Deliberately **not persisted**
+  — every fresh page load starts expanded regardless of what was chosen
+  last time; `renderToolbarToggle()` keeps the button's own label
+  (`toolbarHideLabel`/`toolbarShowLabel`) in sync with its current state
+  and re-syncs it on every language switch.
 - **Cart/checkout:** `addProductToCart` → `computeTotals()` (subtotal →
   discount% → tax% → grand total, all straight percentage math, no
   per-item tax) → `goToCheckout` → split payments via `paymentRows` →

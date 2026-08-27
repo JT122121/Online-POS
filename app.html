@@ -130,6 +130,8 @@ button:active { transform: translateY(1px); }
 .app-header .subtitle { margin: 3px 0 0; color: var(--muted); font-size: 12.5px; }
 .header-actions { display: flex; gap: 8px; }
 .header-actions button { padding: 11px 17px; border: 1px solid transparent; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+.header-actions-group { display: contents; }
+.toolbar-toggle-btn { background: transparent; border: 1px solid var(--line) !important; color: var(--ink-soft) !important; }
 #settingsButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0; }
 #inventoryShortcutButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
@@ -398,8 +400,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @media (max-width: 900px) {
   body { padding: 10px; }
   .app-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .header-actions { width: 100%; }
+  .header-actions { width: 100%; flex-wrap: wrap; }
   .header-actions button, .header-actions select { flex: 1; justify-content: center; }
+  .header-actions .toolbar-toggle-btn { flex: 0 0 100%; }
   .app { display: flex; flex-direction: column; gap: 14px; }
   .left-panel { position: relative; top: auto; width: 100%; max-height: none; }
   .preview-area { min-height: auto; justify-content: flex-start; overflow-x: auto; }
@@ -456,6 +459,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 </a>
 <div class="header-actions">
+<button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
+<div class="header-actions-group" id="headerActionsGroup">
 <select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
 <button id="premiumShortcutButton" onclick="openPremiumSettings()" title="Manage your Premium code">👑 <span id="premiumShortcutLabel">Premium</span></button>
 <button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
@@ -465,6 +470,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
+</div>
 </div>
 </header>
 
@@ -1129,7 +1135,7 @@ en: {
   activeCashierPlaceholder: "No cashier selected", summaryByCashierTitle: "By Cashier", summaryNoCashierLabel: "No cashier selected",
   customerNameLabel: "Customer Name", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
   summaryButtonLabel: "Summary", salesSummaryTitle: "Sales Summary", summaryTotalLabel: "Overall Total",
-  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium",
+  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium", toolbarHideLabel: "Hide Toolbar", toolbarShowLabel: "Show Toolbar",
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
@@ -1221,7 +1227,7 @@ ar: {
   activeCashierPlaceholder: "لم يتم اختيار كاشير", summaryByCashierTitle: "حسب الكاشير", summaryNoCashierLabel: "لم يتم اختيار كاشير",
   customerNameLabel: "اسم العميل", customerNamePlaceholder: "اختياري", customerLabelText: "العميل:",
   summaryButtonLabel: "الملخص", salesSummaryTitle: "ملخص المبيعات", summaryTotalLabel: "الإجمالي الكلي",
-  backupShortcutLabel: "نسخة احتياطية", premiumShortcutLabel: "بريميوم",
+  backupShortcutLabel: "نسخة احتياطية", premiumShortcutLabel: "بريميوم", toolbarHideLabel: "إخفاء شريط الأدوات", toolbarShowLabel: "إظهار شريط الأدوات",
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
@@ -1305,7 +1311,7 @@ fil: {
   activeCashierPlaceholder: "Walang napiling kahero", summaryByCashierTitle: "Ayon sa Kahero", summaryNoCashierLabel: "Walang napiling kahero",
   customerNameLabel: "Pangalan ng Customer", customerNamePlaceholder: "Opsyonal", customerLabelText: "Customer:",
   summaryButtonLabel: "Buod", salesSummaryTitle: "Buod ng Benta", summaryTotalLabel: "Kabuuang Total",
-  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium",
+  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium", toolbarHideLabel: "Itago ang Toolbar", toolbarShowLabel: "Ipakita ang Toolbar",
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
@@ -1389,7 +1395,7 @@ hi: {
   activeCashierPlaceholder: "कोई कैशियर चयनित नहीं", summaryByCashierTitle: "कैशियर के अनुसार", summaryNoCashierLabel: "कोई कैशियर चयनित नहीं",
   customerNameLabel: "ग्राहक का नाम", customerNamePlaceholder: "वैकल्पिक", customerLabelText: "ग्राहक:",
   summaryButtonLabel: "सारांश", salesSummaryTitle: "बिक्री सारांश", summaryTotalLabel: "कुल योग",
-  backupShortcutLabel: "बैकअप", premiumShortcutLabel: "प्रीमियम",
+  backupShortcutLabel: "बैकअप", premiumShortcutLabel: "प्रीमियम", toolbarHideLabel: "टूलबार छुपाएं", toolbarShowLabel: "टूलबार दिखाएं",
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
@@ -1473,7 +1479,7 @@ es: {
   activeCashierPlaceholder: "Ningún cajero seleccionado", summaryByCashierTitle: "Por Cajero", summaryNoCashierLabel: "Ningún cajero seleccionado",
   customerNameLabel: "Nombre del Cliente", customerNamePlaceholder: "Opcional", customerLabelText: "Cliente:",
   summaryButtonLabel: "Resumen", salesSummaryTitle: "Resumen de Ventas", summaryTotalLabel: "Total General",
-  backupShortcutLabel: "Respaldo", premiumShortcutLabel: "Premium",
+  backupShortcutLabel: "Respaldo", premiumShortcutLabel: "Premium", toolbarHideLabel: "Ocultar Barra", toolbarShowLabel: "Mostrar Barra",
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
@@ -1557,7 +1563,7 @@ th: {
   activeCashierPlaceholder: "ยังไม่ได้เลือกแคชเชียร์", summaryByCashierTitle: "แยกตามแคชเชียร์", summaryNoCashierLabel: "ยังไม่ได้เลือกแคชเชียร์",
   customerNameLabel: "ชื่อลูกค้า", customerNamePlaceholder: "ไม่บังคับ", customerLabelText: "ลูกค้า:",
   summaryButtonLabel: "สรุปยอด", salesSummaryTitle: "สรุปยอดขาย", summaryTotalLabel: "ยอดรวมทั้งหมด",
-  backupShortcutLabel: "สำรองข้อมูล", premiumShortcutLabel: "พรีเมียม",
+  backupShortcutLabel: "สำรองข้อมูล", premiumShortcutLabel: "พรีเมียม", toolbarHideLabel: "ซ่อนแถบเครื่องมือ", toolbarShowLabel: "แสดงแถบเครื่องมือ",
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
@@ -1699,6 +1705,19 @@ function openInventoryPanel() {
 function openPremiumSettings() {
   document.getElementById("settingsOverlay").classList.remove("hidden");
   selectSettingsTab("premium");
+}
+function toggleToolbar() {
+  document.getElementById("headerActionsGroup").classList.toggle("hidden");
+  renderToolbarToggle();
+}
+function renderToolbarToggle() {
+  const group = document.getElementById("headerActionsGroup");
+  const label = document.getElementById("toolbarToggleLabel");
+  const btn = document.getElementById("toolbarToggleBtn");
+  if (!group || !label || !btn) return;
+  const collapsed = group.classList.contains("hidden");
+  label.textContent = tr(collapsed ? "toolbarShowLabel" : "toolbarHideLabel");
+  btn.title = label.textContent;
 }
 function closeSettings() {
   document.getElementById("settingsOverlay").classList.add("hidden");
@@ -4077,6 +4096,7 @@ function changeLanguage() {
     if (!element) return;
     element.textContent = tr(ids[id]);
   });
+  renderToolbarToggle();
 
   const searchEl = document.getElementById("productSearch");
   if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
