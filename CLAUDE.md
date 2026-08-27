@@ -172,6 +172,14 @@ short version:
   are shared with the offline build (they live outside the
   `PREMIUM-ACTIVATION` swap block) — only *which* code counts as valid,
   and whether checking one touches the network, differs per-build.
+- A `#premiumShortcutButton` ("👑 Premium") sits in the main screen's
+  header toolbar (`.header-actions`, alongside Backup/Settings/Summary/
+  Print/Inventory/Customer Screen/New Sale) so Settings → Premium is
+  reachable in one click from the main screen instead of needing
+  Settings → the Premium tab specifically. `openPremiumSettings()`
+  opens `#settingsOverlay` and calls `selectSettingsTab("premium")`,
+  the same pattern `openBackupSettings()`/`openInventoryPanel()` already
+  use for their own shortcut buttons.
 - Settings → Premium is a `<select id="premiumCodeSelect">` defaulting to
   PROMO1 (offline build: its own `OFFLINE_PREMIUM_CODE`, swapped in via
   the `<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START/END -->` marker so the

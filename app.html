@@ -457,6 +457,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </a>
 <div class="header-actions">
 <select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
+<button id="premiumShortcutButton" onclick="openPremiumSettings()" title="Manage your Premium code">👑 <span id="premiumShortcutLabel">Premium</span></button>
 <button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
 <button id="summaryButton" onclick="toggleSalesSummary()">📊 <span id="summaryButtonLabel">Summary</span></button>
@@ -1128,7 +1129,7 @@ en: {
   activeCashierPlaceholder: "No cashier selected", summaryByCashierTitle: "By Cashier", summaryNoCashierLabel: "No cashier selected",
   customerNameLabel: "Customer Name", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
   summaryButtonLabel: "Summary", salesSummaryTitle: "Sales Summary", summaryTotalLabel: "Overall Total",
-  backupShortcutLabel: "Backup",
+  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium",
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
@@ -1220,7 +1221,7 @@ ar: {
   activeCashierPlaceholder: "لم يتم اختيار كاشير", summaryByCashierTitle: "حسب الكاشير", summaryNoCashierLabel: "لم يتم اختيار كاشير",
   customerNameLabel: "اسم العميل", customerNamePlaceholder: "اختياري", customerLabelText: "العميل:",
   summaryButtonLabel: "الملخص", salesSummaryTitle: "ملخص المبيعات", summaryTotalLabel: "الإجمالي الكلي",
-  backupShortcutLabel: "نسخة احتياطية",
+  backupShortcutLabel: "نسخة احتياطية", premiumShortcutLabel: "بريميوم",
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
@@ -1304,7 +1305,7 @@ fil: {
   activeCashierPlaceholder: "Walang napiling kahero", summaryByCashierTitle: "Ayon sa Kahero", summaryNoCashierLabel: "Walang napiling kahero",
   customerNameLabel: "Pangalan ng Customer", customerNamePlaceholder: "Opsyonal", customerLabelText: "Customer:",
   summaryButtonLabel: "Buod", salesSummaryTitle: "Buod ng Benta", summaryTotalLabel: "Kabuuang Total",
-  backupShortcutLabel: "Backup",
+  backupShortcutLabel: "Backup", premiumShortcutLabel: "Premium",
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
@@ -1388,7 +1389,7 @@ hi: {
   activeCashierPlaceholder: "कोई कैशियर चयनित नहीं", summaryByCashierTitle: "कैशियर के अनुसार", summaryNoCashierLabel: "कोई कैशियर चयनित नहीं",
   customerNameLabel: "ग्राहक का नाम", customerNamePlaceholder: "वैकल्पिक", customerLabelText: "ग्राहक:",
   summaryButtonLabel: "सारांश", salesSummaryTitle: "बिक्री सारांश", summaryTotalLabel: "कुल योग",
-  backupShortcutLabel: "बैकअप",
+  backupShortcutLabel: "बैकअप", premiumShortcutLabel: "प्रीमियम",
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
@@ -1472,7 +1473,7 @@ es: {
   activeCashierPlaceholder: "Ningún cajero seleccionado", summaryByCashierTitle: "Por Cajero", summaryNoCashierLabel: "Ningún cajero seleccionado",
   customerNameLabel: "Nombre del Cliente", customerNamePlaceholder: "Opcional", customerLabelText: "Cliente:",
   summaryButtonLabel: "Resumen", salesSummaryTitle: "Resumen de Ventas", summaryTotalLabel: "Total General",
-  backupShortcutLabel: "Respaldo",
+  backupShortcutLabel: "Respaldo", premiumShortcutLabel: "Premium",
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
@@ -1556,7 +1557,7 @@ th: {
   activeCashierPlaceholder: "ยังไม่ได้เลือกแคชเชียร์", summaryByCashierTitle: "แยกตามแคชเชียร์", summaryNoCashierLabel: "ยังไม่ได้เลือกแคชเชียร์",
   customerNameLabel: "ชื่อลูกค้า", customerNamePlaceholder: "ไม่บังคับ", customerLabelText: "ลูกค้า:",
   summaryButtonLabel: "สรุปยอด", salesSummaryTitle: "สรุปยอดขาย", summaryTotalLabel: "ยอดรวมทั้งหมด",
-  backupShortcutLabel: "สำรองข้อมูล",
+  backupShortcutLabel: "สำรองข้อมูล", premiumShortcutLabel: "พรีเมียม",
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
@@ -1694,6 +1695,10 @@ function openInventoryPanel() {
   document.getElementById("settingsOverlay").classList.remove("hidden");
   selectSettingsTab("inventory");
   renderInventoryList();
+}
+function openPremiumSettings() {
+  document.getElementById("settingsOverlay").classList.remove("hidden");
+  selectSettingsTab("premium");
 }
 function closeSettings() {
   document.getElementById("settingsOverlay").classList.add("hidden");
@@ -4016,7 +4021,7 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     summaryButtonLabel: "summaryButtonLabel", salesSummaryTitle: "salesSummaryTitle", summaryTotalLabel: "summaryTotalLabel",
-    backupShortcutLabel: "backupShortcutLabel",
+    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
