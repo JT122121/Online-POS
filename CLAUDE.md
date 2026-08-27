@@ -264,8 +264,9 @@ short version:
   still auto-grants PROMO1 locally with no validity shown. The Apps
   Script's own logic (`findCode`, `checkOrClaimSeat`, `validateCode` —
   a code with a long-past date still succeeds, plain-text validity is
-  echoed back verbatim, PROMO1's unlimited seats, a real code still
-  capped at 5) is separately unit-tested in isolation against mocked
+  echoed back verbatim, PROMO1 capped at exactly 30 via
+  `CODE_SEAT_LIMITS`, a real code with no override still capped at the
+  default 5) is separately unit-tested in isolation against mocked
   Sheets/Lock/Content objects.
 - Every `AppsScript.gs` edit requires deploying a **new version** (Deploy
   → Manage deployments → edit → New version) before it takes effect on
@@ -280,6 +281,20 @@ short version:
   in the Apps Script execution log, which the browser then only ever
   saw as a generic "couldn't reach the activation server" (that crash
   page carries no CORS headers).
+- **"Buy Premium Code"** — a `.small-btn` (`#buyPremiumBtn`) under the
+  code-entry form in Settings → Premium opens a small info modal
+  (`#buyPremiumOverlay`, `openBuyPremiumModal()`/`closeBuyPremiumModal()`)
+  showing the price ($9.99 USD, one-time), three bullet features (no
+  expiration, up to 5 active browsers, non-refundable), and a line
+  linking out to `contact.html` to actually buy — this repo has no
+  payment processing, purchasing is handled manually by the site owner
+  via that contact form. Purely informational; doesn't touch
+  `activatePremiumCode()` or any validation logic. The whole feature
+  (button + modal + its two JS functions) lives inside its own
+  `OFFLINE-STRIP:BUY-PREMIUM-BUTTON`/`BUY-PREMIUM-MODAL`/`BUY-PREMIUM-JS`
+  marker blocks and is stripped from the downloadable offline package —
+  an offline copy is already Premium-unlocked via its own separate code,
+  so there's nothing to sell it.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
