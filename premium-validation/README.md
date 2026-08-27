@@ -7,8 +7,8 @@ sheet and is what `app.html` calls to check a code.
 **Setup, once:**
 
 1. In the Google Sheet, make sure the tab with your codes is named
-   exactly `Premium Code`, with the code in column A and an (informational
-   only — see below) validity date in column B.
+   exactly `Premium Code`, with the code in column A and an informational
+   validity value in column B (a date, plain text, or blank — see below).
 2. Extensions → Apps Script in that sheet, paste in `AppsScript.gs`,
    then Deploy → New deployment → **Web app** → Execute as **Me** →
    Who has access **Anyone** (must be exactly this — "Anyone with a
@@ -37,39 +37,23 @@ than that frees its seat automatically). Both are constants at the top of
   internet to call it with. See `CLAUDE.md`.
 - A brand-new visitor is auto-granted Premium on first load using PROMO1 —
   no manual activation needed. That auto-grant looks PROMO1 up against the
-  sheet first, so the real validity date from column B shows immediately;
+  sheet first, so the real validity value from column B shows immediately;
   if the lookup can't be reached, it falls back to a local-only grant with
   no validity shown, so a visitor is never blocked by an infrastructure
   hiccup. "Change code" (next to the Premium status once unlocked) lets
   anyone still switch to a different code without clearing site data.
-- The Validity column **is** enforced, but only at the moment a code is
-  looked up — auto-grant, a manual Activate, or the background heartbeat.
-  A past date there makes that lookup return "expired" instead of "ok."
-  It is **not** retroactive: once a browser has successfully activated a
-  code, it stays unlocked locally until that browser's site data is
-  cleared, even if the code expires later — an "expired" response never
-  revokes access already granted, it only blocks a *new* activation.
-  Leave the Validity cell blank for a code that should never expire.
+- **Codes never expire.** The Validity column is purely informational —
+  shown to the user as "Valid until: …" — and is never checked against
+  today's date. Put whatever you want in column B: a date, or plain text
+  like `Life Time Access`. A date-typed cell is formatted as `dd-MMM-yyyy`
+  for display; anything else is shown exactly as typed. A blank cell
+  shows nothing.
 - `UNLIMITED_CODES` (currently just `PROMO1`) is exempt from the per-code
   seat cap — it's the site's universal free default, auto-granted to
   every new visitor, so it can't be limited to `MAX_SEATS` concurrent
-  devices the way a real purchased code is. It's still subject to the
-  expiration check above.
-
-**Keeping every code's Validity date from going stale:** rather than
-manually re-editing dates in the sheet, run **`installRenewalTrigger`**
-once from the function dropdown (Run, then authorize if prompted). It
-sets up a time-driven trigger that runs `renewFreeCodes()` every 3
-hours, pushing every row's Validity date (any cell that's an actual
-date, i.e. not left blank) out to `FREE_CODE_RENEWAL_DAYS` (90) days
-from whenever it last ran, so none of them land in the past. This
-applies to every code in the sheet, no exceptions — a code only
-avoids renewal by leaving its Validity cell blank in the first place
-(which already means "never expires" and needs no renewal). Re-running
-`installRenewalTrigger` is safe — it clears any previous trigger for
-the same function before creating a new one, so it won't create
-duplicates. Check **Triggers** (clock icon) in the Apps Script editor's
-left sidebar to confirm it's listed, or to remove it later.
+  devices the way a real purchased code is. Every other code is capped
+  at `MAX_SEATS` to blunt one purchased code being shared/leaked
+  indefinitely.
 
 **Debugging "code isn't valid" from the Apps Script editor:** don't run
 `findCode`, `createSessionsSheet`, `checkOrClaimSeat`, etc. directly from

@@ -3,7 +3,6 @@ var SESSIONS_SHEET_NAME = "Active Sessions";
 var MAX_SEATS = 5;
 var SEAT_WINDOW_DAYS = 30;
 var UNLIMITED_CODES = ["PROMO1"];
-var FREE_CODE_RENEWAL_DAYS = 90;
 
 function doGet(e) {
   var params = (e && e.parameter) || {};
@@ -28,12 +27,8 @@ function validateCode(rawCode, rawDeviceId) {
   var codesSheet = ss.getSheetByName(CODES_SHEET_NAME);
   if (!codesSheet) return jsonOut({ ok: false, reason: "server_error" });
 
-  var codeRow = findCode(codesSheet, code);
-  if (!codeRow) return jsonOut({ ok: false, reason: "invalid" });
-
-  if (codeRow.validityDate && codeRow.validityDate.getTime() < Date.now()) {
-    return jsonOut({ ok: false, reason: "expired", validity: codeRow.validity });
-  }
+  var validity = findCode(codesSheet, code);
+  if (validity === null) return jsonOut({ ok: false, reason: "invalid" });
 
   if (UNLIMITED_CODES.indexOf(code) === -1) {
     var sessionsSheet = ss.getSheetByName(SESSIONS_SHEET_NAME) || createSessionsSheet(ss);
@@ -48,7 +43,7 @@ function validateCode(rawCode, rawDeviceId) {
     if (!claimed) return jsonOut({ ok: false, reason: "seat_limit" });
   }
 
-  return jsonOut({ ok: true, validity: codeRow.validity });
+  return jsonOut({ ok: true, validity: validity });
 }
 
 function findCode(sheet, code) {
@@ -57,11 +52,9 @@ function findCode(sheet, code) {
     var rowCode = String(data[i][0] || "").trim().toUpperCase();
     if (rowCode === code) {
       var cell = data[i][1];
-      var validityDate = cell instanceof Date ? cell : null;
-      var validity = validityDate
-        ? Utilities.formatDate(validityDate, Session.getScriptTimeZone(), "dd-MMM-yyyy")
+      return cell instanceof Date
+        ? Utilities.formatDate(cell, Session.getScriptTimeZone(), "dd-MMM-yyyy")
         : String(cell || "");
-      return { validity: validity, validityDate: validityDate };
     }
   }
   return null;
@@ -110,35 +103,9 @@ function jsonOut(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// Keeps every code's Validity date from ever landing in the past --
-// pushes each row's Validity cell out to FREE_CODE_RENEWAL_DAYS from
-// now. Meant to run on a time-driven trigger (see installRenewalTrigger
-// below), not manually. Applies to every code in the sheet, no
-// exceptions -- a blank Validity cell (never-expires) is left blank.
-function renewFreeCodes() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(CODES_SHEET_NAME);
-  if (!sheet) return;
-  var data = sheet.getDataRange().getValues();
-  var target = new Date(Date.now() + FREE_CODE_RENEWAL_DAYS * 24 * 60 * 60 * 1000);
-  for (var i = 1; i < data.length; i++) {
-    if (data[i][1] instanceof Date) {
-      sheet.getRange(i + 1, 2).setValue(target);
-    }
-  }
-}
-
-// Run this ONCE from the function dropdown to schedule renewFreeCodes()
-// to run automatically every 3 hours from then on. Safe to re-run --
-// clears any existing trigger for renewFreeCodes first, so it never
-// creates duplicates.
-function installRenewalTrigger() {
-  ScriptApp.getProjectTriggers().forEach(function(t) {
-    if (t.getHandlerFunction() === "renewFreeCodes") ScriptApp.deleteTrigger(t);
-  });
-  ScriptApp.newTrigger("renewFreeCodes").timeBased().everyHours(3).create();
-  renewFreeCodes();
-}
+// If you previously ran installRenewalTrigger, open the Triggers (clock
+// icon) panel in the Apps Script editor and delete the renewFreeCodes
+// trigger -- it's no longer needed now that expiration isn't enforced.
 
 // Manual test helper. Select "testLookupCode" in the function dropdown
 // above and click Run, then View > Logs (or Ctrl+Enter). Edit the code
@@ -158,5 +125,5 @@ function testLookupCode() {
     Logger.log("Row " + (i + 1) + ": Code=[" + data[i][0] + "] Validity=[" + data[i][1] + "]");
   }
   var result = findCode(sheet, codeToTest);
-  Logger.log('Lookup for "' + codeToTest + '": ' + (result ? JSON.stringify(result) : "NOT FOUND"));
+  Logger.log('Lookup for "' + codeToTest + '": ' + (result !== null ? JSON.stringify(result) : "NOT FOUND"));
 }

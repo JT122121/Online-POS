@@ -159,12 +159,12 @@ short version:
   `pos-premium-unlocked` flag is `null` (i.e. truly first-ever visit, or a
   fresh offline install), with zero clicks required. That function looks
   `DEFAULT_PREMIUM_CODE` ("PROMO1") up against the sheet first so the real
-  "Valid until" date from column B shows immediately, falling back to a
+  validity value from column B shows immediately, falling back to a
   local-only grant (no validity shown) only if the lookup can't be
   reached — so a visitor is never blocked by an infrastructure hiccup. A
-  lookup that succeeds but comes back expired/seat-limited/invalid does
-  **not** auto-grant; the visitor is simply left in the normal locked
-  state. `activatePremiumCode()` (manual entry) gives PROMO1 the same
+  lookup that succeeds but comes back seat-limited/invalid does **not**
+  auto-grant; the visitor is simply left in the normal locked state.
+  `activatePremiumCode()` (manual entry) gives PROMO1 the same
   network-first-with-local-fallback treatment; any other code has no such
   fallback and shows the network-error message if unreachable.
   `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
@@ -202,22 +202,26 @@ short version:
   out the site after its 5th visitor. Real sheet-issued codes are not
   exempt, and this exists to blunt one purchased code being
   shared/leaked indefinitely, not to build real license management.
-- The sheet's Validity column **is enforced, but only at the moment a
-  code is looked up** — auto-grant, a manual Activate, or the background
-  heartbeat. A date in the past there makes that lookup return `expired`
-  instead of `ok` (shown via the `premiumCodeExpired` message). This is
-  **not retroactive**: once a code has been successfully accepted on a
-  browser, that browser stays unlocked locally (`pos-premium-unlocked`)
-  until its site data is cleared, even if the code expires later — an
-  expired/error response from a later lookup (e.g. the heartbeat) never
-  revokes access already granted, it only blocks a *new* activation.
-  Leave the sheet's Validity cell blank for a code that should never
-  expire. `heartbeatPremiumCode()` pings the endpoint in the background
-  on load purely to keep an already-active seat "warm" (refresh
-  `LastSeen` server-side).
-- Failure modes are split four ways in the UI: unknown code
-  (`premiumCodeInvalid`), code found but past its Validity date
-  (`premiumCodeExpired`), code found but at its device cap
+- **Codes never expire.** The sheet's Validity column is purely
+  informational — shown to the user as "Valid until: …" via
+  `renderPremiumValidity()` — and is never checked against today's date.
+  Column B can hold a date (displayed as `dd-MMM-yyyy`), plain text like
+  `Life Time Access` (displayed verbatim), or be left blank (nothing
+  shown). This was a deliberate simplification after an earlier
+  expiration-enforcement design proved to be an operational trap: an
+  expired `PROMO1` row silently stopped the free auto-grant for every
+  new visitor site-wide, discovered only when a site owner reported
+  "expired but still active" for their own already-unlocked browser
+  (correct per the old design's non-retroactive rule) while new visitors
+  were quietly being locked out. The `premiumCodeExpired` translation key
+  and its UI branch in `activatePremiumCode()` still exist client-side
+  but are unreachable now that the server never returns `reason:
+  "expired"` — harmless dead code, not wired to anything.
+  `heartbeatPremiumCode()` still pings the endpoint in the background on
+  load purely to keep an already-active seat "warm" (refresh `LastSeen`
+  server-side); it has nothing to do with expiration.
+- Failure modes are split three ways in the UI: unknown code
+  (`premiumCodeInvalid`), code found but at its device cap
   (`premiumCodeSeatLimit`), and the endpoint being unreachable
   (`premiumCodeNetworkError`).
 - **`checkPremiumCode()` calls the Apps Script with GET, not POST** —
@@ -239,32 +243,26 @@ short version:
 - Verified end-to-end against a mock endpoint standing in for the real
   Apps Script (can't deploy the real one without the site owner's Google
   account): a fresh visit auto-grants Premium with zero clicks and shows
-  the real validity date, a validation-URL-unreachable fresh visit still
-  auto-grants PROMO1 locally with no validity shown, a fresh visit where
-  the lookup reports PROMO1 expired does **not** auto-grant and the badge
-  stays "Basic", and manually activating an expired code shows the
-  expired message. The Apps Script's own logic (`findCode`,
-  `checkOrClaimSeat`, `validateCode` — expiration, blank-validity-never-
-  expires, PROMO1's unlimited seats, a real code still capped at 5) is
-  separately unit-tested in isolation against mocked Sheets/Lock/Content
-  objects.
+  the real validity value, and a validation-URL-unreachable fresh visit
+  still auto-grants PROMO1 locally with no validity shown. The Apps
+  Script's own logic (`findCode`, `checkOrClaimSeat`, `validateCode` —
+  a code with a long-past date still succeeds, plain-text validity is
+  echoed back verbatim, PROMO1's unlimited seats, a real code still
+  capped at 5) is separately unit-tested in isolation against mocked
+  Sheets/Lock/Content objects.
 - Every `AppsScript.gs` edit requires deploying a **new version** (Deploy
   → Manage deployments → edit → New version) before it takes effect on
   the existing `/exec` URL — the URL itself doesn't change, but the code
-  behind it does nothing until redeployed.
-- `renewFreeCodes()` + `installRenewalTrigger()` (in `AppsScript.gs`)
-  keep every sheet row's Validity date from ever landing in the past —
-  a time-driven trigger (installed once by running
-  `installRenewalTrigger` manually, not via deployment) runs
-  `renewFreeCodes()` every 3 hours, pushing every row's Validity date
-  (any cell that's an actual date) out to `FREE_CODE_RENEWAL_DAYS` (90)
-  days from whenever it last ran. Applies to every code, no exceptions —
-  a code only opts out by leaving its Validity cell blank in the sheet
-  (which already means "never expires"). This means in practice no code
-  with a date ever actually reaches its expiration in production, as
-  long as the trigger keeps running — the `expired` check in
-  `validateCode()` still exists and is still unit-tested, but is now a
-  safety net rather than something real codes are expected to hit.
+  behind it does nothing until redeployed. `Code.gs` must be a script
+  created via **Extensions → Apps Script from inside the "Premium Code"
+  sheet itself** — a standalone project (created from script.google.com
+  or Google Drive directly) is never bound to any spreadsheet, so
+  `SpreadsheetApp.getActiveSpreadsheet()` always returns `null` and
+  every request 500s. Confirmed live: this exact mistake produced
+  `TypeError: Cannot read properties of null (reading 'getSheetByName')`
+  in the Apps Script execution log, which the browser then only ever
+  saw as a generic "couldn't reach the activation server" (that crash
+  page carries no CORS headers).
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
