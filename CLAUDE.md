@@ -16,8 +16,9 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
-- **Images:** `guide-*.png` (in-app feature screenshots used in help/guide
-  content), `favicon.png`, `blog-hero-illustration.svg`.
+- **Images:** `guide-*.png` (in-app feature screenshots used in the
+  "Every setting, explained" walkthrough on `index.html`), `favicon.png`,
+  `blog-hero-illustration.svg`.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
   (only lists `/`, `/about.html`, `/contact.html`, `/privacy.html`,
   `/terms.html` — **not** `app.html`, `blog.html`, `how-it-works.html`, or
@@ -70,12 +71,12 @@ local to the browser.
 - **Products:** manual add, or bulk CSV upload (`handleCsvUpload`, columns
   Name/Price/Category/SKU) that **replaces** the whole catalog; "Download
   Sample CSV" and "Clear Products" actions exist.
-- **Exports:** uses `xlsx.full.min.js` (cdnjs) for `.xlsx` inventory/sales
-  reports (`exportInventoryToExcel`, `exportSalesToExcel`) and a
-  hand-rolled CSV/text export path (`rowsToCsv`, `downloadTextFile`).
-- **Barcode scanning:** `@zxing/browser` (unpkg) drives a camera-based
-  scanner (`barcodeReader`), toggleable in Settings; matches scanned code
-  against product SKU.
+- **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
+  (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
+  CSV/text export path (`rowsToCsv`, `downloadTextFile`).
+- **Barcode scanning:** `@zxing/browser` drives a camera-based scanner
+  (`barcodeReader`), toggleable in Settings; matches scanned code against
+  product SKU.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
   everything and reloads the page. This is the *only* way data survives a
@@ -97,42 +98,92 @@ local to the browser.
   default, no-expiration code, so start unlocked"). `applyPremiumLocks()`
   just toggles `disabled`/hidden classes on DOM elements (logo upload,
   receipt number/prefix editing, inventory stock editing/export, customer
-  screen). This is UI-level gating only, not a real entitlement check —
-  worth keeping in mind before treating it as a security boundary.
+  screen, downloading the offline package). This is UI-level gating only,
+  not a real entitlement check — worth keeping in mind before treating it
+  as a security boundary. The downloadable offline copy runs this same
+  mechanism with different defaults — see "Download Offline POS" below.
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
   bottom of the file, separate from the app's own `onlinepos_*` storage
   keys).
 
-## `offline/` — downloadable offline package
+## `vendor/` — self-hosted third-party libraries
 
-A self-contained, zero-network copy of the app for users who want to
-download and run GoOnlinePOS without internet access.
+Root-level `vendor/xlsx.full.min.js`, `vendor/zxing-browser.min.js`, and
+`vendor/jszip.min.js` are unmodified builds pulled straight from the npm
+registry (`vendor/LICENSES.txt` has versions/licenses/attribution).
+`app.html` loads all three via local `<script src="vendor/...">` tags —
+**not** cdnjs/unpkg — so the live site has zero third-party CDN
+dependency. `customer.html` needs none of them. `jszip.min.js` is used
+only by the "Download Offline POS" feature below; the other two are also
+what gets pulled into the generated offline package.
 
-- `offline/app.html` / `offline/customer.html` are **generated**, not
-  hand-edited — derived from the root `app.html`/`customer.html` by
-  `offline/build-offline.py`. Re-run that script after changing the root
-  files to keep the offline copies in sync (it asserts on each expected
-  edit point, so it fails loudly rather than silently drifting).
-- The script: (1) points the `xlsx`/`@zxing/browser` `<script src>` tags
-  at `offline/vendor/` instead of cdnjs/unpkg — those two files are
-  vendored, unmodified builds pulled from the npm registry (see
-  `offline/vendor/LICENSES.txt`); (2) strips the Google Fonts `<link>`
-  tags (the CSS already has system-font fallbacks, so this is cosmetic
-  only); (3) strips the cookie-consent/GA/AdSense bootstrap script and
-  banner markup from `app.html` (nothing to track offline).
-- `offline/start-server.sh` / `-mac.command` / `.bat` run a local Python
-  `http.server` and open the app at `http://localhost:8080/app.html`.
-  This is what makes the customer-screen broadcast
-  (`BroadcastChannel`/`localStorage`) and the camera barcode scanner
-  reliable across browsers offline — double-clicking `app.html` directly
-  via `file://` works too (confirmed in Chromium), but Firefox/Safari can
-  isolate separate double-clicked local files from each other, breaking
-  cross-tab sync. `offline/README.txt` explains both paths to end users.
-- Verified end-to-end with a headless-Chromium smoke test (vendored libs
-  load, cart math, checkout, and live customer-screen mirroring across
-  two localhost tabs) — zero console/page errors.
+## "Download Offline POS" (Premium) — dynamic offline package
+
+Settings → Backup has a Premium-gated "Download Offline POS" button that
+builds a self-contained, zero-network `.zip` of the app **live, client-side,
+in the browser**, rather than serving a pre-built file — so it's always
+exactly what's currently deployed, with no separate build/publish step to
+remember. The whole mechanism lives inside `app.html` itself:
+
+- Clicking the button opens a modal (`#offlineDownloadOverlay`) with a
+  condensed how-to-use summary, the update/migration flow (re-download
+  anytime Premium is active; move data over with existing Backup/Restore),
+  and a required "I agree to the Terms of Service" checkbox that gates the
+  actual download — see `confirmOfflineDownload()`.
+- On confirm, it `fetch()`es the **currently live** `app.html` and
+  `customer.html` (same-origin, `cache: "no-store"`) plus the static
+  ingredients under `offline/` (`README.txt`, the three `start-server.*`
+  launchers, `offline/vendor/LICENSES.txt`) and the two libraries from
+  root `vendor/`, runs `app.html`'s text through `buildOfflineAppHtml()`,
+  zips everything with JSZip, and triggers the download
+  (`GoOnlinePOS-Offline.zip`).
+- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()` edit the fetched
+  HTML by stripping `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
+  `/* OFFLINE-STRIP:<name>:START/END */` (JS) marker comments already
+  present in `app.html`/`customer.html` — **search `OFFLINE-STRIP` to find
+  every edit point** before restructuring any of the marked sections, or
+  the generated package silently drops the edit (a `console.warn` fires
+  if a marker goes missing, but nothing hard-fails). Currently stripped:
+  Google Fonts links, the cookie-consent/GA/AdSense bootstrap + banner,
+  the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
+  download section/modal HTML, and the whole download-building JS block
+  itself (dead code once there's no button to trigger it).
+- **Gate B — the offline copy's own Premium lock is separate from the
+  live site's.** Two more markers handle this: `/* OFFLINE-SWAP:PREMIUM_CODE
+  */` swaps `PREMIUM_CODE` to `OFFLINE_PREMIUM_CODE` (a different code
+  than the live site's `PROMO1`), and `/* OFFLINE-STRIP:AUTO-UNLOCK:...
+  */` removes the auto-unlock-on-first-load branch, so a freshly
+  downloaded offline copy starts **locked** and needs
+  `OFFLINE_PREMIUM_CODE` entered once. `OFFLINE_PREMIUM_CODE` is a
+  placeholder value in the source — **change it to something not published
+  anywhere before distributing**. Like `PREMIUM_CODE`, it's a plain string
+  compared client-side inside a file every offline copy ships with, so
+  it's a soft/honor-system gate, not real DRM — anyone with dev tools open
+  on an offline copy can read it.
+- `offline/README.txt` + `offline/start-server.sh` / `-mac.command` /
+  `.bat` are static, rarely-changing files (not generated) that get pulled
+  into the zip as-is. The launchers run a local Python `http.server` and
+  open the app at `http://localhost:8080/app.html` — this is what makes
+  the customer-screen broadcast (`BroadcastChannel`/`localStorage`) and
+  the camera barcode scanner reliable across browsers offline;
+  double-clicking `app.html` directly via `file://` also works (confirmed
+  in Chromium) but Firefox/Safari can isolate separate double-clicked
+  local files from each other, breaking cross-tab sync.
+- There is **no committed static copy** of the offline package anymore
+  (an earlier `offline/app.html`/`offline/customer.html`/
+  `offline/build-offline.py` were retired in favor of this always-current
+  mechanism) — don't recreate them as a separate, driftable source of
+  truth. If you need a one-off zip outside the browser flow, drive the
+  live button instead.
+- Verified end-to-end with headless Chromium: live download flow produces
+  a valid zip (correct files, correct unix exec permissions on the
+  launcher scripts via `generateAsync({ platform: "UNIX" })` — that option
+  is required or the shell scripts extract non-executable); the generated
+  offline `app.html` has zero leftover `OFFLINE-STRIP` markers, starts
+  Premium-locked, rejects the live site's `PROMO1` code, accepts
+  `OFFLINE_PREMIUM_CODE`, and has no download button/modal of its own.
 
 ## `customer.html`
 

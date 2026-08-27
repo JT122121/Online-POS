@@ -1,0 +1,27 @@
+Vendored third-party libraries in this folder — self-hosted so the site
+doesn't depend on cdnjs/unpkg, and so the same files can be pulled
+straight into the "Download Offline POS" package. Unmodified from their
+published npm packages.
+
+xlsx.full.min.js
+  Package : xlsx (SheetJS)
+  Version : 0.18.5
+  License : Apache-2.0
+  Source  : https://www.npmjs.com/package/xlsx
+  Used by : app.html, offline/app.html (Excel export)
+
+zxing-browser.min.js
+  Package : @zxing/browser
+  Version : 0.2.1
+  License : MIT
+  Source  : https://www.npmjs.com/package/@zxing/browser
+  Used by : app.html, offline/app.html (camera barcode scanning)
+
+jszip.min.js
+  Package : jszip
+  Version : 3.10.1
+  License : MIT OR GPL-3.0-or-later
+  Source  : https://www.npmjs.com/package/jszip
+  Used by : app.html only, to assemble the "Download Offline POS" .zip
+            client-side. Not included in the offline package itself —
+            the offline copy never needs to zip anything.

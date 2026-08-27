@@ -1,6 +1,6 @@
-Vendored third-party libraries in this folder — bundled locally so
-GoOnlinePOS works with zero internet access. Unmodified from their
-published npm packages.
+Third-party libraries bundled in this folder — unmodified builds pulled
+from the npm registry, packaged in so the app works with zero internet
+access.
 
 xlsx.full.min.js
   Package : xlsx (SheetJS)
