@@ -79,11 +79,16 @@
 <meta property="og:title" content="Free Online POS – No Signup, No Login">
 <meta property="og:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
 <meta property="og:site_name" content="Go Online POS">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://goonlinepos.com/app.html">
 <meta name="twitter:title" content="Free Online POS – No Signup, No Login">
 <meta name="twitter:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
 <!-- OFFLINE-STRIP:GOOGLE-FONTS:START -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -621,7 +626,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 
 <footer class="site-footer">
-<a href="index.html">How to Use</a>
+<a href="how-it-works.html">How to Use</a>
 <span>·</span>
 <a href="about.html">About</a>
 <span>·</span>
@@ -3322,10 +3327,11 @@ async function confirmOfflineDownload() {
   try {
     if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
 
-    const [appHtml, customerHtml, faviconBlob, xlsxBlob, zxingBlob, licensesText, readmeText, shText, batText, macCommandText] = await Promise.all([
+    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, zxingBlob, licensesText, readmeText, shText, batText, macCommandText] = await Promise.all([
       fetchOfflineText("app.html"),
       fetchOfflineText("customer.html"),
       fetchOfflineBlob("favicon.png"),
+      fetchOfflineBlob("favicon.ico"),
       fetchOfflineBlob("vendor/xlsx.full.min.js"),
       fetchOfflineBlob("vendor/zxing-browser.min.js"),
       fetchOfflineText("offline/vendor/LICENSES.txt"),
@@ -3339,6 +3345,7 @@ async function confirmOfflineDownload() {
     zip.file("app.html", buildOfflineAppHtml(appHtml));
     zip.file("customer.html", buildOfflineCustomerHtml(customerHtml));
     zip.file("favicon.png", faviconBlob);
+    zip.file("favicon.ico", faviconIcoBlob);
     zip.file("vendor/xlsx.full.min.js", xlsxBlob);
     zip.file("vendor/zxing-browser.min.js", zxingBlob);
     zip.file("vendor/LICENSES.txt", licensesText);

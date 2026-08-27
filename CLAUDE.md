@@ -17,12 +17,16 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
-  "Every setting, explained" walkthrough on `index.html`), `favicon.png`,
+  "Every setting, explained" walkthrough on `index.html`), `favicon.png` /
+  `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
+  below), `og-image.jpg` (shared 1200×630 social-share card),
   `blog-hero-illustration.svg`.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (only lists `/`, `/about.html`, `/contact.html`, `/privacy.html`,
-  `/terms.html` — **not** `app.html`, `blog.html`, `how-it-works.html`, or
-  `customer.html`), `ads.txt` (Google AdSense publisher id).
+  (lists `/`, `app.html`, `how-it-works.html`, `about.html`, `blog.html`,
+  `blog-why-your-business-needs-a-pos.html`, `contact.html`, `privacy.html`,
+  `terms.html` — every page whose own `<meta name="robots">` says
+  `index, follow`; `customer.html` is correctly excluded, its own meta tag
+  says `noindex, nofollow`), `ads.txt` (Google AdSense publisher id).
 
 No README, no CI, no tests, no linter config. History is 50 commits, one
 author, mostly titled "Add files via upload" — this repo has been edited
@@ -472,6 +476,65 @@ is needed on this page; it silently does nothing if that key isn't
 every other analytics/ads script is stripped from the offline package —
 zero network calls there.
 
+## SEO
+
+- **Every indexable page** (i.e. every page whose own `<meta name="robots">`
+  says `index, follow` — everything except `customer.html`, which is
+  `noindex, nofollow`) carries: a unique `<title>`, a `meta description`,
+  exactly one `<h1>`, a self-referencing `<link rel="canonical">`, a full
+  Open Graph set (`og:type`/`og:url`/`og:title`/`og:description`/
+  `og:site_name`/`og:image`+width/height), and a matching Twitter Card set
+  (`twitter:card` = `summary_large_image`/`twitter:title`/
+  `twitter:description`/`twitter:image`). Keep new pages consistent with
+  this — copy an existing page's block rather than reinventing it.
+- **`og-image.jpg`** (1200×630, root) is the shared social-share card used
+  by every page's `og:image`/`twitter:image` — generated once via a
+  Playwright screenshot of a small branded HTML template (not committed;
+  it was a scratch file), not hand-designed. Swap it for a real designed
+  asset if the site ever gets one; there's nothing else in the repo that
+  depends on this specific file beyond those meta tags.
+- **`favicon.ico`** (root) is a PNG-in-ICO wrapper around `favicon.png`
+  (same 256×256 artwork, just re-packaged) — kept only because some
+  crawlers/tools still probe `/favicon.ico` directly regardless of the
+  `<link rel="icon">` tag. Every page links both
+  (`<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">`
+  + `<link rel="shortcut icon" href="favicon.ico">`); if `favicon.png` is
+  ever replaced, regenerate `favicon.ico` from the new artwork too (a
+  plain PNG-in-ICO wrapper — see git history for the generation script) or
+  the two will drift. The offline package (see below) bundles both.
+- **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
+  `how-it-works.html`, `about.html`, `blog.html`,
+  `blog-why-your-business-needs-a-pos.html`, `contact.html`,
+  `privacy.html`, `terms.html` — matching each page's own
+  `index, follow` robots meta tag. `customer.html` is deliberately absent
+  (its own tag says `noindex, nofollow`). If a page's robots meta changes,
+  update this file to match.
+- **`how-it-works.html` was a genuinely broken/orphaned page** before this
+  was fixed, all in one pass: (1) its `<head>` had a duplicated, nested
+  `<!DOCTYPE html><html><head>` wrapper with two conflicting
+  title/description/robots blocks (malformed HTML, not just a missing-tag
+  gap); (2) its Google Analytics script loaded unconditionally, unlike
+  every other page's consent-gated `loadAnalyticsAndAds()` — it now uses
+  the exact same cookie-consent banner/gating pattern as `about.html`/
+  `contact.html`/`blog.html` (including AdSense, and a "Cookie Settings"
+  footer link); (3) **not one other page linked to it** — every page's
+  footer "How to Use" link pointed at `index.html` instead, and
+  `index.html` had no footer link to it at all, making it an orphan page
+  Google would rarely recrawl regardless of its own meta tags — fixed
+  site-wide (all footers, plus `index.html`'s own footer gained a "How to
+  Use" entry); (4) its own "Open the app" buttons (header, hero, CTA band,
+  footer — 4 places) linked to `index.html` instead of `app.html`, so the
+  page's own primary call-to-action didn't actually open the app — fixed
+  to `app.html`, matching every other page's convention.
+- `privacy.html`/`terms.html` each used to render **two `<h1>` tags** (the
+  shared brand-mark heading in the page header, plus the real
+  page-specific title — "Privacy Policy"/"Terms of Service" — below it).
+  Fixed by demoting the brand-mark heading to `<h2>` (CSS selector
+  `.page-header h1` renamed to `.page-header h2` alongside it, no visual
+  change) so the page's actual topic is the page's only `<h1>`. Keep this
+  in mind before copying `about.html`'s/`contact.html`'s header markup
+  onto a page that already has its own `<h1>` elsewhere.
+
 ## Conventions / working on this repo
 
 - No build/test/lint tooling exists — verify changes by opening the HTML
@@ -479,8 +542,7 @@ zero network calls there.
   nothing to `npm install` or `npm run`.
 - Keep new persisted keys behind `storageGet`/`storageSet`, not raw
   `localStorage`, to preserve the embedded-host code path.
-- Keep `sitemap.xml` in mind if adding/removing indexable marketing pages
-  (it currently omits `app.html`, `customer.html`, `blog.html`, and
-  `how-it-works.html` — unclear if intentional).
+- Keep `sitemap.xml` in sync with each page's own `<meta name="robots">`
+  when adding/removing/re-gating an indexable page — see "SEO" above.
 - Git workflow observed in history: work happens on `main`; this session's
   designated branch is `claude/repo-code-access-jpjg54`.
