@@ -108,3 +108,24 @@ function checkOrClaimSeat(sheet, code, deviceId) {
 function jsonOut(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
+
+// Manual test helper. Select "testLookupCode" in the function dropdown
+// above and click Run, then View > Logs (or Ctrl+Enter). Edit the code
+// below to whatever you're testing. Safe to run directly -- unlike
+// findCode/validateCode it doesn't need arguments from doGet/doPost.
+function testLookupCode() {
+  var codeToTest = "PROMO1";
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(CODES_SHEET_NAME);
+  if (!sheet) {
+    Logger.log('No tab named exactly "' + CODES_SHEET_NAME + '" found. Existing tabs: ' + ss.getSheets().map(function(s) { return s.getName(); }).join(", "));
+    return;
+  }
+  var data = sheet.getDataRange().getValues();
+  Logger.log("Rows in \"" + CODES_SHEET_NAME + "\" (including header): " + data.length);
+  for (var i = 1; i < data.length; i++) {
+    Logger.log("Row " + (i + 1) + ": Code=[" + data[i][0] + "] Validity=[" + data[i][1] + "]");
+  }
+  var result = findCode(sheet, codeToTest);
+  Logger.log('Lookup for "' + codeToTest + '": ' + (result ? JSON.stringify(result) : "NOT FOUND"));
+}

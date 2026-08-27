@@ -56,6 +56,19 @@ than that frees its seat automatically). Both are constants at the top of
   devices the way a real purchased code is. It's still subject to the
   expiration check above.
 
+**Debugging "code isn't valid" from the Apps Script editor:** don't run
+`findCode`, `createSessionsSheet`, `checkOrClaimSeat`, etc. directly from
+the function dropdown — they're internal helpers that expect arguments
+only `doGet`/`doPost`/`validateCode` supply, so running them standalone
+throws `Cannot read properties of undefined (reading '...')`. That error
+is just a wrong-function-selected mistake, not a real bug. To actually
+test a lookup: select **`testLookupCode`** in the dropdown, edit the
+`codeToTest` value at its top if needed, click Run, then **View → Logs**
+(or Ctrl+Enter) — it prints every row it read from the `Premium Code`
+tab and whether your code matched, which will show a wrong tab name,
+extra spaces, or hidden characters immediately. No deployment needed —
+manual runs use whatever's currently saved in the editor.
+
 No spreadsheet URL or ID appears anywhere in this repo — the script is
 bound directly to the sheet (`SpreadsheetApp.getActiveSpreadsheet()`), so
 it never needs to reference it, and `PREMIUM_VALIDATION_URL` in `app.html`
