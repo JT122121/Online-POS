@@ -1905,13 +1905,13 @@ async function saveSettings() {
   await storageSet("pos-settings", JSON.stringify(settings));
 }
 function syncScanButtonVisibility() {
-  const toggle = document.getElementById("barcodeScannerToggle");
   const scanBtn = document.getElementById("scanBtn");
-  if (toggle && scanBtn) scanBtn.classList.toggle("hidden", !toggle.checked);
+  if (scanBtn) scanBtn.classList.add("hidden");
 }
 function toggleBarcodeScannerSetting() {
-  syncScanButtonVisibility();
-  saveSettings();
+  const toggle = document.getElementById("barcodeScannerToggle");
+  if (toggle) toggle.checked = false;
+  alert("Coming soon");
 }
 async function loadPaymentMethods() {
   const raw = await storageGet("pos-payment-methods");
@@ -3542,6 +3542,8 @@ let lastScannedCode = "";
 let lastScanTime = 0;
 
 async function openScanner() {
+  alert("Coming soon");
+  return;
   const overlay = document.getElementById("scannerOverlay");
   const messageEl = document.getElementById("scannerMessage");
   messageEl.classList.add("hidden");
