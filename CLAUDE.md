@@ -404,6 +404,19 @@ remember. The whole mechanism lives inside `app.html` itself:
   root `vendor/`, runs `app.html`'s text through `buildOfflineAppHtml()`,
   zips everything with JSZip, and triggers the download
   (`GoOnlinePOS-Offline.zip`).
+- **Usage analytics** via the shared `trackEvent(name, params)` helper
+  (thin `gtag('event', ...)` wrapper, no-ops if `gtag` isn't defined —
+  i.e. respects cookie consent same as every other GA call):
+  `openOfflineDownloadModal()` fires `offline_download_viewed` the moment
+  the modal opens (interest signal, independent of whether the user
+  actually agrees to the ToS and downloads); `confirmOfflineDownload()`
+  fires `offline_download` right after the zip download is triggered
+  (completion signal), or `offline_download_failed` with an
+  `error_message` param if the build throws (fetch failure, JSZip
+  missing, etc.) — lets the site owner see the funnel and diagnose
+  failures from the GA dashboard. All three calls live inside the
+  `OFFLINE-STRIP:DOWNLOAD-JS` block so they're automatically absent from
+  the generated offline package (which already has zero network calls).
 - `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()` edit the fetched
   HTML by stripping `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
   `/* OFFLINE-STRIP:<name>:START/END */` (JS) marker comments already

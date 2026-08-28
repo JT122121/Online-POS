@@ -3233,6 +3233,7 @@ function openOfflineDownloadModal() {
   const progressBox = document.getElementById("offlineDownloadProgress");
   if (progressBox) progressBox.classList.add("hidden");
   document.getElementById("offlineDownloadOverlay").classList.remove("hidden");
+  trackEvent("offline_download_viewed", {});
 }
 function closeOfflineDownloadModal() {
   document.getElementById("offlineDownloadOverlay").classList.add("hidden");
@@ -3370,6 +3371,7 @@ async function confirmOfflineDownload() {
     console.error("Offline package build failed:", e);
     errorBox.textContent = tr("offlineDownloadErrorText");
     errorBox.classList.remove("hidden");
+    trackEvent("offline_download_failed", { error_message: String(e && e.message || e) });
   } finally {
     progressBox.classList.add("hidden");
     const checkbox = document.getElementById("offlineAgreeCheckbox");
