@@ -131,11 +131,23 @@ zero network calls.
   `computeTotalsFromItems(items, taxRate, discountType, discountValue)`,
   which also powers the Sales History detail editor
   (`recomputeSaleDetailTotals`/`saveSaleDetailEdits`) so both places use
-  identical math. **Discount is flexible per transaction** — `#discountType`
-  (`percent` | `amount`, defaults to `percent`) sits next to `#discountRate`
-  in Settings → Tax & Discount; `amount` mode clamps to the subtotal so the
-  total can never go negative. Persisted via `storageSet("pos-settings")`
-  like tax rate/name, so it carries over between sales until changed.
+  identical math. **Discount is flexible per transaction, applied directly
+  at checkout** — `#discountType` (`percent` | `amount`, defaults to
+  `percent`) sits next to `#discountRate` in `#checkoutView` itself, right
+  under the Total Due box, above Customer Name — not in Settings, since
+  it's a per-sale action the cashier makes at the point of sale, not a
+  store-level config. `amount` mode clamps to the subtotal so the total
+  can never go negative. It's still persisted via
+  `storageSet("pos-settings")` like tax rate/name (so a mid-transaction
+  page refresh doesn't lose it), but `startNewSale()` explicitly resets
+  both fields back to `percent`/`0` after every completed sale (or an
+  explicit "New Sale") — otherwise a one-off discount for one customer
+  would silently carry over and discount every sale after it. It does
+  **not** reset on Back → Checkout within the same still-in-progress sale.
+  Settings → Tax (renamed from "Tax & Discount" now that Discount moved
+  out) keeps only Tax Name/Tax Rate, genuine store-level config that
+  should persist indefinitely, plus a one-line `#discountMovedInfo` note
+  pointing to checkout.
   **Tax exemption is per item, settable both on the product and at
   checkout** — each `products[]`/`cart[]` entry carries a `taxExempt`
   boolean; a checkbox in Settings → Products (add form + each row in the

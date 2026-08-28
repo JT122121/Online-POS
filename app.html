@@ -563,6 +563,18 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <div class="label" id="totalDueLabel">Total Due</div>
       <div class="amount" id="checkoutTotalAmount">BD 0.000</div>
     </div>
+    <label id="discountLabel">Discount</label>
+    <div class="two-columns">
+      <div>
+        <select id="discountType" onchange="updateReceipt()">
+          <option value="percent" id="discountTypePercentOption">Percent (%)</option>
+          <option value="amount" id="discountTypeAmountOption">Fixed Amount</option>
+        </select>
+      </div>
+      <div>
+        <input id="discountRate" type="number" value="0" min="0" step="0.01" oninput="updateReceipt()">
+      </div>
+    </div>
     <label id="customerNameLabel">Customer Name</label>
     <input id="customerName" placeholder="Optional" oninput="updateReceipt()">
     <label id="paymentMethodLabel">Payment Method</label>
@@ -872,23 +884,12 @@ Website: goonlinepos.com</textarea>
       </div>
 
       <div class="settings-panel-content" id="panel-tax">
-        <h3 id="taxTitle">Tax &amp; Discount</h3>
+        <h3 id="taxTitle">Tax</h3>
         <label id="taxNameLabel">Tax Name</label>
         <input id="taxName" value="Tax" oninput="updateReceipt()">
         <label id="taxRateLabel">Tax Rate (%)</label>
         <input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
-        <label id="discountLabel">Discount</label>
-        <div class="two-columns">
-          <div>
-            <select id="discountType" onchange="updateReceipt()">
-              <option value="percent" id="discountTypePercentOption">Percent (%)</option>
-              <option value="amount" id="discountTypeAmountOption">Fixed Amount</option>
-            </select>
-          </div>
-          <div>
-            <input id="discountRate" type="number" value="0" min="0" step="0.01" oninput="updateReceipt()">
-          </div>
-        </div>
+        <div class="info" id="discountMovedInfo" style="display:block;">Discount is applied per sale at checkout, not here.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-paymentMethods">
@@ -1230,7 +1231,8 @@ en: {
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
   receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "Edit this to set where numbering continues from - numbers only. The next new sale continues counting up from here.",
   receiptNumberInvalid: "Enter a valid number.", receiptPrefixLabel: "Receipt Number Prefix", receiptPrefixInfo: "Combined with the number above - e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.",
-  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount",
+  taxTitle: "Tax", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount",
+  discountMovedInfo: "Discount is applied per sale at checkout, not here.",
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed Amount", taxExemptLabel: "Tax Exempt", taxExemptTag: "No Tax",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
   productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.",
@@ -1326,7 +1328,8 @@ ar: {
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
   receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "عدّل هذا لتحديد النقطة التي يستمر منها الترقيم - أرقام فقط. تستمر عملية البيع الجديدة التالية بالعد تصاعدياً من هنا.",
   receiptNumberInvalid: "أدخل رقماً صحيحاً.", receiptPrefixLabel: "بادئة رقم الإيصال", receiptPrefixInfo: "تُدمج مع الرقم أعلاه - مثال: INV- + 000123 تُطبع كـ INV-000123. حتى 8 أحرف إجمالاً، بما في ذلك أي شرطات أو رموز.",
-  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم",
+  taxTitle: "الضريبة", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم",
+  discountMovedInfo: "يُطبَّق الخصم لكل عملية بيع عند الدفع، وليس هنا.",
   discountTypePercentOption: "نسبة مئوية (%)", discountTypeAmountOption: "مبلغ ثابت", taxExemptLabel: "معفى من الضريبة", taxExemptTag: "بدون ضريبة",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
   productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج والمخزون والإعفاء الضريبي (TaxExempt)، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
@@ -1412,7 +1415,8 @@ fil: {
   saleDetailPaymentsLabel: "Mga Bayad", saleDetailAddPaymentBtn: "+ Magdagdag ng Payment Row", saleDetailSubtotalLabel: "Subtotal:", saleDetailDiscountAmtLabel: "Discount:", saleDetailTaxAmtLabel: "Buwis:",
   saleDetailGrandLabel: "Total:", saleDetailReceivedLabel: "Natanggap:", saleDetailChangeLabel: "Sukli:", saleDetailReprintLabel: "I-reprint", saleDetailSaveLabel: "I-save ang Pagbabago",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
-  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount",
+  taxTitle: "Buwis", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount",
+  discountMovedInfo: "Inilalapat ang discount kada benta sa checkout, hindi dito.",
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed na Halaga", taxExemptLabel: "Walang Buwis", taxExemptTag: "Walang Buwis",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
   productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category, SKU, Stock, at TaxExempt, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
@@ -1500,7 +1504,8 @@ hi: {
   saleDetailPaymentsLabel: "भुगतान", saleDetailAddPaymentBtn: "+ भुगतान पंक्ति जोड़ें", saleDetailSubtotalLabel: "उप-योग:", saleDetailDiscountAmtLabel: "छूट:", saleDetailTaxAmtLabel: "कर:",
   saleDetailGrandLabel: "कुल:", saleDetailReceivedLabel: "प्राप्त:", saleDetailChangeLabel: "बाकी:", saleDetailReprintLabel: "पुनः प्रिंट करें", saleDetailSaveLabel: "परिवर्तन सहेजें",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
-  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट",
+  taxTitle: "कर", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट",
+  discountMovedInfo: "छूट प्रत्येक बिक्री पर चेकआउट के समय लागू होती है, यहाँ नहीं।",
   discountTypePercentOption: "प्रतिशत (%)", discountTypeAmountOption: "निश्चित राशि", taxExemptLabel: "कर मुक्त", taxExemptTag: "कर मुक्त",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
   productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category, SKU, Stock और TaxExempt वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
@@ -1588,7 +1593,8 @@ es: {
   saleDetailPaymentsLabel: "Pagos", saleDetailAddPaymentBtn: "+ Agregar Fila de Pago", saleDetailSubtotalLabel: "Subtotal:", saleDetailDiscountAmtLabel: "Descuento:", saleDetailTaxAmtLabel: "Impuesto:",
   saleDetailGrandLabel: "Total:", saleDetailReceivedLabel: "Recibido:", saleDetailChangeLabel: "Cambio:", saleDetailReprintLabel: "Reimprimir", saleDetailSaveLabel: "Guardar Cambios",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
-  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento",
+  taxTitle: "Impuesto", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento",
+  discountMovedInfo: "El descuento se aplica por venta al finalizar la compra, no aquí.",
   discountTypePercentOption: "Porcentaje (%)", discountTypeAmountOption: "Monto Fijo", taxExemptLabel: "Exento de Impuesto", taxExemptTag: "Sin Impuesto",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
   productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category, SKU, Stock y TaxExempt, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
@@ -1676,7 +1682,8 @@ th: {
   saleDetailPaymentsLabel: "การชำระเงิน", saleDetailAddPaymentBtn: "+ เพิ่มแถวการชำระเงิน", saleDetailSubtotalLabel: "ยอดรวมย่อย:", saleDetailDiscountAmtLabel: "ส่วนลด:", saleDetailTaxAmtLabel: "ภาษี:",
   saleDetailGrandLabel: "รวม:", saleDetailReceivedLabel: "รับเงิน:", saleDetailChangeLabel: "เงินทอน:", saleDetailReprintLabel: "พิมพ์ซ้ำ", saleDetailSaveLabel: "บันทึกการเปลี่ยนแปลง",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
-  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด",
+  taxTitle: "ภาษี", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด",
+  discountMovedInfo: "ส่วนลดจะถูกใช้ต่อการขายที่หน้าชำระเงิน ไม่ใช่ที่นี่",
   discountTypePercentOption: "เปอร์เซ็นต์ (%)", discountTypeAmountOption: "จำนวนเงินคงที่", taxExemptLabel: "ยกเว้นภาษี", taxExemptTag: "ไม่มีภาษี",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
   productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category, SKU, Stock กับ TaxExempt ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
@@ -2466,6 +2473,8 @@ async function startNewSale() {
   paymentRows = [{ method: paymentMethods[0] || "", amount: 0 }];
   renderPaymentRows();
   document.getElementById("customerName").value = "";
+  document.getElementById("discountType").value = "percent";
+  document.getElementById("discountRate").value = "0";
   backToCatalog();
   updateReceipt();
 }
@@ -4353,6 +4362,7 @@ function changeLanguage() {
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
+    discountMovedInfo: "discountMovedInfo",
     discountTypePercentOption: "discountTypePercentOption", discountTypeAmountOption: "discountTypeAmountOption",
     addProductTaxExemptLabel: "taxExemptLabel",
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
