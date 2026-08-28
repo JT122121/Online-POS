@@ -69,7 +69,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open the App | GoOnlinePOS.com – Free Online POS</title>
-<meta name="description" content="The live GoOnlinePOS.com app. Add products, ring up sales, and print receipts with your own company details — right in your browser, no signup required.">
+<meta name="description" content="The live GoOnlinePOS.com app. Add products, ring up sales, and print receipts with your own company details - right in your browser, no signup required.">
 <meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, print receipts online, simple pos app, cash register app">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#14342B">
@@ -77,7 +77,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://goonlinepos.com/app.html">
 <meta property="og:title" content="Free Online POS – No Signup, No Login">
-<meta property="og:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
+<meta property="og:description" content="Ring up sales and print receipts straight from your browser. No account, no install - just open the tab and go.">
 <meta property="og:site_name" content="Go Online POS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -85,7 +85,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://goonlinepos.com/app.html">
 <meta name="twitter:title" content="Free Online POS – No Signup, No Login">
-<meta name="twitter:description" content="Ring up sales and print receipts straight from your browser. No account, no install — just open the tab and go.">
+<meta name="twitter:description" content="Ring up sales and print receipts straight from your browser. No account, no install - just open the tab and go.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
 <link rel="shortcut icon" href="favicon.ico">
@@ -402,6 +402,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-item-controls .qty-btn { width: 19px; height: 19px; border: 1px solid var(--line); background: #f5f4ee; border-radius: 4px; font-size: 10px; line-height: 1; padding: 0; }
 .receipt-item-controls .qty-btn:hover { background: var(--accent-tint); border-color: #bfe0cf; }
 .receipt-item-controls .remove-cart-btn { background: var(--danger-tint); color: var(--danger); border: 1px solid #f0c2bd; border-radius: 4px; font-size: 7pt; font-weight: 600; padding: 2px 6px; }
+.receipt-item-controls .cart-tax-exempt-label { display: flex; align-items: center; gap: 3px; font-size: 7pt; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.receipt-item-controls .cart-tax-exempt-label input { width: 11px; height: 11px; margin: 0; }
 
 .dashed-line { border-top: 1px dashed #a9a495; margin: 3mm 0; }
 .receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; color: #3c463f; }
@@ -604,7 +606,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <span id="receiptTotalHeader">Total</span>
 </div>
 <div id="receiptItems"></div>
-<div id="receiptEmptyHint" class="receipt-empty-hint no-print">Cart is empty — add products from the left panel.</div>
+<div id="receiptEmptyHint" class="receipt-empty-hint no-print">Cart is empty - add products from the left panel.</div>
 <div class="dashed-line"></div>
 <div class="receipt-total-line"><span id="subtotalLabel">Subtotal</span><span id="subtotal">BD 0.000</span></div>
 <div class="receipt-total-line"><span id="receiptDiscountLabel">Discount</span><span id="discountAmount">BD 0.000</span></div>
@@ -671,13 +673,13 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   <div style="padding:18px 20px;">
     <div id="customerScreenLockMsg" class="error-text hidden">🔒 <span id="customerScreenLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.</span></div>
     <div id="customerScreenUnlockedContent">
-    <p id="customerScreenIntro" style="margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.55;">Open this link in a second window, monitor, or tablet facing your customer — it updates live as you ring up a sale.</p>
+    <p id="customerScreenIntro" style="margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.55;">Open this link in a second window, monitor, or tablet facing your customer - it updates live as you ring up a sale.</p>
     <div style="display:flex; gap:8px;">
       <input id="customerScreenUrlInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px;">
       <button type="button" class="small-btn" onclick="copyCustomerScreenUrl()" id="copyCustomerScreenUrlBtn" style="flex-shrink:0;">Copy</button>
     </div>
     <div id="customerScreenCopiedMsg" class="success-text hidden" style="margin-top:8px;">Copied!</div>
-    <button type="button" class="custom-item-link" onclick="openCustomerScreenGuide()" id="customerScreenGuideBtn" style="margin-top:16px;">📖 <span id="customerScreenGuideBtnLabel">Guide Me — How to Set This Up</span></button>
+    <button type="button" class="custom-item-link" onclick="openCustomerScreenGuide()" id="customerScreenGuideBtn" style="margin-top:16px;">📖 <span id="customerScreenGuideBtnLabel">Guide Me - How to Set This Up</span></button>
     </div>
   </div>
 </div>
@@ -690,19 +692,19 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
     <button onclick="closeCustomerScreenGuide()">✕</button>
   </div>
   <div style="padding:18px 20px; overflow-y:auto;">
-    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod1Title">Method 1 — Second Monitor</h3>
+    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod1Title">Method 1 - Second Monitor</h3>
     <ol style="margin:0 0 20px; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="guideMethod1List">
       <li>Connect a second monitor to this computer with a cable.</li>
-      <li>Set your display to <strong>"Extend"</strong>, not "Duplicate/Mirror" — on Windows: Display Settings → Multiple displays → Extend. On Mac: Displays → uncheck Mirror Displays.</li>
+      <li>Set your display to <strong>"Extend"</strong>, not "Duplicate/Mirror" - on Windows: Display Settings → Multiple displays → Extend. On Mac: Displays → uncheck Mirror Displays.</li>
       <li>Copy the link above, open it in a new browser window here on this computer.</li>
       <li>Drag that window onto the second monitor and make it full-screen.</li>
       <li>Angle the monitor to face your customer.</li>
     </ol>
-    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod2Title">Method 2 — Tablet or TV (Screen Mirroring)</h3>
-    <p style="font-size:12.5px; color:#6b4f12; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px; padding:10px 12px; margin:0 0 12px; line-height:1.55;" id="guideMethod2Note">Important: the tablet needs to <strong>mirror</strong> this computer's screen. Opening the link directly in the tablet's own browser won't show live updates — it only syncs between windows on this same computer.</p>
+    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="guideMethod2Title">Method 2 - Tablet or TV (Screen Mirroring)</h3>
+    <p style="font-size:12.5px; color:#6b4f12; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px; padding:10px 12px; margin:0 0 12px; line-height:1.55;" id="guideMethod2Note">Important: the tablet needs to <strong>mirror</strong> this computer's screen. Opening the link directly in the tablet's own browser won't show live updates - it only syncs between windows on this same computer.</p>
     <ol style="margin:0; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="guideMethod2List">
       <li>First, follow Method 1 above to open the Customer Screen in its own window here on this computer.</li>
-      <li>Mirror that window to your tablet or TV — Windows: press Win+K, or Settings → System → Display → "Connect to a wireless display." Mac: Control Center → Screen Mirroring (AirPlay).</li>
+      <li>Mirror that window to your tablet or TV - Windows: press Win+K, or Settings → System → Display → "Connect to a wireless display." Mac: Control Center → Screen Mirroring (AirPlay).</li>
       <li>Make the mirrored window full-screen. Your tablet or TV now shows a live copy of it.</li>
     </ol>
   </div>
@@ -751,8 +753,18 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <input id="saleDetailTaxRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
       </div>
     </div>
-    <label id="saleDetailDiscountLabel">Discount (%)</label>
-    <input id="saleDetailDiscountRate" type="number" min="0" max="100" step="0.01" oninput="recomputeSaleDetailTotals()">
+    <label id="saleDetailDiscountLabel">Discount</label>
+    <div class="two-columns">
+      <div>
+        <select id="saleDetailDiscountType" onchange="recomputeSaleDetailTotals()">
+          <option value="percent">Percent (%)</option>
+          <option value="amount">Fixed Amount</option>
+        </select>
+      </div>
+      <div>
+        <input id="saleDetailDiscountRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
+      </div>
+    </div>
 
     <label id="saleDetailPaymentsLabel">Payments</label>
     <div id="saleDetailPaymentsList"></div>
@@ -837,7 +849,7 @@ Website: goonlinepos.com</textarea>
             <button type="button" class="remove-logo-btn hidden" id="removeLogoButton" onclick="removeLogo()">Remove logo</button>
           </div>
         </div>
-        <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.</div>
+        <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload - it only goes away if you clear this site's data or remove it here.</div>
         <div id="logoLockMsg" class="error-text hidden">🔒 <span id="logoLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.</span></div>
       </div>
 
@@ -851,11 +863,11 @@ Website: goonlinepos.com</textarea>
         </select>
         <label><span id="receiptNumberLabel">Current Receipt Number</span> <span class="premium-badge" id="premiumBadgeReceiptNumber">Premium</span></label>
         <input id="receiptNumberInput" type="text" inputmode="numeric" oninput="handleReceiptNumberEdit(this)">
-        <div class="info" id="receiptNumberInfo" style="display:block;">Edit this to set where numbering continues from — numbers only. The next new sale continues counting up from here.</div>
+        <div class="info" id="receiptNumberInfo" style="display:block;">Edit this to set where numbering continues from - numbers only. The next new sale continues counting up from here.</div>
         <div id="receiptNumberErrorBox" class="error-text hidden"></div>
         <label><span id="receiptPrefixLabel">Receipt Number Prefix</span> <span class="premium-badge" id="premiumBadgeReceiptPrefix">Premium</span></label>
         <input id="receiptPrefixInput" maxlength="8" placeholder="e.g. INV-" oninput="handleReceiptPrefixEdit(this)">
-        <div class="info" id="receiptPrefixInfo" style="display:block;">Combined with the number above — e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.</div>
+        <div class="info" id="receiptPrefixInfo" style="display:block;">Combined with the number above - e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.</div>
         <div id="receiptNumberLockMsg" class="error-text hidden">🔒 <span id="receiptNumberLockMsgText">These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.</span></div>
       </div>
 
@@ -865,8 +877,18 @@ Website: goonlinepos.com</textarea>
         <input id="taxName" value="Tax" oninput="updateReceipt()">
         <label id="taxRateLabel">Tax Rate (%)</label>
         <input id="taxRate" type="number" value="10" min="0" step="0.01" oninput="updateReceipt()">
-        <label id="discountLabel">Discount (%)</label>
-        <input id="discountRate" type="number" value="0" min="0" max="100" step="0.01" oninput="updateReceipt()">
+        <label id="discountLabel">Discount</label>
+        <div class="two-columns">
+          <div>
+            <select id="discountType" onchange="updateReceipt()">
+              <option value="percent" id="discountTypePercentOption">Percent (%)</option>
+              <option value="amount" id="discountTypeAmountOption">Fixed Amount</option>
+            </select>
+          </div>
+          <div>
+            <input id="discountRate" type="number" value="0" min="0" step="0.01" oninput="updateReceipt()">
+          </div>
+        </div>
       </div>
 
       <div class="settings-panel-content" id="panel-paymentMethods">
@@ -915,11 +937,14 @@ Website: goonlinepos.com</textarea>
         <input id="newProductSku" placeholder="e.g. 8901">
         <label id="addProductStockLabel">Stock Level (optional)</label>
         <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
+          <input id="newProductTaxExempt" type="checkbox"> <span id="addProductTaxExemptLabel">Tax Exempt</span>
+        </label>
         <button type="button" class="small-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:10px; width:100%;">+ Add Product</button>
         <div id="addProductErrorBox" class="error-text hidden"></div>
 
         <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
-        <div id="manageProductsEmpty" class="products-empty hidden">No products yet — add one above or upload a CSV below.</div>
+        <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV below.</div>
 
         <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.</div>
         <input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
@@ -933,7 +958,7 @@ Website: goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-inventory">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><h3 id="inventoryTitle" style="margin:0;">Inventory</h3> <span class="premium-badge" id="premiumBadgeInventory">Premium</span></div>
-        <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.</div>
+        <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock - leave a field blank if you don't want to track stock for that product.</div>
         <div id="inventoryLockMsg" class="error-text hidden">🔒 <span id="inventoryLockMsgText">Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.</span></div>
         <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
         <div id="inventoryList" class="payment-list" style="margin-top:9px;"></div>
@@ -959,7 +984,7 @@ Website: goonlinepos.com</textarea>
           <button style="background:var(--accent);" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
           <button style="background:var(--danger);" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
         </div>
-        <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. Click any sale below to view full details, edit it, or reprint the receipt. The download gives you one file with two tabs: "Sales" (one row per sale — totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
+        <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. Click any sale below to view full details, edit it, or reprint the receipt. The download gives you one file with two tabs: "Sales" (one row per sale - totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
       </div>
 
       <div class="settings-panel-content" id="panel-footer">
@@ -1029,7 +1054,7 @@ Website: goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-backup">
         <h3 id="backupTitle">Backup & Restore</h3>
-        <div class="info" id="backupInfo" style="display:block;">Everything here — products, sales history, settings, your logo, cashiers, and payment methods — is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.</div>
+        <div class="info" id="backupInfo" style="display:block;">Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.</div>
         <button type="button" class="small-btn" onclick="downloadFullBackup()" style="width:100%; margin-top:12px;">⬇ Download Full Backup</button>
         <label id="restoreBackupLabel" style="margin-top:20px;">Restore from Backup</label>
         <input id="backupFileInput" type="file" accept=".json,application/json" onchange="handleBackupFileSelect(event)">
@@ -1038,7 +1063,7 @@ Website: goonlinepos.com</textarea>
         <!-- OFFLINE-STRIP:DOWNLOAD-SECTION:START -->
         <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
           <label><span id="offlineDownloadLabel">Offline Version</span> <span class="premium-badge" id="premiumBadgeOffline">Premium</span></label>
-          <div class="info" id="offlineDownloadInfo" style="display:block;">Get a full copy of the app that runs with zero internet — good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.</div>
+          <div class="info" id="offlineDownloadInfo" style="display:block;">Get a full copy of the app that runs with zero internet - good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.</div>
           <button type="button" class="small-btn" id="offlineDownloadButton" onclick="openOfflineDownloadModal()" style="width:100%; margin-top:12px;">⬇ <span id="offlineDownloadButtonLabel">Download Offline POS</span></button>
           <div id="offlineLockMsg" class="error-text hidden">🔒 <span id="offlineLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to download the offline version.</span></div>
         </div>
@@ -1047,7 +1072,7 @@ Website: goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-premium">
         <h3 id="premiumPanelTitle">Premium</h3>
-        <div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>
+        <div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory - stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>
 
         <div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">
           ✅ <span id="premiumActiveLabel">Premium is active on this device.</span>
@@ -1089,10 +1114,10 @@ Website: goonlinepos.com</textarea>
   <div style="padding:18px 20px; overflow-y:auto;">
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalHowTitle">How the offline version works</h3>
     <ul style="margin:0 0 18px; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="offlineModalHowList">
-      <li>Unzip it anywhere, then run the included launcher — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) — to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li>
+      <li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li>
       <li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li>
-      <li>It works exactly like this website, offline — same cart, receipts, inventory, and languages.</li>
-      <li>Data is saved only on that computer, with no cloud sync — back up regularly from Settings → Backup.</li>
+      <li>It works exactly like this website, offline - same cart, receipts, inventory, and languages.</li>
+      <li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>
     </ul>
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalUpdateTitle">Getting updates later</h3>
     <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime while your Premium is active to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
@@ -1162,12 +1187,12 @@ en: {
   backToCatalogBtn: "← Back", completeBtnLabel: "Complete & Print",
   cartEmptyAlert: "Add at least one item before proceeding to payment.",
   noPaymentAlert: "Enter a payment amount before completing the sale.",
-  receiptEmptyHint: "Cart is empty — add products from the left panel.",
+  receiptEmptyHint: "Cart is empty - add products from the left panel.",
   settingsModalTitle: "Settings",
   storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details",
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
   storeLogoLabel: "Company Logo", logoEmptyLabel: "No logo", removeLogoButton: "Remove logo",
-  storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload — it only goes away if you clear this site's data or remove it here.",
+  storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload - it only goes away if you clear this site's data or remove it here.",
   cashiersTitle: "Cashiers", cashiersInfo: "These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the Summary panel.", cashierLabelText: "Cashier:",
   activeCashierPlaceholder: "No cashier selected", summaryByCashierTitle: "By Cashier", summaryNoCashierLabel: "No cashier selected",
   customerNameLabel: "Customer Name", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
@@ -1177,7 +1202,7 @@ en: {
   summaryEmptyState: "No sales recorded for this date.", summaryNoMethodLabel: "Unspecified",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
-  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Features marked with a gold Premium badge — Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory — stay visible but locked until you activate a code. Enter it below to unlock them on this device.",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Features marked with a gold Premium badge - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory - stay visible but locked until you activate a code. Enter it below to unlock them on this device.",
   premiumActiveLabel: "Premium is active on this device.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "Activate", premiumCodeInvalid: "That code isn't valid. Check it and try again.",
   premiumCodeSeatLimit: "This code has reached its device limit. Contact us for help.", premiumCodeNetworkError: "Couldn't reach the activation server. Check your connection and try again.", premiumCodeExpired: "This code has expired.", premiumValidityLabel: "Valid until:",
   buyPremiumButtonLabel: "Buy Premium Code", buyPremiumModalTitle: "Buy Premium Code", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "One-time payment", buyPremiumFeature1: "No expiration", buyPremiumFeature2: "Up to 5 active browsers", buyPremiumFeature3: "Non-refundable", buyPremiumContactText: "To purchase a code, <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">contact us</a> and we'll get you set up.",
@@ -1187,32 +1212,33 @@ en: {
   receiptNumberLockMsgText: "These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.",
   inventoryLockMsgText: "Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.",
   customerScreenLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.",
-  inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet — add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
+  inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet - add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
   salesExportFromLabel: "From (optional)", salesExportToLabel: "To (optional)", salesExportRangeEmptyAlert: "No sales found in that date range.",
   inventoryShortcutLabel: "Inventory", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (optional)", newProductStockPlaceholder: "Leave blank to not track stock",
-  inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock — leave a field blank if you don't want to track stock for that product.",
+  inventoryTitle: "Inventory", inventoryInfo: "Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock - leave a field blank if you don't want to track stock for that product.",
   inventoryEmpty: "No products yet. Add some from Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
-  customerScreenTitle: "Customer Screen", customerScreenIntro: "Open this link in a second window, monitor, or tablet facing your customer — it updates live as you ring up a sale.",
-  copyCustomerScreenUrlBtn: "Copy", customerScreenCopiedMsg: "Copied!", customerScreenGuideBtnLabel: "Guide Me — How to Set This Up", customerScreenGuideTitle: "Setting Up the Customer Screen",
-  guideMethod1Title: "Method 1 — Second Monitor", guideMethod2Title: "Method 2 — Tablet or TV (Screen Mirroring)",
-  guideMethod2Note: "Important: the tablet needs to <strong>mirror</strong> this computer's screen. Opening the link directly in the tablet's own browser won't show live updates — it only syncs between windows on this same computer.",
-  guideMethod1List: "<li>Connect a second monitor to this computer with a cable.</li><li>Set your display to <strong>\"Extend\"</strong>, not \"Duplicate/Mirror\" — on Windows: Display Settings → Multiple displays → Extend. On Mac: Displays → uncheck Mirror Displays.</li><li>Copy the link above, open it in a new browser window here on this computer.</li><li>Drag that window onto the second monitor and make it full-screen.</li><li>Angle the monitor to face your customer.</li>",
-  guideMethod2List: "<li>First, follow Method 1 above to open the Customer Screen in its own window here on this computer.</li><li>Mirror that window to your tablet or TV — Windows: press Win+K, or Settings → System → Display → \"Connect to a wireless display.\" Mac: Control Center → Screen Mirroring (AirPlay).</li><li>Make the mirrored window full-screen. Your tablet or TV now shows a live copy of it.</li>",
+  customerScreenTitle: "Customer Screen", customerScreenIntro: "Open this link in a second window, monitor, or tablet facing your customer - it updates live as you ring up a sale.",
+  copyCustomerScreenUrlBtn: "Copy", customerScreenCopiedMsg: "Copied!", customerScreenGuideBtnLabel: "Guide Me - How to Set This Up", customerScreenGuideTitle: "Setting Up the Customer Screen",
+  guideMethod1Title: "Method 1 - Second Monitor", guideMethod2Title: "Method 2 - Tablet or TV (Screen Mirroring)",
+  guideMethod2Note: "Important: the tablet needs to <strong>mirror</strong> this computer's screen. Opening the link directly in the tablet's own browser won't show live updates - it only syncs between windows on this same computer.",
+  guideMethod1List: "<li>Connect a second monitor to this computer with a cable.</li><li>Set your display to <strong>\"Extend\"</strong>, not \"Duplicate/Mirror\" - on Windows: Display Settings → Multiple displays → Extend. On Mac: Displays → uncheck Mirror Displays.</li><li>Copy the link above, open it in a new browser window here on this computer.</li><li>Drag that window onto the second monitor and make it full-screen.</li><li>Angle the monitor to face your customer.</li>",
+  guideMethod2List: "<li>First, follow Method 1 above to open the Customer Screen in its own window here on this computer.</li><li>Mirror that window to your tablet or TV - Windows: press Win+K, or Settings → System → Display → \"Connect to a wireless display.\" Mac: Control Center → Screen Mirroring (AirPlay).</li><li>Make the mirrored window full-screen. Your tablet or TV now shows a live copy of it.</li>",
   saleDetailTitle: "Sale Details", saleDetailReceiptLabel: "Receipt No", saleDetailDateLabel: "Date", saleDetailCustomerLabel: "Customer Name", saleDetailCashierLabel: "Cashier",
-  saleDetailItemsLabel: "Items", saleDetailAddItemBtn: "+ Add Item", saleDetailTaxNameLabel: "Tax Name", saleDetailTaxRateLabel: "Tax Rate (%)", saleDetailDiscountLabel: "Discount (%)",
+  saleDetailItemsLabel: "Items", saleDetailAddItemBtn: "+ Add Item", saleDetailTaxNameLabel: "Tax Name", saleDetailTaxRateLabel: "Tax Rate (%)", saleDetailDiscountLabel: "Discount",
   saleDetailPaymentsLabel: "Payments", saleDetailAddPaymentBtn: "+ Add Payment Row", saleDetailSubtotalLabel: "Subtotal:", saleDetailDiscountAmtLabel: "Discount:", saleDetailTaxAmtLabel: "Tax:",
   saleDetailGrandLabel: "Total:", saleDetailReceivedLabel: "Received:", saleDetailChangeLabel: "Change:", saleDetailReprintLabel: "Reprint", saleDetailSaveLabel: "Save Changes",
   receipt: "Receipt", invoice: "Invoice", payment: "Payment Received",
-  receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "Edit this to set where numbering continues from — numbers only. The next new sale continues counting up from here.",
-  receiptNumberInvalid: "Enter a valid number.", receiptPrefixLabel: "Receipt Number Prefix", receiptPrefixInfo: "Combined with the number above — e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.",
-  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount (%)",
+  receiptNumberLabel: "Current Receipt Number", receiptNumberInfo: "Edit this to set where numbering continues from - numbers only. The next new sale continues counting up from here.",
+  receiptNumberInvalid: "Enter a valid number.", receiptPrefixLabel: "Receipt Number Prefix", receiptPrefixInfo: "Combined with the number above - e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.",
+  taxTitle: "Tax & Discount", taxNameLabel: "Tax Name", taxRateLabel: "Tax Rate (%)", discountLabel: "Discount",
+  discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed Amount", taxExemptLabel: "Tax Exempt", taxExemptTag: "No Tax",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
-  productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.",
+  productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.",
   barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Adds a scan button next to search on the main screen, to add items by SKU using your camera.",
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
   addProductPhotoLabel: "Photo (optional)", productPhotoUploadError: "Couldn't load that image. Try a different file.", productPhotoChangeTitle: "Click to change photo", removePhotoLabel: "Remove",
   addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
-  manageProductsEmpty: "No products yet — add one above or upload a CSV below.",
+  manageProductsEmpty: "No products yet - add one above or upload a CSV below.",
   productsSampleButton: "Download Sample CSV", productsClearButton: "Clear Products",
   productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV with Name and Price columns.",
   productsUploadSuccess: "products loaded from file.", inCartLabel: "In cart:",
@@ -1223,7 +1249,7 @@ en: {
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   decimalPlacesLabel: "Decimal Places", decimalPlacesInfo: "Most currencies use 2 (e.g. $0.30). Some, like Bahraini Dinar, use 3 (e.g. BD 0.300).",
   languageTitle: "Language", languageLabel: "Select Language",
-  backupTitle: "Backup & Restore", backupInfo: "Everything here — products, sales history, settings, your logo, cashiers, and payment methods — is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.",
+  backupTitle: "Backup & Restore", backupInfo: "Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.",
   restoreBackupLabel: "Restore from Backup", restoreInfo: "This replaces everything currently saved with what's in the backup file. The page will reload after restoring.",
   backupNoticeText: "Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.", backupNoticeButton: "Download Backup",
   premiumPromoNoticeText: "Activate Your Free Premium Now",
@@ -1235,10 +1261,10 @@ en: {
   receiptNo: "Receipt No:", date: "Date:",
   thankYou: "Thank you for shopping with us!", comeAgain: "Please come again.",
   removeButton: "Remove", customItemName: "Custom Item",
-  offlineDownloadLabel: "Offline Version", offlineDownloadInfo: "Get a full copy of the app that runs with zero internet — good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.",
+  offlineDownloadLabel: "Offline Version", offlineDownloadInfo: "Get a full copy of the app that runs with zero internet - good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.",
   offlineDownloadButtonLabel: "Download Offline POS", offlineLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to download the offline version.",
   offlineModalTitle: "Before You Download", offlineModalHowTitle: "How the offline version works",
-  offlineModalHowList: "<li>Unzip it anywhere, then run the included launcher — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) — to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li><li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li><li>It works exactly like this website, offline — same cart, receipts, inventory, and languages.</li><li>Data is saved only on that computer, with no cloud sync — back up regularly from Settings → Backup.</li>",
+  offlineModalHowList: "<li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li><li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li><li>It works exactly like this website, offline - same cart, receipts, inventory, and languages.</li><li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>",
   offlineModalUpdateTitle: "Getting updates later", offlineModalUpdateText: "Come back and download again anytime while your Premium is active to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.",
   offlineAgreeLabel: "I've read the above and agree to the <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Terms of Service</a>, including that this software is provided \"as is\" with no warranty.",
   offlineCancelBtnLabel: "Cancel", offlineConfirmDownloadBtnLabel: "Download",
@@ -1257,12 +1283,12 @@ ar: {
   paymentMethodLabel: "طريقة الدفع", totalEnteredLabel: "المُدخل:", changeLabelInfo: "الباقي:", addPaymentRowBtn: "+ تقسيم الدفع",
   backToCatalogBtn: "← رجوع", completeBtnLabel: "إتمام وطباعة",
   cartEmptyAlert: "أضف صنفاً واحداً على الأقل قبل المتابعة إلى الدفع.", noPaymentAlert: "أدخل مبلغ الدفع قبل إتمام عملية البيع.",
-  receiptEmptyHint: "السلة فارغة — أضف منتجات من اللوحة اليسرى.",
+  receiptEmptyHint: "السلة فارغة - أضف منتجات من اللوحة اليسرى.",
   settingsModalTitle: "الإعدادات",
   storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر",
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
   storeLogoLabel: "شعار الشركة", logoEmptyLabel: "لا يوجد شعار", removeLogoButton: "إزالة الشعار",
-  storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل — يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
+  storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل - يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
   cashiersTitle: "الكاشيرون", cashiersInfo: "تظهر هذه في قائمة الكاشير أعلى الشاشة الرئيسية. من يتم اختياره يُطبع على كل إيصال ويظهر في لوحة الملخص.", cashierLabelText: "الكاشير:",
   activeCashierPlaceholder: "لم يتم اختيار كاشير", summaryByCashierTitle: "حسب الكاشير", summaryNoCashierLabel: "لم يتم اختيار كاشير",
   customerNameLabel: "اسم العميل", customerNamePlaceholder: "اختياري", customerLabelText: "العميل:",
@@ -1272,7 +1298,7 @@ ar: {
   summaryEmptyState: "لا توجد مبيعات مسجلة لهذا التاريخ.", summaryNoMethodLabel: "غير محدد",
   logoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملف PNG أو JPG.", logoRemoveConfirm: "هل تريد إزالة شعار الشركة؟", removeLogoConfirmButton: "اضغط مرة أخرى للإزالة",
   documentTitle: "المستند", documentTypeLabel: "نوع المستند",
-  premiumTabLabel: "بريميوم", premiumPanelTitle: "بريميوم", premiumPanelInfo: "الميزات التي تحمل شارة بريميوم الذهبية — شعار الشركة، أرقام الإيصالات القابلة للتعديل، بادئة رقم الإيصال، شاشة العميل، والمخزون — تبقى مرئية لكنها مقفلة حتى تفعّل رمزاً. أدخله أدناه لفتحها على هذا الجهاز.",
+  premiumTabLabel: "بريميوم", premiumPanelTitle: "بريميوم", premiumPanelInfo: "الميزات التي تحمل شارة بريميوم الذهبية - شعار الشركة، أرقام الإيصالات القابلة للتعديل، بادئة رقم الإيصال، شاشة العميل، والمخزون - تبقى مرئية لكنها مقفلة حتى تفعّل رمزاً. أدخله أدناه لفتحها على هذا الجهاز.",
   premiumActiveLabel: "بريميوم مفعّل على هذا الجهاز.", premiumCodeLabel: "رمز بريميوم", premiumActivateBtn: "تفعيل", premiumCodeInvalid: "هذا الرمز غير صالح. تحقق منه وحاول مرة أخرى.",
   premiumCodeSeatLimit: "وصل هذا الرمز إلى الحد الأقصى لعدد الأجهزة. تواصل معنا للمساعدة.", premiumCodeNetworkError: "تعذّر الوصول إلى خادم التفعيل. تحقق من اتصالك وحاول مرة أخرى.", premiumCodeExpired: "انتهت صلاحية هذا الرمز.", premiumValidityLabel: "صالح حتى:",
   buyPremiumButtonLabel: "شراء رمز بريميوم", buyPremiumModalTitle: "شراء رمز بريميوم", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "دفعة واحدة", buyPremiumFeature1: "بدون انتهاء صلاحية", buyPremiumFeature2: "حتى 5 متصفحات نشطة", buyPremiumFeature3: "غير قابل للاسترداد", buyPremiumContactText: "لشراء رمز، <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">تواصل معنا</a> وسنساعدك على البدء.",
@@ -1282,32 +1308,33 @@ ar: {
   receiptNumberLockMsgText: "هذه ميزات بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتعديل رقم الإيصال والبادئة.",
   inventoryLockMsgText: "تعديل المخزون وتنزيل التقارير ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتحها. لا يزال بإمكانك تصفح مخزونك أدناه.",
   customerScreenLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لفتح شاشة العميل.",
-  inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد — أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
+  inventoryUncategorized: "غير مصنّف", inventoryExportEmptyAlert: "لا توجد منتجات بعد - أضف بعضها أولاً.", inventoryExportButtonLabel: "تنزيل تقرير المخزون", inventoryValueLabel: "القيمة:",
   salesExportFromLabel: "من (اختياري)", salesExportToLabel: "إلى (اختياري)", salesExportRangeEmptyAlert: "لا توجد مبيعات في هذا النطاق الزمني.",
   inventoryShortcutLabel: "المخزون", customerScreenButtonLabel: "شاشة العميل", addProductStockLabel: "مستوى المخزون (اختياري)", newProductStockPlaceholder: "اتركه فارغاً لعدم تتبع المخزون",
-  inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين — اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
+  inventoryTitle: "المخزون", inventoryInfo: "ينخفض المخزون تلقائياً مع كل عملية بيع. عدّل أي رقم أدناه لتصحيحه أو لإعادة التخزين - اترك الحقل فارغاً إذا كنت لا تريد تتبع مخزون هذا المنتج.",
   inventoryEmpty: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.", inventoryStockLabel: "المخزون:", stockLabel: "المخزون:", premiumBadgeLabel: "بريميوم", basicBadgeLabel: "أساسي", specialAccessBadge: "وصول خاص",
-  customerScreenTitle: "شاشة العميل", customerScreenIntro: "افتح هذا الرابط في نافذة ثانية، أو شاشة، أو جهاز لوحي يواجه عميلك — يتحدث مباشرة أثناء إتمام عملية البيع.",
-  copyCustomerScreenUrlBtn: "نسخ", customerScreenCopiedMsg: "تم النسخ!", customerScreenGuideBtnLabel: "دليل الإعداد — كيفية التهيئة", customerScreenGuideTitle: "إعداد شاشة العميل",
-  guideMethod1Title: "الطريقة الأولى — شاشة ثانية", guideMethod2Title: "الطريقة الثانية — جهاز لوحي أو تلفاز (عكس الشاشة)",
-  guideMethod2Note: "مهم: يجب أن يعكس الجهاز اللوحي شاشة هذا الكمبيوتر. فتح الرابط مباشرة في متصفح الجهاز اللوحي الخاص به لن يُظهر تحديثات مباشرة — فهو يتزامن فقط بين النوافذ على نفس هذا الكمبيوتر.",
-  guideMethod1List: "<li>وصّل شاشة ثانية بهذا الكمبيوتر باستخدام كابل.</li><li>اضبط شاشتك على <strong>\"توسيع\"</strong> وليس \"تكرار/عكس\" — على ويندوز: إعدادات العرض ← شاشات متعددة ← توسيع. على ماك: الشاشات ← أزل تحديد عكس الشاشات.</li><li>انسخ الرابط أعلاه، وافتحه في نافذة متصفح جديدة هنا على هذا الكمبيوتر.</li><li>اسحب تلك النافذة إلى الشاشة الثانية واجعلها ملء الشاشة.</li><li>وجّه الشاشة نحو عميلك.</li>",
-  guideMethod2List: "<li>أولاً، اتبع الطريقة الأولى أعلاه لفتح شاشة العميل في نافذتها الخاصة هنا على هذا الكمبيوتر.</li><li>اعكس تلك النافذة إلى جهازك اللوحي أو تلفازك — ويندوز: اضغط Win+K، أو الإعدادات ← النظام ← العرض ← \"الاتصال بشاشة لاسلكية\". ماك: مركز التحكم ← عكس الشاشة (AirPlay).</li><li>اجعل النافذة المعكوسة ملء الشاشة. سيعرض جهازك اللوحي أو تلفازك الآن نسخة مباشرة منها.</li>",
+  customerScreenTitle: "شاشة العميل", customerScreenIntro: "افتح هذا الرابط في نافذة ثانية، أو شاشة، أو جهاز لوحي يواجه عميلك - يتحدث مباشرة أثناء إتمام عملية البيع.",
+  copyCustomerScreenUrlBtn: "نسخ", customerScreenCopiedMsg: "تم النسخ!", customerScreenGuideBtnLabel: "دليل الإعداد - كيفية التهيئة", customerScreenGuideTitle: "إعداد شاشة العميل",
+  guideMethod1Title: "الطريقة الأولى - شاشة ثانية", guideMethod2Title: "الطريقة الثانية - جهاز لوحي أو تلفاز (عكس الشاشة)",
+  guideMethod2Note: "مهم: يجب أن يعكس الجهاز اللوحي شاشة هذا الكمبيوتر. فتح الرابط مباشرة في متصفح الجهاز اللوحي الخاص به لن يُظهر تحديثات مباشرة - فهو يتزامن فقط بين النوافذ على نفس هذا الكمبيوتر.",
+  guideMethod1List: "<li>وصّل شاشة ثانية بهذا الكمبيوتر باستخدام كابل.</li><li>اضبط شاشتك على <strong>\"توسيع\"</strong> وليس \"تكرار/عكس\" - على ويندوز: إعدادات العرض ← شاشات متعددة ← توسيع. على ماك: الشاشات ← أزل تحديد عكس الشاشات.</li><li>انسخ الرابط أعلاه، وافتحه في نافذة متصفح جديدة هنا على هذا الكمبيوتر.</li><li>اسحب تلك النافذة إلى الشاشة الثانية واجعلها ملء الشاشة.</li><li>وجّه الشاشة نحو عميلك.</li>",
+  guideMethod2List: "<li>أولاً، اتبع الطريقة الأولى أعلاه لفتح شاشة العميل في نافذتها الخاصة هنا على هذا الكمبيوتر.</li><li>اعكس تلك النافذة إلى جهازك اللوحي أو تلفازك - ويندوز: اضغط Win+K، أو الإعدادات ← النظام ← العرض ← \"الاتصال بشاشة لاسلكية\". ماك: مركز التحكم ← عكس الشاشة (AirPlay).</li><li>اجعل النافذة المعكوسة ملء الشاشة. سيعرض جهازك اللوحي أو تلفازك الآن نسخة مباشرة منها.</li>",
   saleDetailTitle: "تفاصيل عملية البيع", saleDetailReceiptLabel: "رقم الإيصال", saleDetailDateLabel: "التاريخ", saleDetailCustomerLabel: "اسم العميل", saleDetailCashierLabel: "الكاشير",
-  saleDetailItemsLabel: "الأصناف", saleDetailAddItemBtn: "+ إضافة صنف", saleDetailTaxNameLabel: "اسم الضريبة", saleDetailTaxRateLabel: "نسبة الضريبة (%)", saleDetailDiscountLabel: "الخصم (%)",
+  saleDetailItemsLabel: "الأصناف", saleDetailAddItemBtn: "+ إضافة صنف", saleDetailTaxNameLabel: "اسم الضريبة", saleDetailTaxRateLabel: "نسبة الضريبة (%)", saleDetailDiscountLabel: "الخصم",
   saleDetailPaymentsLabel: "المدفوعات", saleDetailAddPaymentBtn: "+ إضافة سطر دفع", saleDetailSubtotalLabel: "المجموع الفرعي:", saleDetailDiscountAmtLabel: "الخصم:", saleDetailTaxAmtLabel: "الضريبة:",
   saleDetailGrandLabel: "الإجمالي:", saleDetailReceivedLabel: "المستلم:", saleDetailChangeLabel: "الباقي:", saleDetailReprintLabel: "إعادة الطباعة", saleDetailSaveLabel: "حفظ التغييرات",
   receipt: "إيصال", invoice: "فاتورة", payment: "إيصال استلام الدفع",
-  receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "عدّل هذا لتحديد النقطة التي يستمر منها الترقيم — أرقام فقط. تستمر عملية البيع الجديدة التالية بالعد تصاعدياً من هنا.",
-  receiptNumberInvalid: "أدخل رقماً صحيحاً.", receiptPrefixLabel: "بادئة رقم الإيصال", receiptPrefixInfo: "تُدمج مع الرقم أعلاه — مثال: INV- + 000123 تُطبع كـ INV-000123. حتى 8 أحرف إجمالاً، بما في ذلك أي شرطات أو رموز.",
-  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم (%)",
+  receiptNumberLabel: "رقم الإيصال الحالي", receiptNumberInfo: "عدّل هذا لتحديد النقطة التي يستمر منها الترقيم - أرقام فقط. تستمر عملية البيع الجديدة التالية بالعد تصاعدياً من هنا.",
+  receiptNumberInvalid: "أدخل رقماً صحيحاً.", receiptPrefixLabel: "بادئة رقم الإيصال", receiptPrefixInfo: "تُدمج مع الرقم أعلاه - مثال: INV- + 000123 تُطبع كـ INV-000123. حتى 8 أحرف إجمالاً، بما في ذلك أي شرطات أو رموز.",
+  taxTitle: "الضريبة والخصم", taxNameLabel: "اسم الضريبة", taxRateLabel: "نسبة الضريبة (%)", discountLabel: "الخصم",
+  discountTypePercentOption: "نسبة مئوية (%)", discountTypeAmountOption: "مبلغ ثابت", taxExemptLabel: "معفى من الضريبة", taxExemptTag: "بدون ضريبة",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
-  productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
+  productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج والمخزون والإعفاء الضريبي (TaxExempt)، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
   barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "يضيف زر مسح بجانب البحث في الشاشة الرئيسية، لإضافة الأصناف عبر رمز المنتج باستخدام الكاميرا.",
   addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
   addProductPhotoLabel: "صورة (اختياري)", productPhotoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملفًا آخر.", productPhotoChangeTitle: "انقر لتغيير الصورة", removePhotoLabel: "إزالة",
   addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
-  manageProductsEmpty: "لا توجد منتجات بعد — أضف واحداً أعلاه أو ارفع ملف CSV أدناه.",
+  manageProductsEmpty: "لا توجد منتجات بعد - أضف واحداً أعلاه أو ارفع ملف CSV أدناه.",
   productsSampleButton: "تحميل نموذج CSV", productsClearButton: "مسح المنتجات",
   productsClearConfirm: "هل تريد حذف جميع المنتجات المرفوعة؟", productsUploadError: "تعذّرت قراءة الملف. تأكد أنه CSV يحتوي على عمودي الاسم والسعر.",
   productsUploadSuccess: "منتج تم تحميله من الملف.", inCartLabel: "في السلة:",
@@ -1318,7 +1345,7 @@ ar: {
   currencyTitle: "العملة", currencyCodeLabel: "رمز العملة", currencySymbolLabel: "رمز العملة",
   decimalPlacesLabel: "عدد الخانات العشرية", decimalPlacesInfo: "معظم العملات تستخدم 2 (مثال: $0.30). بعضها، مثل الدينار البحريني، يستخدم 3 (مثال: BD 0.300).",
   languageTitle: "اللغة", languageLabel: "اختر اللغة",
-  backupTitle: "النسخ الاحتياطي والاستعادة", backupInfo: "كل شيء هنا — المنتجات، سجل المبيعات، الإعدادات، شعارك، الكاشيرون، وطرق الدفع — محفوظ فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية كاملة بانتظام، خاصة قبل مسح بيانات المتصفح أو تغيير الجهاز.",
+  backupTitle: "النسخ الاحتياطي والاستعادة", backupInfo: "كل شيء هنا - المنتجات، سجل المبيعات، الإعدادات، شعارك، الكاشيرون، وطرق الدفع - محفوظ فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية كاملة بانتظام، خاصة قبل مسح بيانات المتصفح أو تغيير الجهاز.",
   restoreBackupLabel: "الاستعادة من نسخة احتياطية", restoreInfo: "سيستبدل هذا كل ما هو محفوظ حالياً بما في ملف النسخة الاحتياطية. سيتم إعادة تحميل الصفحة بعد الاستعادة.",
   backupNoticeText: "بياناتك محفوظة فقط في هذا المتصفح. قم بتنزيل نسخة احتياطية بانتظام حتى لا يضيع شيء إذا تم مسح ذاكرة التخزين المؤقت.", backupNoticeButton: "تنزيل نسخة احتياطية",
   premiumPromoNoticeText: "فعّل بريميوم المجاني الآن",
@@ -1330,10 +1357,10 @@ ar: {
   receiptNo: "رقم الإيصال:", date: "التاريخ:",
   thankYou: "شكراً لتسوقكم معنا!", comeAgain: "نتمنى زيارتكم مرة أخرى.",
   removeButton: "حذف", customItemName: "صنف مخصص",
-  offlineDownloadLabel: "النسخة غير المتصلة", offlineDownloadInfo: "احصل على نسخة كاملة من التطبيق تعمل بدون إنترنت نهائيًا — مناسبة لجهاز كمبيوتر في المتجر غير متصل بالإنترنت، أو كنسخة احتياطية للتثبيت. كل شيء يعمل بنفس الطريقة، بما في ذلك شاشة العميل.",
+  offlineDownloadLabel: "النسخة غير المتصلة", offlineDownloadInfo: "احصل على نسخة كاملة من التطبيق تعمل بدون إنترنت نهائيًا - مناسبة لجهاز كمبيوتر في المتجر غير متصل بالإنترنت، أو كنسخة احتياطية للتثبيت. كل شيء يعمل بنفس الطريقة، بما في ذلك شاشة العميل.",
   offlineDownloadButtonLabel: "تنزيل نظام نقاط البيع غير المتصل", offlineLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتنزيل النسخة غير المتصلة.",
   offlineModalTitle: "قبل التنزيل", offlineModalHowTitle: "كيف تعمل النسخة غير المتصلة",
-  offlineModalHowList: "<li>فك ضغط الملف في أي مكان، ثم شغّل المشغّل المرفق — <code>start-server.bat</code> (ويندوز)، أو <code>start-server-mac.command</code> (ماك)، أو <code>start-server.sh</code> (لينكس) — لفتح التطبيق في متصفحك. هذا ما يجعل شاشة العميل وماسح الباركود بالكاميرا يعملان بشكل موثوق.</li><li>لتشغيل صندوق دفع واحد بدون شاشة العميل، يمكنك أيضًا فتح <code>app.html</code> مباشرة بنقرتين.</li><li>يعمل تمامًا مثل هذا الموقع، دون اتصال بالإنترنت — نفس السلة والإيصالات والمخزون واللغات.</li><li>يتم حفظ البيانات فقط على ذلك الجهاز، بدون مزامنة سحابية — قم بعمل نسخة احتياطية بانتظام من الإعدادات ← النسخ الاحتياطي.</li>",
+  offlineModalHowList: "<li>فك ضغط الملف في أي مكان، ثم شغّل المشغّل المرفق - <code>start-server.bat</code> (ويندوز)، أو <code>start-server-mac.command</code> (ماك)، أو <code>start-server.sh</code> (لينكس) - لفتح التطبيق في متصفحك. هذا ما يجعل شاشة العميل وماسح الباركود بالكاميرا يعملان بشكل موثوق.</li><li>لتشغيل صندوق دفع واحد بدون شاشة العميل، يمكنك أيضًا فتح <code>app.html</code> مباشرة بنقرتين.</li><li>يعمل تمامًا مثل هذا الموقع، دون اتصال بالإنترنت - نفس السلة والإيصالات والمخزون واللغات.</li><li>يتم حفظ البيانات فقط على ذلك الجهاز، بدون مزامنة سحابية - قم بعمل نسخة احتياطية بانتظام من الإعدادات ← النسخ الاحتياطي.</li>",
   offlineModalUpdateTitle: "الحصول على التحديثات لاحقًا", offlineModalUpdateText: "عد وقم بالتنزيل مرة أخرى في أي وقت طالما أن بريميوم لديك مفعّل للحصول على أحدث نسخة. لنقل بياناتك: من النسخة القديمة، اذهب إلى الإعدادات ← النسخ الاحتياطي ← تنزيل نسخة احتياطية كاملة، ثم في النسخة الجديدة استخدم الإعدادات ← النسخ الاحتياطي ← الاستعادة من نسخة احتياطية لاستعادتها.",
   offlineAgreeLabel: "لقد قرأت ما سبق وأوافق على <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">شروط الخدمة</a>، بما في ذلك أن هذا البرنامج يُقدَّم \"كما هو\" دون أي ضمان.",
   offlineCancelBtnLabel: "إلغاء", offlineConfirmDownloadBtnLabel: "تنزيل",
@@ -1348,9 +1375,9 @@ fil: {
   storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan",
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
-  storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload — mawawala lang kung burahin ang data ng site o alisin ito dito.",
+  storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload - mawawala lang kung burahin ang data ng site o alisin ito dito.",
   cashiersTitle: "Mga Kahero", cashiersInfo: "Lalabas ito sa dropdown ng kahero sa itaas ng main screen. Ang napili doon ang nakalimbag sa bawat resibo at makikita sa Summary panel.", cashierLabelText: "Kahero:",
-  receiptNumberInvalid: "Maglagay ng tamang numero.", receiptPrefixLabel: "Prefix ng Resibo", receiptPrefixInfo: "Pinagsama sa numero sa itaas — hal. INV- + 000123 ay nagiging INV-000123. Hanggang 8 characters lahat-lahat, kasama ang anumang gitling o simbolo.",
+  receiptNumberInvalid: "Maglagay ng tamang numero.", receiptPrefixLabel: "Prefix ng Resibo", receiptPrefixInfo: "Pinagsama sa numero sa itaas - hal. INV- + 000123 ay nagiging INV-000123. Hanggang 8 characters lahat-lahat, kasama ang anumang gitling o simbolo.",
   activeCashierPlaceholder: "Walang napiling kahero", summaryByCashierTitle: "Ayon sa Kahero", summaryNoCashierLabel: "Walang napiling kahero",
   customerNameLabel: "Pangalan ng Customer", customerNamePlaceholder: "Opsyonal", customerLabelText: "Customer:",
   summaryButtonLabel: "Buod", salesSummaryTitle: "Buod ng Benta", summaryTotalLabel: "Kabuuang Total",
@@ -1359,7 +1386,7 @@ fil: {
   summaryEmptyState: "Walang benta na naitala para sa petsang ito.", summaryNoMethodLabel: "Hindi tinukoy",
   logoUploadError: "Hindi na-load ang larawan. Subukan ang PNG o JPG file.", logoRemoveConfirm: "Alisin ang logo ng kumpanya?", removeLogoConfirmButton: "I-click ulit para alisin",
   documentTitle: "Dokumento", documentTypeLabel: "Uri ng Dokumento",
-  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Ang mga feature na may gold na Premium badge — Company Logo, na-e-edit na Receipt Number, Receipt Number Prefix, Customer Screen, at Inventory — nananatiling makikita pero naka-lock hanggang i-activate mo ang code. Ilagay ito sa ibaba para i-unlock ang mga ito sa device na ito.",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Ang mga feature na may gold na Premium badge - Company Logo, na-e-edit na Receipt Number, Receipt Number Prefix, Customer Screen, at Inventory - nananatiling makikita pero naka-lock hanggang i-activate mo ang code. Ilagay ito sa ibaba para i-unlock ang mga ito sa device na ito.",
   premiumActiveLabel: "Aktibo ang Premium sa device na ito.", premiumCodeLabel: "Premium Code", premiumActivateBtn: "I-activate", premiumCodeInvalid: "Hindi valid ang code na iyon. Suriin at subukan ulit.",
   premiumCodeSeatLimit: "Naabot na ng code na ito ang limitasyon sa bilang ng device. Makipag-ugnayan sa amin para sa tulong.", premiumCodeNetworkError: "Hindi maabot ang activation server. Tingnan ang iyong koneksyon at subukan ulit.", premiumCodeExpired: "Nag-expire na ang code na ito.", premiumValidityLabel: "Valid hanggang:",
   buyPremiumButtonLabel: "Bumili ng Premium Code", buyPremiumModalTitle: "Bumili ng Premium Code", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "Isang beses na bayad", buyPremiumFeature1: "Walang expiration", buyPremiumFeature2: "Hanggang 5 active na browser", buyPremiumFeature3: "Hindi na-rerefund", buyPremiumContactText: "Para bumili ng code, <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">makipag-ugnayan sa amin</a> at aayusin namin ito para sa iyo.",
@@ -1369,32 +1396,33 @@ fil: {
   receiptNumberLockMsgText: "Premium features ito. I-activate ang Premium code sa Settings → Premium para i-edit ang receipt number at prefix.",
   inventoryLockMsgText: "Premium feature ang pag-edit ng stock at pag-download ng report. I-activate ang Premium code sa Settings → Premium para ito ma-unlock. Puwede mo pa ring tingnan ang imbentaryo sa ibaba.",
   customerScreenLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para i-unlock ang Customer Screen.",
-  inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto — magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
+  inventoryUncategorized: "Walang Kategorya", inventoryExportEmptyAlert: "Wala pang produkto - magdagdag muna.", inventoryExportButtonLabel: "I-download ang Inventory Report", inventoryValueLabel: "Halaga:",
   salesExportFromLabel: "Mula (opsyonal)", salesExportToLabel: "Hanggang (opsyonal)", salesExportRangeEmptyAlert: "Walang benta na natagpuan sa hanay ng petsang iyon.",
   inventoryShortcutLabel: "Imbentaryo", customerScreenButtonLabel: "Customer Screen", addProductStockLabel: "Stock Level (opsyonal)", newProductStockPlaceholder: "Iwanang blangko para hindi i-track ang stock",
-  inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock — iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
+  inventoryTitle: "Imbentaryo", inventoryInfo: "Awtomatikong bumababa ang stock tuwing may nabentang item. I-edit ang numero sa ibaba para ayusin o mag-restock - iwanang blangko kung ayaw mong i-track ang stock ng produktong iyon.",
   inventoryEmpty: "Wala pang produkto. Magdagdag mula sa Settings → Products.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Basic", specialAccessBadge: "Special Access",
-  customerScreenTitle: "Customer Screen", customerScreenIntro: "Buksan ang link na ito sa pangalawang window, monitor, o tablet na nakaharap sa customer — nag-a-update ito nang live habang nagbebenta ka.",
-  copyCustomerScreenUrlBtn: "Kopyahin", customerScreenCopiedMsg: "Nakopya!", customerScreenGuideBtnLabel: "Gabayan Mo Ako — Paano I-set Up Ito", customerScreenGuideTitle: "Pag-set Up ng Customer Screen",
-  guideMethod1Title: "Paraan 1 — Pangalawang Monitor", guideMethod2Title: "Paraan 2 — Tablet o TV (Screen Mirroring)",
-  guideMethod2Note: "Mahalaga: kailangang i-mirror ng tablet ang screen ng computer na ito. Ang pagbukas ng link mismo sa sariling browser ng tablet ay hindi magpapakita ng live updates — nag-sync lang ito sa pagitan ng mga window sa parehong computer na ito.",
-  guideMethod1List: "<li>Ikonekta ang pangalawang monitor sa computer na ito gamit ang cable.</li><li>Itakda ang iyong display sa <strong>\"Extend\"</strong>, hindi \"Duplicate/Mirror\" — sa Windows: Display Settings → Multiple displays → Extend. Sa Mac: Displays → i-uncheck ang Mirror Displays.</li><li>Kopyahin ang link sa itaas, buksan ito sa bagong browser window dito sa computer na ito.</li><li>I-drag ang window na iyon papunta sa pangalawang monitor at gawing full-screen.</li><li>I-angle ang monitor papaharap sa customer.</li>",
-  guideMethod2List: "<li>Una, sundan ang Paraan 1 sa itaas para buksan ang Customer Screen sa sarili nitong window dito sa computer na ito.</li><li>I-mirror ang window na iyon papunta sa iyong tablet o TV — Windows: pindutin ang Win+K, o Settings → System → Display → \"Connect to a wireless display.\" Mac: Control Center → Screen Mirroring (AirPlay).</li><li>Gawing full-screen ang na-mirror na window. Ipapakita na ngayon ng iyong tablet o TV ang live na kopya nito.</li>",
+  customerScreenTitle: "Customer Screen", customerScreenIntro: "Buksan ang link na ito sa pangalawang window, monitor, o tablet na nakaharap sa customer - nag-a-update ito nang live habang nagbebenta ka.",
+  copyCustomerScreenUrlBtn: "Kopyahin", customerScreenCopiedMsg: "Nakopya!", customerScreenGuideBtnLabel: "Gabayan Mo Ako - Paano I-set Up Ito", customerScreenGuideTitle: "Pag-set Up ng Customer Screen",
+  guideMethod1Title: "Paraan 1 - Pangalawang Monitor", guideMethod2Title: "Paraan 2 - Tablet o TV (Screen Mirroring)",
+  guideMethod2Note: "Mahalaga: kailangang i-mirror ng tablet ang screen ng computer na ito. Ang pagbukas ng link mismo sa sariling browser ng tablet ay hindi magpapakita ng live updates - nag-sync lang ito sa pagitan ng mga window sa parehong computer na ito.",
+  guideMethod1List: "<li>Ikonekta ang pangalawang monitor sa computer na ito gamit ang cable.</li><li>Itakda ang iyong display sa <strong>\"Extend\"</strong>, hindi \"Duplicate/Mirror\" - sa Windows: Display Settings → Multiple displays → Extend. Sa Mac: Displays → i-uncheck ang Mirror Displays.</li><li>Kopyahin ang link sa itaas, buksan ito sa bagong browser window dito sa computer na ito.</li><li>I-drag ang window na iyon papunta sa pangalawang monitor at gawing full-screen.</li><li>I-angle ang monitor papaharap sa customer.</li>",
+  guideMethod2List: "<li>Una, sundan ang Paraan 1 sa itaas para buksan ang Customer Screen sa sarili nitong window dito sa computer na ito.</li><li>I-mirror ang window na iyon papunta sa iyong tablet o TV - Windows: pindutin ang Win+K, o Settings → System → Display → \"Connect to a wireless display.\" Mac: Control Center → Screen Mirroring (AirPlay).</li><li>Gawing full-screen ang na-mirror na window. Ipapakita na ngayon ng iyong tablet o TV ang live na kopya nito.</li>",
   saleDetailTitle: "Detalye ng Benta", saleDetailReceiptLabel: "Resibo No", saleDetailDateLabel: "Petsa", saleDetailCustomerLabel: "Pangalan ng Customer", saleDetailCashierLabel: "Kahero",
-  saleDetailItemsLabel: "Mga Item", saleDetailAddItemBtn: "+ Magdagdag ng Item", saleDetailTaxNameLabel: "Pangalan ng Buwis", saleDetailTaxRateLabel: "Rate ng Buwis (%)", saleDetailDiscountLabel: "Discount (%)",
+  saleDetailItemsLabel: "Mga Item", saleDetailAddItemBtn: "+ Magdagdag ng Item", saleDetailTaxNameLabel: "Pangalan ng Buwis", saleDetailTaxRateLabel: "Rate ng Buwis (%)", saleDetailDiscountLabel: "Discount",
   saleDetailPaymentsLabel: "Mga Bayad", saleDetailAddPaymentBtn: "+ Magdagdag ng Payment Row", saleDetailSubtotalLabel: "Subtotal:", saleDetailDiscountAmtLabel: "Discount:", saleDetailTaxAmtLabel: "Buwis:",
   saleDetailGrandLabel: "Total:", saleDetailReceivedLabel: "Natanggap:", saleDetailChangeLabel: "Sukli:", saleDetailReprintLabel: "I-reprint", saleDetailSaveLabel: "I-save ang Pagbabago",
   receipt: "Resibo", invoice: "Invoice", payment: "Katibayan ng Bayad",
-  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount (%)",
+  taxTitle: "Buwis at Discount", taxNameLabel: "Pangalan ng Buwis", taxRateLabel: "Rate ng Buwis (%)", discountLabel: "Discount",
+  discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed na Halaga", taxExemptLabel: "Walang Buwis", taxExemptTag: "Walang Buwis",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
-  productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category at SKU, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
+  productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category, SKU, Stock, at TaxExempt, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
   barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Nagdaragdag ng scan button sa tabi ng search sa main screen, para magdagdag ng item gamit ang SKU at camera.",
   addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
   addProductPhotoLabel: "Larawan (opsyonal)", productPhotoUploadError: "Hindi ma-load ang larawang iyon. Subukan ang ibang file.", productPhotoChangeTitle: "I-click para palitan ang larawan", removePhotoLabel: "Alisin",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
   scannerTitle: "I-scan ang Barcode", scannerHint: "Itutok ang camera sa barcode ng produkto", scannerUnsupported: "Hindi available ang pag-scan ng barcode sa browser na ito.",
   scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
-  manageProductsEmpty: "Wala pang produkto — magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
+  manageProductsEmpty: "Wala pang produkto - magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
   productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
   productsUploadSuccess: "produktong na-load mula sa file.", inCartLabel: "Nasa cart:",
@@ -1405,7 +1433,7 @@ fil: {
   currencyTitle: "Currency", currencyCodeLabel: "Currency Code", currencySymbolLabel: "Currency Symbol",
   decimalPlacesLabel: "Decimal Places", decimalPlacesInfo: "Karamihan sa currency ay gumagamit ng 2 (hal. $0.30). Ang ilan, tulad ng Bahraini Dinar, ay gumagamit ng 3 (hal. BD 0.300).",
   languageTitle: "Wika", languageLabel: "Pumili ng Wika",
-  backupTitle: "Backup at Pagbawi", backupInfo: "Lahat dito — mga produkto, kasaysayan ng benta, settings, logo mo, mga kahero, at paraan ng pagbabayad — naka-save lang sa browser na ito. Mag-download ng buong backup nang regular, lalo na bago burahin ang data ng browser o lumipat ng device.",
+  backupTitle: "Backup at Pagbawi", backupInfo: "Lahat dito - mga produkto, kasaysayan ng benta, settings, logo mo, mga kahero, at paraan ng pagbabayad - naka-save lang sa browser na ito. Mag-download ng buong backup nang regular, lalo na bago burahin ang data ng browser o lumipat ng device.",
   restoreBackupLabel: "Ibalik mula sa Backup", restoreInfo: "Papalitan nito ang lahat ng kasalukuyang naka-save ng laman ng backup file. Mag-re-reload ang page pagkatapos ibalik.",
   backupNoticeText: "Naka-save lang ang data mo sa browser na ito. Mag-download ng backup nang regular para walang mawala kapag na-clear ang cache mo.", backupNoticeButton: "I-download ang Backup",
   premiumPromoNoticeText: "I-activate ang Libreng Premium Mo Ngayon",
@@ -1417,10 +1445,10 @@ fil: {
   receiptNo: "Resibo No:", date: "Petsa:",
   thankYou: "Salamat sa inyong pamimili!", comeAgain: "Bumalik po kayo.",
   removeButton: "Alisin",
-  offlineDownloadLabel: "Bersyon na Offline", offlineDownloadInfo: "Kumuha ng buong kopya ng app na gumagana nang walang internet — maganda para sa computer ng tindahan na offline, o bilang backup na install. Pareho pa rin ang lahat, kasama ang Customer Screen.",
+  offlineDownloadLabel: "Bersyon na Offline", offlineDownloadInfo: "Kumuha ng buong kopya ng app na gumagana nang walang internet - maganda para sa computer ng tindahan na offline, o bilang backup na install. Pareho pa rin ang lahat, kasama ang Customer Screen.",
   offlineDownloadButtonLabel: "I-download ang Offline POS", offlineLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para ma-download ang offline na bersyon.",
   offlineModalTitle: "Bago Mag-download", offlineModalHowTitle: "Paano gumagana ang offline na bersyon",
-  offlineModalHowList: "<li>I-unzip kahit saan, pagkatapos patakbuhin ang kasamang launcher — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) — para buksan ang app sa browser mo. Ito ang gumagawa sa Customer Screen at camera barcode scanner na maaasahang gumana.</li><li>Para sa iisang register na walang Customer Screen, pwede mo ring i-double-click lang ang <code>app.html</code> nang direkta.</li><li>Gumagana ito nang eksaktong tulad ng website na ito, offline — parehong cart, resibo, inventory, at mga wika.</li><li>Naka-save lang ang data sa computer na iyon, walang cloud sync — mag-backup nang regular mula sa Settings → Backup.</li>",
+  offlineModalHowList: "<li>I-unzip kahit saan, pagkatapos patakbuhin ang kasamang launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para buksan ang app sa browser mo. Ito ang gumagawa sa Customer Screen at camera barcode scanner na maaasahang gumana.</li><li>Para sa iisang register na walang Customer Screen, pwede mo ring i-double-click lang ang <code>app.html</code> nang direkta.</li><li>Gumagana ito nang eksaktong tulad ng website na ito, offline - parehong cart, resibo, inventory, at mga wika.</li><li>Naka-save lang ang data sa computer na iyon, walang cloud sync - mag-backup nang regular mula sa Settings → Backup.</li>",
   offlineModalUpdateTitle: "Pagkuha ng mga update sa hinaharap", offlineModalUpdateText: "Bumalik at mag-download ulit anumang oras habang aktibo ang Premium mo para makuha ang pinakabagong bersyon. Para ilipat ang data mo: sa lumang kopya, pumunta sa Settings → Backup → Download Full Backup, tapos sa bagong kopya gamitin ang Settings → Backup → Restore from Backup para i-load ulit ito.",
   offlineAgreeLabel: "Nabasa ko ang nasa itaas at sumasang-ayon ako sa <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Mga Tuntunin ng Serbisyo</a>, kasama ang katotohanang ibinibigay ang software na ito \"as is\" na walang warranty.",
   offlineCancelBtnLabel: "Kanselahin", offlineConfirmDownloadBtnLabel: "I-download",
@@ -1435,9 +1463,9 @@ hi: {
   storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण",
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
-  storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है — यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
+  storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है - यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
   cashiersTitle: "कैशियर", cashiersInfo: "ये मुख्य स्क्रीन के ऊपर कैशियर ड्रॉपडाउन में दिखते हैं। वहां चुना गया नाम हर रसीद पर छपेगा और सारांश पैनल में दिखेगा।", cashierLabelText: "कैशियर:",
-  receiptNumberInvalid: "एक सही संख्या दर्ज करें।", receiptPrefixLabel: "रसीद नंबर प्रीफ़िक्स", receiptPrefixInfo: "ऊपर दी गई संख्या के साथ जोड़ा जाता है — जैसे INV- + 000123, INV-000123 के रूप में छपेगा। डैश या प्रतीकों सहित अधिकतम 8 अक्षर।",
+  receiptNumberInvalid: "एक सही संख्या दर्ज करें।", receiptPrefixLabel: "रसीद नंबर प्रीफ़िक्स", receiptPrefixInfo: "ऊपर दी गई संख्या के साथ जोड़ा जाता है - जैसे INV- + 000123, INV-000123 के रूप में छपेगा। डैश या प्रतीकों सहित अधिकतम 8 अक्षर।",
   activeCashierPlaceholder: "कोई कैशियर चयनित नहीं", summaryByCashierTitle: "कैशियर के अनुसार", summaryNoCashierLabel: "कोई कैशियर चयनित नहीं",
   customerNameLabel: "ग्राहक का नाम", customerNamePlaceholder: "वैकल्पिक", customerLabelText: "ग्राहक:",
   summaryButtonLabel: "सारांश", salesSummaryTitle: "बिक्री सारांश", summaryTotalLabel: "कुल योग",
@@ -1446,7 +1474,7 @@ hi: {
   summaryEmptyState: "इस तारीख के लिए कोई बिक्री दर्ज नहीं है।", summaryNoMethodLabel: "अनिर्दिष्ट",
   logoUploadError: "यह छवि लोड नहीं हो सकी। PNG या JPG फ़ाइल आज़माएं।", logoRemoveConfirm: "क्या कंपनी का लोगो हटाना है?", removeLogoConfirmButton: "हटाने के लिए फिर से क्लिक करें",
   documentTitle: "दस्तावेज़", documentTypeLabel: "दस्तावेज़ प्रकार",
-  premiumTabLabel: "प्रीमियम", premiumPanelTitle: "प्रीमियम", premiumPanelInfo: "सुनहरे प्रीमियम बैज वाली सुविधाएं — कंपनी लोगो, संपादन योग्य रसीद नंबर, रसीद नंबर प्रीफ़िक्स, कस्टमर स्क्रीन, और इन्वेंटरी — तब तक दिखाई देती रहेंगी लेकिन लॉक रहेंगी जब तक आप कोड सक्रिय नहीं करते। इस डिवाइस पर अनलॉक करने के लिए नीचे कोड दर्ज करें।",
+  premiumTabLabel: "प्रीमियम", premiumPanelTitle: "प्रीमियम", premiumPanelInfo: "सुनहरे प्रीमियम बैज वाली सुविधाएं - कंपनी लोगो, संपादन योग्य रसीद नंबर, रसीद नंबर प्रीफ़िक्स, कस्टमर स्क्रीन, और इन्वेंटरी - तब तक दिखाई देती रहेंगी लेकिन लॉक रहेंगी जब तक आप कोड सक्रिय नहीं करते। इस डिवाइस पर अनलॉक करने के लिए नीचे कोड दर्ज करें।",
   premiumActiveLabel: "इस डिवाइस पर प्रीमियम सक्रिय है।", premiumCodeLabel: "प्रीमियम कोड", premiumActivateBtn: "सक्रिय करें", premiumCodeInvalid: "वह कोड मान्य नहीं है। जांचें और फिर से प्रयास करें।",
   premiumCodeSeatLimit: "इस कोड ने डिवाइस की सीमा पूरी कर ली है। सहायता के लिए हमसे संपर्क करें।", premiumCodeNetworkError: "एक्टिवेशन सर्वर तक नहीं पहुंचा जा सका। अपना कनेक्शन जांचें और फिर से प्रयास करें।", premiumCodeExpired: "इस कोड की समय सीमा समाप्त हो गई है।", premiumValidityLabel: "इस तक मान्य:",
   buyPremiumButtonLabel: "प्रीमियम कोड खरीदें", buyPremiumModalTitle: "प्रीमियम कोड खरीदें", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "एकमुश्त भुगतान", buyPremiumFeature1: "कोई समाप्ति नहीं", buyPremiumFeature2: "5 सक्रिय ब्राउज़र तक", buyPremiumFeature3: "गैर-वापसीयोग्य", buyPremiumContactText: "कोड खरीदने के लिए, <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">हमसे संपर्क करें</a> और हम आपकी मदद करेंगे।",
@@ -1456,32 +1484,33 @@ hi: {
   receiptNumberLockMsgText: "ये प्रीमियम सुविधाएं हैं। रसीद नंबर और प्रीफ़िक्स संपादित करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   inventoryLockMsgText: "स्टॉक संपादित करना और रिपोर्ट डाउनलोड करना एक प्रीमियम सुविधा है। इसे अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें। आप अभी भी नीचे अपनी इन्वेंटरी देख सकते हैं।",
   customerScreenLockMsgText: "यह एक प्रीमियम सुविधा है। कस्टमर स्क्रीन अनलॉक करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
-  inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है — पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
+  inventoryUncategorized: "बिना श्रेणी", inventoryExportEmptyAlert: "अभी कोई उत्पाद नहीं है - पहले कुछ जोड़ें।", inventoryExportButtonLabel: "इन्वेंटरी रिपोर्ट डाउनलोड करें", inventoryValueLabel: "मूल्य:",
   salesExportFromLabel: "से (वैकल्पिक)", salesExportToLabel: "तक (वैकल्पिक)", salesExportRangeEmptyAlert: "उस दिनांक सीमा में कोई बिक्री नहीं मिली।",
   inventoryShortcutLabel: "इन्वेंटरी", customerScreenButtonLabel: "कस्टमर स्क्रीन", addProductStockLabel: "स्टॉक स्तर (वैकल्पिक)", newProductStockPlaceholder: "स्टॉक ट्रैक न करने के लिए खाली छोड़ें",
-  inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें — यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
+  inventoryTitle: "इन्वेंटरी", inventoryInfo: "हर बिक्री के साथ स्टॉक अपने आप कम हो जाता है। सुधारने या फिर से स्टॉक करने के लिए नीचे कोई भी संख्या संपादित करें - यदि आप उस उत्पाद का स्टॉक ट्रैक नहीं करना चाहते तो फ़ील्ड खाली छोड़ दें।",
   inventoryEmpty: "अभी कोई उत्पाद नहीं है। सेटिंग्स ← उत्पाद से जोड़ें।", inventoryStockLabel: "स्टॉक:", stockLabel: "स्टॉक:", premiumBadgeLabel: "प्रीमियम", basicBadgeLabel: "बेसिक", specialAccessBadge: "विशेष पहुँच",
-  customerScreenTitle: "कस्टमर स्क्रीन", customerScreenIntro: "इस लिंक को अपने ग्राहक के सामने वाली दूसरी विंडो, मॉनिटर, या टैबलेट में खोलें — बिक्री करते समय यह लाइव अपडेट होता है।",
-  copyCustomerScreenUrlBtn: "कॉपी करें", customerScreenCopiedMsg: "कॉपी हो गया!", customerScreenGuideBtnLabel: "मुझे मार्गदर्शन करें — इसे कैसे सेट करें", customerScreenGuideTitle: "कस्टमर स्क्रीन सेट करना",
-  guideMethod1Title: "तरीका 1 — दूसरा मॉनिटर", guideMethod2Title: "तरीका 2 — टैबलेट या टीवी (स्क्रीन मिररिंग)",
-  guideMethod2Note: "महत्वपूर्ण: टैबलेट को इस कंप्यूटर की स्क्रीन को मिरर करना होगा। लिंक को सीधे टैबलेट के अपने ब्राउज़र में खोलने से लाइव अपडेट नहीं दिखेंगे — यह केवल इसी कंप्यूटर पर विंडो के बीच सिंक होता है।",
-  guideMethod1List: "<li>एक केबल से इस कंप्यूटर में दूसरा मॉनिटर कनेक्ट करें।</li><li>अपनी डिस्प्ले को <strong>\"Extend\"</strong> पर सेट करें, \"Duplicate/Mirror\" पर नहीं — विंडोज़ पर: Display Settings → Multiple displays → Extend। मैक पर: Displays → Mirror Displays अनचेक करें।</li><li>ऊपर दिया गया लिंक कॉपी करें, इसे इसी कंप्यूटर पर एक नई ब्राउज़र विंडो में खोलें।</li><li>उस विंडो को दूसरे मॉनिटर पर खींचें और इसे फुल-स्क्रीन बनाएं।</li><li>मॉनिटर को अपने ग्राहक की ओर मोड़ें।</li>",
-  guideMethod2List: "<li>सबसे पहले, कस्टमर स्क्रीन को इसी कंप्यूटर पर अपनी अलग विंडो में खोलने के लिए ऊपर दिया गया तरीका 1 अपनाएं।</li><li>उस विंडो को अपने टैबलेट या टीवी पर मिरर करें — विंडोज़: Win+K दबाएं, या Settings → System → Display → \"Connect to a wireless display\"। मैक: Control Center → Screen Mirroring (AirPlay)।</li><li>मिरर की गई विंडो को फुल-स्क्रीन बनाएं। आपका टैबलेट या टीवी अब इसकी लाइव कॉपी दिखाएगा।</li>",
+  customerScreenTitle: "कस्टमर स्क्रीन", customerScreenIntro: "इस लिंक को अपने ग्राहक के सामने वाली दूसरी विंडो, मॉनिटर, या टैबलेट में खोलें - बिक्री करते समय यह लाइव अपडेट होता है।",
+  copyCustomerScreenUrlBtn: "कॉपी करें", customerScreenCopiedMsg: "कॉपी हो गया!", customerScreenGuideBtnLabel: "मुझे मार्गदर्शन करें - इसे कैसे सेट करें", customerScreenGuideTitle: "कस्टमर स्क्रीन सेट करना",
+  guideMethod1Title: "तरीका 1 - दूसरा मॉनिटर", guideMethod2Title: "तरीका 2 - टैबलेट या टीवी (स्क्रीन मिररिंग)",
+  guideMethod2Note: "महत्वपूर्ण: टैबलेट को इस कंप्यूटर की स्क्रीन को मिरर करना होगा। लिंक को सीधे टैबलेट के अपने ब्राउज़र में खोलने से लाइव अपडेट नहीं दिखेंगे - यह केवल इसी कंप्यूटर पर विंडो के बीच सिंक होता है।",
+  guideMethod1List: "<li>एक केबल से इस कंप्यूटर में दूसरा मॉनिटर कनेक्ट करें।</li><li>अपनी डिस्प्ले को <strong>\"Extend\"</strong> पर सेट करें, \"Duplicate/Mirror\" पर नहीं - विंडोज़ पर: Display Settings → Multiple displays → Extend। मैक पर: Displays → Mirror Displays अनचेक करें।</li><li>ऊपर दिया गया लिंक कॉपी करें, इसे इसी कंप्यूटर पर एक नई ब्राउज़र विंडो में खोलें।</li><li>उस विंडो को दूसरे मॉनिटर पर खींचें और इसे फुल-स्क्रीन बनाएं।</li><li>मॉनिटर को अपने ग्राहक की ओर मोड़ें।</li>",
+  guideMethod2List: "<li>सबसे पहले, कस्टमर स्क्रीन को इसी कंप्यूटर पर अपनी अलग विंडो में खोलने के लिए ऊपर दिया गया तरीका 1 अपनाएं।</li><li>उस विंडो को अपने टैबलेट या टीवी पर मिरर करें - विंडोज़: Win+K दबाएं, या Settings → System → Display → \"Connect to a wireless display\"। मैक: Control Center → Screen Mirroring (AirPlay)।</li><li>मिरर की गई विंडो को फुल-स्क्रीन बनाएं। आपका टैबलेट या टीवी अब इसकी लाइव कॉपी दिखाएगा।</li>",
   saleDetailTitle: "बिक्री का विवरण", saleDetailReceiptLabel: "रसीद नंबर", saleDetailDateLabel: "दिनांक", saleDetailCustomerLabel: "ग्राहक का नाम", saleDetailCashierLabel: "कैशियर",
-  saleDetailItemsLabel: "आइटम", saleDetailAddItemBtn: "+ आइटम जोड़ें", saleDetailTaxNameLabel: "कर का नाम", saleDetailTaxRateLabel: "कर दर (%)", saleDetailDiscountLabel: "छूट (%)",
+  saleDetailItemsLabel: "आइटम", saleDetailAddItemBtn: "+ आइटम जोड़ें", saleDetailTaxNameLabel: "कर का नाम", saleDetailTaxRateLabel: "कर दर (%)", saleDetailDiscountLabel: "छूट",
   saleDetailPaymentsLabel: "भुगतान", saleDetailAddPaymentBtn: "+ भुगतान पंक्ति जोड़ें", saleDetailSubtotalLabel: "उप-योग:", saleDetailDiscountAmtLabel: "छूट:", saleDetailTaxAmtLabel: "कर:",
   saleDetailGrandLabel: "कुल:", saleDetailReceivedLabel: "प्राप्त:", saleDetailChangeLabel: "बाकी:", saleDetailReprintLabel: "पुनः प्रिंट करें", saleDetailSaveLabel: "परिवर्तन सहेजें",
   receipt: "रसीद", invoice: "इनवॉइस", payment: "भुगतान प्राप्ति रसीद",
-  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट (%)",
+  taxTitle: "कर और छूट", taxNameLabel: "कर का नाम", taxRateLabel: "कर दर (%)", discountLabel: "छूट",
+  discountTypePercentOption: "प्रतिशत (%)", discountTypeAmountOption: "निश्चित राशि", taxExemptLabel: "कर मुक्त", taxExemptTag: "कर मुक्त",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
-  productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category और SKU वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
+  productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category, SKU, Stock और TaxExempt वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
   barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "मुख्य स्क्रीन पर सर्च के पास एक स्कैन बटन जोड़ता है, ताकि कैमरे से SKU द्वारा आइटम जोड़े जा सकें।",
   addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
   addProductPhotoLabel: "फ़ोटो (वैकल्पिक)", productPhotoUploadError: "वह इमेज लोड नहीं हो सकी। दूसरी फ़ाइल आज़माएं।", productPhotoChangeTitle: "फ़ोटो बदलने के लिए क्लिक करें", removePhotoLabel: "हटाएं",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
   scannerTitle: "बारकोड स्कैन करें", scannerHint: "कैमरे को उत्पाद के बारकोड की ओर करें", scannerUnsupported: "इस ब्राउज़र में बारकोड स्कैनिंग उपलब्ध नहीं है।",
   scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
-  manageProductsEmpty: "अभी कोई उत्पाद नहीं है — ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
+  manageProductsEmpty: "अभी कोई उत्पाद नहीं है - ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
   productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
   productsUploadSuccess: "उत्पाद फ़ाइल से लोड हुए।", inCartLabel: "कार्ट में:",
@@ -1492,7 +1521,7 @@ hi: {
   currencyTitle: "मुद्रा", currencyCodeLabel: "मुद्रा कोड", currencySymbolLabel: "मुद्रा चिह्न",
   decimalPlacesLabel: "दशमलव स्थान", decimalPlacesInfo: "अधिकतर मुद्राएं 2 का उपयोग करती हैं (जैसे $0.30)। कुछ, जैसे बहरीनी दीनार, 3 का उपयोग करती हैं (जैसे BD 0.300)।",
   languageTitle: "भाषा", languageLabel: "भाषा चुनें",
-  backupTitle: "बैकअप और पुनर्स्थापना", backupInfo: "यहां सब कुछ — उत्पाद, बिक्री इतिहास, सेटिंग्स, आपका लोगो, कैशियर, और भुगतान के तरीके — केवल इस ब्राउज़र में सेव है। नियमित रूप से पूरा बैकअप डाउनलोड करें, खासकर ब्राउज़र डेटा साफ़ करने या डिवाइस बदलने से पहले।",
+  backupTitle: "बैकअप और पुनर्स्थापना", backupInfo: "यहां सब कुछ - उत्पाद, बिक्री इतिहास, सेटिंग्स, आपका लोगो, कैशियर, और भुगतान के तरीके - केवल इस ब्राउज़र में सेव है। नियमित रूप से पूरा बैकअप डाउनलोड करें, खासकर ब्राउज़र डेटा साफ़ करने या डिवाइस बदलने से पहले।",
   restoreBackupLabel: "बैकअप से पुनर्स्थापित करें", restoreInfo: "यह वर्तमान में सेव सब कुछ बैकअप फ़ाइल की सामग्री से बदल देगा। पुनर्स्थापना के बाद पेज रीलोड होगा।",
   backupNoticeText: "आपका डेटा केवल इस ब्राउज़र में सेव है। नियमित रूप से बैकअप डाउनलोड करें ताकि कैश साफ़ होने पर कुछ भी न खोए।", backupNoticeButton: "बैकअप डाउनलोड करें",
   premiumPromoNoticeText: "अभी अपना मुफ़्त प्रीमियम सक्रिय करें",
@@ -1504,10 +1533,10 @@ hi: {
   receiptNo: "रसीद नंबर:", date: "दिनांक:",
   thankYou: "हमारे यहां खरीदारी करने के लिए धन्यवाद!", comeAgain: "फिर से पधारें।",
   removeButton: "हटाएं",
-  offlineDownloadLabel: "ऑफ़लाइन संस्करण", offlineDownloadInfo: "ऐप की पूरी कॉपी पाएं जो बिना इंटरनेट के चलती है — यह ऐसे दुकान के कंप्यूटर के लिए अच्छी है जो ऑफ़लाइन है, या एक बैकअप इंस्टॉल के रूप में। कस्टमर स्क्रीन सहित सब कुछ वैसे ही काम करता है।",
+  offlineDownloadLabel: "ऑफ़लाइन संस्करण", offlineDownloadInfo: "ऐप की पूरी कॉपी पाएं जो बिना इंटरनेट के चलती है - यह ऐसे दुकान के कंप्यूटर के लिए अच्छी है जो ऑफ़लाइन है, या एक बैकअप इंस्टॉल के रूप में। कस्टमर स्क्रीन सहित सब कुछ वैसे ही काम करता है।",
   offlineDownloadButtonLabel: "ऑफ़लाइन POS डाउनलोड करें", offlineLockMsgText: "यह एक प्रीमियम सुविधा है। ऑफ़लाइन संस्करण डाउनलोड करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   offlineModalTitle: "डाउनलोड करने से पहले", offlineModalHowTitle: "ऑफ़लाइन संस्करण कैसे काम करता है",
-  offlineModalHowList: "<li>इसे कहीं भी अनज़िप करें, फिर शामिल लॉन्चर चलाएं — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), या <code>start-server.sh</code> (Linux) — ऐप को अपने ब्राउज़र में खोलने के लिए। यही कस्टमर स्क्रीन और कैमरा बारकोड स्कैनर को भरोसेमंद बनाता है।</li><li>बिना कस्टमर स्क्रीन वाले एक ही रजिस्टर के लिए, आप सीधे <code>app.html</code> पर डबल-क्लिक भी कर सकते हैं।</li><li>यह बिल्कुल इस वेबसाइट की तरह ही काम करता है, ऑफ़लाइन — वही कार्ट, रसीदें, इन्वेंट्री और भाषाएं।</li><li>डेटा केवल उसी कंप्यूटर पर सेव होता है, कोई क्लाउड सिंक नहीं — सेटिंग्स ← बैकअप से नियमित रूप से बैकअप लें।</li>",
+  offlineModalHowList: "<li>इसे कहीं भी अनज़िप करें, फिर शामिल लॉन्चर चलाएं - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), या <code>start-server.sh</code> (Linux) - ऐप को अपने ब्राउज़र में खोलने के लिए। यही कस्टमर स्क्रीन और कैमरा बारकोड स्कैनर को भरोसेमंद बनाता है।</li><li>बिना कस्टमर स्क्रीन वाले एक ही रजिस्टर के लिए, आप सीधे <code>app.html</code> पर डबल-क्लिक भी कर सकते हैं।</li><li>यह बिल्कुल इस वेबसाइट की तरह ही काम करता है, ऑफ़लाइन - वही कार्ट, रसीदें, इन्वेंट्री और भाषाएं।</li><li>डेटा केवल उसी कंप्यूटर पर सेव होता है, कोई क्लाउड सिंक नहीं - सेटिंग्स ← बैकअप से नियमित रूप से बैकअप लें।</li>",
   offlineModalUpdateTitle: "बाद में अपडेट पाना", offlineModalUpdateText: "जब तक आपका प्रीमियम सक्रिय है, नवीनतम संस्करण पाने के लिए कभी भी वापस आकर फिर से डाउनलोड करें। अपना डेटा ले जाने के लिए: पुरानी कॉपी पर, सेटिंग्स ← बैकअप ← पूर्ण बैकअप डाउनलोड करें पर जाएं, फिर नई कॉपी पर सेटिंग्स ← बैकअप ← बैकअप से पुनर्स्थापित करें का उपयोग करके इसे वापस लोड करें।",
   offlineAgreeLabel: "मैंने ऊपर दी गई जानकारी पढ़ ली है और <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">सेवा की शर्तों</a> से सहमत हूं, जिसमें यह भी शामिल है कि यह सॉफ़्टवेयर बिना किसी वारंटी के \"जैसा है\" के आधार पर प्रदान किया जाता है।",
   offlineCancelBtnLabel: "रद्द करें", offlineConfirmDownloadBtnLabel: "डाउनलोड करें",
@@ -1522,9 +1551,9 @@ es: {
   storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda",
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
-  storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página — solo desaparece si borras los datos del sitio o lo quitas aquí.",
+  storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página - solo desaparece si borras los datos del sitio o lo quitas aquí.",
   cashiersTitle: "Cajeros", cashiersInfo: "Aparecen en el menú de cajero en la parte superior de la pantalla principal. Quien esté seleccionado se imprime en cada recibo y aparece en el panel de Resumen.", cashierLabelText: "Cajero:",
-  receiptNumberInvalid: "Ingresa un número válido.", receiptPrefixLabel: "Prefijo del Número de Recibo", receiptPrefixInfo: "Se combina con el número de arriba — ej. INV- + 000123 se imprime como INV-000123. Hasta 8 caracteres en total, incluyendo guiones o símbolos.",
+  receiptNumberInvalid: "Ingresa un número válido.", receiptPrefixLabel: "Prefijo del Número de Recibo", receiptPrefixInfo: "Se combina con el número de arriba - ej. INV- + 000123 se imprime como INV-000123. Hasta 8 caracteres en total, incluyendo guiones o símbolos.",
   activeCashierPlaceholder: "Ningún cajero seleccionado", summaryByCashierTitle: "Por Cajero", summaryNoCashierLabel: "Ningún cajero seleccionado",
   customerNameLabel: "Nombre del Cliente", customerNamePlaceholder: "Opcional", customerLabelText: "Cliente:",
   summaryButtonLabel: "Resumen", salesSummaryTitle: "Resumen de Ventas", summaryTotalLabel: "Total General",
@@ -1533,7 +1562,7 @@ es: {
   summaryEmptyState: "No hay ventas registradas para esta fecha.", summaryNoMethodLabel: "Sin especificar",
   logoUploadError: "No se pudo cargar esa imagen. Prueba con un archivo PNG o JPG.", logoRemoveConfirm: "¿Quitar el logo de la empresa?", removeLogoConfirmButton: "Haz clic de nuevo para quitarlo",
   documentTitle: "Documento", documentTypeLabel: "Tipo de Documento",
-  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Las funciones con la insignia dorada Premium — Logo de la Empresa, Números de Recibo editables, Prefijo del Número de Recibo, Pantalla del Cliente e Inventario — permanecen visibles pero bloqueadas hasta que actives un código. Ingrésalo abajo para desbloquearlas en este dispositivo.",
+  premiumTabLabel: "Premium", premiumPanelTitle: "Premium", premiumPanelInfo: "Las funciones con la insignia dorada Premium - Logo de la Empresa, Números de Recibo editables, Prefijo del Número de Recibo, Pantalla del Cliente e Inventario - permanecen visibles pero bloqueadas hasta que actives un código. Ingrésalo abajo para desbloquearlas en este dispositivo.",
   premiumActiveLabel: "Premium está activo en este dispositivo.", premiumCodeLabel: "Código Premium", premiumActivateBtn: "Activar", premiumCodeInvalid: "Ese código no es válido. Revísalo e intenta de nuevo.",
   premiumCodeSeatLimit: "Este código alcanzó su límite de dispositivos. Contáctanos para obtener ayuda.", premiumCodeNetworkError: "No se pudo conectar con el servidor de activación. Revisa tu conexión e inténtalo de nuevo.", premiumCodeExpired: "Este código ha expirado.", premiumValidityLabel: "Válido hasta:",
   buyPremiumButtonLabel: "Comprar Código Premium", buyPremiumModalTitle: "Comprar Código Premium", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "Pago único", buyPremiumFeature1: "Sin caducidad", buyPremiumFeature2: "Hasta 5 navegadores activos", buyPremiumFeature3: "No reembolsable", buyPremiumContactText: "Para comprar un código, <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">contáctanos</a> y te ayudaremos.",
@@ -1543,32 +1572,33 @@ es: {
   receiptNumberLockMsgText: "Estas son funciones Premium. Activa un código Premium en Configuración → Premium para editar el número de recibo y el prefijo.",
   inventoryLockMsgText: "Editar el stock y descargar reportes es una función Premium. Activa un código Premium en Configuración → Premium para desbloquearla. Aún puedes explorar tu inventario abajo.",
   customerScreenLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para desbloquear la Pantalla del Cliente.",
-  inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos — agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
+  inventoryUncategorized: "Sin Categoría", inventoryExportEmptyAlert: "Aún no hay productos - agrega algunos primero.", inventoryExportButtonLabel: "Descargar Reporte de Inventario", inventoryValueLabel: "Valor:",
   salesExportFromLabel: "Desde (opcional)", salesExportToLabel: "Hasta (opcional)", salesExportRangeEmptyAlert: "No se encontraron ventas en ese rango de fechas.",
   inventoryShortcutLabel: "Inventario", customerScreenButtonLabel: "Pantalla del Cliente", addProductStockLabel: "Nivel de Stock (opcional)", newProductStockPlaceholder: "Déjalo en blanco para no rastrear el stock",
-  inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer — deja un campo en blanco si no quieres rastrear el stock de ese producto.",
+  inventoryTitle: "Inventario", inventoryInfo: "El stock baja automáticamente cada vez que se vende un artículo. Edita cualquier número abajo para corregirlo o reabastecer - deja un campo en blanco si no quieres rastrear el stock de ese producto.",
   inventoryEmpty: "Aún no hay productos. Agrega algunos desde Configuración → Productos.", inventoryStockLabel: "Stock:", stockLabel: "Stock:", premiumBadgeLabel: "Premium", basicBadgeLabel: "Básico", specialAccessBadge: "Acceso Especial",
-  customerScreenTitle: "Pantalla del Cliente", customerScreenIntro: "Abre este enlace en una segunda ventana, monitor o tableta frente a tu cliente — se actualiza en vivo mientras registras una venta.",
-  copyCustomerScreenUrlBtn: "Copiar", customerScreenCopiedMsg: "¡Copiado!", customerScreenGuideBtnLabel: "Guíame — Cómo Configurarlo", customerScreenGuideTitle: "Configurando la Pantalla del Cliente",
-  guideMethod1Title: "Método 1 — Segundo Monitor", guideMethod2Title: "Método 2 — Tableta o TV (Duplicación de Pantalla)",
-  guideMethod2Note: "Importante: la tableta necesita duplicar la pantalla de esta computadora. Abrir el enlace directamente en el propio navegador de la tableta no mostrará actualizaciones en vivo — solo se sincroniza entre ventanas de esta misma computadora.",
-  guideMethod1List: "<li>Conecta un segundo monitor a esta computadora con un cable.</li><li>Configura tu pantalla en <strong>\"Extender\"</strong>, no \"Duplicar/Reflejar\" — en Windows: Configuración de pantalla → Múltiples pantallas → Extender. En Mac: Pantallas → desmarca Duplicar pantallas.</li><li>Copia el enlace de arriba, ábrelo en una nueva ventana del navegador aquí en esta computadora.</li><li>Arrastra esa ventana al segundo monitor y ponla en pantalla completa.</li><li>Orienta el monitor hacia tu cliente.</li>",
-  guideMethod2List: "<li>Primero, sigue el Método 1 de arriba para abrir la Pantalla del Cliente en su propia ventana aquí en esta computadora.</li><li>Duplica esa ventana en tu tableta o TV — Windows: presiona Win+K, o Configuración → Sistema → Pantalla → \"Conectar a una pantalla inalámbrica.\" Mac: Centro de Control → Duplicar pantalla (AirPlay).</li><li>Pon la ventana duplicada en pantalla completa. Tu tableta o TV ahora mostrará una copia en vivo de ella.</li>",
+  customerScreenTitle: "Pantalla del Cliente", customerScreenIntro: "Abre este enlace en una segunda ventana, monitor o tableta frente a tu cliente - se actualiza en vivo mientras registras una venta.",
+  copyCustomerScreenUrlBtn: "Copiar", customerScreenCopiedMsg: "¡Copiado!", customerScreenGuideBtnLabel: "Guíame - Cómo Configurarlo", customerScreenGuideTitle: "Configurando la Pantalla del Cliente",
+  guideMethod1Title: "Método 1 - Segundo Monitor", guideMethod2Title: "Método 2 - Tableta o TV (Duplicación de Pantalla)",
+  guideMethod2Note: "Importante: la tableta necesita duplicar la pantalla de esta computadora. Abrir el enlace directamente en el propio navegador de la tableta no mostrará actualizaciones en vivo - solo se sincroniza entre ventanas de esta misma computadora.",
+  guideMethod1List: "<li>Conecta un segundo monitor a esta computadora con un cable.</li><li>Configura tu pantalla en <strong>\"Extender\"</strong>, no \"Duplicar/Reflejar\" - en Windows: Configuración de pantalla → Múltiples pantallas → Extender. En Mac: Pantallas → desmarca Duplicar pantallas.</li><li>Copia el enlace de arriba, ábrelo en una nueva ventana del navegador aquí en esta computadora.</li><li>Arrastra esa ventana al segundo monitor y ponla en pantalla completa.</li><li>Orienta el monitor hacia tu cliente.</li>",
+  guideMethod2List: "<li>Primero, sigue el Método 1 de arriba para abrir la Pantalla del Cliente en su propia ventana aquí en esta computadora.</li><li>Duplica esa ventana en tu tableta o TV - Windows: presiona Win+K, o Configuración → Sistema → Pantalla → \"Conectar a una pantalla inalámbrica.\" Mac: Centro de Control → Duplicar pantalla (AirPlay).</li><li>Pon la ventana duplicada en pantalla completa. Tu tableta o TV ahora mostrará una copia en vivo de ella.</li>",
   saleDetailTitle: "Detalles de la Venta", saleDetailReceiptLabel: "N.º de Recibo", saleDetailDateLabel: "Fecha", saleDetailCustomerLabel: "Nombre del Cliente", saleDetailCashierLabel: "Cajero",
-  saleDetailItemsLabel: "Artículos", saleDetailAddItemBtn: "+ Agregar Artículo", saleDetailTaxNameLabel: "Nombre del Impuesto", saleDetailTaxRateLabel: "Tasa de Impuesto (%)", saleDetailDiscountLabel: "Descuento (%)",
+  saleDetailItemsLabel: "Artículos", saleDetailAddItemBtn: "+ Agregar Artículo", saleDetailTaxNameLabel: "Nombre del Impuesto", saleDetailTaxRateLabel: "Tasa de Impuesto (%)", saleDetailDiscountLabel: "Descuento",
   saleDetailPaymentsLabel: "Pagos", saleDetailAddPaymentBtn: "+ Agregar Fila de Pago", saleDetailSubtotalLabel: "Subtotal:", saleDetailDiscountAmtLabel: "Descuento:", saleDetailTaxAmtLabel: "Impuesto:",
   saleDetailGrandLabel: "Total:", saleDetailReceivedLabel: "Recibido:", saleDetailChangeLabel: "Cambio:", saleDetailReprintLabel: "Reimprimir", saleDetailSaveLabel: "Guardar Cambios",
   receipt: "Recibo", invoice: "Factura", payment: "Comprobante de Pago",
-  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento (%)",
+  taxTitle: "Impuesto y Descuento", taxNameLabel: "Nombre del Impuesto", taxRateLabel: "Tasa de Impuesto (%)", discountLabel: "Descuento",
+  discountTypePercentOption: "Porcentaje (%)", discountTypeAmountOption: "Monto Fijo", taxExemptLabel: "Exento de Impuesto", taxExemptTag: "Sin Impuesto",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
-  productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category y SKU, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
+  productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category, SKU, Stock y TaxExempt, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
   barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Agrega un botón de escaneo junto a la búsqueda en la pantalla principal, para añadir artículos por SKU usando la cámara.",
   addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
   addProductPhotoLabel: "Foto (opcional)", productPhotoUploadError: "No se pudo cargar esa imagen. Prueba con otro archivo.", productPhotoChangeTitle: "Haz clic para cambiar la foto", removePhotoLabel: "Quitar",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
   scannerTitle: "Escanear Código de Barras", scannerHint: "Apunta la cámara al código de barras del producto", scannerUnsupported: "El escaneo de códigos de barras no está disponible en este navegador.",
   scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
-  manageProductsEmpty: "Aún no hay productos — agrega uno arriba o sube un CSV abajo.",
+  manageProductsEmpty: "Aún no hay productos - agrega uno arriba o sube un CSV abajo.",
   productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
   productsUploadSuccess: "productos cargados desde el archivo.", inCartLabel: "En el carrito:",
@@ -1579,7 +1609,7 @@ es: {
   currencyTitle: "Moneda", currencyCodeLabel: "Código de Moneda", currencySymbolLabel: "Símbolo de Moneda",
   decimalPlacesLabel: "Decimales", decimalPlacesInfo: "La mayoría de las monedas usan 2 (ej. $0.30). Algunas, como el dinar bahreiní, usan 3 (ej. BD 0.300).",
   languageTitle: "Idioma", languageLabel: "Seleccionar Idioma",
-  backupTitle: "Copia de Seguridad y Restauración", backupInfo: "Todo aquí — productos, historial de ventas, configuración, tu logo, cajeros y métodos de pago — se guarda solo en este navegador. Descarga una copia de seguridad completa regularmente, especialmente antes de borrar los datos del navegador o cambiar de dispositivo.",
+  backupTitle: "Copia de Seguridad y Restauración", backupInfo: "Todo aquí - productos, historial de ventas, configuración, tu logo, cajeros y métodos de pago - se guarda solo en este navegador. Descarga una copia de seguridad completa regularmente, especialmente antes de borrar los datos del navegador o cambiar de dispositivo.",
   restoreBackupLabel: "Restaurar desde Copia de Seguridad", restoreInfo: "Esto reemplaza todo lo guardado actualmente con el contenido del archivo de copia de seguridad. La página se recargará después de restaurar.",
   backupNoticeText: "Tus datos se guardan solo en este navegador. Descarga una copia de seguridad regularmente para no perder nada si se borra la caché.", backupNoticeButton: "Descargar Copia de Seguridad",
   premiumPromoNoticeText: "Activa tu Premium Gratis Ahora",
@@ -1591,10 +1621,10 @@ es: {
   receiptNo: "N.º de Recibo:", date: "Fecha:",
   thankYou: "¡Gracias por su compra!", comeAgain: "Vuelva pronto.",
   removeButton: "Eliminar",
-  offlineDownloadLabel: "Versión sin Conexión", offlineDownloadInfo: "Obtén una copia completa de la app que funciona sin conexión a internet — ideal para una computadora de la tienda sin conexión, o como instalación de respaldo. Todo funciona igual, incluida la Pantalla del Cliente.",
+  offlineDownloadLabel: "Versión sin Conexión", offlineDownloadInfo: "Obtén una copia completa de la app que funciona sin conexión a internet - ideal para una computadora de la tienda sin conexión, o como instalación de respaldo. Todo funciona igual, incluida la Pantalla del Cliente.",
   offlineDownloadButtonLabel: "Descargar POS sin Conexión", offlineLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para descargar la versión sin conexión.",
   offlineModalTitle: "Antes de Descargar", offlineModalHowTitle: "Cómo funciona la versión sin conexión",
-  offlineModalHowList: "<li>Descomprímelo donde quieras y luego ejecuta el lanzador incluido — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) — para abrir la app en tu navegador. Esto es lo que hace que la Pantalla del Cliente y el escáner de código de barras funcionen de forma confiable.</li><li>Para una sola caja sin Pantalla del Cliente, también puedes simplemente hacer doble clic en <code>app.html</code> directamente.</li><li>Funciona exactamente igual que este sitio web, sin conexión — mismo carrito, recibos, inventario e idiomas.</li><li>Los datos se guardan solo en esa computadora, sin sincronización en la nube — haz copias de seguridad regularmente desde Configuración → Copia de Seguridad.</li>",
+  offlineModalHowList: "<li>Descomprímelo donde quieras y luego ejecuta el lanzador incluido - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para abrir la app en tu navegador. Esto es lo que hace que la Pantalla del Cliente y el escáner de código de barras funcionen de forma confiable.</li><li>Para una sola caja sin Pantalla del Cliente, también puedes simplemente hacer doble clic en <code>app.html</code> directamente.</li><li>Funciona exactamente igual que este sitio web, sin conexión - mismo carrito, recibos, inventario e idiomas.</li><li>Los datos se guardan solo en esa computadora, sin sincronización en la nube - haz copias de seguridad regularmente desde Configuración → Copia de Seguridad.</li>",
   offlineModalUpdateTitle: "Obtener actualizaciones más adelante", offlineModalUpdateText: "Vuelve y descarga de nuevo cuando quieras mientras tu Premium esté activo para obtener la última versión. Para trasladar tus datos: en la copia antigua, ve a Configuración → Copia de Seguridad → Descargar Copia de Seguridad Completa, y luego en la copia nueva usa Configuración → Copia de Seguridad → Restaurar desde Copia de Seguridad para cargarlos de nuevo.",
   offlineAgreeLabel: "He leído lo anterior y acepto los <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Términos de Servicio</a>, incluido que este software se proporciona \"tal cual\" sin garantía.",
   offlineCancelBtnLabel: "Cancelar", offlineConfirmDownloadBtnLabel: "Descargar",
@@ -1609,9 +1639,9 @@ th: {
   storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า",
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
-  storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า — จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
+  storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า - จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
   cashiersTitle: "แคชเชียร์", cashiersInfo: "รายชื่อนี้จะแสดงในเมนูแคชเชียร์ด้านบนของหน้าหลัก ผู้ที่ถูกเลือกจะถูกพิมพ์บนใบเสร็จทุกใบและแสดงในแผงสรุปยอด", cashierLabelText: "แคชเชียร์:",
-  receiptNumberInvalid: "กรุณากรอกตัวเลขที่ถูกต้อง", receiptPrefixLabel: "คำนำหน้าเลขที่ใบเสร็จ", receiptPrefixInfo: "รวมกับตัวเลขด้านบน — เช่น INV- + 000123 จะพิมพ์เป็น INV-000123 สูงสุด 8 ตัวอักษรรวมกัน รวมถึงขีดหรือสัญลักษณ์ใดๆ",
+  receiptNumberInvalid: "กรุณากรอกตัวเลขที่ถูกต้อง", receiptPrefixLabel: "คำนำหน้าเลขที่ใบเสร็จ", receiptPrefixInfo: "รวมกับตัวเลขด้านบน - เช่น INV- + 000123 จะพิมพ์เป็น INV-000123 สูงสุด 8 ตัวอักษรรวมกัน รวมถึงขีดหรือสัญลักษณ์ใดๆ",
   activeCashierPlaceholder: "ยังไม่ได้เลือกแคชเชียร์", summaryByCashierTitle: "แยกตามแคชเชียร์", summaryNoCashierLabel: "ยังไม่ได้เลือกแคชเชียร์",
   customerNameLabel: "ชื่อลูกค้า", customerNamePlaceholder: "ไม่บังคับ", customerLabelText: "ลูกค้า:",
   summaryButtonLabel: "สรุปยอด", salesSummaryTitle: "สรุปยอดขาย", summaryTotalLabel: "ยอดรวมทั้งหมด",
@@ -1620,7 +1650,7 @@ th: {
   summaryEmptyState: "ไม่มีรายการขายในวันที่นี้", summaryNoMethodLabel: "ไม่ระบุ",
   logoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองใช้ไฟล์ PNG หรือ JPG", logoRemoveConfirm: "ต้องการลบโลโก้บริษัทหรือไม่?", removeLogoConfirmButton: "แตะอีกครั้งเพื่อลบ",
   documentTitle: "เอกสาร", documentTypeLabel: "ประเภทเอกสาร",
-  premiumTabLabel: "พรีเมียม", premiumPanelTitle: "พรีเมียม", premiumPanelInfo: "ฟีเจอร์ที่มีป้ายพรีเมียมสีทอง — โลโก้บริษัท เลขที่ใบเสร็จที่แก้ไขได้ คำนำหน้าเลขที่ใบเสร็จ หน้าจอลูกค้า และคลังสินค้า — จะยังคงมองเห็นได้แต่ถูกล็อกไว้จนกว่าคุณจะเปิดใช้งานรหัส กรอกรหัสด้านล่างเพื่อปลดล็อกบนอุปกรณ์นี้",
+  premiumTabLabel: "พรีเมียม", premiumPanelTitle: "พรีเมียม", premiumPanelInfo: "ฟีเจอร์ที่มีป้ายพรีเมียมสีทอง - โลโก้บริษัท เลขที่ใบเสร็จที่แก้ไขได้ คำนำหน้าเลขที่ใบเสร็จ หน้าจอลูกค้า และคลังสินค้า - จะยังคงมองเห็นได้แต่ถูกล็อกไว้จนกว่าคุณจะเปิดใช้งานรหัส กรอกรหัสด้านล่างเพื่อปลดล็อกบนอุปกรณ์นี้",
   premiumActiveLabel: "พรีเมียมเปิดใช้งานอยู่บนอุปกรณ์นี้", premiumCodeLabel: "รหัสพรีเมียม", premiumActivateBtn: "เปิดใช้งาน", premiumCodeInvalid: "รหัสนั้นไม่ถูกต้อง ตรวจสอบแล้วลองอีกครั้ง",
   premiumCodeSeatLimit: "รหัสนี้ถึงขีดจำกัดจำนวนอุปกรณ์แล้ว ติดต่อเราเพื่อขอความช่วยเหลือ", premiumCodeNetworkError: "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์เปิดใช้งานได้ ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง", premiumCodeExpired: "รหัสนี้หมดอายุแล้ว", premiumValidityLabel: "ใช้ได้ถึง:",
   buyPremiumButtonLabel: "ซื้อรหัสพรีเมียม", buyPremiumModalTitle: "ซื้อรหัสพรีเมียม", buyPremiumPrice: "$9.99 USD", buyPremiumPriceNote: "ชำระเงินครั้งเดียว", buyPremiumFeature1: "ไม่มีวันหมดอายุ", buyPremiumFeature2: "ใช้ได้สูงสุด 5 เบราว์เซอร์ที่ใช้งานอยู่", buyPremiumFeature3: "ไม่สามารถขอคืนเงินได้", buyPremiumContactText: "หากต้องการซื้อรหัส <a href=\"contact.html\" target=\"_blank\" rel=\"noopener\">ติดต่อเรา</a> แล้วเราจะช่วยตั้งค่าให้คุณ",
@@ -1630,32 +1660,33 @@ th: {
   receiptNumberLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อแก้ไขเลขที่ใบเสร็จและคำนำหน้า",
   inventoryLockMsgText: "การแก้ไขสต็อกและการดาวน์โหลดรายงานเป็นฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อก คุณยังสามารถเรียกดูคลังสินค้าของคุณด้านล่างได้",
   customerScreenLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อปลดล็อกหน้าจอลูกค้า",
-  inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า — เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
+  inventoryUncategorized: "ไม่มีหมวดหมู่", inventoryExportEmptyAlert: "ยังไม่มีสินค้า - เพิ่มสินค้าก่อน", inventoryExportButtonLabel: "ดาวน์โหลดรายงานคลังสินค้า", inventoryValueLabel: "มูลค่า:",
   salesExportFromLabel: "จาก (ไม่บังคับ)", salesExportToLabel: "ถึง (ไม่บังคับ)", salesExportRangeEmptyAlert: "ไม่พบยอดขายในช่วงวันที่นั้น",
   inventoryShortcutLabel: "คลังสินค้า", customerScreenButtonLabel: "หน้าจอลูกค้า", addProductStockLabel: "ระดับสต็อก (ไม่บังคับ)", newProductStockPlaceholder: "เว้นว่างไว้หากไม่ต้องการติดตามสต็อก",
-  inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก — เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
+  inventoryTitle: "คลังสินค้า", inventoryInfo: "สต็อกจะลดลงอัตโนมัติทุกครั้งที่มีการขายสินค้า แก้ไขตัวเลขด้านล่างเพื่อแก้ไขหรือเติมสต็อก - เว้นช่องว่างไว้หากไม่ต้องการติดตามสต็อกของสินค้านั้น",
   inventoryEmpty: "ยังไม่มีสินค้า เพิ่มได้จากการตั้งค่า ← สินค้า", inventoryStockLabel: "สต็อก:", stockLabel: "สต็อก:", premiumBadgeLabel: "พรีเมียม", basicBadgeLabel: "พื้นฐาน", specialAccessBadge: "สิทธิ์พิเศษ",
-  customerScreenTitle: "หน้าจอลูกค้า", customerScreenIntro: "เปิดลิงก์นี้ในหน้าต่างที่สอง จอมอนิเตอร์ หรือแท็บเล็ตที่หันหน้าเข้าหาลูกค้า — จะอัปเดตแบบเรียลไทม์ขณะที่คุณคิดเงิน",
-  copyCustomerScreenUrlBtn: "คัดลอก", customerScreenCopiedMsg: "คัดลอกแล้ว!", customerScreenGuideBtnLabel: "แนะนำฉัน — วิธีตั้งค่า", customerScreenGuideTitle: "การตั้งค่าหน้าจอลูกค้า",
-  guideMethod1Title: "วิธีที่ 1 — จอมอนิเตอร์ที่สอง", guideMethod2Title: "วิธีที่ 2 — แท็บเล็ตหรือทีวี (การสะท้อนหน้าจอ)",
-  guideMethod2Note: "สำคัญ: แท็บเล็ตต้องสะท้อนหน้าจอของคอมพิวเตอร์เครื่องนี้ การเปิดลิงก์โดยตรงในเบราว์เซอร์ของแท็บเล็ตเองจะไม่แสดงการอัปเดตแบบเรียลไทม์ — มันจะซิงค์ระหว่างหน้าต่างบนคอมพิวเตอร์เครื่องนี้เท่านั้น",
-  guideMethod1List: "<li>เชื่อมต่อจอมอนิเตอร์ที่สองเข้ากับคอมพิวเตอร์เครื่องนี้ด้วยสายเคเบิล</li><li>ตั้งค่าจอแสดงผลของคุณเป็น <strong>\"ขยาย (Extend)\"</strong> ไม่ใช่ \"ทำซ้ำ/สะท้อน\" — บน Windows: การตั้งค่าจอแสดงผล → หลายจอแสดงผล → ขยาย บน Mac: จอแสดงผล → ยกเลิกการเลือก Mirror Displays</li><li>คัดลอกลิงก์ด้านบน เปิดในหน้าต่างเบราว์เซอร์ใหม่ที่นี่บนคอมพิวเตอร์เครื่องนี้</li><li>ลากหน้าต่างนั้นไปยังจอมอนิเตอร์ที่สองแล้วทำให้เต็มหน้าจอ</li><li>หันจอมอนิเตอร์ให้หันหน้าเข้าหาลูกค้าของคุณ</li>",
-  guideMethod2List: "<li>ก่อนอื่น ทำตามวิธีที่ 1 ด้านบนเพื่อเปิดหน้าจอลูกค้าในหน้าต่างของตัวเองที่นี่บนคอมพิวเตอร์เครื่องนี้</li><li>สะท้อนหน้าต่างนั้นไปยังแท็บเล็ตหรือทีวีของคุณ — Windows: กด Win+K หรือการตั้งค่า → ระบบ → จอแสดงผล → \"เชื่อมต่อกับจอแสดงผลไร้สาย\" Mac: ศูนย์ควบคุม → การสะท้อนหน้าจอ (AirPlay)</li><li>ทำให้หน้าต่างที่สะท้อนเต็มหน้าจอ แท็บเล็ตหรือทีวีของคุณจะแสดงสำเนาแบบเรียลไทม์ของมันทันที</li>",
+  customerScreenTitle: "หน้าจอลูกค้า", customerScreenIntro: "เปิดลิงก์นี้ในหน้าต่างที่สอง จอมอนิเตอร์ หรือแท็บเล็ตที่หันหน้าเข้าหาลูกค้า - จะอัปเดตแบบเรียลไทม์ขณะที่คุณคิดเงิน",
+  copyCustomerScreenUrlBtn: "คัดลอก", customerScreenCopiedMsg: "คัดลอกแล้ว!", customerScreenGuideBtnLabel: "แนะนำฉัน - วิธีตั้งค่า", customerScreenGuideTitle: "การตั้งค่าหน้าจอลูกค้า",
+  guideMethod1Title: "วิธีที่ 1 - จอมอนิเตอร์ที่สอง", guideMethod2Title: "วิธีที่ 2 - แท็บเล็ตหรือทีวี (การสะท้อนหน้าจอ)",
+  guideMethod2Note: "สำคัญ: แท็บเล็ตต้องสะท้อนหน้าจอของคอมพิวเตอร์เครื่องนี้ การเปิดลิงก์โดยตรงในเบราว์เซอร์ของแท็บเล็ตเองจะไม่แสดงการอัปเดตแบบเรียลไทม์ - มันจะซิงค์ระหว่างหน้าต่างบนคอมพิวเตอร์เครื่องนี้เท่านั้น",
+  guideMethod1List: "<li>เชื่อมต่อจอมอนิเตอร์ที่สองเข้ากับคอมพิวเตอร์เครื่องนี้ด้วยสายเคเบิล</li><li>ตั้งค่าจอแสดงผลของคุณเป็น <strong>\"ขยาย (Extend)\"</strong> ไม่ใช่ \"ทำซ้ำ/สะท้อน\" - บน Windows: การตั้งค่าจอแสดงผล → หลายจอแสดงผล → ขยาย บน Mac: จอแสดงผล → ยกเลิกการเลือก Mirror Displays</li><li>คัดลอกลิงก์ด้านบน เปิดในหน้าต่างเบราว์เซอร์ใหม่ที่นี่บนคอมพิวเตอร์เครื่องนี้</li><li>ลากหน้าต่างนั้นไปยังจอมอนิเตอร์ที่สองแล้วทำให้เต็มหน้าจอ</li><li>หันจอมอนิเตอร์ให้หันหน้าเข้าหาลูกค้าของคุณ</li>",
+  guideMethod2List: "<li>ก่อนอื่น ทำตามวิธีที่ 1 ด้านบนเพื่อเปิดหน้าจอลูกค้าในหน้าต่างของตัวเองที่นี่บนคอมพิวเตอร์เครื่องนี้</li><li>สะท้อนหน้าต่างนั้นไปยังแท็บเล็ตหรือทีวีของคุณ - Windows: กด Win+K หรือการตั้งค่า → ระบบ → จอแสดงผล → \"เชื่อมต่อกับจอแสดงผลไร้สาย\" Mac: ศูนย์ควบคุม → การสะท้อนหน้าจอ (AirPlay)</li><li>ทำให้หน้าต่างที่สะท้อนเต็มหน้าจอ แท็บเล็ตหรือทีวีของคุณจะแสดงสำเนาแบบเรียลไทม์ของมันทันที</li>",
   saleDetailTitle: "รายละเอียดการขาย", saleDetailReceiptLabel: "เลขที่ใบเสร็จ", saleDetailDateLabel: "วันที่", saleDetailCustomerLabel: "ชื่อลูกค้า", saleDetailCashierLabel: "แคชเชียร์",
-  saleDetailItemsLabel: "รายการสินค้า", saleDetailAddItemBtn: "+ เพิ่มรายการ", saleDetailTaxNameLabel: "ชื่อภาษี", saleDetailTaxRateLabel: "อัตราภาษี (%)", saleDetailDiscountLabel: "ส่วนลด (%)",
+  saleDetailItemsLabel: "รายการสินค้า", saleDetailAddItemBtn: "+ เพิ่มรายการ", saleDetailTaxNameLabel: "ชื่อภาษี", saleDetailTaxRateLabel: "อัตราภาษี (%)", saleDetailDiscountLabel: "ส่วนลด",
   saleDetailPaymentsLabel: "การชำระเงิน", saleDetailAddPaymentBtn: "+ เพิ่มแถวการชำระเงิน", saleDetailSubtotalLabel: "ยอดรวมย่อย:", saleDetailDiscountAmtLabel: "ส่วนลด:", saleDetailTaxAmtLabel: "ภาษี:",
   saleDetailGrandLabel: "รวม:", saleDetailReceivedLabel: "รับเงิน:", saleDetailChangeLabel: "เงินทอน:", saleDetailReprintLabel: "พิมพ์ซ้ำ", saleDetailSaveLabel: "บันทึกการเปลี่ยนแปลง",
   receipt: "ใบเสร็จ", invoice: "ใบแจ้งหนี้", payment: "ใบรับเงิน",
-  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด (%)",
+  taxTitle: "ภาษีและส่วนลด", taxNameLabel: "ชื่อภาษี", taxRateLabel: "อัตราภาษี (%)", discountLabel: "ส่วนลด",
+  discountTypePercentOption: "เปอร์เซ็นต์ (%)", discountTypeAmountOption: "จำนวนเงินคงที่", taxExemptLabel: "ยกเว้นภาษี", taxExemptTag: "ไม่มีภาษี",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
-  productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category กับ SKU ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
+  productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category, SKU, Stock กับ TaxExempt ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
   barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เพิ่มปุ่มสแกนข้างช่องค้นหาในหน้าหลัก เพื่อเพิ่มสินค้าโดยใช้ SKU ผ่านกล้อง",
   addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
   addProductPhotoLabel: "รูปภาพ (ไม่บังคับ)", productPhotoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองไฟล์อื่น", productPhotoChangeTitle: "คลิกเพื่อเปลี่ยนรูปภาพ", removePhotoLabel: "ลบ",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
   scannerTitle: "สแกนบาร์โค้ด", scannerHint: "เล็งกล้องไปที่บาร์โค้ดของสินค้า", scannerUnsupported: "การสแกนบาร์โค้ดไม่รองรับในเบราว์เซอร์นี้",
   scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
-  manageProductsEmpty: "ยังไม่มีสินค้า — เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
+  manageProductsEmpty: "ยังไม่มีสินค้า - เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
   productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
   productsUploadSuccess: "รายการสินค้าที่โหลดจากไฟล์", inCartLabel: "ในตะกร้า:",
@@ -1666,7 +1697,7 @@ th: {
   currencyTitle: "สกุลเงิน", currencyCodeLabel: "รหัสสกุลเงิน", currencySymbolLabel: "สัญลักษณ์สกุลเงิน",
   decimalPlacesLabel: "จำนวนทศนิยม", decimalPlacesInfo: "สกุลเงินส่วนใหญ่ใช้ 2 ตำแหน่ง (เช่น $0.30) บางสกุล เช่น ดีนาร์บาห์เรน ใช้ 3 ตำแหน่ง (เช่น BD 0.300)",
   languageTitle: "ภาษา", languageLabel: "เลือกภาษา",
-  backupTitle: "สำรองข้อมูลและกู้คืน", backupInfo: "ทุกอย่างที่นี่ — สินค้า ประวัติการขาย การตั้งค่า โลโก้ของคุณ แคชเชียร์ และวิธีการชำระเงิน — ถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองแบบเต็มเป็นประจำ โดยเฉพาะก่อนล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนอุปกรณ์",
+  backupTitle: "สำรองข้อมูลและกู้คืน", backupInfo: "ทุกอย่างที่นี่ - สินค้า ประวัติการขาย การตั้งค่า โลโก้ของคุณ แคชเชียร์ และวิธีการชำระเงิน - ถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองแบบเต็มเป็นประจำ โดยเฉพาะก่อนล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนอุปกรณ์",
   restoreBackupLabel: "กู้คืนจากไฟล์สำรอง", restoreInfo: "การดำเนินการนี้จะแทนที่ทุกอย่างที่บันทึกไว้ในปัจจุบันด้วยเนื้อหาในไฟล์สำรอง หน้าเว็บจะโหลดใหม่หลังจากกู้คืน",
   backupNoticeText: "ข้อมูลของคุณถูกบันทึกไว้ในเบราว์เซอร์นี้เท่านั้น ดาวน์โหลดข้อมูลสำรองเป็นประจำเพื่อไม่ให้ข้อมูลสูญหายหากแคชถูกล้าง", backupNoticeButton: "ดาวน์โหลดข้อมูลสำรอง",
   premiumPromoNoticeText: "เปิดใช้งานพรีเมียมฟรีของคุณตอนนี้",
@@ -1678,10 +1709,10 @@ th: {
   receiptNo: "เลขที่ใบเสร็จ:", date: "วันที่:",
   thankYou: "ขอบคุณที่ใช้บริการ!", comeAgain: "แล้วพบกันใหม่",
   removeButton: "ลบ",
-  offlineDownloadLabel: "เวอร์ชันออฟไลน์", offlineDownloadInfo: "รับแอปฉบับเต็มที่ทำงานได้โดยไม่ต้องใช้อินเทอร์เน็ตเลย — เหมาะสำหรับคอมพิวเตอร์ร้านค้าที่ออฟไลน์ หรือเป็นการติดตั้งสำรอง ทุกอย่างทำงานเหมือนเดิม รวมถึงหน้าจอลูกค้า",
+  offlineDownloadLabel: "เวอร์ชันออฟไลน์", offlineDownloadInfo: "รับแอปฉบับเต็มที่ทำงานได้โดยไม่ต้องใช้อินเทอร์เน็ตเลย - เหมาะสำหรับคอมพิวเตอร์ร้านค้าที่ออฟไลน์ หรือเป็นการติดตั้งสำรอง ทุกอย่างทำงานเหมือนเดิม รวมถึงหน้าจอลูกค้า",
   offlineDownloadButtonLabel: "ดาวน์โหลด POS ออฟไลน์", offlineLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อดาวน์โหลดเวอร์ชันออฟไลน์",
   offlineModalTitle: "ก่อนดาวน์โหลด", offlineModalHowTitle: "เวอร์ชันออฟไลน์ทำงานอย่างไร",
-  offlineModalHowList: "<li>แตกไฟล์ zip ที่ไหนก็ได้ แล้วรันตัวเปิดที่แนบมา — <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac) หรือ <code>start-server.sh</code> (Linux) — เพื่อเปิดแอปในเบราว์เซอร์ของคุณ นี่คือสิ่งที่ทำให้หน้าจอลูกค้าและเครื่องสแกนบาร์โค้ดด้วยกล้องทำงานได้อย่างน่าเชื่อถือ</li><li>สำหรับเครื่องคิดเงินเครื่องเดียวที่ไม่มีหน้าจอลูกค้า คุณสามารถดับเบิลคลิก <code>app.html</code> โดยตรงได้เช่นกัน</li><li>ทำงานเหมือนกับเว็บไซต์นี้ทุกประการแบบออฟไลน์ — ตะกร้าสินค้า ใบเสร็จ สินค้าคงคลัง และภาษาเดียวกัน</li><li>ข้อมูลถูกบันทึกไว้ที่คอมพิวเตอร์เครื่องนั้นเท่านั้น ไม่มีการซิงค์บนคลาวด์ — สำรองข้อมูลเป็นประจำจากการตั้งค่า ← สำรองข้อมูล</li>",
+  offlineModalHowList: "<li>แตกไฟล์ zip ที่ไหนก็ได้ แล้วรันตัวเปิดที่แนบมา - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac) หรือ <code>start-server.sh</code> (Linux) - เพื่อเปิดแอปในเบราว์เซอร์ของคุณ นี่คือสิ่งที่ทำให้หน้าจอลูกค้าและเครื่องสแกนบาร์โค้ดด้วยกล้องทำงานได้อย่างน่าเชื่อถือ</li><li>สำหรับเครื่องคิดเงินเครื่องเดียวที่ไม่มีหน้าจอลูกค้า คุณสามารถดับเบิลคลิก <code>app.html</code> โดยตรงได้เช่นกัน</li><li>ทำงานเหมือนกับเว็บไซต์นี้ทุกประการแบบออฟไลน์ - ตะกร้าสินค้า ใบเสร็จ สินค้าคงคลัง และภาษาเดียวกัน</li><li>ข้อมูลถูกบันทึกไว้ที่คอมพิวเตอร์เครื่องนั้นเท่านั้น ไม่มีการซิงค์บนคลาวด์ - สำรองข้อมูลเป็นประจำจากการตั้งค่า ← สำรองข้อมูล</li>",
   offlineModalUpdateTitle: "รับการอัปเดตในภายหลัง", offlineModalUpdateText: "กลับมาดาวน์โหลดใหม่ได้ทุกเมื่อตราบใดที่พรีเมียมของคุณยังใช้งานอยู่ เพื่อรับเวอร์ชันล่าสุด หากต้องการย้ายข้อมูล: บนสำเนาเก่า ไปที่การตั้งค่า ← สำรองข้อมูล ← ดาวน์โหลดข้อมูลสำรองฉบับเต็ม จากนั้นบนสำเนาใหม่ใช้การตั้งค่า ← สำรองข้อมูล ← กู้คืนจากไฟล์สำรอง เพื่อโหลดกลับเข้าไป",
   offlineAgreeLabel: "ฉันได้อ่านข้อมูลข้างต้นแล้วและยอมรับ<a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">ข้อกำหนดในการให้บริการ</a> รวมถึงการที่ซอฟต์แวร์นี้ให้บริการ \"ตามสภาพ\" โดยไม่มีการรับประกัน",
   offlineCancelBtnLabel: "ยกเลิก", offlineConfirmDownloadBtnLabel: "ดาวน์โหลด",
@@ -1858,7 +1889,7 @@ async function saveSettings() {
   const settings = {
     currencyCode: val("currencyCode"), currencySymbol: val("currencySymbol"), decimalPlaces: val("decimalPlaces"),
     storeName: val("storeName"), storeDetails: val("storeDetails"),
-    taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"),
+    taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"), discountType: val("discountType"),
     footer1: val("footer1"), footer2: val("footer2"),
     language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
     zoomRange: val("zoomRange"), documentType: val("documentType"),
@@ -2511,6 +2542,7 @@ async function saveCurrentSaleToHistory() {
     currencySymbol: symbolNow(),
     taxName: val("taxName").trim() || tr("tax"),
     taxRate: Number(val("taxRate")) || 0,
+    discountType: val("discountType") || "percent",
     discountRate: Number(val("discountRate")) || 0,
     subtotal: totals.subtotal,
     discount: totals.discount,
@@ -2522,7 +2554,7 @@ async function saveCurrentSaleToHistory() {
     change: Math.max(0, totalEntered() - totals.grandTotal),
     itemCount: cartTotalCount(),
     items: cart.map(function(c) {
-      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0) };
+      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0), taxExempt: !!c.taxExempt };
     })
   };
 
@@ -2748,7 +2780,7 @@ function openSaleDetail(receiptNumber) {
   const record = salesHistory.find(function(s) { return s.receiptNumber === receiptNumber; });
   if (!record) return;
   editingSaleRecord = record;
-  saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price }; });
+  saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price, taxExempt: !!it.taxExempt }; });
   saleDetailPayments = (record.payments && record.payments.length)
     ? record.payments.map(function(p) { return { method: p.method, amount: p.amount }; })
     : [{ method: record.paymentMethod || (paymentMethods[0] || ""), amount: record.amountReceived || 0 }];
@@ -2773,6 +2805,7 @@ function openSaleDetail(receiptNumber) {
 
   document.getElementById("saleDetailTaxName").value = record.taxName || tr("tax");
   document.getElementById("saleDetailTaxRate").value = record.taxRate || 0;
+  document.getElementById("saleDetailDiscountType").value = record.discountType || "percent";
   document.getElementById("saleDetailDiscountRate").value = record.discountRate || 0;
 
   renderSaleDetailItems();
@@ -2798,10 +2831,14 @@ function renderSaleDetailItems() {
       "<input class=\"sdi-name\" type=\"text\" value=\"" + escapeAttr(it.name) + "\" placeholder=\"Item name\" style=\"flex:2;\">" +
       "<input class=\"sdi-qty\" type=\"number\" min=\"0\" step=\"1\" value=\"" + it.qty + "\" style=\"flex:0.6;\">" +
       "<input class=\"sdi-price\" type=\"number\" min=\"0\" step=\"0.01\" value=\"" + it.price + "\" style=\"flex:0.8;\">" +
+      "<label style=\"display:flex; align-items:center; gap:3px; font-size:11px; color:var(--ink-soft); white-space:nowrap; flex:0 0 auto;\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
+        "<input class=\"sdi-tax-exempt\" type=\"checkbox\"" + (it.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
+      "</label>" +
       "<button type=\"button\" class=\"payment-row-remove\">×</button>";
     row.querySelector(".sdi-name").addEventListener("input", function() { it.name = this.value; });
     row.querySelector(".sdi-qty").addEventListener("input", function() { it.qty = Number(this.value) || 0; recomputeSaleDetailTotals(); });
     row.querySelector(".sdi-price").addEventListener("input", function() { it.price = Number(this.value) || 0; recomputeSaleDetailTotals(); });
+    row.querySelector(".sdi-tax-exempt").addEventListener("change", function() { it.taxExempt = this.checked; recomputeSaleDetailTotals(); });
     row.querySelector(".payment-row-remove").addEventListener("click", function() {
       saleDetailItems.splice(index, 1);
       renderSaleDetailItems();
@@ -2811,7 +2848,7 @@ function renderSaleDetailItems() {
   });
 }
 function addSaleDetailItem() {
-  saleDetailItems.push({ name: "", qty: 1, price: 0 });
+  saleDetailItems.push({ name: "", qty: 1, price: 0, taxExempt: false });
   renderSaleDetailItems();
   recomputeSaleDetailTotals();
 }
@@ -2850,39 +2887,32 @@ function recomputeSaleDetailTotals() {
   const symbol = editingSaleRecord ? (editingSaleRecord.currencySymbol || symbolNow()) : symbolNow();
   const d = editingSaleRecord && typeof editingSaleRecord.decimalPlaces === "number" ? editingSaleRecord.decimalPlaces : decimalsNow();
 
-  let subtotal = 0;
-  saleDetailItems.forEach(function(it) { subtotal += (Number(it.qty) || 0) * (Number(it.price) || 0); });
-  const discountRate = Number(document.getElementById("saleDetailDiscountRate").value) || 0;
+  const discountType = document.getElementById("saleDetailDiscountType").value || "percent";
+  const discountValue = Number(document.getElementById("saleDetailDiscountRate").value) || 0;
   const taxRate = Number(document.getElementById("saleDetailTaxRate").value) || 0;
-  const discount = subtotal * discountRate / 100;
-  const afterDiscount = subtotal - discount;
-  const tax = afterDiscount * taxRate / 100;
-  const grandTotal = afterDiscount + tax;
+  const totals = computeTotalsFromItems(saleDetailItems, taxRate, discountType, discountValue);
   const received = saleDetailPayments.reduce(function(sum, p) { return sum + (Number(p.amount) || 0); }, 0);
-  const change = Math.max(0, received - grandTotal);
+  const change = Math.max(0, received - totals.grandTotal);
 
-  document.getElementById("saleDetailSubtotalValue").textContent = symbol + " " + subtotal.toFixed(d);
-  document.getElementById("saleDetailDiscountAmtValue").textContent = symbol + " " + discount.toFixed(d);
-  document.getElementById("saleDetailTaxAmtValue").textContent = symbol + " " + tax.toFixed(d);
-  document.getElementById("saleDetailGrandValue").textContent = symbol + " " + grandTotal.toFixed(d);
+  document.getElementById("saleDetailSubtotalValue").textContent = symbol + " " + totals.subtotal.toFixed(d);
+  document.getElementById("saleDetailDiscountAmtValue").textContent = symbol + " " + totals.discount.toFixed(d);
+  document.getElementById("saleDetailTaxAmtValue").textContent = symbol + " " + totals.tax.toFixed(d);
+  document.getElementById("saleDetailGrandValue").textContent = symbol + " " + totals.grandTotal.toFixed(d);
   document.getElementById("saleDetailReceivedValue").textContent = symbol + " " + received.toFixed(d);
   document.getElementById("saleDetailChangeValue").textContent = symbol + " " + change.toFixed(d);
 }
 
 async function saveSaleDetailEdits() {
   if (!editingSaleRecord) return;
-  const subtotal = saleDetailItems.reduce(function(sum, it) { return sum + (Number(it.qty) || 0) * (Number(it.price) || 0); }, 0);
-  const discountRate = Number(document.getElementById("saleDetailDiscountRate").value) || 0;
+  const discountType = document.getElementById("saleDetailDiscountType").value || "percent";
+  const discountValue = Number(document.getElementById("saleDetailDiscountRate").value) || 0;
   const taxRate = Number(document.getElementById("saleDetailTaxRate").value) || 0;
-  const discount = subtotal * discountRate / 100;
-  const afterDiscount = subtotal - discount;
-  const tax = afterDiscount * taxRate / 100;
-  const grandTotal = afterDiscount + tax;
+  const totals = computeTotalsFromItems(saleDetailItems, taxRate, discountType, discountValue);
   const received = saleDetailPayments.reduce(function(sum, p) { return sum + (Number(p.amount) || 0); }, 0);
-  const change = Math.max(0, received - grandTotal);
+  const change = Math.max(0, received - totals.grandTotal);
 
   const cleanItems = saleDetailItems.filter(function(it) { return it.name.trim() !== ""; }).map(function(it) {
-    return { name: it.name.trim(), qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0) };
+    return { name: it.name.trim(), qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0), taxExempt: !!it.taxExempt };
   });
   const cleanPayments = saleDetailPayments.filter(function(p) { return Number(p.amount) > 0; }).map(function(p) {
     return { method: p.method, amount: Number(p.amount) || 0 };
@@ -2892,13 +2922,14 @@ async function saveSaleDetailEdits() {
   editingSaleRecord.cashierName = document.getElementById("saleDetailCashier").value;
   editingSaleRecord.taxName = document.getElementById("saleDetailTaxName").value.trim() || tr("tax");
   editingSaleRecord.taxRate = taxRate;
-  editingSaleRecord.discountRate = discountRate;
+  editingSaleRecord.discountType = discountType;
+  editingSaleRecord.discountRate = discountValue;
   editingSaleRecord.items = cleanItems;
   editingSaleRecord.itemCount = cleanItems.reduce(function(sum, it) { return sum + it.qty; }, 0);
-  editingSaleRecord.subtotal = subtotal;
-  editingSaleRecord.discount = discount;
-  editingSaleRecord.tax = tax;
-  editingSaleRecord.grandTotal = grandTotal;
+  editingSaleRecord.subtotal = totals.subtotal;
+  editingSaleRecord.discount = totals.discount;
+  editingSaleRecord.tax = totals.tax;
+  editingSaleRecord.grandTotal = totals.grandTotal;
   editingSaleRecord.payments = cleanPayments;
   editingSaleRecord.paymentMethod = cleanPayments.map(function(p) { return p.method; }).join(" + ") || (paymentMethods[0] || "");
   editingSaleRecord.amountReceived = received;
@@ -3199,7 +3230,7 @@ function exportInventoryToExcel() {
 }
 
 function exportSalesToExcel() {
-  if (!salesHistory.length) { alert("No completed sales yet — finish a sale first."); return; }
+  if (!salesHistory.length) { alert("No completed sales yet - finish a sale first."); return; }
   const filtered = filterSalesHistoryByDateRange(salesHistory);
   if (!filtered.length) { alert(tr("salesExportRangeEmptyAlert")); return; }
   const { parentRows, childRows } = buildSalesExportRows(filtered);
@@ -3258,7 +3289,7 @@ async function fetchOfflineBlob(path) {
 function stripMarked(html, marker, label) {
   const re = new RegExp("<!-- OFFLINE-STRIP:" + marker + ":START -->[\\s\\S]*?<!-- OFFLINE-STRIP:" + marker + ":END -->\\n?", "g");
   const out = html.replace(re, "");
-  if (out === html) console.warn("Offline package: \"" + marker + "\" marker not found (" + label + ") — check app.html hasn't drifted from the OFFLINE-STRIP comments.");
+  if (out === html) console.warn("Offline package: \"" + marker + "\" marker not found (" + label + ") - check app.html hasn't drifted from the OFFLINE-STRIP comments.");
   return out;
 }
 
@@ -3486,7 +3517,7 @@ function trackEvent(name, params) {
 function addProductToCart(product) {
   const idx = findCartIndexByNamePrice(product.name, product.price);
   if (idx > -1) { cart[idx].qty += 1; }
-  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1 }); }
+  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, taxExempt: !!product.taxExempt }); }
   updateReceipt();
   trackEvent("add_to_cart", {
     currency: val("currencyCode") || "USD",
@@ -3607,9 +3638,10 @@ function pollScannerFrame() {
     ctx.putImageData(imageData, 0, 0);
   } catch (enhanceErr) {}
 
-  barcodeReader.decodeFromCanvas(canvas).then(function(result) {
+  try {
+    const result = barcodeReader.decodeFromCanvas(canvas);
     if (result) handleScannedCode(result.getText());
-  }).catch(function() {});
+  } catch (decodeErr) {}
 }
 
 function closeScanner() {
@@ -3655,7 +3687,7 @@ function handleScannedCode(code) {
 }
 function addCustomItem() {
   itemCounter++;
-  cart.push({ id: itemCounter, name: "", price: 0, qty: 1 });
+  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false });
   updateReceipt();
   setTimeout(function() {
     const input = document.querySelector('.receipt-item[data-id="' + itemCounter + '"] .receipt-item-name-input');
@@ -3734,6 +3766,7 @@ function handleCsvUpload(event) {
       const catIdx = header.findIndex(function(h) { return ["category", "cat", "type"].indexOf(h) !== -1; });
       const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
       const stockIdx = header.findIndex(function(h) { return ["stock", "stock level", "qty", "quantity", "stock qty"].indexOf(h) !== -1; });
+      const taxExemptIdx = header.findIndex(function(h) { return ["taxexempt", "tax exempt", "tax-exempt", "no tax"].indexOf(h) !== -1; });
       if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
 
       const newProducts = [];
@@ -3748,13 +3781,19 @@ function handleCsvUpload(event) {
           const rawStock = (row[stockIdx] || "").trim();
           if (rawStock !== "") stock = parseFloat(rawStock) || 0;
         }
+        let taxExempt = false;
+        if (taxExemptIdx > -1) {
+          const rawExempt = (row[taxExemptIdx] || "").trim().toLowerCase();
+          taxExempt = ["yes", "y", "true", "1"].indexOf(rawExempt) !== -1;
+        }
         newProducts.push({
           name: name,
           price: price,
           category: catIdx > -1 ? (row[catIdx] || "").trim() : "",
           sku: skuIdx > -1 ? (row[skuIdx] || "").trim() : "",
           stock: stock,
-          photo: ""
+          photo: "",
+          taxExempt: taxExempt
         });
       }
       if (!newProducts.length) throw new Error("no valid rows");
@@ -3779,7 +3818,7 @@ function handleCsvUpload(event) {
 }
 
 function downloadSampleCsv() {
-  const sample = "Name,Price,Category,SKU,Stock\nCoca Cola 330ml,0.300,Beverages,8901,50\nWhite Bread,0.450,Bakery,8902,20\nBottled Water 1.5L,0.200,Beverages,8903,75\nPotato Chips,0.350,Snacks,8904,30\nInstant Noodles,0.250,Snacks,8905,40\n";
+  const sample = "Name,Price,Category,SKU,Stock,TaxExempt\nCoca Cola 330ml,0.300,Beverages,8901,50,No\nWhite Bread,0.450,Bakery,8902,20,Yes\nBottled Water 1.5L,0.200,Beverages,8903,75,No\nPotato Chips,0.350,Snacks,8904,30,No\nInstant Noodles,0.250,Snacks,8905,40,No\n";
   const blob = new Blob([sample], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -3797,6 +3836,7 @@ async function addSingleProduct() {
   const categoryEl = document.getElementById("newProductCategory");
   const skuEl = document.getElementById("newProductSku");
   const stockEl = document.getElementById("newProductStock");
+  const taxExemptEl = document.getElementById("newProductTaxExempt");
   const errorBox = document.getElementById("addProductErrorBox");
   errorBox.classList.add("hidden");
 
@@ -3813,7 +3853,8 @@ async function addSingleProduct() {
     category: categoryEl.value.trim(),
     sku: skuEl.value.trim(),
     stock: stockRaw === "" ? null : (parseFloat(stockRaw) || 0),
-    photo: newProductPhotoDataUrl
+    photo: newProductPhotoDataUrl,
+    taxExempt: !!(taxExemptEl && taxExemptEl.checked)
   });
   await saveProducts();
   renderProductCatalog();
@@ -3823,6 +3864,7 @@ async function addSingleProduct() {
   categoryEl.value = "";
   skuEl.value = "";
   stockEl.value = "";
+  if (taxExemptEl) taxExemptEl.checked = false;
   newProductPhotoDataUrl = "";
   renderNewProductPhotoPreview();
   nameEl.focus();
@@ -3920,7 +3962,7 @@ function renderInventoryList() {
         "</div>" +
         "<div class=\"inv-row-stock\">" +
           "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
-          "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"—\">" +
+          "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"-\">" +
         "</div>";
       row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(realIndex, this.value); });
       list.appendChild(row);
@@ -3945,6 +3987,11 @@ async function handleProductNameEdit(index, newName) {
   renderProductCatalog();
   renderInventoryList();
 }
+async function handleProductTaxExemptEdit(index, checked) {
+  if (!products[index]) return;
+  products[index].taxExempt = !!checked;
+  await saveProducts();
+}
 
 function renderManageProductsList() {
   const list = document.getElementById("manageProductsList");
@@ -3965,11 +4012,15 @@ function renderManageProductsList() {
         "<input type=\"file\" accept=\"image/*\" class=\"hidden\">" +
       "</label>" +
       "<input class=\"mp-name-input\" type=\"text\" value=\"" + escapeAttr(p.name) + "\">" +
-      "<span class=\"mp-meta\">— " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
+      "<span class=\"mp-meta\">- " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
       (p.category ? " <span style=\"color:var(--muted);\">(" + escapeHtml(p.category) + ")</span>" : "") + "</span>" +
+      "<label style=\"display:flex; align-items:center; gap:4px; font-size:11.5px; color:var(--ink-soft); cursor:pointer; white-space:nowrap;\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
+        "<input class=\"mp-tax-exempt\" type=\"checkbox\"" + (p.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
+      "</label>" +
       "<button onclick=\"removeProduct(" + index + ")\">×</button>";
     row.querySelector(".mp-name-input").addEventListener("change", function() { handleProductNameEdit(index, this.value); });
     row.querySelector(".mp-photo-label input").addEventListener("change", function(e) { handleExistingProductPhotoUpload(index, e); });
+    row.querySelector(".mp-tax-exempt").addEventListener("change", function() { handleProductTaxExemptEdit(index, this.checked); });
     list.appendChild(row);
   });
 }
@@ -4130,16 +4181,39 @@ function getDocumentTitle() {
   return tr("receipt");
 }
 
+function computeTotalsFromItems(items, taxRate, discountType, discountValue) {
+  let subtotal = 0;
+  let taxableSubtotal = 0;
+  items.forEach(function(it) {
+    const lineTotal = (Number(it.qty) || 0) * (Number(it.price) || 0);
+    subtotal += lineTotal;
+    if (!it.taxExempt) taxableSubtotal += lineTotal;
+  });
+
+  let discount;
+  if (discountType === "amount") {
+    discount = Math.max(0, Math.min(Number(discountValue) || 0, subtotal));
+  } else {
+    discount = subtotal * (Number(discountValue) || 0) / 100;
+  }
+  const afterDiscount = subtotal - discount;
+
+  // Spread the discount across taxable and tax-exempt items in proportion
+  // to their share of the subtotal, so a flat/percent discount doesn't
+  // unfairly shift how much of the remaining total counts as taxable.
+  const taxableRatio = subtotal > 0 ? taxableSubtotal / subtotal : 0;
+  const taxableAfterDiscount = afterDiscount * taxableRatio;
+  const tax = taxableAfterDiscount * (Number(taxRate) || 0) / 100;
+  const grandTotal = afterDiscount + tax;
+
+  return { subtotal: subtotal, discount: discount, tax: tax, grandTotal: grandTotal };
+}
+
 function computeTotals() {
   const taxRate = Number(val("taxRate")) || 0;
-  const discountRate = Number(val("discountRate")) || 0;
-  let subtotal = 0;
-  cart.forEach(function(c) { subtotal += (Number(c.qty) || 0) * (Number(c.price) || 0); });
-  const discount = subtotal * discountRate / 100;
-  const afterDiscount = subtotal - discount;
-  const tax = afterDiscount * taxRate / 100;
-  const grandTotal = afterDiscount + tax;
-  return { subtotal: subtotal, discount: discount, tax: tax, grandTotal: grandTotal };
+  const discountType = val("discountType") || "percent";
+  const discountValue = Number(val("discountRate")) || 0;
+  return computeTotalsFromItems(cart, taxRate, discountType, discountValue);
 }
 
 function renderReceiptItems() {
@@ -4164,12 +4238,16 @@ function renderReceiptItems() {
         "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"" + amountStep() + "\" value=\"" + Number(c.price) + "\">" +
         "<button type=\"button\" class=\"qty-btn\" data-action=\"dec\">−</button>" +
         "<button type=\"button\" class=\"qty-btn\" data-action=\"inc\">+</button>" +
+        "<label class=\"cart-tax-exempt-label\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
+          "<input class=\"cart-tax-exempt\" type=\"checkbox\"" + (c.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
+        "</label>" +
         "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
       "</div>";
 
     const nameEl = div.querySelector(".receipt-item-name-input");
     nameEl.addEventListener("input", function() { c.name = this.textContent; updateTotalsAndHeader(); });
     nameEl.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); this.blur(); } });
+    div.querySelector(".cart-tax-exempt").addEventListener("change", function() { c.taxExempt = this.checked; updateTotalsAndHeader(); });
 
     div.querySelector(".price-input").addEventListener("input", function() { c.price = Number(this.value) || 0; updateTotalsAndHeader(); });
     div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
@@ -4208,7 +4286,7 @@ function updateTotalsAndHeader() {
     const totalEl = row.querySelector(".receipt-item-total");
     const detailEl = row.querySelector(".receipt-item-detail-print");
     if (totalEl) totalEl.textContent = symbol + " " + total.toFixed(decimalsNow());
-    if (detailEl) detailEl.textContent = symbol + " " + Number(c.price).toFixed(decimalsNow()) + " × " + c.qty;
+    if (detailEl) detailEl.textContent = symbol + " " + Number(c.price).toFixed(decimalsNow()) + " × " + c.qty + (c.taxExempt ? " (" + tr("taxExemptTag") + ")" : "");
   });
 
   const totals = computeTotals();
@@ -4275,6 +4353,8 @@ function changeLanguage() {
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
+    discountTypePercentOption: "discountTypePercentOption", discountTypeAmountOption: "discountTypeAmountOption",
+    addProductTaxExemptLabel: "taxExemptLabel",
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
     barcodeScannerToggleLabel: "barcodeScannerToggleLabel",
@@ -4368,6 +4448,12 @@ function changeLanguage() {
     dt.options[2].textContent = tr("payment");
   }
 
+  const sddt = document.getElementById("saleDetailDiscountType");
+  if (sddt) {
+    sddt.options[0].textContent = tr("discountTypePercentOption");
+    sddt.options[1].textContent = tr("discountTypeAmountOption");
+  }
+
   const paperSizeSelect = document.getElementById("paperSize");
   if (paperSizeSelect) paperSizeSelect.options[0].textContent = tr("autoOptionLabel");
   if (paperSizeSelect && paperSizeSelect.value === "auto") {
@@ -4431,7 +4517,7 @@ init();
 </div>
 </div>
 <div id="cookieDeclinedView" class="cc-declined-view hidden">
-<div class="cc-text">Got it — analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
 <button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
 </div>
 </div>

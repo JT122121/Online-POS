@@ -125,10 +125,29 @@ zero network calls.
   product's thumbnail in the manage-list is itself a clickable
   `<label>` wrapping a hidden file input (`handleExistingProductPhotoUpload`)
   so re-uploading is a single click, no separate "edit" mode needed.
-- **Cart/checkout:** `addProductToCart` → `computeTotals()` (subtotal →
-  discount% → tax% → grand total, all straight percentage math, no
-  per-item tax) → `goToCheckout` → split payments via `paymentRows` →
-  `printReceipt()`.
+- **Cart/checkout:** `addProductToCart` → `computeTotals()` → `goToCheckout`
+  → split payments via `paymentRows` → `printReceipt()`.
+  `computeTotals()` is a thin wrapper around the shared
+  `computeTotalsFromItems(items, taxRate, discountType, discountValue)`,
+  which also powers the Sales History detail editor
+  (`recomputeSaleDetailTotals`/`saveSaleDetailEdits`) so both places use
+  identical math. **Discount is flexible per transaction** — `#discountType`
+  (`percent` | `amount`, defaults to `percent`) sits next to `#discountRate`
+  in Settings → Tax & Discount; `amount` mode clamps to the subtotal so the
+  total can never go negative. Persisted via `storageSet("pos-settings")`
+  like tax rate/name, so it carries over between sales until changed.
+  **Tax exemption is per item, settable both on the product and at
+  checkout** — each `products[]`/`cart[]` entry carries a `taxExempt`
+  boolean; a checkbox in Settings → Products (add form + each row in the
+  manage-list) sets the catalog default, and a matching checkbox on every
+  cart line (`.cart-tax-exempt-label`, next to qty/remove) lets the
+  cashier override it per sale, including for custom/manual items. The
+  discount is spread proportionally across taxable vs. exempt line totals
+  before tax is computed on the taxable share only, so a flat or percent
+  discount doesn't shift how much of the total counts as taxable. Both
+  `discountType` and each item's `taxExempt` are saved on the
+  `salesHistory` record so reopening a past sale for editing recomputes
+  correctly instead of silently reverting to percent-only/all-taxable.
 - **Sales history:** completed sales pushed into `salesHistory` and
   rendered grouped by date (`renderSalesHistoryPanel`,
   `saleDateKey`/`toggleHistoryGroup`); each sale can be reopened
@@ -138,8 +157,10 @@ zero network calls.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk CSV upload (`handleCsvUpload`, columns
-  Name/Price/Category/SKU) that **replaces** the whole catalog; "Download
-  Sample CSV" and "Clear Products" actions exist.
+  Name/Price/Category/SKU, optionally Stock and TaxExempt — `Yes`/`Y`/
+  `True`/`1` all parse as exempt, anything else as taxable) that
+  **replaces** the whole catalog; "Download Sample CSV" and "Clear
+  Products" actions exist.
 - **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
   (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
   CSV/text export path (`rowsToCsv`, `downloadTextFile`). Sales History
@@ -155,7 +176,16 @@ zero network calls.
   `salesExportRangeEmptyAlert` rather than downloading an empty file.
 - **Barcode scanning:** `@zxing/browser` drives a camera-based scanner
   (`barcodeReader`), toggleable in Settings; matches scanned code against
-  product SKU.
+  product SKU. `pollScannerFrame()` calls `barcodeReader.decodeFromCanvas()`
+  **synchronously** inside a plain `try/catch` — in `@zxing/browser` 0.2.1
+  (the vendored version) that method returns a `Result` directly (or throws
+  when nothing's found in that frame, which is normal and happens on most
+  polls), it does **not** return a Promise. An earlier version of this
+  code called `.then()`/`.catch()` on that return value, which is a bug:
+  a genuine decode success returned a plain object with no `.then` method,
+  so the `.then(...)` call itself threw a `TypeError` before
+  `handleScannedCode()` ever ran — the scanner silently never registered a
+  successful scan. Don't reintroduce the `.then()` pattern here.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
   everything and reloads the page. This is the *only* way data survives a
@@ -557,5 +587,12 @@ zero network calls there.
   `localStorage`, to preserve the embedded-host code path.
 - Keep `sitemap.xml` in sync with each page's own `<meta name="robots">`
   when adding/removing/re-gating an indexable page — see "SEO" above.
+- **No em dashes ("—") anywhere in site text** - explicit standing
+  instruction. Every em dash across every page (marketing pages and
+  `app.html`, all UI strings and all six `translations` language blocks)
+  was swept to a plain hyphen (`-`) with surrounding spacing left as-is.
+  Write new copy with a plain hyphen or a period/comma instead of an em
+  dash from now on - this applies to visible site text (labels,
+  descriptions, translations), not to this file or other developer docs.
 - Git workflow observed in history: work happens on `main`; this session's
   designated branch is `claude/repo-code-access-jpjg54`.
