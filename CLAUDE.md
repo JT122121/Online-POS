@@ -198,6 +198,31 @@ zero network calls.
   so the `.then(...)` call itself threw a `TypeError` before
   `handleScannedCode()` ever ran — the scanner silently never registered a
   successful scan. Don't reintroduce the `.then()` pattern here.
+  `pollScannerFrame()` now decodes the **full, uncropped video frame** every
+  poll instead of a cropped/contrast-stretched sub-region - an earlier
+  version cropped to a centered ~56-80% window (alternating a "tight" and
+  "loose" inset every 3rd poll) and ran a manual grayscale+contrast-stretch
+  pass on the pixels before decoding. That crop was computed as a percentage
+  of `videoEl.videoWidth`/`videoEl.videoHeight` (the raw camera sensor
+  frame), while the on-screen `.scanner-frame` guide box is a CSS percentage
+  of the `.scanner-body` container - and since `.scanner-body video` uses
+  `object-fit: contain` with a 4:3 container against an (ideal) 16:9 stream,
+  the video gets letterboxed inside that container, so the two percentages
+  don't map to the same pixels. A barcode that visually looked centered
+  inside the guide box could land outside the actual cropped/scanned
+  region. The contrast stretch was also a real risk on glossy/reflective
+  packaging - blowing out a glare highlight to pure white can destroy fine
+  bar detail right where it matters. Full-frame decoding removes both
+  failure modes at once (ZXing scans the whole image for a barcode anywhere
+  in it, so there's no correctness reason to crop, only a minor performance
+  one). Camera resolution was also dropped from an (ideal) 3840x2160 request
+  to 1920x1080 - not every rear camera negotiates a 4K getUserMedia stream
+  cleanly, 1080p is far more universally supported, and it keeps full-frame
+  decode cost reasonable now that nothing is cropped first. Verified with a
+  real fake-camera-device Playwright run (`--use-fake-device-for-media-stream`
+  + a real EAN-13 barcode encoded into a Y4M video file) driving the actual
+  scan button, poll loop, and ZXing decode end-to-end into a matched cart
+  item - not just a mocked decode call.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
   everything and reloads the page. This is the *only* way data survives a
