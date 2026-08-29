@@ -307,6 +307,17 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .amount-words-block { background: transparent !important; border-top: 1px dashed #000; border-radius: 0; }
   .totals-line.grand { border-top: 1px solid #000; }
+
+  /* Keep the receipt table in table layout when printing from a mobile-sized browser. */
+  .items-table { display: table !important; width: 100% !important; }
+  .items-table thead { display: table-header-group !important; }
+  .items-table tbody { display: table-row-group !important; }
+  .items-table tr { display: table-row !important; width: auto !important; border-bottom: 0 !important; padding: 0 !important; margin: 0 !important; }
+  .items-table th, .items-table td { display: table-cell !important; width: auto !important; }
+  .items-table td[data-label]::before { display: none !important; content: none !important; }
+  .items-table .col-amount { width: 130px !important; text-align: right !important; }
+  .items-table .col-amount input { text-align: right !important; }
+  .items-table .col-remove { display: none !important; }
 }
 
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
@@ -709,6 +720,18 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     return currentCurrency().symbol + n.toFixed(currentCurrency().decimals);
   }
 
+  function currencyStep() {
+    var decimals = currentCurrency().decimals;
+    return decimals > 0 ? (1 / Math.pow(10, decimals)).toFixed(decimals) : "1";
+  }
+
+  function updateAmountInputSteps() {
+    var step = currencyStep();
+    document.querySelectorAll(".line-amount, .payment-amount").forEach(function(input) {
+      input.step = step;
+    });
+  }
+
   function loadCustomPaymentMethods() {
     try {
       var raw = localStorage.getItem(PAYMENT_METHODS_KEY);
@@ -791,7 +814,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     row.className = "payment-row";
     row.innerHTML =
       '<select class="payment-method-select" aria-label="Payment method"></select>' +
-      '<input type="number" class="payment-amount" min="0" step="0.01" value="' + (amount != null ? amount : 0) + '" aria-label="Amount received">' +
+      '<input type="number" class="payment-amount" min="0" step="' + currencyStep() + '" value="' + (amount != null ? amount : 0) + '" aria-label="Amount received">' +
       '<button type="button" class="payment-remove-btn no-print" aria-label="Remove payment">✕</button>';
     paymentsBody.appendChild(row);
     var sel = row.querySelector(".payment-method-select");
@@ -854,9 +877,20 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
   function amountToWords(amount, meta) {
     amount = Math.max(0, Number(amount) || 0);
-    var intPart = Math.floor(amount);
     var fracMultiplier = Math.pow(10, meta.decimals);
-    var fracPart = meta.decimals > 0 ? Math.round((amount - intPart) * fracMultiplier) : 0;
+    var rounded = meta.decimals > 0
+      ? Math.round((amount + Number.EPSILON) * fracMultiplier) / fracMultiplier
+      : Math.round(amount);
+
+    var intPart = Math.floor(rounded);
+    var fracPart = meta.decimals > 0
+      ? Math.round((rounded - intPart) * fracMultiplier)
+      : 0;
+
+    if (fracPart >= fracMultiplier && meta.decimals > 0) {
+      intPart += 1;
+      fracPart = 0;
+    }
 
     var words = integerToWords(intPart) + " " + pluralize(meta.name, intPart);
     if (fracPart > 0 && meta.subunit) {
@@ -945,7 +979,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     var tr = document.createElement("tr");
     tr.innerHTML =
       '<td data-label="Description"><input type="text" class="line-desc" placeholder="What this payment is for" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
-      '<td class="col-amount" data-label="Amount"><input type="number" class="line-amount" min="0" step="0.01" value="' + (amount != null ? amount : 0) + '"></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="number" class="line-amount" min="0" step="' + currencyStep() + '" value="' + (amount != null ? amount : 0) + '"></td>' +
       '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
     itemsBody.appendChild(tr);
     wireRow(tr);
@@ -1135,6 +1169,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     payments.forEach(function(p) { makePaymentRow(p.method, p.amount); });
 
     applyRemarksVisibility();
+    updateAmountInputSteps();
     recalcTotals();
   }
 
@@ -1161,7 +1196,11 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     scheduleSave();
   });
 
-  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+  currencySelect.addEventListener("change", function() {
+    updateAmountInputSteps();
+    recalcTotals();
+    scheduleSave();
+  });
 
   showRemarksCheckbox.addEventListener("change", function() {
     applyRemarksVisibility();
