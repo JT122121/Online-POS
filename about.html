@@ -243,17 +243,20 @@ a {
 
 .page-header .back-link {
   font-size: 13.5px;
-  font-weight: 600;
-  color: var(--ink-soft);
+  font-weight: 700;
+  color: #fff;
   text-decoration: none;
-  border: 1px solid var(--line);
-  background: #fff;
+  border: 1px solid var(--accent);
+  background: var(--accent);
   padding: 9px 15px;
   border-radius: 8px;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
 }
 
 .page-header .back-link:hover {
-  border-color: #c9c6ba;
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  transform: translateY(-1px);
 }
 
 .hero {
