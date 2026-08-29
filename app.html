@@ -127,25 +127,6 @@ button:active { transform: translateY(1px); }
 .hidden { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.site-header { max-width: 1500px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.site-header .brand-mark { width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 3px; }
-.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
-.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: -.01em; color: var(--ink); }
-.site-header .cta-btn { font-size: 12.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 8px 14px; border-radius: var(--radius-sm); }
-.site-header .cta-btn:hover { background: var(--accent-dark); }
-.site-header .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
-.site-nav { display: flex; align-items: center; gap: 16px; }
-.site-nav a { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
-.site-nav a:hover { color: var(--accent-dark); }
-.site-nav a.nav-highlight { color: var(--accent-dark); position: relative; }
-.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -10px; right: -22px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
-@media (max-width: 720px) {
-  .site-nav { gap: 12px; }
-  .site-nav a.nav-highlight::after { display: none; }
-  .site-header .header-right { gap: 8px; }
-}
-
 .app-header { max-width: 1500px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .app-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .app-header .brand-mark { width: 44px; height: 44px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
@@ -170,6 +151,8 @@ button:active { transform: translateY(1px); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#aboutShortcutButton, #blogShortcutButton { background: var(--accent-dark); color: #fff; }
+#aboutShortcutButton:hover, #blogShortcutButton:hover { background: #0d3a28; }
 #createInvoiceButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #createInvoiceButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #createReceiptButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
@@ -470,24 +453,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </head>
 <body>
 
-<!-- OFFLINE-STRIP:APP-SITE-HEADER:START -->
-<header class="site-header">
-<a class="brand" href="/" onclick="goHome(); return false;">
-<div class="brand-mark"><img src="favicon.png" alt=""></div>
-<h2>GoOnlinePOS.com</h2>
-</a>
-<div class="header-right">
-<nav class="site-nav">
-<a href="about" target="_blank" rel="noopener">About</a>
-<a href="blog" class="nav-highlight" target="_blank" rel="noopener">Blog</a>
-</nav>
-<a class="cta-btn" href="invoice" target="_blank" rel="noopener">Free Invoice Generator</a>
-<a class="cta-btn" href="receipt" target="_blank" rel="noopener">Free Receipt Generator</a>
-<a class="cta-btn" href="app" target="_blank" rel="noopener">Free Point of Sale</a>
-</div>
-</header>
-<!-- OFFLINE-STRIP:APP-SITE-HEADER:END -->
-
 <header class="app-header">
 <div class="brand">
 <div class="brand-mark" aria-hidden="true">
@@ -510,6 +475,12 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<!-- OFFLINE-STRIP:ABOUT-BUTTON:START -->
+<button id="aboutShortcutButton" onclick="window.open('about', '_blank')" title="Learn more about GoOnlinePOS">ℹ️ <span id="aboutShortcutLabel">About</span></button>
+<!-- OFFLINE-STRIP:ABOUT-BUTTON:END -->
+<!-- OFFLINE-STRIP:BLOG-BUTTON:START -->
+<button id="blogShortcutButton" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
+<!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
 <button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Create Invoice</span></button>
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
@@ -3352,6 +3323,7 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
+    aboutShortcutLabel: "aboutShortcutLabel", blogShortcutLabel: "blogShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel", homeShortcutLabel: "homeShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
