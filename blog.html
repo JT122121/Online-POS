@@ -251,13 +251,41 @@ a {
   text-align: center;
 }
 
+.fp-photo {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 22px;
+}
+
 .featured-post .fp-img {
   width: 100%;
   max-width: 640px;
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
-  margin: 0 auto 22px;
+  margin: 0;
   display: block;
+}
+
+.photo-disclaimer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.post-card .pc-art .photo-disclaimer {
+  font-size: 9px;
+  padding: 4px 6px;
+  border-radius: 0;
 }
 
 .featured-post .fp-tag {
@@ -324,6 +352,7 @@ a {
 }
 
 .post-card .pc-art {
+  position: relative;
   background: var(--accent-tint);
   aspect-ratio: 16/9;
   display: flex;
@@ -617,12 +646,15 @@ a {
 
   <article class="featured-post">
 
-    <img
-      class="fp-img"
-      src="blog-hero-illustration.png"
-      alt="Cashier ringing up a sale on GoOnlinePOS at a retail checkout counter"
-      loading="lazy"
-    >
+    <div class="fp-photo">
+      <img
+        class="fp-img"
+        src="blog-hero-illustration.png"
+        alt="Cashier ringing up a sale on GoOnlinePOS at a retail checkout counter"
+        loading="lazy"
+      >
+      <span class="photo-disclaimer">Photo for illustration purposes only</span>
+    </div>
 
     <span class="fp-tag">
       Getting Started
@@ -712,7 +744,14 @@ a {
 
     <div class="post-card">
 
-      <div class="pc-art">🧑‍💻</div>
+      <div class="pc-art">
+        <img
+          src="blog-excel-photo.png"
+          alt="Office employee reviewing a sales spreadsheet in Excel"
+          loading="lazy"
+        >
+        <span class="photo-disclaimer">Photo for illustration purposes only</span>
+      </div>
 
       <div class="pc-body">
 
