@@ -90,8 +90,12 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
   `privacy.html`, `terms.html` — every page whose own
   `<meta name="robots">` says `index, follow`; `customer.html` is
-  correctly excluded, its own meta tag says `noindex, nofollow`),
-  `ads.txt` (Google AdSense publisher id).
+  correctly excluded, its own meta tag says `noindex, nofollow` -
+  referred to by filename throughout this doc for clarity/searchability,
+  but every actual `<loc>` in `sitemap.xml`, and every internal link
+  site-wide, drops the `.html` extension - see "No `.html` extension on
+  internal links, anywhere" below), `ads.txt` (Google AdSense publisher
+  id).
 
 No README, no CI, no tests, no linter config. History is 50 commits, one
 author, mostly titled "Add files via upload" — this repo has been edited
@@ -948,18 +952,43 @@ on-page heading and the button that links to it now say the same thing).
   `localStorage`, to preserve the embedded-host code path.
 - Keep `sitemap.xml` in sync with each page's own `<meta name="robots">`
   when adding/removing/re-gating an indexable page — see "SEO" above.
-- **Link to the homepage as `href="/"`, never `href="index.html"`.**
-  Every marketing page's brand mark / back-to-home link (`index.html`,
-  `about.html`, `contact.html`, `guide.html`, `how-it-works.html`,
-  `privacy.html`, `terms.html`, `blog.html` + its articles,
-  `invoice.html`) was swept to `href="/"` so navigating home lands on
-  the bare `https://goonlinepos.com/` instead of appending
-  `/index.html` to the address bar - GitHub Pages already serves
-  `index.html` for the root path automatically. This is safe for all of
-  these pages since none of them are bundled into the offline `.zip`.
-  `app.html`'s own `goHome()` is the one exception - see "Header brand
-  mark is not a link" above for why it uses a directory-relative path
-  instead of a hardcoded `"/"`.
+- **No `.html` extension on internal links, anywhere.** GitHub Pages
+  natively serves `page.html` at both `/page.html` and `/page` (no
+  redirect, no config needed - confirmed via GitHub's own community
+  docs/discussions, since this sandbox can't reach the live custom
+  domain directly to verify it firsthand). Every internal `href="X.html"`
+  and OG/canonical `content="https://goonlinepos.com/X.html"` across
+  every page was swept to the extension-less form (`href="X"`,
+  `content="https://goonlinepos.com/X"`), including the ones baked into
+  `modules/translations.js`'s HTML strings (`buyPremiumContactText` →
+  `href="contact"`, `offlineAgreeLabel` → `href="terms"`, across all six
+  languages - easy to miss since these aren't in a `*.html` file's own
+  markup, they're rendered via `innerHTML` from a JS string). The
+  homepage link specifically became `href="/"` rather than `href=""` or
+  `href="/index"`. `sitemap.xml`'s `<loc>` entries were updated to match.
+  This is safe for every marketing page (`index.html`, `about.html`,
+  `contact.html`, `guide.html`, `how-it-works.html`, `privacy.html`,
+  `terms.html`, `blog.html` + its articles, `invoice.html`) since none
+  of them are bundled into the offline `.zip`, where extension-less
+  resolution doesn't exist (plain Python `http.server` and `file://`
+  both need the real filename). **Two deliberate exceptions inside
+  `app.html`, both still using the real `.html` filename:**
+  `customerScreenUrl()` (returns `.../customer.html` - this URL is
+  shown to the user to open on another device, and must work
+  identically whether they're on the live site or the offline package,
+  where `customer.html` genuinely is bundled) and any instructional
+  text telling someone to literally **double-click `app.html`** (that's
+  a real filename on their filesystem, not a browser link - occurs in
+  `app.html`'s own offline-download modal copy and in
+  `modules/translations.js`'s `offlineModalHowList`, all six
+  languages). `openCreateInvoice()`, by contrast, **was** changed to
+  extension-less `"invoice"`, since `invoice.html` is deliberately
+  *not* in the offline package (see its own section above) - the
+  button that calls it is stripped from the offline copy entirely, so
+  this function only ever runs on the live site. `app.html`'s own
+  `goHome()` predates this sweep and already uses a directory-relative
+  path rather than a hardcoded `"/"` - see "Header brand mark is not a
+  link" above for why (same offline-vs-live reasoning).
 - **No em dashes ("—") anywhere in site text** - explicit standing
   instruction. Every em dash across every page (marketing pages and
   `app.html`, all UI strings and all six `translations` language blocks)
