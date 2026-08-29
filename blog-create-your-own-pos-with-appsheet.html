@@ -92,26 +92,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Why Every Business Needs a POS System | GoOnlinePOS.com Blog</title>
+<title>Create Your Own POS Using No-Code AppSheet | GoOnlinePOS.com Blog</title>
 
-<meta name="description" content="If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you - and why a proper point-of-sale system stopped being a luxury a long time ago.">
+<meta name="description" content="Thinking about building your own point-of-sale app with Google AppSheet? Here's what no-code POS builders actually involve, where they shine, where they fall short, and a simpler free alternative.">
 
 <meta name="robots" content="index, follow">
 
-<link rel="canonical" href="https://goonlinepos.com/blog-why-your-business-needs-a-pos.html">
+<link rel="canonical" href="https://goonlinepos.com/blog-create-your-own-pos-with-appsheet.html">
 
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://goonlinepos.com/blog-why-your-business-needs-a-pos.html">
-<meta property="og:title" content="Why Every Business Needs a POS System">
-<meta property="og:description" content="If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you.">
+<meta property="og:url" content="https://goonlinepos.com/blog-create-your-own-pos-with-appsheet.html">
+<meta property="og:title" content="Create Your Own POS Using No-Code AppSheet">
+<meta property="og:description" content="What it actually takes to build a POS app in AppSheet, and where a ready-made free POS can save you the work.">
 <meta property="og:site_name" content="GoOnlinePOS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Why Every Business Needs a POS System">
-<meta name="twitter:description" content="If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you.">
+<meta name="twitter:title" content="Create Your Own POS Using No-Code AppSheet">
+<meta name="twitter:description" content="What it actually takes to build a POS app in AppSheet, and where a ready-made free POS can save you the work.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
@@ -278,7 +278,8 @@ a {
   margin: 0 0 18px;
 }
 
-.article-body ul {
+.article-body ul,
+.article-body ol {
   margin: 0 0 18px;
   padding-left: 22px;
 }
@@ -294,6 +295,21 @@ a {
 .article-body a {
   color: var(--accent-dark);
   text-decoration: underline;
+}
+
+.callout {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+
+.callout strong {
+  color: var(--ink);
 }
 
 .cta-band {
@@ -545,138 +561,241 @@ a {
   </div>
 
   <header class="article-header">
-    <span class="article-tag">Getting Started</span>
+    <span class="article-tag" style="display:inline-flex; align-items:center; gap:6px;">
+      <svg width="14" height="14" viewBox="0 0 35 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="m29.0098 6.30417h-7.6818l-3.0989 4.40413-1.8448 4.3641 4.9437.5578 5.1352-.5377 3.8117-6.59901c.5596-.97344-.1422-2.18932-1.2651-2.18932z" fill="#0060d9"/>
+        <path d="m3.10253 8.49714 3.19192 5.47426c.39193.6708 1.10834 1.0846 1.8849 1.0846l8.20315.0164 4.9455-8.76823h-16.96584c-1.12656 0-1.82656 1.22135-1.25963 2.19297z" fill="#4285f4"/>
+        <path d="m18.0122 29.8453c-.556.9662-1.9469.9789-2.5175.0201l-3.1791-5.3375c-.4011-.6745-.412-1.5112-.0256-2.1948l4.0943-7.2625 10.0771.02z" fill="#4285f4"/>
+      </svg>
+      AppSheet
+    </span>
 
     <h1>
-      Why Every Business Needs a POS System
-      (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)
+      Create Your Own POS Using No-Code AppSheet
+      (And What It Actually Takes to Pull It Off)
     </h1>
 
-    <div class="article-meta">5 MIN READ</div>
+    <div class="article-meta">7 MIN READ</div>
   </header>
 
   <div class="article-body">
 
     <p>
-      If you're running a small shop, a stall, a home bakery, or a food cart,
-      there's a good chance you started out tracking sales the simplest way
-      possible - a notebook, a calculator, maybe a spreadsheet you update at
-      the end of the day if you remember to. It works, until it doesn't.
+      If you've spent any time looking at no-code tools, you've probably
+      run into Google AppSheet - the platform that lets you turn a
+      spreadsheet into a working app without writing code. It's a
+      genuinely powerful idea, and "build my own POS" is one of the
+      most common projects people try with it. Here's what that
+      actually involves, what you get in return, and where it can trip
+      you up.
+    </p>
+
+    <h2>What AppSheet actually is</h2>
+
+    <p>
+      AppSheet is a no-code app builder owned by Google. You connect it
+      to a data source - usually a Google Sheet, sometimes Excel or a
+      database - and it generates an app around that data: forms,
+      buttons, views, and workflows, all configured through a visual
+      editor instead of code. For a POS, the "data source" is where
+      your products, sales, and inventory would live.
+    </p>
+
+    <h2>The basic blueprint for a POS in AppSheet</h2>
+
+    <p>
+      Most DIY AppSheet POS builds follow roughly the same structure:
+    </p>
+
+    <ol>
+      <li>
+        <strong>Build the spreadsheet first.</strong> A Products sheet
+        (name, price, category, stock, barcode), a Sales sheet (each
+        transaction), a Sale Items sheet (line items per sale), and
+        often a Cashiers sheet. This is the real backbone of the app -
+        get the structure wrong and everything built on top of it
+        inherits the problem.
+      </li>
+      <li>
+        <strong>Import it into AppSheet.</strong> AppSheet reads the
+        sheet structure and auto-generates a starter app with basic
+        views.
+      </li>
+      <li>
+        <strong>Build the "ring up a sale" flow.</strong> This is the
+        part that takes real work: a form or view where you tap
+        products, have AppSheet write rows into Sale Items, sum them
+        into a Sales total, and ideally show a running cart total
+        before the sale is saved.
+      </li>
+      <li>
+        <strong>Add stock deduction.</strong> Not automatic - you write
+        an AppSheet "bot" (their automation/workflow feature) that
+        triggers when a sale is saved and subtracts quantities from the
+        Products sheet.
+      </li>
+      <li>
+        <strong>Add receipts.</strong> AppSheet doesn't have a native
+        till-style receipt printer flow. Typically this means
+        generating a PDF from a template and printing that, or emailing
+        it - workable, but not the instant thermal-printer receipt
+        you'd get from purpose-built POS software.
+      </li>
+      <li>
+        <strong>Set up user roles.</strong> If more than one cashier
+        will use it, you'll configure AppSheet's security filters so
+        each person only sees what they should.
+      </li>
+    </ol>
+
+    <p>
+      If you want to build an AppSheet POS yourself, don't start from a blank
+      canvas. <strong>Joe Tayactac's YouTube channel</strong> focuses on
+      practical AppSheet development, including building, troubleshooting,
+      and improving real-world apps. The tutorial below walks through
+      building an AppSheet POS and printing receipts from start to finish.
+    </p>
+
+    <div style="text-align:center; margin: 0 0 22px;">
+      <iframe
+        src="https://www.youtube.com/embed/jUbZVhZqWUw"
+        width="100%" height="315" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        title="AppSheet POS System and Print Receipt Full Tutorial"
+        style="max-width:100%; border-radius: 12px; border: 1px solid var(--line);">
+      </iframe>
+      <div style="margin-top:14px;">
+        <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"
+          style="display:inline-block; font-size:13px; font-weight:700; color:#fff; background:#FF0000; padding:9px 18px; border-radius:8px; text-decoration:none;">
+          ▶ More AppSheet tutorials on the channel
+        </a>
+      </div>
+    </div>
+
+    <h2>Where AppSheet genuinely shines for this</h2>
+
+    <ul>
+      <li>
+        <strong>Total control over the data model.</strong> Since it's
+        your spreadsheet, you can add any custom field or business
+        logic you want - loyalty points, custom order statuses,
+        whatever's specific to your operation.
+      </li>
+      <li>
+        <strong>It plugs into the rest of Google Workspace.</strong>
+        Sales data lands directly in Sheets, so reporting, pivot
+        tables, and integrations with other Google tools are
+        straightforward.
+      </li>
+      <li>
+        <strong>Genuinely no-code.</strong> You're configuring, not
+        programming - approachable if you're comfortable with
+        spreadsheets and have some patience for trial and error.
+      </li>
+      <li>
+        <strong>Built-in automation ("bots").</strong> Useful for
+        things like low-stock email alerts or daily sales summaries
+        once you've learned the automation editor.
+      </li>
+    </ul>
+
+    <h2>Where it tends to fall short as a real checkout tool</h2>
+
+    <ul>
+      <li>
+        <strong>It's not built primarily for speed at the counter.</strong>
+        AppSheet's sync-based architecture can introduce noticeable
+        delays, particularly when the app has a large dataset or
+        complex expressions and workflows. For a slow trickle of sales
+        that's often fine, but during busy periods even small delays
+        can add up.
+      </li>
+      <li>
+        <strong>No native barcode-to-cart flow.</strong> You can add
+        barcode scanning via the camera, but wiring it into a smooth
+        "scan and it's instantly in the cart" experience takes real
+        configuration work, and USB barcode scanners (which just type
+        the code and hit enter) need extra handling to behave properly.
+      </li>
+      <li>
+        <strong>Costs can increase as your business grows.</strong>
+        AppSheet offers different pricing options, but business use
+        with multiple users can require paid plans, making the ongoing
+        cost an important consideration.
+      </li>
+      <li>
+        <strong>Google Sheets as a database has real limits.</strong>
+        As your Sales sheet grows into the thousands of rows, both
+        Sheets and the app built on it can start to slow down
+        noticeably.
+      </li>
+      <li>
+        <strong>You're the support team.</strong> There's no vendor to
+        call when a bot misfires or a formula breaks at checkout - it's
+        on you to debug it, ideally not while a customer is waiting.
+      </li>
+      <li>
+        <strong>Offline use requires careful configuration.</strong>
+        AppSheet supports offline use, but designing a reliable offline
+        POS requires careful handling of synchronization, inventory
+        changes, and conflicts when multiple devices reconnect. For a
+        serious POS, these details need to be tested thoroughly before
+        relying on offline operation.
+      </li>
+    </ul>
+
+    <h2>Who this route actually makes sense for</h2>
+
+    <p>
+      Building a POS in AppSheet is a great fit if you enjoy building
+      things and want an app tailored exactly to a specific, unusual
+      workflow - a POS that also needs to do something ordinary POS
+      software doesn't, like triggering a custom approval step, or
+      feeding a very particular internal reporting format. It's a
+      genuine app-building exercise, not a five-minute setup.
     </p>
 
     <p>
-      Here's why a point-of-sale system isn't a luxury for big retailers
-      anymore - it's genuinely one of the first tools any business should
-      have, no matter how small.
+      If what you actually need is a straightforward, reliable checkout
+      system - ring up items, take payments, print receipts, and track
+      stock - and you'd rather not spend the time building and
+      maintaining it yourself, there's a much faster option: use a POS
+      that's already built.
     </p>
 
-    <h2>The math errors add up faster than you think</h2>
+    <h2>The shortcut: a POS that's already built</h2>
 
     <p>
-      Manual calculations mean manual mistakes. A missed item, a wrong total,
-      a discount applied incorrectly - each one seems small in the moment,
-      but multiply that across dozens of sales a day, every day, and it
-      becomes real money quietly leaking out of your business. A POS system
-      does the math for you, every single time, the same way.
-    </p>
-
-    <h2>You can't manage what you can't see</h2>
-
-    <p>
-      Ask yourself: do you actually know which products sold the most last
-      week? Which ones barely moved? Whether you're about to run out of your
-      best-seller? Without a system tracking this automatically, you're
-      running your business on guesswork. A proper POS logs every sale and
-      every item, so the answers are just a click away instead of a mystery.
-    </p>
-
-    <h2>Running out of stock costs you sales you'll never get back</h2>
-
-    <p>
-      Nothing's worse than a customer wanting to buy something you don't have -
-      and not realizing you were out until they told you. Inventory tracking
-      that deducts stock automatically with every sale means you catch low
-      stock before it becomes a lost sale, not after.
-    </p>
-
-    <h2>Customers expect more than cash-only, calculator-math checkout</h2>
-
-    <p>
-      Card payments, digital wallets, split payments between cash and card -
-      customers increasingly expect flexibility at checkout. A business that
-      can only handle exact cash amounts is quietly turning away sales without
-      realizing it.
-    </p>
-
-    <h2>If more than one person handles sales, you need accountability</h2>
-
-    <p>
-      The moment you have employees or family members ringing up sales
-      alongside you, "who sold what" stops being obvious. A POS that tracks
-      sales by cashier means you always know who handled a transaction - not
-      because you don't trust your team, but because clear records protect
-      everyone, including you.
-    </p>
-
-    <h2>A real receipt builds real trust</h2>
-
-    <p>
-      A handwritten total on a scrap of paper doesn't feel like a real
-      business, even if your product is great. A printed receipt with your
-      store name, your logo, and a clear breakdown of what was purchased makes
-      customers trust that they're dealing with someone legitimate - and gives
-      them something to reference if there's ever a question about a purchase.
-    </p>
-
-    <h2>Tax time gets a lot less painful</h2>
-
-    <p>
-      When every sale is automatically logged with the date, the amount, the
-      tax collected, and the payment method, you're not scrambling to
-      reconstruct months of records from memory when tax season arrives.
-      It's already there, ready to export.
-    </p>
-
-    <h2>"But POS systems are expensive and complicated" - not anymore</h2>
-
-    <p>
-      This used to be the real barrier. Traditional POS systems meant monthly
-      subscriptions, special hardware, and a sales call before you could even
-      try it out. That's exactly the gap
-      <a href="index.html">GoOnlinePOS.com</a> was built to close.
-    </p>
-
-    <p>
-      It's a complete point-of-sale system that runs entirely in your browser -
-      no signup, no login, no monthly fee, nothing to install. Open the page
-      and you're ringing up your first sale in minutes. And it's not a
-      stripped-down "free trial" version missing the features that actually
-      matter:
+      <a href="index.html">GoOnlinePOS.com</a> is a free point-of-sale
+      that runs entirely in your browser - no spreadsheet to design, no
+      bots to configure, no per-user subscription. Open the page and
+      you already have the parts a DIY build spends the most time on:
     </p>
 
     <ul>
-      <li><strong>Barcode scanning</strong> with a USB barcode scanner</li>
+      <li><strong>Barcode scanning</strong> that works with any USB barcode scanner out of the box</li>
+      <li><strong>Automatic stock deduction</strong> with every sale, no automation to build</li>
       <li><strong>Split payments</strong> - part cash, part card, tracked accurately</li>
-      <li><strong>Inventory tracking</strong> that deducts stock automatically with every sale</li>
       <li><strong>Multiple cashiers</strong>, with sales tracked separately for each</li>
-      <li><strong>A live customer-facing screen</strong> so customers see their order and total as you ring it up</li>
-      <li><strong>Your own logo and branding</strong> on every printed receipt</li>
-      <li><strong>Full sales history</strong> - searchable, editable, exportable to Excel, reprintable anytime</li>
-      <li><strong>Six languages</strong> built in, so it works for you and your customers</li>
-      <li><strong>Complete backup and restore</strong>, so your data is never at risk</li>
-      <li><strong>Offline Mode POS</strong> - Use your POS even without an internet connection.</li>
+      <li><strong>Instant receipt printing</strong>, with your own logo and store details</li>
+      <li><strong>Offline Mode</strong>, so you can keep selling without an internet connection</li>
+      <li><strong>Full sales history</strong>, exportable to Excel whenever you need it</li>
     </ul>
 
     <p>
-      If you've been putting off getting a proper point-of-sale system because
-      of the cost or the hassle, that excuse doesn't really apply anymore.
+      No signup, no login, no server to configure, and no database to
+      maintain - it's ready to use the moment you open it. If building
+      a customized no-code POS is the project you want, AppSheet is a
+      solid tool for it. But if you simply want to start ringing up
+      sales today, <strong>GoOnlinePOS is already built and ready to use.</strong>
     </p>
 
   </div>
 
   <div class="cta-band">
-    <h2>Try it free - no signup, no catch</h2>
-    <p>Open the app and start ringing up sales in minutes.</p>
+    <h2>Skip the build - try it free</h2>
+    <p>No signup, no login. Just open GoOnlinePOS and start selling.</p>
     <a class="btn-primary" href="app.html">Open GoOnlinePOS</a>
   </div>
 
