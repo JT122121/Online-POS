@@ -806,6 +806,19 @@ on-page heading and the button that links to it now say the same thing).
   reads as a document, not a form) - not a new PDF library dependency.
   `.no-print` hides the buttons/back-link/footer/info section from the
   printed output, same class name and purpose as `app.html`'s own.
+  **`@page { margin: 0; }`**, matching `app.html`'s own POS-receipt print
+  CSS exactly - the visual page margin is instead applied by `.wrap`
+  itself (`padding: 12mm` in print) rather than left to the browser.
+  This was a deliberate fix, not the original design: a nonzero `@page`
+  margin (the original `12mm`) leaves room for the browser's own print
+  header/footer (page title, URL, date, page number) to render into,
+  which read as clutter on a document meant to look clean/professional;
+  `@page { margin: 0 }` is the same trick `app.html` already relies on to
+  keep its printed receipts free of that browser chrome. Every `<select>`
+  (Currency, Discount %/Flat, Tax %/Flat) also gets
+  `-webkit-appearance: none; -moz-appearance: none; appearance: none;`
+  in print, so the native dropdown-arrow icon doesn't print alongside
+  the now-borderless select - printed selects read as plain text.
 - **Autosaves as you type** to plain `localStorage` (`goonlinepos-invoice-draft`,
   debounced) so a refresh doesn't lose an in-progress invoice - this is a
   fully standalone page like `customer.html`, outside `app.html`'s
@@ -917,13 +930,19 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
   persisted in the autosave draft) makes re-saving the same receipt
   **update** its existing history entry instead of duplicating it - only
   "Clear / New Receipt" resets it to `null`.
-- **A4/Letter print sizing** (`@page { margin: 12mm; }`), matching
-  `invoice.html`'s own print CSS exactly rather than `app.html`'s 80mm
-  thermal receipt convention - this tool is meant to print or save as a
-  regular document/PDF, not on a thermal receipt printer. (An earlier
-  version used `@page { size: 80mm auto; margin: 0; }` to match
-  `app.html`'s thermal receipts, but was changed to A4/Letter to match
-  `invoice.html` instead, per explicit feedback.)
+- **A4/Letter print sizing** (`@page { size: A4; margin: 0; }`), matching
+  `invoice.html`'s own print CSS rather than `app.html`'s 80mm thermal
+  receipt convention - this tool is meant to print or save as a regular
+  document/PDF, not on a thermal receipt printer. (An earlier version
+  used `@page { size: 80mm auto; margin: 0; }` to match `app.html`'s
+  thermal receipts, but was changed to A4/Letter to match `invoice.html`
+  instead, per explicit feedback.) Like `invoice.html`, `@page` margin is
+  `0` and the visual page margin comes from `.wrap { padding: 12mm }` in
+  print instead, so the browser's own print header/footer (title, URL,
+  date, page number) has no room to render - and every `<select>`
+  (Currency, each payment row's method picker) gets
+  `appearance: none` (plus the `-webkit-`/`-moz-` prefixes) in print so
+  no dropdown-arrow icon shows next to the now-borderless select.
 - **Has its own full cookie-consent banner**, same reasoning as
   `invoice.html` - a separate `goonlinepos-cookie-consent` check since
   this page can be visited directly.

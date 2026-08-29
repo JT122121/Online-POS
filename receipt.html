@@ -291,15 +291,15 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .items-table .col-remove { text-align: right; }
 }
 
-@page { size: A4; margin: 12mm; }
+@page { size: A4; margin: 0; }
 @media print {
   html, body { background: #fff; }
   .masthead, .top-actions, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
-  .wrap { max-width: none; padding: 0; }
+  .wrap { max-width: none; padding: 12mm; }
   .receipt-card { box-shadow: none; border: none; padding: 0; margin: 0; }
   .no-print { display: none !important; }
   textarea, .field-input, .items-table input, .totals-line .tl-controls input, .payment-row input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
-  select { border: none !important; background: transparent !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .logo-upload-label, .remove-logo-btn { display: none !important; }
   .add-line-btn, .line-remove-btn { display: none !important; }
   .add-payment-btn, .payment-remove-btn { display: none !important; }
