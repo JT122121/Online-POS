@@ -106,7 +106,7 @@ async function confirmOfflineDownload() {
   try {
     if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
 
-    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, usbScannerJsText, receiptJsText] = await Promise.all([
+    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, translationsJsText, usbScannerJsText, receiptJsText] = await Promise.all([
       fetchOfflineText("app.html"),
       fetchOfflineText("customer.html"),
       fetchOfflineBlob("favicon.png"),
@@ -117,6 +117,7 @@ async function confirmOfflineDownload() {
       fetchOfflineText("offline/start-server.sh"),
       fetchOfflineText("offline/start-server.bat"),
       fetchOfflineText("offline/start-server-mac.command"),
+      fetchOfflineText("modules/translations.js"),
       fetchOfflineText("modules/usb-scanner.js"),
       fetchOfflineText("modules/receipt.js")
     ]);
@@ -128,6 +129,7 @@ async function confirmOfflineDownload() {
     zip.file("favicon.ico", faviconIcoBlob);
     zip.file("vendor/xlsx.full.min.js", xlsxBlob);
     zip.file("vendor/LICENSES.txt", licensesText);
+    zip.file("modules/translations.js", translationsJsText);
     zip.file("modules/usb-scanner.js", usbScannerJsText);
     zip.file("modules/receipt.js", receiptJsText);
     zip.file("README.txt", readmeText);
