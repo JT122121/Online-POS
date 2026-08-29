@@ -127,36 +127,31 @@ button:active { transform: translateY(1px); }
 .hidden { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.app-header { max-width: 1500px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.app-header { max-width: 1500px; margin: 0 auto 20px; display: flex; flex-direction: column; gap: 10px; }
+.app-header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .app-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .app-header .brand-mark { width: 44px; height: 44px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
 .app-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .app-header h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 21px; letter-spacing: -.01em; }
 .app-header .subtitle { margin: 3px 0 0; color: var(--muted); font-size: 12.5px; }
-.header-actions { display: flex; gap: 6px; }
-.header-actions button { padding: 7px 11px; border: 1px solid transparent; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.header-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.header-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.header-actions button, .header-links button { padding: 7px 11px; border: 1px solid transparent; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 .header-actions-group { display: contents; }
 .toolbar-toggle-btn { background: transparent; border: 1px solid var(--line) !important; color: var(--ink-soft) !important; }
-#settingsButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#settingsButton { background: var(--ink); color: #fff; font-weight: 700; }
+#settingsButton:hover { background: #0d1613; }
+#settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: 1px; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0; }
-#inventoryShortcutButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
-#inventoryShortcutButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #backupShortcutButton:hover { background: #f5e7c4; }
 .active-cashier-select { padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; background: var(--panel); color: var(--ink); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
-#settingsButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#printButton { background: var(--ink); color: #fff; }
-#printButton:hover { background: #263832; }
 #customerScreenButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
-#howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#aboutShortcutButton, #blogShortcutButton { background: var(--accent-dark); color: #fff; }
-#aboutShortcutButton:hover, #blogShortcutButton:hover { background: #0d3a28; }
-#createInvoiceButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
-#createInvoiceButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#createReceiptButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
-#createReceiptButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#aboutShortcutButton, #blogShortcutButton, #homeShortcutButton { background: var(--accent-dark); color: #fff; }
+#aboutShortcutButton:hover, #blogShortcutButton:hover, #homeShortcutButton:hover { background: #0d3a28; }
+#createInvoiceButton, #createReceiptButton { background: var(--accent); color: #fff; }
+#createInvoiceButton:hover, #createReceiptButton:hover { background: var(--accent-dark); }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 
@@ -454,6 +449,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <body>
 
 <header class="app-header">
+<div class="app-header-top">
 <div class="brand">
 <div class="brand-mark" aria-hidden="true">
 <img src="favicon.png" alt="">
@@ -463,18 +459,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
 </div>
-<div class="header-actions">
-<button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
-<div class="header-actions-group" id="headerActionsGroup">
-<select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
-<button id="premiumShortcutButton" onclick="openPremiumSettings()" title="Manage your Premium code">👑 <span id="premiumShortcutLabel">Premium</span></button>
-<button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
-<button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
-<button id="howToUseButton" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
-<button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
-<button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
-<button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
-<button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<div class="header-links">
 <!-- OFFLINE-STRIP:ABOUT-BUTTON:START -->
 <button id="aboutShortcutButton" onclick="window.open('about', '_blank')" title="Learn more about GoOnlinePOS">ℹ️ <span id="aboutShortcutLabel">About</span></button>
 <!-- OFFLINE-STRIP:ABOUT-BUTTON:END -->
@@ -482,13 +467,23 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="blogShortcutButton" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
 <!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
-<button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Create Invoice</span></button>
+<button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
-<button id="createReceiptButton" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Create Receipt</span></button>
+<button id="createReceiptButton" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
+<button id="homeShortcutButton" onclick="goHome()" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
+</div>
+</div>
+<div class="header-actions">
+<button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
+<div class="header-actions-group" id="headerActionsGroup">
+<select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
-<button id="homeShortcutButton" onclick="goHome()" style="background:transparent; border:1px solid var(--line); color:var(--ink-soft);" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
+<button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
+<button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
+<button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
 </div>
 </div>
 </header>
@@ -806,9 +801,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
       <button class="settings-tab-item" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
-      <button class="settings-tab-item" data-tab="inventory" onclick="selectSettingsTab('inventory')">📦 <span>Inventory</span></button>
+      <button class="settings-tab-item" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
       <button class="settings-tab-item" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
+      <button class="settings-tab-item" onclick="openHowToUse()">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
     </div>
     <div class="settings-tab-panel">
 
@@ -1334,15 +1330,6 @@ function openSettings() {
 function openBackupSettings() {
   document.getElementById("settingsOverlay").classList.remove("hidden");
   selectSettingsTab("backup");
-}
-function openInventoryPanel() {
-  document.getElementById("settingsOverlay").classList.remove("hidden");
-  selectSettingsTab("inventory");
-  renderInventoryList();
-}
-function openPremiumSettings() {
-  document.getElementById("settingsOverlay").classList.remove("hidden");
-  selectSettingsTab("premium");
 }
 function toggleToolbar() {
   document.getElementById("headerActionsGroup").classList.toggle("hidden");
