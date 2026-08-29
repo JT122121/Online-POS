@@ -204,12 +204,7 @@ img { max-width: 100%; display: block; }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .step-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px; box-shadow: var(--shadow); }
 
-.guide-teaser-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 1000px; margin: 0 auto 32px; }
-.guide-teaser-grid img { width: 100%; aspect-ratio: 1560 / 1214; object-fit: cover; object-position: top; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-lg); }
 .guide-teaser-cta { text-align: center; }
-@media (max-width: 700px) {
-  .guide-teaser-grid { grid-template-columns: 1fr; max-width: 480px; }
-}
 .step-card .num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--gold); background: var(--gold-tint); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .step-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 15.5px; margin: 0 0 8px; }
 .step-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
@@ -475,12 +470,6 @@ img { max-width: 100%; display: block; }
 <h2 class="section-title">Every setting, explained</h2>
 <p class="section-sub">A full walkthrough of the app - from your Store details down to Premium - with real screenshots, not stock photos.</p>
 
-<div class="guide-teaser-grid">
-<img src="guide-catalog.png" alt="Go Online POS main product catalog screen" loading="lazy">
-<img src="guide-store.png" alt="Store settings tab showing store name, address, and logo upload" loading="lazy">
-<img src="guide-salesHistory.png" alt="Sales history tab showing a completed sale grouped by date" loading="lazy">
-<img src="guide-premium.png" alt="Premium settings tab with code activation" loading="lazy">
-</div>
 <div class="guide-teaser-cta">
 <a class="btn-primary" href="guide.html">See the Full Guide →</a>
 </div>
