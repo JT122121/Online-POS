@@ -14,8 +14,9 @@ same as the hosted version at goonlinepos.com, except:
 Everything else — cart & checkout, split payments, receipt printing,
 sales history & summaries, inventory tracking, cashiers, multi-language
 (EN/AR/FIL/HI/ES/TH), CSV product import, Excel/CSV exports, USB barcode
-scanning, backup & restore, and the customer-facing screen — is all
-there and fully functional offline.
+scanning, backup & restore, the customer-facing screen, and the
+standalone invoice generator (invoice.html, reachable via the "Create
+Invoice" button) — is all there and fully functional offline.
 
 
 HOW TO RUN IT
@@ -107,11 +108,12 @@ WHAT'S IN THIS FOLDER
 
   app.html                 The POS app.
   customer.html             The customer-facing screen.
+  invoice.html               The standalone invoice generator.
   favicon.png                Tab icon.
   modules/translations.js    Six-language UI text.
   modules/usb-scanner.js     USB barcode scanner logic.
   modules/receipt.js         Receipt/checkout rendering.
-  vendor/xlsx.full.min.js    Excel export library (bundled, MIT/Apache-2.0 —
+  vendor/xlsx.full.min.js    Excel export library (bundled, MIT/Apache-2.0 -
   vendor/LICENSES.txt         see vendor/LICENSES.txt).
   start-server.bat / .sh / -mac.command   Local server launchers.
   README.txt                This file.
