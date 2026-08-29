@@ -119,13 +119,13 @@ almost entirely through the GitHub web UI, not a local dev workflow.
 
 Every marketing/tool page — `index.html`, `about.html`, `contact.html`,
 `privacy.html`, `terms.html`, `blog.html` + its 3 articles, `invoice.html`,
-`receipt.html` — plus `app.html` itself, shares one canonical
-`<header class="site-header">` structure and CSS block, copied verbatim
-page to page (`.site-header`, `.site-header .brand`/`.brand-mark`,
-`.site-header .header-right`, `.site-nav`, `.cta-btn`). Before this, the
-site had **four divergent header conventions** (`.site-header`,
-`.page-header`, `.masthead`, `.article-header`) depending on which page
-you looked at; this unified all of them under one pattern:
+`receipt.html` — shares one canonical `<header class="site-header">`
+structure and CSS block, copied verbatim page to page (`.site-header`,
+`.site-header .brand`/`.brand-mark`, `.site-header .header-right`,
+`.site-nav`, `.cta-btn`). Before this, the site had **four divergent
+header conventions** (`.site-header`, `.page-header`, `.masthead`,
+`.article-header`) depending on which page you looked at; this unified
+all of them under one pattern:
 
 ```html
 <header class="site-header">
@@ -166,6 +166,18 @@ you looked at; this unified all of them under one pattern:
   every other page, which had About first from the start. Keep new pages
   consistent with About-then-Blog; don't copy `index.html`'s markup from
   before this fix.
+- **`.site-nav a` (About/Blog) renders as a solid dark-green pill, not a
+  plain text link** — `background: var(--accent-dark)`, white text,
+  same `border-radius: var(--radius-sm)` padding treatment as `.cta-btn`
+  but visually distinct from it (`--accent-dark`, the darker of the two
+  greens, vs. `.cta-btn`'s brighter `--accent`) so the nav items and the
+  CTA buttons read as two different weights of action rather than one
+  undifferentiated row. This replaced an earlier plain-text-link style
+  (`color: var(--ink-soft)`, no background) on every page carrying this
+  nav. The `nav-highlight` "NEW" badge on Blog still renders as a small
+  absolutely-positioned corner tag on top of the pill (repositioned
+  slightly tighter - `top: -8px; right: -8px` - to sit correctly against
+  the smaller pill instead of a bare text link).
 - **Footer is trimmed to exactly 4 links, same order, everywhere:**
   Contact → Privacy Policy → Terms of Service → Cookie Settings. Dropped
   from various pages' older footers: About, Blog, "How to Use", "Full
@@ -186,34 +198,35 @@ you looked at; this unified all of them under one pattern:
   print hide-list now hides `.site-header` instead). Neither page had a
   logo before; the brand-mark PNG data URI was copied byte-for-byte from
   `index.html`.
-- **`app.html` itself was the one page still missing this header** even
-  after the rest of the site was unified — added as its own
-  `<header class="site-header">` directly above the existing
-  `<header class="app-header">` (the real POS toolbar), same
-  above-not-merged pattern as `invoice.html`/`receipt.html`. Two
-  deliberate departures from the pattern used everywhere else, both
-  there to protect an in-progress sale:
-  - **The brand mark doesn't use a plain `href="/"`.** `app.html`
-    already has a hard rule that its own header brand isn't a live link
-    (see "Header brand mark is not a link" below) specifically because
-    navigating away silently drops the in-memory `cart`. The new
-    site-header's brand reuses the same guard by calling the existing
-    `goHome()` on click (`onclick="goHome(); return false;"`, `href="/"`
-    kept only as a plain fallback) instead of introducing a second,
-    unguarded way back to the homepage.
-  - **Every About/Blog/CTA link opens in a new tab**
-    (`target="_blank" rel="noopener"`), the same reasoning
-    `openCreateInvoice()`/`openCreateReceipt()` already use elsewhere in
-    this header - a cashier mid-sale shouldn't risk losing their unsaved
-    cart by clicking a nav link.
-  Its own brand-mark image is `favicon.png` (a real file `app.html`
-  already references elsewhere) rather than the inline base64 data URI
-  every other page uses, since `app.html` isn't decoupled from the rest
-  of the repo the way `invoice.html`/`receipt.html` are. The whole
-  header is wrapped in `<!-- OFFLINE-STRIP:APP-SITE-HEADER:START/END -->`
-  and stripped by `buildOfflineAppHtml()` - `about.html`/`blog.html`/
-  `invoice.html`/`receipt.html` aren't bundled in the offline package,
-  so every link this header offers would be dead there.
+- **`app.html` doesn't get a second copy of this header at all** — it
+  already has its own `<header class="app-header">` with its own logo,
+  and stacking a second full `site-header` (with its own brand-mark
+  image) directly above it read as a duplicate logo rather than a
+  unified nav, so that approach was reverted. Instead, **About and Blog
+  are two more entries in the existing header-toolbar shortcut row**
+  (`#aboutShortcutButton`/`#blogShortcutButton`, next to Customer Screen
+  and before Create Invoice/Create Receipt in `#headerActionsGroup`) -
+  the same mechanism every other header action already uses (Premium,
+  Backup, Settings, How To Use, ...), not a parallel header structure.
+  Both buttons are styled with the same dark-green `--accent-dark`
+  background as `.site-nav a` elsewhere (`#aboutShortcutButton,
+  #blogShortcutButton { background: var(--accent-dark); color: #fff; }`)
+  so they read as the same "About/Blog" affordance as every other page,
+  just rendered as toolbar buttons instead of a nav pill. Each opens its
+  target in a new tab via a plain `window.open('about', '_blank')` /
+  `window.open('blog', '_blank')` onclick (not a real `<a>`, to match
+  the existing button-based toolbar) - the same reasoning
+  `openCreateInvoice()`/`openCreateReceipt()` already use for the
+  buttons next to them: a cashier mid-sale shouldn't risk losing their
+  unsaved cart by clicking away in the same tab. Both are wrapped in
+  their own `OFFLINE-STRIP:ABOUT-BUTTON`/`BLOG-BUTTON` marker blocks and
+  stripped by `buildOfflineAppHtml()`, same treatment as Create Invoice/
+  Create Receipt, since `about.html`/`blog.html` aren't bundled in the
+  offline package for them to open. Their labels
+  (`aboutShortcutLabel`/`blogShortcutLabel`) are translated across all
+  six languages in `modules/translations.js`, unlike the marketing
+  pages' own `.site-nav`, since every other button in this toolbar is
+  already translated and these two needed to match.
 - **`blog.html`'s 3 article pages** keep their existing `.back-link-row`
   ("← Back to Blog") **unchanged**, now sitting just below the new
   header — deliberately preserved as a more specific, more useful link
@@ -280,8 +293,8 @@ zero network calls.
   be added to **all six** language blocks (or at least `en` as fallback).
 - **Header toolbar toggle:** `.header-actions` wraps its shortcut buttons
   (Premium/Backup/Settings/How To Use/End of Day/Print/Inventory/Customer
-  Screen/Create Invoice/Create Receipt/New Sale/Home — the last three of
-  those stripped from the offline build) in `#headerActionsGroup`
+  Screen/About/Blog/Create Invoice/Create Receipt/New Sale/Home — the
+  last five of those stripped from the offline build) in `#headerActionsGroup`
   (`display: contents`, so it doesn't affect the flex layout), preceded by
   `#toolbarToggleBtn` (`toggleToolbar()`) which toggles `.hidden` on that
   group to collapse the whole row down to just itself — reclaiming
@@ -839,10 +852,10 @@ remember. The whole mechanism lives inside `app.html` itself:
   `invoice.html` in the offline copy for it to open), the "🧾 Create
   Receipt" button + its `openCreateReceipt()` function
   (`CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`, the same treatment for
-  `receipt.html`), and the new top-of-page `.site-header` nav/CTA row
-  (`APP-SITE-HEADER` - see "Site-wide header, nav & footer" above), since
-  none of `about.html`/`blog.html`/`invoice.html`/`receipt.html` ship in
-  the offline package for it to link to.
+  `receipt.html`), and the "ℹ️ About"/"📰 Blog" toolbar shortcut buttons
+  (`ABOUT-BUTTON`/`BLOG-BUTTON` - see "Site-wide header, nav & footer"
+  above), since neither `about.html` nor `blog.html` ships in the
+  offline package for them to open.
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
