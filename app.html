@@ -151,6 +151,8 @@ button:active { transform: translateY(1px); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #createInvoiceButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #createInvoiceButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#createReceiptButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#createReceiptButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 
@@ -484,6 +486,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
 <button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Create Invoice</span></button>
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
+<button id="createReceiptButton" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Create Receipt</span></button>
+<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
 <button id="homeShortcutButton" onclick="goHome()" style="background:transparent; border:1px solid var(--line); color:var(--ink-soft);" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
 </div>
@@ -2775,6 +2780,13 @@ function openCreateInvoice() {
 }
 /* OFFLINE-STRIP:CREATE-INVOICE-JS:END */
 
+/* OFFLINE-STRIP:CREATE-RECEIPT-JS:START */
+function openCreateReceipt() {
+  const url = location.pathname.replace(/[^/]*$/, "") + "receipt";
+  window.open(url, "_blank");
+}
+/* OFFLINE-STRIP:CREATE-RECEIPT-JS:END */
+
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
@@ -3340,7 +3352,7 @@ function changeLanguage() {
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
-    inventoryShortcutLabel: "inventoryShortcutLabel", customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", addProductStockLabel: "addProductStockLabel",
+    inventoryShortcutLabel: "inventoryShortcutLabel", customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
     premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",
