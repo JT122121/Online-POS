@@ -733,6 +733,15 @@ The page's own `<h1>` reads **"Create Invoice"**, matching the header
 button's label exactly (the `<title>`/meta description still lead with
 "Free Invoice Generator" for its SEO search-term value, but the visible
 on-page heading and the button that links to it now say the same thing).
+- **`index.html`'s header `.cta-btn`** (next to the `Blog`/`About` nav
+  links, `.site-header .cta-btn`) links here (`href="invoice.html"`,
+  labeled "Free Invoice Generator") rather than to `app.html` - a
+  deliberate choice to give the free tool prime header real estate as
+  a lead-in, since `app.html` still has its own prominent "Open the
+  app" buttons in the hero section and the CTA band further down the
+  same page. This header CTA is unique to `index.html`'s own template
+  (`grep` confirms no other page reuses `.cta-btn`) - don't assume
+  other pages' headers need the same swap.
 - **No dependency on `app.html`'s data** - deliberately simple/decoupled:
   plain manual-entry fields (business name/address typed directly, no
   pulling from the POS's own Store Settings), matching the reference
