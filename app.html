@@ -148,12 +148,15 @@ button:active { transform: translateY(1px); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
 #customerScreenButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #aboutShortcutButton, #blogShortcutButton, #homeShortcutButton { background: var(--accent-dark); color: #fff; }
 #aboutShortcutButton:hover, #blogShortcutButton:hover, #homeShortcutButton:hover { background: #0d3a28; }
 #createInvoiceButton, #createReceiptButton { background: var(--accent); color: #fff; }
 #createInvoiceButton:hover, #createReceiptButton:hover { background: var(--accent-dark); }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
+.new-sale-catalog-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px 12px; margin: 10px 0 2px; border: 0; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; }
 
 .app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(220px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
 .app .left-panel { margin-right: 4px; }
@@ -479,7 +482,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
 <div class="header-actions-group" id="headerActionsGroup">
 <select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
-<button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
+<button id="howToUseButton" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
 <button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
@@ -522,6 +525,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <span class="toggle-slider"></span>
       </label>
     </div>
+    <button id="newSaleButton" class="new-sale-catalog-btn" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
     <div class="search-row">
     <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
     </div>
@@ -804,7 +808,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
       <button class="settings-tab-item" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
-      <button class="settings-tab-item" onclick="openHowToUse()">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
     </div>
     <div class="settings-tab-panel">
 
