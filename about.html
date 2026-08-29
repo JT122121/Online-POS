@@ -165,67 +165,19 @@ a {
   margin: 0 auto;
 }
 
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-
-.page-header .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-
-.page-header .brand-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #fff;
-  border: 1px solid var(--line);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow);
-  padding: 4px;
-}
-
-.page-header .brand-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.page-header h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -.01em;
-}
-
-.page-header .back-link {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  padding: 9px 15px;
-  border-radius: 8px;
-  transition: .2s ease;
-}
-
-.page-header .back-link:hover {
-  background: var(--accent-dark);
-  border-color: var(--accent-dark);
-}
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h1, .site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 20px; }
+.site-nav a { font-size: 13.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
+.site-nav a:hover { color: var(--accent-dark); }
+.site-nav a.nav-highlight { color: var(--accent-dark); position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -10px; right: -22px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
 
 .hero {
   text-align: center;
@@ -601,12 +553,16 @@ a {
     padding: 14px;
   }
 
-  .page-header {
-    margin-bottom: 18px;
+  .site-nav {
+    gap: 14px;
   }
 
-  .page-header .back-link {
-    padding: 8px 12px;
+  .site-nav a.nav-highlight::after {
+    display: none;
+  }
+
+  .site-header .header-right {
+    gap: 10px;
   }
 
   .hero {
@@ -652,7 +608,7 @@ a {
 
 <div class="wrap">
 
-<header class="page-header">
+<header class="site-header">
 
 <a class="brand" href="/" aria-label="GoOnlinePOS.com home">
   <div class="brand-mark">
@@ -661,7 +617,15 @@ a {
   <h1>GoOnlinePOS.com</h1>
 </a>
 
-<a class="back-link" href="/">← Back to home</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="about">About</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
 
 </header>
 
@@ -817,7 +781,7 @@ The goal is not to turn a simple sale into a complicated software process. The g
 See how GoOnlinePOS takes you from store setup to completed sales.
 </p>
 
-<a class="inline-link" href="how-it-works">See how GoOnlinePOS works →</a>
+<a class="inline-link" href="app">Open GoOnlinePOS and see it for yourself →</a>
 
 </div>
 
@@ -828,11 +792,11 @@ Want to see what the app actually looks like before using it?
 </p>
 
 <p>
-Our complete walkthrough takes you through the actual GoOnlinePOS interface, starting with <strong>Store Details</strong> and continuing through product setup, checkout, payment methods, receipts, sales records and <strong>Premium</strong> features.
+Open the app and click <strong>How To Use</strong> in the header toolbar for a complete walkthrough of the interface, starting with <strong>Store Details</strong> and continuing through product setup, checkout, payment methods, receipts, sales records and <strong>Premium</strong> features.
 </p>
 
 <p>
-The walkthrough uses <strong>real screenshots from the GoOnlinePOS app</strong>. There are no stock photos and no generic mockups presented as the product.
+It's built right into the app itself, so it's always describing the exact screens you're looking at, not stock photos or generic mockups.
 </p>
 
 <div class="guide-box">
@@ -842,10 +806,10 @@ The walkthrough uses <strong>real screenshots from the GoOnlinePOS app</strong>.
 </p>
 
 <p>
-See the actual screens and learn how the app works before you start using it.
+Open the app, then click How To Use to learn how it works before you start using it.
 </p>
 
-<a class="inline-link" href="guide">View the full GoOnlinePOS walkthrough →</a>
+<a class="inline-link" href="app">Open GoOnlinePOS →</a>
 
 </div>
 
@@ -893,10 +857,6 @@ No signup. No login. Just open GoOnlinePOS and see how it works.
 Open GoOnlinePOS
 </a>
 
-<a class="btn-secondary" href="guide">
-View the Full Guide
-</a>
-
 </div>
 
 </section>
@@ -905,22 +865,11 @@ View the Full Guide
 
 <footer class="site-footer">
 
-<a href="how-it-works">How to Use</a> <span>·</span>
-
-<a href="guide">Full Guide</a> <span>·</span>
-
-<a href="blog">Blog</a> <span>·</span>
-
 <a href="contact">Contact</a> <span>·</span>
 
 <a href="privacy">Privacy Policy</a> <span>·</span>
 
 <a href="terms">Terms of Service</a> <span>·</span>
-
-<a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">
-Facebook
-</a>
-<span>·</span>
 
 <a href="#" onclick="openCookieSettings(); return false;">
 Cookie Settings

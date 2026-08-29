@@ -225,6 +225,26 @@ a {
   background: var(--accent-tint);
 }
 
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 720px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 20px; }
+.site-nav a { font-size: 13.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
+.site-nav a:hover { color: var(--accent-dark); }
+.site-nav a.nav-highlight { color: var(--accent-dark); position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -10px; right: -22px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 10px; }
+  .site-header { margin-top: 12px; }
+}
+
 .article-header {
   text-align: center;
   padding: 10px 0 30px;
@@ -535,12 +555,21 @@ a {
 
 <div class="wrap">
 
-  <div class="site-brand">
-    <a href="/" aria-label="GoOnlinePOS.com">
-      <img src="logo.png" alt="GoOnlinePOS.com" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
-      <span id="logoFallback" class="site-brand-text" style="display:none;">GoOnlinePOS.com</span>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+      <div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+      <h2>GoOnlinePOS.com</h2>
     </a>
-  </div>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="about">About</a>
+        <a href="blog" class="nav-highlight">Blog</a>
+      </nav>
+      <a class="cta-btn" href="invoice">Free Invoice Generator</a>
+      <a class="cta-btn" href="receipt">Free Receipt Generator</a>
+      <a class="cta-btn" href="app">Free Point of Sale</a>
+    </div>
+  </header>
 
   <div class="back-link-row">
     <a class="back-link" href="blog">← Back to Blog</a>
@@ -686,30 +715,13 @@ a {
 
 <footer class="site-footer">
 
-  <a href="how-it-works">How to Use</a>
-  <span>·</span>
-
-  <a href="guide">Full Guide</a>
-  <span>·</span>
-
-  <a href="about">About</a>
-  <span>·</span>
-
-  <a href="blog">Blog</a>
+  <a href="contact">Contact</a>
   <span>·</span>
 
   <a href="privacy">Privacy Policy</a>
   <span>·</span>
 
   <a href="terms">Terms of Service</a>
-  <span>·</span>
-
-  <a href="contact">Contact</a>
-  <span>·</span>
-
-  <a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">
-    Facebook
-  </a>
   <span>·</span>
 
   <a href="#" onclick="openCookieSettings(); return false;">

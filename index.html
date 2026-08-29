@@ -127,7 +127,7 @@ img { max-width: 100%; display: block; }
 .site-header h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
 .site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
 .site-header .cta-btn:hover { background: var(--accent-dark); }
-.site-header .header-right { display: flex; align-items: center; gap: 22px; }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
 .site-nav { display: flex; align-items: center; gap: 20px; }
 .site-nav a { font-size: 13.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
 .site-nav a:hover { color: var(--accent-dark); }
@@ -136,6 +136,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 640px) {
   .site-nav { gap: 14px; }
   .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 10px; }
 }
 
 .hero { text-align: center; padding: 56px 12px 40px; }
@@ -204,7 +205,6 @@ img { max-width: 100%; display: block; }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .step-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px; box-shadow: var(--shadow); }
 
-.guide-teaser-cta { text-align: center; }
 .step-card .num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--gold); background: var(--gold-tint); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .step-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 15.5px; margin: 0 0 8px; }
 .step-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
@@ -230,6 +230,12 @@ img { max-width: 100%; display: block; }
 .cta-band p { color: #b7c0ba; font-size: 14.5px; margin: 0 0 24px; }
 .cta-band .btn-primary { background: var(--gold); color: var(--ink); }
 .cta-band .btn-primary:hover { background: #cf9631; }
+
+.social-section { text-align: center; padding: 30px 12px 6px; }
+.social-heading { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+.social-links { display: flex; justify-content: center; gap: 12px; }
+.social-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line); color: var(--ink-soft); box-shadow: var(--shadow); }
+.social-icon:hover { color: #fff; background: var(--accent); border-color: var(--accent); }
 
 .site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
 .site-footer a { color: var(--muted); text-decoration: none; }
@@ -296,6 +302,7 @@ img { max-width: 100%; display: block; }
 </nav>
 <a class="cta-btn" href="invoice">Free Invoice Generator</a>
 <a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
 </div>
 </header>
 
@@ -467,15 +474,6 @@ img { max-width: 100%; display: block; }
 </div>
 </section>
 
-<section class="section" id="full-guide">
-<h2 class="section-title">Every setting, explained</h2>
-<p class="section-sub">A full walkthrough of the app - from your Store details down to Premium - with real screenshots, not stock photos.</p>
-
-<div class="guide-teaser-cta">
-<a class="btn-primary" href="guide">See the Full Guide →</a>
-</div>
-</section>
-
 <section class="section">
   <h2 class="section-title">Common questions</h2>
 
@@ -571,24 +569,26 @@ img { max-width: 100%; display: block; }
 </div>
 </section>
 
+<section class="social-section">
+<h3 class="social-heading">Social</h3>
+<div class="social-links">
+<a class="social-icon" href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener" aria-label="GoOnlinePOS on Facebook" title="Facebook">
+<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.523 1.492-3.917 3.777-3.917 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94"/></svg>
+</a>
+<!-- Instagram: no profile URL yet. Add it here once one exists - mirror the
+     Facebook <a> above (same .social-icon class), swap href/aria-label/title,
+     and use an Instagram glyph SVG in place of the Facebook path data. -->
+</div>
+</section>
+
 </div>
 
 <footer class="site-footer">
-<a href="about">About</a>
-<span>·</span>
-<a href="how-it-works">How to Use</a>
-<span>·</span>
-<a href="guide">Full Guide</a>
-<span>·</span>
-<a href="blog">Blog</a>
+<a href="contact">Contact</a>
 <span>·</span>
 <a href="privacy">Privacy Policy</a>
 <span>·</span>
 <a href="terms">Terms of Service</a>
-<span>·</span>
-<a href="contact">Contact</a>
-<span>·</span>
-<a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">Facebook</a>
 <span>·</span>
 <a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
 </footer>

@@ -26,18 +26,6 @@
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/how-it-works</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://goonlinepos.com/guide</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
     <loc>https://goonlinepos.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
