@@ -199,8 +199,6 @@ button:active { transform: translateY(1px); }
 
 .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
 .search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fbfbf8; }
-.scan-btn { flex-shrink: 0; width: 42px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fbfbf8; font-size: 17px; display: flex; align-items: center; justify-content: center; }
-.scan-btn:hover { background: var(--accent-tint); border-color: #bfe0cf; }
 .search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 
 .category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
@@ -262,23 +260,14 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .complete-btn:hover:not(:disabled) { background: var(--accent-dark); }
 .complete-btn:disabled { background: #e3e1d8; color: #a19d8f; }
 
-.scanner-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.7); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 110; padding: 16px; }
 .scanner-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 420px; overflow: hidden; box-shadow: var(--shadow-lg); }
 .scanner-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
 .scanner-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
 .scanner-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
 .scanner-header button:hover { background: #f2f1ea; color: var(--ink); }
-.scanner-body { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; overflow: hidden; }
-.scanner-body video { width: 100%; height: 100%; object-fit: contain; background: #000; }
-.scanner-frame { position: absolute; inset: 16% 10%; border: 3px solid var(--gold); border-radius: 12px; box-shadow: 0 0 0 2000px rgba(0,0,0,.35); pointer-events: none; }
-.scanner-torch-btn { position: absolute; bottom: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 5; }
-.scanner-torch-btn.torch-active { background: var(--gold); }
-.scanner-torch-btn:hover { background: rgba(0,0,0,.7); }
-.scanner-torch-btn.torch-active:hover { background: #cf9631; }
-.scanner-hint { text-align: center; font-size: 13px; color: var(--ink-soft); padding: 14px 18px 6px; margin: 0; }
-.scanner-message { margin: 0 18px 18px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; }
-.scanner-message.success { background: var(--accent-tint); color: var(--accent-dark); }
-.scanner-message.error { background: var(--danger-tint); color: var(--danger); }
+.usb-scan-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; box-shadow: var(--shadow-lg); z-index: 200; }
+.usb-scan-toast.success { background: var(--accent-tint); color: var(--accent-dark); }
+.usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
 
 .settings-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
 .settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
@@ -535,15 +524,14 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
     </div>
     <div class="toggle-row compact">
-      <div class="toggle-label">📷 <span id="barcodeScannerToggleLabel">Barcode Scanner</span></div>
+      <div class="toggle-label">🏷️ <span id="barcodeScannerToggleLabel">Barcode Scanner</span></div>
       <label class="toggle-switch">
-        <input type="checkbox" id="barcodeScannerToggle" onchange="toggleBarcodeScannerSetting()">
+        <input type="checkbox" id="barcodeScannerToggle" checked onchange="toggleBarcodeScannerSetting()">
         <span class="toggle-slider"></span>
       </label>
     </div>
     <div class="search-row">
     <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
-    <button type="button" class="scan-btn hidden" id="scanBtn" onclick="openScanner()" title="Scan barcode">📷</button>
     </div>
     <div id="categoryChips" class="category-chips"></div>
     <div id="productsList" class="product-list"></div>
@@ -658,23 +646,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
 <!-- OFFLINE-STRIP:COOKIE-SETTINGS-LINK:END -->
 </footer>
-
-<div id="scannerOverlay" class="scanner-overlay hidden" onclick="if(event.target===this) closeScanner()">
-<div class="scanner-modal">
-  <div class="scanner-header">
-    <h2 id="scannerTitle">Scan Barcode</h2>
-    <button onclick="closeScanner()">✕</button>
-  </div>
-  <div class="scanner-body">
-    <video id="scannerVideo" autoplay playsinline muted></video>
-    <div class="scanner-frame"></div>
-    <button type="button" id="scannerTorchBtn" class="scanner-torch-btn hidden" onclick="toggleTorch()" title="Toggle flashlight">🔦</button>
-    <canvas id="scannerCanvas" class="hidden"></canvas>
-  </div>
-  <p id="scannerHint" class="scanner-hint">Point the camera at a product's barcode</p>
-  <div id="scannerMessage" class="scanner-message hidden"></div>
-</div>
-</div>
 
 <div id="customerScreenOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeCustomerScreenPanel()">
 <div class="scanner-modal" style="max-width:480px;">
@@ -1115,7 +1086,7 @@ Website: goonlinepos.com</textarea>
   <div style="padding:18px 20px; overflow-y:auto;">
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalHowTitle">How the offline version works</h3>
     <ul style="margin:0 0 18px; padding-left:20px; font-size:13px; color:var(--ink-soft); line-height:1.7;" id="offlineModalHowList">
-      <li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li>
+      <li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen work reliably.</li>
       <li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li>
       <li>It works exactly like this website, offline - same cart, receipts, inventory, and languages.</li>
       <li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>
@@ -1169,8 +1140,10 @@ Website: goonlinepos.com</textarea>
 <!-- OFFLINE-STRIP:BUY-PREMIUM-MODAL:END -->
 
 <script src="vendor/xlsx.full.min.js"></script>
-<script src="vendor/zxing-browser.min.js"></script>
 <!-- OFFLINE-STRIP:JSZIP:START --><script src="vendor/jszip.min.js"></script><!-- OFFLINE-STRIP:JSZIP:END -->
+<script src="modules/usb-scanner.js"></script>
+<script src="modules/receipt.js"></script>
+<!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:START --><script src="modules/offline-builder.js"></script><!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:END -->
 <script>
 
 const translations = {
@@ -1180,8 +1153,7 @@ en: {
   settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
-  scannerTitle: "Scan Barcode", scannerHint: "Point the camera at a product's barcode", scannerUnsupported: "Barcode scanning isn't available in this browser.",
-  scannerNoCamera: "Couldn't access the camera. Check permissions and try again.", scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
+  scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
   customItemLink: "+ Add a custom item", proceedLabel: "Proceed to Payment",
   checkoutHeading: "Payment", totalDueLabel: "Total Due",
   paymentMethodLabel: "Payment Method", totalEnteredLabel: "Entered:", changeLabelInfo: "Change:", addPaymentRowBtn: "+ Split Payment",
@@ -1236,7 +1208,7 @@ en: {
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed Amount", taxExemptLabel: "Tax Exempt", taxExemptTag: "No Tax",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
   productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.",
-  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Adds a scan button next to search on the main screen, to add items by SKU using your camera.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "When on, scanning a barcode with a USB barcode scanner adds the matching item by SKU from anywhere on the main screen.",
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
   addProductPhotoLabel: "Photo (optional)", productPhotoUploadError: "Couldn't load that image. Try a different file.", productPhotoChangeTitle: "Click to change photo", removePhotoLabel: "Remove",
   addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
@@ -1266,7 +1238,7 @@ en: {
   offlineDownloadLabel: "Offline Version", offlineDownloadInfo: "Get a full copy of the app that runs with zero internet - good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.",
   offlineDownloadButtonLabel: "Download Offline POS", offlineLockMsgText: "This is a Premium feature. Activate a Premium code in Settings → Premium to download the offline version.",
   offlineModalTitle: "Before You Download", offlineModalHowTitle: "How the offline version works",
-  offlineModalHowList: "<li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen and camera barcode scanner work reliably.</li><li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li><li>It works exactly like this website, offline - same cart, receipts, inventory, and languages.</li><li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>",
+  offlineModalHowList: "<li>Unzip it anywhere, then run the included launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), or <code>start-server.sh</code> (Linux) - to open the app in your browser. This is what makes the Customer Screen work reliably.</li><li>For a single register with no Customer Screen, you can also just double-click <code>app.html</code> directly.</li><li>It works exactly like this website, offline - same cart, receipts, inventory, and languages.</li><li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>",
   offlineModalUpdateTitle: "Getting updates later", offlineModalUpdateText: "Come back and download again anytime while your Premium is active to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.",
   offlineAgreeLabel: "I've read the above and agree to the <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Terms of Service</a>, including that this software is provided \"as is\" with no warranty.",
   offlineCancelBtnLabel: "Cancel", offlineConfirmDownloadBtnLabel: "Download",
@@ -1278,8 +1250,7 @@ ar: {
   settingsButtonLabel: "الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
-  scannerTitle: "مسح الباركود", scannerHint: "وجّه الكاميرا نحو باركود المنتج", scannerUnsupported: "مسح الباركود غير متاح في هذا المتصفح.",
-  scannerNoCamera: "تعذّر الوصول إلى الكاميرا. تحقق من الأذونات وحاول مرة أخرى.", scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
+  scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
   customItemLink: "+ إضافة صنف مخصص", proceedLabel: "المتابعة إلى الدفع",
   checkoutHeading: "الدفع", totalDueLabel: "المبلغ المستحق",
   paymentMethodLabel: "طريقة الدفع", totalEnteredLabel: "المُدخل:", changeLabelInfo: "الباقي:", addPaymentRowBtn: "+ تقسيم الدفع",
@@ -1333,7 +1304,7 @@ ar: {
   discountTypePercentOption: "نسبة مئوية (%)", discountTypeAmountOption: "مبلغ ثابت", taxExemptLabel: "معفى من الضريبة", taxExemptTag: "بدون ضريبة",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
   productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج والمخزون والإعفاء الضريبي (TaxExempt)، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
-  barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "يضيف زر مسح بجانب البحث في الشاشة الرئيسية، لإضافة الأصناف عبر رمز المنتج باستخدام الكاميرا.",
+  barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "عند التفعيل، يؤدي مسح باركود بواسطة ماسح USB إلى إضافة الصنف المطابق عبر رمز المنتج من أي مكان في الشاشة الرئيسية.",
   addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
   addProductPhotoLabel: "صورة (اختياري)", productPhotoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملفًا آخر.", productPhotoChangeTitle: "انقر لتغيير الصورة", removePhotoLabel: "إزالة",
   addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
@@ -1363,7 +1334,7 @@ ar: {
   offlineDownloadLabel: "النسخة غير المتصلة", offlineDownloadInfo: "احصل على نسخة كاملة من التطبيق تعمل بدون إنترنت نهائيًا - مناسبة لجهاز كمبيوتر في المتجر غير متصل بالإنترنت، أو كنسخة احتياطية للتثبيت. كل شيء يعمل بنفس الطريقة، بما في ذلك شاشة العميل.",
   offlineDownloadButtonLabel: "تنزيل نظام نقاط البيع غير المتصل", offlineLockMsgText: "هذه ميزة بريميوم. فعّل رمز بريميوم من الإعدادات ← بريميوم لتنزيل النسخة غير المتصلة.",
   offlineModalTitle: "قبل التنزيل", offlineModalHowTitle: "كيف تعمل النسخة غير المتصلة",
-  offlineModalHowList: "<li>فك ضغط الملف في أي مكان، ثم شغّل المشغّل المرفق - <code>start-server.bat</code> (ويندوز)، أو <code>start-server-mac.command</code> (ماك)، أو <code>start-server.sh</code> (لينكس) - لفتح التطبيق في متصفحك. هذا ما يجعل شاشة العميل وماسح الباركود بالكاميرا يعملان بشكل موثوق.</li><li>لتشغيل صندوق دفع واحد بدون شاشة العميل، يمكنك أيضًا فتح <code>app.html</code> مباشرة بنقرتين.</li><li>يعمل تمامًا مثل هذا الموقع، دون اتصال بالإنترنت - نفس السلة والإيصالات والمخزون واللغات.</li><li>يتم حفظ البيانات فقط على ذلك الجهاز، بدون مزامنة سحابية - قم بعمل نسخة احتياطية بانتظام من الإعدادات ← النسخ الاحتياطي.</li>",
+  offlineModalHowList: "<li>فك ضغط الملف في أي مكان، ثم شغّل المشغّل المرفق - <code>start-server.bat</code> (ويندوز)، أو <code>start-server-mac.command</code> (ماك)، أو <code>start-server.sh</code> (لينكس) - لفتح التطبيق في متصفحك. هذا ما يجعل شاشة العميل تعمل بشكل موثوق.</li><li>لتشغيل صندوق دفع واحد بدون شاشة العميل، يمكنك أيضًا فتح <code>app.html</code> مباشرة بنقرتين.</li><li>يعمل تمامًا مثل هذا الموقع، دون اتصال بالإنترنت - نفس السلة والإيصالات والمخزون واللغات.</li><li>يتم حفظ البيانات فقط على ذلك الجهاز، بدون مزامنة سحابية - قم بعمل نسخة احتياطية بانتظام من الإعدادات ← النسخ الاحتياطي.</li>",
   offlineModalUpdateTitle: "الحصول على التحديثات لاحقًا", offlineModalUpdateText: "عد وقم بالتنزيل مرة أخرى في أي وقت طالما أن بريميوم لديك مفعّل للحصول على أحدث نسخة. لنقل بياناتك: من النسخة القديمة، اذهب إلى الإعدادات ← النسخ الاحتياطي ← تنزيل نسخة احتياطية كاملة، ثم في النسخة الجديدة استخدم الإعدادات ← النسخ الاحتياطي ← الاستعادة من نسخة احتياطية لاستعادتها.",
   offlineAgreeLabel: "لقد قرأت ما سبق وأوافق على <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">شروط الخدمة</a>، بما في ذلك أن هذا البرنامج يُقدَّم \"كما هو\" دون أي ضمان.",
   offlineCancelBtnLabel: "إلغاء", offlineConfirmDownloadBtnLabel: "تنزيل",
@@ -1420,12 +1391,11 @@ fil: {
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed na Halaga", taxExemptLabel: "Walang Buwis", taxExemptTag: "Walang Buwis",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
   productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category, SKU, Stock, at TaxExempt, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
-  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Nagdaragdag ng scan button sa tabi ng search sa main screen, para magdagdag ng item gamit ang SKU at camera.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Kapag naka-on, ang pag-scan ng barcode gamit ang USB barcode scanner ay nagdaragdag ng tumutugmang item gamit ang SKU, kahit saan sa main screen.",
   addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
   addProductPhotoLabel: "Larawan (opsyonal)", productPhotoUploadError: "Hindi ma-load ang larawang iyon. Subukan ang ibang file.", productPhotoChangeTitle: "I-click para palitan ang larawan", removePhotoLabel: "Alisin",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
-  scannerTitle: "I-scan ang Barcode", scannerHint: "Itutok ang camera sa barcode ng produkto", scannerUnsupported: "Hindi available ang pag-scan ng barcode sa browser na ito.",
-  scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
+  scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
   manageProductsEmpty: "Wala pang produkto - magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
   productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
@@ -1452,7 +1422,7 @@ fil: {
   offlineDownloadLabel: "Bersyon na Offline", offlineDownloadInfo: "Kumuha ng buong kopya ng app na gumagana nang walang internet - maganda para sa computer ng tindahan na offline, o bilang backup na install. Pareho pa rin ang lahat, kasama ang Customer Screen.",
   offlineDownloadButtonLabel: "I-download ang Offline POS", offlineLockMsgText: "Premium feature ito. I-activate ang Premium code sa Settings → Premium para ma-download ang offline na bersyon.",
   offlineModalTitle: "Bago Mag-download", offlineModalHowTitle: "Paano gumagana ang offline na bersyon",
-  offlineModalHowList: "<li>I-unzip kahit saan, pagkatapos patakbuhin ang kasamang launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para buksan ang app sa browser mo. Ito ang gumagawa sa Customer Screen at camera barcode scanner na maaasahang gumana.</li><li>Para sa iisang register na walang Customer Screen, pwede mo ring i-double-click lang ang <code>app.html</code> nang direkta.</li><li>Gumagana ito nang eksaktong tulad ng website na ito, offline - parehong cart, resibo, inventory, at mga wika.</li><li>Naka-save lang ang data sa computer na iyon, walang cloud sync - mag-backup nang regular mula sa Settings → Backup.</li>",
+  offlineModalHowList: "<li>I-unzip kahit saan, pagkatapos patakbuhin ang kasamang launcher - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para buksan ang app sa browser mo. Ito ang gumagawa sa Customer Screen na maaasahang gumana.</li><li>Para sa iisang register na walang Customer Screen, pwede mo ring i-double-click lang ang <code>app.html</code> nang direkta.</li><li>Gumagana ito nang eksaktong tulad ng website na ito, offline - parehong cart, resibo, inventory, at mga wika.</li><li>Naka-save lang ang data sa computer na iyon, walang cloud sync - mag-backup nang regular mula sa Settings → Backup.</li>",
   offlineModalUpdateTitle: "Pagkuha ng mga update sa hinaharap", offlineModalUpdateText: "Bumalik at mag-download ulit anumang oras habang aktibo ang Premium mo para makuha ang pinakabagong bersyon. Para ilipat ang data mo: sa lumang kopya, pumunta sa Settings → Backup → Download Full Backup, tapos sa bagong kopya gamitin ang Settings → Backup → Restore from Backup para i-load ulit ito.",
   offlineAgreeLabel: "Nabasa ko ang nasa itaas at sumasang-ayon ako sa <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Mga Tuntunin ng Serbisyo</a>, kasama ang katotohanang ibinibigay ang software na ito \"as is\" na walang warranty.",
   offlineCancelBtnLabel: "Kanselahin", offlineConfirmDownloadBtnLabel: "I-download",
@@ -1509,12 +1479,11 @@ hi: {
   discountTypePercentOption: "प्रतिशत (%)", discountTypeAmountOption: "निश्चित राशि", taxExemptLabel: "कर मुक्त", taxExemptTag: "कर मुक्त",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
   productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category, SKU, Stock और TaxExempt वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
-  barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "मुख्य स्क्रीन पर सर्च के पास एक स्कैन बटन जोड़ता है, ताकि कैमरे से SKU द्वारा आइटम जोड़े जा सकें।",
+  barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "चालू होने पर, USB बारकोड स्कैनर से बारकोड स्कैन करने पर मुख्य स्क्रीन पर कहीं से भी SKU के अनुसार मिलान वाला आइटम जुड़ जाता है।",
   addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
   addProductPhotoLabel: "फ़ोटो (वैकल्पिक)", productPhotoUploadError: "वह इमेज लोड नहीं हो सकी। दूसरी फ़ाइल आज़माएं।", productPhotoChangeTitle: "फ़ोटो बदलने के लिए क्लिक करें", removePhotoLabel: "हटाएं",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
-  scannerTitle: "बारकोड स्कैन करें", scannerHint: "कैमरे को उत्पाद के बारकोड की ओर करें", scannerUnsupported: "इस ब्राउज़र में बारकोड स्कैनिंग उपलब्ध नहीं है।",
-  scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
+  scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
   manageProductsEmpty: "अभी कोई उत्पाद नहीं है - ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
   productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
@@ -1541,7 +1510,7 @@ hi: {
   offlineDownloadLabel: "ऑफ़लाइन संस्करण", offlineDownloadInfo: "ऐप की पूरी कॉपी पाएं जो बिना इंटरनेट के चलती है - यह ऐसे दुकान के कंप्यूटर के लिए अच्छी है जो ऑफ़लाइन है, या एक बैकअप इंस्टॉल के रूप में। कस्टमर स्क्रीन सहित सब कुछ वैसे ही काम करता है।",
   offlineDownloadButtonLabel: "ऑफ़लाइन POS डाउनलोड करें", offlineLockMsgText: "यह एक प्रीमियम सुविधा है। ऑफ़लाइन संस्करण डाउनलोड करने के लिए सेटिंग्स ← प्रीमियम में प्रीमियम कोड सक्रिय करें।",
   offlineModalTitle: "डाउनलोड करने से पहले", offlineModalHowTitle: "ऑफ़लाइन संस्करण कैसे काम करता है",
-  offlineModalHowList: "<li>इसे कहीं भी अनज़िप करें, फिर शामिल लॉन्चर चलाएं - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), या <code>start-server.sh</code> (Linux) - ऐप को अपने ब्राउज़र में खोलने के लिए। यही कस्टमर स्क्रीन और कैमरा बारकोड स्कैनर को भरोसेमंद बनाता है।</li><li>बिना कस्टमर स्क्रीन वाले एक ही रजिस्टर के लिए, आप सीधे <code>app.html</code> पर डबल-क्लिक भी कर सकते हैं।</li><li>यह बिल्कुल इस वेबसाइट की तरह ही काम करता है, ऑफ़लाइन - वही कार्ट, रसीदें, इन्वेंट्री और भाषाएं।</li><li>डेटा केवल उसी कंप्यूटर पर सेव होता है, कोई क्लाउड सिंक नहीं - सेटिंग्स ← बैकअप से नियमित रूप से बैकअप लें।</li>",
+  offlineModalHowList: "<li>इसे कहीं भी अनज़िप करें, फिर शामिल लॉन्चर चलाएं - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), या <code>start-server.sh</code> (Linux) - ऐप को अपने ब्राउज़र में खोलने के लिए। यही कस्टमर स्क्रीन को भरोसेमंद बनाता है।</li><li>बिना कस्टमर स्क्रीन वाले एक ही रजिस्टर के लिए, आप सीधे <code>app.html</code> पर डबल-क्लिक भी कर सकते हैं।</li><li>यह बिल्कुल इस वेबसाइट की तरह ही काम करता है, ऑफ़लाइन - वही कार्ट, रसीदें, इन्वेंट्री और भाषाएं।</li><li>डेटा केवल उसी कंप्यूटर पर सेव होता है, कोई क्लाउड सिंक नहीं - सेटिंग्स ← बैकअप से नियमित रूप से बैकअप लें।</li>",
   offlineModalUpdateTitle: "बाद में अपडेट पाना", offlineModalUpdateText: "जब तक आपका प्रीमियम सक्रिय है, नवीनतम संस्करण पाने के लिए कभी भी वापस आकर फिर से डाउनलोड करें। अपना डेटा ले जाने के लिए: पुरानी कॉपी पर, सेटिंग्स ← बैकअप ← पूर्ण बैकअप डाउनलोड करें पर जाएं, फिर नई कॉपी पर सेटिंग्स ← बैकअप ← बैकअप से पुनर्स्थापित करें का उपयोग करके इसे वापस लोड करें।",
   offlineAgreeLabel: "मैंने ऊपर दी गई जानकारी पढ़ ली है और <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">सेवा की शर्तों</a> से सहमत हूं, जिसमें यह भी शामिल है कि यह सॉफ़्टवेयर बिना किसी वारंटी के \"जैसा है\" के आधार पर प्रदान किया जाता है।",
   offlineCancelBtnLabel: "रद्द करें", offlineConfirmDownloadBtnLabel: "डाउनलोड करें",
@@ -1598,12 +1567,11 @@ es: {
   discountTypePercentOption: "Porcentaje (%)", discountTypeAmountOption: "Monto Fijo", taxExemptLabel: "Exento de Impuesto", taxExemptTag: "Sin Impuesto",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
   productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category, SKU, Stock y TaxExempt, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
-  barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Agrega un botón de escaneo junto a la búsqueda en la pantalla principal, para añadir artículos por SKU usando la cámara.",
+  barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Cuando está activado, escanear un código de barras con un escáner USB añade el artículo correspondiente por SKU desde cualquier parte de la pantalla principal.",
   addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
   addProductPhotoLabel: "Foto (opcional)", productPhotoUploadError: "No se pudo cargar esa imagen. Prueba con otro archivo.", productPhotoChangeTitle: "Haz clic para cambiar la foto", removePhotoLabel: "Quitar",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
-  scannerTitle: "Escanear Código de Barras", scannerHint: "Apunta la cámara al código de barras del producto", scannerUnsupported: "El escaneo de códigos de barras no está disponible en este navegador.",
-  scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
+  scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
   manageProductsEmpty: "Aún no hay productos - agrega uno arriba o sube un CSV abajo.",
   productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
@@ -1630,7 +1598,7 @@ es: {
   offlineDownloadLabel: "Versión sin Conexión", offlineDownloadInfo: "Obtén una copia completa de la app que funciona sin conexión a internet - ideal para una computadora de la tienda sin conexión, o como instalación de respaldo. Todo funciona igual, incluida la Pantalla del Cliente.",
   offlineDownloadButtonLabel: "Descargar POS sin Conexión", offlineLockMsgText: "Esta es una función Premium. Activa un código Premium en Configuración → Premium para descargar la versión sin conexión.",
   offlineModalTitle: "Antes de Descargar", offlineModalHowTitle: "Cómo funciona la versión sin conexión",
-  offlineModalHowList: "<li>Descomprímelo donde quieras y luego ejecuta el lanzador incluido - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para abrir la app en tu navegador. Esto es lo que hace que la Pantalla del Cliente y el escáner de código de barras funcionen de forma confiable.</li><li>Para una sola caja sin Pantalla del Cliente, también puedes simplemente hacer doble clic en <code>app.html</code> directamente.</li><li>Funciona exactamente igual que este sitio web, sin conexión - mismo carrito, recibos, inventario e idiomas.</li><li>Los datos se guardan solo en esa computadora, sin sincronización en la nube - haz copias de seguridad regularmente desde Configuración → Copia de Seguridad.</li>",
+  offlineModalHowList: "<li>Descomprímelo donde quieras y luego ejecuta el lanzador incluido - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac), o <code>start-server.sh</code> (Linux) - para abrir la app en tu navegador. Esto es lo que hace que la Pantalla del Cliente funcione de forma confiable.</li><li>Para una sola caja sin Pantalla del Cliente, también puedes simplemente hacer doble clic en <code>app.html</code> directamente.</li><li>Funciona exactamente igual que este sitio web, sin conexión - mismo carrito, recibos, inventario e idiomas.</li><li>Los datos se guardan solo en esa computadora, sin sincronización en la nube - haz copias de seguridad regularmente desde Configuración → Copia de Seguridad.</li>",
   offlineModalUpdateTitle: "Obtener actualizaciones más adelante", offlineModalUpdateText: "Vuelve y descarga de nuevo cuando quieras mientras tu Premium esté activo para obtener la última versión. Para trasladar tus datos: en la copia antigua, ve a Configuración → Copia de Seguridad → Descargar Copia de Seguridad Completa, y luego en la copia nueva usa Configuración → Copia de Seguridad → Restaurar desde Copia de Seguridad para cargarlos de nuevo.",
   offlineAgreeLabel: "He leído lo anterior y acepto los <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">Términos de Servicio</a>, incluido que este software se proporciona \"tal cual\" sin garantía.",
   offlineCancelBtnLabel: "Cancelar", offlineConfirmDownloadBtnLabel: "Descargar",
@@ -1687,12 +1655,11 @@ th: {
   discountTypePercentOption: "เปอร์เซ็นต์ (%)", discountTypeAmountOption: "จำนวนเงินคงที่", taxExemptLabel: "ยกเว้นภาษี", taxExemptTag: "ไม่มีภาษี",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
   productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category, SKU, Stock กับ TaxExempt ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
-  barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เพิ่มปุ่มสแกนข้างช่องค้นหาในหน้าหลัก เพื่อเพิ่มสินค้าโดยใช้ SKU ผ่านกล้อง",
+  barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เมื่อเปิดใช้งาน การสแกนบาร์โค้ดด้วยเครื่องสแกน USB จะเพิ่มสินค้าที่ตรงกันตาม SKU ได้จากทุกที่ในหน้าหลัก",
   addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
   addProductPhotoLabel: "รูปภาพ (ไม่บังคับ)", productPhotoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองไฟล์อื่น", productPhotoChangeTitle: "คลิกเพื่อเปลี่ยนรูปภาพ", removePhotoLabel: "ลบ",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
-  scannerTitle: "สแกนบาร์โค้ด", scannerHint: "เล็งกล้องไปที่บาร์โค้ดของสินค้า", scannerUnsupported: "การสแกนบาร์โค้ดไม่รองรับในเบราว์เซอร์นี้",
-  scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
+  scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
   manageProductsEmpty: "ยังไม่มีสินค้า - เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
   productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
@@ -1719,7 +1686,7 @@ th: {
   offlineDownloadLabel: "เวอร์ชันออฟไลน์", offlineDownloadInfo: "รับแอปฉบับเต็มที่ทำงานได้โดยไม่ต้องใช้อินเทอร์เน็ตเลย - เหมาะสำหรับคอมพิวเตอร์ร้านค้าที่ออฟไลน์ หรือเป็นการติดตั้งสำรอง ทุกอย่างทำงานเหมือนเดิม รวมถึงหน้าจอลูกค้า",
   offlineDownloadButtonLabel: "ดาวน์โหลด POS ออฟไลน์", offlineLockMsgText: "นี่คือฟีเจอร์พรีเมียม เปิดใช้งานรหัสพรีเมียมที่การตั้งค่า ← พรีเมียม เพื่อดาวน์โหลดเวอร์ชันออฟไลน์",
   offlineModalTitle: "ก่อนดาวน์โหลด", offlineModalHowTitle: "เวอร์ชันออฟไลน์ทำงานอย่างไร",
-  offlineModalHowList: "<li>แตกไฟล์ zip ที่ไหนก็ได้ แล้วรันตัวเปิดที่แนบมา - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac) หรือ <code>start-server.sh</code> (Linux) - เพื่อเปิดแอปในเบราว์เซอร์ของคุณ นี่คือสิ่งที่ทำให้หน้าจอลูกค้าและเครื่องสแกนบาร์โค้ดด้วยกล้องทำงานได้อย่างน่าเชื่อถือ</li><li>สำหรับเครื่องคิดเงินเครื่องเดียวที่ไม่มีหน้าจอลูกค้า คุณสามารถดับเบิลคลิก <code>app.html</code> โดยตรงได้เช่นกัน</li><li>ทำงานเหมือนกับเว็บไซต์นี้ทุกประการแบบออฟไลน์ - ตะกร้าสินค้า ใบเสร็จ สินค้าคงคลัง และภาษาเดียวกัน</li><li>ข้อมูลถูกบันทึกไว้ที่คอมพิวเตอร์เครื่องนั้นเท่านั้น ไม่มีการซิงค์บนคลาวด์ - สำรองข้อมูลเป็นประจำจากการตั้งค่า ← สำรองข้อมูล</li>",
+  offlineModalHowList: "<li>แตกไฟล์ zip ที่ไหนก็ได้ แล้วรันตัวเปิดที่แนบมา - <code>start-server.bat</code> (Windows), <code>start-server-mac.command</code> (Mac) หรือ <code>start-server.sh</code> (Linux) - เพื่อเปิดแอปในเบราว์เซอร์ของคุณ นี่คือสิ่งที่ทำให้หน้าจอลูกค้าทำงานได้อย่างน่าเชื่อถือ</li><li>สำหรับเครื่องคิดเงินเครื่องเดียวที่ไม่มีหน้าจอลูกค้า คุณสามารถดับเบิลคลิก <code>app.html</code> โดยตรงได้เช่นกัน</li><li>ทำงานเหมือนกับเว็บไซต์นี้ทุกประการแบบออฟไลน์ - ตะกร้าสินค้า ใบเสร็จ สินค้าคงคลัง และภาษาเดียวกัน</li><li>ข้อมูลถูกบันทึกไว้ที่คอมพิวเตอร์เครื่องนั้นเท่านั้น ไม่มีการซิงค์บนคลาวด์ - สำรองข้อมูลเป็นประจำจากการตั้งค่า ← สำรองข้อมูล</li>",
   offlineModalUpdateTitle: "รับการอัปเดตในภายหลัง", offlineModalUpdateText: "กลับมาดาวน์โหลดใหม่ได้ทุกเมื่อตราบใดที่พรีเมียมของคุณยังใช้งานอยู่ เพื่อรับเวอร์ชันล่าสุด หากต้องการย้ายข้อมูล: บนสำเนาเก่า ไปที่การตั้งค่า ← สำรองข้อมูล ← ดาวน์โหลดข้อมูลสำรองฉบับเต็ม จากนั้นบนสำเนาใหม่ใช้การตั้งค่า ← สำรองข้อมูล ← กู้คืนจากไฟล์สำรอง เพื่อโหลดกลับเข้าไป",
   offlineAgreeLabel: "ฉันได้อ่านข้อมูลข้างต้นแล้วและยอมรับ<a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">ข้อกำหนดในการให้บริการ</a> รวมถึงการที่ซอฟต์แวร์นี้ให้บริการ \"ตามสภาพ\" โดยไม่มีการรับประกัน",
   offlineCancelBtnLabel: "ยกเลิก", offlineConfirmDownloadBtnLabel: "ดาวน์โหลด",
@@ -1886,10 +1853,9 @@ async function loadSettings() {
         if (el && el.type !== "checkbox") el.value = s[key];
       });
       const scannerToggle = document.getElementById("barcodeScannerToggle");
-      if (scannerToggle) scannerToggle.checked = !!s.barcodeScannerEnabled;
+      if (scannerToggle) scannerToggle.checked = s.barcodeScannerEnabled !== false;
     } catch (e) {  }
   }
-  syncScanButtonVisibility();
   document.getElementById("newProductPrice").step = amountStep();
 }
 async function saveSettings() {
@@ -1904,14 +1870,8 @@ async function saveSettings() {
   };
   await storageSet("pos-settings", JSON.stringify(settings));
 }
-function syncScanButtonVisibility() {
-  const scanBtn = document.getElementById("scanBtn");
-  if (scanBtn) scanBtn.classList.add("hidden");
-}
 function toggleBarcodeScannerSetting() {
-  const toggle = document.getElementById("barcodeScannerToggle");
-  if (toggle) toggle.checked = false;
-  alert("Coming back soon we are working on it!");
+  saveSettings();
 }
 async function loadPaymentMethods() {
   const raw = await storageGet("pos-payment-methods");
@@ -3257,170 +3217,6 @@ function exportSalesToExcel() {
   downloadTextFile("sales-report-items-" + suffix + ".csv", rowsToCsv(childRows));
 }
 
-/* OFFLINE-STRIP:DOWNLOAD-JS:START */
-const OFFLINE_PREMIUM_CODE = "GOOFFLINE-LIFETIME";
-
-function openOfflineDownloadModal() {
-  if (!premiumUnlocked) return;
-  const checkbox = document.getElementById("offlineAgreeCheckbox");
-  if (checkbox) checkbox.checked = false;
-  const confirmBtn = document.getElementById("offlineConfirmDownloadBtn");
-  if (confirmBtn) confirmBtn.disabled = true;
-  const cancelBtn = document.getElementById("offlineCancelBtn");
-  if (cancelBtn) cancelBtn.disabled = false;
-  const errorBox = document.getElementById("offlineDownloadError");
-  if (errorBox) errorBox.classList.add("hidden");
-  const progressBox = document.getElementById("offlineDownloadProgress");
-  if (progressBox) progressBox.classList.add("hidden");
-  document.getElementById("offlineDownloadOverlay").classList.remove("hidden");
-  trackEvent("offline_download_viewed", {});
-}
-function closeOfflineDownloadModal() {
-  document.getElementById("offlineDownloadOverlay").classList.add("hidden");
-}
-function handleOfflineAgreeChange() {
-  const checkbox = document.getElementById("offlineAgreeCheckbox");
-  const confirmBtn = document.getElementById("offlineConfirmDownloadBtn");
-  if (confirmBtn) confirmBtn.disabled = !(checkbox && checkbox.checked);
-}
-
-async function fetchOfflineText(path) {
-  const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch " + path + " (" + res.status + ")");
-  return res.text();
-}
-async function fetchOfflineBlob(path) {
-  const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch " + path + " (" + res.status + ")");
-  return res.blob();
-}
-
-function stripMarked(html, marker, label) {
-  const re = new RegExp("<!-- OFFLINE-STRIP:" + marker + ":START -->[\\s\\S]*?<!-- OFFLINE-STRIP:" + marker + ":END -->\\n?", "g");
-  const out = html.replace(re, "");
-  if (out === html) console.warn("Offline package: \"" + marker + "\" marker not found (" + label + ") - check app.html hasn't drifted from the OFFLINE-STRIP comments.");
-  return out;
-}
-
-function buildOfflineAppHtml(html) {
-  html = stripMarked(html, "COOKIE-CONSENT", "cookie consent script");
-  html = stripMarked(html, "GOOGLE-FONTS", "google fonts links");
-  html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
-  html = stripMarked(html, "COOKIE-BANNER", "cookie banner markup");
-  html = stripMarked(html, "JSZIP", "jszip script tag");
-  html = stripMarked(html, "DOWNLOAD-SECTION", "download settings section");
-  html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");
-  html = stripMarked(html, "BUY-PREMIUM-BUTTON", "buy premium button");
-  html = stripMarked(html, "BUY-PREMIUM-MODAL", "buy premium modal");
-  const heartbeatRe = /\/\* OFFLINE-STRIP:HEARTBEAT:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:HEARTBEAT:END \*\/\n?/;
-  html = heartbeatRe.test(html) ? html.replace(heartbeatRe, "") : (console.warn("Offline package: heartbeat marker not found"), html);
-
-  const offlineActivationJs = [
-    'const DEFAULT_PREMIUM_CODE = "' + OFFLINE_PREMIUM_CODE + '";',
-    'async function activatePremiumCode() {',
-    '  const errorBox = document.getElementById("premiumCodeError");',
-    '  errorBox.classList.add("hidden");',
-    '  const entered = getEnteredPremiumCode();',
-    '  if (entered === DEFAULT_PREMIUM_CODE) {',
-    '    await unlockPremiumLocally(entered, "");',
-    '  } else {',
-    '    errorBox.textContent = tr("premiumCodeInvalid");',
-    '    errorBox.classList.remove("hidden");',
-    '  }',
-    '}',
-    'async function autoGrantDefaultPremium() {',
-    '  await unlockPremiumLocally(DEFAULT_PREMIUM_CODE, "");',
-    '}'
-  ].join("\n");
-  const activationRe = /\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:START \*\/[\s\S]*?\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:END \*\//;
-  html = activationRe.test(html) ? html.replace(activationRe, offlineActivationJs) : (console.warn("Offline package: premium-activation marker not found"), html);
-
-  const defaultOptionRe = /<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START -->[\s\S]*?<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:END -->/;
-  const offlineDefaultOption = '<option value="' + OFFLINE_PREMIUM_CODE + '" id="premiumCodeDefaultOption">' + OFFLINE_PREMIUM_CODE + '</option>';
-  html = defaultOptionRe.test(html) ? html.replace(defaultOptionRe, offlineDefaultOption) : (console.warn("Offline package: default-code-option marker not found"), html);
-
-  const downloadJsRe = /\/\* OFFLINE-STRIP:DOWNLOAD-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:DOWNLOAD-JS:END \*\/\n?/;
-  html = downloadJsRe.test(html) ? html.replace(downloadJsRe, "") : (console.warn("Offline package: download-js marker not found"), html);
-
-  const buyPremiumJsRe = /\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:END \*\/\n?/;
-  html = buyPremiumJsRe.test(html) ? html.replace(buyPremiumJsRe, "") : (console.warn("Offline package: buy-premium-js marker not found"), html);
-
-  return html;
-}
-function buildOfflineCustomerHtml(html) {
-  html = stripMarked(html, "GOOGLE-FONTS", "customer.html google fonts links");
-  html = stripMarked(html, "CUSTOMER-ANALYTICS", "customer.html analytics script");
-  return html;
-}
-
-async function confirmOfflineDownload() {
-  if (!premiumUnlocked) { closeOfflineDownloadModal(); return; }
-  const confirmBtn = document.getElementById("offlineConfirmDownloadBtn");
-  const cancelBtn = document.getElementById("offlineCancelBtn");
-  const errorBox = document.getElementById("offlineDownloadError");
-  const progressBox = document.getElementById("offlineDownloadProgress");
-
-  errorBox.classList.add("hidden");
-  progressBox.classList.remove("hidden");
-  confirmBtn.disabled = true;
-  cancelBtn.disabled = true;
-
-  try {
-    if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
-
-    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, zxingBlob, licensesText, readmeText, shText, batText, macCommandText] = await Promise.all([
-      fetchOfflineText("app.html"),
-      fetchOfflineText("customer.html"),
-      fetchOfflineBlob("favicon.png"),
-      fetchOfflineBlob("favicon.ico"),
-      fetchOfflineBlob("vendor/xlsx.full.min.js"),
-      fetchOfflineBlob("vendor/zxing-browser.min.js"),
-      fetchOfflineText("offline/vendor/LICENSES.txt"),
-      fetchOfflineText("offline/README.txt"),
-      fetchOfflineText("offline/start-server.sh"),
-      fetchOfflineText("offline/start-server.bat"),
-      fetchOfflineText("offline/start-server-mac.command")
-    ]);
-
-    const zip = new JSZip();
-    zip.file("app.html", buildOfflineAppHtml(appHtml));
-    zip.file("customer.html", buildOfflineCustomerHtml(customerHtml));
-    zip.file("favicon.png", faviconBlob);
-    zip.file("favicon.ico", faviconIcoBlob);
-    zip.file("vendor/xlsx.full.min.js", xlsxBlob);
-    zip.file("vendor/zxing-browser.min.js", zxingBlob);
-    zip.file("vendor/LICENSES.txt", licensesText);
-    zip.file("README.txt", readmeText);
-    zip.file("start-server.sh", shText, { unixPermissions: "755" });
-    zip.file("start-server.bat", batText);
-    zip.file("start-server-mac.command", macCommandText, { unixPermissions: "755" });
-
-    const blob = await zip.generateAsync({ type: "blob", platform: "UNIX" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "GoOnlinePOS-Offline.zip";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
-
-    trackEvent("offline_download", {});
-    closeOfflineDownloadModal();
-  } catch (e) {
-    console.error("Offline package build failed:", e);
-    errorBox.textContent = tr("offlineDownloadErrorText");
-    errorBox.classList.remove("hidden");
-    trackEvent("offline_download_failed", { error_message: String(e && e.message || e) });
-  } finally {
-    progressBox.classList.add("hidden");
-    const checkbox = document.getElementById("offlineAgreeCheckbox");
-    confirmBtn.disabled = !(checkbox && checkbox.checked);
-    cancelBtn.disabled = false;
-  }
-}
-/* OFFLINE-STRIP:DOWNLOAD-JS:END */
-
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:START */
 function openBuyPremiumModal() {
   document.getElementById("buyPremiumOverlay").classList.remove("hidden");
@@ -3535,146 +3331,6 @@ function addProductToCart(product) {
   });
 }
 
-let barcodeReader = null;
-let scannerPollTimer = null;
-let scannerMessageTimeout = null;
-let lastScannedCode = "";
-let lastScanTime = 0;
-
-async function openScanner() {
-  alert("Coming soon");
-  return;
-  const overlay = document.getElementById("scannerOverlay");
-  const messageEl = document.getElementById("scannerMessage");
-  messageEl.classList.add("hidden");
-  overlay.classList.remove("hidden");
-  lastScannedCode = "";
-  lastScanTime = 0;
-  torchOn = false;
-  updateTorchButton();
-
-  if (typeof ZXingBrowser === "undefined") {
-    showScannerMessage(tr("scannerUnsupported"), "error");
-    return;
-  }
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    showScannerMessage(tr("scannerNoCamera"), "error");
-    return;
-  }
-
-  try {
-    const constraints = { video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } } };
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    const videoEl = document.getElementById("scannerVideo");
-    videoEl.srcObject = stream;
-    await videoEl.play().catch(function() {});
-
-    const track = stream.getVideoTracks()[0];
-    applyContinuousFocus(track);
-    setTimeout(function() { applyContinuousFocus(track); }, 400);
-
-    if (track && typeof track.getCapabilities === "function") {
-      try {
-        const caps = track.getCapabilities();
-        const torchBtn = document.getElementById("scannerTorchBtn");
-        if (caps.torch && torchBtn) torchBtn.classList.remove("hidden");
-        else if (torchBtn) torchBtn.classList.add("hidden");
-      } catch (capsErr) {}
-    }
-
-    barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
-    clearInterval(scannerPollTimer);
-    scannerPollTimer = setInterval(pollScannerFrame, 200);
-  } catch (err) {
-    showScannerMessage(tr("scannerNoCamera"), "error");
-  }
-}
-
-function applyContinuousFocus(track) {
-  if (!track || typeof track.getCapabilities !== "function") return;
-  try {
-    const caps = track.getCapabilities();
-    if (caps.focusMode && caps.focusMode.indexOf("continuous") > -1) {
-      track.applyConstraints({ advanced: [{ focusMode: "continuous" }] }).catch(function() {});
-    }
-  } catch (focusErr) {}
-}
-
-let torchOn = false;
-function toggleTorch() {
-  const videoEl = document.getElementById("scannerVideo");
-  if (!videoEl || !videoEl.srcObject) return;
-  const track = videoEl.srcObject.getVideoTracks()[0];
-  if (!track) return;
-  torchOn = !torchOn;
-  track.applyConstraints({ advanced: [{ torch: torchOn }] }).catch(function() { torchOn = !torchOn; });
-  updateTorchButton();
-}
-function updateTorchButton() {
-  const btn = document.getElementById("scannerTorchBtn");
-  if (btn) btn.classList.toggle("torch-active", torchOn);
-}
-
-function pollScannerFrame() {
-  const videoEl = document.getElementById("scannerVideo");
-  if (!videoEl || !videoEl.videoWidth || !barcodeReader) return;
-
-  const vw = videoEl.videoWidth;
-  const vh = videoEl.videoHeight;
-
-  const canvas = document.getElementById("scannerCanvas");
-  canvas.width = vw;
-  canvas.height = vh;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(videoEl, 0, 0, vw, vh);
-
-  try {
-    const result = barcodeReader.decodeFromCanvas(canvas);
-    if (result) handleScannedCode(result.getText());
-  } catch (decodeErr) {}
-}
-
-function closeScanner() {
-  document.getElementById("scannerOverlay").classList.add("hidden");
-  clearInterval(scannerPollTimer);
-  scannerPollTimer = null;
-  if (barcodeReader) {
-    try { barcodeReader.reset(); } catch (e) {}
-    barcodeReader = null;
-  }
-  const videoEl = document.getElementById("scannerVideo");
-  if (videoEl && videoEl.srcObject) {
-    try { videoEl.srcObject.getTracks().forEach(function(t) { t.stop(); }); } catch (e) {}
-    videoEl.srcObject = null;
-  }
-}
-
-function showScannerMessage(text, type) {
-  const messageEl = document.getElementById("scannerMessage");
-  messageEl.textContent = text;
-  messageEl.className = "scanner-message " + type;
-  messageEl.classList.remove("hidden");
-  clearTimeout(scannerMessageTimeout);
-  if (type === "success") {
-    scannerMessageTimeout = setTimeout(function() { messageEl.classList.add("hidden"); }, 1800);
-  }
-}
-
-function handleScannedCode(code) {
-  const now = Date.now();
-  if (code === lastScannedCode && (now - lastScanTime) < 2000) return;
-  lastScannedCode = code;
-  lastScanTime = now;
-
-  const match = products.find(function(p) { return p.sku && p.sku.trim() !== "" && p.sku.trim() === code.trim(); });
-  if (match) {
-    addProductToCart(match);
-    showScannerMessage(tr("scannerFound") + " " + match.name, "success");
-    if (navigator.vibrate) navigator.vibrate(80);
-  } else {
-    showScannerMessage(tr("scannerNotFound") + " " + code, "error");
-  }
-}
 function addCustomItem() {
   itemCounter++;
   cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false });
@@ -4154,173 +3810,6 @@ function updateZoom() {
   saveSettings();
 }
 
-function printReceipt() {
-  const select = document.getElementById("paperSize");
-  let width;
-  if (select.value === "auto") width = "auto";
-  else if (select.value === "custom") width = Number(document.getElementById("customWidth").value) || 80;
-  else width = Number(select.value);
-  updatePrintStyle(width);
-  window.print();
-}
-
-function getDocumentTitle() {
-  const type = document.getElementById("documentType").value;
-  if (type === "invoice") return tr("invoice");
-  if (type === "payment") return tr("payment");
-  return tr("receipt");
-}
-
-function computeTotalsFromItems(items, taxRate, discountType, discountValue) {
-  let subtotal = 0;
-  let taxableSubtotal = 0;
-  items.forEach(function(it) {
-    const lineTotal = (Number(it.qty) || 0) * (Number(it.price) || 0);
-    subtotal += lineTotal;
-    if (!it.taxExempt) taxableSubtotal += lineTotal;
-  });
-
-  let discount;
-  if (discountType === "amount") {
-    discount = Math.max(0, Math.min(Number(discountValue) || 0, subtotal));
-  } else {
-    discount = subtotal * (Number(discountValue) || 0) / 100;
-  }
-  const afterDiscount = subtotal - discount;
-
-  // Spread the discount across taxable and tax-exempt items in proportion
-  // to their share of the subtotal, so a flat/percent discount doesn't
-  // unfairly shift how much of the remaining total counts as taxable.
-  const taxableRatio = subtotal > 0 ? taxableSubtotal / subtotal : 0;
-  const taxableAfterDiscount = afterDiscount * taxableRatio;
-  const tax = taxableAfterDiscount * (Number(taxRate) || 0) / 100;
-  const grandTotal = afterDiscount + tax;
-
-  return { subtotal: subtotal, discount: discount, tax: tax, grandTotal: grandTotal };
-}
-
-function computeTotals() {
-  const taxRate = Number(val("taxRate")) || 0;
-  const discountType = val("discountType") || "percent";
-  const discountValue = Number(val("discountRate")) || 0;
-  return computeTotalsFromItems(cart, taxRate, discountType, discountValue);
-}
-
-function renderReceiptItems() {
-  const receiptItems = document.getElementById("receiptItems");
-  const emptyHint = document.getElementById("receiptEmptyHint");
-  receiptItems.innerHTML = "";
-  emptyHint.textContent = tr("receiptEmptyHint");
-  emptyHint.classList.toggle("hidden", cart.length > 0);
-
-  cart.forEach(function(c) {
-    const div = document.createElement("div");
-    div.className = "receipt-item";
-    div.setAttribute("data-id", c.id);
-    div.innerHTML =
-      "<div class=\"receipt-item-line\">" +
-        "<div class=\"receipt-item-name-input\" contenteditable=\"true\" data-placeholder=\"" + escapeAttr(tr("customItemName")) + "\">" + escapeHtml(c.name) + "</div>" +
-        "<span class=\"receipt-item-qty\">" + c.qty + "</span>" +
-        "<span class=\"receipt-item-total\">" + "</span>" +
-      "</div>" +
-      "<div class=\"receipt-item-detail-print\"></div>" +
-      "<div class=\"receipt-item-controls no-print\">" +
-        "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"" + amountStep() + "\" value=\"" + Number(c.price) + "\">" +
-        "<button type=\"button\" class=\"qty-btn\" data-action=\"dec\">−</button>" +
-        "<button type=\"button\" class=\"qty-btn\" data-action=\"inc\">+</button>" +
-        "<label class=\"cart-tax-exempt-label\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
-          "<input class=\"cart-tax-exempt\" type=\"checkbox\"" + (c.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
-        "</label>" +
-        "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
-      "</div>";
-
-    const nameEl = div.querySelector(".receipt-item-name-input");
-    nameEl.addEventListener("input", function() { c.name = this.textContent; updateTotalsAndHeader(); });
-    nameEl.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); this.blur(); } });
-    div.querySelector(".cart-tax-exempt").addEventListener("change", function() { c.taxExempt = this.checked; updateTotalsAndHeader(); });
-
-    div.querySelector(".price-input").addEventListener("input", function() { c.price = Number(this.value) || 0; updateTotalsAndHeader(); });
-    div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
-    div.querySelector("[data-action=\"inc\"]").addEventListener("click", function() { stepCartQty(c.id, 1); });
-    div.querySelector(".remove-cart-btn").addEventListener("click", function() { removeCartItem(c.id); });
-
-    receiptItems.appendChild(div);
-  });
-}
-
-function updateTotalsAndHeader() {
-  const symbol = symbolNow();
-  const taxName = val("taxName").trim() || tr("tax");
-  const taxRate = Number(val("taxRate")) || 0;
-
-  document.getElementById("receiptStoreName").textContent = val("storeName") || "GoOnlinePOS.com";
-  document.getElementById("receiptStoreDetails").innerHTML = escapeHtml(val("storeDetails")).replace(/\n/g, "<br>");
-  document.getElementById("receiptDocumentTitle").textContent = getDocumentTitle();
-  document.getElementById("receiptNumber").textContent = currentReceiptNumber;
-  if (document.activeElement !== document.getElementById("receiptNumberInput")) {
-    document.getElementById("receiptNumberInput").value = receiptCounterValue;
-  }
-
-  const cashierName = activeCashierName;
-  document.getElementById("receiptCashierName").textContent = cashierName;
-  document.getElementById("receiptCashierRow").classList.toggle("hidden", !cashierName);
-
-  const customerName = val("customerName").trim();
-  document.getElementById("receiptCustomerName").textContent = customerName;
-  document.getElementById("receiptCustomerRow").classList.toggle("hidden", !customerName);
-
-  cart.forEach(function(c) {
-    const row = document.querySelector('.receipt-item[data-id="' + c.id + '"]');
-    if (!row) return;
-    const total = (Number(c.qty) || 0) * (Number(c.price) || 0);
-    const totalEl = row.querySelector(".receipt-item-total");
-    const detailEl = row.querySelector(".receipt-item-detail-print");
-    if (totalEl) totalEl.textContent = symbol + " " + total.toFixed(decimalsNow());
-    if (detailEl) detailEl.textContent = symbol + " " + Number(c.price).toFixed(decimalsNow()) + " × " + c.qty + (c.taxExempt ? " (" + tr("taxExemptTag") + ")" : "");
-  });
-
-  const totals = computeTotals();
-  const received = totalEntered();
-  let change = received - totals.grandTotal;
-  if (change < 0) change = 0;
-
-  const paymentLinesEl = document.getElementById("receiptPaymentLines");
-  paymentLinesEl.innerHTML = "";
-  const activeRows = paymentRows.filter(function(r) { return Number(r.amount) > 0; });
-  const rowsToShow = activeRows.length ? activeRows : (paymentRows[0] ? [paymentRows[0]] : []);
-  rowsToShow.forEach(function(r) {
-    const line = document.createElement("div");
-    line.className = "receipt-payment-line";
-    line.innerHTML = "<span>" + escapeHtml(r.method || "") + "</span><span>" + escapeHtml(symbol) + " " + (Number(r.amount) || 0).toFixed(decimalsNow()) + "</span>";
-    paymentLinesEl.appendChild(line);
-  });
-
-  document.getElementById("receiptTaxLabel").textContent = taxName + " (" + taxRate + "%)";
-  document.getElementById("subtotal").textContent = symbol + " " + totals.subtotal.toFixed(decimalsNow());
-  document.getElementById("discountAmount").textContent = symbol + " " + totals.discount.toFixed(decimalsNow());
-  document.getElementById("taxAmount").textContent = symbol + " " + totals.tax.toFixed(decimalsNow());
-  document.getElementById("grandTotal").textContent = symbol + " " + totals.grandTotal.toFixed(decimalsNow());
-  document.getElementById("receiptReceived").textContent = symbol + " " + received.toFixed(decimalsNow());
-  document.getElementById("receiptChange").textContent = symbol + " " + change.toFixed(decimalsNow());
-  document.getElementById("changePreview").textContent = symbol + " " + change.toFixed(decimalsNow());
-  document.getElementById("totalEnteredPreview").textContent = symbol + " " + received.toFixed(decimalsNow());
-  document.getElementById("receiptFooter1").textContent = val("footer1");
-  document.getElementById("receiptFooter2").textContent = val("footer2");
-
-  document.getElementById("proceedAmount").textContent = symbol + " " + totals.grandTotal.toFixed(decimalsNow());
-  document.getElementById("checkoutTotalAmount").textContent = symbol + " " + totals.grandTotal.toFixed(decimalsNow());
-  document.getElementById("proceedBtn").disabled = cart.length === 0;
-
-  renderProductCatalog();
-  saveSettings();
-  broadcastCustomerScreenOrder();
-}
-
-function updateReceipt() {
-  renderReceiptItems();
-  updateTotalsAndHeader();
-}
-
 function changeLanguage() {
   const language = document.getElementById("language").value;
   document.documentElement.lang = language;
@@ -4389,7 +3878,6 @@ function changeLanguage() {
     premiumBadgeOffline: "premiumBadgeLabel",
     offlineModalTitle: "offlineModalTitle", offlineModalHowTitle: "offlineModalHowTitle", offlineModalUpdateTitle: "offlineModalUpdateTitle", offlineModalUpdateText: "offlineModalUpdateText",
     offlineCancelBtnLabel: "offlineCancelBtnLabel", offlineConfirmDownloadBtnLabel: "offlineConfirmDownloadBtnLabel",
-    scannerTitle: "scannerTitle", scannerHint: "scannerHint",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
     receiptReceivedLabel: "received", receiptChangeLabel: "change",
     receiptNumberText: "receiptNo", receiptDateLabel: "date"
