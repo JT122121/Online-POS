@@ -791,6 +791,21 @@ on-page heading and the button that links to it now say the same thing).
   directly rather than `storageGet`/`storageSet` (same reasoning as
   `customer.html`'s own `localStorage` use). "Clear / New Invoice" wipes
   both the on-screen form and the saved draft after a confirm.
+- **"Save Invoice" / "Saved Invoices"** - a separate, explicit save
+  action distinct from the silent autosave draft above, added after a
+  report that a saved invoice couldn't be found: the draft only ever
+  holds the one in-progress invoice, with no way to browse past ones.
+  "💾 Save Invoice" pushes the current form into a `goonlinepos-invoice-history`
+  `localStorage` array (list of `{id, number, to, total, date, savedAt,
+  state}`, `state` being a full `collectState()` snapshot) and shows a
+  brief `.save-toast` confirmation; "📂 Saved Invoices" opens a
+  `.modal-overlay`/`.modal-box` listing them (newest first), each row
+  reopening that invoice into the form on click or removable via its
+  own ✕ with a confirm. `currentInvoiceId` (generated once per invoice,
+  carried through `collectState()`/`applyState()`, and persisted in the
+  autosave draft too) is what lets re-saving the same invoice **update**
+  its existing history entry instead of creating a duplicate - only
+  "Clear / New Invoice" resets it to `null` for a genuinely new one.
 - **Has its own full cookie-consent banner** (same `.cookie-consent`/
   `.cc-*` markup/behavior as `blog.html`/`about.html`/etc., a separate
   `goonlinepos-cookie-consent` check from `app.html`'s, since this page
