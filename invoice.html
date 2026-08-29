@@ -532,6 +532,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 (function() {
   var DRAFT_KEY = "goonlinepos-invoice-draft";
   var HISTORY_KEY = "goonlinepos-invoice-history";
+  var DEFAULTS_KEY = "goonlinepos-invoice-defaults";
   var CURRENCIES = {
     AED: "د.إ", AFN: "؋", ALL: "L", AMD: "դր.", ANG: "ƒ", AOA: "Kz", ARS: "$", AUD: "A$",
     AWG: "ƒ", AZN: "₼", BAM: "KM", BBD: "$", BDT: "৳", BGN: "лв", BHD: ".د.ب", BIF: "FBu",
@@ -604,6 +605,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     compressLogo(file, function(dataUrl) {
       setLogo(dataUrl);
       scheduleSave();
+      saveDefaults();
     });
     logoInput.value = "";
   });
@@ -611,6 +613,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   removeLogoBtn.addEventListener("click", function() {
     setLogo("");
     scheduleSave();
+    saveDefaults();
   });
 
   Object.keys(CURRENCIES).forEach(function(code) {
@@ -749,6 +752,28 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
   }
 
+  function loadDefaults() {
+    try {
+      var raw = localStorage.getItem(DEFAULTS_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveDefaults() {
+    try {
+      localStorage.setItem(DEFAULTS_KEY, JSON.stringify({
+        logo: currentLogoDataUrl,
+        from: document.getElementById("invFrom").value,
+        currency: currencySelect.value
+      }));
+    } catch (e) {}
+  }
+
+  function defaultsAsInitialState() {
+    var d = loadDefaults();
+    return { logo: d.logo || "", from: d.from || "", currency: d.currency || "USD" };
+  }
+
   function loadHistory() {
     try {
       var raw = localStorage.getItem(HISTORY_KEY);
@@ -882,11 +907,16 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         return;
       } catch (e) {}
     }
-    applyState({});
+    applyState(defaultsAsInitialState());
   }
 
-  ["invTitle", "invNumber", "invFrom", "invTo", "invDate", "invDueDate", "invTerms", "invPO", "invNotes", "invTermsText"].forEach(function(id) {
+  ["invTitle", "invNumber", "invTo", "invDate", "invDueDate", "invTerms", "invPO", "invNotes", "invTermsText"].forEach(function(id) {
     document.getElementById(id).addEventListener("input", scheduleSave);
+  });
+
+  document.getElementById("invFrom").addEventListener("input", function() {
+    scheduleSave();
+    saveDefaults();
   });
 
   ["invDiscountType", "invDiscountValue", "invTaxType", "invTaxValue", "invAmountPaid"].forEach(function(id) {
@@ -895,7 +925,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     el.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
   });
 
-  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); saveDefaults(); });
 
   document.getElementById("addLineBtn").addEventListener("click", function() {
     makeLineRow("", 1, 0);
@@ -910,7 +940,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   document.getElementById("clearInvoiceBtn").addEventListener("click", function() {
     if (!confirm("Clear this invoice and start a new one? This can't be undone.")) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
-    applyState({});
+    applyState(defaultsAsInitialState());
   });
 
   document.getElementById("saveInvoiceBtn").addEventListener("click", saveInvoiceExplicit);
