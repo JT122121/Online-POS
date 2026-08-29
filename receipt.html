@@ -238,18 +238,17 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .receipt-card { padding: 20px; }
 }
 
-@page { size: 80mm auto; margin: 0; }
+@page { margin: 12mm; }
 @media print {
   html, body { background: #fff; }
   .masthead, .top-actions, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
-  .wrap { max-width: 80mm; padding: 0; margin: 0; }
-  .receipt-card { box-shadow: none; border: none; padding: 3mm; margin: 0; width: 80mm; }
+  .wrap { max-width: none; padding: 0; }
+  .receipt-card { box-shadow: none; border: none; padding: 0; margin: 0; }
   .no-print { display: none !important; }
-  textarea, .field-input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; font-size: 11px !important; }
+  textarea, .field-input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
   select { border: none !important; background: transparent !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .logo-upload-label, .remove-logo-btn { display: none !important; }
-  .title-input { font-size: 18px !important; }
-  .amount-words-block { background: transparent !important; padding: 8px 0 !important; border-top: 1px dashed #000; border-radius: 0; }
+  .amount-words-block { background: transparent !important; border-top: 1px dashed #000; border-radius: 0; }
   .totals-line.grand { border-top: 1px solid #000; }
 }
 
@@ -414,8 +413,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     <dd>Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.</dd>
     <dt>Where can I see my saved receipts?</dt>
     <dd>Click "Save Receipt" to add the current one to your list, then click "Saved Receipts" any time to browse, reopen, or delete them, remarks included. They're stored only in this browser - clearing your browser data removes them.</dd>
-    <dt>What size does it print at?</dt>
-    <dd>It's formatted for standard 80mm thermal receipt paper. Click "Print / Save as PDF" and pick your receipt printer, or "Save as PDF" to keep a digital copy.</dd>
+    <dt>How do I save it as a PDF?</dt>
+    <dd>Click "Print / Save as PDF" and pick "Save as PDF" (or "Microsoft Print to PDF") as the destination in the print dialog your browser opens. It's formatted for standard A4/Letter paper, same as the invoice tool.</dd>
     <dt>Is this the same as GoOnlinePOS's checkout receipts?</dt>
     <dd>No. Checkout receipts are printed automatically inside <a href="app">the POS app</a> when you ring up a sale. This tool is for standalone payment receipts you fill in by hand - a deposit, a partial payment, a service call - without ringing up a full sale.</dd>
   </dl>
