@@ -20,6 +20,9 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
+- **`invoice.html`** — a standalone, free invoice generator, unrelated to
+  the cart/checkout flow. See "`invoice.html` — standalone invoice
+  generator" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -611,15 +614,16 @@ remember. The whole mechanism lives inside `app.html` itself:
   anytime Premium is active; move data over with existing Backup/Restore),
   and a required "I agree to the Terms of Service" checkbox that gates the
   actual download — see `confirmOfflineDownload()`.
-- On confirm, it `fetch()`es the **currently live** `app.html` and
-  `customer.html` (same-origin, `cache: "no-store"`) plus the static
-  ingredients under `offline/` (`README.txt`, the three `start-server.*`
-  launchers, `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`,
-  and `modules/translations.js`/`modules/usb-scanner.js`/
-  `modules/receipt.js` (the offline copy still needs all three, at
-  those same paths, since `app.html`'s
+- On confirm, it `fetch()`es the **currently live** `app.html`,
+  `customer.html`, and `invoice.html` (same-origin, `cache: "no-store"`)
+  plus the static ingredients under `offline/` (`README.txt`, the three
+  `start-server.*` launchers, `offline/vendor/LICENSES.txt`),
+  `vendor/xlsx.full.min.js`, and `modules/translations.js`/
+  `modules/usb-scanner.js`/`modules/receipt.js` (the offline copy still
+  needs all three, at those same paths, since `app.html`'s
   `<script src="modules/...">` tags aren't marker-stripped for them),
-  runs `app.html`'s text through `buildOfflineAppHtml()`, zips everything
+  runs `app.html`'s text through `buildOfflineAppHtml()` and
+  `invoice.html`'s through `buildOfflineInvoiceHtml()`, zips everything
   with JSZip, and triggers the download (`GoOnlinePOS-Offline.zip`).
 - **Usage analytics** via the shared `trackEvent(name, params)` helper
   (thin `gtag('event', ...)` wrapper, no-ops if `gtag` isn't defined —
@@ -634,10 +638,12 @@ remember. The whole mechanism lives inside `app.html` itself:
   failures from the GA dashboard. All three calls live inside the
   `OFFLINE-STRIP:DOWNLOAD-JS` block so they're automatically absent from
   the generated offline package (which already has zero network calls).
-- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()` edit the fetched
-  HTML by stripping `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
+- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()`/
+  `buildOfflineInvoiceHtml()` edit the fetched HTML by stripping
+  `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
   `/* OFFLINE-STRIP:<name>:START/END */` (JS) marker comments already
-  present in `app.html`/`customer.html` — **search `OFFLINE-STRIP` to find
+  present in `app.html`/`customer.html`/`invoice.html` — **search
+  `OFFLINE-STRIP` to find
   every edit point** before restructuring any of the marked sections, or
   the generated package silently drops the edit (a `console.warn` fires
   if a marker goes missing, but nothing hard-fails). Currently stripped:
@@ -707,6 +713,65 @@ is needed on this page; it silently does nothing if that key isn't
 every other analytics/ads script is stripped from the offline package —
 zero network calls there.
 
+## `invoice.html` — standalone invoice generator
+
+A free-standing invoice builder, loosely modeled after invoice-generator.com
+(a reference copy was provided for the request) but **not a copy of it** -
+own design system (same `--ink`/`--accent`/`--gold` tokens and
+Space Grotesk/Inter fonts as the rest of the site, not their Tailwind/
+dark-mode skin), own simplified feature set, and no third-party branding,
+ads network, account system, or footer link farm to tools that don't
+exist here. It's for one-off invoices sent to a customer (net terms,
+formal billing) - a different job from `app.html`'s point-of-sale
+receipts, which is why it's `app.html`'s **"🧾 Create Invoice"** header
+shortcut button (`openCreateInvoice()`, next to Customer Screen) that
+opens it, via `window.open(...)` in a **new tab** rather than in-place
+navigation - a cashier mid-sale shouldn't risk losing their unsaved cart
+by clicking it. It's also directly reachable/shareable on its own
+(indexable, in `sitemap.xml`) as a free tool independent of the POS app.
+- **No dependency on `app.html`'s data** - deliberately simple/decoupled:
+  plain manual-entry fields (business name/address typed directly, no
+  pulling from the POS's own Store Settings/logo), matching the
+  reference tool's own approach. A closer integration (e.g. prefilling
+  Bill From from the POS's store settings) is a reasonable future
+  enhancement, not done here.
+- **Line items, tax, discount, shipping, amount paid, and balance due**
+  are computed client-side (`recalcTotals()`) - discount/tax each have a
+  Percent/Flat toggle (`invDiscountType`/`invTaxType`), mirroring
+  `app.html`'s own `discountType` terminology for consistency, though
+  the two features are otherwise unrelated.
+- **PDF export reuses the exact technique `app.html` already uses for
+  receipts** - a plain `window.print()` call plus `@media print` CSS
+  (turning every input/textarea/select borderless so the printed page
+  reads as a document, not a form) - not a new PDF library dependency.
+  `.no-print` hides the buttons/back-link/footer/info section from the
+  printed output, same class name and purpose as `app.html`'s own.
+- **Autosaves as you type** to plain `localStorage` (`goonlinepos-invoice-draft`,
+  debounced) so a refresh doesn't lose an in-progress invoice - this is a
+  fully standalone page like `customer.html`, outside `app.html`'s
+  embedded-host storage abstraction, so it uses raw `localStorage`
+  directly rather than `storageGet`/`storageSet` (same reasoning as
+  `customer.html`'s own `localStorage` use). "Clear / New Invoice" wipes
+  both the on-screen form and the saved draft after a confirm.
+- **Has its own full cookie-consent banner** (same `.cookie-consent`/
+  `.cc-*` markup/behavior as `blog.html`/`about.html`/etc., a separate
+  `goonlinepos-cookie-consent` check from `app.html`'s, since this page
+  can be visited directly and isn't guaranteed to share a browsing
+  session with `app.html`) - unlike `customer.html`, which reuses
+  `app.html`'s consent choice since it's only ever opened alongside it.
+- **Bundled into the "Download Offline POS" package** (see below) since
+  it's directly reachable from inside `app.html` - `buildOfflineInvoiceHtml()`
+  strips its `COOKIE-CONSENT`/`GOOGLE-FONTS`/`COOKIE-BANNER` marked
+  blocks, same marker names/pattern as `app.html`'s own, and
+  `confirmOfflineDownload()` fetches and zips it alongside `app.html`/
+  `customer.html`. `offline/README.txt`'s file listing and feature list
+  both mention it.
+- Six-language UI strings are **not** part of this page - `app.html`'s
+  `translations` dictionary only supplies the `createInvoiceShortcutLabel`
+  header-button text; the invoice tool itself is English-only for now,
+  consistent with it being a new, separate feature rather than a
+  from-day-one part of the translated POS app.
+
 ## SEO
 
 - **Every indexable page** (i.e. every page whose own `<meta name="robots">`
@@ -734,8 +799,8 @@ zero network calls there.
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `how-it-works.html`, `guide.html`, `about.html`, `blog.html`,
-  `blog-why-your-business-needs-a-pos.html`,
+  `invoice.html`, `how-it-works.html`, `guide.html`, `about.html`,
+  `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
   `privacy.html`, `terms.html` — matching each page's own
