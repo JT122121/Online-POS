@@ -649,14 +649,11 @@ a {
     </ol>
 
     <p>
-      If you want to actually go this route, don't start from a blank
-      canvas. <strong>Joe Tayactac's YouTube channel</strong> is
-      entirely focused on AppSheet - he designs, builds, and fixes
-      AppSheet apps and walks through that work on the channel. His
-      tutorial below covers building an AppSheet POS and printing
-      receipts from it start to finish - a genuinely good resource if
-      you want to learn the platform properly instead of guessing your
-      way through it.
+      If you want to build an AppSheet POS yourself, don't start from a blank
+      canvas. <strong>Joe Tayactac's YouTube channel</strong> focuses on
+      practical AppSheet development, including building, troubleshooting,
+      and improving real-world apps. The tutorial below walks through
+      building an AppSheet POS and printing receipts from start to finish.
     </p>
 
     <div style="text-align:center; margin: 0 0 22px;">
@@ -707,10 +704,12 @@ a {
 
     <ul>
       <li>
-        <strong>It's not built for speed at the counter.</strong>
-        AppSheet apps are form-driven; every tap tends to trigger a
-        sync with the backend sheet. For a slow trickle of sales that's
-        fine. For a line of customers, the lag adds up.
+        <strong>It's not built primarily for speed at the counter.</strong>
+        AppSheet's sync-based architecture can introduce noticeable
+        delays, particularly when the app has a large dataset or
+        complex expressions and workflows. For a slow trickle of sales
+        that's often fine, but during busy periods even small delays
+        can add up.
       </li>
       <li>
         <strong>No native barcode-to-cart flow.</strong> You can add
@@ -720,10 +719,10 @@ a {
         the code and hit enter) need extra handling to behave properly.
       </li>
       <li>
-        <strong>Costs money past a small scale.</strong> AppSheet has a
-        free tier, but real business use - especially with multiple
-        users - typically needs a paid plan, billed per user, per
-        month.
+        <strong>Costs can increase as your business grows.</strong>
+        AppSheet offers different pricing options, but business use
+        with multiple users can require paid plans, making the ongoing
+        cost an important consideration.
       </li>
       <li>
         <strong>Google Sheets as a database has real limits.</strong>
@@ -737,11 +736,12 @@ a {
         on you to debug it, ideally not while a customer is waiting.
       </li>
       <li>
-        <strong>Offline mode is limited.</strong> AppSheet apps can
-        cache some data for offline use, but sales made offline need to
-        sync carefully once you're back online, and conflicts (two
-        offline sales touching the same stock count) aren't handled
-        for you.
+        <strong>Offline use requires careful configuration.</strong>
+        AppSheet supports offline use, but designing a reliable offline
+        POS requires careful handling of synchronization, inventory
+        changes, and conflicts when multiple devices reconnect. For a
+        serious POS, these details need to be tested thoroughly before
+        relying on offline operation.
       </li>
     </ul>
 
@@ -758,10 +758,10 @@ a {
 
     <p>
       If what you actually need is a straightforward, reliable checkout
-      screen - ring up items, take payment, print a receipt, track
+      system - ring up items, take payments, print receipts, and track
       stock - and you'd rather not spend the time building and
-      maintaining that yourself, it's worth knowing there's a much
-      faster path.
+      maintaining it yourself, there's a much faster option: use a POS
+      that's already built.
     </p>
 
     <h2>The shortcut: a POS that's already built</h2>
@@ -784,10 +784,11 @@ a {
     </ul>
 
     <p>
-      No signup, no login, and nothing to maintain - it's ready the
-      moment you open it. If a no-code build is the project you want,
-      AppSheet is a solid tool for it. If you just want to start
-      ringing up sales today, that part's already done.
+      No signup, no login, no server to configure, and no database to
+      maintain - it's ready to use the moment you open it. If building
+      a customized no-code POS is the project you want, AppSheet is a
+      solid tool for it. But if you simply want to start ringing up
+      sales today, <strong>GoOnlinePOS is already built and ready to use.</strong>
     </p>
 
   </div>
