@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try {
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    hideBanner();
+  };
+
+  window.openCookieSettings = function() {
+    showView("cookieChoiceView");
+  };
+
+  window.acceptCookies = function() {
+    try {
+      localStorage.setItem(CONSENT_KEY, "accepted");
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+
+  window.declineCookies = function() {
+    try {
+      localStorage.setItem(CONSENT_KEY, "declined");
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+
+  window.closeCookieBanner = function() {
+    hideBanner();
+  };
+
+  var consent = null;
+  var seen = null;
+
+  try {
+    consent = localStorage.getItem(CONSENT_KEY);
+    seen = localStorage.getItem(SEEN_KEY);
+  } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() {
+      showView("cookieNoticeView");
+    });
+  }
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>From Excel to AppSheet Expert | GoOnlinePOS.com Blog</title>
+
+<meta name="description" content="How Joe Tayactac went from managing spreadsheets in Excel to becoming an AppSheet expert with over five years of experience building real client apps, and why that journey led to GoOnlinePOS.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://goonlinepos.com/blog-from-excel-to-appsheet-expert.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://goonlinepos.com/blog-from-excel-to-appsheet-expert.html">
+<meta property="og:title" content="From Excel to AppSheet Expert">
+<meta property="og:description" content="How managing spreadsheets during COVID led to five years of building real AppSheet apps, a YouTube channel, and eventually GoOnlinePOS.">
+<meta property="article:published_time" content="2026-08-29">
+<meta property="article:modified_time" content="2026-08-29">
+<meta property="og:site_name" content="GoOnlinePOS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From Excel to AppSheet Expert">
+<meta name="twitter:description" content="How managing spreadsheets during COVID led to five years of building real AppSheet apps, a YouTube channel, and eventually GoOnlinePOS.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-dark);
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.site-brand {
+  text-align: center;
+  padding: 12px 0 18px;
+}
+
+.site-brand a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.site-brand img {
+  display: block;
+  width: auto;
+  max-width: 240px;
+  max-height: 70px;
+  object-fit: contain;
+}
+
+.site-brand-text {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -.03em;
+}
+
+.back-link-row {
+  margin: 8px 0 22px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  transition: .15s ease;
+}
+
+.back-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.article-header {
+  text-align: center;
+  padding: 10px 0 30px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 34px;
+}
+
+.article-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-tint);
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.article-header h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 33px;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.article-meta {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.article-body {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--ink);
+  margin: 36px 0 14px;
+  letter-spacing: -.01em;
+}
+
+.article-body p {
+  margin: 0 0 18px;
+}
+
+.article-body ul,
+.article-body ol {
+  margin: 0 0 18px;
+  padding-left: 22px;
+}
+
+.article-body li {
+  margin-bottom: 8px;
+}
+
+.article-body strong {
+  color: var(--ink);
+}
+
+.article-body a {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.callout {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+
+.callout strong {
+  color: var(--ink);
+}
+
+.cta-band {
+  text-align: center;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  margin-top: 40px;
+  box-shadow: var(--shadow-lg);
+}
+
+.cta-band h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: #ffffff;
+  margin: 0 0 10px;
+}
+
+.cta-band p {
+  color: #d7dcd8;
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+.btn-primary {
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none !important;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  background: var(--gold);
+  color: var(--ink) !important;
+  transition: .15s ease;
+}
+
+.btn-primary:hover {
+  background: #cf9631;
+}
+
+.site-footer {
+  max-width: 720px;
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 20px 20px 40px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.site-footer span {
+  margin: 0 8px;
+}
+
+.cookie-consent {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  z-index: 300;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  padding: 14px 16px;
+}
+
+.cookie-consent.hidden {
+  display: none !important;
+}
+
+.cookie-consent .cc-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 200px;
+  color: #d7dcd8;
+}
+
+.cookie-consent .cc-text a {
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cookie-notice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cookie-notice-view.hidden {
+  display: none !important;
+}
+
+.cookie-notice-view .cn-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  color: #b7c0ba;
+  font-size: 19px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.cookie-notice-view .cn-close:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+
+.cc-choice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-choice-view.hidden {
+  display: none !important;
+}
+
+.cc-actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.cc-decline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.3);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-decline:hover {
+  border-color: rgba(255,255,255,.6);
+}
+
+.cc-accept {
+  background: var(--gold);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-accept:hover {
+  background: #cf9631;
+}
+
+.cc-declined-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-declined-view.hidden {
+  display: none !important;
+}
+
+.cc-close {
+  background: var(--panel);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cc-close:hover {
+  background: #e6e4d9;
+}
+
+@media (max-width: 640px) {
+
+  .wrap {
+    padding: 16px;
+  }
+
+  .site-brand img {
+    max-width: 200px;
+    max-height: 60px;
+  }
+
+  .article-header h1 {
+    font-size: 26px;
+  }
+
+  .article-body {
+    font-size: 15px;
+  }
+
+  .article-body h2 {
+    font-size: 20px;
+  }
+
+  .cta-band {
+    padding: 30px 20px;
+  }
+
+  .cookie-notice-view {
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="site-brand">
+    <a href="index.html" aria-label="GoOnlinePOS.com">
+      <img src="logo.png" alt="GoOnlinePOS.com" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+      <span id="logoFallback" class="site-brand-text" style="display:none;">GoOnlinePOS.com</span>
+    </a>
+  </div>
+
+  <div class="back-link-row">
+    <a class="back-link" href="blog.html">← Back to Blog</a>
+  </div>
+
+  <header class="article-header">
+    <span class="article-tag">Founder Story</span>
+
+    <h1>
+      From Excel to AppSheet Expert: How I Started Building Real Apps
+      and Created GoOnlinePOS
+    </h1>
+
+    <div class="article-meta">Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ</div>
+  </header>
+
+  <div class="article-body">
+
+    <p>I didn't start as a traditional programmer.</p>
+
+    <p>
+      My journey into building business applications started with
+      something much simpler: <strong>Excel</strong>.
+    </p>
+
+    <p>
+      During COVID, the company I was working with relied heavily on
+      Excel to manage information and daily operations. Excel was
+      useful, but as the processes became more complicated, I started
+      thinking there had to be a better way.
+    </p>
+
+    <p>I began asking myself:</p>
+
+    <p><strong>What if we could turn these spreadsheets into an actual application?</strong></p>
+
+    <p>That question eventually led me to AppSheet.</p>
+
+    <h2>How I Discovered AppSheet</h2>
+
+    <p>
+      When I started exploring <a href="https://about.appsheet.com/" target="_blank" rel="noopener">AppSheet</a>,
+      I wasn't coming from a traditional programming background.
+    </p>
+
+    <p>I learned by building.</p>
+
+    <p>
+      I would create an app, test it, find something that needed
+      improvement, fix it, and then build the next feature. Over time, I
+      became much more comfortable with AppSheet and learned how to turn
+      business processes into practical applications.
+    </p>
+
+    <p>
+      What started as a way to improve an Excel-based workflow
+      eventually became a career in building business applications.
+    </p>
+
+    <p>I've now been working with AppSheet for <strong>more than five years</strong>.</p>
+
+    <h2>From Learning to Building Real Apps</h2>
+
+    <p>Eventually, AppSheet became more than something I was learning for myself.</p>
+
+    <p>I started building <strong>real applications for clients</strong>.</p>
+
+    <p>
+      I've built multiple applications for different business needs, and
+      every project has taught me something new.
+    </p>
+
+    <p>
+      Some businesses need inventory management. Others need sales
+      tracking, technician tracking, approvals, reporting, customer
+      management, or completely customized workflows.
+    </p>
+
+    <p>That's one of the things I enjoy about AppSheet.</p>
+
+    <p>You can build an application around the way a business actually works.</p>
+
+    <p>
+      Working on real client projects also taught me that building an
+      application isn't just about making screens and buttons.
+    </p>
+
+    <p>You have to understand the workflow.</p>
+
+    <p>You have to understand what users actually need.</p>
+
+    <p>And you have to keep improving the application when real people start using it.</p>
+
+    <h2>Becoming an AppSheet Expert</h2>
+
+    <p>
+      After more than five years of building applications, working
+      through different business requirements, and solving real-world
+      problems, AppSheet has become one of my main areas of expertise.
+    </p>
+
+    <p>I wouldn't describe myself as a traditional programmer.</p>
+
+    <p><strong>I'm an AppSheet expert who learned by building real solutions.</strong></p>
+
+    <p>That distinction is important to me.</p>
+
+    <p>
+      My experience comes from actually creating applications,
+      troubleshooting them, improving them, and adapting them to the
+      needs of real businesses.
+    </p>
+
+    <h2>Sharing What I Learn on YouTube</h2>
+
+    <p>
+      As I continued building applications, I also started sharing what
+      I was learning on YouTube.
+    </p>
+
+    <p>
+      My YouTube channel, <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"><strong>Joe Tayactac</strong></a>,
+      focuses on practical AppSheet development.
+    </p>
+
+    <p>
+      I create tutorials, demonstrate how applications are built,
+      explain solutions, and share ideas that can help other people
+      create their own business applications.
+    </p>
+
+    <p>The goal is simple:</p>
+
+    <p><strong>If something I learned can help someone else solve a problem, I want to share it.</strong></p>
+
+    <p>Over time, I've also noticed that certain questions come up again and again.</p>
+
+    <p>And one of the biggest ones is about POS systems.</p>
+
+    <h2>Why Everyone Keeps Asking About POS</h2>
+
+    <p>
+      When people talk about business applications, POS and inventory
+      are two of the most common requirements I come across.
+    </p>
+
+    <p>People ask:</p>
+
+    <ul>
+      <li>Can AppSheet build a POS?</li>
+      <li>Can it manage inventory?</li>
+      <li>Can it scan barcodes?</li>
+      <li>Can it print receipts?</li>
+      <li>Can multiple cashiers use it?</li>
+      <li>Can it work offline?</li>
+      <li>Can it handle cash and card payments?</li>
+      <li>Can it track sales?</li>
+      <li>Can it work on a phone or computer?</li>
+    </ul>
+
+    <p>The answer is that AppSheet can be used to build many of these solutions.</p>
+
+    <p>
+      I've built POS-related applications and understand how much work
+      goes into making them useful in a real business environment.
+    </p>
+
+    <p>
+      A POS might look simple from the outside, but once you start
+      building one, there are many details to consider.
+    </p>
+
+    <p>
+      Inventory, sales, payments, receipts, barcode scanning, users,
+      reports, and daily workflows all need to work together.
+    </p>
+
+    <h2>Why I Created GoOnlinePOS</h2>
+
+    <p>
+      After seeing how often people were looking for a simple POS, I
+      started thinking about another approach.
+    </p>
+
+    <p>Not everyone wants to build their own application.</p>
+
+    <p>
+      A business owner might not want to spend weeks creating tables,
+      configuring workflows, building automations, testing expressions,
+      and maintaining an app.
+    </p>
+
+    <p>Sometimes they simply want to <strong>open a POS and start selling</strong>.</p>
+
+    <p>That's where GoOnlinePOS came from.</p>
+
+    <p>
+      I wanted to create a practical POS that could be used without
+      requiring the business owner to become an AppSheet developer.
+    </p>
+
+    <p>The idea is simple:</p>
+
+    <p><strong>Open it. Add your products. Start selling.</strong></p>
+
+    <p>
+      GoOnlinePOS includes features such as inventory management,
+      barcode scanning, sales tracking, payment handling, receipt
+      printing, multiple cashier support, sales history, and offline
+      functionality.
+    </p>
+
+    <p>The goal is to make POS software straightforward and accessible for small businesses.</p>
+
+    <h2>From One Excel File to GoOnlinePOS</h2>
+
+    <p>When I look back at the journey, it's interesting how everything connected.</p>
+
+    <p>It started with Excel during COVID.</p>
+
+    <p>Then I started looking for a better way to manage business processes.</p>
+
+    <p>That led me to AppSheet.</p>
+
+    <p>I learned by building.</p>
+
+    <p>Then I started building multiple real applications for clients.</p>
+
+    <p>I shared what I learned through my YouTube channel.</p>
+
+    <p>People kept asking about POS, inventory, and other business systems.</p>
+
+    <p>And eventually, those experiences led to GoOnlinePOS.</p>
+
+    <p>It wasn't something I planned from the beginning.</p>
+
+    <p>It grew naturally from years of solving business problems and building applications.</p>
+
+    <h2>I'm Still Building</h2>
+
+    <p>More than five years after discovering AppSheet, I'm still building and learning.</p>
+
+    <p>
+      I've built multiple applications for clients, continue to create
+      AppSheet tutorials through <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"><strong>Joe Tayactac</strong></a>
+      on YouTube, and continue developing GoOnlinePOS.
+    </p>
+
+    <p>Every project brings a different challenge.</p>
+
+    <p>That's what keeps it interesting.</p>
+
+    <p>
+      I may not have started as a traditional programmer, but I became
+      an AppSheet expert by doing something I believe is more important:
+    </p>
+
+    <p><strong>building real solutions for real problems.</strong></p>
+
+    <p>And that's ultimately what GoOnlinePOS represents.</p>
+
+    <p>
+      It comes from years of working with business processes, building
+      applications, listening to what people actually need, and trying
+      to make things simpler.
+    </p>
+
+    <h2>From My Experience to a POS You Can Use</h2>
+
+    <p>
+      If you're interested in learning AppSheet and building your own
+      business applications, you can follow my tutorials on
+      <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener">YouTube</a>.
+    </p>
+
+    <p>
+      If you simply need a POS without having to build one yourself, you
+      can try <a href="index.html">GoOnlinePOS</a>.
+    </p>
+
+    <p>
+      <strong>The journey started with Excel. AppSheet changed the
+      direction of my career. Real client projects built my experience.
+      And GoOnlinePOS is the next step in that journey.</strong>
+    </p>
+
+  </div>
+
+  <div class="cta-band">
+    <h2>Open it. Add your products. Start selling.</h2>
+    <p>No signup, no login. Just open GoOnlinePOS and start selling.</p>
+    <a class="btn-primary" href="app.html">Open GoOnlinePOS</a>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+
+  <a href="how-it-works.html">How to Use</a>
+  <span>·</span>
+
+  <a href="guide.html">Full Guide</a>
+  <span>·</span>
+
+  <a href="about.html">About</a>
+  <span>·</span>
+
+  <a href="blog.html">Blog</a>
+  <span>·</span>
+
+  <a href="privacy.html">Privacy Policy</a>
+  <span>·</span>
+
+  <a href="terms.html">Terms of Service</a>
+  <span>·</span>
+
+  <a href="contact.html">Contact</a>
+  <span>·</span>
+
+  <a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">
+    Facebook
+  </a>
+  <span>·</span>
+
+  <a href="#" onclick="openCookieSettings(); return false;">
+    Cookie Settings
+  </a>
+
+</footer>
+
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+
+  <div id="cookieNoticeView" class="cookie-notice-view">
+
+    <div class="cc-text">
+      🍪 We use cookies for analytics and to show relevant ads.
+      Manage your preference anytime in
+      <a onclick="openCookieSettings(); return false;" href="#">
+        Cookie Settings
+      </a>.
+    </div>
+
+    <button
+      type="button"
+      class="cn-close"
+      onclick="closeCookieNotice()"
+      aria-label="Close">
+      ×
+    </button>
+
+  </div>
+
+  <div id="cookieChoiceView" class="cc-choice-view hidden">
+
+    <div class="cc-text">
+      Set your preference: allow cookies for analytics and ads, or decline them.
+      <a href="privacy.html">Learn more</a>
+    </div>
+
+    <div class="cc-actions">
+
+      <button
+        type="button"
+        class="cc-decline"
+        onclick="declineCookies()">
+        Decline
+      </button>
+
+      <button
+        type="button"
+        class="cc-accept"
+        onclick="acceptCookies()">
+        Accept
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="cookieDeclinedView" class="cc-declined-view hidden">
+
+    <div class="cc-text">
+      Got it - analytics and ads won't load on this device.
+      The site itself works exactly the same either way.
+      You can change this anytime via "Cookie Settings" in the footer.
+    </div>
+
+    <button
+      type="button"
+      class="cc-close"
+      onclick="closeCookieBanner()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+</body>
+</html>
