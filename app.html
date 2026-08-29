@@ -176,25 +176,6 @@ button:active { transform: translateY(1px); }
 .bn-dismiss-btn { border: 0; background: transparent; color: #6b4f12; font-size: 19px; line-height: 1; padding: 4px 7px; opacity: .65; border-radius: 6px; }
 .bn-dismiss-btn:hover { opacity: 1; background: rgba(0,0,0,.05); }
 
-.sales-summary-panel { max-width: 1500px; margin: 0 auto 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
-.ssp-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.ssp-header h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
-.ssp-header input[type="date"] { width: auto; padding: 8px 10px; font-size: 13px; }
-.ssp-breakdown { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-.ssp-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: #f8f7f2; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; }
-.ssp-row span:last-child { font-family: var(--font-mono); color: var(--ink-soft); }
-.ssp-empty { padding: 14px 8px; text-align: center; color: var(--muted); font-size: 12.5px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
-.ssp-by-cashier { margin-bottom: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
-.ssp-subheading { margin: 0 0 10px; font-family: var(--font-display); font-weight: 600; font-size: 12.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.ssp-cashier-block { margin-bottom: 12px; }
-.ssp-cashier-block:last-child { margin-bottom: 0; }
-.ssp-cashier-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
-.ssp-cashier-block .ssp-row { background: #fff; border: 1px solid var(--line-soft); font-weight: 500; font-size: 12.5px; padding: 8px 12px; margin-bottom: 5px; }
-.ssp-cashier-block .ssp-row:last-child { margin-bottom: 0; }
-.ssp-cashier-total { font-weight: 700 !important; }
-.ssp-total-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--ink); color: #fff; border-radius: var(--radius-sm); font-size: 14.5px; font-weight: 700; }
-.ssp-total-row span:last-child { font-family: var(--font-mono); }
-
 .left-panel { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
 
 .panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -429,7 +410,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel, .backup-notice { display: none !important; }
+  .app-header, .left-panel, .settings-overlay, .site-footer, .backup-notice { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -479,7 +460,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="premiumShortcutButton" onclick="openPremiumSettings()" title="Manage your Premium code">👑 <span id="premiumShortcutLabel">Premium</span></button>
 <button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
-<button id="summaryButton" onclick="toggleSalesSummary()">📊 <span id="summaryButtonLabel">Summary</span></button>
+<button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
@@ -508,22 +489,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="bn-actions">
 <button type="button" class="bn-backup-btn" onclick="downloadFullBackup()" id="backupNoticeButton">Download Backup</button>
 <button type="button" class="bn-dismiss-btn" onclick="dismissBackupNotice()" aria-label="Dismiss">×</button>
-</div>
-</div>
-
-<div id="salesSummaryPanel" class="sales-summary-panel hidden">
-<div class="ssp-header">
-<h3 id="salesSummaryTitle">Sales Summary</h3>
-<input id="summaryDateInput" type="date" onchange="renderSalesSummary()">
-</div>
-<div id="summaryBreakdown" class="ssp-breakdown"></div>
-<div id="summaryByCashier" class="ssp-by-cashier hidden">
-<h4 id="summaryByCashierTitle" class="ssp-subheading">By Cashier</h4>
-<div id="summaryByCashierBody"></div>
-</div>
-<div class="ssp-total-row">
-<span id="summaryTotalLabel">Overall Total</span>
-<span id="summaryTotalAmount">BD 0.000</span>
 </div>
 </div>
 
@@ -907,7 +872,7 @@ Website: goonlinepos.com</textarea>
           <button class="small-btn" onclick="addCashier()">+</button>
         </div>
         <div id="cashiersList" class="payment-list"></div>
-        <div class="info" id="cashiersInfo" style="display:block;">These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the Summary panel.</div>
+        <div class="info" id="cashiersInfo" style="display:block;">These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the End of Day report.</div>
       </div>
 
       <div class="settings-panel-content" id="panel-products">
@@ -2017,8 +1982,6 @@ async function saveCurrentSaleToHistory() {
   await saveSalesHistoryToStorage();
   await deductStockForCart();
   renderSalesHistoryPanel();
-  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
-
   trackEvent("purchase", {
     transaction_id: currentReceiptNumber,
     currency: record.currencyCode || "USD",
@@ -2115,115 +2078,13 @@ function renderSalesHistoryPanel() {
   });
 }
 
-function todayDateInputValue() {
-  const d = new Date();
-  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-}
-
-function toggleSalesSummary() {
-  const panel = document.getElementById("salesSummaryPanel");
-  panel.classList.toggle("hidden");
-  if (!panel.classList.contains("hidden")) {
-    renderSalesSummary();
-  }
-}
-
-function saleMethodBreakdown(s) {
-  let rows;
-  if (s.payments && s.payments.length) {
-    rows = s.payments.map(function(p) { return { method: p.method || tr("summaryNoMethodLabel"), amount: Number(p.amount) || 0 }; });
-  } else {
-    rows = [{ method: s.paymentMethod || tr("summaryNoMethodLabel"), amount: Number(s.grandTotal) || 0 }];
-  }
-  const change = Number(s.change) || 0;
-  if (change > 0) {
-    let idx = rows.findIndex(function(r) { return (r.method || "").trim().toLowerCase() === "cash"; });
-    if (idx === -1) idx = rows.length - 1;
-    rows[idx].amount = Math.max(0, rows[idx].amount - change);
-  }
-  return rows;
-}
-
-function renderSalesSummary() {
-  const dateInput = document.getElementById("summaryDateInput");
-  if (!dateInput.value) dateInput.value = todayDateInputValue();
-  const selectedKey = dateInput.value;
-  const symbol = symbolNow();
-
-  const salesForDate = salesHistory.filter(function(s) { return saleDateKey(s.dateTime) === selectedKey; });
-
-  const totalsByMethod = {};
-  let overallTotal = 0;
-  salesForDate.forEach(function(s) {
-    saleMethodBreakdown(s).forEach(function(p) {
-      totalsByMethod[p.method] = (totalsByMethod[p.method] || 0) + p.amount;
-    });
-    overallTotal += Number(s.grandTotal) || 0;
-  });
-
-  const breakdown = document.getElementById("summaryBreakdown");
-  breakdown.innerHTML = "";
-  const methods = Object.keys(totalsByMethod);
-  if (!methods.length) {
-    const empty = document.createElement("div");
-    empty.className = "ssp-empty";
-    empty.textContent = tr("summaryEmptyState");
-    breakdown.appendChild(empty);
-  } else {
-    methods.sort().forEach(function(method) {
-      const row = document.createElement("div");
-      row.className = "ssp-row";
-      row.innerHTML = "<span>" + escapeHtml(method) + "</span><span>" + escapeHtml(symbol) + " " + totalsByMethod[method].toFixed(decimalsNow()) + "</span>";
-      breakdown.appendChild(row);
-    });
-  }
-
-  document.getElementById("summaryTotalAmount").textContent = symbol + " " + overallTotal.toFixed(decimalsNow());
-
-  const byCashierSection = document.getElementById("summaryByCashier");
-  const byCashierBody = document.getElementById("summaryByCashierBody");
-  byCashierBody.innerHTML = "";
-
-  if (cashiers.length === 0 || !salesForDate.length) {
-    byCashierSection.classList.add("hidden");
-  } else {
-    byCashierSection.classList.remove("hidden");
-
-    const byCashier = {};
-    salesForDate.forEach(function(s) {
-      const cashierKey = s.cashierName || tr("summaryNoCashierLabel");
-      if (!byCashier[cashierKey]) byCashier[cashierKey] = { total: 0, methods: {} };
-      byCashier[cashierKey].total += Number(s.grandTotal) || 0;
-      saleMethodBreakdown(s).forEach(function(p) {
-        byCashier[cashierKey].methods[p.method] = (byCashier[cashierKey].methods[p.method] || 0) + p.amount;
-      });
-    });
-
-    Object.keys(byCashier).sort().forEach(function(cashierKey) {
-      const data = byCashier[cashierKey];
-      const block = document.createElement("div");
-      block.className = "ssp-cashier-block";
-
-      const nameEl = document.createElement("div");
-      nameEl.className = "ssp-cashier-name";
-      nameEl.textContent = cashierKey;
-      block.appendChild(nameEl);
-
-      Object.keys(data.methods).sort().forEach(function(method) {
-        const row = document.createElement("div");
-        row.className = "ssp-row";
-        row.innerHTML = "<span>" + escapeHtml(method) + "</span><span>" + escapeHtml(symbol) + " " + data.methods[method].toFixed(decimalsNow()) + "</span>";
-        block.appendChild(row);
-      });
-
-      const totalRow = document.createElement("div");
-      totalRow.className = "ssp-row ssp-cashier-total";
-      totalRow.innerHTML = "<span>" + escapeHtml(tr("summaryTotalLabel")) + "</span><span>" + escapeHtml(symbol) + " " + data.total.toFixed(decimalsNow()) + "</span>";
-      block.appendChild(totalRow);
-
-      byCashierBody.appendChild(block);
-    });
-  }
+function openEndOfDayReport() {
+  // Unlike Create Invoice/Create Receipt, this report ships in the offline
+  // package too (see modules/offline-builder.js), where extension-less
+  // resolution doesn't exist - so it needs the real .html filename, the
+  // same reasoning customerScreenUrl() already follows for customer.html.
+  const url = location.pathname.replace(/[^/]*$/, "") + "end-of-day.html";
+  window.open(url, "_blank");
 }
 
 let editingSaleRecord = null;
@@ -2390,9 +2251,7 @@ async function saveSaleDetailEdits() {
   editingSaleRecord.change = change;
 
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();
-  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
-  closeSaleDetail();
+  renderSalesHistoryPanel();  closeSaleDetail();
 }
 
 function printHistoricalReceipt(record) {
@@ -2465,18 +2324,14 @@ async function deleteSaleRecord(receiptNumber) {
   if (!confirm("Delete sale #" + receiptNumber + "? This can't be undone.")) return;
   salesHistory = salesHistory.filter(function(s) { return s.receiptNumber !== receiptNumber; });
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();
-  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
-}
+  renderSalesHistoryPanel();}
 
 async function clearSalesHistory() {
   if (!salesHistory.length) return;
   if (!confirm("Delete all recorded sales history? This can't be undone.")) return;
   salesHistory = [];
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();
-  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
-}
+  renderSalesHistoryPanel();}
 
 function todayStamp() {
   const d = new Date();
@@ -3326,7 +3181,7 @@ function changeLanguage() {
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
-    summaryButtonLabel: "summaryButtonLabel", salesSummaryTitle: "salesSummaryTitle", summaryTotalLabel: "summaryTotalLabel",
+    endOfDayShortcutLabel: "endOfDayShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel", homeShortcutLabel: "homeShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
@@ -3445,9 +3300,7 @@ function changeLanguage() {
   renderCashierSelect();
   renderInventoryList();
   renderPremiumValidity();
-  renderAppTitleBadge();
-  if (!document.getElementById("salesSummaryPanel").classList.contains("hidden")) renderSalesSummary();
-}
+  renderAppTitleBadge();}
 
 function escapeHtml(text) {
   const div = document.createElement("div");
