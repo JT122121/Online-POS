@@ -165,8 +165,26 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
 .meta-field .field-input { font-size: 13px; padding: 8px 9px; }
 
-.currency-row { display: flex; justify-content: center; margin-bottom: 22px; }
-.currency-row .meta-field { width: 160px; }
+.items-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+.items-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 9px 8px; }
+.items-table th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.items-table th:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; text-align: right; }
+.items-table td { padding: 6px 6px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.items-table input, .items-table select { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: #fff; }
+.items-table input:hover, .items-table select:hover { border-color: #cfccbf; }
+.items-table input:focus, .items-table select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
+.items-table .col-qty, .items-table .col-rate { width: 90px; }
+.items-table .col-method { width: 160px; }
+.items-table .col-amount { width: 110px; text-align: right; }
+.items-table .col-amount input { text-align: right; background: var(--line-soft); }
+.items-table .col-remove { width: 34px; text-align: center; }
+.line-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.line-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
+.line-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
+.line-remove-btn:disabled:hover { background: transparent; color: var(--muted); }
+.add-line-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-dark); background: var(--accent-tint); border: 1px dashed #b9d9c8; padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; margin: 8px 0 22px; }
+.add-line-btn:hover { background: #dcefe4; }
+.section-gap { margin-top: 6px; }
 
 .totals-box { border-top: 2px dashed var(--line); padding-top: 16px; margin-top: 4px; }
 .totals-line { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; gap: 10px; }
@@ -236,6 +254,25 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .masthead h1 { font-size: 27px; }
   .two-col, .meta-grid { grid-template-columns: 1fr; }
   .receipt-card { padding: 20px; }
+  .items-table thead { display: none; }
+  .items-table, .items-table tbody, .items-table tr, .items-table td {
+    display: block;
+    width: 100% !important;
+  }
+  .items-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 6px; }
+  .items-table td { padding: 4px 0; border-bottom: none; }
+  .items-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .items-table .col-amount, .items-table .col-amount input { text-align: left; }
+  .items-table .col-remove { text-align: right; }
 }
 
 @page { margin: 12mm; }
@@ -245,9 +282,10 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .wrap { max-width: none; padding: 0; }
   .receipt-card { box-shadow: none; border: none; padding: 0; margin: 0; }
   .no-print { display: none !important; }
-  textarea, .field-input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
-  select { border: none !important; background: transparent !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .logo-upload-label, .remove-logo-btn { display: none !important; }
+  textarea, .field-input, .items-table input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
+  select, .items-table select { border: none !important; background: transparent !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .logo-upload-label, .remove-logo-btn, .add-line-btn, .line-remove-btn { display: none !important; }
+  .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .amount-words-block { background: transparent !important; border-top: 1px dashed #000; border-radius: 0; }
   .totals-line.grand { border-top: 1px solid #000; }
 }
@@ -280,7 +318,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 <header class="masthead">
 <div class="kicker">Free Tool</div>
 <h1>Create Receipt</h1>
-<p>Build a professional payment receipt in your browser, add remarks and your logo, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
+<p>Build a professional payment receipt in your browser, list line items, split the payment across methods, add remarks and your logo, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
 </header>
 
 <div class="top-actions no-print">
@@ -322,32 +360,47 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       <input type="date" class="field-input" id="rcDate">
     </div>
     <div class="meta-field">
-      <label class="field-label" for="rcPaymentMethod">Payment Method</label>
-      <select class="field-input" id="rcPaymentMethod">
-        <option value="Cash">Cash</option>
-        <option value="Card">Card</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-        <option value="Cheque">Cheque</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="currency-row">
-    <div class="meta-field">
       <label class="field-label" for="rcCurrency">Currency</label>
       <select class="field-input" id="rcCurrency"></select>
     </div>
   </div>
 
+  <label class="field-label">Items</label>
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="col-qty">Qty</th>
+        <th class="col-rate">Rate</th>
+        <th class="col-amount">Amount</th>
+        <th class="col-remove"></th>
+      </tr>
+    </thead>
+    <tbody id="rcItemsBody"></tbody>
+  </table>
+  <button type="button" class="add-line-btn no-print" id="addItemBtn">+ Add Line Item</button>
+
+  <label class="field-label section-gap">Payment Split</label>
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th class="col-method">Method</th>
+        <th class="col-amount">Amount</th>
+        <th class="col-remove"></th>
+      </tr>
+    </thead>
+    <tbody id="rcPaymentsBody"></tbody>
+  </table>
+  <button type="button" class="add-line-btn no-print" id="addPaymentBtn">+ Add Payment</button>
+
   <div class="totals-box">
     <div class="totals-line grand">
       <span class="tl-label">Total</span>
-      <div class="tl-controls"><input type="number" id="rcTotal" value="0" min="0" step="0.01"></div>
+      <span class="tl-value" id="rcTotal">0.00</span>
     </div>
     <div class="totals-line">
       <span class="tl-label">Received</span>
-      <div class="tl-controls"><input type="number" id="rcReceived" value="0" min="0" step="0.01"></div>
+      <span class="tl-value" id="rcReceived">0.00</span>
     </div>
     <div class="totals-line due">
       <span class="tl-label">Total Due</span>
@@ -401,8 +454,9 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   <h2>How to make a receipt</h2>
   <ol>
     <li>Add your logo (optional) and fill in who the receipt is from and who paid.</li>
-    <li>Add a receipt number, date, and payment method.</li>
-    <li>Enter the Total and how much was Received - Total Due (if any) and the Amount in Words are calculated for you.</li>
+    <li>Add a receipt number, date, and currency.</li>
+    <li>List what was paid for as line items - the Total is calculated for you as you add quantity and rate.</li>
+    <li>Add a row per payment method under Payment Split (e.g. part Cash, part Card) - Received, Total Due, and the Amount in Words are calculated for you.</li>
     <li>Add Remarks if you need to, or uncheck "Show Remarks" to leave it off the receipt entirely.</li>
     <li>Click "Save Receipt" to keep it in your Saved Receipts list, and Print / Save as PDF whenever you're ready to hand it over.</li>
   </ol>
@@ -482,6 +536,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     KWD: { symbol: "KD", name: "Kuwaiti Dinar", subunit: "Fils", decimals: 3 }
   };
 
+  var PAYMENT_METHODS = ["Cash", "Card", "Bank Transfer", "Cheque", "Other"];
+
   var currencySelect = document.getElementById("rcCurrency");
   var saveTimer = null;
   var currentLogoDataUrl = "";
@@ -492,6 +548,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   var removeLogoBtn = document.getElementById("removeLogoBtn");
   var remarksBlock = document.getElementById("remarksBlock");
   var showRemarksCheckbox = document.getElementById("rcShowRemarks");
+  var itemsBody = document.getElementById("rcItemsBody");
+  var paymentsBody = document.getElementById("rcPaymentsBody");
 
   Object.keys(CURRENCIES).forEach(function(code) {
     var opt = document.createElement("option");
@@ -622,10 +680,89 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     remarksBlock.classList.toggle("hidden", !showRemarksCheckbox.checked);
   }
 
+  function makeItemRow(desc, qty, rate) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td data-label="Item"><input type="text" class="line-desc" placeholder="Item or service description" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
+      '<td class="col-qty" data-label="Qty"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
+      '<td class="col-rate" data-label="Rate"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
+      '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove item">✕</button></td>';
+    itemsBody.appendChild(tr);
+    wireItemRow(tr);
+    updateItemRowAmount(tr);
+    return tr;
+  }
+
+  function updateItemRowAmount(tr) {
+    var qty = parseFloat(tr.querySelector(".line-qty").value) || 0;
+    var rate = parseFloat(tr.querySelector(".line-rate").value) || 0;
+    tr.querySelector(".line-amount").value = (qty * rate).toFixed(2);
+  }
+
+  function updateItemRemoveButtons() {
+    var onlyOne = itemsBody.children.length <= 1;
+    itemsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
+  function wireItemRow(tr) {
+    tr.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
+      el.addEventListener("input", function() { updateItemRowAmount(tr); recalcTotals(); scheduleSave(); });
+    });
+    tr.querySelector(".line-remove-btn").addEventListener("click", function() {
+      if (itemsBody.children.length <= 1) return;
+      tr.remove();
+      updateItemRemoveButtons();
+      recalcTotals();
+      scheduleSave();
+    });
+    updateItemRemoveButtons();
+  }
+
+  function makePaymentRow(method, amount) {
+    var tr = document.createElement("tr");
+    var options = PAYMENT_METHODS.map(function(m) {
+      return '<option value="' + m + '"' + (m === (method || "Cash") ? " selected" : "") + '>' + m + '</option>';
+    }).join("");
+    tr.innerHTML =
+      '<td class="col-method" data-label="Method"><select class="payment-method">' + options + '</select></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="number" class="payment-amount" min="0" step="0.01" value="' + (amount != null ? amount : 0) + '"></td>' +
+      '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove payment">✕</button></td>';
+    paymentsBody.appendChild(tr);
+    wirePaymentRow(tr);
+    return tr;
+  }
+
+  function updatePaymentRemoveButtons() {
+    var onlyOne = paymentsBody.children.length <= 1;
+    paymentsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
+  function wirePaymentRow(tr) {
+    tr.querySelector(".payment-amount").addEventListener("input", function() { recalcTotals(); scheduleSave(); });
+    tr.querySelector(".payment-method").addEventListener("change", scheduleSave);
+    tr.querySelector(".line-remove-btn").addEventListener("click", function() {
+      if (paymentsBody.children.length <= 1) return;
+      tr.remove();
+      updatePaymentRemoveButtons();
+      recalcTotals();
+      scheduleSave();
+    });
+    updatePaymentRemoveButtons();
+  }
+
   function recalcTotals() {
-    var total = parseFloat(document.getElementById("rcTotal").value) || 0;
-    var received = parseFloat(document.getElementById("rcReceived").value) || 0;
+    var total = 0;
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      total += parseFloat(tr.querySelector(".line-amount").value) || 0;
+    });
+    var received = 0;
+    paymentsBody.querySelectorAll("tr").forEach(function(tr) {
+      received += parseFloat(tr.querySelector(".payment-amount").value) || 0;
+    });
     var due = total - received;
+    document.getElementById("rcTotal").textContent = fmt(total);
+    document.getElementById("rcReceived").textContent = fmt(received);
     document.getElementById("rcTotalDue").textContent = fmt(due);
     document.getElementById("rcAmountWords").textContent = amountToWords(total, currentCurrency());
   }
@@ -636,6 +773,21 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   }
 
   function collectState() {
+    var items = [];
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      items.push({
+        desc: tr.querySelector(".line-desc").value,
+        qty: tr.querySelector(".line-qty").value,
+        rate: tr.querySelector(".line-rate").value
+      });
+    });
+    var payments = [];
+    paymentsBody.querySelectorAll("tr").forEach(function(tr) {
+      payments.push({
+        method: tr.querySelector(".payment-method").value,
+        amount: tr.querySelector(".payment-amount").value
+      });
+    });
     return {
       id: currentReceiptId,
       title: document.getElementById("rcTitle").value,
@@ -645,9 +797,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       from: document.getElementById("rcFrom").value,
       receivedFrom: document.getElementById("rcReceivedFrom").value,
       date: document.getElementById("rcDate").value,
-      paymentMethod: document.getElementById("rcPaymentMethod").value,
-      total: document.getElementById("rcTotal").value,
-      received: document.getElementById("rcReceived").value,
+      items: items,
+      payments: payments,
       showRemarks: showRemarksCheckbox.checked,
       remarks: document.getElementById("rcRemarks").value,
       footerNote: document.getElementById("rcFooterNote").value
@@ -688,7 +839,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       id: currentReceiptId,
       number: state.number || "",
       receivedFrom: (state.receivedFrom || "").split("\n")[0] || "",
-      total: document.getElementById("rcTotal").value ? fmt(parseFloat(state.total) || 0) : fmt(0),
+      total: document.getElementById("rcTotal").textContent,
       date: state.date || "",
       savedAt: Date.now(),
       state: state
@@ -767,9 +918,15 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     document.getElementById("rcFrom").value = state.from || "";
     document.getElementById("rcReceivedFrom").value = state.receivedFrom || "";
     document.getElementById("rcDate").value = state.date || todayIso();
-    document.getElementById("rcPaymentMethod").value = state.paymentMethod || "Cash";
-    document.getElementById("rcTotal").value = state.total || 0;
-    document.getElementById("rcReceived").value = state.received || 0;
+
+    itemsBody.innerHTML = "";
+    var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: state.total != null ? state.total : 0 }];
+    items.forEach(function(it) { makeItemRow(it.desc, it.qty, it.rate); });
+
+    paymentsBody.innerHTML = "";
+    var payments = (state.payments && state.payments.length) ? state.payments : [{ method: state.paymentMethod || "Cash", amount: state.received != null ? state.received : 0 }];
+    payments.forEach(function(p) { makePaymentRow(p.method, p.amount); });
+
     showRemarksCheckbox.checked = state.showRemarks !== false;
     document.getElementById("rcRemarks").value = state.remarks || "";
     document.getElementById("rcFooterNote").value = (state.footerNote != null) ? state.footerNote : "Thank you for your business!";
@@ -789,16 +946,24 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     applyState({});
   }
 
-  ["rcTitle", "rcNumber", "rcFrom", "rcReceivedFrom", "rcDate", "rcPaymentMethod", "rcRemarks", "rcFooterNote"].forEach(function(id) {
+  ["rcTitle", "rcNumber", "rcFrom", "rcReceivedFrom", "rcDate", "rcRemarks", "rcFooterNote"].forEach(function(id) {
     document.getElementById(id).addEventListener("input", scheduleSave);
     document.getElementById(id).addEventListener("change", scheduleSave);
   });
 
-  ["rcTotal", "rcReceived"].forEach(function(id) {
-    document.getElementById(id).addEventListener("input", function() { recalcTotals(); scheduleSave(); });
+  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+
+  document.getElementById("addItemBtn").addEventListener("click", function() {
+    makeItemRow("", 1, 0);
+    recalcTotals();
+    scheduleSave();
   });
 
-  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+  document.getElementById("addPaymentBtn").addEventListener("click", function() {
+    makePaymentRow("Cash", 0);
+    recalcTotals();
+    scheduleSave();
+  });
 
   showRemarksCheckbox.addEventListener("change", function() {
     applyRemarksVisibility();

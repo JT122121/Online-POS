@@ -871,16 +871,37 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
 - **`index.html`'s header `.cta-btn`** row now has two buttons - "Free
   Invoice Generator" (`href="invoice"`) and "Free Receipt Generator"
   (`href="receipt"`), side by side in that order.
-- **Simple-summary layout, not a line-item table**: From / Received From
-  (plain textareas, no pulling from `app.html`'s Store Settings, same
-  decoupled-by-design reasoning as `invoice.html`), a Date + Payment
-  Method row, a currency picker, then a `.totals-box` with just three
-  numbers - **Total** (editable), **Received** (editable), **Total Due**
-  (computed = Total − Received, read-only, clamped at 0 by the UI's plain
-  number-input min but not otherwise validated against overpayment).
-  There is no discount/tax math here (unlike `invoice.html`) - a receipt
-  in this tool records what was already agreed and paid, it doesn't
-  compute a bill.
+- **Line items and a payment split**, added after initial feedback that
+  the first version ("simple summary, matches your example") was missing
+  both: From / Received From (plain textareas, no pulling from
+  `app.html`'s Store Settings, same decoupled-by-design reasoning as
+  `invoice.html`), a Date + Currency row, then an `.items-table`
+  (`#rcItemsBody`, Item/Qty/Rate/Amount, `makeItemRow()`/`wireItemRow()`
+  - the same DOM-is-source-of-truth pattern `invoice.html`'s own
+  `itemsBody` uses, just without the Tax Free column since this tool
+  still does no tax math) whose row amounts sum into **Total**, and a
+  second `.items-table` for **Payment Split** (`#rcPaymentsBody`, a
+  Method `<select>` - the same five options the old single
+  `#rcPaymentMethod` field offered - plus an Amount, `makePaymentRow()`/
+  `wirePaymentRow()`) whose row amounts sum into **Received**. Both
+  start with exactly one row on a new receipt (mirroring
+  `invoice.html`'s always-at-least-one-line-item rule) - the "+ Add Line
+  Item"/"+ Add Payment" buttons add more, each row's ✕ removes it but is
+  `disabled` when it's the last row in its table. **Total**, **Received**,
+  and **Total Due** (= Total − Received) are now all read-only computed
+  `.tl-value` spans, not inputs - `recalcTotals()` sums `#rcItemsBody`'s
+  `.line-amount` cells and `#rcPaymentsBody`'s `.payment-amount` inputs
+  directly off the DOM on every row edit, same as `invoice.html`'s own
+  `recalcTotals()` does for its items table. There is still no discount/
+  tax math (unlike `invoice.html`) - itemizing here is about listing what
+  was paid for and how, not computing a bill. A receipt for a flat,
+  undetailed amount still works exactly like the original design: one
+  item row with the amount in Rate (Qty 1) and one payment row with the
+  full amount - the UI just no longer assumes that's the only case.
+  `applyState()` falls back to synthesizing a single item/payment row
+  from any pre-existing `total`/`received`/`paymentMethod` fields when
+  `items`/`payments` are missing or empty, so a draft or saved receipt
+  from before this change still reopens correctly.
 - **Amount in Words** (`amountToWords()`) - auto-converts the Total into
   words underneath the totals box, currency-aware via a `CURRENCIES` map
   (`{symbol, name, subunit, decimals}` per code) richer than
