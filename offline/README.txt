@@ -13,20 +13,20 @@ same as the hosted version at goonlinepos.com, except:
 
 Everything else — cart & checkout, split payments, receipt printing,
 sales history & summaries, inventory tracking, cashiers, multi-language
-(EN/AR/FIL/HI/ES/TH), CSV product import, Excel/CSV exports, camera
-barcode scanning, backup & restore, and the customer-facing screen — is
-all there and fully functional offline.
+(EN/AR/FIL/HI/ES/TH), CSV product import, Excel/CSV exports, USB barcode
+scanning, backup & restore, and the customer-facing screen — is all
+there and fully functional offline.
 
 
 HOW TO RUN IT
 -------------
 
 There are two ways to open the app. Use the launcher script if you want
-the Customer Screen or the camera barcode scanner — both need it to work
-reliably in every browser. For just ringing up sales and printing on this
-one computer, double-clicking app.html is enough.
+the Customer Screen to work reliably in every browser. For just ringing
+up sales, printing, and USB barcode scanning on this one computer,
+double-clicking app.html is enough.
 
-  Option A — Recommended (enables Customer Screen + camera scanner):
+  Option A — Recommended (enables the Customer Screen everywhere):
     Windows : double-click start-server.bat
     macOS   : double-click start-server-mac.command
               (first time: right-click it -> Open, to clear the
@@ -43,7 +43,7 @@ one computer, double-clicking app.html is enough.
   Option B — Quick start (fastest, no setup):
     Just double-click app.html. This works fine in Chrome/Edge for a
     single register. It's not guaranteed to work for the Customer Screen
-    or camera scanner in every browser — see below.
+    in every browser — see below.
 
 
 THE CUSTOMER SCREEN, OFFLINE
@@ -75,15 +75,14 @@ follow the in-app guide — same two methods as always:
      sync only works between windows on the same device.
 
 
-CAMERA BARCODE SCANNER, OFFLINE
----------------------------------
+USB BARCODE SCANNER, OFFLINE
+-------------------------------
 
-Also fully local — it uses your device's camera directly (no cloud
-lookup), matching scanned codes against product SKUs already in your
-catalog. Camera access from a browser generally requires either the
-local server (Option A) or Chrome/Edge (which treats double-clicked
-local files as trusted enough for camera access; Firefox/Safari are
-stricter). Use Option A if the scanner won't request camera permission.
+Also fully local, and needs no setup at all. A USB barcode scanner acts
+as a keyboard — it "types" the scanned code and presses Enter for you —
+so as long as the "Barcode Scanner" toggle on the main screen is on,
+scanning a barcode adds the matching product by SKU straight away. No
+camera, no permissions, works the same in Option A or Option B.
 
 
 YOUR DATA
@@ -109,8 +108,9 @@ WHAT'S IN THIS FOLDER
   app.html                 The POS app.
   customer.html             The customer-facing screen.
   favicon.png                Tab icon.
-  vendor/xlsx.full.min.js     Excel export library (bundled, MIT/Apache-2.0
-  vendor/zxing-browser.min.js  and barcode-scanning library — see
-  vendor/LICENSES.txt          vendor/LICENSES.txt).
+  modules/usb-scanner.js     USB barcode scanner logic.
+  modules/receipt.js         Receipt/checkout rendering.
+  vendor/xlsx.full.min.js    Excel export library (bundled, MIT/Apache-2.0 —
+  vendor/LICENSES.txt         see vendor/LICENSES.txt).
   start-server.bat / .sh / -mac.command   Local server launchers.
   README.txt                This file.

@@ -10,13 +10,6 @@ xlsx.full.min.js
   Source  : https://www.npmjs.com/package/xlsx
   Used by : app.html, offline/app.html (Excel export)
 
-zxing-browser.min.js
-  Package : @zxing/browser
-  Version : 0.2.1
-  License : MIT
-  Source  : https://www.npmjs.com/package/@zxing/browser
-  Used by : app.html, offline/app.html (camera barcode scanning)
-
 jszip.min.js
   Package : jszip
   Version : 3.10.1

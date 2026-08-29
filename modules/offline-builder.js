@@ -106,19 +106,18 @@ async function confirmOfflineDownload() {
   try {
     if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
 
-    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, zxingBlob, licensesText, readmeText, shText, batText, macCommandText, scannerJsText, receiptJsText] = await Promise.all([
+    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, usbScannerJsText, receiptJsText] = await Promise.all([
       fetchOfflineText("app.html"),
       fetchOfflineText("customer.html"),
       fetchOfflineBlob("favicon.png"),
       fetchOfflineBlob("favicon.ico"),
       fetchOfflineBlob("vendor/xlsx.full.min.js"),
-      fetchOfflineBlob("vendor/zxing-browser.min.js"),
       fetchOfflineText("offline/vendor/LICENSES.txt"),
       fetchOfflineText("offline/README.txt"),
       fetchOfflineText("offline/start-server.sh"),
       fetchOfflineText("offline/start-server.bat"),
       fetchOfflineText("offline/start-server-mac.command"),
-      fetchOfflineText("modules/scanner.js"),
+      fetchOfflineText("modules/usb-scanner.js"),
       fetchOfflineText("modules/receipt.js")
     ]);
 
@@ -128,9 +127,8 @@ async function confirmOfflineDownload() {
     zip.file("favicon.png", faviconBlob);
     zip.file("favicon.ico", faviconIcoBlob);
     zip.file("vendor/xlsx.full.min.js", xlsxBlob);
-    zip.file("vendor/zxing-browser.min.js", zxingBlob);
     zip.file("vendor/LICENSES.txt", licensesText);
-    zip.file("modules/scanner.js", scannerJsText);
+    zip.file("modules/usb-scanner.js", usbScannerJsText);
     zip.file("modules/receipt.js", receiptJsText);
     zip.file("README.txt", readmeText);
     zip.file("start-server.sh", shText, { unixPermissions: "755" });

@@ -7,9 +7,3 @@ xlsx.full.min.js
   Version : 0.18.5
   License : Apache-2.0
   Source  : https://www.npmjs.com/package/xlsx
-
-zxing-browser.min.js
-  Package : @zxing/browser
-  Version : 0.2.1
-  License : MIT
-  Source  : https://www.npmjs.com/package/@zxing/browser

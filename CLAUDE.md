@@ -191,43 +191,53 @@ zero network calls.
   `sales-report-2026-08-01_to_2026-08-31.xlsx`) instead of just today's
   date when a range is set. A range matching zero sales shows
   `salesExportRangeEmptyAlert` rather than downloading an empty file.
-- **Barcode scanning:** `@zxing/browser` drives a camera-based scanner
-  (`barcodeReader`), toggleable in Settings; matches scanned code against
-  product SKU. `pollScannerFrame()` calls `barcodeReader.decodeFromCanvas()`
-  **synchronously** inside a plain `try/catch` — in `@zxing/browser` 0.2.1
-  (the vendored version) that method returns a `Result` directly (or throws
-  when nothing's found in that frame, which is normal and happens on most
-  polls), it does **not** return a Promise. An earlier version of this
-  code called `.then()`/`.catch()` on that return value, which is a bug:
-  a genuine decode success returned a plain object with no `.then` method,
-  so the `.then(...)` call itself threw a `TypeError` before
-  `handleScannedCode()` ever ran — the scanner silently never registered a
-  successful scan. Don't reintroduce the `.then()` pattern here.
-  `pollScannerFrame()` now decodes the **full, uncropped video frame** every
-  poll instead of a cropped/contrast-stretched sub-region - an earlier
-  version cropped to a centered ~56-80% window (alternating a "tight" and
-  "loose" inset every 3rd poll) and ran a manual grayscale+contrast-stretch
-  pass on the pixels before decoding. That crop was computed as a percentage
-  of `videoEl.videoWidth`/`videoEl.videoHeight` (the raw camera sensor
-  frame), while the on-screen `.scanner-frame` guide box is a CSS percentage
-  of the `.scanner-body` container - and since `.scanner-body video` uses
-  `object-fit: contain` with a 4:3 container against an (ideal) 16:9 stream,
-  the video gets letterboxed inside that container, so the two percentages
-  don't map to the same pixels. A barcode that visually looked centered
-  inside the guide box could land outside the actual cropped/scanned
-  region. The contrast stretch was also a real risk on glossy/reflective
-  packaging - blowing out a glare highlight to pure white can destroy fine
-  bar detail right where it matters. Full-frame decoding removes both
-  failure modes at once (ZXing scans the whole image for a barcode anywhere
-  in it, so there's no correctness reason to crop, only a minor performance
-  one). Camera resolution was also dropped from an (ideal) 3840x2160 request
-  to 1920x1080 - not every rear camera negotiates a 4K getUserMedia stream
-  cleanly, 1080p is far more universally supported, and it keeps full-frame
-  decode cost reasonable now that nothing is cropped first. Verified with a
-  real fake-camera-device Playwright run (`--use-fake-device-for-media-stream`
-  + a real EAN-13 barcode encoded into a Y4M video file) driving the actual
-  scan button, poll loop, and ZXing decode end-to-end into a matched cart
-  item - not just a mocked decode call.
+- **Barcode scanning:** USB barcode scanner support, keyboard-wedge style
+  (a USB scanner acts as a keyboard — it "types" the scanned code then
+  presses Enter). `modules/usb-scanner.js` listens for `keydown` on
+  `document`; a burst of keystrokes arriving less than
+  `USB_SCAN_MAX_GAP_MS` (50ms) apart, ending in Enter, at least
+  `USB_SCAN_MIN_LENGTH` (3) characters long, is treated as a scan and
+  matched against product SKU (`handleUsbScannedCode`) — human typing
+  speed is well above that gap, so it's never mistaken for a scan.
+  Capture is **global but pauses whenever a text-entry element is
+  focused** (`isTextEntryElement()` checks `document.activeElement` for
+  `INPUT`/`TEXTAREA`/`SELECT`/`contenteditable`) so a scan never leaks
+  keystrokes into whatever field a cashier happens to be editing — it
+  only fires when focus is elsewhere (a button, the body, nothing).
+  Toggleable via the **"Barcode Scanner" toggle** (`#barcodeScannerToggle`,
+  the same toggle/storage key — `barcodeScannerEnabled` — that predates
+  this feature) on the main screen, **default ON**: the checkbox carries
+  `checked` in the markup and `loadSettings()` only unchecks it when
+  `pos-settings` has `barcodeScannerEnabled` explicitly stored as
+  `false`, so both a brand-new visitor and a returning user who never
+  touched the setting default to on. `toggleBarcodeScannerSetting()`
+  just persists the checkbox state via `saveSettings()` — no separate
+  enable/disable call into the module, since `handleUsbScanKeydown()`
+  reads the checkbox live on every keydown. A match calls
+  `addProductToCart()` and shows a floating `.usb-scan-toast` (reusing
+  the `scannerFound`/`scannerNotFound` translation keys); no match shows
+  the same toast with the "not found" text. This replaced an earlier
+  camera-based scanner (`@zxing/browser` driving `getUserMedia()`) that
+  was disabled/WIP in the shipped build (`openScanner()` opened with
+  `alert("Coming soon"); return;` before any camera code ran) and, per
+  the site owner, wasn't working out after repeated attempts to fix it —
+  removed entirely rather than left half-working: `modules/scanner.js`,
+  `vendor/zxing-browser.min.js`, the `#scannerOverlay` camera/video/torch
+  UI, its `.scanner-overlay`/`.scanner-body`/`.scanner-frame`/
+  `.scanner-torch-btn`/`.scanner-hint`/`.scanner-message` CSS, and the
+  `scannerTitle`/`scannerHint`/`scannerUnsupported`/`scannerNoCamera`
+  translation keys (all six languages) are gone. `.scanner-modal`/
+  `.scanner-header` CSS **stayed** — despite the name, those are the
+  generic modal-box classes reused by the Customer Screen, Offline
+  Download, and Buy Premium modals, not scanner-specific. Verified
+  end-to-end with Playwright: a fast keystroke burst + Enter with no
+  field focused adds the matching product and shows the toast; the same
+  burst while a text input is focused types normally into that field
+  with zero cart effect; disabling the toggle suppresses scanning
+  entirely; slow (human-speed, >50ms/char) keystrokes are never treated
+  as a scan; and a freshly built offline package carries
+  `modules/usb-scanner.js` (not `scanner.js`) and reproduces the same
+  behavior with zero network calls.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
   everything and reloads the page. This is the *only* way data survives a
@@ -296,15 +306,14 @@ global scope as the main inline block regardless of load order (`let`/
 every other classic `<script>` in the same document), so this is a
 drop-in split with no behavior change, not a rewrite.
 
-- **`modules/scanner.js`** — the camera barcode scanner: `openScanner`,
-  `pollScannerFrame`, `closeScanner`, `handleScannedCode`, the torch/focus
-  helpers, and their backing state (`barcodeReader`, `scannerPollTimer`,
-  `lastScannedCode`, etc). Note `openScanner()` currently opens with
-  `alert("Coming soon"); return;` before any camera code runs, and
-  `toggleBarcodeScannerSetting()` (still in `app.html`, not moved) just
-  alerts and forces the setting back off — the feature is disabled/WIP
-  in the current build; this split preserved that as-is rather than
-  re-enabling it.
+- **`modules/usb-scanner.js`** — USB barcode scanner support (see
+  "Barcode scanning" above for the full behavior): `handleUsbScanKeydown`
+  (the `document` `keydown` listener), `isTextEntryElement`,
+  `handleUsbScannedCode`, `showUsbScanToast`, and their backing state
+  (`usbScanBuffer`, `usbScanLastCharTime`, `usbScanToastTimeout`). This
+  replaced the earlier `modules/scanner.js` (camera-based, `@zxing/browser`)
+  when the camera scanner was removed for not working out — see "Barcode
+  scanning" above for why.
 - **`modules/receipt.js`** — receipt/checkout math and rendering:
   `printReceipt`, `computeTotalsFromItems`/`computeTotals`,
   `renderReceiptItems`, `updateTotalsAndHeader`, `updateReceipt`,
@@ -320,33 +329,39 @@ drop-in split with no behavior change, not a rewrite.
   marker (same pattern as the `JSZIP` script tag right above it) so it's
   dropped from the generated offline package entirely — an offline copy
   has no download button to trigger it, and it would otherwise try to
-  fetch/rebuild a zip of itself. `modules/scanner.js` and
+  fetch/rebuild a zip of itself. `modules/usb-scanner.js` and
   `modules/receipt.js` are **not** marker-wrapped since the offline copy
   still needs the scanner and receipt code; `confirmOfflineDownload()`
   fetches both files alongside `app.html`/`customer.html` and adds them
-  to the zip at `modules/scanner.js`/`modules/receipt.js` so the paths
+  to the zip at `modules/usb-scanner.js`/`modules/receipt.js` so the paths
   the generated `app.html`'s `<script src>` tags expect are actually
   there. See "Download Offline POS" below for the full file list.
 
-All three were extracted verbatim (moved, not rewritten) end-to-end
-verified with Playwright: adding a product, clicking it into the cart,
-qty +/-, and printing all still work through `modules/receipt.js`; the
-scanner module's dead-code alert path still fires unchanged; and a live
-"Download Offline POS" run produces a zip whose `app.html` has zero
-leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers, still defines
-`openScanner`/`printReceipt` from the bundled modules, and has no
-`buildOfflineAppHtml` (correctly absent, since that module was stripped).
+`modules/receipt.js` and `modules/offline-builder.js` were extracted
+verbatim (moved, not rewritten); `modules/usb-scanner.js` is new code
+replacing the removed camera scanner. All verified end-to-end with
+Playwright: adding a product, clicking it into the cart, qty +/-, and
+printing all still work through `modules/receipt.js`; a USB-scanner-speed
+keystroke burst adds the matching product while the same burst is inert
+when a text field is focused; and a live "Download Offline POS" run
+produces a zip whose `app.html` has zero leftover
+`OFFLINE-STRIP`/`OFFLINE-SWAP` markers, still defines
+`handleUsbScanKeydown`/`printReceipt` from the bundled modules, and has
+no `buildOfflineAppHtml` (correctly absent, since that module was
+stripped).
 
 ## `vendor/` — self-hosted third-party libraries
 
-Root-level `vendor/xlsx.full.min.js`, `vendor/zxing-browser.min.js`, and
-`vendor/jszip.min.js` are unmodified builds pulled straight from the npm
-registry (`vendor/LICENSES.txt` has versions/licenses/attribution).
-`app.html` loads all three via local `<script src="vendor/...">` tags —
-**not** cdnjs/unpkg — so the live site has zero third-party CDN
-dependency. `customer.html` needs none of them. `jszip.min.js` is used
-only by the "Download Offline POS" feature below; the other two are also
-what gets pulled into the generated offline package.
+Root-level `vendor/xlsx.full.min.js` and `vendor/jszip.min.js` are
+unmodified builds pulled straight from the npm registry
+(`vendor/LICENSES.txt` has versions/licenses/attribution). `app.html`
+loads both via local `<script src="vendor/...">` tags — **not**
+cdnjs/unpkg — so the live site has zero third-party CDN dependency.
+`customer.html` needs neither. `jszip.min.js` is used only by the
+"Download Offline POS" feature below; `xlsx.full.min.js` is also what
+gets pulled into the generated offline package. (`vendor/zxing-browser.min.js`
+was removed along with the camera barcode scanner — see "Barcode
+scanning" above.)
 
 ## Premium code validation (live site only)
 
@@ -528,9 +543,9 @@ remember. The whole mechanism lives inside `app.html` itself:
 - On confirm, it `fetch()`es the **currently live** `app.html` and
   `customer.html` (same-origin, `cache: "no-store"`) plus the static
   ingredients under `offline/` (`README.txt`, the three `start-server.*`
-  launchers, `offline/vendor/LICENSES.txt`), the two libraries from root
-  `vendor/`, and `modules/scanner.js`/`modules/receipt.js` (the offline
-  copy still needs both, at those same paths, since `app.html`'s
+  launchers, `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`,
+  and `modules/usb-scanner.js`/`modules/receipt.js` (the offline copy
+  still needs both, at those same paths, since `app.html`'s
   `<script src="modules/...">` tags aren't marker-stripped for them),
   runs `app.html`'s text through `buildOfflineAppHtml()`, zips everything
   with JSZip, and triggers the download (`GoOnlinePOS-Offline.zip`).
@@ -578,9 +593,10 @@ remember. The whole mechanism lives inside `app.html` itself:
   `.bat` are static, rarely-changing files (not generated) that get pulled
   into the zip as-is. The launchers run a local Python `http.server` and
   open the app at `http://localhost:8080/app.html` — this is what makes
-  the customer-screen broadcast (`BroadcastChannel`/`localStorage`) and
-  the camera barcode scanner reliable across browsers offline;
-  double-clicking `app.html` directly via `file://` also works (confirmed
+  the customer-screen broadcast (`BroadcastChannel`/`localStorage`)
+  reliable across browsers offline (the USB scanner needs no such
+  help — it's just `keydown` events, which work identically via
+  `file://`); double-clicking `app.html` directly via `file://` also works (confirmed
   in Chromium) but Firefox/Safari can isolate separate double-clicked
   local files from each other, breaking cross-tab sync.
 - There is **no committed static copy** of the offline package anymore
