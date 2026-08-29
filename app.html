@@ -149,6 +149,8 @@ button:active { transform: translateY(1px); }
 #printButton:hover { background: #263832; }
 #customerScreenButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
+#howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
+#howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #createInvoiceButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #createInvoiceButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #createReceiptButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
@@ -250,6 +252,12 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .scanner-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
 .scanner-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
 .scanner-header button:hover { background: #f2f1ea; color: var(--ink); }
+.htu-item { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--line-soft); }
+.htu-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.htu-num { display: block; font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+.htu-item h3 { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0 0 6px; }
+.htu-item p { color: var(--ink-soft); font-size: 13px; line-height: 1.6; margin: 0; }
+.premium-note { display: inline-block; margin-top: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 3px 10px; border-radius: 999px; }
 .usb-scan-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; box-shadow: var(--shadow-lg); z-index: 200; }
 .usb-scan-toast.success { background: var(--accent-tint); color: var(--accent-dark); }
 .usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
@@ -460,6 +468,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="premiumShortcutButton" onclick="openPremiumSettings()" title="Manage your Premium code">👑 <span id="premiumShortcutLabel">Premium</span></button>
 <button id="backupShortcutButton" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
+<button id="howToUseButton" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
@@ -608,19 +617,11 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 
 <footer class="site-footer">
-<a href="how-it-works">How to Use</a>
-<span>·</span>
-<a href="about">About</a>
-<span>·</span>
-<a href="blog">Blog</a>
+<a href="contact">Contact</a>
 <span>·</span>
 <a href="privacy">Privacy Policy</a>
 <span>·</span>
 <a href="terms">Terms of Service</a>
-<span>·</span>
-<a href="contact">Contact</a>
-<span>·</span>
-<a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">Facebook</a>
 <!-- OFFLINE-STRIP:COOKIE-SETTINGS-LINK:START -->
 <span>·</span>
 <a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
@@ -1130,6 +1131,131 @@ Website: goonlinepos.com</textarea>
 </div>
 </div>
 <!-- OFFLINE-STRIP:BUY-PREMIUM-MODAL:END -->
+
+<div id="howToUseOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeHowToUse()">
+<div class="scanner-modal" style="max-width:640px; max-height:85vh; display:flex; flex-direction:column;">
+  <div class="scanner-header">
+    <h2 id="howToUseTitle">How To Use</h2>
+    <button onclick="closeHowToUse()">✕</button>
+  </div>
+  <div style="padding:18px 20px; overflow-y:auto;" class="how-to-use-body">
+    <p style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 18px;">A quick walkthrough of every setting, from your Store details down to Premium.</p>
+
+    <div class="htu-item">
+      <span class="htu-num">MAIN SCREEN</span>
+      <h3>Your everyday screen</h3>
+      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the toolbar for more room). Tap a product to add it to the cart, search or filter by category, and use the header buttons to reach Premium, Backup, Settings, End of Day, Print, Inventory, Customer Screen, New Sale, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle here and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">HEADER → CUSTOMER SCREEN</span>
+      <h3>Customer Screen</h3>
+      <p>Show customers exactly what they're ordering and what they owe, on a second monitor or tablet facing them - items and totals update live as you ring things up, and it shows a "Thank you" screen with the payment breakdown once the sale completes.</p>
+      <span class="premium-note">Customer Screen is a Premium feature</span>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">HEADER → END OF DAY</span>
+      <h3>End of Day</h3>
+      <p>Opens a printable closing report for a date you pick - total sales, what sold and how much, a payment method breakdown, and a per-cashier collection breakdown. Choose 80mm thermal or A4 paper, and save a report to reopen it again later even if sales history changes afterward.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → STORE</span>
+      <h3>Store</h3>
+      <p>Set your store name and details - address, phone, email, website, anything you want printed at the top of every receipt. Upload your own logo here too, so receipts look like they came from your actual business.</p>
+      <span class="premium-note">Logo upload is a Premium feature</span>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → DOCUMENT</span>
+      <h3>Document</h3>
+      <p>Choose whether you're printing a Receipt, Invoice, or Payment Received. The current receipt number lives here too - editable, with a custom prefix if you want one (like INV-000123).</p>
+      <span class="premium-note">Editable receipt number & prefix are Premium features</span>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → TAX</span>
+      <h3>Tax</h3>
+      <p>Name your tax (VAT, GST, Sales Tax - whatever applies to you) and set the rate. Every total recalculates automatically. Discounts live at checkout itself - see "Main Screen" above - since they're a per-sale choice, not a store-wide setting.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → PAYMENT METHODS</span>
+      <h3>Payment Methods</h3>
+      <p>Cash, Card, and Bank Transfer come built in, and you can add your own - GCash, PayPal, whatever your customers actually use. These show up in the dropdown at checkout, including for split payments.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → CASHIERS</span>
+      <h3>Cashiers</h3>
+      <p>Add everyone who works the till. Whoever's selected in the header dropdown gets printed on every receipt and tracked separately in the End of Day report - so you always know who rang up what.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → PRODUCTS</span>
+      <h3>Products</h3>
+      <p>Add items one at a time - name, price, category, SKU, stock level, photo, and tax-exempt status - or upload a CSV to load your whole catalog in one shot. Product names are editable right in this list, and changes sync everywhere instantly, including Inventory.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → SALES HISTORY</span>
+      <h3>Sales History</h3>
+      <p>Every completed sale is saved automatically, grouped by date. Click any sale to view full details, fix a mistake, or reprint the receipt - and download a two-tab Excel report whenever you need your own records, optionally filtered to a date range.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → FOOTER</span>
+      <h3>Footer</h3>
+      <p>The two lines that print at the bottom of every receipt - "Thank you for shopping with us!" by default, but make it your own.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → PAPER &amp; ZOOM</span>
+      <h3>Paper &amp; Zoom</h3>
+      <p>Leave it on Auto to fit whatever printer you're using, or pick 58mm, 80mm, A5, A4, or a custom width. Screen zoom adjusts how large everything looks while you work.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → CURRENCY</span>
+      <h3>Currency</h3>
+      <p>Set your currency code and symbol, and choose how many decimal places to show - 2 for most currencies, 3 if you're working in something like Bahraini Dinar.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → LANGUAGE</span>
+      <h3>Language</h3>
+      <p>Switch the entire interface between English, Arabic, Filipino, Hindi, Spanish, or Thai - including the Customer Screen, which picks up the same language automatically.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → INVENTORY</span>
+      <h3>Inventory</h3>
+      <p>Stock is grouped by category, with SKU and total value shown per item. Numbers deduct automatically with every sale - edit any figure directly to correct it or restock, and download a full inventory report to Excel whenever you need it.</p>
+      <span class="premium-note">Editing stock & exporting reports are Premium features</span>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → BACKUP</span>
+      <h3>Backup & Restore</h3>
+      <p>Since everything lives only in this browser, back it up regularly - one click downloads products, sales history, settings, your logo, and more into a single file. Restoring is just as simple if you ever switch devices.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → BACKUP → OFFLINE VERSION</span>
+      <h3>Offline Version</h3>
+      <p>Download a complete copy of the app that runs with zero internet - a shop computer with no connection, a spare install, or just a backup plan. It's built fresh from the live site each time you click Download, so it's always current, and it includes the Customer Screen, End of Day report, and USB barcode scanner support. Come back and download again anytime your Premium is active to grab the latest version; carry your data over with Backup → Download Full Backup on the old copy, then Restore from Backup on the new one.</p>
+      <span class="premium-note">Downloading the offline version is a Premium feature</span>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → PREMIUM</span>
+      <h3>Premium</h3>
+      <p>Premium features stay visible throughout the app with a gold badge, even before you activate anything - you can see exactly what's available. Enter a code here to unlock them on your device.</p>
+    </div>
+  </div>
+</div>
+</div>
 
 <script src="vendor/xlsx.full.min.js"></script>
 <!-- OFFLINE-STRIP:JSZIP:START --><script src="vendor/jszip.min.js"></script><!-- OFFLINE-STRIP:JSZIP:END -->
@@ -2566,6 +2692,13 @@ function closeBuyPremiumModal() {
 }
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:END */
 
+function openHowToUse() {
+  document.getElementById("howToUseOverlay").classList.remove("hidden");
+}
+function closeHowToUse() {
+  document.getElementById("howToUseOverlay").classList.add("hidden");
+}
+
 function updateDate() {
   const now = new Date();
   const day = String(now.getDate()).padStart(2, "0");
@@ -3181,7 +3314,7 @@ function changeLanguage() {
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
-    endOfDayShortcutLabel: "endOfDayShortcutLabel",
+    endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel", homeShortcutLabel: "homeShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",

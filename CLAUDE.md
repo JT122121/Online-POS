@@ -7,11 +7,18 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 
 ## Repo layout
 
-- **Marketing/site pages:** `index.html`, `guide.html`, `about.html`,
-  `contact.html`, `how-it-works.html`, `privacy.html`, `terms.html`,
-  `blog.html` + its articles: `blog-why-your-business-needs-a-pos.html`,
+- **Marketing/site pages:** `index.html`, `about.html`, `contact.html`,
+  `privacy.html`, `terms.html`, `blog.html` + its articles:
+  `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
-  `blog-from-excel-to-appsheet-expert.html`
+  `blog-from-excel-to-appsheet-expert.html`. All of these, plus
+  `invoice.html`/`receipt.html` below, share one canonical site-wide
+  header/nav/footer — see "Site-wide header, nav & footer" below.
+  `guide.html` and `how-it-works.html` still exist on disk but are
+  **retired** — `noindex`, removed from every page's nav/footer and from
+  `sitemap.xml`, their walkthrough content now living inside `app.html`
+  itself as the "How To Use" panel instead. See "Site-wide header, nav &
+  footer" and the SEO section below for the full story.
 - **`app.html`** (~4,050 lines) — the actual POS application. Most logic
   still runs client-side in one big inline `<script>` block near the
   bottom of the file; a few self-contained pieces (barcode scanner,
@@ -35,10 +42,10 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   `app.html`'s inline block to keep it smaller. See "`modules/` —
   split-out app.html pieces" below.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
-  "Every setting, explained" full walkthrough on `guide.html`; `index.html`
-  used to also show a 4-image teaser of these on the homepage, but that
-  grid was removed since the images stayed blurry there even widened -
-  `index.html` now just links straight to `guide.html`), `favicon.png` /
+  "Every setting, explained" full walkthrough on the now-retired
+  `guide.html` - see "Retired: `guide.html` and `how-it-works.html`"
+  under "Site-wide header, nav & footer" and the SEO section below;
+  `index.html` no longer links to or teases that page at all), `favicon.png` /
   `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
   below), `og-image.jpg` (shared 1200×630 social-share card),
   `blog-hero-illustration.png` (featured-post image on `blog.html`,
@@ -91,7 +98,7 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   same badge to any future blog photo that isn't a genuine, literal
   photo of the thing it's illustrating.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (lists `/`, `app.html`, `how-it-works.html`, `guide.html`, `about.html`,
+  (lists `/`, `app.html`, `invoice.html`, `receipt.html`, `about.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -107,6 +114,103 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 No README, no CI, no tests, no linter config. History is 50 commits, one
 author, mostly titled "Add files via upload" — this repo has been edited
 almost entirely through the GitHub web UI, not a local dev workflow.
+
+## Site-wide header, nav & footer
+
+Every marketing/tool page — `index.html`, `about.html`, `contact.html`,
+`privacy.html`, `terms.html`, `blog.html` + its 3 articles, `invoice.html`,
+`receipt.html` — shares one canonical `<header class="site-header">`
+structure and CSS block, copied verbatim page to page (`.site-header`,
+`.site-header .brand`/`.brand-mark`, `.site-header .header-right`,
+`.site-nav`, `.cta-btn`). Before this, the site had **four divergent
+header conventions** (`.site-header`, `.page-header`, `.masthead`,
+`.article-header`) depending on which page you looked at; this unified
+all of them under one pattern:
+
+```html
+<header class="site-header">
+<a class="brand" href="/">
+<div class="brand-mark"><img src="data:image/png;base64,..." alt=""></div>
+<h1>GoOnlinePOS.com</h1>  <!-- or <h2> — see below -->
+</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="blog" class="nav-highlight">Blog</a>
+<a href="about">About</a>
+</nav>
+<a class="cta-btn" href="invoice">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+</header>
+```
+
+- **Brand-mark heading level depends on whether the page already has its
+  own topic-specific `<h1>` elsewhere** — same rule already established
+  for `privacy.html`/`terms.html` before this change (see SEO below):
+  `index.html`/`about.html`/`contact.html`/`blog.html` (which have no
+  other `<h1>`) use `<h1>GoOnlinePOS.com</h1>` here; `privacy.html`/
+  `terms.html` (own `<h1 class="doc-title">`) and `invoice.html`/
+  `receipt.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
+  use `<h2>` so the page keeps exactly one real `<h1>`.
+- **The 3-button `.cta-btn` row is identical and in the same order on
+  every page** — Free Invoice Generator → Free Receipt Generator → Free
+  Point of Sale (`href="app"`), always extension-less. `index.html` used
+  to be the only page with this row (2 buttons, no POS link); this pass
+  both added the third button there and rolled the whole row out
+  site-wide, so **any older note in this file describing the CTA row as
+  unique to `index.html` is stale** — it isn't anymore.
+- **Footer is trimmed to exactly 4 links, same order, everywhere:**
+  Contact → Privacy Policy → Terms of Service → Cookie Settings. Dropped
+  from various pages' older footers: About, Blog, "How to Use", "Full
+  Guide", and the Facebook link (Facebook now lives in `index.html`'s own
+  Social section instead — see below). `app.html`'s own `<footer
+  class="site-footer">` got the same trim (it used to carry How to Use/
+  About/Blog/Facebook too); its Cookie Settings link stays wrapped in the
+  `OFFLINE-STRIP:COOKIE-SETTINGS-LINK` marker like before, since the
+  offline build has no cookie-consent flow to link to.
+- **`invoice.html`/`receipt.html`** keep their own existing `<header
+  class="masthead">` (with the page's real `<h1>` — "Create Invoice"/
+  "Create Receipt" — and the doc's own from/logo controls) **unchanged
+  below** the new `site-header`; the new header was added above it, not
+  merged into it. Their old `.top-actions` div (a back-link plus, on
+  `invoice.html`, a second "Open the POS App" button) was removed
+  entirely as redundant with the new nav — its CSS and the
+  `.top-actions` mention in the print hide-list were removed too (the
+  print hide-list now hides `.site-header` instead). Neither page had a
+  logo before; the brand-mark PNG data URI was copied byte-for-byte from
+  `index.html`.
+- **`blog.html`'s 3 article pages** keep their existing `.back-link-row`
+  ("← Back to Blog") **unchanged**, now sitting just below the new
+  header — deliberately preserved as a more specific, more useful link
+  than the generic nav offers. `blog.html` itself dropped its own
+  `.back-link-row` ("← Back to GoOnlinePOS.com") since the new header's
+  brand-mark link already covers that. The 3 article pages also had a
+  pre-existing **broken** `.site-brand` block referencing a nonexistent
+  `logo.png`, which the new canonical header replaced outright rather
+  than stacking alongside it.
+- **`index.html`'s own "Social" section** — a `<section class="social-section">`
+  (heading "Social", `.social-links` row of round `.social-icon`
+  buttons) placed between the homepage's CTA band and its footer.
+  Currently one icon: Facebook (`https://www.facebook.com/share/1F18wrqU3F/`),
+  a real inline `<svg>` glyph, not a text link or emoji. **Instagram is
+  deliberately not there yet** — there's no profile URL for it — but the
+  markup has an HTML comment immediately after the Facebook `<a>`
+  explaining exactly how to add it (mirror the same `.social-icon`
+  markup, swap `href`/`aria-label`/`title`, use an Instagram glyph SVG).
+  This section is `index.html`-only, not part of the shared site-header/
+  footer pattern above.
+- **Retired: `guide.html` and `how-it-works.html`.** Both files still
+  exist on disk, unedited otherwise, but are no longer linked from any
+  standardized page's nav or footer, and are no longer in `sitemap.xml`
+  — see "SEO" below for the full reasoning and the exact meta-tag
+  change. Their walkthrough content now lives inside `app.html` itself
+  as the "How To Use" panel (see "`app.html` — architecture" below)
+  instead of as a separate page. Any remaining prose in an older page's
+  body copy that referenced "the full guide" or "how it works" as a
+  separate page (e.g. `about.html`'s two `.guide-box` callouts) was
+  repointed to just open `app.html` and click How To Use there, rather
+  than linking to either retired page.
 
 ## `app.html` — architecture
 
@@ -140,16 +244,17 @@ zero network calls.
   as the other `modules/` files — see below). `tr(key)` looks up
   `currentLang()` and falls back to `en`. New user-facing strings must
   be added to **all six** language blocks (or at least `en` as fallback).
-- **Header toolbar toggle:** `.header-actions` wraps its 8 shortcut
-  buttons (Premium/Backup/Settings/Summary/Print/Inventory/Customer
-  Screen/New Sale) in `#headerActionsGroup` (`display: contents`, so it
-  doesn't affect the flex layout), preceded by `#toolbarToggleBtn`
-  (`toggleToolbar()`) which toggles `.hidden` on that group to collapse
-  the whole row down to just itself — reclaiming vertical space for the
-  product grid/receipt below. Deliberately **collapses all 8 buttons
-  together, including Print and New Sale** (not just the occasional/
-  admin ones) per an explicit choice to prioritize maximum space over
-  keeping per-sale actions always pinned. Deliberately **not persisted**
+- **Header toolbar toggle:** `.header-actions` wraps its shortcut buttons
+  (Premium/Backup/Settings/How To Use/End of Day/Print/Inventory/Customer
+  Screen/Create Invoice/Create Receipt/New Sale/Home — the last three of
+  those stripped from the offline build) in `#headerActionsGroup`
+  (`display: contents`, so it doesn't affect the flex layout), preceded by
+  `#toolbarToggleBtn` (`toggleToolbar()`) which toggles `.hidden` on that
+  group to collapse the whole row down to just itself — reclaiming
+  vertical space for the product grid/receipt below. Deliberately
+  **collapses every button together, including Print and New Sale** (not
+  just the occasional/admin ones) per an explicit choice to prioritize
+  maximum space over keeping per-sale actions always pinned. Deliberately **not persisted**
   — every fresh page load starts expanded regardless of what was chosen
   last time; `renderToolbarToggle()` keeps the button's own label
   (`toolbarHideLabel`/`toolbarShowLabel`) in sync with its current state
@@ -372,6 +477,27 @@ zero network calls.
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
   bottom of the file, separate from the app's own `onlinepos_*` storage
   keys).
+- **"How To Use" panel** (`#howToUseOverlay`, `openHowToUse()`/
+  `closeHowToUse()`) — an in-app walkthrough covering every setting,
+  reachable from the header toolbar's **"❓ How To Use"** button
+  (`#howToUseButton`, next to Settings). Replaces the old standalone
+  `guide.html` marketing page as the walkthrough's home — see "Retired
+  pages" under SEO below for why that page was pulled out of navigation
+  rather than deleted. Deliberately **text-only** (a `.htu-item` title +
+  description per section, 18 sections total including one new "End of
+  Day" section `guide.html` never had) — no screenshots, unlike
+  `guide.html`'s photo-heavy original. Screenshots showing "what does
+  Settings → Store look like" are redundant once you're already inside
+  the app and can just click over and look, and skipping them avoids
+  bundling 17 more `guide-*.png` images into the offline package. Both
+  functions live **outside** the `OFFLINE-STRIP:BUY-PREMIUM-JS` marker
+  block right above them (easy to mix up since they sit immediately
+  after it in the file) since this panel ships in the offline build —
+  unlike Buy Premium, there's nothing about it that depends on the
+  network. `howToUseShortcutLabel` is the only piece of this feature in
+  `modules/translations.js` (the button label, all six languages); the
+  panel's own content is English-only, same as `invoice.html`/
+  `receipt.html`/`end-of-day.html`.
 
 ## `modules/` — split-out app.html pieces
 
@@ -776,15 +902,14 @@ on-page heading and the button that links to it now say the same thing).
   field kept its original `id` (`invFrom`, `invTo`, `invDate`, etc.) so
   none of the JS (`collectState`/`applyState`/`recalcTotals`) needed to
   change.
-- **`index.html`'s header `.cta-btn`** (next to the `Blog`/`About` nav
-  links, `.site-header .cta-btn`) links here (`href="invoice.html"`,
-  labeled "Free Invoice Generator") rather than to `app.html` - a
-  deliberate choice to give the free tool prime header real estate as
-  a lead-in, since `app.html` still has its own prominent "Open the
-  app" buttons in the hero section and the CTA band further down the
-  same page. This header CTA is unique to `index.html`'s own template
-  (`grep` confirms no other page reuses `.cta-btn`) - don't assume
-  other pages' headers need the same swap.
+- **Every page's header `.cta-btn` row** (next to the `Blog`/`About` nav
+  links, `.site-header .cta-btn`) links here (`href="invoice"`, labeled
+  "Free Invoice Generator", first of the 3 CTA buttons) - a deliberate
+  choice to give the free tool prime header real estate as a lead-in,
+  since `app.html` still has its own prominent "Open the app" buttons in
+  the hero section and the CTA band further down `index.html`. This CTA
+  row is now shared by every marketing/tool page, not just `index.html`
+  - see "Site-wide header, nav & footer" above for the full pattern.
 - **No dependency on `app.html`'s data** - deliberately simple/decoupled:
   plain manual-entry fields (business name/address typed directly, no
   pulling from the POS's own Store Settings), matching the reference
@@ -905,9 +1030,10 @@ directly reachable/shareable on its own (indexable, in `sitemap.xml`).
 The page's own `<h1>` reads **"Create Receipt"**, matching the header
 button's label (the `<title>`/meta description lead with "Free Receipt
 Generator" for SEO search-term value, same pattern as `invoice.html`).
-- **`index.html`'s header `.cta-btn`** row now has two buttons - "Free
-  Invoice Generator" (`href="invoice"`) and "Free Receipt Generator"
-  (`href="receipt"`), side by side in that order.
+- **Every page's header `.cta-btn` row** has "Free Invoice Generator"
+  (`href="invoice"`) and "Free Receipt Generator" (`href="receipt"`) as
+  its first two buttons, in that order, before "Free Point of Sale" -
+  see "Site-wide header, nav & footer" above for the full pattern.
 - **Header layout follows common commercial-receipt convention**, the
   same `.doc-header`/`.doc-header-left`/`.doc-header-right`/`.doc-meta`/
   `.bill-to-block`/`.currency-inline` structure as `invoice.html` (see
@@ -1124,7 +1250,7 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `invoice.html`, `receipt.html`, `how-it-works.html`, `guide.html`, `about.html`,
+  `invoice.html`, `receipt.html`, `about.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -1136,39 +1262,41 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   was missed once when a second article (`blog-create-your-own-pos-with-
   appsheet.html`) was added directly via the GitHub web UI, so double
   check this file whenever a new `blog-*.html` page shows up.
-- **`guide.html`** is the full, screenshot-by-screenshot "Every setting,
+- **`guide.html`** was the full, screenshot-by-screenshot "Every setting,
   explained" walkthrough (all 17 `guide-item`s, the same `.guide-nav`
-  jump links, unchanged content) — split out of `index.html` into its
-  own page because it's the section that goes stale every time a
-  setting changes or a screenshot needs retaking, and a shop-owner
-  visitor reading it doesn't need the rest of `index.html`'s marketing
-  copy in the way. `index.html` keeps only a 4-image teaser
-  (`.guide-teaser-grid`: catalog, products, inventory, offline version)
-  under the same "Every setting, explained" heading, plus a "See the
-  Full Guide →" button linking to `guide.html`. Uses the same page
-  template as `how-it-works.html` (simple header, no `app-preview` mock,
-  same cookie-consent/analytics pattern) rather than `index.html`'s
-  richer homepage template. Every page's footer gained a "Full Guide"
-  link next to "How to Use" (guide.html's own footer keeps "How to Use"
-  but skips linking to itself, same pattern `how-it-works.html` already
-  used for its own "How to Use" link).
-- **`how-it-works.html` was a genuinely broken/orphaned page** before this
-  was fixed, all in one pass: (1) its `<head>` had a duplicated, nested
+  jump links), originally split out of `index.html` into its own page
+  because it's the section that goes stale every time a setting changes
+  or a screenshot needs retaking, and a shop-owner visitor reading it
+  didn't need the rest of `index.html`'s marketing copy in the way.
+  **Now retired** — its `<meta name="robots">` was changed from
+  `index, follow` to `noindex, follow` (still `follow`, not `nofollow`,
+  since the page's own internal links, e.g. to `app.html`, are still
+  worth crawlers following even though the page itself shouldn't be
+  indexed), it was dropped from `sitemap.xml` and from every other
+  page's nav/footer, and `index.html` lost the 4-image teaser grid/CTA
+  that used to link to it. The file itself is otherwise **untouched** —
+  still has its old body content and its own old header/footer/nav
+  referencing the pre-overhaul link set — kept on disk unlinked rather
+  than deleted, in case anything external still links to it directly.
+  Its walkthrough content lives on inside `app.html` itself as the
+  text-only "How To Use" panel instead (see "`app.html` — architecture"
+  above) — not a byte-for-byte copy, rewritten to be screenshot-free
+  since you're already looking at the real UI once you're in the app.
+- **`how-it-works.html`** was a genuinely broken/orphaned page before an
+  earlier fix, all in one pass: (1) its `<head>` had a duplicated, nested
   `<!DOCTYPE html><html><head>` wrapper with two conflicting
   title/description/robots blocks (malformed HTML, not just a missing-tag
   gap); (2) its Google Analytics script loaded unconditionally, unlike
-  every other page's consent-gated `loadAnalyticsAndAds()` — it now uses
-  the exact same cookie-consent banner/gating pattern as `about.html`/
-  `contact.html`/`blog.html` (including AdSense, and a "Cookie Settings"
-  footer link); (3) **not one other page linked to it** — every page's
-  footer "How to Use" link pointed at `index.html` instead, and
-  `index.html` had no footer link to it at all, making it an orphan page
-  Google would rarely recrawl regardless of its own meta tags — fixed
-  site-wide (all footers, plus `index.html`'s own footer gained a "How to
-  Use" entry); (4) its own "Open the app" buttons (header, hero, CTA band,
-  footer — 4 places) linked to `index.html` instead of `app.html`, so the
-  page's own primary call-to-action didn't actually open the app — fixed
-  to `app.html`, matching every other page's convention.
+  every other page's consent-gated `loadAnalyticsAndAds()` — it was fixed
+  to use the exact same cookie-consent banner/gating pattern as
+  `about.html`/`contact.html`/`blog.html`; (3) **not one other page
+  linked to it** at the time, making it an orphan page Google would
+  rarely recrawl regardless of its own meta tags; (4) its own "Open the
+  app" buttons linked to `index.html` instead of `app.html`. **Now
+  retired** the same way as `guide.html` above — `noindex, follow`,
+  removed from `sitemap.xml` and every nav/footer, file left otherwise
+  untouched on disk. Its own walkthrough content is likewise superseded
+  by `app.html`'s in-app "How To Use" panel.
 - `privacy.html`/`terms.html` each used to render **two `<h1>` tags** (the
   shared brand-mark heading in the page header, plus the real
   page-specific title — "Privacy Policy"/"Terms of Service" — below it).
