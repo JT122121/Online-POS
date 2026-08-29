@@ -755,6 +755,21 @@ The page's own `<h1>` reads **"Create Invoice"**, matching the header
 button's label exactly (the `<title>`/meta description still lead with
 "Free Invoice Generator" for its SEO search-term value, but the visible
 on-page heading and the button that links to it now say the same thing).
+- **Header layout follows common commercial-invoice convention**: a
+  `.doc-header` two-column row - `.doc-header-left` (logo + "From",
+  formerly "Bill From") on the left, `.doc-header-right` (the
+  right-aligned "INVOICE" title, `#` number, and a `.doc-meta` mini-table
+  of Date/Due Date/Terms/PO #, each a `.doc-meta-row` with the label on
+  the left and the value right-aligned) on the right - followed by
+  "Bill To" as its own `.bill-to-block` below the header, not
+  side-by-side with From anymore. The Currency `<select>` moved into a
+  small `.currency-inline` control (`no-print`) tucked above the title,
+  since the printed document already shows currency via the symbol in
+  every amount ($/€/£/etc.) - there's no separate "Currency" field/label
+  cluttering the printed page. Only markup/CSS changed here; every
+  field kept its original `id` (`invFrom`, `invTo`, `invDate`, etc.) so
+  none of the JS (`collectState`/`applyState`/`recalcTotals`) needed to
+  change.
 - **`index.html`'s header `.cta-btn`** (next to the `Blog`/`About` nav
   links, `.site-header .cta-btn`) links here (`href="invoice.html"`,
   labeled "Free Invoice Generator") rather than to `app.html` - a
@@ -870,9 +885,12 @@ A free-standing **payment receipt** builder, `invoice.html`'s sibling tool
 and built by mirroring its architecture closely (own `--ink`/`--accent`/
 `--gold` design tokens, own cookie-consent banner, own autosave-draft +
 explicit Save/Saved-list pattern, `window.print()` + `@media print` for
-PDF export) - but deliberately **not itemized**: this is for a quick,
-one-off payment record (a deposit, a partial payment, a service call),
-not a formal line-item bill, which is what `invoice.html` is already for.
+PDF export). It now supports line items and a payment split (added after
+initial feedback that the first version, a non-itemized single Total/
+Received summary, was missing both) - see the items/payment bullet
+below - though it's still lighter than `invoice.html`: no tax/discount
+math, since a receipt records what was already paid rather than
+computing a bill.
 `app.html`'s own **"🧾 Create Receipt"** header shortcut button
 (`openCreateReceipt()`, next to Create Invoice) opens it via
 `window.open(...)` in a **new tab**, same reasoning as Create Invoice - a
@@ -884,16 +902,33 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
 - **`index.html`'s header `.cta-btn`** row now has two buttons - "Free
   Invoice Generator" (`href="invoice"`) and "Free Receipt Generator"
   (`href="receipt"`), side by side in that order.
-- **Simple-summary layout, not a line-item table**: From / Received From
-  (plain textareas, no pulling from `app.html`'s Store Settings, same
-  decoupled-by-design reasoning as `invoice.html`), a Date + Payment
-  Method row, a currency picker, then a `.totals-box` with just three
-  numbers - **Total** (editable), **Received** (editable), **Total Due**
-  (computed = Total − Received, read-only, clamped at 0 by the UI's plain
-  number-input min but not otherwise validated against overpayment).
-  There is no discount/tax math here (unlike `invoice.html`) - a receipt
-  in this tool records what was already agreed and paid, it doesn't
-  compute a bill.
+- **Header layout follows common commercial-receipt convention**, the
+  same `.doc-header`/`.doc-header-left`/`.doc-header-right`/`.doc-meta`/
+  `.bill-to-block`/`.currency-inline` structure as `invoice.html` (see
+  its own section above for the full breakdown) - logo + "From" on the
+  left, the right-aligned "RECEIPT" title/number/Date on the right, a
+  no-print `.currency-inline` picker tucked above the title instead of a
+  printed "Currency" field, and "Received From" (renamed from
+  `invoice.html`'s "Bill To") as its own block below the header. Only
+  markup/CSS changed - every field kept its original `id` so no JS
+  needed to change.
+- **Line items and a payment split**: an `.items-table` (`#rcItemsBody`,
+  Description/Amount - no Qty/Rate split like `invoice.html`, since a
+  receipt line is usually a flat amount, not a quantity × rate
+  calculation) whose row amounts sum into **Total**, and a
+  **Payment Received** block (`#rcPaymentsBody`, one `.payment-row` per
+  payment method + amount) whose row amounts sum into **Total Received**.
+  Both start with one row on a new receipt and can't go below one (the
+  remove button disables itself on the last row), mirroring
+  `invoice.html`'s own items table. **Total Due** stays computed as
+  Total − Total Received. Payment methods are a `<select>` seeded from
+  `DEFAULT_PAYMENT_METHODS` (Cash/Card/Bank Transfer/Cheque/Other) plus
+  any custom ones a user has typed before (persisted in
+  `localStorage["goonlinepos-receipt-payment-methods"]`, shared across
+  all receipts in that browser) - picking "+ Add New..." prompts for a
+  name and adds it to that list. There is still no discount/tax math
+  (unlike `invoice.html`) - itemizing here is about listing what was
+  paid for and how, not computing a bill.
 - **Amount in Words** (`amountToWords()`) - auto-converts the Total into
   words underneath the totals box, currency-aware via a `CURRENCIES` map
   (`{symbol, name, subunit, decimals}` per code) richer than
