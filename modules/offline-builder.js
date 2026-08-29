@@ -43,6 +43,7 @@ function stripMarked(html, marker, label) {
 }
 
 function buildOfflineAppHtml(html) {
+  html = stripMarked(html, "APP-SITE-HEADER", "app.html site-header nav/CTA row");
   html = stripMarked(html, "COOKIE-CONSENT", "cookie consent script");
   html = stripMarked(html, "GOOGLE-FONTS", "google fonts links");
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
