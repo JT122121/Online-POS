@@ -351,6 +351,7 @@ a {
 .btn-primary:hover {
   background: #cf9631;
 }
+
 .site-footer {
   max-width: 720px;
   margin: 30px auto 0;
@@ -582,23 +583,30 @@ a {
 
     <p>
       If you've spent any time looking at no-code tools, you've probably
-      run into Google AppSheet - the platform that lets you turn a
-      spreadsheet into a working app without writing code. It's a
-      genuinely powerful idea, and "build my own POS" is one of the
-      most common projects people try with it. Here's what that
-      actually involves, what you get in return, and where it can trip
-      you up.
+      run into <a href="https://about.appsheet.com/" target="_blank" rel="noopener">Google AppSheet</a> -
+      the platform that lets you turn a spreadsheet into a working app
+      without writing code. It's a genuinely powerful idea, and
+      "build my own POS" is one of the most common projects people try
+      with it. Here's what that actually involves, what you get in
+      return, and where it can trip you up.
     </p>
 
     <h2>What AppSheet actually is</h2>
 
     <p>
-      AppSheet is a no-code app builder owned by Google. You connect it
-      to a data source - usually a Google Sheet, sometimes Excel or a
-      database - and it generates an app around that data: forms,
-      buttons, views, and workflows, all configured through a visual
-      editor instead of code. For a POS, the "data source" is where
-      your products, sales, and inventory would live.
+      <a href="https://about.appsheet.com/" target="_blank" rel="noopener">AppSheet</a>
+      is a no-code app builder from Google. You connect it to a data
+      source - usually a Google Sheet, sometimes Excel or a database -
+      and it generates an app around that data: forms, buttons, views,
+      and workflows, all configured through a visual editor instead of
+      code. For a POS, the "data source" is where your products, sales,
+      and inventory would live.
+    </p>
+
+    <p>
+      If you want to explore the platform directly, you can visit the
+      <a href="https://about.appsheet.com/" target="_blank" rel="noopener"><strong>official Google AppSheet website</strong></a>
+      for its current features, documentation, and ways to get started.
     </p>
 
     <h2>The basic blueprint for a POS in AppSheet</h2>
@@ -649,11 +657,12 @@ a {
     </ol>
 
     <p>
-      If you want to build an AppSheet POS yourself, don't start from a blank
-      canvas. <strong>Joe Tayactac's YouTube channel</strong> focuses on
-      practical AppSheet development, including building, troubleshooting,
-      and improving real-world apps. The tutorial below walks through
-      building an AppSheet POS and printing receipts from start to finish.
+      If you want to build an AppSheet POS yourself, don't start from a
+      blank canvas. <strong>Joe Tayactac's YouTube channel</strong>
+      focuses on practical AppSheet development, including building,
+      troubleshooting, and improving real-world apps. The tutorial
+      below walks through building an AppSheet POS and printing receipts
+      from start to finish.
     </p>
 
     <div style="text-align:center; margin: 0 0 22px;">
@@ -665,6 +674,7 @@ a {
         title="AppSheet POS System and Print Receipt Full Tutorial"
         style="max-width:100%; border-radius: 12px; border: 1px solid var(--line);">
       </iframe>
+
       <div style="margin-top:14px;">
         <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"
           style="display:inline-block; font-size:13px; font-weight:700; color:#fff; background:#FF0000; padding:9px 18px; border-radius:8px; text-decoration:none;">
@@ -711,6 +721,7 @@ a {
         that's often fine, but during busy periods even small delays
         can add up.
       </li>
+
       <li>
         <strong>No native barcode-to-cart flow.</strong> You can add
         barcode scanning via the camera, but wiring it into a smooth
@@ -718,23 +729,28 @@ a {
         configuration work, and USB barcode scanners (which just type
         the code and hit enter) need extra handling to behave properly.
       </li>
+
       <li>
         <strong>Costs can increase as your business grows.</strong>
         AppSheet offers different pricing options, but business use
         with multiple users can require paid plans, making the ongoing
         cost an important consideration.
+        <a href="https://about.appsheet.com/pricing/" target="_blank" rel="noopener">See current AppSheet pricing</a>.
       </li>
+
       <li>
         <strong>Google Sheets as a database has real limits.</strong>
         As your Sales sheet grows into the thousands of rows, both
         Sheets and the app built on it can start to slow down
         noticeably.
       </li>
+
       <li>
         <strong>You're the support team.</strong> There's no vendor to
         call when a bot misfires or a formula breaks at checkout - it's
         on you to debug it, ideally not while a customer is waiting.
       </li>
+
       <li>
         <strong>Offline use requires careful configuration.</strong>
         AppSheet supports offline use, but designing a reliable offline
@@ -774,13 +790,40 @@ a {
     </p>
 
     <ul>
-      <li><strong>Barcode scanning</strong> that works with any USB barcode scanner out of the box</li>
-      <li><strong>Automatic stock deduction</strong> with every sale, no automation to build</li>
-      <li><strong>Split payments</strong> - part cash, part card, tracked accurately</li>
-      <li><strong>Multiple cashiers</strong>, with sales tracked separately for each</li>
-      <li><strong>Instant receipt printing</strong>, with your own logo and store details</li>
-      <li><strong>Offline Mode</strong>, so you can keep selling without an internet connection</li>
-      <li><strong>Full sales history</strong>, exportable to Excel whenever you need it</li>
+      <li>
+        <strong>Barcode scanning</strong> that works with any USB barcode
+        scanner out of the box
+      </li>
+
+      <li>
+        <strong>Automatic stock deduction</strong> with every sale, no
+        automation to build
+      </li>
+
+      <li>
+        <strong>Split payments</strong> - part cash, part card, tracked
+        accurately
+      </li>
+
+      <li>
+        <strong>Multiple cashiers</strong>, with sales tracked separately
+        for each
+      </li>
+
+      <li>
+        <strong>Instant receipt printing</strong>, with your own logo
+        and store details
+      </li>
+
+      <li>
+        <strong>Offline Mode</strong>, so you can keep selling without
+        an internet connection
+      </li>
+
+      <li>
+        <strong>Full sales history</strong>, exportable to Excel whenever
+        you need it
+      </li>
     </ul>
 
     <p>
