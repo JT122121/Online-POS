@@ -18,9 +18,10 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
-- **`modules/`** — `usb-scanner.js`, `receipt.js`, `offline-builder.js`,
-  plain global-scope scripts split out of `app.html`'s inline block to
-  keep it smaller. See "`modules/` — split-out app.html pieces" below.
+- **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
+  `offline-builder.js`, plain global-scope scripts split out of
+  `app.html`'s inline block to keep it smaller. See "`modules/` —
+  split-out app.html pieces" below.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
   "Every setting, explained" full walkthrough on `guide.html`, and as a
   4-image teaser on `index.html`), `favicon.png` /
@@ -79,8 +80,10 @@ zero network calls.
   loadPremiumStatus → startFirstSale`, then wires up paper size/zoom/date/
   language/receipt rendering and a 1s clock tick.
 - **i18n:** one `translations` object keyed by language code — `en`, `ar`,
-  `fil`, `hi`, `es`, `th` — each a flat string dictionary. `tr(key)` looks
-  up `currentLang()` and falls back to `en`. New user-facing strings must
+  `fil`, `hi`, `es`, `th` — each a flat string dictionary, split out into
+  `modules/translations.js` (loaded before the main inline script, same
+  as the other `modules/` files — see below). `tr(key)` looks up
+  `currentLang()` and falls back to `en`. New user-facing strings must
   be added to **all six** language blocks (or at least `en` as fallback).
 - **Header toolbar toggle:** `.header-actions` wraps its 8 shortcut
   buttons (Premium/Backup/Settings/Summary/Print/Inventory/Customer
@@ -308,7 +311,7 @@ zero network calls.
 
 ## `modules/` — split-out app.html pieces
 
-Three self-contained slices of `app.html`'s logic live in their own files
+Four self-contained slices of `app.html`'s logic live in their own files
 under `modules/`, loaded via plain `<script src="modules/...">` tags
 (classic scripts, **not** `type="module"`) placed right after the
 `vendor/` script tags and before the main inline `<script>` block. This
@@ -321,6 +324,15 @@ global scope as the main inline block regardless of load order (`let`/
 every other classic `<script>` in the same document), so this is a
 drop-in split with no behavior change, not a rewrite.
 
+- **`modules/translations.js`** — the entire `const translations = {...}`
+  i18n dictionary (all six languages), extracted verbatim. By far the
+  single biggest contributor to `app.html`'s line count before the
+  split (~550 lines of largely repetitive key/value pairs) and the one
+  piece with zero logic — pure data — so it was the first candidate to
+  pull out once `receipt.js`/`usb-scanner.js`/`offline-builder.js`
+  already existed. Loaded first among the `modules/` scripts since nothing
+  else depends on load order here, just needs to exist before any
+  `tr(key)` call fires at runtime.
 - **`modules/usb-scanner.js`** — USB barcode scanner support (see
   "Barcode scanning" above for the full behavior): `handleUsbScanKeydown`
   (the `document` `keydown` listener), `isTextEntryElement`,
@@ -344,26 +356,29 @@ drop-in split with no behavior change, not a rewrite.
   marker (same pattern as the `JSZIP` script tag right above it) so it's
   dropped from the generated offline package entirely — an offline copy
   has no download button to trigger it, and it would otherwise try to
-  fetch/rebuild a zip of itself. `modules/usb-scanner.js` and
-  `modules/receipt.js` are **not** marker-wrapped since the offline copy
-  still needs the scanner and receipt code; `confirmOfflineDownload()`
-  fetches both files alongside `app.html`/`customer.html` and adds them
-  to the zip at `modules/usb-scanner.js`/`modules/receipt.js` so the paths
-  the generated `app.html`'s `<script src>` tags expect are actually
-  there. See "Download Offline POS" below for the full file list.
+  fetch/rebuild a zip of itself. `modules/translations.js`,
+  `modules/usb-scanner.js`, and `modules/receipt.js` are **not**
+  marker-wrapped since the offline copy still needs all three;
+  `confirmOfflineDownload()` fetches them alongside `app.html`/
+  `customer.html` and adds them to the zip at those same
+  `modules/...` paths so they land where the generated `app.html`'s
+  `<script src>` tags expect them. See "Download Offline POS" below for
+  the full file list.
 
-`modules/receipt.js` and `modules/offline-builder.js` were extracted
-verbatim (moved, not rewritten); `modules/usb-scanner.js` is new code
-replacing the removed camera scanner. All verified end-to-end with
-Playwright: adding a product, clicking it into the cart, qty +/-, and
-printing all still work through `modules/receipt.js`; a USB-scanner-speed
-keystroke burst adds the matching product while the same burst is inert
-when a text field is focused; and a live "Download Offline POS" run
-produces a zip whose `app.html` has zero leftover
-`OFFLINE-STRIP`/`OFFLINE-SWAP` markers, still defines
-`handleUsbScanKeydown`/`printReceipt` from the bundled modules, and has
-no `buildOfflineAppHtml` (correctly absent, since that module was
-stripped).
+`modules/translations.js`, `modules/receipt.js`, and
+`modules/offline-builder.js` were extracted verbatim (moved, not
+rewritten); `modules/usb-scanner.js` is new code replacing the removed
+camera scanner. All verified end-to-end with Playwright: adding a
+product, clicking it into the cart, qty +/-, and printing all still
+work through `modules/receipt.js`; language switching and `tr()`
+lookups across all six languages still work through
+`modules/translations.js`; a USB-scanner-speed keystroke burst adds the
+matching product while the same burst is inert when a text field is
+focused; and a live "Download Offline POS" run produces a zip whose
+`app.html` has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers,
+still defines `translations`/`handleUsbScanKeydown`/`printReceipt` from
+the bundled modules, and has no `buildOfflineAppHtml` (correctly
+absent, since that module was stripped).
 
 ## `vendor/` — self-hosted third-party libraries
 
@@ -559,8 +574,9 @@ remember. The whole mechanism lives inside `app.html` itself:
   `customer.html` (same-origin, `cache: "no-store"`) plus the static
   ingredients under `offline/` (`README.txt`, the three `start-server.*`
   launchers, `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`,
-  and `modules/usb-scanner.js`/`modules/receipt.js` (the offline copy
-  still needs both, at those same paths, since `app.html`'s
+  and `modules/translations.js`/`modules/usb-scanner.js`/
+  `modules/receipt.js` (the offline copy still needs all three, at
+  those same paths, since `app.html`'s
   `<script src="modules/...">` tags aren't marker-stripped for them),
   runs `app.html`'s text through `buildOfflineAppHtml()`, zips everything
   with JSZip, and triggers the download (`GoOnlinePOS-Offline.zip`).

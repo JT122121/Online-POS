@@ -108,6 +108,7 @@ WHAT'S IN THIS FOLDER
   app.html                 The POS app.
   customer.html             The customer-facing screen.
   favicon.png                Tab icon.
+  modules/translations.js    Six-language UI text.
   modules/usb-scanner.js     USB barcode scanner logic.
   modules/receipt.js         Receipt/checkout rendering.
   vendor/xlsx.full.min.js    Excel export library (bundled, MIT/Apache-2.0 —
