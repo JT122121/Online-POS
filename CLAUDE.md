@@ -7,9 +7,9 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 
 ## Repo layout
 
-- **Marketing/site pages:** `index.html`, `about.html`, `contact.html`,
-  `how-it-works.html`, `privacy.html`, `terms.html`, `blog.html` +
-  `blog-why-your-business-needs-a-pos.html`
+- **Marketing/site pages:** `index.html`, `guide.html`, `about.html`,
+  `contact.html`, `how-it-works.html`, `privacy.html`, `terms.html`,
+  `blog.html` + `blog-why-your-business-needs-a-pos.html`
 - **`app.html`** (~4,050 lines) — the actual POS application. Most logic
   still runs client-side in one big inline `<script>` block near the
   bottom of the file; a few self-contained pieces (barcode scanner,
@@ -18,11 +18,12 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
-- **`modules/`** — `scanner.js`, `receipt.js`, `offline-builder.js`, plain
-  global-scope scripts split out of `app.html`'s inline block to keep it
-  smaller. See "`modules/` — split-out app.html pieces" below.
+- **`modules/`** — `usb-scanner.js`, `receipt.js`, `offline-builder.js`,
+  plain global-scope scripts split out of `app.html`'s inline block to
+  keep it smaller. See "`modules/` — split-out app.html pieces" below.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
-  "Every setting, explained" walkthrough on `index.html`), `favicon.png` /
+  "Every setting, explained" full walkthrough on `guide.html`, and as a
+  4-image teaser on `index.html`), `favicon.png` /
   `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
   below), `og-image.jpg` (shared 1200×630 social-share card),
   `blog-hero-illustration.svg`.
@@ -662,12 +663,28 @@ zero network calls there.
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `how-it-works.html`, `about.html`, `blog.html`,
+  `how-it-works.html`, `guide.html`, `about.html`, `blog.html`,
   `blog-why-your-business-needs-a-pos.html`, `contact.html`,
   `privacy.html`, `terms.html` — matching each page's own
   `index, follow` robots meta tag. `customer.html` is deliberately absent
   (its own tag says `noindex, nofollow`). If a page's robots meta changes,
   update this file to match.
+- **`guide.html`** is the full, screenshot-by-screenshot "Every setting,
+  explained" walkthrough (all 17 `guide-item`s, the same `.guide-nav`
+  jump links, unchanged content) — split out of `index.html` into its
+  own page because it's the section that goes stale every time a
+  setting changes or a screenshot needs retaking, and a shop-owner
+  visitor reading it doesn't need the rest of `index.html`'s marketing
+  copy in the way. `index.html` keeps only a 4-image teaser
+  (`.guide-teaser-grid`: catalog, products, inventory, offline version)
+  under the same "Every setting, explained" heading, plus a "See the
+  Full Guide →" button linking to `guide.html`. Uses the same page
+  template as `how-it-works.html` (simple header, no `app-preview` mock,
+  same cookie-consent/analytics pattern) rather than `index.html`'s
+  richer homepage template. Every page's footer gained a "Full Guide"
+  link next to "How to Use" (guide.html's own footer keeps "How to Use"
+  but skips linking to itself, same pattern `how-it-works.html` already
+  used for its own "How to Use" link).
 - **`how-it-works.html` was a genuinely broken/orphaned page** before this
   was fixed, all in one pass: (1) its `<head>` had a duplicated, nested
   `<!DOCTYPE html><html><head>` wrapper with two conflicting

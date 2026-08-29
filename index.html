@@ -171,7 +171,6 @@ img { max-width: 100%; display: block; }
 .ap-toggle-pill.on em { left: 13px; }
 .ap-search-row { display: flex; gap: 6px; margin-bottom: 9px; }
 .ap-search-row .ap-search { flex: 1; margin-bottom: 0; }
-.ap-scan-btn { flex-shrink: 0; width: 32px; border: 1px solid var(--line); border-radius: 7px; background: #fbfbf8; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 .ap-search { border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; font-size: 11.5px; color: var(--muted); background: #fbfbf8; margin-bottom: 9px; }
 .ap-chips { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
 .ap-chip { font-size: 9.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
@@ -204,19 +203,12 @@ img { max-width: 100%; display: block; }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .step-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px; box-shadow: var(--shadow); }
 
-.guide-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 820px; margin: 0 auto 40px; }
-.guide-nav a { font-size: 12px; font-weight: 600; color: var(--ink-soft); text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 7px 13px; border-radius: 999px; }
-.guide-nav a:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-tint); }
-.guide-item { display: flex; flex-direction: column; align-items: center; margin-bottom: 48px; scroll-margin-top: 20px; }
-.guide-item img { width: 100%; max-width: 780px; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-lg); margin-bottom: 18px; display: block; }
-.guide-num { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--accent-dark); background: var(--accent-tint); padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
-.guide-item h3 { font-family: var(--font-display); font-weight: 700; font-size: 19px; margin: 0 0 8px; text-align: center; }
-.guide-item p { color: var(--ink-soft); font-size: 14px; line-height: 1.65; max-width: 580px; text-align: center; margin: 0; }
-.guide-item .premium-note { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 3px 10px; border-radius: 999px; }
-.guide-dual { display: flex; gap: 20px; align-items: flex-start; justify-content: center; max-width: 780px; margin-bottom: 18px; flex-wrap: wrap; }
-.guide-dual > div { flex: 1; min-width: 260px; }
-.guide-dual img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-lg); display: block; }
-.guide-dual .guide-caption { text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 8px; font-weight: 600; }
+.guide-teaser-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 820px; margin: 0 auto 32px; }
+.guide-teaser-grid img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.guide-teaser-cta { text-align: center; }
+@media (max-width: 700px) {
+  .guide-teaser-grid { grid-template-columns: repeat(2, 1fr); }
+}
 .step-card .num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--gold); background: var(--gold-tint); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .step-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 15.5px; margin: 0 0 8px; }
 .step-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
@@ -338,10 +330,9 @@ img { max-width: 100%; display: block; }
 <span class="ap-panel-title">Products</span>
 <span class="ap-cart-badge">2 in cart</span>
 </div>
-<div class="ap-scanner-toggle"><span>📷 Barcode Scanner</span><span class="ap-toggle-pill on"><em></em></span></div>
+<div class="ap-scanner-toggle"><span>🏷️ Barcode Scanner</span><span class="ap-toggle-pill on"><em></em></span></div>
 <div class="ap-search-row">
 <div class="ap-search">Search products...</div>
-<span class="ap-scan-btn">📷</span>
 </div>
 <div class="ap-chips"><span class="ap-chip active">All</span><span class="ap-chip">Bakery</span><span class="ap-chip">Beverages</span></div>
 <div class="ap-product">
@@ -453,7 +444,7 @@ img { max-width: 100%; display: block; }
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
 <h3>Tax & discount</h3>
-<p>Set a tax name and rate, plus a discount percentage, in Settings → Tax & Discount. Totals recalculate automatically.</p>
+<p>Set a tax name and rate in Settings → Tax. Discounts are applied per sale at checkout, as a percent or a flat amount - totals recalculate automatically either way.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"></path></svg></div>
@@ -477,168 +468,15 @@ img { max-width: 100%; display: block; }
 <h2 class="section-title">Every setting, explained</h2>
 <p class="section-sub">A full walkthrough of the app - from your Store details down to Premium - with real screenshots, not stock photos.</p>
 
-<div class="guide-nav">
-<a href="#guide-main">Main Screen</a>
-<a href="#guide-customerscreen">Customer Screen</a>
-<a href="#guide-store">Store</a>
-<a href="#guide-document">Document</a>
-<a href="#guide-tax">Tax & Discount</a>
-<a href="#guide-paymentMethods">Payment Methods</a>
-<a href="#guide-cashiers">Cashiers</a>
-<a href="#guide-products">Products</a>
-<a href="#guide-salesHistory">Sales History</a>
-<a href="#guide-footer">Footer</a>
-<a href="#guide-paper">Paper & Zoom</a>
-<a href="#guide-currency">Currency</a>
-<a href="#guide-language">Language</a>
-<a href="#guide-inventory">Inventory</a>
-<a href="#guide-backup">Backup</a>
-<a href="#guide-offline">Offline Version</a>
-<a href="#guide-premium">Premium</a>
-</div>
-
-<div class="guide-item" id="guide-main">
-<span class="guide-num">MAIN SCREEN</span>
+<div class="guide-teaser-grid">
 <img src="guide-catalog.png" alt="Go Online POS main product catalog screen" loading="lazy">
-<h3>Your everyday screen</h3>
-<p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the toolbar for more room). Tap a product to add it to the cart, search or filter by category, and use the header buttons to reach Premium, Backup, Settings, Summary, Print, Inventory, Customer Screen, New Sale, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon.</p>
-</div>
-
-<div class="guide-item" id="guide-customerscreen">
-<span class="guide-num">HEADER → CUSTOMER SCREEN</span>
-<div class="guide-dual">
-<div>
-<img src="guide-customerscreen-live.png" alt="Customer-facing screen showing a live order and total" loading="lazy">
-<div class="guide-caption">What your customer sees, live</div>
-</div>
-<div>
-<img src="guide-customerscreen-panel.png" alt="Customer Screen setup panel with link and copy button" loading="lazy">
-<div class="guide-caption">Getting the link takes one click</div>
-</div>
-</div>
-<h3>Customer Screen</h3>
-<p>Show customers exactly what they're ordering and what they owe, on a second monitor or tablet facing them - items and totals update live as you ring things up, and it shows a "Thank you" screen with the payment breakdown once the sale completes.</p>
-<span class="premium-note">Customer Screen is a Premium feature</span>
-</div>
-
-<div class="guide-item" id="guide-store">
-<span class="guide-num">SETTINGS → STORE</span>
-<img src="guide-store.png" alt="Store settings tab showing store name, address, and logo upload" loading="lazy">
-<h3>Store</h3>
-<p>Set your store name and details - address, phone, email, website, anything you want printed at the top of every receipt. Upload your own logo here too, so receipts look like they came from your actual business.</p>
-<span class="premium-note">Logo upload is a Premium feature</span>
-</div>
-
-<div class="guide-item" id="guide-document">
-<span class="guide-num">SETTINGS → DOCUMENT</span>
-<img src="guide-document.png" alt="Document settings tab showing document type and receipt number" loading="lazy">
-<h3>Document</h3>
-<p>Choose whether you're printing a Receipt, Invoice, or Payment Received. The current receipt number lives here too - editable, with a custom prefix if you want one (like INV-000123).</p>
-<span class="premium-note">Editable receipt number & prefix are Premium features</span>
-</div>
-
-<div class="guide-item" id="guide-tax">
-<span class="guide-num">SETTINGS → TAX & DISCOUNT</span>
-<img src="guide-tax.png" alt="Tax and discount settings tab" loading="lazy">
-<h3>Tax & Discount</h3>
-<p>Name your tax (VAT, GST, Sales Tax - whatever applies to you), set the rate, and add a discount percentage if you run promotions. Every total recalculates automatically.</p>
-</div>
-
-<div class="guide-item" id="guide-paymentMethods">
-<span class="guide-num">SETTINGS → PAYMENT METHODS</span>
-<img src="guide-paymentMethods.png" alt="Payment methods settings tab" loading="lazy">
-<h3>Payment Methods</h3>
-<p>Cash, Card, and Bank Transfer come built in, and you can add your own - GCash, PayPal, whatever your customers actually use. These show up in the dropdown at checkout, including for split payments.</p>
-</div>
-
-<div class="guide-item" id="guide-cashiers">
-<span class="guide-num">SETTINGS → CASHIERS</span>
-<img src="guide-cashiers.png" alt="Cashiers settings tab showing a list of added cashiers" loading="lazy">
-<h3>Cashiers</h3>
-<p>Add everyone who works the till. Whoever's selected in the header dropdown gets printed on every receipt and tracked separately in the Sales Summary panel - so you always know who rang up what.</p>
-</div>
-
-<div class="guide-item" id="guide-products">
-<span class="guide-num">SETTINGS → PRODUCTS</span>
 <img src="guide-products.png" alt="Products settings tab with product list and CSV upload" loading="lazy">
-<h3>Products</h3>
-<p>Add items one at a time - name, price, category, SKU, and stock level - or upload a CSV to load your whole catalog in one shot. Product names are editable right in this list, and changes sync everywhere instantly, including Inventory.</p>
-</div>
-
-<div class="guide-item" id="guide-salesHistory">
-<span class="guide-num">SETTINGS → SALES HISTORY</span>
-<img src="guide-salesHistory.png" alt="Sales history tab showing a completed sale grouped by date" loading="lazy">
-<h3>Sales History</h3>
-<p>Every completed sale is saved automatically, grouped by date. Click any sale to view full details, fix a mistake, or reprint the receipt - and download a two-tab Excel report whenever you need your own records.</p>
-</div>
-
-<div class="guide-item" id="guide-footer">
-<span class="guide-num">SETTINGS → FOOTER</span>
-<img src="guide-footer.png" alt="Receipt footer settings tab" loading="lazy">
-<h3>Footer</h3>
-<p>The two lines that print at the bottom of every receipt - "Thank you for shopping with us!" by default, but make it your own.</p>
-</div>
-
-<div class="guide-item" id="guide-paper">
-<span class="guide-num">SETTINGS → PAPER & ZOOM</span>
-<img src="guide-paper.png" alt="Paper size and zoom settings tab" loading="lazy">
-<h3>Paper & Zoom</h3>
-<p>Leave it on Auto to fit whatever printer you're using, or pick 58mm, 80mm, A5, A4, or a custom width. Screen zoom adjusts how large everything looks while you work.</p>
-</div>
-
-<div class="guide-item" id="guide-currency">
-<span class="guide-num">SETTINGS → CURRENCY</span>
-<img src="guide-currency.png" alt="Currency settings tab" loading="lazy">
-<h3>Currency</h3>
-<p>Set your currency code and symbol, and choose how many decimal places to show - 2 for most currencies, 3 if you're working in something like Bahraini Dinar.</p>
-</div>
-
-<div class="guide-item" id="guide-language">
-<span class="guide-num">SETTINGS → LANGUAGE</span>
-<img src="guide-language.png" alt="Language settings tab showing six language options" loading="lazy">
-<h3>Language</h3>
-<p>Switch the entire interface between English, Arabic, Filipino, Hindi, Spanish, or Thai - including the Customer Screen, which picks up the same language automatically.</p>
-</div>
-
-<div class="guide-item" id="guide-inventory">
-<span class="guide-num">SETTINGS → INVENTORY</span>
 <img src="guide-inventory.png" alt="Inventory settings tab showing stock levels grouped by category" loading="lazy">
-<h3>Inventory</h3>
-<p>Stock is grouped by category, with SKU and total value shown per item. Numbers deduct automatically with every sale - edit any figure directly to correct it or restock, and download a full inventory report to Excel whenever you need it.</p>
-<span class="premium-note">Editing stock & exporting reports are Premium features</span>
-</div>
-
-<div class="guide-item" id="guide-backup">
-<span class="guide-num">SETTINGS → BACKUP</span>
-<img src="guide-backup.png" alt="Backup and restore settings tab" loading="lazy">
-<h3>Backup & Restore</h3>
-<p>Since everything lives only in this browser, back it up regularly - one click downloads products, sales history, settings, your logo, and more into a single file. Restoring is just as simple if you ever switch devices.</p>
-</div>
-
-<div class="guide-item" id="guide-offline">
-<span class="guide-num">SETTINGS → BACKUP → OFFLINE VERSION</span>
-<div class="guide-dual">
-<div>
 <img src="guide-offline.png" alt="Offline Version section in Settings, with a Download Offline POS button" loading="lazy">
-<div class="guide-caption">One button, always the current version</div>
 </div>
-<div>
-<img src="guide-offline-modal.png" alt="Before You Download dialog explaining offline setup and the Terms of Service agreement" loading="lazy">
-<div class="guide-caption">A quick setup guide before it downloads</div>
+<div class="guide-teaser-cta">
+<a class="btn-primary" href="guide.html">See the Full Guide →</a>
 </div>
-</div>
-<h3>Offline Version</h3>
-<p>Download a complete copy of the app that runs with zero internet - a shop computer with no connection, a spare install, or just a backup plan. It's built fresh from the live site each time you click Download, so it's always current, and it includes the Customer Screen and USB barcode scanner support. Come back and download again anytime your Premium is active to grab the latest version; carry your data over with Backup → Download Full Backup on the old copy, then Restore from Backup on the new one.</p>
-<span class="premium-note">Downloading the offline version is a Premium feature</span>
-</div>
-
-<div class="guide-item" id="guide-premium">
-<span class="guide-num">SETTINGS → PREMIUM</span>
-<img src="guide-premium.png" alt="Premium settings tab with code activation" loading="lazy">
-<h3>Premium</h3>
-<p>Premium features stay visible throughout the app with a gold badge, even before you activate anything - you can see exactly what's available. Enter a code here to unlock them on your device.</p>
-</div>
-
 </section>
 
 <section class="section">
@@ -681,6 +519,8 @@ img { max-width: 100%; display: block; }
 <a href="about.html">About</a>
 <span>·</span>
 <a href="how-it-works.html">How to Use</a>
+<span>·</span>
+<a href="guide.html">Full Guide</a>
 <span>·</span>
 <a href="blog.html">Blog</a>
 <span>·</span>
