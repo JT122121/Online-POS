@@ -10,13 +10,15 @@ same as the hosted version at goonlinepos.com, except:
   - Fonts fall back to your system's own fonts instead of downloading
     Space Grotesk / Inter / JetBrains Mono from Google Fonts. Purely
     cosmetic — nothing else is different.
+  - No standalone invoice generator (invoice.html). That's a separate
+    free tool on goonlinepos.com, not part of the offline POS package,
+    so the "Create Invoice" button doesn't appear in this copy.
 
 Everything else — cart & checkout, split payments, receipt printing,
 sales history & summaries, inventory tracking, cashiers, multi-language
 (EN/AR/FIL/HI/ES/TH), CSV product import, Excel/CSV exports, USB barcode
-scanning, backup & restore, the customer-facing screen, and the
-standalone invoice generator (invoice.html, reachable via the "Create
-Invoice" button) — is all there and fully functional offline.
+scanning, backup & restore, and the customer-facing screen — is all
+there and fully functional offline.
 
 
 HOW TO RUN IT
@@ -108,7 +110,6 @@ WHAT'S IN THIS FOLDER
 
   app.html                 The POS app.
   customer.html             The customer-facing screen.
-  invoice.html               The standalone invoice generator.
   favicon.png                Tab icon.
   modules/translations.js    Six-language UI text.
   modules/usb-scanner.js     USB barcode scanner logic.
