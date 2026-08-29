@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try {
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    hideBanner();
+  };
+
+  window.openCookieSettings = function() {
+    showView("cookieChoiceView");
+  };
+
+  window.acceptCookies = function() {
+    try {
+      localStorage.setItem(CONSENT_KEY, "accepted");
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+
+  window.declineCookies = function() {
+    try {
+      localStorage.setItem(CONSENT_KEY, "declined");
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+
+  window.closeCookieBanner = function() {
+    hideBanner();
+  };
+
+  var consent = null;
+  var seen = null;
+
+  try {
+    consent = localStorage.getItem(CONSENT_KEY);
+    seen = localStorage.getItem(SEEN_KEY);
+  } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() {
+      showView("cookieNoticeView");
+    });
+  }
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Your Own POS Using No-Code AppSheet | GoOnlinePOS.com Blog</title>
+
+<meta name="description" content="Thinking about building your own point-of-sale app with Google AppSheet? Here's what no-code POS builders actually involve, where they shine, where they fall short, and a simpler free alternative.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://goonlinepos.com/blog-create-your-own-pos-with-appsheet.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://goonlinepos.com/blog-create-your-own-pos-with-appsheet.html">
+<meta property="og:title" content="Create Your Own POS Using No-Code AppSheet">
+<meta property="og:description" content="What it actually takes to build a POS app in AppSheet, and where a ready-made free POS can save you the work.">
+<meta property="og:site_name" content="GoOnlinePOS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create Your Own POS Using No-Code AppSheet">
+<meta name="twitter:description" content="What it actually takes to build a POS app in AppSheet, and where a ready-made free POS can save you the work.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-dark);
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.site-brand {
+  text-align: center;
+  padding: 12px 0 18px;
+}
+
+.site-brand a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.site-brand img {
+  display: block;
+  width: auto;
+  max-width: 240px;
+  max-height: 70px;
+  object-fit: contain;
+}
+
+.site-brand-text {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -.03em;
+}
+
+.back-link-row {
+  margin: 8px 0 22px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  transition: .15s ease;
+}
+
+.back-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.article-header {
+  text-align: center;
+  padding: 10px 0 30px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 34px;
+}
+
+.article-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-tint);
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.article-header h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 33px;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.article-meta {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.article-body {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--ink);
+  margin: 36px 0 14px;
+  letter-spacing: -.01em;
+}
+
+.article-body p {
+  margin: 0 0 18px;
+}
+
+.article-body ul,
+.article-body ol {
+  margin: 0 0 18px;
+  padding-left: 22px;
+}
+
+.article-body li {
+  margin-bottom: 8px;
+}
+
+.article-body strong {
+  color: var(--ink);
+}
+
+.article-body a {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.callout {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+
+.callout strong {
+  color: var(--ink);
+}
+
+.cta-band {
+  text-align: center;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  margin-top: 40px;
+  box-shadow: var(--shadow-lg);
+}
+
+.cta-band h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: #ffffff;
+  margin: 0 0 10px;
+}
+
+.cta-band p {
+  color: #d7dcd8;
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+.btn-primary {
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none !important;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  background: var(--gold);
+  color: var(--ink) !important;
+  transition: .15s ease;
+}
+
+.btn-primary:hover {
+  background: #cf9631;
+}
+.site-footer {
+  max-width: 720px;
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 20px 20px 40px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.site-footer span {
+  margin: 0 8px;
+}
+
+.cookie-consent {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  z-index: 300;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  padding: 14px 16px;
+}
+
+.cookie-consent.hidden {
+  display: none !important;
+}
+
+.cookie-consent .cc-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 200px;
+  color: #d7dcd8;
+}
+
+.cookie-consent .cc-text a {
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cookie-notice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cookie-notice-view.hidden {
+  display: none !important;
+}
+
+.cookie-notice-view .cn-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  color: #b7c0ba;
+  font-size: 19px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.cookie-notice-view .cn-close:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+
+.cc-choice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-choice-view.hidden {
+  display: none !important;
+}
+
+.cc-actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.cc-decline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.3);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-decline:hover {
+  border-color: rgba(255,255,255,.6);
+}
+
+.cc-accept {
+  background: var(--gold);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-accept:hover {
+  background: #cf9631;
+}
+
+.cc-declined-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-declined-view.hidden {
+  display: none !important;
+}
+
+.cc-close {
+  background: var(--panel);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cc-close:hover {
+  background: #e6e4d9;
+}
+
+@media (max-width: 640px) {
+
+  .wrap {
+    padding: 16px;
+  }
+
+  .site-brand img {
+    max-width: 200px;
+    max-height: 60px;
+  }
+
+  .article-header h1 {
+    font-size: 26px;
+  }
+
+  .article-body {
+    font-size: 15px;
+  }
+
+  .article-body h2 {
+    font-size: 20px;
+  }
+
+  .cta-band {
+    padding: 30px 20px;
+  }
+
+  .cookie-notice-view {
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="site-brand">
+    <a href="index.html" aria-label="GoOnlinePOS.com">
+      <img src="logo.png" alt="GoOnlinePOS.com" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+      <span id="logoFallback" class="site-brand-text" style="display:none;">GoOnlinePOS.com</span>
+    </a>
+  </div>
+
+  <div class="back-link-row">
+    <a class="back-link" href="blog.html">← Back to Blog</a>
+  </div>
+
+  <header class="article-header">
+    <span class="article-tag" style="display:inline-flex; align-items:center; gap:6px;">
+      <svg width="14" height="14" viewBox="0 0 35 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="m29.0098 6.30417h-7.6818l-3.0989 4.40413-1.8448 4.3641 4.9437.5578 5.1352-.5377 3.8117-6.59901c.5596-.97344-.1422-2.18932-1.2651-2.18932z" fill="#0060d9"/>
+        <path d="m3.10253 8.49714 3.19192 5.47426c.39193.6708 1.10834 1.0846 1.8849 1.0846l8.20315.0164 4.9455-8.76823h-16.96584c-1.12656 0-1.82656 1.22135-1.25963 2.19297z" fill="#4285f4"/>
+        <path d="m18.0122 29.8453c-.556.9662-1.9469.9789-2.5175.0201l-3.1791-5.3375c-.4011-.6745-.412-1.5112-.0256-2.1948l4.0943-7.2625 10.0771.02z" fill="#4285f4"/>
+      </svg>
+      AppSheet
+    </span>
+
+    <h1>
+      Create Your Own POS Using No-Code AppSheet
+      (And What It Actually Takes to Pull It Off)
+    </h1>
+
+    <div class="article-meta">7 MIN READ</div>
+  </header>
+
+  <div class="article-body">
+
+    <p>
+      If you've spent any time looking at no-code tools, you've probably
+      run into Google AppSheet - the platform that lets you turn a
+      spreadsheet into a working app without writing code. It's a
+      genuinely powerful idea, and "build my own POS" is one of the
+      most common projects people try with it. Here's what that
+      actually involves, what you get in return, and where it can trip
+      you up.
+    </p>
+
+    <h2>What AppSheet actually is</h2>
+
+    <p>
+      AppSheet is a no-code app builder owned by Google. You connect it
+      to a data source - usually a Google Sheet, sometimes Excel or a
+      database - and it generates an app around that data: forms,
+      buttons, views, and workflows, all configured through a visual
+      editor instead of code. For a POS, the "data source" is where
+      your products, sales, and inventory would live.
+    </p>
+
+    <h2>The basic blueprint for a POS in AppSheet</h2>
+
+    <p>
+      Most DIY AppSheet POS builds follow roughly the same structure:
+    </p>
+
+    <ol>
+      <li>
+        <strong>Build the spreadsheet first.</strong> A Products sheet
+        (name, price, category, stock, barcode), a Sales sheet (each
+        transaction), a Sale Items sheet (line items per sale), and
+        often a Cashiers sheet. This is the real backbone of the app -
+        get the structure wrong and everything built on top of it
+        inherits the problem.
+      </li>
+      <li>
+        <strong>Import it into AppSheet.</strong> AppSheet reads the
+        sheet structure and auto-generates a starter app with basic
+        views.
+      </li>
+      <li>
+        <strong>Build the "ring up a sale" flow.</strong> This is the
+        part that takes real work: a form or view where you tap
+        products, have AppSheet write rows into Sale Items, sum them
+        into a Sales total, and ideally show a running cart total
+        before the sale is saved.
+      </li>
+      <li>
+        <strong>Add stock deduction.</strong> Not automatic - you write
+        an AppSheet "bot" (their automation/workflow feature) that
+        triggers when a sale is saved and subtracts quantities from the
+        Products sheet.
+      </li>
+      <li>
+        <strong>Add receipts.</strong> AppSheet doesn't have a native
+        till-style receipt printer flow. Typically this means
+        generating a PDF from a template and printing that, or emailing
+        it - workable, but not the instant thermal-printer receipt
+        you'd get from purpose-built POS software.
+      </li>
+      <li>
+        <strong>Set up user roles.</strong> If more than one cashier
+        will use it, you'll configure AppSheet's security filters so
+        each person only sees what they should.
+      </li>
+    </ol>
+
+    <div class="callout">
+      <strong>Reality check:</strong> a basic version of this is a
+      weekend project if you already know AppSheet. A version that
+      handles barcode scanning, split payments, offline use, and
+      real-time stock correctly is closer to a multi-week build, and
+      you'll be the one maintaining it.
+    </div>
+
+    <p>
+      If you want to actually go this route, don't start from a blank
+      canvas. <strong>Joe Tayactac's YouTube channel</strong> is
+      entirely focused on AppSheet - he designs, builds, and fixes
+      AppSheet apps and walks through that work on the channel. A
+      genuinely good resource if you want to learn the platform
+      properly instead of guessing your way through it.
+    </p>
+
+    <div style="text-align:center; margin: 0 0 22px;">
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=UURC82n8iFWNSpPFIvF8ZsJg"
+        width="100%" height="315" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="max-width:100%; border-radius: 12px; border: 1px solid var(--line);">
+      </iframe>
+      <div style="margin-top:14px;">
+        <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"
+          style="display:inline-block; font-size:13px; font-weight:700; color:#fff; background:#FF0000; padding:9px 18px; border-radius:8px; text-decoration:none;">
+          ▶ Watch on YouTube
+        </a>
+      </div>
+    </div>
+
+    <h2>Where AppSheet genuinely shines for this</h2>
+
+    <ul>
+      <li>
+        <strong>Total control over the data model.</strong> Since it's
+        your spreadsheet, you can add any custom field or business
+        logic you want - loyalty points, custom order statuses,
+        whatever's specific to your operation.
+      </li>
+      <li>
+        <strong>It plugs into the rest of Google Workspace.</strong>
+        Sales data lands directly in Sheets, so reporting, pivot
+        tables, and integrations with other Google tools are
+        straightforward.
+      </li>
+      <li>
+        <strong>Genuinely no-code.</strong> You're configuring, not
+        programming - approachable if you're comfortable with
+        spreadsheets and have some patience for trial and error.
+      </li>
+      <li>
+        <strong>Built-in automation ("bots").</strong> Useful for
+        things like low-stock email alerts or daily sales summaries
+        once you've learned the automation editor.
+      </li>
+    </ul>
+
+    <h2>Where it tends to fall short as a real checkout tool</h2>
+
+    <ul>
+      <li>
+        <strong>It's not built for speed at the counter.</strong>
+        AppSheet apps are form-driven; every tap tends to trigger a
+        sync with the backend sheet. For a slow trickle of sales that's
+        fine. For a line of customers, the lag adds up.
+      </li>
+      <li>
+        <strong>No native barcode-to-cart flow.</strong> You can add
+        barcode scanning via the camera, but wiring it into a smooth
+        "scan and it's instantly in the cart" experience takes real
+        configuration work, and USB barcode scanners (which just type
+        the code and hit enter) need extra handling to behave properly.
+      </li>
+      <li>
+        <strong>Costs money past a small scale.</strong> AppSheet has a
+        free tier, but real business use - especially with multiple
+        users - typically needs a paid plan, billed per user, per
+        month.
+      </li>
+      <li>
+        <strong>Google Sheets as a database has real limits.</strong>
+        As your Sales sheet grows into the thousands of rows, both
+        Sheets and the app built on it can start to slow down
+        noticeably.
+      </li>
+      <li>
+        <strong>You're the support team.</strong> There's no vendor to
+        call when a bot misfires or a formula breaks at checkout - it's
+        on you to debug it, ideally not while a customer is waiting.
+      </li>
+      <li>
+        <strong>Offline mode is limited.</strong> AppSheet apps can
+        cache some data for offline use, but sales made offline need to
+        sync carefully once you're back online, and conflicts (two
+        offline sales touching the same stock count) aren't handled
+        for you.
+      </li>
+    </ul>
+
+    <h2>Who this route actually makes sense for</h2>
+
+    <p>
+      Building a POS in AppSheet is a great fit if you enjoy building
+      things and want an app tailored exactly to a specific, unusual
+      workflow - a POS that also needs to do something ordinary POS
+      software doesn't, like triggering a custom approval step, or
+      feeding a very particular internal reporting format. It's a
+      genuine app-building exercise, not a five-minute setup.
+    </p>
+
+    <p>
+      If what you actually need is a straightforward, reliable checkout
+      screen - ring up items, take payment, print a receipt, track
+      stock - and you'd rather not spend the time building and
+      maintaining that yourself, it's worth knowing there's a much
+      faster path.
+    </p>
+
+    <h2>The shortcut: a POS that's already built</h2>
+
+    <p>
+      <a href="index.html">GoOnlinePOS.com</a> is a free point-of-sale
+      that runs entirely in your browser - no spreadsheet to design, no
+      bots to configure, no per-user subscription. Open the page and
+      you already have the parts a DIY build spends the most time on:
+    </p>
+
+    <ul>
+      <li><strong>Barcode scanning</strong> that works with any USB barcode scanner out of the box</li>
+      <li><strong>Automatic stock deduction</strong> with every sale, no automation to build</li>
+      <li><strong>Split payments</strong> - part cash, part card, tracked accurately</li>
+      <li><strong>Multiple cashiers</strong>, with sales tracked separately for each</li>
+      <li><strong>Instant receipt printing</strong>, with your own logo and store details</li>
+      <li><strong>Offline Mode</strong>, so you can keep selling without an internet connection</li>
+      <li><strong>Full sales history</strong>, exportable to Excel whenever you need it</li>
+    </ul>
+
+    <p>
+      No signup, no login, and nothing to maintain - it's ready the
+      moment you open it. If a no-code build is the project you want,
+      AppSheet is a solid tool for it. If you just want to start
+      ringing up sales today, that part's already done.
+    </p>
+
+  </div>
+
+  <div class="cta-band">
+    <h2>Skip the build - try it free</h2>
+    <p>No signup, no login. Just open GoOnlinePOS and start selling.</p>
+    <a class="btn-primary" href="app.html">Open GoOnlinePOS</a>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+
+  <a href="how-it-works.html">How to Use</a>
+  <span>·</span>
+
+  <a href="guide.html">Full Guide</a>
+  <span>·</span>
+
+  <a href="about.html">About</a>
+  <span>·</span>
+
+  <a href="blog.html">Blog</a>
+  <span>·</span>
+
+  <a href="privacy.html">Privacy Policy</a>
+  <span>·</span>
+
+  <a href="terms.html">Terms of Service</a>
+  <span>·</span>
+
+  <a href="contact.html">Contact</a>
+  <span>·</span>
+
+  <a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">
+    Facebook
+  </a>
+  <span>·</span>
+
+  <a href="#" onclick="openCookieSettings(); return false;">
+    Cookie Settings
+  </a>
+
+</footer>
+
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+
+  <div id="cookieNoticeView" class="cookie-notice-view">
+
+    <div class="cc-text">
+      🍪 We use cookies for analytics and to show relevant ads.
+      Manage your preference anytime in
+      <a onclick="openCookieSettings(); return false;" href="#">
+        Cookie Settings
+      </a>.
+    </div>
+
+    <button
+      type="button"
+      class="cn-close"
+      onclick="closeCookieNotice()"
+      aria-label="Close">
+      ×
+    </button>
+
+  </div>
+
+  <div id="cookieChoiceView" class="cc-choice-view hidden">
+
+    <div class="cc-text">
+      Set your preference: allow cookies for analytics and ads, or decline them.
+      <a href="privacy.html">Learn more</a>
+    </div>
+
+    <div class="cc-actions">
+
+      <button
+        type="button"
+        class="cc-decline"
+        onclick="declineCookies()">
+        Decline
+      </button>
+
+      <button
+        type="button"
+        class="cc-accept"
+        onclick="acceptCookies()">
+        Accept
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="cookieDeclinedView" class="cc-declined-view hidden">
+
+    <div class="cc-text">
+      Got it - analytics and ads won't load on this device.
+      The site itself works exactly the same either way.
+      You can change this anytime via "Cookie Settings" in the footer.
+    </div>
+
+    <button
+      type="button"
+      class="cc-close"
+      onclick="closeCookieBanner()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+</body>
+</html>
