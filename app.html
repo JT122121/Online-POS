@@ -1926,7 +1926,7 @@ async function newSale() {
 
 function goHome() {
   if (cart.length && !confirm(tr("goHomeConfirm"))) return;
-  location.href = "index.html";
+  location.href = location.pathname.replace(/[^/]*$/, "");
 }
 
 function goToCheckout() {

@@ -162,14 +162,23 @@ zero network calls.
   `.panel-resize-handle` is simply hidden there — dragging left/right
   makes no sense once the panels aren't side-by-side.
 - **Header brand mark is not a link.** `.brand` (logo + title + Premium
-  badge) is a plain `<div>`, not an `<a href="index.html">` — it used to
+  badge) is a plain `<div>`, not an `<a href="/">` — it used to
   double as an unguarded way back to the homepage, but that bypassed
   the in-progress-cart safety check entirely (`cart` is in-memory only,
   never persisted — navigating away loses it) and was easy to trigger
   by accident. The only way back to the homepage now is the explicit
   **`#homeShortcutButton`** ("🏠 Home", last item in the header
   toolbar) → `goHome()`, which confirms first via `goHomeConfirm` if
-  `cart.length` is non-zero, then navigates.
+  `cart.length` is non-zero, then navigates to
+  `location.pathname.replace(/[^/]*$/, "")` (the current directory) -
+  **not** a hardcoded `"/"` or `"index.html"`. This matters because
+  `app.html` is also shipped inside the offline `.zip`: on the live
+  site this resolves to `/` (loads the bare domain, no `index.html` in
+  the URL bar); under `file://` or the offline package's local server,
+  a literal `"/"` would jump to the actual OS filesystem root, which
+  this pattern avoids by staying within the current folder instead
+  (same directory-derivation pattern `customerScreenUrl()` and
+  `openCreateInvoice()` already use).
 - **Product photos:** each `products[]` entry has an optional `photo`
   field (a compressed JPEG data URL) alongside `name`/`price`/
   `category`/`sku`/`stock`. `compressProductPhoto(file)` downsizes any
@@ -911,6 +920,24 @@ on-page heading and the button that links to it now say the same thing).
   change) so the page's actual topic is the page's only `<h1>`. Keep this
   in mind before copying `about.html`'s/`contact.html`'s header markup
   onto a page that already has its own `<h1>` elsewhere.
+- **`about.html`'s cookie-consent `<script>` had stray literal
+  `` ``` `` markdown code-fence lines** embedded directly in the JS (4
+  of them, likely pasted in from an AI response or markdown source via
+  the GitHub web UI without stripping the fences first) - not a comment,
+  an actual syntax problem: three backticks parse as an empty template
+  literal immediately followed by another unclosed template literal, and
+  when the next line happens to start with `(`, JS's automatic semicolon
+  insertion doesn't kick in, so it tries to **call the empty string as a
+  function** - `TypeError: "" is not a function`, thrown from `showView()`
+  on every single page load before the fix (it silently broke the entire
+  cookie banner, meaning analytics/ads never loaded on this page since
+  `acceptCookies()` was unreachable). Fixed by deleting the 4 stray
+  `` ``` `` lines; confirmed via Playwright the banner now shows and
+  closes/accepts with zero console errors. If a page ever again shows a
+  `TypeError: "" is not a function` (or similar "empty string is not a
+  function/not defined" errors), search that file for stray `` ``` ``
+  first - it's a fast, easy-to-miss mistake when copy-pasting AI output
+  into the GitHub web UI without stripping the markdown fences.
 
 ## Conventions / working on this repo
 
@@ -921,6 +948,18 @@ on-page heading and the button that links to it now say the same thing).
   `localStorage`, to preserve the embedded-host code path.
 - Keep `sitemap.xml` in sync with each page's own `<meta name="robots">`
   when adding/removing/re-gating an indexable page — see "SEO" above.
+- **Link to the homepage as `href="/"`, never `href="index.html"`.**
+  Every marketing page's brand mark / back-to-home link (`index.html`,
+  `about.html`, `contact.html`, `guide.html`, `how-it-works.html`,
+  `privacy.html`, `terms.html`, `blog.html` + its articles,
+  `invoice.html`) was swept to `href="/"` so navigating home lands on
+  the bare `https://goonlinepos.com/` instead of appending
+  `/index.html` to the address bar - GitHub Pages already serves
+  `index.html` for the root path automatically. This is safe for all of
+  these pages since none of them are bundled into the offline `.zip`.
+  `app.html`'s own `goHome()` is the one exception - see "Header brand
+  mark is not a link" above for why it uses a directory-relative path
+  instead of a hardcoded `"/"`.
 - **No em dashes ("—") anywhere in site text** - explicit standing
   instruction. Every em dash across every page (marketing pages and
   `app.html`, all UI strings and all six `translations` language blocks)
