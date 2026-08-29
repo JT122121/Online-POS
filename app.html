@@ -481,7 +481,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button id="printButton" onclick="printReceipt()">🖨 <span id="printButtonLabel">Print</span></button>
 <button id="inventoryShortcutButton" onclick="openInventoryPanel()" title="View and edit stock">📦 <span id="inventoryShortcutLabel">Inventory</span></button>
 <button id="customerScreenButton" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
 <button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Create Invoice</span></button>
+<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
 <button id="newSaleButton" onclick="newSale()">+ <span id="newSaleButtonLabel">New Sale</span></button>
 <button id="homeShortcutButton" onclick="goHome()" style="background:transparent; border:1px solid var(--line); color:var(--ink-soft);" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
 </div>
@@ -2766,10 +2768,12 @@ function customerScreenUrl() {
   return location.origin + location.pathname.replace(/[^/]*$/, "") + "customer.html";
 }
 
+/* OFFLINE-STRIP:CREATE-INVOICE-JS:START */
 function openCreateInvoice() {
   const url = location.pathname.replace(/[^/]*$/, "") + "invoice.html";
   window.open(url, "_blank");
 }
+/* OFFLINE-STRIP:CREATE-INVOICE-JS:END */
 
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();

@@ -614,17 +614,18 @@ remember. The whole mechanism lives inside `app.html` itself:
   anytime Premium is active; move data over with existing Backup/Restore),
   and a required "I agree to the Terms of Service" checkbox that gates the
   actual download — see `confirmOfflineDownload()`.
-- On confirm, it `fetch()`es the **currently live** `app.html`,
-  `customer.html`, and `invoice.html` (same-origin, `cache: "no-store"`)
-  plus the static ingredients under `offline/` (`README.txt`, the three
-  `start-server.*` launchers, `offline/vendor/LICENSES.txt`),
-  `vendor/xlsx.full.min.js`, and `modules/translations.js`/
-  `modules/usb-scanner.js`/`modules/receipt.js` (the offline copy still
-  needs all three, at those same paths, since `app.html`'s
-  `<script src="modules/...">` tags aren't marker-stripped for them),
-  runs `app.html`'s text through `buildOfflineAppHtml()` and
-  `invoice.html`'s through `buildOfflineInvoiceHtml()`, zips everything
-  with JSZip, and triggers the download (`GoOnlinePOS-Offline.zip`).
+- On confirm, it `fetch()`es the **currently live** `app.html` and
+  `customer.html` (same-origin, `cache: "no-store"`) - **not**
+  `invoice.html`, which is deliberately excluded (see the `invoice.html`
+  section above) - plus the static ingredients under `offline/`
+  (`README.txt`, the three `start-server.*` launchers,
+  `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`, and
+  `modules/translations.js`/`modules/usb-scanner.js`/`modules/receipt.js`
+  (the offline copy still needs all three, at those same paths, since
+  `app.html`'s `<script src="modules/...">` tags aren't marker-stripped
+  for them), runs `app.html`'s text through `buildOfflineAppHtml()`,
+  zips everything with JSZip, and triggers the download
+  (`GoOnlinePOS-Offline.zip`).
 - **Usage analytics** via the shared `trackEvent(name, params)` helper
   (thin `gtag('event', ...)` wrapper, no-ops if `gtag` isn't defined —
   i.e. respects cookie consent same as every other GA call):
@@ -638,12 +639,10 @@ remember. The whole mechanism lives inside `app.html` itself:
   failures from the GA dashboard. All three calls live inside the
   `OFFLINE-STRIP:DOWNLOAD-JS` block so they're automatically absent from
   the generated offline package (which already has zero network calls).
-- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()`/
-  `buildOfflineInvoiceHtml()` edit the fetched HTML by stripping
-  `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
+- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()` edit the fetched
+  HTML by stripping `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
   `/* OFFLINE-STRIP:<name>:START/END */` (JS) marker comments already
-  present in `app.html`/`customer.html`/`invoice.html` — **search
-  `OFFLINE-STRIP` to find
+  present in `app.html`/`customer.html` — **search `OFFLINE-STRIP` to find
   every edit point** before restructuring any of the marked sections, or
   the generated package silently drops the edit (a `console.warn` fires
   if a marker goes missing, but nothing hard-fails). Currently stripped:
@@ -651,7 +650,10 @@ remember. The whole mechanism lives inside `app.html` itself:
   the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
   `modules/offline-builder.js` script tag (its own module, dead code
   once there's no button to trigger it), the download section/modal
-  HTML, and the Premium heartbeat call site (no network calls offline).
+  HTML, the Premium heartbeat call site (no network calls offline), and
+  the "🧾 Create Invoice" button + its `openCreateInvoice()` function
+  (`CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` - there's no
+  `invoice.html` in the offline copy for it to open).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
@@ -812,13 +814,17 @@ on-page heading and the button that links to it now say the same thing).
   can be visited directly and isn't guaranteed to share a browsing
   session with `app.html`) - unlike `customer.html`, which reuses
   `app.html`'s consent choice since it's only ever opened alongside it.
-- **Bundled into the "Download Offline POS" package** (see below) since
-  it's directly reachable from inside `app.html` - `buildOfflineInvoiceHtml()`
-  strips its `COOKIE-CONSENT`/`GOOGLE-FONTS`/`COOKIE-BANNER` marked
-  blocks, same marker names/pattern as `app.html`'s own, and
-  `confirmOfflineDownload()` fetches and zips it alongside `app.html`/
-  `customer.html`. `offline/README.txt`'s file listing and feature list
-  both mention it.
+- **Deliberately NOT bundled into the "Download Offline POS" package**
+  (see below) - it's a separate free web tool, not part of the offline
+  POS itself. It was briefly included (a `buildOfflineInvoiceHtml()`
+  step, mirroring `app.html`/`customer.html`'s own marker-stripping)
+  before being pulled back out. `app.html`'s own **"🧾 Create Invoice"**
+  button and `openCreateInvoice()` function are wrapped in their own
+  `OFFLINE-STRIP:CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` marker
+  blocks so they don't appear in the offline copy either - there would
+  be nothing for the button to open there. `offline/README.txt`
+  explicitly calls out this exclusion in its "except" list, next to the
+  cookie-banner/analytics/fonts differences that were already there.
 - Six-language UI strings are **not** part of this page - `app.html`'s
   `translations` dictionary only supplies the `createInvoiceShortcutLabel`
   header-button text; the invoice tool itself is English-only for now,

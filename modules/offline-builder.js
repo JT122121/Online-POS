@@ -53,8 +53,11 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");
   html = stripMarked(html, "BUY-PREMIUM-BUTTON", "buy premium button");
   html = stripMarked(html, "BUY-PREMIUM-MODAL", "buy premium modal");
+  html = stripMarked(html, "CREATE-INVOICE-BUTTON", "create invoice button");
   const heartbeatRe = /\/\* OFFLINE-STRIP:HEARTBEAT:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:HEARTBEAT:END \*\/\n?/;
   html = heartbeatRe.test(html) ? html.replace(heartbeatRe, "") : (console.warn("Offline package: heartbeat marker not found"), html);
+  const createInvoiceJsRe = /\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:END \*\/\n?/;
+  html = createInvoiceJsRe.test(html) ? html.replace(createInvoiceJsRe, "") : (console.warn("Offline package: create-invoice-js marker not found"), html);
 
   const offlineActivationJs = [
     'const DEFAULT_PREMIUM_CODE = "' + OFFLINE_PREMIUM_CODE + '";',
@@ -90,13 +93,6 @@ function buildOfflineCustomerHtml(html) {
   html = stripMarked(html, "CUSTOMER-ANALYTICS", "customer.html analytics script");
   return html;
 }
-function buildOfflineInvoiceHtml(html) {
-  html = stripMarked(html, "COOKIE-CONSENT", "invoice.html cookie consent script");
-  html = stripMarked(html, "GOOGLE-FONTS", "invoice.html google fonts links");
-  html = stripMarked(html, "COOKIE-BANNER", "invoice.html cookie banner markup");
-  return html;
-}
-
 async function confirmOfflineDownload() {
   if (!premiumUnlocked) { closeOfflineDownloadModal(); return; }
   const confirmBtn = document.getElementById("offlineConfirmDownloadBtn");
@@ -112,10 +108,9 @@ async function confirmOfflineDownload() {
   try {
     if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
 
-    const [appHtml, customerHtml, invoiceHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, translationsJsText, usbScannerJsText, receiptJsText] = await Promise.all([
+    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, translationsJsText, usbScannerJsText, receiptJsText] = await Promise.all([
       fetchOfflineText("app.html"),
       fetchOfflineText("customer.html"),
-      fetchOfflineText("invoice.html"),
       fetchOfflineBlob("favicon.png"),
       fetchOfflineBlob("favicon.ico"),
       fetchOfflineBlob("vendor/xlsx.full.min.js"),
@@ -132,7 +127,6 @@ async function confirmOfflineDownload() {
     const zip = new JSZip();
     zip.file("app.html", buildOfflineAppHtml(appHtml));
     zip.file("customer.html", buildOfflineCustomerHtml(customerHtml));
-    zip.file("invoice.html", buildOfflineInvoiceHtml(invoiceHtml));
     zip.file("favicon.png", faviconBlob);
     zip.file("favicon.ico", faviconIcoBlob);
     zip.file("vendor/xlsx.full.min.js", xlsxBlob);
