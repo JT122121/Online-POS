@@ -119,13 +119,13 @@ almost entirely through the GitHub web UI, not a local dev workflow.
 
 Every marketing/tool page — `index.html`, `about.html`, `contact.html`,
 `privacy.html`, `terms.html`, `blog.html` + its 3 articles, `invoice.html`,
-`receipt.html` — shares one canonical `<header class="site-header">`
-structure and CSS block, copied verbatim page to page (`.site-header`,
-`.site-header .brand`/`.brand-mark`, `.site-header .header-right`,
-`.site-nav`, `.cta-btn`). Before this, the site had **four divergent
-header conventions** (`.site-header`, `.page-header`, `.masthead`,
-`.article-header`) depending on which page you looked at; this unified
-all of them under one pattern:
+`receipt.html` — plus `app.html` itself, shares one canonical
+`<header class="site-header">` structure and CSS block, copied verbatim
+page to page (`.site-header`, `.site-header .brand`/`.brand-mark`,
+`.site-header .header-right`, `.site-nav`, `.cta-btn`). Before this, the
+site had **four divergent header conventions** (`.site-header`,
+`.page-header`, `.masthead`, `.article-header`) depending on which page
+you looked at; this unified all of them under one pattern:
 
 ```html
 <header class="site-header">
@@ -135,8 +135,8 @@ all of them under one pattern:
 </a>
 <div class="header-right">
 <nav class="site-nav">
-<a href="blog" class="nav-highlight">Blog</a>
 <a href="about">About</a>
+<a href="blog" class="nav-highlight">Blog</a>
 </nav>
 <a class="cta-btn" href="invoice">Free Invoice Generator</a>
 <a class="cta-btn" href="receipt">Free Receipt Generator</a>
@@ -160,6 +160,12 @@ all of them under one pattern:
   both added the third button there and rolled the whole row out
   site-wide, so **any older note in this file describing the CTA row as
   unique to `index.html` is stale** — it isn't anymore.
+- **`.site-nav` is always About → Blog, in that order, everywhere** —
+  `index.html` briefly shipped with Blog first (with the `nav-highlight`
+  "NEW" badge drawing the eye there) before being corrected to match
+  every other page, which had About first from the start. Keep new pages
+  consistent with About-then-Blog; don't copy `index.html`'s markup from
+  before this fix.
 - **Footer is trimmed to exactly 4 links, same order, everywhere:**
   Contact → Privacy Policy → Terms of Service → Cookie Settings. Dropped
   from various pages' older footers: About, Blog, "How to Use", "Full
@@ -180,6 +186,34 @@ all of them under one pattern:
   print hide-list now hides `.site-header` instead). Neither page had a
   logo before; the brand-mark PNG data URI was copied byte-for-byte from
   `index.html`.
+- **`app.html` itself was the one page still missing this header** even
+  after the rest of the site was unified — added as its own
+  `<header class="site-header">` directly above the existing
+  `<header class="app-header">` (the real POS toolbar), same
+  above-not-merged pattern as `invoice.html`/`receipt.html`. Two
+  deliberate departures from the pattern used everywhere else, both
+  there to protect an in-progress sale:
+  - **The brand mark doesn't use a plain `href="/"`.** `app.html`
+    already has a hard rule that its own header brand isn't a live link
+    (see "Header brand mark is not a link" below) specifically because
+    navigating away silently drops the in-memory `cart`. The new
+    site-header's brand reuses the same guard by calling the existing
+    `goHome()` on click (`onclick="goHome(); return false;"`, `href="/"`
+    kept only as a plain fallback) instead of introducing a second,
+    unguarded way back to the homepage.
+  - **Every About/Blog/CTA link opens in a new tab**
+    (`target="_blank" rel="noopener"`), the same reasoning
+    `openCreateInvoice()`/`openCreateReceipt()` already use elsewhere in
+    this header - a cashier mid-sale shouldn't risk losing their unsaved
+    cart by clicking a nav link.
+  Its own brand-mark image is `favicon.png` (a real file `app.html`
+  already references elsewhere) rather than the inline base64 data URI
+  every other page uses, since `app.html` isn't decoupled from the rest
+  of the repo the way `invoice.html`/`receipt.html` are. The whole
+  header is wrapped in `<!-- OFFLINE-STRIP:APP-SITE-HEADER:START/END -->`
+  and stripped by `buildOfflineAppHtml()` - `about.html`/`blog.html`/
+  `invoice.html`/`receipt.html` aren't bundled in the offline package,
+  so every link this header offers would be dead there.
 - **`blog.html`'s 3 article pages** keep their existing `.back-link-row`
   ("← Back to Blog") **unchanged**, now sitting just below the new
   header — deliberately preserved as a more specific, more useful link
@@ -802,10 +836,13 @@ remember. The whole mechanism lives inside `app.html` itself:
   HTML, the Premium heartbeat call site (no network calls offline), the
   "🧾 Create Invoice" button + its `openCreateInvoice()` function
   (`CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` - there's no
-  `invoice.html` in the offline copy for it to open), and the "🧾 Create
+  `invoice.html` in the offline copy for it to open), the "🧾 Create
   Receipt" button + its `openCreateReceipt()` function
   (`CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`, the same treatment for
-  `receipt.html`).
+  `receipt.html`), and the new top-of-page `.site-header` nav/CTA row
+  (`APP-SITE-HEADER` - see "Site-wide header, nav & footer" above), since
+  none of `about.html`/`blog.html`/`invoice.html`/`receipt.html` ship in
+  the offline package for it to link to.
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
