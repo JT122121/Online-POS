@@ -9,7 +9,8 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 
 - **Marketing/site pages:** `index.html`, `guide.html`, `about.html`,
   `contact.html`, `how-it-works.html`, `privacy.html`, `terms.html`,
-  `blog.html` + `blog-why-your-business-needs-a-pos.html`
+  `blog.html` + its articles: `blog-why-your-business-needs-a-pos.html`,
+  `blog-create-your-own-pos-with-appsheet.html`
 - **`app.html`** (~4,050 lines) — the actual POS application. Most logic
   still runs client-side in one big inline `<script>` block near the
   bottom of the file; a few self-contained pieces (barcode scanner,
@@ -23,8 +24,10 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   `app.html`'s inline block to keep it smaller. See "`modules/` —
   split-out app.html pieces" below.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
-  "Every setting, explained" full walkthrough on `guide.html`, and as a
-  4-image teaser on `index.html`), `favicon.png` /
+  "Every setting, explained" full walkthrough on `guide.html`; `index.html`
+  used to also show a 4-image teaser of these on the homepage, but that
+  grid was removed since the images stayed blurry there even widened -
+  `index.html` now just links straight to `guide.html`), `favicon.png` /
   `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
   below), `og-image.jpg` (shared 1200×630 social-share card),
   `blog-hero-illustration.png` (featured-post image on `blog.html`,
@@ -42,12 +45,22 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   that reason — upload the correctly-named file fresh, or rename via a
   real git client/API instead. This replaced an earlier
   `blog-hero-illustration.svg` placeholder illustration.
+- **`blog.html`'s `.post-grid`** (non-featured articles, below the one
+  `.featured-post`) uses `grid-template-columns: repeat(auto-fit,
+  minmax(340px, 1fr))`, not a fixed column count - with only one
+  `.post-card` it stretches to fill the full 780px row (matching the
+  featured post's width above it) instead of being stuck at half-width
+  in an otherwise-empty two-column grid; it'll wrap into multiple
+  columns automatically once more articles are added. Don't revert this
+  to `repeat(2, 1fr)` while there's fewer than two real posts.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (lists `/`, `app.html`, `how-it-works.html`, `about.html`, `blog.html`,
-  `blog-why-your-business-needs-a-pos.html`, `contact.html`, `privacy.html`,
-  `terms.html` — every page whose own `<meta name="robots">` says
-  `index, follow`; `customer.html` is correctly excluded, its own meta tag
-  says `noindex, nofollow`), `ads.txt` (Google AdSense publisher id).
+  (lists `/`, `app.html`, `how-it-works.html`, `guide.html`, `about.html`,
+  `blog.html`, `blog-why-your-business-needs-a-pos.html`,
+  `blog-create-your-own-pos-with-appsheet.html`, `contact.html`,
+  `privacy.html`, `terms.html` — every page whose own
+  `<meta name="robots">` says `index, follow`; `customer.html` is
+  correctly excluded, its own meta tag says `noindex, nofollow`),
+  `ads.txt` (Google AdSense publisher id).
 
 No README, no CI, no tests, no linter config. History is 50 commits, one
 author, mostly titled "Add files via upload" — this repo has been edited
@@ -694,11 +707,16 @@ zero network calls there.
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
   `how-it-works.html`, `guide.html`, `about.html`, `blog.html`,
-  `blog-why-your-business-needs-a-pos.html`, `contact.html`,
+  `blog-why-your-business-needs-a-pos.html`,
+  `blog-create-your-own-pos-with-appsheet.html`, `contact.html`,
   `privacy.html`, `terms.html` — matching each page's own
   `index, follow` robots meta tag. `customer.html` is deliberately absent
   (its own tag says `noindex, nofollow`). If a page's robots meta changes,
-  update this file to match.
+  update this file to match. **Every new blog article needs its own
+  sitemap entry** (`yearly`/`0.5`, matching the existing article) - this
+  was missed once when a second article (`blog-create-your-own-pos-with-
+  appsheet.html`) was added directly via the GitHub web UI, so double
+  check this file whenever a new `blog-*.html` page shows up.
 - **`guide.html`** is the full, screenshot-by-screenshot "Every setting,
   explained" walkthrough (all 17 `guide-item`s, the same `.guide-nav`
   jump links, unchanged content) — split out of `index.html` into its
