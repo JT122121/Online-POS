@@ -10,7 +10,8 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **Marketing/site pages:** `index.html`, `guide.html`, `about.html`,
   `contact.html`, `how-it-works.html`, `privacy.html`, `terms.html`,
   `blog.html` + its articles: `blog-why-your-business-needs-a-pos.html`,
-  `blog-create-your-own-pos-with-appsheet.html`
+  `blog-create-your-own-pos-with-appsheet.html`,
+  `blog-from-excel-to-appsheet-expert.html`
 - **`app.html`** (~4,050 lines) — the actual POS application. Most logic
   still runs client-side in one big inline `<script>` block near the
   bottom of the file; a few self-contained pieces (barcode scanner,
@@ -51,12 +52,23 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   `.post-card` it stretches to fill the full 780px row (matching the
   featured post's width above it) instead of being stuck at half-width
   in an otherwise-empty two-column grid; it'll wrap into multiple
-  columns automatically once more articles are added. Don't revert this
-  to `repeat(2, 1fr)` while there's fewer than two real posts.
+  columns automatically once more articles are added (now three posts
+  total: the featured one plus two `.post-card`s side by side at
+  ~377px each). Don't revert this to `repeat(2, 1fr)` while there's
+  fewer than two non-featured posts. `.post-card h3`/`p`/`.pc-tag` are
+  sized to match `.featured-post`'s h2/p/fp-tag exactly (27px title,
+  14.5px body) - this was tuned for the single-card full-width case but
+  reads fine at two-up too, so it wasn't split into a narrower variant.
+  A `.post-card`'s `.pc-art` thumbnail is optional - it's just an
+  `<img>` when a card has a photo (`appsheet-logo.png`), or a plain
+  centered emoji (`🧑‍💻`) on the existing `accent-tint` background when
+  it doesn't, using the same font-size fallback already built into
+  `.pc-art`'s CSS. No placeholder image asset needed either way.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
   (lists `/`, `app.html`, `how-it-works.html`, `guide.html`, `about.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
-  `blog-create-your-own-pos-with-appsheet.html`, `contact.html`,
+  `blog-create-your-own-pos-with-appsheet.html`,
+  `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
   `privacy.html`, `terms.html` — every page whose own
   `<meta name="robots">` says `index, follow`; `customer.html` is
   correctly excluded, its own meta tag says `noindex, nofollow`),
@@ -708,7 +720,8 @@ zero network calls there.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
   `how-it-works.html`, `guide.html`, `about.html`, `blog.html`,
   `blog-why-your-business-needs-a-pos.html`,
-  `blog-create-your-own-pos-with-appsheet.html`, `contact.html`,
+  `blog-create-your-own-pos-with-appsheet.html`,
+  `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
   `privacy.html`, `terms.html` — matching each page's own
   `index, follow` robots meta tag. `customer.html` is deliberately absent
   (its own tag says `noindex, nofollow`). If a page's robots meta changes,
