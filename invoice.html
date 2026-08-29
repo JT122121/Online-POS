@@ -175,7 +175,7 @@ img { max-width: 100%; display: block; }
 
 .field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 textarea, .field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
-textarea { resize: vertical; min-height: 66px; }
+textarea { resize: none; min-height: 66px; overflow-y: hidden; }
 textarea:focus, .field-input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
 
 .items-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
@@ -300,7 +300,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .wrap { max-width: none; padding: 12mm; }
   .invoice-card { box-shadow: none; border: none; padding: 0; margin: 0; }
   .no-print { display: none !important; }
-  textarea, .field-input, .items-table input, .doc-meta-row input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
+  textarea, .field-input, .items-table input, .doc-meta-row input, .number-row input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
+  textarea { min-height: 0 !important; }
   select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
   input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
@@ -902,6 +903,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: 0, exempt: false }];
     items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate, it.exempt); });
     recalcTotals();
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
   }
 
   function loadDraft() {
@@ -955,6 +957,24 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   document.getElementById("savedInvoicesOverlay").addEventListener("click", function(e) {
     if (e.target.id === "savedInvoicesOverlay") closeSavedInvoicesModal();
   });
+
+  function autosizeTextarea(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+  function autosizeAllTextareas() {
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
+  }
+  document.querySelectorAll("textarea").forEach(function(el) {
+    el.addEventListener("input", function() { autosizeTextarea(el); });
+  });
+  // Print CSS relaxes textarea min-height so short fields (e.g. a one-line
+  // "From" address) don't leave a tall blank box on the printed page - but
+  // that only takes effect once print media is active, so the fit height
+  // has to be re-measured at beforeprint (and restored at afterprint for
+  // on-screen editing) rather than computed once up front.
+  window.addEventListener("beforeprint", autosizeAllTextareas);
+  window.addEventListener("afterprint", autosizeAllTextareas);
 
   loadDraft();
 })();
