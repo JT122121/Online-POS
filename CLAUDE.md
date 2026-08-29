@@ -26,6 +26,10 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`receipt.html`** — a standalone, free payment-receipt generator
   (simple summary, not itemized), a sibling tool to `invoice.html`. See
   "`receipt.html` — standalone receipt generator" below.
+- **`end-of-day.html`** — a printable/saveable POS closing report, opened
+  from `app.html`'s header toolbar; unlike `invoice.html`/`receipt.html`
+  it reads `app.html`'s own storage directly and ships in the offline
+  package. See "`end-of-day.html` — POS closing report" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -630,11 +634,11 @@ remember. The whole mechanism lives inside `app.html` itself:
   anytime Premium is active; move data over with existing Backup/Restore),
   and a required "I agree to the Terms of Service" checkbox that gates the
   actual download — see `confirmOfflineDownload()`.
-- On confirm, it `fetch()`es the **currently live** `app.html` and
-  `customer.html` (same-origin, `cache: "no-store"`) - **not**
-  `invoice.html`/`receipt.html`, both deliberately excluded (see the
-  `invoice.html` and `receipt.html` sections above) - plus the static
-  ingredients under `offline/`
+- On confirm, it `fetch()`es the **currently live** `app.html`,
+  `customer.html`, and `end-of-day.html` (same-origin, `cache: "no-store"`)
+  - **not** `invoice.html`/`receipt.html`, both deliberately excluded
+  (see the `invoice.html` and `receipt.html` sections above) - plus the
+  static ingredients under `offline/`
   (`README.txt`, the three `start-server.*` launchers,
   `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`, and
   `modules/translations.js`/`modules/usb-scanner.js`/`modules/receipt.js`
@@ -656,10 +660,12 @@ remember. The whole mechanism lives inside `app.html` itself:
   failures from the GA dashboard. All three calls live inside the
   `OFFLINE-STRIP:DOWNLOAD-JS` block so they're automatically absent from
   the generated offline package (which already has zero network calls).
-- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()` edit the fetched
-  HTML by stripping `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
+- `buildOfflineAppHtml()`/`buildOfflineCustomerHtml()`/
+  `buildOfflineEndOfDayHtml()` edit the fetched HTML by stripping
+  `<!-- OFFLINE-STRIP:<name>:START/END -->` (HTML) or
   `/* OFFLINE-STRIP:<name>:START/END */` (JS) marker comments already
-  present in `app.html`/`customer.html` — **search `OFFLINE-STRIP` to find
+  present in `app.html`/`customer.html`/`end-of-day.html` — **search
+  `OFFLINE-STRIP` to find
   every edit point** before restructuring any of the marked sections, or
   the generated package silently drops the edit (a `console.warn` fires
   if a marker goes missing, but nothing hard-fails). Currently stripped:
@@ -992,6 +998,104 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
   `invoice.html` - `app.html`'s `translations` dictionary only supplies
   the `createReceiptShortcutLabel` header-button text; the receipt tool
   itself is English-only.
+
+## `end-of-day.html` — POS closing report
+
+Replaces the old in-app "Sales Summary" panel (`toggleSalesSummary()`/
+`renderSalesSummary()`/`saleMethodBreakdown()`, all removed from
+`app.html`) with a standalone, printable, saveable report. Unlike
+`invoice.html`/`receipt.html`, this page is **not** decoupled from
+`app.html` - it's a real POS report, so it deliberately reads the same
+storage keys `app.html` writes (`pos-sales-history`, `pos-cashiers`,
+`pos-settings`, `pos-logo`), via the exact same
+`hasArtifactStorage`/`storageGet`/`storageSet` implementation copied
+verbatim (so it works identically whether `app.html` is running against
+the injected-host storage or the `localStorage` fallback). `noindex,
+nofollow`, not in `sitemap.xml` - it's an internal tool, useless without
+existing sales data, not a public lead-gen page like invoice/receipt.
+- `app.html`'s header toolbar has a **"📅 End of Day"** button
+  (`#endOfDayButton` → `openEndOfDayReport()`, replacing the old
+  `#summaryButton`) that opens this page in a **new tab**, same
+  `window.open(...)` pattern as Create Invoice/Create Receipt - except
+  it opens the literal `end-of-day.html` filename rather than an
+  extension-less URL, the same reasoning `customerScreenUrl()` already
+  follows for `customer.html`: this page **does** ship in the offline
+  package (see below), where extension-less resolution doesn't exist.
+- **Report Date is selectable** (`#reportDateInput`, defaults to today) -
+  changing it recomputes live from `salesHistory` filtered by
+  `saleDateKey(s.dateTime) === selectedDate` (the identical date-key
+  helper `app.html` uses for its own Sales History grouping, copied
+  verbatim so the two never disagree about which calendar day a sale
+  falls on).
+- **Cash/change netting matches the old Summary panel's logic exactly**
+  (`saleMethodBreakdown()`, copied verbatim into this page's own script):
+  a `payments[]` row's `amount` is what was tendered/entered at checkout,
+  not necessarily what was actually kept - a cash payment can include
+  change handed back, which is tracked only as a single scalar
+  `sale.change`, not broken out per payment method. The function
+  subtracts that scalar from whichever row is named "Cash" (case
+  insensitive), falling back to the last row if none is - a heuristic,
+  not perfectly precise for exotic cases (change given on a non-cash
+  tender, two "Cash" rows), but exactly what the app's own prior Summary
+  panel already did, so numbers stay consistent with history. This same
+  function backs both the Payment Breakdown section and each Cashier
+  Collection block - "Cash" is never just summed from raw tendered
+  amounts anywhere on this report.
+- **Items Sold** aggregates every sale's `items[]` (already
+  self-sufficient per line - `name`/`qty`/`price`/`lineTotal` snapshotted
+  at sale time, no need to cross-reference the live `products` catalog,
+  which could have since renamed/deleted the item) by name, summing
+  qty and line total. **Top 5 Best Sellers** is the same aggregation
+  sorted by qty descending, sliced to 5.
+- **Cashier Collection** buckets by `s.cashierName || "No Cashier"` -
+  `cashierName` is stored as a plain empty string (never `null`) when no
+  cashier was active at checkout, matching `app.html`'s own
+  representation exactly. The whole section is hidden when there are no
+  cashiers configured at all or no sales that date, same rule the old
+  Summary panel used.
+- **Paper size is selectable, 80mm thermal or A4** (`#paperSizeSelect`,
+  persisted via `storageGet`/`storageSet("eod-paper-size")`) -
+  `applyPaperSize()` toggles a `body.paper-80mm`/`body.paper-a4` class
+  for regular CSS (narrower widths/smaller fonts at 80mm) and rewrites
+  a dedicated `<style id="dynamicPageSize">` tag's `@page` rule, since
+  `@page` size can't be scoped by a body class the way ordinary
+  selectors can - this is the standard trick for letting a print size
+  be chosen at runtime rather than fixed in the stylesheet.
+- **Save Report / Saved Reports** works like Save Invoice/Save Receipt,
+  but saves a **frozen snapshot** of the fully computed report (not just
+  the selected date) into `storageGet`/`storageSet("eod-report-history")`
+  - deliberately an immutable closing record: if a past sale is later
+  edited or deleted in Sales History, an already-saved End of Day report
+  keeps showing the numbers as they were the moment it was saved, the
+  same way a real end-of-day closing report would. Reopening one shows a
+  dismissible "Viewing a saved report" banner and displays the frozen
+  numbers directly (no recomputation); changing the Report Date switches
+  back to a live, freshly-computed report for that date.
+- Reads Sales History **once, when the page loads** - if a new sale is
+  rung up in `app.html` while an End of Day tab is already open in
+  another tab, that open tab does not update live; reopen it (click
+  "📅 End of Day" again) to see the new sale reflected. There is no
+  cross-tab sync mechanism here (unlike the customer-facing screen's
+  `BroadcastChannel`), since this report is meant to be pulled up
+  on demand at closing time, not kept open continuously.
+- **Included in the offline package** (unlike `invoice.html`/
+  `receipt.html`) - `modules/offline-builder.js` fetches
+  `end-of-day.html` alongside `app.html`/`customer.html` and runs it
+  through its own `buildOfflineEndOfDayHtml()`, which strips the same
+  `GOOGLE-FONTS` marker every offline page strips plus its own
+  `EOD-ANALYTICS` marker (mirroring `customer.html`'s
+  `CUSTOMER-ANALYTICS` marker exactly - a GA pageview gated on the
+  existing `goonlinepos-cookie-consent` key, no AdSense, since a report
+  showing real sales figures shouldn't carry ads either).
+- Verified end-to-end with Playwright: two full checkout sales through
+  `app.html` (one cash-with-change under an active cashier, one exact
+  card payment with no cashier selected) produced a report whose Total
+  Sales, Items Sold, Top 5 Best Sellers, Payment Breakdown (cash netted
+  correctly), and Cashier Collection (including the "No Cashier" bucket)
+  all matched hand-computed expectations exactly; Save/Saved Reports
+  round-tripped correctly; switching between 80mm and A4 applied the
+  right body class and page size; zero console errors throughout on
+  both `app.html` and `end-of-day.html`.
 
 ## SEO
 

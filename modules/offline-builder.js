@@ -96,6 +96,11 @@ function buildOfflineCustomerHtml(html) {
   html = stripMarked(html, "CUSTOMER-ANALYTICS", "customer.html analytics script");
   return html;
 }
+function buildOfflineEndOfDayHtml(html) {
+  html = stripMarked(html, "GOOGLE-FONTS", "end-of-day.html google fonts links");
+  html = stripMarked(html, "EOD-ANALYTICS", "end-of-day.html analytics script");
+  return html;
+}
 async function confirmOfflineDownload() {
   if (!premiumUnlocked) { closeOfflineDownloadModal(); return; }
   const confirmBtn = document.getElementById("offlineConfirmDownloadBtn");
@@ -111,9 +116,10 @@ async function confirmOfflineDownload() {
   try {
     if (typeof JSZip === "undefined") throw new Error("JSZip not loaded");
 
-    const [appHtml, customerHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, translationsJsText, usbScannerJsText, receiptJsText] = await Promise.all([
+    const [appHtml, customerHtml, endOfDayHtml, faviconBlob, faviconIcoBlob, xlsxBlob, licensesText, readmeText, shText, batText, macCommandText, translationsJsText, usbScannerJsText, receiptJsText] = await Promise.all([
       fetchOfflineText("app.html"),
       fetchOfflineText("customer.html"),
+      fetchOfflineText("end-of-day.html"),
       fetchOfflineBlob("favicon.png"),
       fetchOfflineBlob("favicon.ico"),
       fetchOfflineBlob("vendor/xlsx.full.min.js"),
@@ -130,6 +136,7 @@ async function confirmOfflineDownload() {
     const zip = new JSZip();
     zip.file("app.html", buildOfflineAppHtml(appHtml));
     zip.file("customer.html", buildOfflineCustomerHtml(customerHtml));
+    zip.file("end-of-day.html", buildOfflineEndOfDayHtml(endOfDayHtml));
     zip.file("favicon.png", faviconBlob);
     zip.file("favicon.ico", faviconIcoBlob);
     zip.file("vendor/xlsx.full.min.js", xlsxBlob);
