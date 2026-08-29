@@ -305,6 +305,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .toggle-row.compact { padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); background: #fbfbf8; }
 .toggle-row.compact .toggle-label { font-size: 12.5px; }
 .toggle-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+.info-btn { background: transparent; border: 0; padding: 0 0 0 2px; font-size: 12px; line-height: 1; cursor: pointer; vertical-align: -1px; opacity: .7; }
+.info-btn:hover { opacity: 1; }
 .toggle-sublabel { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
 .toggle-switch { position: relative; width: 44px; height: 25px; flex-shrink: 0; }
 .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
@@ -524,7 +526,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
     </div>
     <div class="toggle-row compact">
-      <div class="toggle-label">🏷️ <span id="barcodeScannerToggleLabel">Barcode Scanner</span></div>
+      <div class="toggle-label">🔫 <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
+        <button type="button" class="info-btn" onclick="openBarcodeScannerInfo()" title="How it works" aria-label="How it works">ℹ️</button>
+      </div>
       <label class="toggle-switch">
         <input type="checkbox" id="barcodeScannerToggle" checked onchange="toggleBarcodeScannerSetting()">
         <span class="toggle-slider"></span>
@@ -690,6 +694,18 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <li>Mirror that window to your tablet or TV - Windows: press Win+K, or Settings → System → Display → "Connect to a wireless display." Mac: Control Center → Screen Mirroring (AirPlay).</li>
       <li>Make the mirrored window full-screen. Your tablet or TV now shows a live copy of it.</li>
     </ol>
+  </div>
+</div>
+</div>
+
+<div id="barcodeScannerInfoOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeBarcodeScannerInfo()">
+<div class="scanner-modal" style="max-width:420px;">
+  <div class="scanner-header">
+    <h2 id="barcodeScannerInfoTitle">How the Barcode Scanner Works</h2>
+    <button onclick="closeBarcodeScannerInfo()">✕</button>
+  </div>
+  <div style="padding:18px 20px;">
+    <p id="barcodeScannerInfoText" style="margin:0; font-size:13px; color:var(--ink-soft); line-height:1.6;">Plug in any USB barcode scanner - it works like a keyboard, no setup needed. With this toggle on, scan a product's barcode and it's added to your cart automatically. It won't interfere while you're typing in a text field.</p>
   </div>
 </div>
 </div>
@@ -1208,7 +1224,7 @@ en: {
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed Amount", taxExemptLabel: "Tax Exempt", taxExemptTag: "No Tax",
   paymentMethodsTitle: "Payment Methods", paymentMethodsInfo: "These appear in the Payment Method dropdown at checkout.",
   productsTitle: "Products", productsUploadHint: "Or upload a CSV with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.",
-  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "When on, scanning a barcode with a USB barcode scanner adds the matching item by SKU from anywhere on the main screen.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Plug in any USB barcode scanner - it works like a keyboard, no setup needed. With this toggle on, scan a product's barcode and it's added to your cart automatically. It won't interfere while you're typing in a text field.", barcodeScannerInfoTitle: "How the Barcode Scanner Works",
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU (optional)",
   addProductPhotoLabel: "Photo (optional)", productPhotoUploadError: "Couldn't load that image. Try a different file.", productPhotoChangeTitle: "Click to change photo", removePhotoLabel: "Remove",
   addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
@@ -1304,7 +1320,7 @@ ar: {
   discountTypePercentOption: "نسبة مئوية (%)", discountTypeAmountOption: "مبلغ ثابت", taxExemptLabel: "معفى من الضريبة", taxExemptTag: "بدون ضريبة",
   paymentMethodsTitle: "طرق الدفع", paymentMethodsInfo: "تظهر هذه في قائمة طريقة الدفع عند إتمام البيع.",
   productsTitle: "المنتجات", productsUploadHint: "أو ارفع ملف CSV يحتوي على الأعمدة: الاسم، السعر، وبشكل اختياري الفئة ورمز المنتج والمخزون والإعفاء الضريبي (TaxExempt)، لتحميل كامل الكتالوج دفعة واحدة. سيستبدل هذا القائمة الحالية.",
-  barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "عند التفعيل، يؤدي مسح باركود بواسطة ماسح USB إلى إضافة الصنف المطابق عبر رمز المنتج من أي مكان في الشاشة الرئيسية.",
+  barcodeScannerToggleLabel: "ماسح الباركود", barcodeScannerToggleInfo: "وصّل أي ماسح باركود USB - فهو يعمل مثل لوحة المفاتيح تمامًا، بلا أي إعداد. عند تفعيل هذا المفتاح، يؤدي مسح باركود منتج إلى إضافته للسلة تلقائيًا. لن يتعارض هذا مع الكتابة في حقل نصي.", barcodeScannerInfoTitle: "كيف يعمل ماسح الباركود",
   addProductNameLabel: "اسم المنتج", addProductPriceLabel: "السعر", addProductCategoryLabel: "الفئة (اختياري)", addProductSkuLabel: "رمز المنتج (اختياري)",
   addProductPhotoLabel: "صورة (اختياري)", productPhotoUploadError: "تعذّر تحميل هذه الصورة. جرّب ملفًا آخر.", productPhotoChangeTitle: "انقر لتغيير الصورة", removePhotoLabel: "إزالة",
   addProductButton: "+ إضافة منتج", addProductNameError: "أدخل اسم المنتج.", addProductPriceError: "أدخل سعراً صحيحاً.",
@@ -1391,7 +1407,7 @@ fil: {
   discountTypePercentOption: "Percent (%)", discountTypeAmountOption: "Fixed na Halaga", taxExemptLabel: "Walang Buwis", taxExemptTag: "Walang Buwis",
   paymentMethodsTitle: "Paraan ng Pagbabayad", paymentMethodsInfo: "Lalabas ito sa dropdown ng payment method.",
   productsTitle: "Mga Produkto", productsUploadHint: "O mag-upload ng CSV na may mga column na: Name, Price, at opsyonal na Category, SKU, Stock, at TaxExempt, para i-load ang buong catalog nang sabay-sabay. Papalitan nito ang kasalukuyang listahan.",
-  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Kapag naka-on, ang pag-scan ng barcode gamit ang USB barcode scanner ay nagdaragdag ng tumutugmang item gamit ang SKU, kahit saan sa main screen.",
+  barcodeScannerToggleLabel: "Barcode Scanner", barcodeScannerToggleInfo: "Isaksak ang anumang USB barcode scanner - gumagana ito tulad ng keyboard, walang kailangang i-set up. Kapag naka-on ang switch na ito, ang pag-scan ng barcode ng produkto ay awtomatikong idadagdag ito sa iyong cart. Hindi ito makakaabala habang nagta-type ka sa isang text field.", barcodeScannerInfoTitle: "Paano Gumagana ang Barcode Scanner",
   addProductNameLabel: "Pangalan ng Produkto", addProductPriceLabel: "Presyo", addProductCategoryLabel: "Category (opsyonal)", addProductSkuLabel: "SKU (opsyonal)",
   addProductPhotoLabel: "Larawan (opsyonal)", productPhotoUploadError: "Hindi ma-load ang larawang iyon. Subukan ang ibang file.", productPhotoChangeTitle: "I-click para palitan ang larawan", removePhotoLabel: "Alisin",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
@@ -1479,7 +1495,7 @@ hi: {
   discountTypePercentOption: "प्रतिशत (%)", discountTypeAmountOption: "निश्चित राशि", taxExemptLabel: "कर मुक्त", taxExemptTag: "कर मुक्त",
   paymentMethodsTitle: "भुगतान के तरीके", paymentMethodsInfo: "ये चेकआउट पर दिखाई देंगे।",
   productsTitle: "उत्पाद", productsUploadHint: "या Name, Price कॉलम वाली CSV अपलोड करें; Category, SKU, Stock और TaxExempt वैकल्पिक हैं, ताकि पूरा कैटलॉग एक साथ लोड हो सके। इससे मौजूदा सूची बदल जाएगी।",
-  barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "चालू होने पर, USB बारकोड स्कैनर से बारकोड स्कैन करने पर मुख्य स्क्रीन पर कहीं से भी SKU के अनुसार मिलान वाला आइटम जुड़ जाता है।",
+  barcodeScannerToggleLabel: "बारकोड स्कैनर", barcodeScannerToggleInfo: "कोई भी USB बारकोड स्कैनर जोड़ें - यह कीबोर्ड की तरह काम करता है, किसी सेटअप की ज़रूरत नहीं। यह स्विच चालू होने पर, किसी उत्पाद का बारकोड स्कैन करते ही वह अपने आप आपके कार्ट में जुड़ जाता है। टेक्स्ट फ़ील्ड में टाइप करते समय यह बाधा नहीं डालेगा।", barcodeScannerInfoTitle: "बारकोड स्कैनर कैसे काम करता है",
   addProductNameLabel: "उत्पाद का नाम", addProductPriceLabel: "कीमत", addProductCategoryLabel: "श्रेणी (वैकल्पिक)", addProductSkuLabel: "SKU (वैकल्पिक)",
   addProductPhotoLabel: "फ़ोटो (वैकल्पिक)", productPhotoUploadError: "वह इमेज लोड नहीं हो सकी। दूसरी फ़ाइल आज़माएं।", productPhotoChangeTitle: "फ़ोटो बदलने के लिए क्लिक करें", removePhotoLabel: "हटाएं",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
@@ -1567,7 +1583,7 @@ es: {
   discountTypePercentOption: "Porcentaje (%)", discountTypeAmountOption: "Monto Fijo", taxExemptLabel: "Exento de Impuesto", taxExemptTag: "Sin Impuesto",
   paymentMethodsTitle: "Métodos de Pago", paymentMethodsInfo: "Aparecerán en el menú de pago al finalizar la venta.",
   productsTitle: "Productos", productsUploadHint: "O sube un CSV con las columnas: Name, Price, y opcionalmente Category, SKU, Stock y TaxExempt, para cargar todo tu catálogo a la vez. Esto reemplaza la lista actual.",
-  barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Cuando está activado, escanear un código de barras con un escáner USB añade el artículo correspondiente por SKU desde cualquier parte de la pantalla principal.",
+  barcodeScannerToggleLabel: "Escáner de Código de Barras", barcodeScannerToggleInfo: "Conecta cualquier escáner de código de barras USB - funciona como un teclado, sin configuración necesaria. Con este interruptor activado, escanear el código de barras de un producto lo añade automáticamente al carrito. No interferirá mientras escribes en un campo de texto.", barcodeScannerInfoTitle: "Cómo Funciona el Escáner de Código de Barras",
   addProductNameLabel: "Nombre del Producto", addProductPriceLabel: "Precio", addProductCategoryLabel: "Categoría (opcional)", addProductSkuLabel: "SKU (opcional)",
   addProductPhotoLabel: "Foto (opcional)", productPhotoUploadError: "No se pudo cargar esa imagen. Prueba con otro archivo.", productPhotoChangeTitle: "Haz clic para cambiar la foto", removePhotoLabel: "Quitar",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
@@ -1655,7 +1671,7 @@ th: {
   discountTypePercentOption: "เปอร์เซ็นต์ (%)", discountTypeAmountOption: "จำนวนเงินคงที่", taxExemptLabel: "ยกเว้นภาษี", taxExemptTag: "ไม่มีภาษี",
   paymentMethodsTitle: "วิธีการชำระเงิน", paymentMethodsInfo: "จะแสดงในเมนูวิธีการชำระเงินตอนชำระเงิน",
   productsTitle: "สินค้า", productsUploadHint: "หรืออัปโหลดไฟล์ CSV ที่มีคอลัมน์: Name, Price และสามารถเพิ่ม Category, SKU, Stock กับ TaxExempt ได้ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว การทำเช่นนี้จะแทนที่รายการปัจจุบัน",
-  barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เมื่อเปิดใช้งาน การสแกนบาร์โค้ดด้วยเครื่องสแกน USB จะเพิ่มสินค้าที่ตรงกันตาม SKU ได้จากทุกที่ในหน้าหลัก",
+  barcodeScannerToggleLabel: "เครื่องสแกนบาร์โค้ด", barcodeScannerToggleInfo: "เสียบเครื่องสแกนบาร์โค้ด USB รุ่นใดก็ได้ - ทำงานเหมือนคีย์บอร์ด ไม่ต้องตั้งค่าใดๆ เมื่อเปิดสวิตช์นี้ การสแกนบาร์โค้ดสินค้าจะเพิ่มลงตะกร้าให้อัตโนมัติ และจะไม่รบกวนขณะที่คุณกำลังพิมพ์ในช่องข้อความ", barcodeScannerInfoTitle: "เครื่องสแกนบาร์โค้ดทำงานอย่างไร",
   addProductNameLabel: "ชื่อสินค้า", addProductPriceLabel: "ราคา", addProductCategoryLabel: "หมวดหมู่ (ไม่บังคับ)", addProductSkuLabel: "SKU (ไม่บังคับ)",
   addProductPhotoLabel: "รูปภาพ (ไม่บังคับ)", productPhotoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองไฟล์อื่น", productPhotoChangeTitle: "คลิกเพื่อเปลี่ยนรูปภาพ", removePhotoLabel: "ลบ",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
@@ -1872,6 +1888,12 @@ async function saveSettings() {
 }
 function toggleBarcodeScannerSetting() {
   saveSettings();
+}
+function openBarcodeScannerInfo() {
+  document.getElementById("barcodeScannerInfoOverlay").classList.remove("hidden");
+}
+function closeBarcodeScannerInfo() {
+  document.getElementById("barcodeScannerInfoOverlay").classList.add("hidden");
 }
 async function loadPaymentMethods() {
   const raw = await storageGet("pos-payment-methods");
@@ -3838,6 +3860,7 @@ function changeLanguage() {
     paymentMethodsTitle: "paymentMethodsTitle", paymentMethodsInfo: "paymentMethodsInfo",
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
     barcodeScannerToggleLabel: "barcodeScannerToggleLabel",
+    barcodeScannerInfoTitle: "barcodeScannerInfoTitle", barcodeScannerInfoText: "barcodeScannerToggleInfo",
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
     addProductPhotoLabel: "addProductPhotoLabel", removePhotoLabel: "removePhotoLabel",
     addProductButton: "addProductButton",
