@@ -10,12 +10,17 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **Marketing/site pages:** `index.html`, `about.html`, `contact.html`,
   `how-it-works.html`, `privacy.html`, `terms.html`, `blog.html` +
   `blog-why-your-business-needs-a-pos.html`
-- **`app.html`** (~3,600 lines) — the actual POS application. Everything
-  runs client-side in one big inline `<script>` block near the bottom of
-  the file.
+- **`app.html`** (~4,050 lines) — the actual POS application. Most logic
+  still runs client-side in one big inline `<script>` block near the
+  bottom of the file; a few self-contained pieces (barcode scanner,
+  receipt rendering, the offline-package builder) have been split out
+  into `modules/` — see "`modules/` — split-out app.html pieces" below.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
+- **`modules/`** — `scanner.js`, `receipt.js`, `offline-builder.js`, plain
+  global-scope scripts split out of `app.html`'s inline block to keep it
+  smaller. See "`modules/` — split-out app.html pieces" below.
 - **Images:** `guide-*.png` (in-app feature screenshots used in the
   "Every setting, explained" walkthrough on `index.html`), `favicon.png` /
   `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
@@ -276,6 +281,62 @@ zero network calls.
   bottom of the file, separate from the app's own `onlinepos_*` storage
   keys).
 
+## `modules/` — split-out app.html pieces
+
+Three self-contained slices of `app.html`'s logic live in their own files
+under `modules/`, loaded via plain `<script src="modules/...">` tags
+(classic scripts, **not** `type="module"`) placed right after the
+`vendor/` script tags and before the main inline `<script>` block. This
+was a deliberate choice over ES modules: `type="module"` scripts are
+blocked by browsers on `file://`, which would break the documented
+"double-click `app.html` to run it, no server needed" path (see
+"Download Offline POS" below) — plain classic scripts share the same
+global scope as the main inline block regardless of load order (`let`/
+`const`/functions declared in one classic `<script>` are visible to
+every other classic `<script>` in the same document), so this is a
+drop-in split with no behavior change, not a rewrite.
+
+- **`modules/scanner.js`** — the camera barcode scanner: `openScanner`,
+  `pollScannerFrame`, `closeScanner`, `handleScannedCode`, the torch/focus
+  helpers, and their backing state (`barcodeReader`, `scannerPollTimer`,
+  `lastScannedCode`, etc). Note `openScanner()` currently opens with
+  `alert("Coming soon"); return;` before any camera code runs, and
+  `toggleBarcodeScannerSetting()` (still in `app.html`, not moved) just
+  alerts and forces the setting back off — the feature is disabled/WIP
+  in the current build; this split preserved that as-is rather than
+  re-enabling it.
+- **`modules/receipt.js`** — receipt/checkout math and rendering:
+  `printReceipt`, `computeTotalsFromItems`/`computeTotals`,
+  `renderReceiptItems`, `updateTotalsAndHeader`, `updateReceipt`,
+  `getDocumentTitle`. `updatePrintStyle()` and `updateZoom()` stayed
+  behind in `app.html` (paper-size/settings glue shared with the Settings
+  panel, not receipt content itself) and are called from here as globals.
+- **`modules/offline-builder.js`** — the "Download Offline POS" zip
+  builder: `OFFLINE_PREMIUM_CODE`, the download modal's open/close/agree
+  handlers, `fetchOfflineText`/`fetchOfflineBlob`, `stripMarked`,
+  `buildOfflineAppHtml`/`buildOfflineCustomerHtml`, and
+  `confirmOfflineDownload`. Its own `<script src="modules/offline-builder.js">`
+  tag is wrapped in a `<!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:START/END -->`
+  marker (same pattern as the `JSZIP` script tag right above it) so it's
+  dropped from the generated offline package entirely — an offline copy
+  has no download button to trigger it, and it would otherwise try to
+  fetch/rebuild a zip of itself. `modules/scanner.js` and
+  `modules/receipt.js` are **not** marker-wrapped since the offline copy
+  still needs the scanner and receipt code; `confirmOfflineDownload()`
+  fetches both files alongside `app.html`/`customer.html` and adds them
+  to the zip at `modules/scanner.js`/`modules/receipt.js` so the paths
+  the generated `app.html`'s `<script src>` tags expect are actually
+  there. See "Download Offline POS" below for the full file list.
+
+All three were extracted verbatim (moved, not rewritten) end-to-end
+verified with Playwright: adding a product, clicking it into the cart,
+qty +/-, and printing all still work through `modules/receipt.js`; the
+scanner module's dead-code alert path still fires unchanged; and a live
+"Download Offline POS" run produces a zip whose `app.html` has zero
+leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers, still defines
+`openScanner`/`printReceipt` from the bundled modules, and has no
+`buildOfflineAppHtml` (correctly absent, since that module was stripped).
+
 ## `vendor/` — self-hosted third-party libraries
 
 Root-level `vendor/xlsx.full.min.js`, `vendor/zxing-browser.min.js`, and
@@ -467,10 +528,12 @@ remember. The whole mechanism lives inside `app.html` itself:
 - On confirm, it `fetch()`es the **currently live** `app.html` and
   `customer.html` (same-origin, `cache: "no-store"`) plus the static
   ingredients under `offline/` (`README.txt`, the three `start-server.*`
-  launchers, `offline/vendor/LICENSES.txt`) and the two libraries from
-  root `vendor/`, runs `app.html`'s text through `buildOfflineAppHtml()`,
-  zips everything with JSZip, and triggers the download
-  (`GoOnlinePOS-Offline.zip`).
+  launchers, `offline/vendor/LICENSES.txt`), the two libraries from root
+  `vendor/`, and `modules/scanner.js`/`modules/receipt.js` (the offline
+  copy still needs both, at those same paths, since `app.html`'s
+  `<script src="modules/...">` tags aren't marker-stripped for them),
+  runs `app.html`'s text through `buildOfflineAppHtml()`, zips everything
+  with JSZip, and triggers the download (`GoOnlinePOS-Offline.zip`).
 - **Usage analytics** via the shared `trackEvent(name, params)` helper
   (thin `gtag('event', ...)` wrapper, no-ops if `gtag` isn't defined —
   i.e. respects cookie consent same as every other GA call):
@@ -493,9 +556,9 @@ remember. The whole mechanism lives inside `app.html` itself:
   if a marker goes missing, but nothing hard-fails). Currently stripped:
   Google Fonts links, the cookie-consent/GA/AdSense bootstrap + banner,
   the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
-  download section/modal HTML, the Premium heartbeat call site (no
-  network calls offline), and the whole download-building JS block
-  itself (dead code once there's no button to trigger it).
+  `modules/offline-builder.js` script tag (its own module, dead code
+  once there's no button to trigger it), the download section/modal
+  HTML, and the Premium heartbeat call site (no network calls offline).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
