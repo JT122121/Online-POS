@@ -26,7 +26,21 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   4-image teaser on `index.html`), `favicon.png` /
   `favicon.ico` (same artwork, PNG-in-ICO — kept in sync manually, see
   below), `og-image.jpg` (shared 1200×630 social-share card),
-  `blog-hero-illustration.svg`.
+  `blog-hero-illustration.png` (featured-post image on `blog.html`,
+  `.fp-img`, displayed at up to 640px wide — **plug-and-play by design**:
+  swapping the blog's featured photo is just overwriting this exact
+  filename with a new image and pushing, no HTML edit needed, since
+  `blog.html` always references this fixed name. Keep any replacement
+  as a `.png` at roughly 1200-1400px wide (2x the display width) rather
+  than uploading a full-resolution original — this file was recovered
+  from a 1536×1024/2.2MB source that GitHub's web "rename" editor had
+  corrupted down to 2 bytes (it treats a binary file as text when you
+  rename it there), and was resized to 1280×853/~1.5MB, matching the
+  actual display size, before being committed via git directly. **Never
+  rename a binary file through the GitHub web UI's file editor** for
+  that reason — upload the correctly-named file fresh, or rename via a
+  real git client/API instead. This replaced an earlier
+  `blog-hero-illustration.svg` placeholder illustration.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
   (lists `/`, `app.html`, `how-it-works.html`, `about.html`, `blog.html`,
   `blog-why-your-business-needs-a-pos.html`, `contact.html`, `privacy.html`,
