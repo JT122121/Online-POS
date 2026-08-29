@@ -46,6 +46,10 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   that reason — upload the correctly-named file fresh, or rename via a
   real git client/API instead. This replaced an earlier
   `blog-hero-illustration.svg` placeholder illustration.
+  `blog-excel-photo.png` (1280×853, same sizing convention) is the
+  `.pc-art` photo for the "From Excel to AppSheet Expert" post card -
+  a generic office/spreadsheet stock photo, not an actual photo of the
+  site owner or a real client.
 - **`blog.html`'s `.post-grid`** (non-featured articles, below the one
   `.featured-post`) uses `grid-template-columns: repeat(auto-fit,
   minmax(340px, 1fr))`, not a fixed column count - with only one
@@ -60,10 +64,22 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   14.5px body) - this was tuned for the single-card full-width case but
   reads fine at two-up too, so it wasn't split into a narrower variant.
   A `.post-card`'s `.pc-art` thumbnail is optional - it's just an
-  `<img>` when a card has a photo (`appsheet-logo.png`), or a plain
-  centered emoji (`🧑‍💻`) on the existing `accent-tint` background when
-  it doesn't, using the same font-size fallback already built into
-  `.pc-art`'s CSS. No placeholder image asset needed either way.
+  `<img>` when a card has a photo, or a plain centered emoji on the
+  existing `accent-tint` background when it doesn't, using the same
+  font-size fallback already built into `.pc-art`'s CSS. No placeholder
+  image asset needed either way.
+- **`.photo-disclaimer`** - a small "Photo for illustration purposes
+  only" badge overlaid on the bottom edge of any stock/generic photo
+  used in the blog (the featured post's `blog-hero-illustration.png`
+  inside its `.fp-photo` wrapper, and the Excel-to-AppSheet post card's
+  `blog-excel-photo.png` inside its `.pc-art`), since neither photo is
+  an actual picture of the site owner, a real client, or GoOnlinePOS in
+  use. Both host elements need `position: relative` for the badge to
+  anchor correctly. **Only applies to generic/stock photos** - the
+  AppSheet post card's `appsheet-logo.png` is the real Google AppSheet
+  logo, not a stand-in photo, so it's deliberately excluded. Add the
+  same badge to any future blog photo that isn't a genuine, literal
+  photo of the thing it's illustrating.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
   (lists `/`, `app.html`, `how-it-works.html`, `guide.html`, `about.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
