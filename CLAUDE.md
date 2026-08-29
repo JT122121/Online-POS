@@ -23,6 +23,9 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`invoice.html`** — a standalone, free invoice generator, unrelated to
   the cart/checkout flow. See "`invoice.html` — standalone invoice
   generator" below.
+- **`receipt.html`** — a standalone, free payment-receipt generator
+  (simple summary, not itemized), a sibling tool to `invoice.html`. See
+  "`receipt.html` — standalone receipt generator" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -629,8 +632,9 @@ remember. The whole mechanism lives inside `app.html` itself:
   actual download — see `confirmOfflineDownload()`.
 - On confirm, it `fetch()`es the **currently live** `app.html` and
   `customer.html` (same-origin, `cache: "no-store"`) - **not**
-  `invoice.html`, which is deliberately excluded (see the `invoice.html`
-  section above) - plus the static ingredients under `offline/`
+  `invoice.html`/`receipt.html`, both deliberately excluded (see the
+  `invoice.html` and `receipt.html` sections above) - plus the static
+  ingredients under `offline/`
   (`README.txt`, the three `start-server.*` launchers,
   `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`, and
   `modules/translations.js`/`modules/usb-scanner.js`/`modules/receipt.js`
@@ -663,10 +667,13 @@ remember. The whole mechanism lives inside `app.html` itself:
   the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
   `modules/offline-builder.js` script tag (its own module, dead code
   once there's no button to trigger it), the download section/modal
-  HTML, the Premium heartbeat call site (no network calls offline), and
-  the "🧾 Create Invoice" button + its `openCreateInvoice()` function
+  HTML, the Premium heartbeat call site (no network calls offline), the
+  "🧾 Create Invoice" button + its `openCreateInvoice()` function
   (`CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` - there's no
-  `invoice.html` in the offline copy for it to open).
+  `invoice.html` in the offline copy for it to open), and the "🧾 Create
+  Receipt" button + its `openCreateReceipt()` function
+  (`CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`, the same treatment for
+  `receipt.html`).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
@@ -844,6 +851,93 @@ on-page heading and the button that links to it now say the same thing).
   consistent with it being a new, separate feature rather than a
   from-day-one part of the translated POS app.
 
+## `receipt.html` — standalone receipt generator
+
+A free-standing **payment receipt** builder, `invoice.html`'s sibling tool
+and built by mirroring its architecture closely (own `--ink`/`--accent`/
+`--gold` design tokens, own cookie-consent banner, own autosave-draft +
+explicit Save/Saved-list pattern, `window.print()` + `@media print` for
+PDF export) - but deliberately **not itemized**: this is for a quick,
+one-off payment record (a deposit, a partial payment, a service call),
+not a formal line-item bill, which is what `invoice.html` is already for.
+`app.html`'s own **"🧾 Create Receipt"** header shortcut button
+(`openCreateReceipt()`, next to Create Invoice) opens it via
+`window.open(...)` in a **new tab**, same reasoning as Create Invoice - a
+cashier mid-sale shouldn't risk losing their unsaved cart. It's also
+directly reachable/shareable on its own (indexable, in `sitemap.xml`).
+The page's own `<h1>` reads **"Create Receipt"**, matching the header
+button's label (the `<title>`/meta description lead with "Free Receipt
+Generator" for SEO search-term value, same pattern as `invoice.html`).
+- **`index.html`'s header `.cta-btn`** row now has two buttons - "Free
+  Invoice Generator" (`href="invoice"`) and "Free Receipt Generator"
+  (`href="receipt"`), side by side in that order.
+- **Simple-summary layout, not a line-item table**: From / Received From
+  (plain textareas, no pulling from `app.html`'s Store Settings, same
+  decoupled-by-design reasoning as `invoice.html`), a Date + Payment
+  Method row, a currency picker, then a `.totals-box` with just three
+  numbers - **Total** (editable), **Received** (editable), **Total Due**
+  (computed = Total − Received, read-only, clamped at 0 by the UI's plain
+  number-input min but not otherwise validated against overpayment).
+  There is no discount/tax math here (unlike `invoice.html`) - a receipt
+  in this tool records what was already agreed and paid, it doesn't
+  compute a bill.
+- **Amount in Words** (`amountToWords()`) - auto-converts the Total into
+  words underneath the totals box, currency-aware via a `CURRENCIES` map
+  (`{symbol, name, subunit, decimals}` per code) richer than
+  `invoice.html`'s plain `{code: symbol}` map, since it needs the
+  currency's spoken name/subunit and decimal precision (e.g. Bahraini
+  Dinar/Kuwaiti Dinar use 3 decimals/"Fils", not the usual 2). Whole
+  amounts read e.g. "Five Hundred Seventeen Bahraini Dinars Only";
+  amounts with a fractional part add the subunit, e.g. "Twelve Dollars
+  and Fifty Cents Only" for $12.50. Zero fractional value omits the
+  subunit clause entirely rather than saying "and Zero Cents."
+- **Remarks field with a "Show Remarks" toggle** (`#rcShowRemarks`,
+  default **checked**) - a multi-line `#rcRemarks` textarea inside
+  `#remarksBlock`, placed after the totals/Amount-in-Words block and
+  before the footer note, matching the requested layout. Unchecking the
+  toggle adds `.hidden` to `#remarksBlock` (`.remarks-block.hidden {
+  display: none !important; }`, defined outside the print block so it
+  applies identically on screen and when printed) - the block is
+  actually removed from layout, not just visually faded, so disabling it
+  leaves no empty gap on the receipt either in the live preview or on
+  the printed 80mm output. Both `showRemarks` and the remarks text are
+  part of `collectState()`/`applyState()`, so they round-trip through
+  the autosave draft and through Saved Receipts (reopening a saved
+  receipt restores the original remarks and toggle state exactly).
+- **"Save Receipt" / "Saved Receipts"** - the same explicit-save-plus-list
+  pattern as `invoice.html`'s "Save Invoice"/"Saved Invoices": "💾 Save
+  Receipt" pushes the current form into a `goonlinepos-receipt-history`
+  `localStorage` array (`{id, number, receivedFrom, total, date,
+  savedAt, state}`) and shows a `.save-toast`; "📂 Saved Receipts" opens
+  a `.modal-overlay`/`.modal-box` (`#savedReceiptsOverlay`) listing
+  entries newest-first, each row (`.saved-receipt-row` /
+  `.saved-receipt-main` / `.saved-receipt-delete`) reopening on click or
+  deletable via its own ✕ with a `confirm()`. `currentReceiptId`
+  (generated once, carried through `collectState()`/`applyState()`, also
+  persisted in the autosave draft) makes re-saving the same receipt
+  **update** its existing history entry instead of duplicating it - only
+  "Clear / New Receipt" resets it to `null`.
+- **80mm thermal print sizing** (`@page { size: 80mm auto; margin: 0; }`),
+  matching `app.html`'s own POS receipt paper-size convention, rather
+  than `invoice.html`'s A4/Letter-style print CSS - this tool is meant to
+  print on the same thermal printer a shop's POS already uses, not just
+  export a PDF on plain paper (though "Print / Save as PDF" still works
+  identically via the browser's print dialog either way).
+- **Has its own full cookie-consent banner**, same reasoning as
+  `invoice.html` - a separate `goonlinepos-cookie-consent` check since
+  this page can be visited directly.
+- **Deliberately NOT bundled into the "Download Offline POS" package** -
+  same policy as `invoice.html`, a separate free web tool rather than
+  part of the offline POS itself. `app.html`'s own "🧾 Create Receipt"
+  button and `openCreateReceipt()` function are wrapped in their own
+  `OFFLINE-STRIP:CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS` marker
+  blocks (mirroring Create Invoice's exact markers) so they don't appear
+  in the offline copy either.
+- Six-language UI strings are **not** part of this page, same as
+  `invoice.html` - `app.html`'s `translations` dictionary only supplies
+  the `createReceiptShortcutLabel` header-button text; the receipt tool
+  itself is English-only.
+
 ## SEO
 
 - **Every indexable page** (i.e. every page whose own `<meta name="robots">`
@@ -871,7 +965,7 @@ on-page heading and the button that links to it now say the same thing).
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `invoice.html`, `how-it-works.html`, `guide.html`, `about.html`,
+  `invoice.html`, `receipt.html`, `how-it-works.html`, `guide.html`, `about.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -968,8 +1062,8 @@ on-page heading and the button that links to it now say the same thing).
   `href="/index"`. `sitemap.xml`'s `<loc>` entries were updated to match.
   This is safe for every marketing page (`index.html`, `about.html`,
   `contact.html`, `guide.html`, `how-it-works.html`, `privacy.html`,
-  `terms.html`, `blog.html` + its articles, `invoice.html`) since none
-  of them are bundled into the offline `.zip`, where extension-less
+  `terms.html`, `blog.html` + its articles, `invoice.html`, `receipt.html`)
+  since none of them are bundled into the offline `.zip`, where extension-less
   resolution doesn't exist (plain Python `http.server` and `file://`
   both need the real filename). **Two deliberate exceptions inside
   `app.html`, both still using the real `.html` filename:**
@@ -981,11 +1075,12 @@ on-page heading and the button that links to it now say the same thing).
   a real filename on their filesystem, not a browser link - occurs in
   `app.html`'s own offline-download modal copy and in
   `modules/translations.js`'s `offlineModalHowList`, all six
-  languages). `openCreateInvoice()`, by contrast, **was** changed to
-  extension-less `"invoice"`, since `invoice.html` is deliberately
-  *not* in the offline package (see its own section above) - the
-  button that calls it is stripped from the offline copy entirely, so
-  this function only ever runs on the live site. `app.html`'s own
+  languages). `openCreateInvoice()`/`openCreateReceipt()`, by contrast,
+  **were** changed to extension-less `"invoice"`/`"receipt"`, since
+  neither `invoice.html` nor `receipt.html` is in the offline package
+  (see their own sections above) - the buttons that call them are
+  stripped from the offline copy entirely, so these functions only ever
+  run on the live site. `app.html`'s own
   `goHome()` predates this sweep and already uses a directory-relative
   path rather than a hardcoded `"/"` - see "Header brand mark is not a
   link" above for why (same offline-vs-live reasoning).

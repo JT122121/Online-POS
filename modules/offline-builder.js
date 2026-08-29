@@ -54,10 +54,13 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "BUY-PREMIUM-BUTTON", "buy premium button");
   html = stripMarked(html, "BUY-PREMIUM-MODAL", "buy premium modal");
   html = stripMarked(html, "CREATE-INVOICE-BUTTON", "create invoice button");
+  html = stripMarked(html, "CREATE-RECEIPT-BUTTON", "create receipt button");
   const heartbeatRe = /\/\* OFFLINE-STRIP:HEARTBEAT:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:HEARTBEAT:END \*\/\n?/;
   html = heartbeatRe.test(html) ? html.replace(heartbeatRe, "") : (console.warn("Offline package: heartbeat marker not found"), html);
   const createInvoiceJsRe = /\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:END \*\/\n?/;
   html = createInvoiceJsRe.test(html) ? html.replace(createInvoiceJsRe, "") : (console.warn("Offline package: create-invoice-js marker not found"), html);
+  const createReceiptJsRe = /\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:END \*\/\n?/;
+  html = createReceiptJsRe.test(html) ? html.replace(createReceiptJsRe, "") : (console.warn("Offline package: create-receipt-js marker not found"), html);
 
   const offlineActivationJs = [
     'const DEFAULT_PREMIUM_CODE = "' + OFFLINE_PREMIUM_CODE + '";',

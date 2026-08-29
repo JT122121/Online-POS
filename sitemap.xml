@@ -20,6 +20,12 @@
   </url>
 
   <url>
+    <loc>https://goonlinepos.com/receipt</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://goonlinepos.com/how-it-works</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
