@@ -917,12 +917,13 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
   persisted in the autosave draft) makes re-saving the same receipt
   **update** its existing history entry instead of duplicating it - only
   "Clear / New Receipt" resets it to `null`.
-- **80mm thermal print sizing** (`@page { size: 80mm auto; margin: 0; }`),
-  matching `app.html`'s own POS receipt paper-size convention, rather
-  than `invoice.html`'s A4/Letter-style print CSS - this tool is meant to
-  print on the same thermal printer a shop's POS already uses, not just
-  export a PDF on plain paper (though "Print / Save as PDF" still works
-  identically via the browser's print dialog either way).
+- **A4/Letter print sizing** (`@page { margin: 12mm; }`), matching
+  `invoice.html`'s own print CSS exactly rather than `app.html`'s 80mm
+  thermal receipt convention - this tool is meant to print or save as a
+  regular document/PDF, not on a thermal receipt printer. (An earlier
+  version used `@page { size: 80mm auto; margin: 0; }` to match
+  `app.html`'s thermal receipts, but was changed to A4/Letter to match
+  `invoice.html` instead, per explicit feedback.)
 - **Has its own full cookie-consent banner**, same reasoning as
   `invoice.html` - a separate `goonlinepos-cookie-consent` check since
   this page can be visited directly.
