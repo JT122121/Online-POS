@@ -202,31 +202,69 @@ all of them under one pattern:
   already has its own `<header class="app-header">` with its own logo,
   and stacking a second full `site-header` (with its own brand-mark
   image) directly above it read as a duplicate logo rather than a
-  unified nav, so that approach was reverted. Instead, **About and Blog
-  are two more entries in the existing header-toolbar shortcut row**
-  (`#aboutShortcutButton`/`#blogShortcutButton`, next to Customer Screen
-  and before Create Invoice/Create Receipt in `#headerActionsGroup`) -
-  the same mechanism every other header action already uses (Premium,
-  Backup, Settings, How To Use, ...), not a parallel header structure.
-  Both buttons are styled with the same dark-green `--accent-dark`
-  background as `.site-nav a` elsewhere (`#aboutShortcutButton,
-  #blogShortcutButton { background: var(--accent-dark); color: #fff; }`)
-  so they read as the same "About/Blog" affordance as every other page,
-  just rendered as toolbar buttons instead of a nav pill. Each opens its
-  target in a new tab via a plain `window.open('about', '_blank')` /
-  `window.open('blog', '_blank')` onclick (not a real `<a>`, to match
-  the existing button-based toolbar) - the same reasoning
-  `openCreateInvoice()`/`openCreateReceipt()` already use for the
-  buttons next to them: a cashier mid-sale shouldn't risk losing their
-  unsaved cart by clicking away in the same tab. Both are wrapped in
-  their own `OFFLINE-STRIP:ABOUT-BUTTON`/`BLOG-BUTTON` marker blocks and
-  stripped by `buildOfflineAppHtml()`, same treatment as Create Invoice/
-  Create Receipt, since `about.html`/`blog.html` aren't bundled in the
-  offline package for them to open. Their labels
-  (`aboutShortcutLabel`/`blogShortcutLabel`) are translated across all
-  six languages in `modules/translations.js`, unlike the marketing
-  pages' own `.site-nav`, since every other button in this toolbar is
-  already translated and these two needed to match.
+  unified nav, so that approach was tried and reverted. What shipped
+  instead is a deliberately trimmed **two-row header**, split into a
+  `.app-header-top` row (brand/title/badges plus a `.header-links` row
+  of "leave the app" links) and the existing `.header-actions` toolbar
+  below it, matching an explicit design brief for what the POS toolbar
+  should show versus what only needs to live inside Settings:
+  - **`.header-links`** (next to the app title/Premium/Special-Access
+    badges): About, Blog, Free Invoice Generator, Free Receipt Generator,
+    Home, in that order. About/Blog/Home render as dark-green
+    (`--accent-dark`) pills matching `.site-nav a` elsewhere; Free
+    Invoice/Receipt Generator (still `#createInvoiceButton`/
+    `#createReceiptButton` → `openCreateInvoice()`/`openCreateReceipt()`,
+    just relabeled from "Create Invoice"/"Create Receipt" to match the
+    marketing-page CTA wording and moved up here) render in the brighter
+    `--accent`, matching `.cta-btn` elsewhere - same two-weight visual
+    split as the marketing pages' nav-pill-vs-CTA-button distinction.
+    Every link here opens in a new tab (`window.open(...)` for About/Blog,
+    the existing `openCreateInvoice()`/`openCreateReceipt()` for the
+    other two) except **Home**, which still goes through `goHome()`'s
+    cart-safety confirm rather than a raw link - see "Header brand mark
+    is not a link" below, unchanged. About/Blog/Create Invoice/Create
+    Receipt stay wrapped in their existing `OFFLINE-STRIP:ABOUT-BUTTON`/
+    `BLOG-BUTTON`/`CREATE-INVOICE-BUTTON`/`CREATE-RECEIPT-BUTTON` marker
+    blocks (only the label text and position changed, not the markers),
+    since none of `about.html`/`blog.html`/`invoice.html`/`receipt.html`
+    ship in the offline package.
+  - **`.header-actions` (the toolbar) now shows exactly seven things:**
+    Hide Toolbar, the Cashier select, New Sale, Settings, End of Day,
+    Customer Screen, Backup - deliberately trimmed down from a longer
+    list. **Premium, How To Use, Print, and Inventory lost their
+    dedicated toolbar buttons entirely** - Premium and Inventory were
+    always just thin wrappers around `selectSettingsTab(...)` (their own
+    `openPremiumSettings()`/`openInventoryPanel()` functions were deleted
+    as dead code once nothing called them), so both remain exactly as
+    reachable as before via Settings → Premium / Settings → Inventory,
+    just by clicking that tab in `#settingsTabRail` directly instead of
+    a shortcut. Removing `openInventoryPanel()` also removed its
+    `renderInventoryList()` call, so the Inventory tab's own
+    `data-tab="inventory"` button in the rail now calls
+    `renderInventoryList()` itself on click, preserving that behavior.
+    Print (manual "reprint the current draft receipt") was dropped
+    without a replacement - `completeAndPrint()` already prints
+    automatically on checkout, and a past sale can already be reprinted
+    from Settings → Sales History, so nothing was actually lost. **How
+    To Use is the one exception that needed a new home**, since it's a
+    whole modal/panel, not a settings-tab redirect: `#settingsTabRail`
+    gained a plain `❓ How To Use` entry (no `data-tab`, so
+    `selectSettingsTab()`'s active-tab toggle ignores it) whose `onclick`
+    calls `openHowToUse()` directly instead of switching panels - it
+    reuses the exact same `howToUseShortcutLabel` translation key/span id
+    the old toolbar button used, so no new translation work was needed.
+  - **`New Sale` moved from the end of the toolbar to right after the
+    Cashier select**, per the same brief - starting a new sale is
+    contextually tied to who's ringing it up, so the two now sit next to
+    each other rather than New Sale being the second-to-last button in a
+    long row.
+  - **`#settingsButton` got heavier visual treatment** now that it's the
+    toolbar's primary gateway to everything that used to have its own
+    shortcut (Premium, Inventory, How To Use): solid `--ink` background
+    instead of the plain neutral panel style every other secondary
+    button uses, plus a small `▾` appended via `#settingsButton::after`
+    (CSS-only, not a translated string) hinting that it opens onto more
+    options rather than performing a single action.
 - **`blog.html`'s 3 article pages** keep their existing `.back-link-row`
   ("← Back to Blog") **unchanged**, now sitting just below the new
   header — deliberately preserved as a more specific, more useful link
@@ -291,19 +329,22 @@ zero network calls.
   as the other `modules/` files — see below). `tr(key)` looks up
   `currentLang()` and falls back to `en`. New user-facing strings must
   be added to **all six** language blocks (or at least `en` as fallback).
-- **Header toolbar toggle:** `.header-actions` wraps its shortcut buttons
-  (Premium/Backup/Settings/How To Use/End of Day/Print/Inventory/Customer
-  Screen/About/Blog/Create Invoice/Create Receipt/New Sale/Home — the
-  last five of those stripped from the offline build) in `#headerActionsGroup`
+- **Header toolbar toggle:** `.header-actions` (the second of the
+  `app-header`'s two rows - see "Site-wide header, nav & footer" above
+  for the first) wraps its shortcut buttons - just the Cashier select,
+  New Sale, Settings, End of Day, Customer Screen, and Backup, the
+  deliberately trimmed-down set described above - in `#headerActionsGroup`
   (`display: contents`, so it doesn't affect the flex layout), preceded by
   `#toolbarToggleBtn` (`toggleToolbar()`) which toggles `.hidden` on that
   group to collapse the whole row down to just itself — reclaiming
-  vertical space for the product grid/receipt below. Deliberately
-  **collapses every button together, including Print and New Sale** (not
-  just the occasional/admin ones) per an explicit choice to prioritize
-  maximum space over keeping per-sale actions always pinned. Deliberately **not persisted**
-  — every fresh page load starts expanded regardless of what was chosen
-  last time; `renderToolbarToggle()` keeps the button's own label
+  vertical space for the product grid/receipt below. **The top row's
+  `.header-links` (About/Blog/Free Invoice Generator/Free Receipt
+  Generator/Home) is a sibling of `.header-actions`, not inside
+  `#headerActionsGroup`** - hiding the toolbar never hides that row, since
+  those are "leave the app" links rather than per-sale operational
+  shortcuts. Deliberately **not persisted** — every fresh page load
+  starts expanded regardless of what was chosen last time;
+  `renderToolbarToggle()` keeps the button's own label
   (`toolbarHideLabel`/`toolbarShowLabel`) in sync with its current state
   and re-syncs it on every language switch.
 - **Resizable product/receipt split:** `.app` is a 3-column CSS grid —
@@ -526,11 +567,18 @@ zero network calls.
   keys).
 - **"How To Use" panel** (`#howToUseOverlay`, `openHowToUse()`/
   `closeHowToUse()`) — an in-app walkthrough covering every setting,
-  reachable from the header toolbar's **"❓ How To Use"** button
-  (`#howToUseButton`, next to Settings). Replaces the old standalone
-  `guide.html` marketing page as the walkthrough's home — see "Retired
-  pages" under SEO below for why that page was pulled out of navigation
-  rather than deleted. Deliberately **text-only** (a `.htu-item` title +
+  reachable via a plain `❓ How To Use` entry at the bottom of
+  `#settingsTabRail` (no `data-tab`, so `selectSettingsTab()`'s
+  active-tab toggle skips over it; its `onclick` calls `openHowToUse()`
+  directly instead of switching settings panels). It used to have its
+  own dedicated header-toolbar button (`#howToUseButton`) before the
+  toolbar was trimmed down to a smaller fixed set of shortcuts - see
+  "Site-wide header, nav & footer" above for the current toolbar layout
+  and why this was the one removed shortcut that needed a new home
+  rather than just falling back on an existing Settings tab. Replaces
+  the old standalone `guide.html` marketing page as the walkthrough's
+  home — see "Retired pages" under SEO below for why that page was
+  pulled out of navigation rather than deleted. Deliberately **text-only** (a `.htu-item` title +
   description per section, 18 sections total including one new "End of
   Day" section `guide.html` never had) — no screenshots, unlike
   `guide.html`'s photo-heavy original. Screenshots showing "what does
