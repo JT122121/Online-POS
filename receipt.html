@@ -300,6 +300,9 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .no-print { display: none !important; }
   textarea, .field-input, .items-table input, .totals-line .tl-controls input, .payment-row input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
   select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
+  input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+  input[type="date"]::-webkit-inner-spin-button { display: none !important; }
   .logo-upload-label, .remove-logo-btn { display: none !important; }
   .add-line-btn, .line-remove-btn { display: none !important; }
   .add-payment-btn, .payment-remove-btn { display: none !important; }
