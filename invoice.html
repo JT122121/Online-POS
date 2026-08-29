@@ -69,23 +69,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Free Invoice Generator | GoOnlinePOS.com</title>
-<meta name="description" content="Create a professional invoice for free, right in your browser. Add line items, tax, discount, and shipping, then print or save it as a PDF. No signup required.">
+<title>Create Invoice - Free Invoice Generator | GoOnlinePOS.com</title>
+<meta name="description" content="Create a professional invoice for free, right in your browser. Add your logo, line items with per-item tax exemption, tax, and discount, then print or save it as a PDF. No signup required.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://goonlinepos.com/invoice.html">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://goonlinepos.com/invoice.html">
-<meta property="og:title" content="Free Invoice Generator | GoOnlinePOS.com">
-<meta property="og:description" content="Create a professional invoice for free, right in your browser. Add line items, tax, discount, and shipping, then print or save it as a PDF.">
+<meta property="og:title" content="Create Invoice | GoOnlinePOS.com">
+<meta property="og:description" content="Create a professional invoice for free, right in your browser. Add your logo, line items, tax, and discount, then print or save it as a PDF.">
 <meta property="og:site_name" content="Go Online POS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Free Invoice Generator | GoOnlinePOS.com">
-<meta name="twitter:description" content="Create a professional invoice for free, right in your browser. Add line items, tax, discount, and shipping, then print or save it as a PDF.">
+<meta name="twitter:title" content="Create Invoice | GoOnlinePOS.com">
+<meta name="twitter:description" content="Create a professional invoice for free, right in your browser. Add your logo, line items, tax, and discount, then print or save it as a PDF.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
@@ -147,6 +147,15 @@ img { max-width: 100%; display: block; }
 .number-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 13px; color: var(--muted); }
 .number-row input { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 13px; width: 130px; }
 
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.logo-upload-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px dashed var(--line); padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; }
+.logo-upload-label:hover { background: #fafaf7; border-color: #cfccbf; }
+.hidden-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.logo-preview { max-width: 160px; max-height: 70px; object-fit: contain; border-radius: 6px; }
+.remove-logo-btn { border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.remove-logo-btn:hover { background: #fbe9e7; color: #b3261e; }
+.logo-preview.hidden, .remove-logo-btn.hidden, .logo-upload-label.hidden { display: none !important; }
+
 .field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 textarea, .field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
 textarea { resize: vertical; min-height: 66px; }
@@ -161,15 +170,19 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 .items-table th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .items-table th:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; text-align: right; }
 .items-table td { padding: 6px 6px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-.items-table input { width: 100%; border: 1px solid transparent; border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: transparent; }
-.items-table input:hover { border-color: var(--line); }
+.items-table input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: #fff; }
+.items-table input:hover { border-color: #cfccbf; }
 .items-table input:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 .items-table .col-qty, .items-table .col-rate { width: 90px; }
 .items-table .col-amount { width: 110px; text-align: right; }
-.items-table .col-amount input { text-align: right; }
+.items-table .col-amount input { text-align: right; background: var(--line-soft); }
+.items-table .col-tax-exempt { width: 74px; text-align: center; }
+.items-table .col-tax-exempt input { width: auto; border: none; background: transparent; padding: 0; }
 .items-table .col-remove { width: 34px; text-align: center; }
 .line-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
 .line-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
+.line-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
+.line-remove-btn:disabled:hover { background: transparent; color: var(--muted); }
 
 .add-line-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-dark); background: var(--accent-tint); border: 1px dashed #b9d9c8; padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; margin: 8px 0 26px; }
 .add-line-btn:hover { background: #dcefe4; }
@@ -214,9 +227,25 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .meta-grid { grid-template-columns: 1fr 1fr; }
   .invoice-card { padding: 20px; }
   .items-table thead { display: none; }
-  .items-table, .items-table tbody, .items-table tr, .items-table td { display: block; width: 100%; }
+  .items-table, .items-table tbody, .items-table tr, .items-table td {
+    display: block;
+    width: 100% !important;
+  }
   .items-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 6px; }
-  .items-table td { padding: 3px 0; border-bottom: none; }
+  .items-table td { padding: 4px 0; border-bottom: none; }
+  .items-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .items-table .col-tax-exempt { display: flex; align-items: center; gap: 8px; text-align: left; }
+  .items-table .col-tax-exempt::before { margin-bottom: 0 !important; }
+  .items-table .col-amount, .items-table .col-amount input { text-align: left; }
   .items-table .col-remove { text-align: right; }
 }
 
@@ -229,7 +258,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .no-print { display: none !important; }
   textarea, .field-input, .items-table input, .meta-field .field-input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
   select { border: none !important; background: transparent !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .add-line-btn, .line-remove-btn { display: none !important; }
+  .add-line-btn, .line-remove-btn, .logo-upload-label, .remove-logo-btn { display: none !important; }
   .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .totals-line.balance { background: #f1f1ee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
@@ -261,8 +290,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
 <header class="masthead">
 <div class="kicker">Free Tool</div>
-<h1>Invoice Generator</h1>
-<p>Build a professional invoice in your browser, add line items and tax, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
+<h1>Create Invoice</h1>
+<p>Build a professional invoice in your browser, add your logo and line items, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
 </header>
 
 <div class="top-actions no-print">
@@ -271,6 +300,13 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 </div>
 
 <div class="invoice-card" id="invoiceCard">
+
+  <div class="logo-area">
+    <input type="file" id="invLogoInput" accept="image/*" class="hidden-file-input">
+    <label for="invLogoInput" class="logo-upload-label no-print" id="logoUploadLabel">🖼 Add Logo</label>
+    <img id="invLogoPreview" class="logo-preview hidden" alt="Company logo">
+    <button type="button" id="removeLogoBtn" class="remove-logo-btn no-print hidden" aria-label="Remove logo">✕ Remove</button>
+  </div>
 
   <div class="title-row">
     <div>
@@ -322,6 +358,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         <th>Description</th>
         <th class="col-qty">Qty</th>
         <th class="col-rate">Rate</th>
+        <th class="col-tax-exempt">Tax Free</th>
         <th class="col-amount">Amount</th>
         <th class="col-remove"></th>
       </tr>
@@ -349,12 +386,6 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         <div class="tl-controls">
           <select id="invTaxType"><option value="percent">%</option><option value="flat">Flat</option></select>
           <input type="number" id="invTaxValue" value="0" min="0" step="0.01">
-        </div>
-      </div>
-      <div class="totals-line">
-        <span class="tl-label">Shipping</span>
-        <div class="tl-controls">
-          <input type="number" id="invShippingValue" value="0" min="0" step="0.01">
         </div>
       </div>
       <div class="totals-line grand">
@@ -396,10 +427,10 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 <div class="info-section no-print">
   <h2>How to make an invoice</h2>
   <ol>
-    <li>Fill in who the invoice is from and who it's billed to.</li>
+    <li>Add your logo (optional) and fill in who the invoice is from and who it's billed to.</li>
     <li>Add an invoice number, date, due date, and payment terms.</li>
-    <li>List each line item with a quantity and rate - the amount is calculated for you.</li>
-    <li>Add tax, a discount, or shipping if they apply, then check the balance due.</li>
+    <li>List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed.</li>
+    <li>Add tax and a discount if they apply, then check the balance due.</li>
     <li>Click Print / Save as PDF and choose "Save as PDF" in your browser's print dialog.</li>
   </ol>
 
@@ -463,6 +494,60 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   var itemsBody = document.getElementById("invItemsBody");
   var currencySelect = document.getElementById("invCurrency");
   var saveTimer = null;
+  var currentLogoDataUrl = "";
+  var logoInput = document.getElementById("invLogoInput");
+  var logoPreview = document.getElementById("invLogoPreview");
+  var logoUploadLabel = document.getElementById("logoUploadLabel");
+  var removeLogoBtn = document.getElementById("removeLogoBtn");
+
+  function setLogo(dataUrl) {
+    currentLogoDataUrl = dataUrl || "";
+    if (currentLogoDataUrl) {
+      logoPreview.src = currentLogoDataUrl;
+      logoPreview.classList.remove("hidden");
+      logoUploadLabel.classList.add("hidden");
+      removeLogoBtn.classList.remove("hidden");
+    } else {
+      logoPreview.src = "";
+      logoPreview.classList.add("hidden");
+      logoUploadLabel.classList.remove("hidden");
+      removeLogoBtn.classList.add("hidden");
+    }
+  }
+
+  function compressLogo(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var img = new Image();
+      img.onload = function() {
+        var maxW = 320;
+        var scale = Math.min(1, maxW / img.width);
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        callback(canvas.toDataURL("image/png"));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  logoInput.addEventListener("change", function() {
+    var file = logoInput.files && logoInput.files[0];
+    if (!file) return;
+    compressLogo(file, function(dataUrl) {
+      setLogo(dataUrl);
+      scheduleSave();
+    });
+    logoInput.value = "";
+  });
+
+  removeLogoBtn.addEventListener("click", function() {
+    setLogo("");
+    scheduleSave();
+  });
 
   Object.keys(CURRENCIES).forEach(function(code) {
     var opt = document.createElement("option");
@@ -480,13 +565,14 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     return currencySymbol() + n.toFixed(2);
   }
 
-  function makeLineRow(desc, qty, rate) {
+  function makeLineRow(desc, qty, rate, exempt) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td><input type="text" class="line-desc" placeholder="Item or service description" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
-      '<td class="col-qty"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
-      '<td class="col-rate"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
-      '<td class="col-amount"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
+      '<td data-label="Description"><input type="text" class="line-desc" placeholder="Item or service description" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
+      '<td class="col-qty" data-label="Qty"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
+      '<td class="col-rate" data-label="Rate"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
+      '<td class="col-tax-exempt" data-label="Tax Free"><input type="checkbox" class="line-tax-exempt"' + (exempt ? " checked" : "") + '></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
       '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
     itemsBody.appendChild(tr);
     wireRow(tr);
@@ -498,16 +584,24 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
+  function updateRemoveButtons() {
+    var onlyOne = itemsBody.children.length <= 1;
+    itemsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
   function wireRow(tr) {
     tr.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
       el.addEventListener("input", function() { updateRowAmount(tr); recalcTotals(); scheduleSave(); });
     });
+    tr.querySelector(".line-tax-exempt").addEventListener("change", function() { recalcTotals(); scheduleSave(); });
     tr.querySelector(".line-remove-btn").addEventListener("click", function() {
       if (itemsBody.children.length <= 1) { return; }
       tr.remove();
+      updateRemoveButtons();
       recalcTotals();
       scheduleSave();
     });
+    updateRemoveButtons();
   }
 
   function updateRowAmount(tr) {
@@ -518,8 +612,11 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
   function recalcTotals() {
     var subtotal = 0;
+    var taxableSubtotal = 0;
     itemsBody.querySelectorAll("tr").forEach(function(tr) {
-      subtotal += parseFloat(tr.querySelector(".line-amount").value) || 0;
+      var amount = parseFloat(tr.querySelector(".line-amount").value) || 0;
+      subtotal += amount;
+      if (!tr.querySelector(".line-tax-exempt").checked) taxableSubtotal += amount;
     });
 
     var discountType = document.getElementById("invDiscountType").value;
@@ -529,13 +626,17 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
     var afterDiscount = subtotal - discountAmount;
 
+    // Spread the discount across taxable/tax-free items in proportion to
+    // their share of the subtotal, so tax is only computed on the taxable
+    // share - same approach app.html uses for per-item tax exemption.
+    var taxableRatio = subtotal > 0 ? taxableSubtotal / subtotal : 0;
+    var taxableAfterDiscount = afterDiscount * taxableRatio;
+
     var taxType = document.getElementById("invTaxType").value;
     var taxValue = parseFloat(document.getElementById("invTaxValue").value) || 0;
-    var taxAmount = taxType === "percent" ? afterDiscount * (taxValue / 100) : taxValue;
+    var taxAmount = taxType === "percent" ? taxableAfterDiscount * (taxValue / 100) : taxableRatio * taxValue;
 
-    var shipping = parseFloat(document.getElementById("invShippingValue").value) || 0;
-
-    var total = afterDiscount + taxAmount + shipping;
+    var total = afterDiscount + taxAmount;
     var paid = parseFloat(document.getElementById("invAmountPaid").value) || 0;
     var balance = total - paid;
 
@@ -555,13 +656,15 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       items.push({
         desc: tr.querySelector(".line-desc").value,
         qty: tr.querySelector(".line-qty").value,
-        rate: tr.querySelector(".line-rate").value
+        rate: tr.querySelector(".line-rate").value,
+        exempt: tr.querySelector(".line-tax-exempt").checked
       });
     });
     return {
       title: document.getElementById("invTitle").value,
       number: document.getElementById("invNumber").value,
       currency: currencySelect.value,
+      logo: currentLogoDataUrl,
       from: document.getElementById("invFrom").value,
       to: document.getElementById("invTo").value,
       date: document.getElementById("invDate").value,
@@ -573,7 +676,6 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       discountValue: document.getElementById("invDiscountValue").value,
       taxType: document.getElementById("invTaxType").value,
       taxValue: document.getElementById("invTaxValue").value,
-      shipping: document.getElementById("invShippingValue").value,
       amountPaid: document.getElementById("invAmountPaid").value,
       notes: document.getElementById("invNotes").value,
       termsText: document.getElementById("invTermsText").value
@@ -595,6 +697,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     document.getElementById("invTitle").value = state.title || "INVOICE";
     document.getElementById("invNumber").value = state.number || "";
     currencySelect.value = state.currency || "USD";
+    setLogo(state.logo || "");
     document.getElementById("invFrom").value = state.from || "";
     document.getElementById("invTo").value = state.to || "";
     document.getElementById("invDate").value = state.date || todayIso();
@@ -605,14 +708,13 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     document.getElementById("invDiscountValue").value = state.discountValue || 0;
     document.getElementById("invTaxType").value = state.taxType || "percent";
     document.getElementById("invTaxValue").value = state.taxValue || 0;
-    document.getElementById("invShippingValue").value = state.shipping || 0;
     document.getElementById("invAmountPaid").value = state.amountPaid || 0;
     document.getElementById("invNotes").value = state.notes || "";
     document.getElementById("invTermsText").value = state.termsText || "";
 
     itemsBody.innerHTML = "";
-    var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: 0 }];
-    items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate); });
+    var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: 0, exempt: false }];
+    items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate, it.exempt); });
     recalcTotals();
   }
 
@@ -632,7 +734,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     document.getElementById(id).addEventListener("input", scheduleSave);
   });
 
-  ["invDiscountType", "invDiscountValue", "invTaxType", "invTaxValue", "invShippingValue", "invAmountPaid"].forEach(function(id) {
+  ["invDiscountType", "invDiscountValue", "invTaxType", "invTaxValue", "invAmountPaid"].forEach(function(id) {
     var el = document.getElementById(id);
     el.addEventListener("input", function() { recalcTotals(); scheduleSave(); });
     el.addEventListener("change", function() { recalcTotals(); scheduleSave(); });

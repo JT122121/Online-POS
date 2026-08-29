@@ -729,17 +729,46 @@ opens it, via `window.open(...)` in a **new tab** rather than in-place
 navigation - a cashier mid-sale shouldn't risk losing their unsaved cart
 by clicking it. It's also directly reachable/shareable on its own
 (indexable, in `sitemap.xml`) as a free tool independent of the POS app.
+The page's own `<h1>` reads **"Create Invoice"**, matching the header
+button's label exactly (the `<title>`/meta description still lead with
+"Free Invoice Generator" for its SEO search-term value, but the visible
+on-page heading and the button that links to it now say the same thing).
 - **No dependency on `app.html`'s data** - deliberately simple/decoupled:
   plain manual-entry fields (business name/address typed directly, no
-  pulling from the POS's own Store Settings/logo), matching the
-  reference tool's own approach. A closer integration (e.g. prefilling
-  Bill From from the POS's store settings) is a reasonable future
-  enhancement, not done here.
-- **Line items, tax, discount, shipping, amount paid, and balance due**
-  are computed client-side (`recalcTotals()`) - discount/tax each have a
+  pulling from the POS's own Store Settings), matching the reference
+  tool's own approach. A closer integration (e.g. prefilling Bill From
+  from the POS's store settings) is a reasonable future enhancement,
+  not done here. It has its **own** logo upload though (`invLogoInput`)
+  - unrelated to `app.html`'s separate Premium-gated logo, since this
+  page has no concept of Premium/unlocking. A selected image is
+  downsized client-side via canvas (max 320px wide, matching the
+  compression approach `app.html` already uses for product photos) and
+  stored as a data URL in the autosaved draft (`state.logo`); `setLogo()`
+  toggles the upload button/preview/remove-button visibility. **No
+  Shipping field** - removed after initial feedback that it wasn't
+  needed.
+- **Line items, tax, discount, amount paid, and balance due** are
+  computed client-side (`recalcTotals()`) - discount/tax each have a
   Percent/Flat toggle (`invDiscountType`/`invTaxType`), mirroring
-  `app.html`'s own `discountType` terminology for consistency, though
-  the two features are otherwise unrelated.
+  `app.html`'s own `discountType` terminology for consistency. Each
+  line item also has its own **Tax Free checkbox** (`.line-tax-exempt`),
+  and the discount-then-tax math mirrors `app.html`'s own per-item
+  `taxExempt` handling exactly: the discount is spread proportionally
+  across taxable vs. tax-free line totals before tax is computed on the
+  taxable share only (see `computeTotalsFromItems` in
+  `modules/receipt.js` for the app-side equivalent).
+- **Mobile line-item layout bug (fixed)** - the responsive stacked-row
+  CSS (`@media (max-width: 720px)`) originally lost to the desktop
+  `.col-qty`/`.col-rate`/`.col-amount` column-width rules on
+  specificity (`.items-table .col-qty` beats the plain-element mobile
+  override), squeezing every field into a ~90px box with no visible
+  label - reported as "line items not working." Fixed with `!important`
+  on the mobile override plus `data-label` attributes on each `<td>`
+  (rendered via a `::before` pseudo-element) so each field is labeled once
+  the table header is hidden on small screens. Also switched
+  `.items-table input` from a transparent default border to a visible
+  one, matching every other input on the page, so fields don't look
+  inert before hover/focus.
 - **PDF export reuses the exact technique `app.html` already uses for
   receipts** - a plain `window.print()` call plus `@media print` CSS
   (turning every input/textarea/select borderless so the printed page
