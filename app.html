@@ -306,6 +306,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .toggle-row.compact .toggle-label { font-size: 12.5px; }
 .toggle-label { font-size: 13px; font-weight: 600; color: var(--ink); }
 .info-btn { background: transparent; border: 0; padding: 0 0 0 2px; font-size: 12px; line-height: 1; cursor: pointer; vertical-align: -1px; opacity: .7; }
+.scanner-icon { width: 15px; height: 15px; vertical-align: -2px; }
 .info-btn:hover { opacity: 1; }
 .toggle-sublabel { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
 .toggle-switch { position: relative; width: 44px; height: 25px; flex-shrink: 0; }
@@ -526,7 +527,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
     </div>
     <div class="toggle-row compact">
-      <div class="toggle-label">🔫 <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
+      <div class="toggle-label"><svg class="scanner-icon" viewBox="0 0 322.943532 322.528573" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(-104.000000,347.528573) scale(0.100000,-0.100000)" fill="currentColor" stroke="none"><path d="M2880 3466 c-117 -24 -301 -68 -415 -100 -27 -8 -255 -65 -505 -127 -481 -119 -503 -127 -536 -191 -18 -35 -15 -67 21 -248 3 -14 7 -41 10 -60 4 -19 10 -53 15 -75 5 -22 21 -105 36 -185 14 -80 32 -161 39 -180 13 -38 65 -79 124 -99 20 -7 45 -16 56 -22 28 -13 236 -83 325 -109 41 -12 86 -26 100 -30 14 -5 41 -12 60 -15 19 -4 49 -11 65 -15 54 -16 198 -49 285 -65 47 -8 108 -20 135 -25 113 -23 225 -35 318 -35 l98 0 10 -38 c15 -55 -5 -143 -57 -259 -57 -127 -60 -184 -12 -228 18 -17 55 -36 83 -44 175 -50 227 -56 275 -31 32 17 106 124 140 205 30 73 69 208 71 245 l1 30 10 -35 c6 -19 8 -86 5 -150 -9 -242 -113 -424 -229 -406 -18 3 -57 8 -86 11 l-53 6 8 -78 c14 -137 10 -179 -23 -225 -16 -22 -47 -50 -69 -63 -62 -34 -88 -78 -83 -146 8 -111 179 -359 282 -408 39 -19 60 -21 287 -21 285 0 310 5 392 80 80 73 160 221 192 355 19 78 19 282 1 379 -8 41 -29 121 -46 178 -17 57 -42 139 -55 183 -13 44 -39 134 -59 200 -84 286 -116 466 -116 655 0 187 40 358 96 411 13 12 35 41 48 63 22 39 24 54 30 276 8 270 5 285 -71 327 -47 26 -211 54 -458 79 -82 8 -193 19 -245 25 -166 17 -428 19 -500 5z m-950 -672 c47 -8 128 -24 180 -34 52 -10 115 -22 140 -25 25 -4 61 -11 80 -15 19 -5 87 -19 150 -30 63 -12 147 -28 187 -36 40 -8 80 -14 90 -14 10 0 24 -4 31 -8 12 -8 38 -134 67 -327 8 -49 17 -105 21 -122 5 -27 3 -33 -10 -33 -25 0 -182 28 -333 60 -210 44 -538 137 -694 198 l-66 25 -27 146 c-15 80 -31 165 -37 188 -16 74 -18 72 64 57 39 -8 110 -21 157 -30z"/><path d="M1040 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M1410 940 l0 -440 65 0 65 0 0 440 0 440 -65 0 -65 0 0 -440z"/><path d="M1660 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M2030 940 l0 -440 68 0 67 0 0 440 0 440 -67 0 -68 0 0 -440z"/></g></svg> <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
         <button type="button" class="info-btn" onclick="openBarcodeScannerInfo()" title="How it works" aria-label="How it works">ℹ️</button>
       </div>
       <label class="toggle-switch">
