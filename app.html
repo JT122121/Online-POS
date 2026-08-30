@@ -281,7 +281,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 
 .premium-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
 .basic-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
-.special-access-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #1a5c7a; background: #e3f2fa; border: 1px solid #b8e0f0; padding: 2px 7px; border-radius: 999px; vertical-align: middle; margin-left: 4px; }
 .logo-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
 .logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
 .logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -462,7 +461,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <img src="favicon.png" alt="">
 </div>
 <div>
-<h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span> <span class="special-access-badge hidden" id="specialAccessBadge"></span></h1>
+<h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span></h1>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
 </div>
@@ -502,14 +501,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 </div>
 </header>
-
-<div id="premiumPromoNotice" class="backup-notice hidden">
-<div class="bn-text">🎁 <span id="premiumPromoNoticeText">Activate Your Free Premium Now</span></div>
-<div class="bn-actions">
-<button type="button" class="bn-backup-btn" onclick="activateFreePremiumFromNotice()" id="premiumPromoNoticeButton">Activate</button>
-<button type="button" class="bn-dismiss-btn" onclick="dismissPremiumPromoNotice()" aria-label="Dismiss">×</button>
-</div>
-</div>
 
 <div id="backupNotice" class="backup-notice hidden">
 <div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.</span></div>
@@ -1048,19 +1039,12 @@ Website: Goonlinepos.com</textarea>
         <!-- OFFLINE-STRIP:CLOUD-SYNC-SECTION:START -->
         <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
           <label><span id="cloudSyncTitle">Cloud Sync</span> <span class="premium-badge" id="premiumBadgeCloudSync">Premium</span></label>
-          <div class="info" id="cloudSyncInfo" style="display:block;">Optional - sign in with Google to back up your data to the cloud and restore it on any device. Needs a purchased Premium code (the free PROMO1 code doesn't unlock it).</div>
-          <div id="cloudSyncLockMsg" class="error-text hidden">🔒 <span id="cloudSyncLockMsgText">This is a Premium feature and needs a purchased Premium code - the free PROMO1 code doesn't unlock it. Activate a purchased code in Settings → Premium to use Cloud Sync.</span></div>
+          <div class="info" id="cloudSyncInfo" style="display:block;">Optional - back up your data to the cloud and restore it on any device you sign in on.</div>
+          <div id="cloudSyncLockMsg" class="error-text hidden">🔒 <span id="cloudSyncLockMsgText">This is a Premium feature. Sign in and redeem a code in Settings → Premium to use Cloud Sync.</span></div>
           <div id="cloudSyncUnlockedContent" class="hidden">
-            <div id="cloudSyncSignedOut">
-              <button type="button" class="small-btn" onclick="cloudSignIn()" style="width:100%; margin-top:12px;">🔵 <span id="cloudSyncSignInButton">Sign in with Google</span></button>
-            </div>
-            <div id="cloudSyncSignedIn" class="hidden">
-              <div class="info" style="display:block; margin-top:12px;"><span id="cloudSyncSignedInAs">Signed in as</span> <strong id="cloudSyncEmail"></strong></div>
-              <button type="button" class="small-btn" id="cloudSyncBackupButton" onclick="cloudBackupNow()" style="width:100%; margin-top:8px;">☁ <span id="cloudSyncBackupButtonLabel">Backup to Cloud</span></button>
-              <button type="button" class="small-btn" id="cloudSyncRestoreButton" onclick="cloudRestoreNow()" style="width:100%; margin-top:8px;">☁ <span id="cloudSyncRestoreButtonLabel">Restore from Cloud</span></button>
-              <button type="button" class="small-btn" onclick="cloudSignOut()" style="width:100%; margin-top:8px;"><span id="cloudSyncSignOutButton">Sign Out</span></button>
-            </div>
-            <div id="cloudSyncError" class="error-text hidden"></div>
+            <button type="button" class="small-btn" id="cloudSyncBackupButton" onclick="cloudBackupNow()" style="width:100%; margin-top:12px;">☁ <span id="cloudSyncBackupButtonLabel">Backup to Cloud</span></button>
+            <button type="button" class="small-btn" id="cloudSyncRestoreButton" onclick="cloudRestoreNow()" style="width:100%; margin-top:8px;">☁ <span id="cloudSyncRestoreButtonLabel">Restore from Cloud</span></button>
+            <div id="cloudSyncError" class="error-text hidden" style="margin-top:8px;"></div>
           </div>
         </div>
         <!-- OFFLINE-STRIP:CLOUD-SYNC-SECTION:END -->
@@ -1076,26 +1060,30 @@ Website: Goonlinepos.com</textarea>
       </div>
 
       <div class="settings-panel-content" id="panel-premium">
-        <h3 id="premiumPanelTitle">Premium</h3>
-        <div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory - stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>
+        <!-- OFFLINE-SWAP:PREMIUM-PANEL:START -->
+        <h3 id="accountPanelTitle">Account &amp; Subscription</h3>
+        <div class="info" id="accountPanelInfo" style="display:block;">Sign in with Google to get a free account, then redeem a code to unlock Premium features - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, Inventory, and Cloud Sync.</div>
 
-        <div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">
-          ✅ <span id="premiumActiveLabel">Premium is active on this device.</span>
-          <a href="#" onclick="openPremiumCodeEdit(); return false;" id="premiumChangeCodeLink" style="margin-left:6px;"><span id="premiumChangeCodeLabel">Change code</span></a>
+        <div id="accountSignedOut">
+          <button type="button" class="small-btn" onclick="signInWithGoogle()" style="width:100%; margin-top:12px;">🔵 <span id="accountSignInButton">Sign in with Google</span></button>
+          <div id="accountError" class="error-text hidden" style="margin-top:8px;"></div>
         </div>
-        <div id="premiumValidityText" class="info hidden" style="margin-top:8px;"></div>
 
-        <div id="premiumCodeForm">
-          <label id="premiumCodeLabel">Premium Code</label>
-          <select id="premiumCodeSelect" onchange="handlePremiumCodeSelectChange()" style="width:100%; margin-bottom:8px;">
-            <!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START --><option value="PROMO1" id="premiumCodeDefaultOption">PROMO1 (default)</option><!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:END -->
-            <option value="__other__" id="premiumCodeOtherOption">Enter a different code...</option>
-          </select>
-          <input id="premiumCodeInput" type="text" placeholder="Enter code" class="hidden" style="width:100%; margin-bottom:8px;">
-          <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="width:100%;">Activate</button>
-          <button type="button" class="small-btn hidden" onclick="cancelPremiumCodeEdit()" id="premiumCancelEditBtn" style="width:100%; margin-top:8px; background:transparent; color:var(--ink-soft);"><span id="premiumCancelEditLabel">Cancel</span></button>
-          <div id="premiumCodeError" class="error-text hidden"></div>
+        <div id="accountSignedIn" class="hidden">
+          <div class="info" style="display:block; margin-top:12px;"><span id="accountSignedInAs">Signed in as</span> <strong id="accountEmail"></strong></div>
+
+          <div id="accountStatusFree" class="info hidden" style="display:block; margin-top:8px;"><span id="accountStatusFreeText">Your subscription: Free</span></div>
+          <div id="accountStatusPremium" class="success-text hidden" style="margin-top:8px;">✅ <span id="accountStatusPremiumText">Your subscription: Premium</span> <span id="accountPremiumUntil"></span></div>
+
+          <label id="redeemCodeLabel" style="margin-top:16px;">Redeem Code</label>
+          <input id="redeemCodeInput" type="text" placeholder="Enter code" style="width:100%; margin-bottom:8px;">
+          <button type="button" class="small-btn" id="redeemCodeButton" onclick="redeemCodeNow()" style="width:100%;"><span id="redeemCodeButtonLabel">Redeem</span></button>
+          <div id="redeemCodeError" class="error-text hidden" style="margin-top:8px;"></div>
+          <div id="redeemCodeSuccess" class="success-text hidden" style="margin-top:8px;"></div>
+
+          <button type="button" class="small-btn" onclick="signOutAccount()" style="width:100%; margin-top:16px; background:transparent; color:var(--ink-soft);"><span id="accountSignOutButton">Sign Out</span></button>
         </div>
+        <!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->
 
         <!-- OFFLINE-STRIP:BUY-PREMIUM-BUTTON:START -->
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
@@ -1162,8 +1150,8 @@ Website: Goonlinepos.com</textarea>
     <div style="font-family:var(--font-display); font-size:28px; font-weight:700; margin-bottom:4px;" id="buyPremiumPrice">$9.99 USD</div>
     <div style="font-size:12.5px; color:var(--ink-soft); margin-bottom:16px;" id="buyPremiumPriceNote">One-time payment</div>
     <ul style="margin:0 0 18px; padding-left:20px; font-size:13.5px; line-height:1.9;">
-      <li id="buyPremiumFeature1">No expiration</li>
-      <li id="buyPremiumFeature2">Up to 5 active browsers</li>
+      <li id="buyPremiumFeature1">Redeem to extend your subscription</li>
+      <li id="buyPremiumFeature2">Works on any device you sign in on</li>
       <li id="buyPremiumFeature3">Non-refundable</li>
     </ul>
     <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0;" id="buyPremiumContactText">To purchase a code, <a href="contact" target="_blank" rel="noopener">contact us</a> and we'll get you set up.</p>
@@ -1302,7 +1290,7 @@ Website: Goonlinepos.com</textarea>
 <script src="modules/translations.js"></script>
 <script src="modules/usb-scanner.js"></script>
 <script src="modules/receipt.js"></script>
-<!-- OFFLINE-STRIP:CLOUD-SYNC-SCRIPT:START --><script src="vendor/supabase.min.js"></script><script src="modules/cloud-sync.js"></script><!-- OFFLINE-STRIP:CLOUD-SYNC-SCRIPT:END -->
+<!-- OFFLINE-STRIP:ACCOUNT-SCRIPT:START --><script src="vendor/supabase.min.js"></script><script src="modules/account.js"></script><script src="modules/cloud-sync.js"></script><!-- OFFLINE-STRIP:ACCOUNT-SCRIPT:END -->
 <!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:START --><script src="modules/offline-builder.js"></script><!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:END -->
 <script>
 
@@ -1641,169 +1629,12 @@ async function loadSalesHistory() {
 async function saveSalesHistoryToStorage() { await storageSet("pos-sales-history", JSON.stringify(salesHistory)); }
 let premiumUnlocked = false;
 
-async function loadPremiumStatus() {
-  const raw = await storageGet("pos-premium-unlocked");
-  if (raw === null) {
-    await autoGrantDefaultPremium();
-    renderPremiumStatus();
-    renderPremiumValidity();
-    applyPremiumLocks();
-    refreshPremiumPromoNotice();
-    return;
-  }
-  premiumUnlocked = raw === "1";
-  renderPremiumStatus();
-  renderPremiumValidity();
-  applyPremiumLocks();
-  refreshPremiumPromoNotice();
-  /* OFFLINE-STRIP:HEARTBEAT:START */
-  if (premiumUnlocked) heartbeatPremiumCode();
-  /* OFFLINE-STRIP:HEARTBEAT:END */
-}
-
-function handlePremiumCodeSelectChange() {
-  const select = document.getElementById("premiumCodeSelect");
-  const input = document.getElementById("premiumCodeInput");
-  const isOther = select.value === "__other__";
-  input.classList.toggle("hidden", !isOther);
-  if (isOther) input.focus();
-}
-
-function getEnteredPremiumCode() {
-  const select = document.getElementById("premiumCodeSelect");
-  if (select && select.value !== "__other__") return select.value;
-  const input = document.getElementById("premiumCodeInput");
-  return input ? input.value.trim().toUpperCase() : "";
-}
-
-let premiumEditMode = false;
-function openPremiumCodeEdit() {
-  premiumEditMode = true;
-  const select = document.getElementById("premiumCodeSelect");
-  if (select) { select.selectedIndex = 0; handlePremiumCodeSelectChange(); }
-  document.getElementById("premiumCodeError").classList.add("hidden");
-  renderPremiumStatus();
-}
-function cancelPremiumCodeEdit() {
-  premiumEditMode = false;
-  document.getElementById("premiumCodeError").classList.add("hidden");
-  renderPremiumStatus();
-}
-
-async function unlockPremiumLocally(code, validity) {
-  premiumUnlocked = true;
-  premiumEditMode = false;
-  await storageSet("pos-premium-unlocked", "1");
-  await storageSet("pos-premium-code-used", code);
-  await storageSet("pos-premium-validity", validity || "");
-  const input = document.getElementById("premiumCodeInput");
-  if (input) input.value = "";
-  renderPremiumStatus();
-  renderPremiumValidity();
-  applyPremiumLocks();
-  refreshPremiumPromoNotice();
-}
-
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:START */
-const PREMIUM_VALIDATION_URL = "https://script.google.com/macros/s/AKfycbxotcNNc3ggLJTrcu1vMl3DRScH7G4iXbhNJAAlMs7GC48Y1RsbmZBTH24TGGwKpYtsQQ/exec";
-
-async function getDeviceId() {
-  let id = await storageGet("pos-device-id");
-  if (!id) {
-    id = (typeof crypto !== "undefined" && crypto.randomUUID)
-      ? crypto.randomUUID()
-      : "dev-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
-    await storageSet("pos-device-id", id);
-  }
-  return id;
-}
-
-async function checkPremiumCode(code) {
-  const deviceId = await getDeviceId();
-  const url = PREMIUM_VALIDATION_URL + "?code=" + encodeURIComponent(code) + "&deviceId=" + encodeURIComponent(deviceId);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return res.json();
-}
-
-const DEFAULT_PREMIUM_CODE = "PROMO1";
-
-async function activatePremiumCode() {
-  const errorBox = document.getElementById("premiumCodeError");
-  const activateBtn = document.getElementById("premiumActivateBtn");
-  errorBox.classList.add("hidden");
-  const entered = getEnteredPremiumCode();
-  if (!entered) { errorBox.textContent = tr("premiumCodeInvalid"); errorBox.classList.remove("hidden"); return; }
-
-  activateBtn.disabled = true;
-  try {
-    const result = await checkPremiumCode(entered);
-    if (result && result.ok) {
-      await unlockPremiumLocally(entered, result.validity || "");
-    } else if (result && result.reason === "seat_limit") {
-      errorBox.textContent = tr("premiumCodeSeatLimit");
-      errorBox.classList.remove("hidden");
-    } else if (result && result.reason === "expired") {
-      errorBox.textContent = tr("premiumCodeExpired");
-      errorBox.classList.remove("hidden");
-    } else {
-      errorBox.textContent = tr("premiumCodeInvalid");
-      errorBox.classList.remove("hidden");
-    }
-  } catch (e) {
-    if (entered === DEFAULT_PREMIUM_CODE) {
-      await unlockPremiumLocally(entered, "");
-    } else {
-      errorBox.textContent = tr("premiumCodeNetworkError");
-      errorBox.classList.remove("hidden");
-    }
-  } finally {
-    activateBtn.disabled = false;
-  }
-}
-
-async function autoGrantDefaultPremium() {
-  try {
-    const result = await checkPremiumCode(DEFAULT_PREMIUM_CODE);
-    if (result && result.ok) {
-      await unlockPremiumLocally(DEFAULT_PREMIUM_CODE, result.validity || "");
-    }
-  } catch (e) {
-    await unlockPremiumLocally(DEFAULT_PREMIUM_CODE, "");
-  }
-}
-
-async function heartbeatPremiumCode() {
-  try {
-    const code = await storageGet("pos-premium-code-used");
-    if (!code) return;
-    const result = await checkPremiumCode(code);
-    if (result && result.ok && result.validity) await storageSet("pos-premium-validity", result.validity);
-  } catch (e) {}
+async function initPremiumSystem() {
+  await initAccount();
 }
 /* OFFLINE-SWAP:PREMIUM-ACTIVATION:END */
 
-function renderPremiumStatus() {
-  const statusBox = document.getElementById("premiumStatusBox");
-  const form = document.getElementById("premiumCodeForm");
-  const cancelBtn = document.getElementById("premiumCancelEditBtn");
-  if (!statusBox || !form) return;
-  const editing = premiumUnlocked && premiumEditMode;
-  statusBox.classList.toggle("hidden", !premiumUnlocked || editing);
-  form.classList.toggle("hidden", premiumUnlocked && !editing);
-  if (cancelBtn) cancelBtn.classList.toggle("hidden", !editing);
-}
-async function renderPremiumValidity() {
-  const el = document.getElementById("premiumValidityText");
-  if (!el) return;
-  const validity = await storageGet("pos-premium-validity");
-  if (validity) {
-    el.textContent = tr("premiumValidityLabel") + " " + validity;
-    el.classList.remove("hidden");
-  } else {
-    el.classList.add("hidden");
-  }
-}
 function applyPremiumLocks() {
   const logoInput = document.getElementById("logoFileInput");
   if (logoInput) logoInput.disabled = !premiumUnlocked;
@@ -1835,7 +1666,10 @@ function applyPremiumLocks() {
   const offlineLockMsg = document.getElementById("offlineLockMsg");
   if (offlineLockMsg) offlineLockMsg.classList.toggle("hidden", premiumUnlocked);
 
-  if (typeof refreshCloudSyncLock === "function") refreshCloudSyncLock();
+  const cloudSyncLockMsg = document.getElementById("cloudSyncLockMsg");
+  const cloudSyncContent = document.getElementById("cloudSyncUnlockedContent");
+  if (cloudSyncLockMsg) cloudSyncLockMsg.classList.toggle("hidden", premiumUnlocked);
+  if (cloudSyncContent) cloudSyncContent.classList.toggle("hidden", !premiumUnlocked);
 
   renderAppTitleBadge();
 }
@@ -1845,13 +1679,6 @@ async function renderAppTitleBadge() {
     badge.textContent = premiumUnlocked ? tr("premiumBadgeLabel") : tr("basicBadgeLabel");
     badge.classList.toggle("premium-badge", premiumUnlocked);
     badge.classList.toggle("basic-badge", !premiumUnlocked);
-  }
-  const specialBadge = document.getElementById("specialAccessBadge");
-  if (specialBadge) {
-    const codeUsed = premiumUnlocked ? await storageGet("pos-premium-code-used") : null;
-    const isSpecialAccess = codeUsed === "PROMO1";
-    specialBadge.textContent = isSpecialAccess ? tr("specialAccessBadge") : "";
-    specialBadge.classList.toggle("hidden", !isSpecialAccess);
   }
 }
 
@@ -2607,27 +2434,6 @@ async function loadBackupNoticeState() {
 async function dismissBackupNotice() {
   document.getElementById("backupNotice").classList.add("hidden");
   await storageSet("pos-backup-notice-dismissed", "1");
-}
-
-async function refreshPremiumPromoNotice() {
-  const notice = document.getElementById("premiumPromoNotice");
-  if (!notice) return;
-  if (premiumUnlocked) { notice.classList.add("hidden"); return; }
-  const dismissed = await storageGet("pos-premium-promo-dismissed");
-  const defaultOption = document.getElementById("premiumCodeDefaultOption");
-  const hasDefaultCode = !!(defaultOption && defaultOption.value);
-  notice.classList.toggle("hidden", !!dismissed || !hasDefaultCode);
-}
-async function dismissPremiumPromoNotice() {
-  document.getElementById("premiumPromoNotice").classList.add("hidden");
-  await storageSet("pos-premium-promo-dismissed", "1");
-}
-async function activateFreePremiumFromNotice() {
-  document.getElementById("settingsOverlay").classList.remove("hidden");
-  selectSettingsTab("premium");
-  const select = document.getElementById("premiumCodeSelect");
-  if (select) { select.selectedIndex = 0; handlePremiumCodeSelectChange(); }
-  await activatePremiumCode();
 }
 
 function buildSalesExportRows(list) {
@@ -3450,7 +3256,6 @@ function changeLanguage() {
     cloudSyncSignInButton: "cloudSyncSignInButton", cloudSyncSignedInAs: "cloudSyncSignedInAs", cloudSyncSignOutButton: "cloudSyncSignOutButton",
     cloudSyncBackupButtonLabel: "cloudSyncBackupButton", cloudSyncRestoreButtonLabel: "cloudSyncRestoreButton",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
-    premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", createBarcodeShortcutLabel: "createBarcodeShortcutLabel", createVatShortcutLabel: "createVatShortcutLabel", createPricingShortcutLabel: "createPricingShortcutLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
@@ -3468,7 +3273,9 @@ function changeLanguage() {
     salesExportFromLabel: "salesExportFromLabel", salesExportToLabel: "salesExportToLabel",
     premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
     premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
-    premiumChangeCodeLabel: "premiumChangeCodeLabel", premiumCancelEditLabel: "offlineCancelBtnLabel",
+    accountPanelTitle: "accountPanelTitle", accountPanelInfo: "accountPanelInfo", accountSignInButton: "accountSignInButton",
+    accountSignedInAs: "accountSignedInAs", accountStatusFreeText: "accountStatusFreeText", accountStatusPremiumText: "accountStatusPremiumText",
+    redeemCodeLabel: "redeemCodeLabel", redeemCodeButtonLabel: "redeemCodeButton", accountSignOutButton: "accountSignOutButton",
     logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
     buyPremiumButtonLabel: "buyPremiumButtonLabel", buyPremiumModalTitle: "buyPremiumModalTitle", buyPremiumPrice: "buyPremiumPrice", buyPremiumPriceNote: "buyPremiumPriceNote",
@@ -3515,11 +3322,6 @@ function changeLanguage() {
   const offlineProgress = document.getElementById("offlineDownloadProgress");
   if (offlineProgress) offlineProgress.textContent = tr("offlineDownloadPreparing");
 
-  const defaultCodeOption = document.getElementById("premiumCodeDefaultOption");
-  if (defaultCodeOption) defaultCodeOption.textContent = defaultCodeOption.value + " (" + tr("premiumCodeDefaultLabel") + ")";
-  const otherCodeOption = document.getElementById("premiumCodeOtherOption");
-  if (otherCodeOption) otherCodeOption.textContent = tr("premiumCodeOtherOption");
-
   const dt = document.getElementById("documentType");
   if (dt) {
     dt.options[0].textContent = tr("receipt");
@@ -3544,7 +3346,7 @@ function changeLanguage() {
   renderSalesHistoryPanel();
   renderCashierSelect();
   renderInventoryList();
-  renderPremiumValidity();
+  if (typeof renderPremiumStatus === "function") renderPremiumStatus();
   renderAppTitleBadge();}
 
 function escapeHtml(text) {
@@ -3566,9 +3368,8 @@ async function init() {
   await loadSalesHistory();
   await loadBackupNoticeState();
   await loadReceiptPrefix();
-  await loadPremiumStatus();
   await loadPanelSplit();
-  if (typeof initCloudSync === "function") await initCloudSync();
+  await initPremiumSystem();
   await startFirstSale();
   changePaperSize();
   updateZoom();
