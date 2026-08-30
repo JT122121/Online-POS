@@ -1,5 +1,5 @@
 var OWNER_EMAIL = "REPLACE_WITH_YOUR_EMAIL@example.com";
-var OTP_TTL_SECONDS = 600;
+var OTP_TTL_SECONDS = 60;
 var RESEND_COOLDOWN_SECONDS = 60;
 var MAX_VERIFY_ATTEMPTS = 5;
 
@@ -104,7 +104,7 @@ function sendOtpEmail(toEmail, name, otp) {
     "Thanks for reaching out to GoOnlinePOS.com! To keep spam out of our inbox, we just need to confirm it's really you before your message goes through.\n\n" +
     "Your verification code is:\n\n" +
     "    " + otp + "\n\n" +
-    "Enter this code on the contact page to send your message. It expires in 10 minutes.\n\n" +
+    "Enter this code on the contact page to send your message. It expires in 1 minute.\n\n" +
     "If you didn't request this, you can safely ignore this email - no message will be sent without the code.\n\n" +
     "- GoOnlinePOS.com\n\n" +
     "This is an automated message. Please do not reply directly to this email.";
