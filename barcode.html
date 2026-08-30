@@ -158,8 +158,6 @@ img { max-width: 100%; display: block; }
 .type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
 .type-tab:hover { border-color: #cfccbf; }
 .type-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
-.type-tabs.small { margin-bottom: 12px; }
-.type-tabs.small .type-tab { flex: 0 0 auto; font-size: 12.5px; padding: 7px 16px; }
 
 .field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .field-input, select.field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
@@ -181,13 +179,6 @@ img { max-width: 100%; display: block; }
 .hidden { display: none !important; }
 
 .center-content-block { background: #fafaf7; border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 14px; margin: 0 0 16px; }
-.logo-upload-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px dashed var(--line); padding: 9px 14px; border-radius: var(--radius-sm); cursor: pointer; }
-.logo-upload-label:hover { background: #fff; border-color: #cfccbf; }
-.hidden-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
-.logo-preview { max-width: 60px; max-height: 60px; object-fit: contain; border-radius: 6px; display: inline-block; vertical-align: middle; margin-right: 8px; border: 1px solid var(--line); background: #fff; }
-.remove-logo-btn { border: none; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
-.remove-logo-btn:hover { background: #fbe9e7; color: #b3261e; }
-.logo-preview.hidden, .remove-logo-btn.hidden, .logo-upload-label.hidden { display: none !important; }
 
 .divider-line { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
@@ -362,6 +353,17 @@ img { max-width: 100%; display: block; }
       </div>
     </div>
 
+    <div class="field-row">
+      <label class="field-label" for="borderStyle">Border</label>
+      <select class="field-input" id="borderStyle">
+        <option value="none">None</option>
+        <option value="solid-strong">Solid - Strong</option>
+        <option value="solid-medium">Solid - Medium</option>
+        <option value="dashed">Dashed line</option>
+        <option value="dotted">Dotted line</option>
+      </select>
+    </div>
+
     <hr class="divider-line">
 
     <div class="checkbox-row">
@@ -381,24 +383,14 @@ img { max-width: 100%; display: block; }
     </div>
 
     <div class="checkbox-row hidden" id="centerContentToggleRow">
-      <label><input type="checkbox" id="enableCenterContent"> Add an image or text in the center</label>
+      <label><input type="checkbox" id="enableCenterContent"> Add text in the center</label>
     </div>
     <div class="center-content-block hidden" id="centerContentBlock">
-      <div class="type-tabs small">
-        <button type="button" class="type-tab active" id="centerModeImageBtn" data-mode="image">Image</button>
-        <button type="button" class="type-tab" id="centerModeTextBtn" data-mode="text">Text</button>
-      </div>
-      <div id="centerImageRow">
-        <input type="file" id="centerImageInput" accept="image/*" class="hidden-file-input">
-        <img id="centerImagePreview" class="logo-preview hidden" alt="Center logo">
-        <label for="centerImageInput" class="logo-upload-label" id="centerImageUploadLabel">🖼 Upload Image</label>
-        <button type="button" id="removeCenterImageBtn" class="remove-logo-btn hidden">✕ Remove</button>
-      </div>
-      <div class="field-row hidden" id="centerTextRow" style="margin-top: 10px;">
+      <div class="field-row" style="margin: 0;">
         <label class="field-label" for="centerText">Center Text</label>
         <input type="text" class="field-input" id="centerText" maxlength="4" placeholder="e.g. GO">
       </div>
-      <p class="field-hint">A high error-correction level is used automatically whenever center content is on, so the code still scans correctly with the middle covered. Keep center text to 2-4 characters.</p>
+      <p class="field-hint">A high error-correction level is used automatically whenever center text is on, so the code still scans correctly with the middle covered. Keep it to 2-4 characters.</p>
     </div>
 
   </div>
@@ -444,8 +436,8 @@ img { max-width: 100%; display: block; }
     <li>Choose Barcode or QR Code at the top.</li>
     <li>Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
     <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're printing for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
-    <li>Optionally add text above the code (e.g. a product name), and choose whether to show the encoded value underneath it.</li>
-    <li>For a QR code, you can also add a small logo image or a short piece of text to the center - a high error-correction level is used automatically so it still scans correctly.</li>
+    <li>Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.</li>
+    <li>For a QR code, you can also add up to 4 characters of text to the center - a high error-correction level is used automatically so it still scans correctly.</li>
     <li>Click "Save" to keep it in your Saved Codes list, "Download PNG" to save an image file, or "Print / Save as PDF" to print it directly.</li>
   </ol>
 
@@ -457,10 +449,12 @@ img { max-width: 100%; display: block; }
     <dd>Click "Save" to add the current one to your list, then click "Saved Codes" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
     <dt>Will my barcode scan correctly?</dt>
     <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid printing the label too small.</dd>
-    <dt>Can I add my logo to a QR code?</dt>
-    <dd>Yes - turn on "Add an image or text in the center" under QR Code and upload an image, or add a short piece of text instead. A high error-correction level keeps the code scannable even with part of the center covered.</dd>
+    <dt>Can I add text to the middle of a QR code?</dt>
+    <dd>Yes - turn on "Add text in the center" under QR Code and type up to 4 characters. A high error-correction level keeps the code scannable even with part of the center covered.</dd>
     <dt>What sizes can I print at?</dt>
     <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the printed output match exactly.</dd>
+    <dt>Can I add a border around the code?</dt>
+    <dd>Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted) so a printed label can have a clean cutting edge if you want one.</dd>
   </dl>
 </div>
 
@@ -555,15 +549,8 @@ img { max-width: 100%; display: block; }
   var showValueBelowCheckbox = document.getElementById("showValueBelow");
   var showQrValueBelowCheckbox = document.getElementById("showQrValueBelow");
   var enableCenterContentCheckbox = document.getElementById("enableCenterContent");
-  var centerModeImageBtn = document.getElementById("centerModeImageBtn");
-  var centerModeTextBtn = document.getElementById("centerModeTextBtn");
-  var centerImageRow = document.getElementById("centerImageRow");
-  var centerTextRow = document.getElementById("centerTextRow");
-  var centerImageInput = document.getElementById("centerImageInput");
-  var centerImagePreview = document.getElementById("centerImagePreview");
-  var centerImageUploadLabel = document.getElementById("centerImageUploadLabel");
-  var removeCenterImageBtn = document.getElementById("removeCenterImageBtn");
   var centerTextInput = document.getElementById("centerText");
+  var borderStyleSelect = document.getElementById("borderStyle");
   var previewBox = document.getElementById("previewBox");
   var previewTopText = document.getElementById("previewTopText");
   var previewValueText = document.getElementById("previewValueText");
@@ -571,10 +558,16 @@ img { max-width: 100%; display: block; }
   var sizeHint = document.getElementById("sizeHint");
   var dynamicPageSizeTag = null;
 
+  var BORDER_STYLES = {
+    "none": "",
+    "solid-strong": "3px solid #000",
+    "solid-medium": "1.5px solid #000",
+    "dashed": "2px dashed #000",
+    "dotted": "2.5px dotted #000"
+  };
+
   var currentType = "barcode";
-  var currentCenterMode = "image";
   var currentCodeId = null;
-  var centerImageDataUrl = "";
   var saveTimer = null;
   var lastFinalModuleMm = null;
 
@@ -648,56 +641,12 @@ img { max-width: 100%; display: block; }
     codeValueInput.placeholder = isBarcode ? "e.g. 123456789012" : "e.g. https://example.com or any text";
   }
 
-  function updateCenterModeUI() {
-    centerModeImageBtn.classList.toggle("active", currentCenterMode === "image");
-    centerModeTextBtn.classList.toggle("active", currentCenterMode === "text");
-    centerImageRow.classList.toggle("hidden", currentCenterMode !== "image");
-    centerTextRow.classList.toggle("hidden", currentCenterMode !== "text");
+  function applyBorderStyle() {
+    previewBox.style.border = BORDER_STYLES[borderStyleSelect.value] || "";
   }
 
-  function setCenterImage(dataUrl) {
-    centerImageDataUrl = dataUrl || "";
-    if (centerImageDataUrl) {
-      centerImagePreview.src = centerImageDataUrl;
-      centerImagePreview.classList.remove("hidden");
-      centerImageUploadLabel.classList.add("hidden");
-      removeCenterImageBtn.classList.remove("hidden");
-    } else {
-      centerImagePreview.src = "";
-      centerImagePreview.classList.add("hidden");
-      centerImageUploadLabel.classList.remove("hidden");
-      removeCenterImageBtn.classList.add("hidden");
-    }
-  }
-
-  centerImageInput.addEventListener("change", function() {
-    var file = centerImageInput.files && centerImageInput.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function() {
-      setCenterImage(reader.result);
-      renderPreview();
-      scheduleSave();
-    };
-    reader.readAsDataURL(file);
-    centerImageInput.value = "";
-  });
-  removeCenterImageBtn.addEventListener("click", function() {
-    setCenterImage("");
-    renderPreview();
-    scheduleSave();
-  });
-
-  centerModeImageBtn.addEventListener("click", function() {
-    currentCenterMode = "image";
-    updateCenterModeUI();
-    renderPreview();
-    scheduleSave();
-  });
-  centerModeTextBtn.addEventListener("click", function() {
-    currentCenterMode = "text";
-    updateCenterModeUI();
-    renderPreview();
+  borderStyleSelect.addEventListener("change", function() {
+    applyBorderStyle();
     scheduleSave();
   });
 
@@ -838,30 +787,15 @@ img { max-width: 100%; display: block; }
       }
     }
 
-    if (enableCenterContentCheckbox.checked) {
+    if (enableCenterContentCheckbox.checked && centerTextInput.value.trim()) {
       var boxSize = Math.round(total * 0.26);
-      var boxX = Math.round((total - boxSize) / 2);
-      var boxY = Math.round((total - boxSize) / 2);
-      var pad = Math.round(boxSize * 0.08);
       ctx.fillStyle = "#ffffff";
-      ctx.fillRect(boxX, boxY, boxSize, boxSize);
-      if (currentCenterMode === "image" && centerImageDataUrl) {
-        var img = new Image();
-        img.onload = function() {
-          var innerSize = boxSize - pad * 2;
-          var scale = Math.min(innerSize / img.width, innerSize / img.height);
-          var dw = img.width * scale, dh = img.height * scale;
-          ctx.drawImage(img, boxX + (boxSize - dw) / 2, boxY + (boxSize - dh) / 2, dw, dh);
-          fitCanvasInBox();
-        };
-        img.src = centerImageDataUrl;
-      } else if (currentCenterMode === "text" && centerTextInput.value.trim()) {
-        ctx.fillStyle = "#000000";
-        ctx.font = "bold " + Math.round(boxSize * 0.42) + "px " + getComputedStyle(document.body).fontFamily;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(centerTextInput.value.trim().slice(0, 4), total / 2, total / 2 + 1);
-      }
+      ctx.fillRect(Math.round((total - boxSize) / 2), Math.round((total - boxSize) / 2), boxSize, boxSize);
+      ctx.fillStyle = "#000000";
+      ctx.font = "bold " + Math.round(boxSize * 0.42) + "px " + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(centerTextInput.value.trim().slice(0, 4), total / 2, total / 2 + 1);
     }
   }
 
@@ -1000,9 +934,8 @@ img { max-width: 100%; display: block; }
       showValueBelow: showValueBelowCheckbox.checked,
       showQrValueBelow: showQrValueBelowCheckbox.checked,
       enableCenterContent: enableCenterContentCheckbox.checked,
-      centerMode: currentCenterMode,
-      centerImage: centerImageDataUrl,
-      centerText: centerTextInput.value
+      centerText: centerTextInput.value,
+      borderStyle: borderStyleSelect.value
     };
   }
 
@@ -1123,10 +1056,10 @@ img { max-width: 100%; display: block; }
 
     enableCenterContentCheckbox.checked = !!state.enableCenterContent;
     centerContentBlock.classList.toggle("hidden", currentType === "barcode" || !enableCenterContentCheckbox.checked);
-    currentCenterMode = state.centerMode === "text" ? "text" : "image";
-    updateCenterModeUI();
-    setCenterImage(state.centerImage || "");
     centerTextInput.value = state.centerText || "";
+
+    borderStyleSelect.value = BORDER_STYLES.hasOwnProperty(state.borderStyle) ? state.borderStyle : "none";
+    applyBorderStyle();
 
     applyBoxSize();
     renderPreview();

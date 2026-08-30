@@ -1471,7 +1471,17 @@ nav & footer" above) the same way Invoice/Receipt were added.
   "dynamic page-size style tag" pattern `end-of-day.html`'s
   `applyPaperSize()` already uses for its 80mm-thermal-vs-A4 choice
   (see that page's own section above), just parameterized to an
-  arbitrary width/height instead of two fixed presets.
+  arbitrary width/height instead of two fixed presets. This same
+  `@page { margin: 0 }` is also what keeps the browser's own print
+  header/footer (page title, URL, date, page number) off the printed
+  label - confirmed by generating PDFs of both `barcode.html` and
+  `invoice.html` with the header/footer explicitly forced on: **both**
+  pages render that browser chrome identically when forced, since
+  forcing it bypasses the margin-starves-it trick entirely - meaning
+  there's no real difference between the two pages here, `barcode.html`
+  already matches `invoice.html`'s print behavior exactly. A real
+  browser's native print dialog (not a forced PDF export) respects the
+  zero margin and squeezes that chrome away on both pages the same way.
 - **Barcode rendering** uses the self-hosted `vendor/jsbarcode.min.js`
   (see "`vendor/` — self-hosted third-party libraries" below) via
   `JsBarcode(canvas, value, options)`, format chosen from a curated
@@ -1550,15 +1560,35 @@ nav & footer" above) the same way Invoice/Receipt were added.
   problem. A plain QR, one with a center-text overlay, and one with a
   center overlay at the largest QR preset all decoded correctly too.
 - **QR center content** (`#enableCenterContent`, QR-only) lets the user
-  add either an uploaded image or up to 4 characters of text into the
-  middle of the code, via the same small Image/Text `.type-tabs.small`
-  toggle mentioned above. Turning it on **always bumps the QR error-
-  correction level from `M` to `H`** (`qrcode(0, ecLevel)`, `ecLevel =
-  enableCenterContent ? "H" : "M"`) so the extra ~30% redundancy budget
-  can absorb the obscured center - a plain white square covering ~26%
-  of the code's width is painted first, then either the uploaded image
-  (`drawImage`, scaled to fit with a small padding) or the text
-  (`fillText`, bold, sized to the box) is drawn on top of it.
+  add up to 4 characters of text into the middle of the code. Turning it
+  on **always bumps the QR error-correction level from `M` to `H`**
+  (`qrcode(0, ecLevel)`, `ecLevel = enableCenterContent ? "H" : "M"`) so
+  the extra ~30% redundancy budget can absorb the obscured center - a
+  plain white square covering ~26% of the code's width is painted
+  first, then the text (`fillText`, bold, sized to the box) is drawn on
+  top of it. **This was originally an Image-or-Text choice** (a small
+  Image/Text `.type-tabs.small` toggle, an uploaded logo drawn via
+  `drawImage`) but the image option was deliberately removed at the
+  site owner's request, text-only being simpler and enough for the
+  center-content use case - `centerImageDataUrl`/`currentCenterMode`/
+  `setCenterImage()`/`updateCenterModeUI()`, the upload `<input>`, and
+  the now-orphaned `.logo-upload-label`/`.hidden-file-input`/
+  `.logo-preview`/`.remove-logo-btn`/`.type-tabs.small` CSS are gone
+  entirely rather than left disabled.
+- **Border** (`#borderStyle`, shared by both Barcode and QR) applies a
+  line style around `#previewBox` - None, Solid Strong (3px), Solid
+  Medium (1.5px), Dashed, or Dotted - via `applyBorderStyle()` setting
+  `previewBox.style.border` directly from a `BORDER_STYLES` map. This
+  is deliberately a plain inline style rather than a CSS class swap:
+  an inline style always wins over the base `.preview-box` rule's own
+  `border: 1px solid var(--line-soft)` (the subtle on-screen framing
+  default, used whenever `borderStyle` is `"none"`) *and* over the
+  print stylesheet's `.preview-box { border: none; ... }` reset, with
+  no `!important` needed on either side - so a chosen border shows up
+  identically on screen and on the printed label, while `"none"` still
+  correctly prints border-free. The border is screen/print-only, not
+  baked into the canvas raster - `buildExportCanvas()` composites only
+  from `#codeCanvas`, so "Download PNG" never includes it.
 - **Save/Saved Codes** follows the exact same explicit-save-plus-list
   pattern as `invoice.html`/`receipt.html`'s own Save/Saved
   Invoices/Receipts: "💾 Save" pushes the current form into a
