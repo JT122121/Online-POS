@@ -150,10 +150,8 @@ button:active { transform: translateY(1px); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#aboutShortcutButton, #blogShortcutButton, #homeShortcutButton { background: var(--accent-dark); color: #fff; }
-#aboutShortcutButton:hover, #blogShortcutButton:hover, #homeShortcutButton:hover { background: #0d3a28; }
-#createInvoiceButton, #createReceiptButton { background: var(--accent); color: #fff; }
-#createInvoiceButton:hover, #createReceiptButton:hover { background: var(--accent-dark); }
+#homepageShortcutButton { background: var(--accent-dark); color: #fff; }
+#homepageShortcutButton:hover { background: #0d3a28; }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 .new-sale-catalog-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px 12px; margin: 10px 0 2px; border: 0; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; }
@@ -463,19 +461,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 </div>
 <div class="header-links">
-<!-- OFFLINE-STRIP:ABOUT-BUTTON:START -->
-<button id="aboutShortcutButton" onclick="window.open('about', '_blank')" title="Learn more about GoOnlinePOS">ℹ️ <span id="aboutShortcutLabel">About</span></button>
-<!-- OFFLINE-STRIP:ABOUT-BUTTON:END -->
-<!-- OFFLINE-STRIP:BLOG-BUTTON:START -->
-<button id="blogShortcutButton" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
-<!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
-<button id="createInvoiceButton" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
-<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
-<button id="createReceiptButton" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
-<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
-<button id="homeShortcutButton" onclick="goHome()" title="Go to homepage">🏠 <span id="homeShortcutLabel">Home</span></button>
+<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
+<button id="homepageShortcutButton" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage">🏠 <span id="homepageShortcutLabel">Homepage</span></button>
+<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
 </div>
 </div>
 <div class="header-actions">
@@ -2018,11 +2006,6 @@ async function newSale() {
   await startNewSale();
 }
 
-function goHome() {
-  if (cart.length && !confirm(tr("goHomeConfirm"))) return;
-  location.href = location.pathname.replace(/[^/]*$/, "");
-}
-
 function goToCheckout() {
   if (cart.length === 0) { alert(tr("cartEmptyAlert")); return; }
   document.getElementById("catalogView").classList.add("hidden");
@@ -2759,20 +2742,6 @@ function customerScreenUrl() {
   return location.origin + location.pathname.replace(/[^/]*$/, "") + "customer.html";
 }
 
-/* OFFLINE-STRIP:CREATE-INVOICE-JS:START */
-function openCreateInvoice() {
-  const url = location.pathname.replace(/[^/]*$/, "") + "invoice";
-  window.open(url, "_blank");
-}
-/* OFFLINE-STRIP:CREATE-INVOICE-JS:END */
-
-/* OFFLINE-STRIP:CREATE-RECEIPT-JS:START */
-function openCreateReceipt() {
-  const url = location.pathname.replace(/[^/]*$/, "") + "receipt";
-  window.open(url, "_blank");
-}
-/* OFFLINE-STRIP:CREATE-RECEIPT-JS:END */
-
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
@@ -3313,8 +3282,8 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
-    aboutShortcutLabel: "aboutShortcutLabel", blogShortcutLabel: "blogShortcutLabel",
-    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel", homeShortcutLabel: "homeShortcutLabel",
+    homepageShortcutLabel: "homepageShortcutLabel",
+    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
@@ -3339,7 +3308,7 @@ function changeLanguage() {
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
-    inventoryShortcutLabel: "inventoryShortcutLabel", customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", addProductStockLabel: "addProductStockLabel",
+    customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
     premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",
