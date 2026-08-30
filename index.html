@@ -175,13 +175,13 @@ img { max-width: 100%; display: block; }
 .preview-badge-right { bottom: -16px; right: 28px; transform: rotate(3deg); }
 @media (max-width: 900px) { .preview-badge { display: none; } }
 .app-preview { background: var(--bg); padding: 20px; display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
-.ap-toolbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; }
+.ap-toolbar { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; row-gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; overflow: hidden; }
+.ap-toolbar-left { display: flex; align-items: center; gap: 8px; }
 .ap-toolbar-hide { display: flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--ink-soft); background: #fbfbf8; border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; flex-shrink: 0; }
 .ap-cashier-select { font-size: 10.5px; font-weight: 600; color: var(--ink); background: #fbfbf8; border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; }
 .ap-cashier-select em { font-style: normal; color: var(--muted); }
-.ap-toolbar-spacer { flex: 1; }
+.ap-toolbar-icons { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
 .ap-toolbar-icon { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
-.ap-toolbar-btn { font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 6px 10px; }
 .ap-new-sale-btn { display: block; width: 100%; text-align: center; font-size: 11px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 7px; padding: 8px 10px; margin: 9px 0 10px; }
 .ap-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
 .ap-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -357,14 +357,17 @@ img { max-width: 100%; display: block; }
 </div>
 <div class="app-preview">
 <div class="ap-toolbar">
+<div class="ap-toolbar-left">
 <span class="ap-toolbar-hide">☰ Hide Toolbar</span>
 <span class="ap-cashier-select">Cashier: Alex <em>▾</em></span>
-<span class="ap-toolbar-spacer"></span>
+</div>
+<div class="ap-toolbar-icons">
 <span class="ap-toolbar-icon" title="How To Use">❓</span>
 <span class="ap-toolbar-icon" title="Settings">⚙</span>
 <span class="ap-toolbar-icon" title="End of Day">📅</span>
 <span class="ap-toolbar-icon" title="Customer Screen">📺</span>
 <span class="ap-toolbar-icon" title="Backup">💾</span>
+</div>
 </div>
 <div class="ap-panel">
 <div class="ap-panel-head">
@@ -494,6 +497,11 @@ img { max-width: 100%; display: block; }
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
 <h3>Sales history, editable</h3>
 <p>Click any past sale to view full details, fix a mistake, or reprint the receipt. Export a two-tab Excel report whenever you need your own records.</p>
+</div>
+<div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+<h3>End of Day report</h3>
+<p>Print or save a closing report from the header's End of Day button - total sales, items sold, payment breakdown, and collections per cashier for the day.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"></path><polyline points="8 11 12 15 16 11"></polyline><path d="M20 21H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h2.5"></path><path d="M17.5 13H20a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"></path></svg></div>
