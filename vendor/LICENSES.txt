@@ -24,8 +24,7 @@ jsbarcode.min.js
   Version : 3.12.3
   License : MIT
   Source  : https://www.npmjs.com/package/jsbarcode
-  Used by : barcode.html (barcode rendering) — not yet linked from any
-            other page.
+  Used by : barcode.html only (barcode rendering).
 
 qrcode.js
 qrcode_UTF8.js
@@ -33,6 +32,6 @@ qrcode_UTF8.js
   Version : 2.0.4
   License : MIT
   Source  : https://www.npmjs.com/package/qrcode-generator
-  Used by : barcode.html (QR code rendering) — not yet linked from any
-            other page. qrcode_UTF8.js is the package's own optional
-            UTF-8 string-encoding patch and must load after qrcode.js.
+  Used by : barcode.html only (QR code rendering). qrcode_UTF8.js is the
+            package's own optional UTF-8 string-encoding patch and must
+            load after qrcode.js.
