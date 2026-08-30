@@ -1522,6 +1522,14 @@ just no longer via an unlinked page.
   under the value field (`#codeValueHint`) - e.g. "isn't valid for
   EAN-13 - needs 12 or 13 digits" - rather than letting an invalid
   value silently fail or throw.
+- **FAQ has a "Can I scan this with my phone?" entry** flagging that a
+  phone's stock Camera app generally only reads QR codes out of the
+  box - scanning a traditional barcode (CODE128/EAN-13/UPC-A/etc.)
+  needs a dedicated barcode scanner app, unlike QR which needs nothing
+  extra. This is a real device/OS limitation, not something this page
+  can work around - added since a visitor generating a barcode here
+  and then trying to test-scan it with their phone's plain camera
+  could otherwise conclude the generated code itself is broken.
 - **QR rendering** uses the self-hosted `vendor/qrcode.js` +
   `vendor/qrcode_UTF8.js` (the `qrcode-generator` npm package's own
   optional UTF-8 patch file, which must load after the core file - see
