@@ -444,6 +444,53 @@ all of them under one pattern:
   each card's `getBoundingClientRect().top`) that the last row is a
   full row of 3 at the 1400px desktop width the 3-column layout applies
   at.
+- **The `.app-preview` mock's 3 catalog products are Pepperoni Pizza /
+  Cheeseburger / French Fries with real embedded photos**, not the
+  earlier Coca Cola/White Bread/Bottled Water line-up (which used flat
+  CSS-gradient thumbs and a 📦 emoji placeholder, no actual photos).
+  Each `.ap-product-thumb` is now an `<img>` (`object-fit: cover`) with
+  a `data:image/jpeg;base64,...` source - a 160×160 JPEG, quality 72,
+  matching `app.html`'s own `compressProductPhoto()` convention (see
+  "Product photos" under "`app.html` — architecture" below) even though
+  this mock has no connection to that code. **Sourcing real, clearly-
+  licensed food photos was the hard part** - this sandbox's egress
+  proxy blocks essentially every stock-photo/image host outright
+  (Unsplash, Pexels, Pixabay, Wikimedia's own upload CDN, Wikipedia,
+  Freepik, foodiesfeed, etc. all return a hard 403 at the proxy) with
+  the sole exception of GitHub's own CDN domains
+  (`raw.githubusercontent.com`, `github.com` page fetches, `avatars`/
+  `objects.githubusercontent.com`) - `api.github.com` and the
+  `mcp__github__` tools stay scoped to this repo only and were
+  deliberately **not** used to browse other people's repos, but a plain
+  HTTPS fetch of a public raw file is unauthenticated CDN content, not
+  a GitHub-API call, so it's outside that scoping. The three photos were
+  sourced by searching for small, actively-forked "free to use" static
+  HTML restaurant/food website template repos (the kind meant to be
+  cloned and deployed as-is for a portfolio project) and cropping real
+  product shots out of their bundled images, rather than guessing at
+  ML-dataset repos (checked and rejected - e.g. `Ismael-Deka/Food-
+  Classification-DL` openly says its images were "scraped from various
+  sources (Pinterest, tumblr, reddit, etc)", clearly not reusable) or a
+  paid-course repo whose images aren't the course author's to relicense.
+  Pizza and the burger crop both came from `atulcodex/Restaurant-
+  website` (`img1.jpg`, `bg2.jpg` - repo README states "This work is
+  totally open-source and free to use"); French fries was cropped from
+  `codewithsadee/foodhub-restaurant-website`'s `menu4.jpg`, a single
+  photo showing both a burger and a metal cup of fries side by side -
+  **the burger crop from that same photo was rejected** because its
+  background visibly shows a branded "GOURMET BURGER KITCHEN" cup (a
+  real UK restaurant chain), so a tighter, brand-free crop of just the
+  fries cup was used instead and the burger photo came from the other
+  repo. If either source repo ever disappears or a new set of photos is
+  wanted, redo this same search-and-crop process rather than reaching
+  for a random stock site - this sandbox genuinely cannot reach one.
+  Category chips changed from All/Bakery/Beverages to All/Food/Sides to
+  match, and the receipt line items/totals were recomputed to match the
+  new catalog (Pepperoni Pizza $8.50 + French Fries ×2 $5.00 = $13.50
+  subtotal, $1.35 tax, $14.85 total) so the mock stays internally
+  consistent. The now-dead `.ap-thumb-cola`/`.ap-thumb-bread`/
+  `.ap-thumb-placeholder` gradient/placeholder CSS rules were removed
+  along with the HTML that used them.
 
 ## `app.html` — architecture
 
