@@ -1540,6 +1540,13 @@ just no longer via an unlinked page.
   can work around - added since a visitor generating a barcode here
   and then trying to test-scan it with their phone's plain camera
   could otherwise conclude the generated code itself is broken.
+- **FAQ also has an "Is there a limit on how many codes I can generate?"
+  entry**, right after the "Is this generator free?" one - answers "No"
+  and explains why: generation is entirely client-side (JsBarcode/
+  qrcode-generator running in the browser, no server call), so there's
+  no usage cap, only the browser's own `localStorage` capacity as a
+  practical ceiling if someone saves a very large number of codes to
+  their Saved Codes list.
 - **QR rendering** uses the self-hosted `vendor/qrcode.js` +
   `vendor/qrcode_UTF8.js` (the `qrcode-generator` npm package's own
   optional UTF-8 patch file, which must load after the core file - see
