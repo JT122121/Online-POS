@@ -67,6 +67,7 @@ function renderReceiptItems() {
         "<span class=\"receipt-item-qty\">" + c.qty + "</span>" +
         "<span class=\"receipt-item-total\">" + "</span>" +
       "</div>" +
+      "<div class=\"receipt-item-description-input" + (c.showDescription ? "" : " hidden") + "\" contenteditable=\"true\" data-placeholder=\"" + escapeAttr(tr("itemDescriptionPlaceholder")) + "\">" + escapeHtml(c.description || "") + "</div>" +
       "<div class=\"receipt-item-detail-print\"></div>" +
       "<div class=\"receipt-item-controls no-print\">" +
         "<input class=\"price-input\" type=\"number\" min=\"0\" step=\"" + amountStep() + "\" value=\"" + Number(c.price) + "\">" +
@@ -75,6 +76,9 @@ function renderReceiptItems() {
         "<label class=\"cart-tax-exempt-label\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
           "<input class=\"cart-tax-exempt\" type=\"checkbox\"" + (c.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
         "</label>" +
+        "<label class=\"cart-description-label\" title=\"" + escapeAttr(tr("itemDescriptionLabel")) + "\">" +
+          "<input class=\"cart-description-toggle\" type=\"checkbox\"" + (c.showDescription ? " checked" : "") + "> " + escapeHtml(tr("itemDescriptionTag")) +
+        "</label>" +
         "<button type=\"button\" class=\"remove-cart-btn\">" + tr("removeButton") + "</button>" +
       "</div>";
 
@@ -82,6 +86,15 @@ function renderReceiptItems() {
     nameEl.addEventListener("input", function() { c.name = this.textContent; updateTotalsAndHeader(); });
     nameEl.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); this.blur(); } });
     div.querySelector(".cart-tax-exempt").addEventListener("change", function() { c.taxExempt = this.checked; updateTotalsAndHeader(); });
+
+    const descEl = div.querySelector(".receipt-item-description-input");
+    descEl.addEventListener("input", function() { c.description = this.textContent; });
+    descEl.addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); this.blur(); } });
+    div.querySelector(".cart-description-toggle").addEventListener("change", function() {
+      c.showDescription = this.checked;
+      descEl.classList.toggle("hidden", !c.showDescription);
+      if (c.showDescription) descEl.focus();
+    });
 
     div.querySelector(".price-input").addEventListener("input", function() { c.price = Number(this.value) || 0; updateTotalsAndHeader(); });
     div.querySelector("[data-action=\"dec\"]").addEventListener("click", function() { stepCartQty(c.id, -1); });
