@@ -1045,6 +1045,26 @@ Website: Goonlinepos.com</textarea>
         <input id="backupFileInput" type="file" accept=".json,application/json" onchange="handleBackupFileSelect(event)">
         <div class="info" id="restoreInfo" style="display:block;">This replaces everything currently saved with what's in the backup file. The page will reload after restoring.</div>
 
+        <!-- OFFLINE-STRIP:CLOUD-SYNC-SECTION:START -->
+        <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
+          <label><span id="cloudSyncTitle">Cloud Sync</span> <span class="premium-badge" id="premiumBadgeCloudSync">Premium</span></label>
+          <div class="info" id="cloudSyncInfo" style="display:block;">Optional - sign in with Google to back up your data to the cloud and restore it on any device. Needs a purchased Premium code (the free PROMO1 code doesn't unlock it).</div>
+          <div id="cloudSyncLockMsg" class="error-text hidden">🔒 <span id="cloudSyncLockMsgText">This is a Premium feature and needs a purchased Premium code - the free PROMO1 code doesn't unlock it. Activate a purchased code in Settings → Premium to use Cloud Sync.</span></div>
+          <div id="cloudSyncUnlockedContent" class="hidden">
+            <div id="cloudSyncSignedOut">
+              <button type="button" class="small-btn" onclick="cloudSignIn()" style="width:100%; margin-top:12px;">🔵 <span id="cloudSyncSignInButton">Sign in with Google</span></button>
+            </div>
+            <div id="cloudSyncSignedIn" class="hidden">
+              <div class="info" style="display:block; margin-top:12px;"><span id="cloudSyncSignedInAs">Signed in as</span> <strong id="cloudSyncEmail"></strong></div>
+              <button type="button" class="small-btn" id="cloudSyncBackupButton" onclick="cloudBackupNow()" style="width:100%; margin-top:8px;">☁ <span id="cloudSyncBackupButtonLabel">Backup to Cloud</span></button>
+              <button type="button" class="small-btn" id="cloudSyncRestoreButton" onclick="cloudRestoreNow()" style="width:100%; margin-top:8px;">☁ <span id="cloudSyncRestoreButtonLabel">Restore from Cloud</span></button>
+              <button type="button" class="small-btn" onclick="cloudSignOut()" style="width:100%; margin-top:8px;"><span id="cloudSyncSignOutButton">Sign Out</span></button>
+            </div>
+            <div id="cloudSyncError" class="error-text hidden"></div>
+          </div>
+        </div>
+        <!-- OFFLINE-STRIP:CLOUD-SYNC-SECTION:END -->
+
         <!-- OFFLINE-STRIP:DOWNLOAD-SECTION:START -->
         <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
           <label><span id="offlineDownloadLabel">Offline Version</span> <span class="premium-badge" id="premiumBadgeOffline">Premium</span></label>
@@ -1282,6 +1302,7 @@ Website: Goonlinepos.com</textarea>
 <script src="modules/translations.js"></script>
 <script src="modules/usb-scanner.js"></script>
 <script src="modules/receipt.js"></script>
+<!-- OFFLINE-STRIP:CLOUD-SYNC-SCRIPT:START --><script src="vendor/supabase.min.js"></script><script src="modules/cloud-sync.js"></script><!-- OFFLINE-STRIP:CLOUD-SYNC-SCRIPT:END -->
 <!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:START --><script src="modules/offline-builder.js"></script><!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:END -->
 <script>
 
@@ -1813,6 +1834,8 @@ function applyPremiumLocks() {
   if (offlineBtn) offlineBtn.disabled = !premiumUnlocked;
   const offlineLockMsg = document.getElementById("offlineLockMsg");
   if (offlineLockMsg) offlineLockMsg.classList.toggle("hidden", premiumUnlocked);
+
+  if (typeof refreshCloudSyncLock === "function") refreshCloudSyncLock();
 
   renderAppTitleBadge();
 }
@@ -2517,8 +2540,8 @@ function downloadTextFile(filename, text, mime) {
   URL.revokeObjectURL(url);
 }
 
-async function downloadFullBackup() {
-  const backup = {
+async function buildBackupPayload() {
+  return {
     version: 1,
     exportedAt: new Date().toISOString(),
     settings: JSON.parse((await storageGet("pos-settings")) || "{}"),
@@ -2530,6 +2553,21 @@ async function downloadFullBackup() {
     salesHistory: JSON.parse((await storageGet("pos-sales-history")) || "[]"),
     receiptCounter: (await storageGet("pos-receipt-counter")) || "0"
   };
+}
+
+async function applyBackupPayload(backup) {
+  if (backup.settings) await storageSet("pos-settings", JSON.stringify(backup.settings));
+  if (backup.paymentMethods) await storageSet("pos-payment-methods", JSON.stringify(backup.paymentMethods));
+  if (backup.cashiers) await storageSet("pos-cashiers", JSON.stringify(backup.cashiers));
+  if (backup.activeCashier !== undefined) await storageSet("pos-active-cashier", backup.activeCashier);
+  if (backup.products) await storageSet("pos-products", JSON.stringify(backup.products));
+  if (backup.logo) await storageSet("pos-logo", backup.logo);
+  if (backup.salesHistory) await storageSet("pos-sales-history", JSON.stringify(backup.salesHistory));
+  if (backup.receiptCounter !== undefined) await storageSet("pos-receipt-counter", backup.receiptCounter);
+}
+
+async function downloadFullBackup() {
+  const backup = await buildBackupPayload();
   downloadTextFile("goonlinepos-backup-" + todayStamp() + ".json", JSON.stringify(backup, null, 2), "application/json");
   trackEvent("backup_downloaded", {});
 }
@@ -2550,14 +2588,7 @@ function handleBackupFileSelect(event) {
     }
     if (!confirm(tr("restoreConfirm"))) { event.target.value = ""; return; }
 
-    if (backup.settings) await storageSet("pos-settings", JSON.stringify(backup.settings));
-    if (backup.paymentMethods) await storageSet("pos-payment-methods", JSON.stringify(backup.paymentMethods));
-    if (backup.cashiers) await storageSet("pos-cashiers", JSON.stringify(backup.cashiers));
-    if (backup.activeCashier !== undefined) await storageSet("pos-active-cashier", backup.activeCashier);
-    if (backup.products) await storageSet("pos-products", JSON.stringify(backup.products));
-    if (backup.logo) await storageSet("pos-logo", backup.logo);
-    if (backup.salesHistory) await storageSet("pos-sales-history", JSON.stringify(backup.salesHistory));
-    if (backup.receiptCounter !== undefined) await storageSet("pos-receipt-counter", backup.receiptCounter);
+    await applyBackupPayload(backup);
 
     alert(tr("restoreSuccess"));
     location.reload();
@@ -3415,6 +3446,9 @@ function changeLanguage() {
     decimalPlacesLabel: "decimalPlacesLabel", decimalPlacesInfo: "decimalPlacesInfo",
     languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
+    cloudSyncTitle: "cloudSyncTitle", premiumBadgeCloudSync: "premiumBadgeLabel", cloudSyncInfo: "cloudSyncInfo", cloudSyncLockMsgText: "cloudSyncLockMsgText",
+    cloudSyncSignInButton: "cloudSyncSignInButton", cloudSyncSignedInAs: "cloudSyncSignedInAs", cloudSyncSignOutButton: "cloudSyncSignOutButton",
+    cloudSyncBackupButtonLabel: "cloudSyncBackupButton", cloudSyncRestoreButtonLabel: "cloudSyncRestoreButton",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
@@ -3534,6 +3568,7 @@ async function init() {
   await loadReceiptPrefix();
   await loadPremiumStatus();
   await loadPanelSplit();
+  if (typeof initCloudSync === "function") await initCloudSync();
   await startFirstSale();
   changePaperSize();
   updateZoom();

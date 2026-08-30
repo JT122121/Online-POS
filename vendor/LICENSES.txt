@@ -35,3 +35,15 @@ qrcode_UTF8.js
   Used by : barcode-generator.html only (QR code rendering). qrcode_UTF8.js is the
             package's own optional UTF-8 string-encoding patch and must
             load after qrcode.js.
+
+supabase.min.js
+  Package : @supabase/supabase-js
+  Version : 2.112.4
+  License : MIT
+  Source  : https://www.npmjs.com/package/@supabase/supabase-js
+  Used by : app.html only (optional Cloud Sync feature, Settings → Backup).
+            The prebuilt dist/umd/supabase.js from the published package,
+            unmodified. Wrapped in its own OFFLINE-STRIP marker in app.html
+            and never fetched into the "Download Offline POS" package —
+            cloud sync needs a network connection, which the offline copy
+            deliberately has none of.

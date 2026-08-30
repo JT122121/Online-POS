@@ -55,6 +55,8 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
   html = stripMarked(html, "COOKIE-BANNER", "cookie banner markup");
   html = stripMarked(html, "JSZIP", "jszip script tag");
+  html = stripMarked(html, "CLOUD-SYNC-SCRIPT", "cloud sync vendor/module script tags");
+  html = stripMarked(html, "CLOUD-SYNC-SECTION", "cloud sync settings section");
   html = stripMarked(html, "OFFLINE-BUILDER-SCRIPT", "offline builder module script tag");
   html = stripMarked(html, "DOWNLOAD-SECTION", "download settings section");
   html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");

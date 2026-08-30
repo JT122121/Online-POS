@@ -1091,8 +1091,118 @@ zero network calls.
   behavior with zero network calls.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
-  everything and reloads the page. This is the *only* way data survives a
-  cleared browser/new device — there is no cloud sync.
+  everything and reloads the page. This is one of two ways data survives a
+  cleared browser/new device now - the other is the optional Cloud Sync
+  feature immediately below. `downloadFullBackup()`/`handleBackupFileSelect()`
+  were refactored to route through two shared helpers,
+  `buildBackupPayload()`/`applyBackupPayload(backup)`, with byte-identical
+  behavior - Cloud Sync (below) reuses both instead of duplicating the
+  local-state serialization/restore logic.
+- **Cloud Sync (Premium, purchased code only)** - an optional,
+  local-first-by-default alternative to the file-based Backup/Restore
+  above, in the same Settings → Backup panel, right below "Restore from
+  Backup". Deliberately does **not** change the core "no signup, no
+  login" promise made throughout `index.html` (hero, trust bar, FAQ) -
+  the app works exactly as before with zero signup; Cloud Sync is purely
+  an opt-in extra for shop owners who want it, wrapped in its own
+  `OFFLINE-STRIP:CLOUD-SYNC-SECTION`/`CLOUD-SYNC-SCRIPT` markers (HTML +
+  the `vendor/supabase.min.js`/`modules/cloud-sync.js` script tags) so it
+  never ships in the "Download Offline POS" package - cloud sync needs a
+  network connection, which the offline copy deliberately has none of.
+  - **Gated on a *purchased* Premium code specifically, not just any
+    unlocked state** - `hasRealPremiumCode()` checks both
+    `premiumUnlocked` and that `pos-premium-code-used` (stored by the
+    existing Premium activation flow - see "Premium code validation"
+    below) is not `"PROMO1"`, the free auto-granted code every new
+    visitor gets. `refreshCloudSyncLock()` toggles
+    `#cloudSyncLockMsg`/`#cloudSyncUnlockedContent` from this check and
+    is called from `applyPremiumLocks()` (guarded with a `typeof` check,
+    since `refreshCloudSyncLock` doesn't exist in the offline build)
+    every time Premium status changes, alongside the existing
+    `renderAppTitleBadge()` call.
+  - **Auth is Supabase Auth** (Google, or any other provider enabled in
+    the Supabase dashboard - see `supabase/README.md`), via the
+    self-hosted `vendor/supabase.min.js` (the published
+    `@supabase/supabase-js` package's own `dist/umd/supabase.js` build,
+    unmodified - see `vendor/LICENSES.txt`) and `modules/cloud-sync.js`.
+    `SUPABASE_URL`/`SUPABASE_ANON_KEY` near the top of that file are the
+    project's public URL and anon/publishable key - safe to embed
+    client-side by design (Supabase's own model), with every read/write
+    still enforced by the Row Level Security policies in
+    `supabase/schema.sql`. `initCloudSync()` (called from `init()`,
+    guarded the same way as `refreshCloudSyncLock()`) restores any
+    existing session and listens for auth state changes;
+    `cloudSignIn()`/`cloudSignOut()` wrap
+    `signInWithOAuth({ provider: "google", redirectTo: <current URL> })`/
+    `signOut()`. `renderCloudSyncStatus()` toggles
+    `#cloudSyncSignedOut`/`#cloudSyncSignedIn` and fills in
+    `#cloudSyncEmail`.
+  - **"Backup to Cloud" / "Restore from Cloud" are full-replace
+    operations**, not incremental/bidirectional sync - deliberately kept
+    as simple as the existing file-based Backup/Restore rather than
+    building a conflict-resolution engine for a feature nobody asked for
+    that level of complexity on. `pushBackupToCloud()` builds the same
+    payload `buildBackupPayload()` already produces for the downloadable
+    JSON backup, then **upserts** `store_settings` (one row, keyed on
+    `user_id`) and **replaces** (`delete` all existing rows for that
+    user, then bulk `insert` the current state) `products`, `cashiers`,
+    `payment_methods`, and `sales` (whose `sale_items`/`sale_payments`
+    cascade-delete via the FK in `supabase/schema.sql`, then get
+    re-inserted alongside their new parent `sales` rows, referenced by a
+    client-generated `crypto.randomUUID()` so children can be inserted
+    right after their parent without a round-trip to read back
+    generated ids). Inserts are chunked at 500 rows
+    (`bulkInsert()`/`chunkArray()`) as a simple defensive measure for
+    shops with a lot of history. `pullBackupFromCloud()` does the
+    reverse - reads every table for the signed-in user and reconstructs
+    the exact same payload shape `buildBackupPayload()` produces, then
+    hands it to the shared `applyBackupPayload()` (same function the
+    file-based Restore uses) and reloads.
+  - **Fields without their own column round-trip through jsonb catch-alls**
+    already present in `supabase/schema.sql` (`store_settings.settings`,
+    `sales.meta`) rather than growing the schema for every minor display
+    field - e.g. discount rate/type, zoom, decimal places, active
+    cashier name, and (per-sale) currency code/symbol/decimal places at
+    the moment of that specific sale. `sales.document_type` **was** added
+    as a first-class column (not jsonb) since it's a real, meaningful
+    field ("Receipt"/"Invoice"/"Payment") - both `document_type` and
+    `meta` were added to `supabase/schema.sql` in the same pass that
+    wired up this feature (the schema was authored, then merged,
+    *before* Cloud Sync was built; these two additions are why
+    `schema.sql` has `alter table ... add column if not exists`
+    statements right after the `create table` block for `sales` - so
+    re-running the file against a project that already had the
+    pre-Cloud-Sync version applied still picks up the new columns
+    instead of silently missing them).
+  - Sale date/time round-trips through `saleDateTimeToIso()`/
+    `isoToSaleDateTime()`, converting between `app.html`'s own
+    `"DD/MM/YYYY HH:MM:SS"` local-time string format (see `updateDate()`)
+    and the `timestamptz` column Postgres expects - matching
+    `updateDate()`'s own construction exactly so the round trip is
+    lossless up to display precision.
+  - **Verified with a real local Postgres instance plus a mocked
+    Supabase client, not a live project** - this sandbox's egress proxy
+    has a hard, unrelated organizational policy blocking `*.supabase.co`
+    entirely (confirmed via the proxy's own status endpoint - not a
+    project-specific or credentials problem), so an actual live
+    connection could not be exercised from here, the same class of
+    limitation `contact.html`'s OTP flow and Premium code validation
+    already document for their own Apps Script endpoints. What *was*
+    verified: `supabase/schema.sql` (fresh install, a second idempotent
+    run, and an upgrade-from-the-pre-`document_type`/`meta` version) all
+    ran cleanly against a throwaway local PostgreSQL 16 instance;
+    `vendor/supabase.min.js` genuinely loads in a real browser and
+    `createClient()` produces a working client; the Premium-gate lock
+    correctly stays locked for a `PROMO1` code and unlocks for any other
+    code; `cloudSignIn()` calls `signInWithOAuth` with the right
+    provider/redirect; and, against a hand-written mock standing in for
+    the real Supabase client (matching this repo's established pattern
+    for untestable third-party endpoints), `pushBackupToCloud()` issues
+    the correct delete-then-insert sequence with correctly-mapped rows
+    for a seeded cart/sale, and `pullBackupFromCloud()` reconstructs a
+    `salesHistory` record byte-for-byte identical in shape to what
+    `saveCurrentSaleToHistory()` itself produces. Confirm the actual live
+    round trip once deployed - this sandbox cannot.
 - **Customer-facing screen:** `app.html` broadcasts live order state via
   **both** `localStorage.setItem("goonlinepos-customer-screen-state", …)`
   and a `BroadcastChannel("goonlinepos-customer-screen")`
@@ -1255,36 +1365,53 @@ scanning" above.) `vendor/jsbarcode.min.js` and `vendor/qrcode.js` +
 the core file) are the same "unmodified npm build" convention, used
 only by `barcode-generator.html` — see that page's own section below. None of
 the three are referenced by `app.html`/`offline-builder.js`, so they
-have no bearing on the offline package.
+have no bearing on the offline package. `vendor/supabase.min.js`
+(`@supabase/supabase-js`'s own `dist/umd/supabase.js`, unmodified) is
+the same convention again, used only by `app.html`'s optional Cloud
+Sync feature - see "Cloud Sync" under "`app.html` — architecture" above
+and `supabase/` below. Wrapped in its own `OFFLINE-STRIP` marker
+alongside `modules/cloud-sync.js`, so it's excluded from the offline
+package the same way `jszip.min.js` is.
 
-## `supabase/` — Supabase schema (authored, not connected)
+## `supabase/` — Supabase schema (connected via app.html's Cloud Sync)
 
 `supabase/schema.sql` + `supabase/README.md` are a Supabase PostgreSQL
-schema (tables, indexes, RLS policies, a `handle_new_user()` trigger)
-for the POS app to eventually save its data to, authored ahead of any
-actual integration - per an explicit "without connecting yet" request.
-**Nothing in `app.html` or anywhere else in the repo talks to Supabase**;
-no project URL or API key exists anywhere in this codebase; this schema
-has never been run against a live project, only verified locally against
-a throwaway PostgreSQL 16 instance with stub `auth.users`/`auth.uid()`
-objects standing in for Supabase's own built-ins (confirmed idempotent -
-safe to re-run - and that the new-user trigger correctly auto-provisions
-a default `store_settings` row with the same "Demo Store" defaults
-`app.html` itself ships). Tables: `store_settings` (Settings panel,
-one row per user, plus a catch-all `settings jsonb` column for anything
-not worth its own column), `products`, `cashiers`, `payment_methods`,
-`sales` (header/totals, with store name/details/footer snapshotted at
-sale time for reprints, same as `app.html`'s own `salesHistory`),
-`sale_items` (line items, including the optional per-item `description`
-field), `sale_payments`. Every table carries its own `user_id` (not just
-reachable via a join) so RLS can be a single `auth.uid() = user_id`
-policy per table. Auth is Supabase's own built-in `auth.users` - there is
-no separate users table here - so enabling Google (or any other OAuth
-provider) is a Supabase-dashboard-only step (Authentication -> Providers),
-not a SQL change; see `supabase/README.md` for the exact steps. Follow
-this same "dedicated folder + setup README, no live credentials in the
-repo" convention (matching `contact-form/`/`premium-validation/`) if this
-schema is later extended or actually wired up to `app.html`.
+schema (tables, indexes, RLS policies, a `handle_new_user()` trigger).
+It started out authored-but-not-connected, per an explicit "without
+connecting yet" request; a later request ("can you connect it to pos
+app now?") wired it up for real as `app.html`'s optional Cloud Sync
+feature - see "Cloud Sync" under "`app.html` — architecture" above for
+the integration itself (`modules/cloud-sync.js`,
+`vendor/supabase.min.js`, the Settings → Backup UI). Tables:
+`store_settings` (Settings panel, one row per user, plus a catch-all
+`settings jsonb` column for anything not worth its own column),
+`products`, `cashiers`, `payment_methods`, `sales` (header/totals, with
+store name/details/footer snapshotted at sale time for reprints, same
+as `app.html`'s own `salesHistory`, plus a first-class `document_type`
+column and its own `meta jsonb` catch-all - both added once Cloud Sync
+needed them, with `alter table ... add column if not exists` statements
+so re-running the file against an already-applied older copy still
+picks them up), `sale_items` (line items, including the optional
+per-item `description` field), `sale_payments`. Every table carries its
+own `user_id` (not just reachable via a join) so RLS can be a single
+`auth.uid() = user_id` policy per table. Auth is Supabase's own
+built-in `auth.users` - there is no separate users table here - so
+enabling Google (or any other OAuth provider) is a
+Supabase-dashboard-only step (Authentication -> Providers), not a SQL
+change; see `supabase/README.md` for the exact steps.
+`SUPABASE_URL`/`SUPABASE_ANON_KEY` (the project's public URL and
+anon/publishable key, safe to embed client-side by Supabase's own
+design) live in `modules/cloud-sync.js`, not in this folder - this
+folder is schema-only. Confirmed via a throwaway local PostgreSQL 16
+instance (fresh install, idempotent re-run, and the pre-Cloud-Sync
+upgrade path) that the schema itself runs cleanly and the
+`handle_new_user()` trigger correctly auto-provisions a default
+`store_settings` row - see the Cloud Sync bullet above for what could
+and couldn't be verified against the actual live project from this
+sandbox. Follow this same "dedicated folder + setup README, no live
+credentials in the repo" convention (matching
+`contact-form/`/`premium-validation/`) if this schema is extended
+further.
 
 ## Premium code validation (live site only)
 
