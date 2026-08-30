@@ -619,10 +619,13 @@ all of them under one pattern:
     drifted stale (still individually linking only 4 of the 5 tools,
     missing Pricing Calculator, a real content bug) and now duplicated
     the new `#free-tools` section's job; trimmed to one sentence naming
-    all five tools plus a single link down to `#free-tools` instead of
-    four separate `<a>` tags repeating the same pitch. The other three
-    About paragraphs were also tightened for the same short-sentence
-    brand voice already established elsewhere on this page, no content
+    all five tools plus a single link back up to `#free-tools` instead
+    of four separate `<a>` tags repeating the same pitch - worded "See
+    ... above", not "below", since `#free-tools` sits earlier on the
+    page than the About section (wrong the first time this line was
+    written, caught and fixed on review). The other three About
+    paragraphs were also tightened for the same short-sentence brand
+    voice already established elsewhere on this page, no content
     removed. A live full-page screenshot audit surfaced one other thing
     worth recording as a **known, deliberately-not-fixed issue**: the
     sitewide `.cookie-consent` banner (`position: fixed; bottom: 12px`)
