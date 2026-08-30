@@ -693,11 +693,30 @@ zero network calls.
   cashier.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
-- **Products:** manual add, or bulk CSV upload (`handleCsvUpload`, columns
-  Name/Price/Category/SKU, optionally Stock and TaxExempt — `Yes`/`Y`/
-  `True`/`1` all parse as exempt, anything else as taxable) that
-  **replaces** the whole catalog; "Download Sample CSV" and "Clear
-  Products" actions exist.
+- **Products:** manual add, or bulk upload from **either CSV or Excel
+  (`.xlsx`/`.xls`)** (`handleProductFileUpload`, columns Name/Price/
+  Category/SKU, optionally Stock and TaxExempt — `Yes`/`Y`/`True`/`1`
+  all parse as exempt, anything else as taxable) that **replaces** the
+  whole catalog. The file input's `accept` covers both extensions/MIME
+  types; `handleProductFileUpload` sniffs the filename
+  (`/\.xlsx?$/i`) to decide whether to `reader.readAsArrayBuffer()` +
+  `XLSX.read(...)` (the same `vendor/xlsx.full.min.js`/SheetJS library
+  already used for `.xlsx` exports below - it reads workbooks too, not
+  just writes them) or `reader.readAsText()` + the existing hand-rolled
+  `parseCSV()`. Both paths converge on the same
+  `XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false })`-
+  shaped array-of-arrays, so the actual column-detection/row-building
+  logic (`productRowsFromParsed()`, extracted verbatim from the old
+  CSV-only `handleCsvUpload`) is shared and format-agnostic - it doesn't
+  know or care whether a row came from a spreadsheet or a text file.
+  "Download Sample CSV" and "Download Sample Excel" sit side by side
+  (`downloadSampleCsv()`/`downloadSampleExcel()`, both built from the
+  same `sampleProductRows()` data so the two files always stay in sync),
+  plus "Clear Products". This was a deliberate add-Excel-without-
+  breaking-CSV choice, not a replacement - Excel is the more familiar
+  format for most shop owners maintaining a product list, but nothing
+  about the existing CSV workflow (or any external tooling built around
+  it) changes.
 - **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
   (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
   CSV/text export path (`rowsToCsv`, `downloadTextFile`). Sales History
