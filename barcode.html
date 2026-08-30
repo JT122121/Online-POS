@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:START -->
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+  };
+  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+  window.acceptCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "accepted"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+  window.declineCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "declined"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+  window.closeCookieBanner = function() { hideBanner(); };
+
+  var consent = null, seen = null;
+  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+  }
+})();
+</script>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Barcode / QR Code - Free Barcode &amp; QR Code Generator | GoOnlinePOS.com</title>
+<meta name="description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, add optional text above or below, and add a logo or short text to the center of a QR code. Save, download, or print - no signup required.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://goonlinepos.com/barcode">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://goonlinepos.com/barcode">
+<meta property="og:title" content="Create Barcode / QR Code | GoOnlinePOS.com">
+<meta property="og:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save, download, or print it.">
+<meta property="og:site_name" content="Go Online POS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create Barcode / QR Code | GoOnlinePOS.com">
+<meta name="twitter:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save, download, or print it.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:START -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:END -->
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 20px; }
+
+.masthead { text-align: center; padding: 30px 20px 18px; }
+.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: -.02em; margin: 0 0 8px; }
+.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 480px; }
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 900px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 10px; }
+  .site-header { margin-top: 12px; }
+}
+
+.gen-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 26px; margin: 22px 0; }
+
+.type-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+.type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
+.type-tab:hover { border-color: #cfccbf; }
+.type-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.type-tabs.small { margin-bottom: 12px; }
+.type-tabs.small .type-tab { flex: 0 0 auto; font-size: 12.5px; padding: 7px 16px; }
+
+.field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.field-input, select.field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+.field-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.field-row { margin-bottom: 16px; }
+.field-hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; line-height: 1.5; }
+.field-hint.error { color: #b3261e; font-weight: 600; }
+.field-hint.warn { color: #9a6a00; font-weight: 600; }
+
+.size-row { margin-bottom: 12px; }
+.custom-size-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.custom-size-row.one-col { grid-template-columns: 1fr; max-width: 220px; }
+.custom-size-row.hidden { display: none !important; }
+
+.checkbox-row { margin: 4px 0 12px; }
+.checkbox-row label { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink-soft); cursor: pointer; }
+.checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+
+.hidden { display: none !important; }
+
+.center-content-block { background: #fafaf7; border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 14px; margin: 0 0 16px; }
+.logo-upload-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px dashed var(--line); padding: 9px 14px; border-radius: var(--radius-sm); cursor: pointer; }
+.logo-upload-label:hover { background: #fff; border-color: #cfccbf; }
+.hidden-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.logo-preview { max-width: 60px; max-height: 60px; object-fit: contain; border-radius: 6px; display: inline-block; vertical-align: middle; margin-right: 8px; border: 1px solid var(--line); background: #fff; }
+.remove-logo-btn { border: none; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
+.remove-logo-btn:hover { background: #fbe9e7; color: #b3261e; }
+.logo-preview.hidden, .remove-logo-btn.hidden, .logo-upload-label.hidden { display: none !important; }
+
+.divider-line { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
+
+.preview-area { margin-top: 6px; }
+.preview-label { font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; text-align: center; }
+.preview-box-outer { display: flex; justify-content: center; padding: 10px 0; }
+.preview-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #fff; border: 1px solid var(--line-soft); box-shadow: var(--shadow); padding: 2.5mm; overflow: hidden; }
+.preview-top-text { font-family: var(--font-body); font-weight: 700; font-size: 12px; text-align: center; color: #000; line-height: 1.2; max-width: 100%; overflow-wrap: break-word; }
+.preview-value-text { font-family: var(--font-mono); font-size: 11px; text-align: center; color: #000; letter-spacing: .02em; }
+.preview-box canvas { display: block; }
+.preview-hint { text-align: center; font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+.preview-hint.warn { color: #9a6a00; font-weight: 600; }
+
+.action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
+.action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
+#printCodeBtn { background: var(--ink); color: #fff; }
+#printCodeBtn:hover { background: #263832; }
+#saveCodeBtn { background: var(--accent); color: #fff; }
+#saveCodeBtn:hover { background: var(--accent-dark); }
+#downloadCodeBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#downloadCodeBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+#savedCodesBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#savedCodesBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+#clearCodeBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#clearCodeBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+.autosave-note { text-align: center; font-size: 12px; color: var(--muted); margin: 10px 0 30px; }
+
+.save-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 400; }
+.save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(22,33,29,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 350; }
+.modal-overlay.hidden { display: none !important; }
+.modal-box { background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; color: var(--ink); }
+.modal-close-btn { border: none; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.modal-close-btn:hover { background: var(--line-soft); color: var(--ink); }
+.modal-body { padding: 10px 12px; overflow-y: auto; }
+.saved-code-row { display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.saved-code-row:hover { background: var(--accent-tint); }
+.saved-code-badge { flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); border-radius: 6px; padding: 4px 7px; }
+.saved-code-row.type-qr .saved-code-badge { color: #8a6417; background: var(--gold-tint); }
+.saved-code-main { flex: 1; min-width: 0; }
+.saved-code-title { font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.saved-code-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.saved-code-delete { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 8px; border-radius: 6px; flex-shrink: 0; }
+.saved-code-delete:hover { background: #fbe9e7; color: #b3261e; }
+.saved-codes-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 30px 16px; }
+
+.info-section { max-width: 640px; margin: 10px auto 30px; }
+.info-section h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); margin: 30px 0 12px; }
+.info-section ol, .info-section ul { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 14px; }
+.info-section dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
+.info-section dd { color: var(--ink-soft); font-size: 14px; margin: 4px 0 0; }
+
+.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
+.site-footer span { margin: 0 8px; }
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 27px; }
+  .gen-card { padding: 20px; }
+  .custom-size-row { grid-template-columns: 1fr; }
+}
+
+@page { size: 60mm 40mm; margin: 0; }
+@media print {
+  html, body { background: #fff; }
+  .masthead, .site-header, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
+  .wrap { max-width: none; padding: 0; margin: 0; }
+  .gen-card { box-shadow: none; border: none; padding: 0; margin: 0; }
+  .no-print { display: none !important; }
+  .preview-label { display: none !important; }
+  .preview-box-outer { padding: 0; }
+  .preview-box { border: none; box-shadow: none; padding: 0; width: 100% !important; height: 100vh !important; }
+}
+
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+.cookie-consent.hidden { display: none !important; }
+.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
+.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
+.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cookie-notice-view.hidden { display: none !important; }
+.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
+.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-choice-view.hidden { display: none !important; }
+.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
+.cc-decline:hover { border-color: rgba(255,255,255,.6); }
+.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
+.cc-accept:hover { background: #cf9631; }
+.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-declined-view.hidden { display: none !important; }
+.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+.cc-close:hover { background: #e6e4d9; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="site-header">
+<a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+<div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+<h2>GoOnlinePOS.com</h2>
+</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="/">Homepage</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+</header>
+
+<header class="masthead">
+<div class="kicker">Free Tool</div>
+<h1>Create Barcode / QR Code</h1>
+<p>Generate a barcode or QR code in your browser, choose a standard or custom label size, then print it, download it, or save it for later. No signup, nothing leaves this browser.</p>
+</header>
+
+<div class="gen-card" id="genCard">
+
+  <div class="type-tabs no-print">
+    <button type="button" class="type-tab active" id="tabBarcode" data-type="barcode">▮▮▮ Barcode</button>
+    <button type="button" class="type-tab" id="tabQr" data-type="qr">▦ QR Code</button>
+  </div>
+
+  <div class="form-section no-print">
+
+    <div class="field-row">
+      <label class="field-label" for="codeValue" id="codeValueLabel">Barcode Value</label>
+      <input type="text" class="field-input" id="codeValue" placeholder="e.g. 123456789012">
+      <p class="field-hint" id="codeValueHint"></p>
+    </div>
+
+    <div class="field-row" id="barcodeTypeRow">
+      <label class="field-label" for="barcodeFormat">Barcode Type</label>
+      <select class="field-input" id="barcodeFormat">
+        <option value="CODE128">CODE128 (letters, numbers, symbols)</option>
+        <option value="EAN13">EAN-13 (retail products, 12-13 digits)</option>
+        <option value="UPC">UPC-A (retail products, 11-12 digits)</option>
+        <option value="CODE39">CODE39 (letters, numbers, a few symbols)</option>
+        <option value="ITF14">ITF-14 (shipping cartons, 13-14 digits)</option>
+        <option value="codabar">Codabar (numbers and -$:/.+)</option>
+        <option value="pharmacode">Pharmacode (a single number)</option>
+      </select>
+    </div>
+
+    <div class="size-row">
+      <label class="field-label" for="sizePreset">Label Size</label>
+      <select class="field-input" id="sizePreset"></select>
+    </div>
+    <div class="custom-size-row hidden" id="customSizeBarcodeRow">
+      <div>
+        <label class="field-label" for="customWidth">Width (mm)</label>
+        <input type="number" class="field-input" id="customWidth" min="15" max="300" value="60">
+      </div>
+      <div>
+        <label class="field-label" for="customHeight">Height (mm)</label>
+        <input type="number" class="field-input" id="customHeight" min="10" max="300" value="40">
+      </div>
+    </div>
+    <div class="custom-size-row one-col hidden" id="customSizeQrRow">
+      <div>
+        <label class="field-label" for="customQrSize">Size (mm, square)</label>
+        <input type="number" class="field-input" id="customQrSize" min="15" max="300" value="51">
+      </div>
+    </div>
+
+    <hr class="divider-line">
+
+    <div class="checkbox-row">
+      <label><input type="checkbox" id="showTopText"> Add text above</label>
+    </div>
+    <div class="field-row hidden" id="topTextRow">
+      <label class="field-label" for="topText">Text Above</label>
+      <input type="text" class="field-input" id="topText" placeholder="e.g. Product Name" maxlength="60">
+    </div>
+
+    <div class="checkbox-row" id="showValueRow">
+      <label><input type="checkbox" id="showValueBelow" checked> Show the barcode value underneath</label>
+    </div>
+
+    <div class="checkbox-row hidden" id="showQrValueRow">
+      <label><input type="checkbox" id="showQrValueBelow"> Show the QR value underneath</label>
+    </div>
+
+    <div class="checkbox-row hidden" id="centerContentToggleRow">
+      <label><input type="checkbox" id="enableCenterContent"> Add an image or text in the center</label>
+    </div>
+    <div class="center-content-block hidden" id="centerContentBlock">
+      <div class="type-tabs small">
+        <button type="button" class="type-tab active" id="centerModeImageBtn" data-mode="image">Image</button>
+        <button type="button" class="type-tab" id="centerModeTextBtn" data-mode="text">Text</button>
+      </div>
+      <div id="centerImageRow">
+        <input type="file" id="centerImageInput" accept="image/*" class="hidden-file-input">
+        <img id="centerImagePreview" class="logo-preview hidden" alt="Center logo">
+        <label for="centerImageInput" class="logo-upload-label" id="centerImageUploadLabel">🖼 Upload Image</label>
+        <button type="button" id="removeCenterImageBtn" class="remove-logo-btn hidden">✕ Remove</button>
+      </div>
+      <div class="field-row hidden" id="centerTextRow" style="margin-top: 10px;">
+        <label class="field-label" for="centerText">Center Text</label>
+        <input type="text" class="field-input" id="centerText" maxlength="4" placeholder="e.g. GO">
+      </div>
+      <p class="field-hint">A high error-correction level is used automatically whenever center content is on, so the code still scans correctly with the middle covered. Keep center text to 2-4 characters.</p>
+    </div>
+
+  </div>
+
+  <div class="preview-area">
+    <div class="preview-label no-print">Preview</div>
+    <div class="preview-box-outer">
+      <div class="preview-box" id="previewBox">
+        <div class="preview-top-text hidden" id="previewTopText"></div>
+        <canvas id="codeCanvas"></canvas>
+        <div class="preview-value-text hidden" id="previewValueText"></div>
+      </div>
+    </div>
+    <p class="preview-hint no-print" id="sizeHint"></p>
+  </div>
+
+</div>
+
+<div class="action-bar no-print">
+  <button type="button" id="saveCodeBtn">💾 Save</button>
+  <button type="button" id="savedCodesBtn">📂 Saved Codes</button>
+  <button type="button" id="downloadCodeBtn">⬇ Download PNG</button>
+  <button type="button" id="printCodeBtn">🖨 Print / Save as PDF</button>
+  <button type="button" id="clearCodeBtn">🗑 Clear / New</button>
+</div>
+<p class="autosave-note no-print">Your current barcode or QR code is saved automatically in this browser as you type. Click "Save" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.</p>
+
+<div class="modal-overlay hidden no-print" id="savedCodesOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Saved Codes</h3>
+      <button type="button" class="modal-close-btn" id="closeSavedCodesBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="savedCodesList"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">Saved</div>
+
+<div class="info-section no-print">
+  <h2>How to create a barcode or QR code</h2>
+  <ol>
+    <li>Choose Barcode or QR Code at the top.</li>
+    <li>Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
+    <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're printing for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
+    <li>Optionally add text above the code (e.g. a product name), and choose whether to show the encoded value underneath it.</li>
+    <li>For a QR code, you can also add a small logo image or a short piece of text to the center - a high error-correction level is used automatically so it still scans correctly.</li>
+    <li>Click "Save" to keep it in your Saved Codes list, "Download PNG" to save an image file, or "Print / Save as PDF" to print it directly.</li>
+  </ol>
+
+  <h2>Barcode / QR Code FAQ</h2>
+  <dl>
+    <dt>Is this barcode/QR code generator free?</dt>
+    <dd>Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.</dd>
+    <dt>Where can I see my saved codes?</dt>
+    <dd>Click "Save" to add the current one to your list, then click "Saved Codes" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt>Will my barcode scan correctly?</dt>
+    <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid printing the label too small.</dd>
+    <dt>Can I add my logo to a QR code?</dt>
+    <dd>Yes - turn on "Add an image or text in the center" under QR Code and upload an image, or add a short piece of text instead. A high error-correction level keeps the code scannable even with part of the center covered.</dd>
+    <dt>What sizes can I print at?</dt>
+    <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the printed output match exactly.</dd>
+  </dl>
+</div>
+
+</div>
+
+<footer class="site-footer no-print">
+<a href="contact">Contact</a>
+<span>·</span>
+<a href="privacy">Privacy Policy</a>
+<span>·</span>
+<a href="terms">Terms of Service</a>
+<span>·</span>
+<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+</footer>
+
+<!-- OFFLINE-STRIP:COOKIE-BANNER:START -->
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+<div id="cookieNoticeView" class="cookie-notice-view">
+<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+</div>
+<div id="cookieChoiceView" class="cc-choice-view hidden">
+<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy">Learn more</a></div>
+<div class="cc-actions">
+<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
+<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+</div>
+</div>
+<div id="cookieDeclinedView" class="cc-declined-view hidden">
+<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+</div>
+</div>
+<!-- OFFLINE-STRIP:COOKIE-BANNER:END -->
+
+<script src="vendor/jsbarcode.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="vendor/qrcode_UTF8.js"></script>
+<script>
+(function() {
+  var DRAFT_KEY = "goonlinepos-barcode-draft";
+  var HISTORY_KEY = "goonlinepos-barcode-history";
+
+  var BARCODE_SIZES = [
+    { key: "2x1", label: "2 x 1 in (51 x 25 mm) - Standard retail label", w: 51, h: 25 },
+    { key: "1.5x1", label: "1.5 x 1 in (38 x 25 mm) - Small item label", w: 38, h: 25 },
+    { key: "3x2", label: "3 x 2 in (76 x 51 mm) - Shipping / product label", w: 76, h: 51 },
+    { key: "4x6", label: "4 x 6 in (102 x 152 mm) - Shipping label", w: 102, h: 152 },
+    { key: "custom", label: "Custom size", w: null, h: null }
+  ];
+  var QR_SIZES = [
+    { key: "1x1", label: "1 x 1 in (25 x 25 mm) - Small", w: 25, h: 25 },
+    { key: "2x2", label: "2 x 2 in (51 x 51 mm) - Standard", w: 51, h: 51 },
+    { key: "3x3", label: "3 x 3 in (76 x 76 mm) - Poster / table tent", w: 76, h: 76 },
+    { key: "4x4", label: "4 x 4 in (102 x 102 mm) - Large", w: 102, h: 102 },
+    { key: "custom", label: "Custom size", w: null, h: null }
+  ];
+
+  var BARCODE_FORMAT_HINTS = {
+    CODE128: "Accepts letters, numbers, and most symbols - the most flexible general-purpose format.",
+    EAN13: "Needs 12 or 13 digits (a 13th check digit is added automatically if you enter 12).",
+    UPC: "Needs 11 or 12 digits (a 12th check digit is added automatically if you enter 11).",
+    CODE39: "Accepts uppercase letters, numbers, and - . $ / + % space.",
+    ITF14: "Needs 13 or 14 digits, used for shipping cartons and pallets.",
+    codabar: "Accepts numbers and - $ : / . +",
+    pharmacode: "Accepts a single number from 3 to 131070."
+  };
+
+  var typeTabBarcode = document.getElementById("tabBarcode");
+  var typeTabQr = document.getElementById("tabQr");
+  var barcodeTypeRow = document.getElementById("barcodeTypeRow");
+  var showValueRow = document.getElementById("showValueRow");
+  var showQrValueRow = document.getElementById("showQrValueRow");
+  var centerContentToggleRow = document.getElementById("centerContentToggleRow");
+  var centerContentBlock = document.getElementById("centerContentBlock");
+  var sizePresetSelect = document.getElementById("sizePreset");
+  var customBarcodeRow = document.getElementById("customSizeBarcodeRow");
+  var customQrRow = document.getElementById("customSizeQrRow");
+  var codeValueInput = document.getElementById("codeValue");
+  var codeValueLabel = document.getElementById("codeValueLabel");
+  var codeValueHint = document.getElementById("codeValueHint");
+  var barcodeFormatSelect = document.getElementById("barcodeFormat");
+  var showTopTextCheckbox = document.getElementById("showTopText");
+  var topTextRow = document.getElementById("topTextRow");
+  var topTextInput = document.getElementById("topText");
+  var showValueBelowCheckbox = document.getElementById("showValueBelow");
+  var showQrValueBelowCheckbox = document.getElementById("showQrValueBelow");
+  var enableCenterContentCheckbox = document.getElementById("enableCenterContent");
+  var centerModeImageBtn = document.getElementById("centerModeImageBtn");
+  var centerModeTextBtn = document.getElementById("centerModeTextBtn");
+  var centerImageRow = document.getElementById("centerImageRow");
+  var centerTextRow = document.getElementById("centerTextRow");
+  var centerImageInput = document.getElementById("centerImageInput");
+  var centerImagePreview = document.getElementById("centerImagePreview");
+  var centerImageUploadLabel = document.getElementById("centerImageUploadLabel");
+  var removeCenterImageBtn = document.getElementById("removeCenterImageBtn");
+  var centerTextInput = document.getElementById("centerText");
+  var previewBox = document.getElementById("previewBox");
+  var previewTopText = document.getElementById("previewTopText");
+  var previewValueText = document.getElementById("previewValueText");
+  var codeCanvas = document.getElementById("codeCanvas");
+  var sizeHint = document.getElementById("sizeHint");
+  var dynamicPageSizeTag = null;
+
+  var currentType = "barcode";
+  var currentCenterMode = "image";
+  var currentCodeId = null;
+  var centerImageDataUrl = "";
+  var saveTimer = null;
+
+  function makeId() {
+    return "code_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function currentSizeList() {
+    return currentType === "barcode" ? BARCODE_SIZES : QR_SIZES;
+  }
+
+  function populateSizePreset(selectedKey) {
+    var list = currentSizeList();
+    sizePresetSelect.innerHTML = "";
+    list.forEach(function(s) {
+      var opt = document.createElement("option");
+      opt.value = s.key;
+      opt.textContent = s.label;
+      sizePresetSelect.appendChild(opt);
+    });
+    var valid = list.some(function(s) { return s.key === selectedKey; });
+    sizePresetSelect.value = valid ? selectedKey : list[0].key;
+  }
+
+  function currentSizeMm() {
+    var key = sizePresetSelect.value;
+    if (key === "custom") {
+      if (currentType === "barcode") {
+        var w = Math.max(15, parseFloat(document.getElementById("customWidth").value) || 60);
+        var h = Math.max(10, parseFloat(document.getElementById("customHeight").value) || 40);
+        return { w: w, h: h };
+      }
+      var size = Math.max(15, parseFloat(document.getElementById("customQrSize").value) || 51);
+      return { w: size, h: size };
+    }
+    var found = currentSizeList().find(function(s) { return s.key === key; });
+    if (!found) found = currentSizeList()[0];
+    return { w: found.w, h: found.h };
+  }
+
+  function ensureDynamicPageSizeTag() {
+    if (!dynamicPageSizeTag) {
+      dynamicPageSizeTag = document.createElement("style");
+      dynamicPageSizeTag.id = "dynamicPageSize";
+      document.head.appendChild(dynamicPageSizeTag);
+    }
+    return dynamicPageSizeTag;
+  }
+
+  function applyBoxSize() {
+    var size = currentSizeMm();
+    previewBox.style.width = size.w + "mm";
+    previewBox.style.height = size.h + "mm";
+    ensureDynamicPageSizeTag().textContent = "@page { size: " + size.w + "mm " + size.h + "mm; margin: 0; }";
+    sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
+  }
+
+  function updateTypeUI() {
+    var isBarcode = currentType === "barcode";
+    typeTabBarcode.classList.toggle("active", isBarcode);
+    typeTabQr.classList.toggle("active", !isBarcode);
+    barcodeTypeRow.classList.toggle("hidden", !isBarcode);
+    showValueRow.classList.toggle("hidden", !isBarcode);
+    showQrValueRow.classList.toggle("hidden", isBarcode);
+    centerContentToggleRow.classList.toggle("hidden", isBarcode);
+    centerContentBlock.classList.toggle("hidden", isBarcode || !enableCenterContentCheckbox.checked);
+    codeValueLabel.textContent = isBarcode ? "Barcode Value" : "QR Code Value / Data";
+    codeValueInput.placeholder = isBarcode ? "e.g. 123456789012" : "e.g. https://example.com or any text";
+  }
+
+  function updateCenterModeUI() {
+    centerModeImageBtn.classList.toggle("active", currentCenterMode === "image");
+    centerModeTextBtn.classList.toggle("active", currentCenterMode === "text");
+    centerImageRow.classList.toggle("hidden", currentCenterMode !== "image");
+    centerTextRow.classList.toggle("hidden", currentCenterMode !== "text");
+  }
+
+  function setCenterImage(dataUrl) {
+    centerImageDataUrl = dataUrl || "";
+    if (centerImageDataUrl) {
+      centerImagePreview.src = centerImageDataUrl;
+      centerImagePreview.classList.remove("hidden");
+      centerImageUploadLabel.classList.add("hidden");
+      removeCenterImageBtn.classList.remove("hidden");
+    } else {
+      centerImagePreview.src = "";
+      centerImagePreview.classList.add("hidden");
+      centerImageUploadLabel.classList.remove("hidden");
+      removeCenterImageBtn.classList.add("hidden");
+    }
+  }
+
+  centerImageInput.addEventListener("change", function() {
+    var file = centerImageInput.files && centerImageInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function() {
+      setCenterImage(reader.result);
+      renderPreview();
+      scheduleSave();
+    };
+    reader.readAsDataURL(file);
+    centerImageInput.value = "";
+  });
+  removeCenterImageBtn.addEventListener("click", function() {
+    setCenterImage("");
+    renderPreview();
+    scheduleSave();
+  });
+
+  centerModeImageBtn.addEventListener("click", function() {
+    currentCenterMode = "image";
+    updateCenterModeUI();
+    renderPreview();
+    scheduleSave();
+  });
+  centerModeTextBtn.addEventListener("click", function() {
+    currentCenterMode = "text";
+    updateCenterModeUI();
+    renderPreview();
+    scheduleSave();
+  });
+
+  typeTabBarcode.addEventListener("click", function() { switchType("barcode"); });
+  typeTabQr.addEventListener("click", function() { switchType("qr"); });
+
+  function switchType(type) {
+    if (currentType === type) return;
+    currentType = type;
+    populateSizePreset(currentType === "barcode" ? "2x1" : "2x2");
+    updateTypeUI();
+    updateSizeRowsVisibility();
+    applyBoxSize();
+    renderPreview();
+    scheduleSave();
+  }
+
+  function updateSizeRowsVisibility() {
+    var isCustom = sizePresetSelect.value === "custom";
+    customBarcodeRow.classList.toggle("hidden", !(isCustom && currentType === "barcode"));
+    customQrRow.classList.toggle("hidden", !(isCustom && currentType === "qr"));
+  }
+
+  sizePresetSelect.addEventListener("change", function() {
+    updateSizeRowsVisibility();
+    applyBoxSize();
+    renderPreview();
+    scheduleSave();
+  });
+  ["customWidth", "customHeight", "customQrSize"].forEach(function(id) {
+    document.getElementById(id).addEventListener("input", function() {
+      applyBoxSize();
+      renderPreview();
+      scheduleSave();
+    });
+  });
+
+  showTopTextCheckbox.addEventListener("change", function() {
+    topTextRow.classList.toggle("hidden", !showTopTextCheckbox.checked);
+    renderPreview();
+    scheduleSave();
+  });
+  enableCenterContentCheckbox.addEventListener("change", function() {
+    centerContentBlock.classList.toggle("hidden", !enableCenterContentCheckbox.checked);
+    renderPreview();
+    scheduleSave();
+  });
+
+  [codeValueInput, barcodeFormatSelect, topTextInput, centerTextInput].forEach(function(el) {
+    el.addEventListener("input", function() { renderPreview(); scheduleSave(); });
+    el.addEventListener("change", function() { renderPreview(); scheduleSave(); });
+  });
+  [showValueBelowCheckbox, showQrValueBelowCheckbox].forEach(function(el) {
+    el.addEventListener("change", function() { renderPreview(); scheduleSave(); });
+  });
+
+  function renderBarcodeToCanvas(value) {
+    var size = currentSizeMm();
+    var barHeightPx = Math.max(50, Math.min(160, Math.round(size.h * 4)));
+    try {
+      window.JsBarcode(codeCanvas, value || " ", {
+        format: barcodeFormatSelect.value,
+        displayValue: false,
+        width: 2,
+        height: barHeightPx,
+        margin: 10,
+        background: "#ffffff",
+        lineColor: "#000000",
+        valid: function(valid) {
+          if (!value) {
+            codeValueHint.textContent = "";
+            codeValueHint.className = "field-hint";
+          } else if (!valid) {
+            codeValueHint.textContent = "This value isn't valid for " + barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0] + ". " + (BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "");
+            codeValueHint.className = "field-hint error";
+          } else {
+            codeValueHint.textContent = BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "";
+            codeValueHint.className = "field-hint";
+          }
+        }
+      });
+    } catch (e) {
+      codeValueHint.textContent = "This value isn't valid for " + barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0] + ". " + (BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "");
+      codeValueHint.className = "field-hint error";
+      var ctx = codeCanvas.getContext("2d");
+      codeCanvas.width = 300; codeCanvas.height = 100;
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 300, 100);
+      ctx.fillStyle = "#b3261e"; ctx.font = "13px Arial"; ctx.textAlign = "center";
+      ctx.fillText("Enter a valid value", 150, 54);
+    }
+  }
+
+  function renderQrToCanvas(value) {
+    codeValueHint.textContent = "";
+    codeValueHint.className = "field-hint";
+    var ecLevel = enableCenterContentCheckbox.checked ? "H" : "M";
+    var text = value || " ";
+    var qr;
+    try {
+      qr = window.qrcode(0, ecLevel);
+      qr.addData(text);
+      qr.make();
+    } catch (e) {
+      try {
+        qr = window.qrcode(0, "L");
+        qr.addData(text);
+        qr.make();
+      } catch (e2) {
+        codeValueHint.textContent = "This value is too long to encode as a QR code.";
+        codeValueHint.className = "field-hint error";
+        var ctx0 = codeCanvas.getContext("2d");
+        codeCanvas.width = 200; codeCanvas.height = 200;
+        ctx0.fillStyle = "#fff"; ctx0.fillRect(0, 0, 200, 200);
+        return;
+      }
+    }
+    var moduleCount = qr.getModuleCount();
+    var pxPerModule = 10;
+    var quietZone = 4;
+    var total = (moduleCount + quietZone * 2) * pxPerModule;
+    codeCanvas.width = total;
+    codeCanvas.height = total;
+    var ctx = codeCanvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, total, total);
+    ctx.fillStyle = "#000000";
+    for (var r = 0; r < moduleCount; r++) {
+      for (var c = 0; c < moduleCount; c++) {
+        if (qr.isDark(r, c)) {
+          ctx.fillRect((c + quietZone) * pxPerModule, (r + quietZone) * pxPerModule, pxPerModule, pxPerModule);
+        }
+      }
+    }
+
+    if (enableCenterContentCheckbox.checked) {
+      var boxSize = Math.round(total * 0.26);
+      var boxX = Math.round((total - boxSize) / 2);
+      var boxY = Math.round((total - boxSize) / 2);
+      var pad = Math.round(boxSize * 0.08);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(boxX, boxY, boxSize, boxSize);
+      if (currentCenterMode === "image" && centerImageDataUrl) {
+        var img = new Image();
+        img.onload = function() {
+          var innerSize = boxSize - pad * 2;
+          var scale = Math.min(innerSize / img.width, innerSize / img.height);
+          var dw = img.width * scale, dh = img.height * scale;
+          ctx.drawImage(img, boxX + (boxSize - dw) / 2, boxY + (boxSize - dh) / 2, dw, dh);
+          fitCanvasInBox();
+        };
+        img.src = centerImageDataUrl;
+      } else if (currentCenterMode === "text" && centerTextInput.value.trim()) {
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold " + Math.round(boxSize * 0.42) + "px " + getComputedStyle(document.body).fontFamily;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(centerTextInput.value.trim().slice(0, 4), total / 2, total / 2 + 1);
+      }
+    }
+  }
+
+  function fitCanvasInBox() {
+    var boxRect = previewBox.getBoundingClientRect();
+    var reserved = 0;
+    if (!previewTopText.classList.contains("hidden")) reserved += previewTopText.offsetHeight + 4;
+    if (!previewValueText.classList.contains("hidden")) reserved += previewValueText.offsetHeight + 4;
+    var availW = Math.max(20, boxRect.width - 4);
+    var availH = Math.max(20, boxRect.height - reserved - 4);
+    var nativeW = codeCanvas.width || 1;
+    var nativeH = codeCanvas.height || 1;
+    var scale = Math.min(availW / nativeW, availH / nativeH);
+    var dispW = Math.max(1, Math.round(nativeW * scale));
+    var dispH = Math.max(1, Math.round(nativeH * scale));
+    codeCanvas.style.width = dispW + "px";
+    codeCanvas.style.height = dispH + "px";
+
+    if (scale < 0.35) {
+      sizeHint.textContent = "⚠ This is quite dense for the selected label size - try a larger size or a shorter value for reliable scanning.";
+      sizeHint.className = "preview-hint no-print warn";
+    } else {
+      var size = currentSizeMm();
+      sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
+      sizeHint.className = "preview-hint no-print";
+    }
+  }
+
+  function renderPreview() {
+    var value = codeValueInput.value.trim();
+
+    var showTop = showTopTextCheckbox.checked && topTextInput.value.trim();
+    previewTopText.textContent = showTop ? topTextInput.value.trim() : "";
+    previewTopText.classList.toggle("hidden", !showTop);
+
+    var showVal = currentType === "barcode"
+      ? (showValueBelowCheckbox.checked && value)
+      : (showQrValueBelowCheckbox.checked && value);
+    previewValueText.textContent = showVal ? value : "";
+    previewValueText.classList.toggle("hidden", !showVal);
+
+    if (currentType === "barcode") {
+      renderBarcodeToCanvas(value);
+    } else {
+      renderQrToCanvas(value);
+    }
+    fitCanvasInBox();
+  }
+
+  function buildExportCanvas() {
+    var size = currentSizeMm();
+    var pxPerMm = 12;
+    var W = Math.round(size.w * pxPerMm);
+    var H = Math.round(size.h * pxPerMm);
+    var out = document.createElement("canvas");
+    out.width = W;
+    out.height = H;
+    var ctx = out.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, W, H);
+
+    var padding = Math.round(pxPerMm * 2);
+    var topH = 0, botH = 0;
+    var topText = previewTopText.classList.contains("hidden") ? "" : previewTopText.textContent;
+    var valText = previewValueText.classList.contains("hidden") ? "" : previewValueText.textContent;
+
+    ctx.fillStyle = "#000000";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    if (topText) {
+      topH = Math.round(H * 0.14);
+      ctx.font = "bold " + Math.round(topH * 0.55) + "px Arial, sans-serif";
+      ctx.fillText(topText, W / 2, topH / 2, W - padding * 2);
+    }
+    if (valText) {
+      botH = Math.round(H * 0.12);
+      ctx.font = Math.round(botH * 0.55) + "px monospace";
+      ctx.fillText(valText, W / 2, H - botH / 2, W - padding * 2);
+    }
+
+    var availW = W - padding * 2;
+    var availH = H - topH - botH - padding;
+    var scale = Math.min(availW / codeCanvas.width, availH / codeCanvas.height);
+    var dw = codeCanvas.width * scale;
+    var dh = codeCanvas.height * scale;
+    var dx = (W - dw) / 2;
+    var dy = topH + (availH - dh) / 2 + padding / 2;
+    ctx.drawImage(codeCanvas, dx, dy, dw, dh);
+
+    return out;
+  }
+
+  function slugify(s) {
+    return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  }
+
+  function downloadPng() {
+    var out = buildExportCanvas();
+    var a = document.createElement("a");
+    a.href = out.toDataURL("image/png");
+    var name = (currentType === "barcode" ? "barcode" : "qrcode") + (slugify(codeValueInput.value) ? "-" + slugify(codeValueInput.value) : "");
+    a.download = name + ".png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  function scheduleSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 400);
+  }
+
+  function collectState() {
+    return {
+      id: currentCodeId,
+      type: currentType,
+      value: codeValueInput.value,
+      barcodeFormat: barcodeFormatSelect.value,
+      sizeKey: sizePresetSelect.value,
+      customWidth: document.getElementById("customWidth").value,
+      customHeight: document.getElementById("customHeight").value,
+      customQrSize: document.getElementById("customQrSize").value,
+      showTopText: showTopTextCheckbox.checked,
+      topText: topTextInput.value,
+      showValueBelow: showValueBelowCheckbox.checked,
+      showQrValueBelow: showQrValueBelowCheckbox.checked,
+      enableCenterContent: enableCenterContentCheckbox.checked,
+      centerMode: currentCenterMode,
+      centerImage: centerImageDataUrl,
+      centerText: centerTextInput.value
+    };
+  }
+
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory(list) {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function showToast(text) {
+    var toast = document.getElementById("saveToast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(function() { toast.classList.remove("show"); }, 1800);
+  }
+
+  function saveCodeExplicit() {
+    if (!currentCodeId) currentCodeId = makeId();
+    var state = collectState();
+    state.id = currentCodeId;
+    var entry = {
+      id: currentCodeId,
+      type: state.type,
+      value: state.value || "",
+      sizeLabel: sizeHint.textContent.replace("Label size: ", "").replace(/^⚠.*/, ""),
+      savedAt: Date.now(),
+      state: state
+    };
+    var list = loadHistory();
+    var idx = list.findIndex(function(e) { return e.id === currentCodeId; });
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    saveHistory(list);
+    saveDraft();
+    showToast("Saved");
+  }
+
+  function renderSavedList() {
+    var list = loadHistory().slice().sort(function(a, b) { return b.savedAt - a.savedAt; });
+    var container = document.getElementById("savedCodesList");
+    container.innerHTML = "";
+    if (!list.length) {
+      container.innerHTML = '<div class="saved-codes-empty">No saved codes yet. Create a barcode or QR code and click "Save" to keep it here.</div>';
+      return;
+    }
+    list.forEach(function(entry) {
+      var row = document.createElement("div");
+      row.className = "saved-code-row" + (entry.type === "qr" ? " type-qr" : "");
+      var d = new Date(entry.savedAt);
+      var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      row.innerHTML =
+        '<span class="saved-code-badge">' + (entry.type === "qr" ? "QR" : "Barcode") + '</span>' +
+        '<div class="saved-code-main">' +
+          '<div class="saved-code-title">' + escapeHtml(entry.value || "(no value)") + '</div>' +
+          '<div class="saved-code-meta">' + escapeHtml(entry.sizeLabel || "") + ' · ' + escapeHtml(dateStr) + '</div>' +
+        '</div>' +
+        '<button type="button" class="saved-code-delete" aria-label="Delete saved code">✕</button>';
+      row.querySelector(".saved-code-main").addEventListener("click", function() { openSavedCode(entry.id); });
+      row.querySelector(".saved-code-delete").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (!confirm("Delete this saved code? This can't be undone.")) return;
+        deleteSavedCode(entry.id);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function openSavedCode(id) {
+    var entry = loadHistory().find(function(e) { return e.id === id; });
+    if (!entry) return;
+    applyState(entry.state);
+    saveDraft();
+    closeSavedCodesModal();
+  }
+
+  function deleteSavedCode(id) {
+    saveHistory(loadHistory().filter(function(e) { return e.id !== id; }));
+    renderSavedList();
+  }
+
+  function openSavedCodesModal() {
+    renderSavedList();
+    document.getElementById("savedCodesOverlay").classList.remove("hidden");
+  }
+  function closeSavedCodesModal() {
+    document.getElementById("savedCodesOverlay").classList.add("hidden");
+  }
+
+  function applyState(state) {
+    state = state || {};
+    currentCodeId = state.id || null;
+    currentType = state.type === "qr" ? "qr" : "barcode";
+    populateSizePreset(state.sizeKey || (currentType === "barcode" ? "2x1" : "2x2"));
+    updateTypeUI();
+
+    codeValueInput.value = state.value || "";
+    barcodeFormatSelect.value = state.barcodeFormat || "CODE128";
+    document.getElementById("customWidth").value = state.customWidth || 60;
+    document.getElementById("customHeight").value = state.customHeight || 40;
+    document.getElementById("customQrSize").value = state.customQrSize || 51;
+    updateSizeRowsVisibility();
+
+    showTopTextCheckbox.checked = !!state.showTopText;
+    topTextInput.value = state.topText || "";
+    topTextRow.classList.toggle("hidden", !showTopTextCheckbox.checked);
+
+    showValueBelowCheckbox.checked = state.showValueBelow !== false;
+    showQrValueBelowCheckbox.checked = !!state.showQrValueBelow;
+
+    enableCenterContentCheckbox.checked = !!state.enableCenterContent;
+    centerContentBlock.classList.toggle("hidden", currentType === "barcode" || !enableCenterContentCheckbox.checked);
+    currentCenterMode = state.centerMode === "text" ? "text" : "image";
+    updateCenterModeUI();
+    setCenterImage(state.centerImage || "");
+    centerTextInput.value = state.centerText || "";
+
+    applyBoxSize();
+    renderPreview();
+  }
+
+  function loadDraft() {
+    var raw = null;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
+    if (raw) {
+      try {
+        applyState(JSON.parse(raw));
+        return;
+      } catch (e) {}
+    }
+    applyState({});
+  }
+
+  document.getElementById("saveCodeBtn").addEventListener("click", saveCodeExplicit);
+  document.getElementById("savedCodesBtn").addEventListener("click", openSavedCodesModal);
+  document.getElementById("closeSavedCodesBtn").addEventListener("click", closeSavedCodesModal);
+  document.getElementById("savedCodesOverlay").addEventListener("click", function(e) {
+    if (e.target.id === "savedCodesOverlay") closeSavedCodesModal();
+  });
+  document.getElementById("downloadCodeBtn").addEventListener("click", downloadPng);
+  document.getElementById("printCodeBtn").addEventListener("click", function() { window.print(); });
+  document.getElementById("clearCodeBtn").addEventListener("click", function() {
+    if (!confirm("Clear this code and start a new one? This can't be undone.")) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    currentCodeId = null;
+    applyState({});
+  });
+
+  window.addEventListener("resize", function() { fitCanvasInBox(); });
+
+  loadDraft();
+})();
+</script>
+
+</body>
+</html>

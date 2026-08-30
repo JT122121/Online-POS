@@ -18,3 +18,21 @@ jszip.min.js
   Used by : app.html only, to assemble the "Download Offline POS" .zip
             client-side. Not included in the offline package itself —
             the offline copy never needs to zip anything.
+
+jsbarcode.min.js
+  Package : jsbarcode
+  Version : 3.12.3
+  License : MIT
+  Source  : https://www.npmjs.com/package/jsbarcode
+  Used by : barcode.html (barcode rendering) — not yet linked from any
+            other page.
+
+qrcode.js
+qrcode_UTF8.js
+  Package : qrcode-generator
+  Version : 2.0.4
+  License : MIT
+  Source  : https://www.npmjs.com/package/qrcode-generator
+  Used by : barcode.html (QR code rendering) — not yet linked from any
+            other page. qrcode_UTF8.js is the package's own optional
+            UTF-8 string-encoding patch and must load after qrcode.js.
