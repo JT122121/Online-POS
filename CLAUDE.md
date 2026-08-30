@@ -46,6 +46,12 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   (URL-only, `noindex`) while still being built, then was wired in once
   ready. See "`barcode.html` — standalone barcode / QR code generator"
   below.
+- **`vat.html`** — a standalone, free VAT calculator, the fourth
+  sibling in the `invoice.html`/`receipt.html`/`barcode.html` family
+  of free tools — add VAT to a net amount or remove VAT from a gross
+  amount. Indexable and linked from every page's header CTA row and
+  `app.html`'s own header-links from the day it shipped. See
+  "`vat.html` — standalone VAT calculator" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -162,16 +168,18 @@ all of them under one pattern:
   `terms.html` (own `<h1 class="doc-title">`) and `invoice.html`/
   `receipt.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
   use `<h2>` so the page keeps exactly one real `<h1>`.
-- **The 4-button `.cta-btn` row is identical and in the same order on
+- **The 5-button `.cta-btn` row is identical and in the same order on
   every page** — Free Invoice Generator → Free Receipt Generator → Free
-  Barcode & QR Code (`href="barcode"`) → Free Point of Sale
-  (`href="app"`), always extension-less. `index.html` used to be the
-  only page with this row (2 buttons, no POS link); a later pass added
-  the third button there and rolled the whole row out site-wide, and a
-  still-later pass added the fourth (Barcode & QR Code) once
-  `barcode.html` was ready to connect — see its own section below — so
-  **any older note in this file describing the CTA row as unique to
-  `index.html`, or as only 3 buttons, is stale**.
+  Barcode & QR Code (`href="barcode"`) → Free VAT Calculator
+  (`href="vat"`) → Free Point of Sale (`href="app"`), always
+  extension-less. `index.html` used to be the only page with this row
+  (2 buttons, no POS link); a later pass added the third button there
+  and rolled the whole row out site-wide, a later pass added the
+  fourth (Barcode & QR Code) once `barcode.html` was ready to connect,
+  and a still-later pass added the fifth (VAT Calculator) once
+  `vat.html` shipped — see each tool's own section below — so **any
+  older note in this file describing the CTA row as unique to
+  `index.html`, or as only 3 or 4 buttons, is stale**.
 - **`.site-nav` is always Homepage → Blog, in that order, everywhere** —
   originally "About" (linking to `about.html`), renamed to "Homepage"
   (linking to `/`) once `about.html`'s content moved onto `index.html`
@@ -225,12 +233,12 @@ all of them under one pattern:
   should show versus what only needs to live inside Settings:
   - **`.header-links`** (next to the app title/Premium/Special-Access
     badges): Homepage, Blog, Free Invoice Generator, Free Receipt
-    Generator, Free Barcode & QR Code, in that order - five **text-only**
-    buttons (no emoji icon, unlike most of the rest of the toolbar), all
-    sharing the exact same dark-green (`--accent-dark`) pill styling so
-    they read as one consistent row rather than differently-weighted
-    actions. Free Barcode & QR Code (`#createBarcodeButton` →
-    `openCreateBarcode()`) was added last, once `barcode.html` was ready
+    Generator, Free Barcode & QR Code, Free VAT Calculator, in that
+    order - six **text-only** buttons (no emoji icon, unlike most of
+    the rest of the toolbar), all sharing the exact same dark-green
+    (`--accent-dark`) pill styling so they read as one consistent row
+    rather than differently-weighted actions. Free Barcode & QR Code
+    (`#createBarcodeButton` → `openCreateBarcode()`) was added once `barcode.html` was ready
     to connect - same `window.open(...)` new-tab pattern, same
     `OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
     wrapping, and the same `createBarcodeShortcutLabel` translation key
@@ -267,7 +275,25 @@ all of them under one pattern:
     `OFFLINE-STRIP:HOMEPAGE-BUTTON`, and stripped by
     `buildOfflineAppHtml()` - none of `blog.html`/`invoice.html`/
     `receipt.html`/`index.html` ship in the offline package for them to
-    open.
+    open. **`#createVatButton` → `openCreateVat()` was added last**,
+    once `vat.html` shipped - same `window.open(...)` new-tab pattern,
+    same `OFFLINE-STRIP:CREATE-VAT-BUTTON`/`CREATE-VAT-JS` marker
+    wrapping, and the same `createVatShortcutLabel` translation key
+    added across all six `modules/translations.js` language blocks, as
+    every button before it. Adding it surfaced a real, pre-existing
+    bug: `changeLanguage()`'s `ids` map (the `{elementId:
+    translationKey}` table that actually re-translates `.header-links`
+    text on a language switch) never had `createBarcodeShortcutLabel`
+    added to it when Free Barcode & QR Code shipped, so that button's
+    translation key existed and its markup existed but nothing wired
+    them together - it silently stayed in whatever language it loaded
+    in and never re-translated. Fixed by adding both
+    `createBarcodeShortcutLabel` and the new `createVatShortcutLabel`
+    to that map in the same pass - the same class of oversight as the
+    missing dark-green CSS entry two paragraphs up, and the same
+    lesson: a new `.header-links` button needs the CSS color rule, the
+    `changeLanguage()` `ids` map entry, *and* the
+    `modules/translations.js` key, not just the button markup itself.
   - **`.header-actions` (the toolbar) now shows exactly six things:**
     Hide Toolbar, the Cashier select, How To Use, Settings, End of Day,
     Customer Screen, Backup - deliberately trimmed down from a longer
@@ -1704,6 +1730,105 @@ just no longer via an unlinked page.
   browser file - which doesn't fit a repo with no build step, so
   `qrcode-generator` (a single ready-to-use classic script, no bundler
   needed) was used instead.
+
+## `vat.html` — standalone VAT calculator
+
+A free-standing VAT calculator, `invoice.html`/`receipt.html`/
+`barcode.html`'s fourth sibling free tool, built by mirroring their
+exact architecture (own `--ink`/`--accent`/`--gold` design tokens
+copied verbatim, own cookie-consent banner, own autosave-draft +
+explicit Save/Saved-list pattern, an "info-section" How-to + FAQ
+block, own `<meta name="robots">` of `index, follow`, its own
+`sitemap.xml` entry, its own `SiteNavigationElement` JSON-LD entry on
+`index.html`). Indexable and connected from day one - unlike
+`barcode.html`, there was no unlinked/building period, since the
+calculator/save-list pattern was already proven three times over by
+the time this was built.
+- **Every page's header `.cta-btn` row** picked up a fifth button,
+  **"Free VAT Calculator"** (`href="vat"`), inserted right after "Free
+  Barcode & QR Code" and before "Free Point of Sale" - see "Site-wide
+  header, nav & footer" below for the full row and why the order is
+  what it is. `app.html`'s own `.header-links` row picked up a
+  matching `#createVatButton` → `openCreateVat()` (`window.open(...)`
+  to `vat`, same new-tab pattern as Create Invoice/Receipt/Barcode,
+  same `OFFLINE-STRIP:CREATE-VAT-BUTTON`/`CREATE-VAT-JS` marker
+  wrapping since `vat.html` isn't in the offline package either -
+  `modules/offline-builder.js` strips both), and
+  `modules/translations.js` picked up a `createVatShortcutLabel` key
+  across all six language blocks to match. This surfaced a real,
+  pre-existing `changeLanguage()` translation-map bug affecting the
+  Barcode & QR Code button too - see "Site-wide header, nav & footer"
+  above, under `.header-links`, for the full story and fix.
+- **Two modes, one shared result set**: `#tabAddVat`/`#tabRemoveVat`
+  (the same `.type-tabs`/`.type-tab` pill pattern `barcode.html` uses
+  for Barcode/QR Code) switch between "Add VAT" (the entered amount is
+  treated as Net, before tax) and "Remove VAT" (the entered amount is
+  treated as Gross, already including tax) - `#vatAmountLabel`'s text
+  swaps between "Net Amount (excl. VAT)" and "Gross Amount (incl.
+  VAT)" to match. Both modes always show all three figures - Net
+  Amount, VAT Amount, Gross Amount - computed via
+  `computeResults()`: Add mode does `vat = net * (rate/100); gross =
+  net + vat`, Remove mode does `net = gross / (1 + rate/100); vat =
+  gross - net`, the standard VAT math either direction.
+- **VAT Rate is a curated preset list plus Custom**, the same
+  `<select>`-with-a-`Custom`-option-that-reveals-a-field pattern
+  `barcode.html`'s Label Size uses: `VAT_RATES` holds common standard
+  rates (20%/UK, France; 21%/Netherlands, Belgium; 19%/Germany;
+  15%/South Africa, NZ GST; 12%/Philippines; 10%/Australia GST;
+  7%/Thailand; 5%/UAE; 0%/zero-rated) each labeled with the rate and a
+  parenthetical of representative countries, plus a `Custom rate`
+  entry that reveals `#customRateRow`'s `#customRate` number input.
+  These labels are explicitly **for reference only** - the FAQ has a
+  dedicated entry making clear that real VAT rates vary by country and
+  by product/service type, and that this tool doesn't provide tax
+  advice; the presets exist to save typing a common rate, not to
+  assert a rate is correct for any specific business.
+- **Currency is the same plain `{code: symbol}` map `invoice.html`
+  already has** (`CURRENCIES`, copied verbatim - see `invoice.html`'s
+  own section above) via a `.currency-inline` picker (same class/CSS
+  as `invoice.html`/`receipt.html`'s own currency control) above the
+  amount field. `formatAmount(value, code)` is the shared money
+  formatter, always 2 decimals regardless of currency, matching
+  `invoice.html`'s own `money()` - this tool doesn't need
+  `receipt.html`'s richer per-currency decimals/subunit handling since
+  there's no "Amount in Words" feature here.
+- **No Print/Download output** - unlike `barcode.html` (Download PNG)
+  or `invoice.html`/`receipt.html` (print-to-PDF), a VAT calculation is
+  just three numbers, not a document or image, so there's nothing
+  meaningful to export as a file. The action bar is Save/Saved
+  Calculations/Clear-New only, three buttons instead of the other
+  tools' four.
+- **Save/Saved Calculations** follows the exact same
+  explicit-save-plus-list pattern as `invoice.html`/`receipt.html`/
+  `barcode.html`'s own Save/Saved Invoices/Receipts/Codes: "💾 Save"
+  pushes the current calculation into a `goonlinepos-vat-history`
+  `localStorage` array (`{id, mode, currency, rateLabel, net, vat,
+  gross, savedAt, state}`) and shows a `.save-toast`; "📂 Saved
+  Calculations" opens a `.modal-overlay` (`#savedVatOverlay`) listing
+  entries newest-first, each row carrying a small `Add VAT`/`Remove
+  VAT` badge (reusing `barcode.html`'s `.saved-code-badge`/`.type-qr`
+  CSS verbatim - green for Add VAT, gold for Remove VAT, same
+  two-accent-color convention) and reopening the full state on click,
+  or deletable via its own ✕ with a `confirm()`. `currentCalcId`
+  (generated once, carried through `collectState()`/`applyState()`,
+  persisted in the autosave draft too) makes re-saving the same
+  calculation **update** its existing history entry instead of
+  duplicating it - only "Clear / New" resets it to `null`. The current
+  in-progress calculation also autosaves to `goonlinepos-vat-draft`
+  exactly like the other three tools.
+- **FAQ includes the now-standard "Is there a limit on how many
+  calculations I can do?" entry** (matching `barcode.html`'s own
+  "Is there a limit on how many codes I can generate?" - see that
+  page's section above), since every tool in this free-tools family
+  now answers that question the same way: no, everything runs
+  client-side with no server call and no usage cap.
+- **Deliberately NOT bundled into the "Download Offline POS" package** -
+  same policy as `invoice.html`/`receipt.html`/`barcode.html`, a
+  separate free web tool rather than part of the offline POS itself.
+- Six-language UI strings are **not** part of this page, same as
+  `invoice.html`/`receipt.html`/`barcode.html` - `app.html`'s
+  `translations` dictionary only supplies the `createVatShortcutLabel`
+  header-links text; the calculator itself is English-only.
 
 ## `end-of-day.html` — POS closing report
 
