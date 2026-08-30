@@ -39,6 +39,11 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   from `app.html`'s header toolbar; unlike `invoice.html`/`receipt.html`
   it reads `app.html`'s own storage directly and ships in the offline
   package. See "`end-of-day.html` — POS closing report" below.
+- **`barcode.html`** — a standalone, free barcode/QR code generator,
+  `invoice.html`/`receipt.html`'s third sibling tool. **Not yet linked
+  from anywhere** (no header CTA, not in `sitemap.xml`, `noindex` for
+  now) — URL-only until connected later. See "`barcode.html` —
+  standalone barcode / QR code generator" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -866,7 +871,12 @@ cdnjs/unpkg — so the live site has zero third-party CDN dependency.
 "Download Offline POS" feature below; `xlsx.full.min.js` is also what
 gets pulled into the generated offline package. (`vendor/zxing-browser.min.js`
 was removed along with the camera barcode scanner — see "Barcode
-scanning" above.)
+scanning" above.) `vendor/jsbarcode.min.js` and `vendor/qrcode.js` +
+`vendor/qrcode_UTF8.js` (load in that order — the `_UTF8` file patches
+the core file) are the same "unmodified npm build" convention, used
+only by `barcode.html` — see that page's own section below. None of
+the three are referenced by `app.html`/`offline-builder.js`, so they
+have no bearing on the offline package.
 
 ## Premium code validation (live site only)
 
@@ -1416,6 +1426,147 @@ pattern as `invoice.html`).
   `invoice.html` - `app.html`'s `translations` dictionary only supplies
   the `createReceiptShortcutLabel` header-links text; the receipt tool
   itself is English-only.
+
+## `barcode.html` — standalone barcode / QR code generator (not yet connected)
+
+A free-standing barcode and QR code generator, `invoice.html`/
+`receipt.html`'s third sibling tool, built by mirroring their exact
+architecture (own `--ink`/`--accent`/`--gold` design tokens copied
+verbatim, own cookie-consent banner, own autosave-draft +
+explicit Save/Saved-list pattern, `window.print()` + a dynamically
+rewritten `@page` rule for physical-size-accurate printing, an
+"info-section" How-to + FAQ block). **Deliberately not linked from
+anywhere yet** - no page's header/nav CTA row references it, it's not
+in `sitemap.xml`, and its own `<meta name="robots">` is `noindex,
+follow` (matching the retired-page convention - crawlable-if-found but
+not meant to be indexed while unfinished/unannounced). Per an explicit
+instruction, this stays a disconnected, URL-only page until the site
+owner says it's ready - only then does it get `index, follow`, a
+`sitemap.xml` entry, and a fourth **"Free Barcode/QR Generator"**
+`.cta-btn` added to every page's shared header (see "Site-wide header,
+nav & footer" above) the same way Invoice/Receipt were added.
+`vendor/LICENSES.txt` already notes both vendored libraries below as
+"not yet linked from any other page" for the same reason.
+- **Type toggle**: two `.type-tab` pill buttons, Barcode vs QR Code
+  (`#tabBarcode`/`#tabQr`), switching which form rows/size-preset list
+  apply - mirrors the same `.type-tab` look for the smaller center-content
+  Image/Text sub-toggle inside the QR options (`.type-tabs.small`).
+- **Label size**: a `<select id="sizePreset">` populated per-type from
+  `BARCODE_SIZES` (2x1in/1.5x1in/3x2in/4x6in) or `QR_SIZES`
+  (1x1in/2x2in/3x3in/4x4in) - real-world common label sizes, each
+  labeled with both inches and millimeters - plus a "Custom size"
+  entry. Custom reveals **Width + Height** number inputs for barcodes
+  (`#customSizeBarcodeRow`, rectangular) but a **single Size** input
+  for QR (`#customSizeQrRow`) - deliberately square-only, since letting
+  QR width/height differ would distort the code. All sizing is in
+  millimeters throughout, matching `app.html`'s own Paper & Zoom
+  convention (58mm/80mm/A4/A5/custom, never inches) rather than
+  introducing a new unit to the codebase.
+- **The chosen size drives both the on-screen preview and the printed
+  output identically** - `#previewBox`'s CSS `width`/`height` are set
+  directly in `mm` (a real physical CSS unit, same trick `.receipt`'s
+  fixed `80mm` width in `app.html` already relies on), and
+  `applyBoxSize()` simultaneously rewrites a `<style id="dynamicPageSize">`
+  tag's `@page { size: <w>mm <h>mm; margin: 0; }` rule - the exact same
+  "dynamic page-size style tag" pattern `end-of-day.html`'s
+  `applyPaperSize()` already uses for its 80mm-thermal-vs-A4 choice
+  (see that page's own section above), just parameterized to an
+  arbitrary width/height instead of two fixed presets.
+- **Barcode rendering** uses the self-hosted `vendor/jsbarcode.min.js`
+  (see "`vendor/` — self-hosted third-party libraries" below) via
+  `JsBarcode(canvas, value, options)`, format chosen from a curated
+  7-option `<select id="barcodeFormat">` (CODE128, EAN-13, UPC-A,
+  CODE39, ITF-14, Codabar, Pharmacode) covering the common
+  "market-standard" symbologies without overwhelming the page.
+  JsBarcode's own `valid` callback option drives a live inline hint
+  under the value field (`#codeValueHint`) - e.g. "isn't valid for
+  EAN-13 - needs 12 or 13 digits" - rather than letting an invalid
+  value silently fail or throw.
+- **QR rendering** uses the self-hosted `vendor/qrcode.js` +
+  `vendor/qrcode_UTF8.js` (the `qrcode-generator` npm package's own
+  optional UTF-8 patch file, which must load after the core file - see
+  `vendor/LICENSES.txt`). Rather than use the library's own
+  `createImgTag`/`createSvgTag` helpers, the code walks the raw module
+  matrix itself (`qr.getModuleCount()`/`qr.isDark(row, col)`) and
+  paints it onto `#codeCanvas` by hand, with its own 4-module quiet
+  zone - this is what makes the center-content overlay possible (see
+  below), since the matrix is available as data rather than a
+  pre-rendered image.
+- **Both the "value" text and any "text above" are plain HTML, not
+  baked into the canvas** - `#previewTopText`/`#previewValueText` are
+  separate `<div>`s positioned above/below `#codeCanvas` inside
+  `#previewBox`, toggled by their own checkboxes
+  (`#showTopText`/`#showValueBelow` for barcodes,
+  `#showQrValueBelow` for QR). This is deliberately **not** JsBarcode's
+  own built-in `displayValue`/`textPosition` text rendering
+  (`displayValue` is always passed as `false`) - JsBarcode can only
+  place one piece of text (the encoded value) at one position, but the
+  page needs two independent, differently-sourced pieces of text (an
+  arbitrary label above, and the raw encoded value below) shown or
+  hidden independently, which is simpler to get right as ordinary DOM
+  text than by fighting the library's own text layout.
+- **`fitCanvasInBox()`** re-measures `#previewBox` after every render
+  and scales `#codeCanvas`'s CSS `width`/`height` (not its underlying
+  pixel buffer) to fit whatever room is left once the optional top/value
+  text rows are accounted for, preserving the raster's aspect ratio.
+  The barcode raster itself is rendered at a bar height of
+  `clamp(50, heightMm * 4, 160)` px and a fixed 2px module width -
+  deliberately capped rather than scaled all the way up with label
+  height, since an early version scaled bar height too aggressively
+  (`heightMm * 8`) and, combined with the box's original `6mm` CSS
+  padding, made even a short 15-character CODE128 value falsely trip
+  the "too dense to scan" warning on the default 2x1in label; both the
+  padding (now `2.5mm`) and the height multiplier were tuned down after
+  visually confirming the false warning with Playwright screenshots.
+  If the final fit scale still comes out under `0.35`, `#sizeHint`
+  shows a genuine "try a larger size or a shorter value" warning
+  instead of the normal "Label size: W x H mm" caption.
+- **QR center content** (`#enableCenterContent`, QR-only) lets the user
+  add either an uploaded image or up to 4 characters of text into the
+  middle of the code, via the same small Image/Text `.type-tabs.small`
+  toggle mentioned above. Turning it on **always bumps the QR error-
+  correction level from `M` to `H`** (`qrcode(0, ecLevel)`, `ecLevel =
+  enableCenterContent ? "H" : "M"`) so the extra ~30% redundancy budget
+  can absorb the obscured center - a plain white square covering ~26%
+  of the code's width is painted first, then either the uploaded image
+  (`drawImage`, scaled to fit with a small padding) or the text
+  (`fillText`, bold, sized to the box) is drawn on top of it.
+- **Save/Saved Codes** follows the exact same explicit-save-plus-list
+  pattern as `invoice.html`/`receipt.html`'s own Save/Saved
+  Invoices/Receipts: "💾 Save" pushes the current form into a
+  `goonlinepos-barcode-history` `localStorage` array (`{id, type,
+  value, sizeLabel, savedAt, state}`) and shows a `.save-toast`;
+  "📂 Saved Codes" opens a `.modal-overlay` (`#savedCodesOverlay`)
+  listing entries newest-first, each row carrying a small `Barcode`/`QR`
+  `.saved-code-badge` pill (green for barcode, gold for QR - matching
+  the site's two-accent-color convention) and reopening the full state
+  on click, or deletable via its own ✕ with a `confirm()`.
+  `currentCodeId` (generated once, carried through
+  `collectState()`/`applyState()`, persisted in the autosave draft too)
+  makes re-saving the same code **update** its existing history entry
+  instead of duplicating it - only "Clear / New" resets it to `null`.
+  The current in-progress code also autosaves to
+  `goonlinepos-barcode-draft` exactly like the other two tools.
+- **"⬇ Download PNG"** is a bonus fourth action beyond the required
+  Save/Print - `buildExportCanvas()` composites a fresh, higher-
+  resolution (`12px/mm`) canvas from scratch (white background, the
+  top text and value text drawn as real canvas text, then the live
+  `#codeCanvas` raster scaled/centered into the remaining space) so the
+  downloaded image matches what the on-screen/printed label actually
+  shows, rather than just exporting the bare code without its
+  surrounding text.
+- **Sourcing the vendored libraries**: both `jsbarcode` (3.12.3, MIT)
+  and `qrcode-generator` (2.0.4, MIT) were pulled directly from
+  `registry.npmjs.org` (reachable in this sandbox even when most of the
+  open web isn't - see the `.app-preview` mock's product-photo bullet
+  above for the same discovery) and used unmodified, matching
+  `vendor/`'s existing convention for `xlsx.full.min.js`/`jszip.min.js`.
+  The `qrcode` (soldair) npm package was tried first since it renders
+  straight to a `<canvas>`, but its published tarball only ships
+  CommonJS source meant to be run through a bundler - no prebuilt
+  browser file - which doesn't fit a repo with no build step, so
+  `qrcode-generator` (a single ready-to-use classic script, no bundler
+  needed) was used instead.
 
 ## `end-of-day.html` — POS closing report
 
