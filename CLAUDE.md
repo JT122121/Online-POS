@@ -1469,12 +1469,25 @@ live code calls it anymore.
   date when applicable (`#accountStatusFree`/`#accountStatusPremium`/
   `#accountPremiumUntil`, formatted by `formatPremiumUntil()`), a Redeem
   Code field + button (`#redeemCodeInput`/`redeemCodeNow()`), and Sign
-  Out. "Buy Premium Code" (`#buyPremiumBtn`/`#buyPremiumOverlay`) is
+  Out. **"Get Your Free Trial"** (`#freeTrialBtn` → `openFreeTrial()`,
+  wrapped in its own `OFFLINE-STRIP:FREE-TRIAL-BUTTON`/`FREE-TRIAL-JS`
+  marker pair) sits directly above "Buy Premium Code" - a single click
+  opens `contact` in a new tab (`window.open("contact", "_blank")`, the
+  same new-tab pattern every other "leave the app" link already uses),
+  so a visitor who wants to try Premium first just messages the site
+  owner for a trial code rather than being asked to pay immediately.
+  "Buy Premium Code" (`#buyPremiumBtn`/`#buyPremiumOverlay`) is
   unchanged in mechanism - still a purely informational modal pointing to
-  `contact.html`, still `OFFLINE-STRIP`-wrapped - only its two feature
-  bullets were reworded (`buyPremiumFeature1`/`2`) since "No expiration"/
-  "Up to 5 active browsers" no longer describe how a code behaves under
-  the new redeemable-and-account-bound model.
+  `contact.html`, still `OFFLINE-STRIP`-wrapped. Its price changed from a
+  one-time `$9.99 USD` to **`$3.99 USD / month`, "Billed monthly"**
+  (`#buyPremiumPrice`/`#buyPremiumPriceNote`) - no more lifetime/
+  one-time framing, matching the redeemable-code-with-a-duration model
+  `redeem_code()` actually implements (a code's `duration_days` already
+  meant "not lifetime" from the moment that table was designed - this
+  just makes the marketing copy say so too). Its two feature bullets stay
+  as reworded (`buyPremiumFeature1`/`2` - "Redeem to extend your
+  subscription" / "Works on any device you sign in on"), still accurate
+  under the new monthly framing.
 - **Cloud Sync's own gating simplified** now that there's exactly one way
   to be Premium on the live site: `applyPremiumLocks()` toggles
   `#cloudSyncLockMsg`/`#cloudSyncUnlockedContent` directly from
@@ -1583,6 +1596,26 @@ live code calls it anymore.
   rejects a wrong code and accepts `GOOFFLINE-LIFETIME` when entered
   manually, defines none of `account.js`'s functions or `window.supabase`
   at all, and has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers.
+- **Monthly pricing + a free-trial path, added once the account model was
+  live.** `$3.99 USD / month` / "Billed monthly" replaced the old
+  one-time `$9.99 USD` in the Buy Premium modal (`#buyPremiumPrice`/
+  `#buyPremiumPriceNote`, all 6 languages) - a code's `duration_days`
+  always meant "not lifetime," this just made the price line say so.
+  "Get Your Free Trial" (`#freeTrialBtn` → `openFreeTrial()`) sits above
+  "Buy Premium Code" in the same panel, `window.open("contact", "_blank")`
+  - a visitor can ask for a trial code before paying, same contact-form
+  mechanism the purchase flow already used, just a lower-commitment first
+  step. Wrapped in its own `OFFLINE-STRIP:FREE-TRIAL-BUTTON`/
+  `FREE-TRIAL-JS` markers, same treatment as "Buy Premium Code" - nothing
+  to sell or trial once a copy is already offline. `index.html`'s "Full
+  backup & restore" feature-card and the "Where is my data stored?" FAQ
+  answer both picked up a one-sentence mention that Cloud Sync is an
+  optional, sign-in-based alternative to file-based backup - the feature
+  existed already (see "Cloud Sync" above) but was never mentioned on the
+  landing page itself until this pass. Deliberately **not** a new
+  `.feature-grid` card - the grid was already a clean 15 (5 rows of 3);
+  adding a 16th would have reopened the stranded-last-row problem
+  documented above, so the mention was folded into existing copy instead.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 

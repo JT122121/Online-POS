@@ -60,6 +60,7 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "OFFLINE-BUILDER-SCRIPT", "offline builder module script tag");
   html = stripMarked(html, "DOWNLOAD-SECTION", "download settings section");
   html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");
+  html = stripMarked(html, "FREE-TRIAL-BUTTON", "free trial button");
   html = stripMarked(html, "BUY-PREMIUM-BUTTON", "buy premium button");
   html = stripMarked(html, "BUY-PREMIUM-MODAL", "buy premium modal");
   const createInvoiceJsRe = /\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:END \*\/\n?/;
@@ -131,6 +132,9 @@ function buildOfflineAppHtml(html) {
   ].join("\n");
   const premiumPanelRe = /<!-- OFFLINE-SWAP:PREMIUM-PANEL:START -->[\s\S]*?<!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->/;
   html = premiumPanelRe.test(html) ? html.replace(premiumPanelRe, offlinePremiumPanelHtml) : (console.warn("Offline package: premium-panel marker not found"), html);
+
+  const freeTrialJsRe = /\/\* OFFLINE-STRIP:FREE-TRIAL-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:FREE-TRIAL-JS:END \*\/\n?/;
+  html = freeTrialJsRe.test(html) ? html.replace(freeTrialJsRe, "") : (console.warn("Offline package: free-trial-js marker not found"), html);
 
   const buyPremiumJsRe = /\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:END \*\/\n?/;
   html = buyPremiumJsRe.test(html) ? html.replace(buyPremiumJsRe, "") : (console.warn("Offline package: buy-premium-js marker not found"), html);

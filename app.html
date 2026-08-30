@@ -1085,6 +1085,12 @@ Website: Goonlinepos.com</textarea>
         </div>
         <!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->
 
+        <!-- OFFLINE-STRIP:FREE-TRIAL-BUTTON:START -->
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
+          <button type="button" class="small-btn" onclick="openFreeTrial()" id="freeTrialBtn" style="width:100%;">🎁 <span id="freeTrialButtonLabel">Get Your Free Trial</span></button>
+        </div>
+        <!-- OFFLINE-STRIP:FREE-TRIAL-BUTTON:END -->
+
         <!-- OFFLINE-STRIP:BUY-PREMIUM-BUTTON:START -->
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
           <button type="button" class="small-btn" onclick="openBuyPremiumModal()" id="buyPremiumBtn" style="width:100%;">💳 <span id="buyPremiumButtonLabel">Buy Premium Code</span></button>
@@ -1147,8 +1153,8 @@ Website: Goonlinepos.com</textarea>
       <li id="buyPremiumBenefit4">Inventory tracking with export</li>
       <li id="buyPremiumBenefit5">Downloadable offline version</li>
     </ul>
-    <div style="font-family:var(--font-display); font-size:28px; font-weight:700; margin-bottom:4px;" id="buyPremiumPrice">$9.99 USD</div>
-    <div style="font-size:12.5px; color:var(--ink-soft); margin-bottom:16px;" id="buyPremiumPriceNote">One-time payment</div>
+    <div style="font-family:var(--font-display); font-size:28px; font-weight:700; margin-bottom:4px;" id="buyPremiumPrice">$3.99 USD / month</div>
+    <div style="font-size:12.5px; color:var(--ink-soft); margin-bottom:16px;" id="buyPremiumPriceNote">Billed monthly</div>
     <ul style="margin:0 0 18px; padding-left:20px; font-size:13.5px; line-height:1.9;">
       <li id="buyPremiumFeature1">Redeem to extend your subscription</li>
       <li id="buyPremiumFeature2">Works on any device you sign in on</li>
@@ -2547,6 +2553,12 @@ function exportSalesToExcel() {
   downloadTextFile("sales-report-items-" + suffix + ".csv", rowsToCsv(childRows));
 }
 
+/* OFFLINE-STRIP:FREE-TRIAL-JS:START */
+function openFreeTrial() {
+  window.open("contact", "_blank");
+}
+/* OFFLINE-STRIP:FREE-TRIAL-JS:END */
+
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:START */
 function openBuyPremiumModal() {
   document.getElementById("buyPremiumOverlay").classList.remove("hidden");
@@ -3278,6 +3290,7 @@ function changeLanguage() {
     redeemCodeLabel: "redeemCodeLabel", redeemCodeButtonLabel: "redeemCodeButton", accountSignOutButton: "accountSignOutButton",
     logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
+    freeTrialButtonLabel: "freeTrialButtonLabel",
     buyPremiumButtonLabel: "buyPremiumButtonLabel", buyPremiumModalTitle: "buyPremiumModalTitle", buyPremiumPrice: "buyPremiumPrice", buyPremiumPriceNote: "buyPremiumPriceNote",
     buyPremiumFeature1: "buyPremiumFeature1", buyPremiumFeature2: "buyPremiumFeature2", buyPremiumFeature3: "buyPremiumFeature3",
     buyPremiumBenefitsTitle: "buyPremiumBenefitsTitle", buyPremiumBenefit1: "buyPremiumBenefit1", buyPremiumBenefit2: "buyPremiumBenefit2",
