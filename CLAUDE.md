@@ -40,10 +40,12 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   it reads `app.html`'s own storage directly and ships in the offline
   package. See "`end-of-day.html` — POS closing report" below.
 - **`barcode.html`** — a standalone, free barcode/QR code generator,
-  `invoice.html`/`receipt.html`'s third sibling tool. **Not yet linked
-  from anywhere** (no header CTA, not in `sitemap.xml`, `noindex` for
-  now) — URL-only until connected later. See "`barcode.html` —
-  standalone barcode / QR code generator" below.
+  `invoice.html`/`receipt.html`'s third sibling tool, linked from every
+  page's header CTA row and `app.html`'s own header-links, indexable,
+  and in `sitemap.xml` — it started out deliberately disconnected
+  (URL-only, `noindex`) while still being built, then was wired in once
+  ready. See "`barcode.html` — standalone barcode / QR code generator"
+  below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -105,7 +107,7 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   same badge to any future blog photo that isn't a genuine, literal
   photo of the thing it's illustrating.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (lists `/`, `app.html`, `invoice.html`, `receipt.html`,
+  (lists `/`, `app.html`, `invoice.html`, `receipt.html`, `barcode.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -160,13 +162,16 @@ all of them under one pattern:
   `terms.html` (own `<h1 class="doc-title">`) and `invoice.html`/
   `receipt.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
   use `<h2>` so the page keeps exactly one real `<h1>`.
-- **The 3-button `.cta-btn` row is identical and in the same order on
+- **The 4-button `.cta-btn` row is identical and in the same order on
   every page** — Free Invoice Generator → Free Receipt Generator → Free
-  Point of Sale (`href="app"`), always extension-less. `index.html` used
-  to be the only page with this row (2 buttons, no POS link); this pass
-  both added the third button there and rolled the whole row out
-  site-wide, so **any older note in this file describing the CTA row as
-  unique to `index.html` is stale** — it isn't anymore.
+  Barcode & QR Code (`href="barcode"`) → Free Point of Sale
+  (`href="app"`), always extension-less. `index.html` used to be the
+  only page with this row (2 buttons, no POS link); a later pass added
+  the third button there and rolled the whole row out site-wide, and a
+  still-later pass added the fourth (Barcode & QR Code) once
+  `barcode.html` was ready to connect — see its own section below — so
+  **any older note in this file describing the CTA row as unique to
+  `index.html`, or as only 3 buttons, is stale**.
 - **`.site-nav` is always Homepage → Blog, in that order, everywhere** —
   originally "About" (linking to `about.html`), renamed to "Homepage"
   (linking to `/`) once `about.html`'s content moved onto `index.html`
@@ -220,10 +225,17 @@ all of them under one pattern:
   should show versus what only needs to live inside Settings:
   - **`.header-links`** (next to the app title/Premium/Special-Access
     badges): Homepage, Blog, Free Invoice Generator, Free Receipt
-    Generator, in that order - four **text-only** buttons (no emoji
-    icon, unlike most of the rest of the toolbar), all sharing the exact
-    same dark-green (`--accent-dark`) pill styling so they read as one
-    consistent row rather than four differently-weighted actions. This
+    Generator, Free Barcode & QR Code, in that order - five **text-only**
+    buttons (no emoji icon, unlike most of the rest of the toolbar), all
+    sharing the exact same dark-green (`--accent-dark`) pill styling so
+    they read as one consistent row rather than differently-weighted
+    actions. Free Barcode & QR Code (`#createBarcodeButton` →
+    `openCreateBarcode()`) was added last, once `barcode.html` was ready
+    to connect - same `window.open(...)` new-tab pattern, same
+    `OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
+    wrapping, and the same `createBarcodeShortcutLabel` translation key
+    added across all six `modules/translations.js` language blocks, as
+    Free Invoice/Receipt Generator below. This
     row was briefly trimmed down to just the Homepage button alone (Blog/
     Invoice/Receipt/a separate Home button were deleted outright, per an
     earlier design call that the POS app shouldn't link out to any of
@@ -1057,8 +1069,8 @@ remember. The whole mechanism lives inside `app.html` itself:
   actual download — see `confirmOfflineDownload()`.
 - On confirm, it `fetch()`es the **currently live** `app.html`,
   `customer.html`, and `end-of-day.html` (same-origin, `cache: "no-store"`)
-  - **not** `invoice.html`/`receipt.html`, both deliberately excluded
-  (see the `invoice.html` and `receipt.html` sections above) - plus the
+  - **not** `invoice.html`/`receipt.html`/`barcode.html`, all three
+  deliberately excluded (see their own sections above) - plus the
   static ingredients under `offline/`
   (`README.txt`, the three `start-server.*` launchers,
   `offline/vendor/LICENSES.txt`), `vendor/xlsx.full.min.js`, and
@@ -1101,9 +1113,12 @@ remember. The whole mechanism lives inside `app.html` itself:
   them to open, and the "Free Invoice Generator" button + its
   `openCreateInvoice()` function (`CREATE-INVOICE-BUTTON`/
   `CREATE-INVOICE-JS` - there's no `invoice.html` in the offline copy
-  for it to open), and the "Free Receipt Generator" button + its
+  for it to open), the "Free Receipt Generator" button + its
   `openCreateReceipt()` function (`CREATE-RECEIPT-BUTTON`/
-  `CREATE-RECEIPT-JS`, the same treatment for `receipt.html`).
+  `CREATE-RECEIPT-JS`, the same treatment for `receipt.html`), and the
+  "Free Barcode & QR Code" button + its `openCreateBarcode()` function
+  (`CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS`, the same treatment for
+  `barcode.html`).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
@@ -1204,7 +1219,7 @@ the on-page heading stays the more natural "Create Invoice").
   change.
 - **Every page's header `.cta-btn` row** (next to the `Homepage`/`Blog`
   nav links, `.site-header .cta-btn`) links here (`href="invoice"`, labeled
-  "Free Invoice Generator", first of the 3 CTA buttons) - a deliberate
+  "Free Invoice Generator", first of the 4 CTA buttons) - a deliberate
   choice to give the free tool prime header real estate as a lead-in,
   since `app.html` still has its own prominent "Open the app" buttons in
   the hero section and the CTA band further down `index.html`. This CTA
@@ -1427,30 +1442,38 @@ pattern as `invoice.html`).
   the `createReceiptShortcutLabel` header-links text; the receipt tool
   itself is English-only.
 
-## `barcode.html` — standalone barcode / QR code generator (not yet connected)
+## `barcode.html` — standalone barcode / QR code generator
 
 A free-standing barcode and QR code generator, `invoice.html`/
-`receipt.html`'s third sibling tool, built by mirroring their exact
-architecture (own `--ink`/`--accent`/`--gold` design tokens copied
-verbatim, own cookie-consent banner, own autosave-draft +
+`receipt.html`'s third sibling free tool, built by mirroring their
+exact architecture (own `--ink`/`--accent`/`--gold` design tokens
+copied verbatim, own cookie-consent banner, own autosave-draft +
 explicit Save/Saved-list pattern, `window.print()` + a dynamically
 rewritten `@page` rule for physical-size-accurate printing, an
-"info-section" How-to + FAQ block). **Deliberately not linked from
-anywhere yet** - no page's header/nav CTA row references it, it's not
-in `sitemap.xml`, and its own `<meta name="robots">` is `noindex,
-follow` (matching the retired-page convention - crawlable-if-found but
-not meant to be indexed while unfinished/unannounced). Per an explicit
-instruction, this stays a disconnected, URL-only page until the site
-owner says it's ready - only then does it get `index, follow`, a
-`sitemap.xml` entry, and a fourth **"Free Barcode/QR Generator"**
-`.cta-btn` added to every page's shared header (see "Site-wide header,
-nav & footer" above) the same way Invoice/Receipt were added.
-`vendor/LICENSES.txt` already notes both vendored libraries below as
-"not yet linked from any other page" for the same reason.
+"info-section" How-to + FAQ block). **Now fully connected**, the same
+way Invoice/Receipt already were: `<meta name="robots">` is
+`index, follow`, it has a `sitemap.xml` entry, it's one of the five
+`SiteNavigationElement` entries in `index.html`'s own JSON-LD (see
+"SEO" below), and every page's shared header carries a fourth
+**"Free Barcode & QR Code"** `.cta-btn` linking to it (see "Site-wide
+header, nav & footer" below) - it started out deliberately
+disconnected (URL-only, `noindex`) while the tool itself was still
+being built, and was wired in only once the feature set was confirmed
+ready. `app.html`'s own `.header-links` row picked up a matching
+`#createBarcodeButton` → `openCreateBarcode()` (`window.open(...)` to
+`barcode`, same new-tab pattern as Create Invoice/Create Receipt, same
+`OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
+wrapping since `barcode.html` isn't in the offline package either -
+`modules/offline-builder.js` strips both), and
+`modules/translations.js` picked up a `createBarcodeShortcutLabel` key
+across all six language blocks to match. `vendor/LICENSES.txt`'s "not
+yet linked from any other page" note for `jsbarcode.min.js`/
+`qrcode.js`/`qrcode_UTF8.js` is now stale now that the page linking to
+them is connected - the libraries themselves are still barcode.html-only,
+just no longer via an unlinked page.
 - **Type toggle**: two `.type-tab` pill buttons, Barcode vs QR Code
   (`#tabBarcode`/`#tabQr`), switching which form rows/size-preset list
-  apply - mirrors the same `.type-tab` look for the smaller center-content
-  Image/Text sub-toggle inside the QR options (`.type-tabs.small`).
+  apply.
 - **Label size**: a `<select id="sizePreset">` populated per-type from
   `BARCODE_SIZES` (2x1in/1.5x1in/3x2in/4x6in) or `QR_SIZES`
   (1x1in/2x2in/3x3in/4x4in) - real-world common label sizes, each
@@ -1740,8 +1763,9 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   — the original `SoftwareApplication` schema (name/description/
   featureList/offer), and a second block: a JSON array of
   `SiteNavigationElement` entries (Free Point of Sale, Free Invoice
-  Generator, Free Receipt Generator, Blog), each with its own `name`/
-  `url`. This is a **best-effort hint**, not a guarantee - Google decides
+  Generator, Free Receipt Generator, Free Barcode & QR Code, Blog), each
+  with its own `name`/`url`. This is a **best-effort hint**, not a
+  guarantee - Google decides
   on its own whether to render sitelinks beneath a search result, and
   there's no way to force it - but `SiteNavigationElement` is the
   standard schema.org signal for "these are the site's important
@@ -1767,7 +1791,7 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `invoice.html`, `receipt.html`,
+  `invoice.html`, `receipt.html`, `barcode.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,

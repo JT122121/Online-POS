@@ -473,6 +473,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
 <button id="createReceiptButton" onclick="openCreateReceipt()" title="Create a standalone payment receipt"><span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:START -->
+<button id="createBarcodeButton" onclick="openCreateBarcode()" title="Create a barcode or QR code"><span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
+<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:END -->
 </div>
 </div>
 <div class="header-actions">
@@ -2764,6 +2767,13 @@ function openCreateReceipt() {
   window.open(url, "_blank");
 }
 /* OFFLINE-STRIP:CREATE-RECEIPT-JS:END */
+
+/* OFFLINE-STRIP:CREATE-BARCODE-JS:START */
+function openCreateBarcode() {
+  const url = location.pathname.replace(/[^/]*$/, "") + "barcode";
+  window.open(url, "_blank");
+}
+/* OFFLINE-STRIP:CREATE-BARCODE-JS:END */
 
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();

@@ -47,6 +47,7 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "BLOG-BUTTON", "blog shortcut button");
   html = stripMarked(html, "CREATE-INVOICE-BUTTON", "create invoice button");
   html = stripMarked(html, "CREATE-RECEIPT-BUTTON", "create receipt button");
+  html = stripMarked(html, "CREATE-BARCODE-BUTTON", "create barcode button");
   html = stripMarked(html, "COOKIE-CONSENT", "cookie consent script");
   html = stripMarked(html, "GOOGLE-FONTS", "google fonts links");
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
@@ -63,6 +64,8 @@ function buildOfflineAppHtml(html) {
   html = createInvoiceJsRe.test(html) ? html.replace(createInvoiceJsRe, "") : (console.warn("Offline package: create-invoice-js marker not found"), html);
   const createReceiptJsRe = /\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:END \*\/\n?/;
   html = createReceiptJsRe.test(html) ? html.replace(createReceiptJsRe, "") : (console.warn("Offline package: create-receipt-js marker not found"), html);
+  const createBarcodeJsRe = /\/\* OFFLINE-STRIP:CREATE-BARCODE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-BARCODE-JS:END \*\/\n?/;
+  html = createBarcodeJsRe.test(html) ? html.replace(createBarcodeJsRe, "") : (console.warn("Offline package: create-barcode-js marker not found"), html);
 
   const offlineActivationJs = [
     'const DEFAULT_PREMIUM_CODE = "' + OFFLINE_PREMIUM_CODE + '";',
