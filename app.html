@@ -919,13 +919,14 @@ Website: goonlinepos.com</textarea>
         <div id="addProductErrorBox" class="error-text hidden"></div>
 
         <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
-        <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV below.</div>
+        <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
 
-        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV with columns: Name, Price, and optionally Category and SKU, to load your whole catalog at once. This replaces the current list.</div>
-        <input id="csvFileInput" type="file" accept=".csv,text/csv" onchange="handleCsvUpload(event)">
+        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.</div>
+        <input id="csvFileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleProductFileUpload(event)">
         <div id="csvErrorBox" class="error-text hidden"></div>
         <div id="csvSuccessBox" class="success-text hidden"></div>
         <div class="csv-actions">
+          <button style="background:var(--ink);" onclick="downloadSampleExcel()" id="productsSampleExcelButton">Download Sample Excel</button>
           <button style="background:var(--ink);" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
           <button style="background:var(--danger);" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
         </div>
@@ -2890,7 +2891,49 @@ function parseCSV(text) {
   return rows;
 }
 
-function handleCsvUpload(event) {
+function productRowsFromParsed(parsed) {
+  if (!parsed.length) throw new Error("empty file");
+  const header = parsed[0].map(function(h) { return String(h).trim().toLowerCase(); });
+  const nameIdx = header.findIndex(function(h) { return ["name", "item", "product", "item name", "product name"].indexOf(h) !== -1; });
+  const priceIdx = header.findIndex(function(h) { return ["price", "unit price", "cost", "amount"].indexOf(h) !== -1; });
+  const catIdx = header.findIndex(function(h) { return ["category", "cat", "type"].indexOf(h) !== -1; });
+  const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
+  const stockIdx = header.findIndex(function(h) { return ["stock", "stock level", "qty", "quantity", "stock qty"].indexOf(h) !== -1; });
+  const taxExemptIdx = header.findIndex(function(h) { return ["taxexempt", "tax exempt", "tax-exempt", "no tax"].indexOf(h) !== -1; });
+  if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
+
+  const newProducts = [];
+  for (let i = 1; i < parsed.length; i++) {
+    const row = parsed[i];
+    if (!row || row.every(function(f) { return String(f).trim() === ""; })) continue;
+    const name = String(row[nameIdx] || "").trim();
+    const price = parseFloat(row[priceIdx]) || 0;
+    if (!name) continue;
+    let stock = null;
+    if (stockIdx > -1) {
+      const rawStock = String(row[stockIdx] || "").trim();
+      if (rawStock !== "") stock = parseFloat(rawStock) || 0;
+    }
+    let taxExempt = false;
+    if (taxExemptIdx > -1) {
+      const rawExempt = String(row[taxExemptIdx] || "").trim().toLowerCase();
+      taxExempt = ["yes", "y", "true", "1"].indexOf(rawExempt) !== -1;
+    }
+    newProducts.push({
+      name: name,
+      price: price,
+      category: catIdx > -1 ? String(row[catIdx] || "").trim() : "",
+      sku: skuIdx > -1 ? String(row[skuIdx] || "").trim() : "",
+      stock: stock,
+      photo: "",
+      taxExempt: taxExempt
+    });
+  }
+  if (!newProducts.length) throw new Error("no valid rows");
+  return newProducts;
+}
+
+function handleProductFileUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
   const errorBox = document.getElementById("csvErrorBox");
@@ -2898,48 +2941,19 @@ function handleCsvUpload(event) {
   errorBox.classList.add("hidden");
   successBox.classList.add("hidden");
 
+  const isExcel = /\.xlsx?$/i.test(file.name);
   const reader = new FileReader();
   reader.onload = async function(e) {
     try {
-      const parsed = parseCSV(String(e.target.result));
-      if (!parsed.length) throw new Error("empty file");
-      const header = parsed[0].map(function(h) { return h.trim().toLowerCase(); });
-      const nameIdx = header.findIndex(function(h) { return ["name", "item", "product", "item name", "product name"].indexOf(h) !== -1; });
-      const priceIdx = header.findIndex(function(h) { return ["price", "unit price", "cost", "amount"].indexOf(h) !== -1; });
-      const catIdx = header.findIndex(function(h) { return ["category", "cat", "type"].indexOf(h) !== -1; });
-      const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
-      const stockIdx = header.findIndex(function(h) { return ["stock", "stock level", "qty", "quantity", "stock qty"].indexOf(h) !== -1; });
-      const taxExemptIdx = header.findIndex(function(h) { return ["taxexempt", "tax exempt", "tax-exempt", "no tax"].indexOf(h) !== -1; });
-      if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
-
-      const newProducts = [];
-      for (let i = 1; i < parsed.length; i++) {
-        const row = parsed[i];
-        if (!row || row.every(function(f) { return f.trim() === ""; })) continue;
-        const name = (row[nameIdx] || "").trim();
-        const price = parseFloat(row[priceIdx]) || 0;
-        if (!name) continue;
-        let stock = null;
-        if (stockIdx > -1) {
-          const rawStock = (row[stockIdx] || "").trim();
-          if (rawStock !== "") stock = parseFloat(rawStock) || 0;
-        }
-        let taxExempt = false;
-        if (taxExemptIdx > -1) {
-          const rawExempt = (row[taxExemptIdx] || "").trim().toLowerCase();
-          taxExempt = ["yes", "y", "true", "1"].indexOf(rawExempt) !== -1;
-        }
-        newProducts.push({
-          name: name,
-          price: price,
-          category: catIdx > -1 ? (row[catIdx] || "").trim() : "",
-          sku: skuIdx > -1 ? (row[skuIdx] || "").trim() : "",
-          stock: stock,
-          photo: "",
-          taxExempt: taxExempt
-        });
+      let parsed;
+      if (isExcel) {
+        const workbook = XLSX.read(e.target.result, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        parsed = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false });
+      } else {
+        parsed = parseCSV(String(e.target.result));
       }
-      if (!newProducts.length) throw new Error("no valid rows");
+      const newProducts = productRowsFromParsed(parsed);
 
       products = newProducts;
       await saveProducts();
@@ -2956,8 +2970,18 @@ function handleCsvUpload(event) {
     errorBox.textContent = tr("productsUploadError");
     errorBox.classList.remove("hidden");
   };
-  reader.readAsText(file);
+  if (isExcel) reader.readAsArrayBuffer(file); else reader.readAsText(file);
   event.target.value = "";
+}
+
+function sampleProductRows() {
+  return [
+    { Name: "Coca Cola 330ml", Price: 0.300, Category: "Beverages", SKU: "8901", Stock: 50, TaxExempt: "No" },
+    { Name: "White Bread", Price: 0.450, Category: "Bakery", SKU: "8902", Stock: 20, TaxExempt: "Yes" },
+    { Name: "Bottled Water 1.5L", Price: 0.200, Category: "Beverages", SKU: "8903", Stock: 75, TaxExempt: "No" },
+    { Name: "Potato Chips", Price: 0.350, Category: "Snacks", SKU: "8904", Stock: 30, TaxExempt: "No" },
+    { Name: "Instant Noodles", Price: 0.250, Category: "Snacks", SKU: "8905", Stock: 40, TaxExempt: "No" }
+  ];
 }
 
 function downloadSampleCsv() {
@@ -2971,6 +2995,12 @@ function downloadSampleCsv() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function downloadSampleExcel() {
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sampleProductRows()), "Products");
+  XLSX.writeFile(wb, "sample-products.xlsx");
 }
 
 async function addSingleProduct() {
@@ -3340,7 +3370,7 @@ function changeLanguage() {
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
     addProductPhotoLabel: "addProductPhotoLabel", removePhotoLabel: "removePhotoLabel",
     addProductButton: "addProductButton",
-    productsSampleButton: "productsSampleButton", productsClearButton: "productsClearButton",
+    productsSampleButton: "productsSampleButton", productsSampleExcelButton: "productsSampleExcelButton", productsClearButton: "productsClearButton",
     footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
     paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
     zoomLabel: "zoomLabel", zoomValueLabel: "zoomValueLabel",
