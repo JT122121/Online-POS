@@ -97,7 +97,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 
 <div class="cs-header">
 <div class="cs-logo" id="csLogoBox"><img id="csLogo" class="hidden" alt=""></div>
-<h1 class="cs-store-name" id="csStoreName">GoOnlinePOS.com</h1>
+<h1 class="cs-store-name" id="csStoreName">Demo Store</h1>
 </div>
 
 <div class="cs-body">
@@ -178,7 +178,7 @@ function render(state) {
     return;
   }
 
-  document.getElementById("csStoreName").textContent = state.storeName || "GoOnlinePOS.com";
+  document.getElementById("csStoreName").textContent = state.storeName || "Demo Store";
   var logoImg = document.getElementById("csLogo");
   if (state.logo) {
     logoImg.src = state.logo;

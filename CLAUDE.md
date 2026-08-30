@@ -543,7 +543,14 @@ all of them under one pattern:
   subtotal, $1.35 tax, $14.85 total) so the mock stays internally
   consistent. The now-dead `.ap-thumb-cola`/`.ap-thumb-bread`/
   `.ap-thumb-placeholder` gradient/placeholder CSS rules were removed
-  along with the HTML that used them.
+  along with the HTML that used them. **`.ap-receipt-store`/
+  `.ap-receipt-details`** (the mock's own store name/Tel/Email/Website
+  lines) read "Demo Store" / "Tel: +000 000 000" / "Email:
+  Demo@example.com" / "Website: Goonlinepos.com" - matching
+  `app.html`'s own default Store Name/Store Details exactly (see
+  "Default store name/details are obviously-fake placeholder data"
+  under "`app.html` — architecture" below) rather than showing the
+  site's real brand name/domain as if it were an actual store.
 
 ## `app.html` — architecture
 
@@ -565,6 +572,35 @@ zero network calls.
   `activeCategory`, `settingsActiveTab`, `editingSaleRecord`,
   `saleDetailItems`/`saleDetailPayments`, `expandedHistoryDates`, barcode
   scanner state (`barcodeReader`, `scannerPollTimer`, ...).
+- **Default store name/details are obviously-fake placeholder data, not
+  the site's own brand.** `#storeName`'s default `value` and
+  `#storeDetails`' default `<textarea>` content (Settings → Store) read
+  "Demo Store" / "Your Company Address: / Tel: +000 000 000 / Email:
+  Demo@example.com / Website: Goonlinepos.com" - deliberately unreal
+  contact info (`+000 000 000`, `Demo@example.com`) so nobody mistakes
+  it for a real phone/email and so it's obvious at a glance this needs
+  replacing with the shop's actual details before printing real
+  receipts. This used to default to the literal site brand
+  ("GoOnlinePOS.com" as both store name and website, `example@`/`+1
+  123-4567` as contact info) - a real problem, since a shop owner who
+  never opened Settings → Store would otherwise print receipts
+  branded with this site's own name instead of their business, or a
+  contact number that looked real enough to not obviously be a
+  placeholder. Every other **fallback** that shows when `storeName` is
+  literally blank was changed to match (`"Demo Store"`, not
+  `"GoOnlinePOS.com"`) - `receiptStoreName`'s initial HTML text and its
+  fallback in both `modules/receipt.js` and the sale-reprint path in
+  `app.html` itself, `customer.html`'s `csStoreName` (initial text +
+  fallback), and `end-of-day.html`'s `rhStoreName` (initial text +
+  fallback) - so a blank store name reads the same "this is a demo"
+  signal everywhere a receipt-like store name can appear, not just on
+  the main checkout receipt. The homepage's `.app-preview` mock (see
+  below) was updated to match too, for the same reason plus simple
+  consistency between the marketing screenshot and the real default.
+  Legitimate uses of the actual site brand - the header's own
+  `<title>`/meta tags, `customer.html`'s "Powered by GoOnlinePOS.com"
+  footer, the site-wide header/footer links - were deliberately left
+  alone; only the store-name placeholder/fallback occurrences changed.
 - **`init()`** (bottom of the script, called immediately) sequentially
   awaits `loadSettings → loadPaymentMethods → loadCashiers →
   loadActiveCashier → loadProductsFromStorage → loadLogo →

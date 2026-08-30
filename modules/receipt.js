@@ -97,7 +97,7 @@ function updateTotalsAndHeader() {
   const taxName = val("taxName").trim() || tr("tax");
   const taxRate = Number(val("taxRate")) || 0;
 
-  document.getElementById("receiptStoreName").textContent = val("storeName") || "GoOnlinePOS.com";
+  document.getElementById("receiptStoreName").textContent = val("storeName") || "Demo Store";
   document.getElementById("receiptStoreDetails").innerHTML = escapeHtml(val("storeDetails")).replace(/\n/g, "<br>");
   document.getElementById("receiptDocumentTitle").textContent = getDocumentTitle();
   document.getElementById("receiptNumber").textContent = currentReceiptNumber;
