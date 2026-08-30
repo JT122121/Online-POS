@@ -1,19 +1,26 @@
-# Supabase schema (connected - Cloud Sync)
+# Supabase schema (connected - Account & Subscription + Cloud Sync)
 
 This folder holds the Supabase PostgreSQL schema behind `app.html`'s
-optional **Cloud Sync** feature (Settings → Backup → Cloud Sync) - sign in
-with Google (or any other provider you enable), back up your data to the
-cloud, and restore it on any device, in addition to (not instead of) the
-browser's own `localStorage`, which stays the primary/default storage with
-zero signup required. See `modules/cloud-sync.js` and the "Cloud Sync"
-section of `CLAUDE.md` for the integration itself; this file covers the
-database side.
+**Account & Subscription** system (Settings → Premium) and its optional
+**Cloud Sync** feature (Settings → Backup → Cloud Sync). Anyone can sign
+in with Google (or any other provider you enable) to get a free account;
+redeeming a code extends their subscription and unlocks Premium features,
+including Cloud Sync, which backs up data to the cloud and restores it on
+any device. The app itself stays usable with zero signup - `localStorage`
+remains the primary/default storage for everyone on the free tier. See
+`modules/account.js`/`modules/cloud-sync.js` and the "Account &
+Subscription"/"Cloud Sync" sections of `CLAUDE.md` for the integration
+itself; this file covers the database side.
 
-**Before Cloud Sync will work, run this file (or the updated version of
-it) against your Supabase project's SQL Editor** - see "How to run this"
-below. If you ran an earlier version of this file before the
-`document_type`/`meta` columns existed on `sales`, just re-run the current
-version; it upgrades an existing table in place (see "Notes" below).
+This **replaced** an earlier Google Sheet + Apps Script Premium system
+(`premium-validation/`, left on disk unused - see `CLAUDE.md`) - there is
+no more free auto-granted code; every new account starts on the free tier
+and stays there until a code is redeemed.
+
+**Before this will work, run this file (or the updated version of it)
+against your Supabase project's SQL Editor** - see "How to run this"
+below. It's safe to re-run any time you pull a newer version; it upgrades
+an existing project in place (see "Notes" below).
 
 ## What's in `schema.sql`
 
@@ -30,11 +37,32 @@ API:
 | `sales` | Completed sales (`salesHistory`) - totals/header, plus a `document_type` column and a `meta jsonb` catch-all for smaller per-sale display fields |
 | `sale_items` | Each sale's line items, including the optional per-item description feature |
 | `sale_payments` | Each sale's payment split |
+| `profiles` | Settings -> Premium ("Account & Subscription") - one row per user, subscription status and expiry |
+| `redemption_codes` | Codes you create; redeemed exactly once each via the `redeem_code()` function below |
 
 A `handle_new_user()` trigger on Supabase's own `auth.users` table
 auto-creates a default `store_settings` row (same "Demo Store" defaults
-`app.html` already ships) the moment a new account first signs in - no
-app code has to remember to provision one.
+`app.html` already ships) **and** a default `profiles` row
+(`subscription_status: 'free'`) the moment a new account first signs in -
+no app code has to remember to provision either.
+
+## Adding redemption codes
+
+Open your Supabase project's dashboard -> **Table Editor** ->
+`redemption_codes` -> **Insert row**. Fill in:
+
+- `code` - the string a user types into Settings -> Premium -> Redeem
+  Code. Matching is case/whitespace-insensitive.
+- `duration_days` - how many days that code extends a subscription by
+  (defaults to 30 if left blank).
+- `note` (optional) - your own reference, e.g. "batch for Facebook promo,
+  Aug 2026" - never shown to users.
+
+That's it - no app code, deploy step, or extra tooling needed. The table
+has no public API access at all (see "Notes" below), so this dashboard
+view - or a direct SQL `insert` in the SQL Editor - is the only way codes
+get created. `is_used`/`used_by`/`used_at` fill in automatically the
+moment someone redeems a code; leave them blank when inserting a new one.
 
 ## Authentication (Google or anything else)
 
@@ -67,12 +95,13 @@ etc.) is a **dashboard setting, not a SQL change**:
    won't error, and won't miss new columns, on a project that already has
    an older version applied.
 3. Enable whichever sign-in provider(s) you want, per the section above.
-4. `app.html`'s Settings → Backup → Cloud Sync is already wired up to call
-   this (`modules/cloud-sync.js`) - once the schema is applied and a
-   provider is enabled, sign in from the app and Backup/Restore to Cloud
-   will work. Cloud Sync itself also needs a purchased Premium code (not
-   the free `PROMO1` code) to unlock, same as the app's other Premium
-   features - see `CLAUDE.md`'s "Cloud Sync" section.
+4. `app.html`'s Settings → Premium ("Account & Subscription") and Settings
+   → Backup → Cloud Sync are already wired up to call this
+   (`modules/account.js`/`modules/cloud-sync.js`) - once the schema is
+   applied and a provider is enabled, anyone can sign in, land on the
+   free tier automatically, and redeem a code (see "Adding redemption
+   codes" above) to unlock Premium features including Cloud Sync - see
+   `CLAUDE.md`'s "Account & Subscription" and "Cloud Sync" sections.
 
 ## Notes
 
@@ -87,9 +116,28 @@ etc.) is a **dashboard setting, not a SQL change**:
   dismissed-notice flag, or a specific sale's currency symbol at the time
   it was made) - so a future new field in `app.html` doesn't automatically
   require a schema migration before it can round-trip through Supabase too.
-- This schema does not model Premium seat/device tracking
-  (`premium-validation/AppsScript.gs`'s own Google Sheet) - that's a
-  separate system and out of scope here.
+- **`redemption_codes` has zero Row Level Security policies** (RLS is
+  enabled, but nothing grants anon/authenticated access) - a signed-in
+  user can never read or list codes directly through the app's public
+  API, only redeem one by calling the `redeem_code(p_code)` function,
+  which runs as `security definer` (bypasses RLS) and only ever touches
+  the *caller's own* profile - there's no way to redeem "on behalf of"
+  someone else. Redeeming is additive: doing it while already Premium
+  extends from the current expiry rather than overwriting it, so
+  redeeming early never costs anyone remaining time. The dashboard's
+  Table Editor/SQL Editor use the project's service role, which also
+  bypasses RLS - that's how you add codes (see "Adding redemption codes"
+  above) without needing any policy to grant it.
+- `profiles.subscription_status` is a convenience label for browsing the
+  table in the dashboard - the app always computes actual Premium status
+  from `premium_until` being in the future, and lazily corrects a stale
+  `'premium'` label back to `'free'` the next time that profile loads
+  after it expires, so the label doesn't just sit there being wrong
+  indefinitely.
+- This schema does not model Premium seat/device limits the way the
+  retired `premium-validation/AppsScript.gs` used to - Premium now
+  follows the signed-in account, not a per-browser code entry, so there's
+  nothing to cap.
 - "Backup to Cloud" / "Restore from Cloud" are full-replace operations
   (delete-then-reinsert for `products`/`cashiers`/`payment_methods`/
   `sales` and its children, upsert for the single `store_settings` row) -

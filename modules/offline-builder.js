@@ -55,15 +55,13 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
   html = stripMarked(html, "COOKIE-BANNER", "cookie banner markup");
   html = stripMarked(html, "JSZIP", "jszip script tag");
-  html = stripMarked(html, "CLOUD-SYNC-SCRIPT", "cloud sync vendor/module script tags");
+  html = stripMarked(html, "ACCOUNT-SCRIPT", "account/cloud-sync vendor/module script tags");
   html = stripMarked(html, "CLOUD-SYNC-SECTION", "cloud sync settings section");
   html = stripMarked(html, "OFFLINE-BUILDER-SCRIPT", "offline builder module script tag");
   html = stripMarked(html, "DOWNLOAD-SECTION", "download settings section");
   html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");
   html = stripMarked(html, "BUY-PREMIUM-BUTTON", "buy premium button");
   html = stripMarked(html, "BUY-PREMIUM-MODAL", "buy premium modal");
-  const heartbeatRe = /\/\* OFFLINE-STRIP:HEARTBEAT:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:HEARTBEAT:END \*\/\n?/;
-  html = heartbeatRe.test(html) ? html.replace(heartbeatRe, "") : (console.warn("Offline package: heartbeat marker not found"), html);
   const createInvoiceJsRe = /\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-INVOICE-JS:END \*\/\n?/;
   html = createInvoiceJsRe.test(html) ? html.replace(createInvoiceJsRe, "") : (console.warn("Offline package: create-invoice-js marker not found"), html);
   const createReceiptJsRe = /\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-RECEIPT-JS:END \*\/\n?/;
@@ -75,29 +73,64 @@ function buildOfflineAppHtml(html) {
   const createPricingJsRe = /\/\* OFFLINE-STRIP:CREATE-PRICING-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-PRICING-JS:END \*\/\n?/;
   html = createPricingJsRe.test(html) ? html.replace(createPricingJsRe, "") : (console.warn("Offline package: create-pricing-js marker not found"), html);
 
+  // The offline copy has zero network calls, so it keeps its own simple
+  // local-code Premium unlock, entirely separate from the live site's
+  // Supabase-based Account & Subscription system (see CLAUDE.md's "Cloud
+  // Sync"/"Account & Subscription" sections). OFFLINE_PREMIUM_CODE is a
+  // placeholder value - change it to something not published anywhere
+  // before distributing.
   const offlineActivationJs = [
     'const DEFAULT_PREMIUM_CODE = "' + OFFLINE_PREMIUM_CODE + '";',
+    'function renderPremiumStatus() {',
+    '  const statusBox = document.getElementById("premiumStatusBox");',
+    '  const form = document.getElementById("premiumCodeForm");',
+    '  if (!statusBox || !form) return;',
+    '  statusBox.classList.toggle("hidden", !premiumUnlocked);',
+    '  form.classList.toggle("hidden", premiumUnlocked);',
+    '}',
+    'async function unlockPremiumLocally(code) {',
+    '  premiumUnlocked = true;',
+    '  await storageSet("pos-premium-unlocked", "1");',
+    '  await storageSet("pos-premium-code-used", code);',
+    '  renderPremiumStatus();',
+    '  applyPremiumLocks();',
+    '}',
     'async function activatePremiumCode() {',
     '  const errorBox = document.getElementById("premiumCodeError");',
+    '  const input = document.getElementById("premiumCodeInput");',
     '  errorBox.classList.add("hidden");',
-    '  const entered = getEnteredPremiumCode();',
+    '  const entered = input ? input.value.trim().toUpperCase() : "";',
     '  if (entered === DEFAULT_PREMIUM_CODE) {',
-    '    await unlockPremiumLocally(entered, "");',
+    '    await unlockPremiumLocally(entered);',
     '  } else {',
     '    errorBox.textContent = tr("premiumCodeInvalid");',
     '    errorBox.classList.remove("hidden");',
     '  }',
     '}',
-    'async function autoGrantDefaultPremium() {',
-    '  await unlockPremiumLocally(DEFAULT_PREMIUM_CODE, "");',
+    'async function initPremiumSystem() {',
+    '  const raw = await storageGet("pos-premium-unlocked");',
+    '  if (raw === null) { await unlockPremiumLocally(DEFAULT_PREMIUM_CODE); return; }',
+    '  premiumUnlocked = raw === "1";',
+    '  renderPremiumStatus();',
+    '  applyPremiumLocks();',
     '}'
   ].join("\n");
   const activationRe = /\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:START \*\/[\s\S]*?\/\* OFFLINE-SWAP:PREMIUM-ACTIVATION:END \*\//;
   html = activationRe.test(html) ? html.replace(activationRe, offlineActivationJs) : (console.warn("Offline package: premium-activation marker not found"), html);
 
-  const defaultOptionRe = /<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START -->[\s\S]*?<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:END -->/;
-  const offlineDefaultOption = '<option value="' + OFFLINE_PREMIUM_CODE + '" id="premiumCodeDefaultOption">' + OFFLINE_PREMIUM_CODE + '</option>';
-  html = defaultOptionRe.test(html) ? html.replace(defaultOptionRe, offlineDefaultOption) : (console.warn("Offline package: default-code-option marker not found"), html);
+  const offlinePremiumPanelHtml = [
+    '<h3 id="premiumPanelTitle">Premium</h3>',
+    '<div class="info" id="premiumPanelInfo" style="display:block;">Features marked with a gold Premium badge - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory - stay visible but locked until you activate a code. Enter it below to unlock them on this device.</div>',
+    '<div id="premiumStatusBox" class="success-text hidden" style="margin-top:12px;">✅ <span id="premiumActiveLabel">Premium is active on this device.</span></div>',
+    '<div id="premiumCodeForm">',
+    '  <label id="premiumCodeLabel">Premium Code</label>',
+    '  <input id="premiumCodeInput" type="text" placeholder="Enter code" style="width:100%; margin-bottom:8px;">',
+    '  <button type="button" class="small-btn" onclick="activatePremiumCode()" id="premiumActivateBtn" style="width:100%;">Activate</button>',
+    '  <div id="premiumCodeError" class="error-text hidden"></div>',
+    '</div>'
+  ].join("\n");
+  const premiumPanelRe = /<!-- OFFLINE-SWAP:PREMIUM-PANEL:START -->[\s\S]*?<!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->/;
+  html = premiumPanelRe.test(html) ? html.replace(premiumPanelRe, offlinePremiumPanelHtml) : (console.warn("Offline package: premium-panel marker not found"), html);
 
   const buyPremiumJsRe = /\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:BUY-PREMIUM-JS:END \*\/\n?/;
   html = buyPremiumJsRe.test(html) ? html.replace(buyPremiumJsRe, "") : (console.warn("Offline package: buy-premium-js marker not found"), html);

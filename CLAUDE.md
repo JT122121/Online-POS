@@ -791,9 +791,9 @@ all of them under one pattern:
 ## `app.html` — architecture
 
 Client-only, no server. All persistence is local to the browser. The one
-exception is Premium code activation, which calls out to a Google Apps
-Script — see "Premium code validation" below; everything else still has
-zero network calls.
+exception is the optional Account & Subscription / Cloud Sync system,
+which calls out to Supabase — see "Account & Subscription" and "Cloud
+Sync" below; everything else still has zero network calls.
 
 - **Storage abstraction** (`hasArtifactStorage`, `storageGet`/`storageSet`):
   prefers `window.storage.get/set` if present (an injected host API — this
@@ -1098,45 +1098,45 @@ zero network calls.
   `buildBackupPayload()`/`applyBackupPayload(backup)`, with byte-identical
   behavior - Cloud Sync (below) reuses both instead of duplicating the
   local-state serialization/restore logic.
-- **Cloud Sync (Premium, purchased code only)** - an optional,
-  local-first-by-default alternative to the file-based Backup/Restore
-  above, in the same Settings → Backup panel, right below "Restore from
-  Backup". Deliberately does **not** change the core "no signup, no
-  login" promise made throughout `index.html` (hero, trust bar, FAQ) -
-  the app works exactly as before with zero signup; Cloud Sync is purely
-  an opt-in extra for shop owners who want it, wrapped in its own
-  `OFFLINE-STRIP:CLOUD-SYNC-SECTION`/`CLOUD-SYNC-SCRIPT` markers (HTML +
-  the `vendor/supabase.min.js`/`modules/cloud-sync.js` script tags) so it
-  never ships in the "Download Offline POS" package - cloud sync needs a
-  network connection, which the offline copy deliberately has none of.
-  - **Gated on a *purchased* Premium code specifically, not just any
-    unlocked state** - `hasRealPremiumCode()` checks both
-    `premiumUnlocked` and that `pos-premium-code-used` (stored by the
-    existing Premium activation flow - see "Premium code validation"
-    below) is not `"PROMO1"`, the free auto-granted code every new
-    visitor gets. `refreshCloudSyncLock()` toggles
-    `#cloudSyncLockMsg`/`#cloudSyncUnlockedContent` from this check and
-    is called from `applyPremiumLocks()` (guarded with a `typeof` check,
-    since `refreshCloudSyncLock` doesn't exist in the offline build)
-    every time Premium status changes, alongside the existing
-    `renderAppTitleBadge()` call.
+- **Cloud Sync (Premium)** - an optional, local-first-by-default
+  alternative to the file-based Backup/Restore above, in the same
+  Settings → Backup panel, right below "Restore from Backup".
+  Deliberately does **not** change the core "no signup, no login" promise
+  made throughout `index.html` (hero, trust bar, FAQ) - the app works
+  exactly as before with zero signup; Cloud Sync is purely an opt-in
+  extra for shop owners who want it, wrapped in its own
+  `OFFLINE-STRIP:CLOUD-SYNC-SECTION`/`ACCOUNT-SCRIPT` markers (HTML +
+  the `vendor/supabase.min.js`/`modules/account.js`/`modules/cloud-sync.js`
+  script tags) so it never ships in the "Download Offline POS" package -
+  cloud sync needs a network connection, which the offline copy
+  deliberately has none of.
+  - **Gated on `premiumUnlocked` directly**, the same global every other
+    Premium feature checks - `applyPremiumLocks()` toggles
+    `#cloudSyncLockMsg`/`#cloudSyncUnlockedContent` from it inline,
+    alongside logo/receipt-number/inventory/customer-screen/offline-
+    download. Since the only way to become Premium on the live site now
+    is signing in and redeeming a code (see "Account & Subscription"
+    below), `premiumUnlocked` being true already implies being signed
+    in - there's no separate PROMO1-style exclusion check needed the way
+    an earlier version of this feature had. The Backup tab's Cloud Sync
+    section has no sign-in button of its own; its lock message points to
+    Settings → Premium (now "Account & Subscription") to sign in and
+    redeem a code.
   - **Auth is Supabase Auth** (Google, or any other provider enabled in
-    the Supabase dashboard - see `supabase/README.md`), via the
-    self-hosted `vendor/supabase.min.js` (the published
-    `@supabase/supabase-js` package's own `dist/umd/supabase.js` build,
-    unmodified - see `vendor/LICENSES.txt`) and `modules/cloud-sync.js`.
-    `SUPABASE_URL`/`SUPABASE_ANON_KEY` near the top of that file are the
-    project's public URL and anon/publishable key - safe to embed
-    client-side by design (Supabase's own model), with every read/write
-    still enforced by the Row Level Security policies in
-    `supabase/schema.sql`. `initCloudSync()` (called from `init()`,
-    guarded the same way as `refreshCloudSyncLock()`) restores any
-    existing session and listens for auth state changes;
-    `cloudSignIn()`/`cloudSignOut()` wrap
-    `signInWithOAuth({ provider: "google", redirectTo: <current URL> })`/
-    `signOut()`. `renderCloudSyncStatus()` toggles
-    `#cloudSyncSignedOut`/`#cloudSyncSignedIn` and fills in
-    `#cloudSyncEmail`.
+    the Supabase dashboard - see `supabase/README.md`), but the session/
+    client layer now lives in **`modules/account.js`**, not here -
+    `getSupabaseClient()`, `initAccount()`, `signInWithGoogle()`/
+    `signOutAccount()` are all defined there and shared by both this
+    feature and the Account & Subscription panel (one Supabase session
+    for the whole app, not a separate one per feature - see "Account &
+    Subscription" below for the full breakdown). `modules/cloud-sync.js`
+    itself only calls `getSupabaseClient()` and checks the shared
+    `premiumUnlocked` flag - it has no sign-in/session code of its own
+    anymore. `SUPABASE_URL`/`SUPABASE_ANON_KEY` (the project's public URL
+    and anon/publishable key - safe to embed client-side by design,
+    Supabase's own model) live in `modules/account.js` near the top; every
+    read/write is still enforced by the Row Level Security policies in
+    `supabase/schema.sql` regardless.
   - **"Backup to Cloud" / "Restore from Cloud" are full-replace
     operations**, not incremental/bidirectional sync - deliberately kept
     as simple as the existing file-based Backup/Restore rather than
@@ -1186,23 +1186,24 @@ zero network calls.
     entirely (confirmed via the proxy's own status endpoint - not a
     project-specific or credentials problem), so an actual live
     connection could not be exercised from here, the same class of
-    limitation `contact.html`'s OTP flow and Premium code validation
-    already document for their own Apps Script endpoints. What *was*
+    limitation `contact.html`'s OTP flow and (formerly)
+    `premium-validation/AppsScript.gs` already documented for their own
+    Apps Script endpoints. What *was*
     verified: `supabase/schema.sql` (fresh install, a second idempotent
     run, and an upgrade-from-the-pre-`document_type`/`meta` version) all
     ran cleanly against a throwaway local PostgreSQL 16 instance;
     `vendor/supabase.min.js` genuinely loads in a real browser and
-    `createClient()` produces a working client; the Premium-gate lock
-    correctly stays locked for a `PROMO1` code and unlocks for any other
-    code; `cloudSignIn()` calls `signInWithOAuth` with the right
-    provider/redirect; and, against a hand-written mock standing in for
-    the real Supabase client (matching this repo's established pattern
-    for untestable third-party endpoints), `pushBackupToCloud()` issues
-    the correct delete-then-insert sequence with correctly-mapped rows
-    for a seeded cart/sale, and `pullBackupFromCloud()` reconstructs a
-    `salesHistory` record byte-for-byte identical in shape to what
-    `saveCurrentSaleToHistory()` itself produces. Confirm the actual live
-    round trip once deployed - this sandbox cannot.
+    `createClient()` produces a working client; and, against a
+    hand-written mock standing in for the real Supabase client (matching
+    this repo's established pattern for untestable third-party
+    endpoints), `pushBackupToCloud()` issues the correct
+    delete-then-insert sequence with correctly-mapped rows for a seeded
+    cart/sale, and `pullBackupFromCloud()` reconstructs a `salesHistory`
+    record byte-for-byte identical in shape to what
+    `saveCurrentSaleToHistory()` itself produces. (The Premium-gate/
+    sign-in verification itself now lives under "Account & Subscription"
+    below, alongside the code it tests.) Confirm the actual live round
+    trip once deployed - this sandbox cannot.
 - **Customer-facing screen:** `app.html` broadcasts live order state via
   **both** `localStorage.setItem("goonlinepos-customer-screen-state", …)`
   and a `BroadcastChannel("goonlinepos-customer-screen")`
@@ -1216,36 +1217,31 @@ zero network calls.
 - **"Premium" gating:** `premiumUnlocked` gates the same set of features
   it always has (logo upload, receipt number/prefix editing, inventory
   stock editing/export, customer screen, downloading the offline
-  package) via `applyPremiumLocks()`, which just toggles `disabled`/
-  hidden classes on DOM elements — UI-level gating, not a real
-  entitlement check. There is **no auto-unlock** — `loadPremiumStatus()`
-  reads the stored `pos-premium-unlocked` flag as-is, so a fresh browser
-  starts locked and stays that way until a code is activated; once
-  activated it stays unlocked locally until that browser's site data is
-  cleared (never re-locked automatically). How a code gets *accepted* is
-  now two entirely different mechanisms depending on build — see
-  "Premium code validation" and "Download Offline POS" below.
+  package, and now Cloud Sync too) via `applyPremiumLocks()`, which just
+  toggles `disabled`/hidden classes on DOM elements — UI-level gating,
+  not a real entitlement check. **No auto-unlock on the live site** — a
+  fresh sign-in starts on the free tier and stays that way until a code
+  is redeemed (see "Account & Subscription" below); the offline build
+  still auto-unlocks on first launch via its own separate local code,
+  unchanged from before. How Premium gets granted is now two entirely
+  different mechanisms depending on build — see "Account & Subscription"
+  and "Download Offline POS" below.
   `applyPremiumLocks()` also calls `renderAppTitleBadge()`, which reflects
   actual status in the header — `#premiumBadgeAppTitle` reads "Premium"
   (gold `.premium-badge`) only once really unlocked, "Basic" (gray
   `.basic-badge`) otherwise; it used to always read "Premium" regardless
   of status. `changeLanguage()` also calls it directly, so it re-translates
   on a language switch without needing a status change.
-- **`#premiumPromoNotice`** — a dismissible "Activate Your Free Premium
-  Now" banner, styled/behaving exactly like the pre-existing
-  `#backupNotice` (same `.backup-notice`/`.bn-*` classes, same
-  dismiss-persists-via-storage pattern — `pos-premium-promo-dismissed`).
-  Shown only while premium isn't unlocked, there's a default code to
-  offer (`#premiumCodeDefaultOption` has a value — true for both builds),
-  and it hasn't been dismissed; `refreshPremiumPromoNotice()` re-evaluates
-  this from both `loadPremiumStatus()` and `unlockPremiumLocally()`, so it
-  disappears the moment premium is unlocked through *any* path, not only
-  by clicking this banner. Its own button
-  (`activateFreePremiumFromNotice()`) is a single click that opens
-  Settings, switches to the Premium tab, and immediately activates
-  whatever the dropdown's default option is — safe to do unprompted since
-  that default is always the local/no-network code (PROMO1 online,
-  `OFFLINE_PREMIUM_CODE` offline).
+- **Retired: `#premiumPromoNotice`.** A dismissible "Activate Your Free
+  Premium Now" banner used to sit here, nudging every visitor to
+  one-click-activate the old auto-granted `PROMO1` code
+  (`refreshPremiumPromoNotice()`/`dismissPremiumPromoNotice()`/
+  `activateFreePremiumFromNotice()`). Removed outright, HTML/CSS-class
+  reuse and all, once the live Premium system moved to the sign-in +
+  redeem model under "Account & Subscription" - there's no more
+  auto-granted free code to promote, so the banner had nothing left to
+  do. `#backupNotice` (the sibling banner it was styled after) is
+  unaffected and still works exactly as before.
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
@@ -1413,169 +1409,180 @@ credentials in the repo" convention (matching
 `contact-form/`/`premium-validation/`) if this schema is extended
 further.
 
-## Premium code validation (live site only)
+## Account & Subscription (live site only) — replaced the old Premium code system
 
-The live site auto-grants Premium to every visitor — no code entry
-required — while still validating that grant against a Google Sheet the
-site owner edits directly (not hardcoded in this file), through a Google
-Apps Script Web App (`activatePremiumCode()`/`autoGrantDefaultPremium()`,
-inside the `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */` marked
-block). Full setup/schema/deployment steps are in
-`premium-validation/README.md` and `premium-validation/AppsScript.gs`;
-short version:
+The live site's Premium gate is now Supabase Auth + a `profiles`/
+`redemption_codes` pair of tables (`supabase/schema.sql`,
+`modules/account.js`) — **not** the Google Sheet + Apps Script system
+this section used to describe. Per an explicit "everyone can sign in or
+register... redeem a code that extends their subscription" request,
+replacing the old system entirely (not running the two in parallel): a
+visitor signs in with Google (or any other provider enabled in the
+Supabase dashboard - see `supabase/README.md`), gets a free-tier profile
+automatically, and redeems a code to become Premium for a limited time
+rather than getting an unlimited free grant the moment they show up.
+`premium-validation/AppsScript.gs`/`README.md` are **left on disk,
+unused** - same "retire, don't delete" convention as `guide.html`/
+`about.html`/`how-it-works.html` - in case the site owner still has that
+Apps Script deployed and wants to decommission it at their own pace; no
+live code calls it anymore.
 
-- **`loadPremiumStatus()` auto-grants Premium on a brand-new visit** — it
-  calls `autoGrantDefaultPremium()` whenever the stored
-  `pos-premium-unlocked` flag is `null` (i.e. truly first-ever visit, or a
-  fresh offline install), with zero clicks required. That function looks
-  `DEFAULT_PREMIUM_CODE` ("PROMO1") up against the sheet first so the real
-  validity value from column B shows immediately, falling back to a
-  local-only grant (no validity shown) only if the lookup can't be
-  reached — so a visitor is never blocked by an infrastructure hiccup. A
-  lookup that succeeds but comes back seat-limited/invalid does **not**
-  auto-grant; the visitor is simply left in the normal locked state.
-  `activatePremiumCode()` (manual entry) gives PROMO1 the same
-  network-first-with-local-fallback treatment; any other code has no such
-  fallback and shows the network-error message if unreachable.
-  `handlePremiumCodeSelectChange()`/`getEnteredPremiumCode()`/
-  `unlockPremiumLocally()`/`openPremiumCodeEdit()`/`cancelPremiumCodeEdit()`
-  are shared with the offline build (they live outside the
-  `PREMIUM-ACTIVATION` swap block) — only *which* code counts as valid,
-  and whether checking one touches the network, differs per-build.
-- A `#premiumShortcutButton` ("👑 Premium") sits in the main screen's
-  header toolbar (`.header-actions`, alongside Backup/Settings/Summary/
-  Print/Inventory/Customer Screen/New Sale) so Settings → Premium is
-  reachable in one click from the main screen instead of needing
-  Settings → the Premium tab specifically. `openPremiumSettings()`
-  opens `#settingsOverlay` and calls `selectSettingsTab("premium")`,
-  the same pattern `openBackupSettings()`/`openInventoryPanel()` already
-  use for their own shortcut buttons.
-- Settings → Premium is a `<select id="premiumCodeSelect">` defaulting to
-  PROMO1 (offline build: its own `OFFLINE_PREMIUM_CODE`, swapped in via
-  the `<!-- OFFLINE-SWAP:DEFAULT-CODE-OPTION:START/END -->` marker so the
-  dropdown never advertises the wrong code for the build), with an
-  "Enter a different code…" option that reveals `#premiumCodeInput` for
-  anything else.
-- A "Change code" link next to the "Premium is active" status re-reveals
-  the form (`openPremiumCodeEdit()`, gated by the in-memory
-  `premiumEditMode` flag — not persisted) so someone can switch to a
-  different code — e.g. swap the auto-granted PROMO1 for a real purchased
-  one — without clearing the browser's site data. `#premiumCancelEditBtn`
-  backs out without changing anything; successfully activating any code
-  (`unlockPremiumLocally()`) always clears edit mode back to the plain
-  status view.
-- `PREMIUM_VALIDATION_URL` (near the top of the marked block) must be
-  your deployed Apps Script's `/exec` URL. It's fine for this URL to be
-  public (it's a validation proxy, not the spreadsheet) — the actual
-  sheet ID/URL never appears anywhere in this repo or in `app.html`; the
-  Apps Script reaches its bound sheet via
-  `SpreadsheetApp.getActiveSpreadsheet()`.
-- Each browser gets a random, persisted `pos-device-id`
-  (`getDeviceId()`). A code is capped at a maximum number of
-  simultaneously active devices, on a `SEAT_WINDOW_DAYS` (30-day) rolling
-  window enforced server-side in the Apps Script — a device that stops
-  checking in for that long silently frees its seat. The cap is
-  `MAX_SEATS` (5) by default, except for entries in `CODE_SEAT_LIMITS`
-  (`AppsScript.gs`) which override it per-code — currently just
-  `{ "PROMO1": 30 }`, since every new visitor auto-activates PROMO1 over
-  the network and a 5-device cap would lock out the site after only 5
-  visitors ever. This is a deliberate soft cap while the site is new
-  (chosen over full exemption), not full unlimited — the site owner can
-  raise it, lower it, or remove PROMO1 from `CODE_SEAT_LIMITS` entirely
-  (reverting it to the default 5) as traffic grows. Real purchased codes
-  get the default `MAX_SEATS` (5) unless explicitly added to
-  `CODE_SEAT_LIMITS`, to blunt one code being shared/leaked indefinitely
-  — not to build real license management.
-- **`#specialAccessBadge`** — a small blue pill next to the header's
-  Premium badge, reading "Special Access", shown only when the code
-  actually used to unlock (`pos-premium-code-used`, checked in
-  `renderAppTitleBadge()`) is literally `"PROMO1"` — i.e. it marks
-  access granted through the free/promotional program specifically, not
-  a real purchased code, and never shows on the offline build (whose own
-  default code is a different string). Explicitly a **temporary
-  placeholder** while the site is new and building an audience — the
-  site owner intends to remove it later once they decide; it's isolated
-  to one CSS class, one HTML element, and a few lines in
-  `renderAppTitleBadge()`, deliberately kept simple to delete later.
-- **Codes never expire.** The sheet's Validity column is purely
-  informational — shown to the user as "Valid until: …" via
-  `renderPremiumValidity()` — and is never checked against today's date.
-  Column B can hold a date (displayed as `dd-MMM-yyyy`), plain text like
-  `Life Time Access` (displayed verbatim), or be left blank (nothing
-  shown). This was a deliberate simplification after an earlier
-  expiration-enforcement design proved to be an operational trap: an
-  expired `PROMO1` row silently stopped the free auto-grant for every
-  new visitor site-wide, discovered only when a site owner reported
-  "expired but still active" for their own already-unlocked browser
-  (correct per the old design's non-retroactive rule) while new visitors
-  were quietly being locked out. The `premiumCodeExpired` translation key
-  and its UI branch in `activatePremiumCode()` still exist client-side
-  but are unreachable now that the server never returns `reason:
-  "expired"` — harmless dead code, not wired to anything.
-  `heartbeatPremiumCode()` still pings the endpoint in the background on
-  load purely to keep an already-active seat "warm" (refresh `LastSeen`
-  server-side); it has nothing to do with expiration.
-- Failure modes are split three ways in the UI: unknown code
-  (`premiumCodeInvalid`), code found but at its device cap
-  (`premiumCodeSeatLimit`), and the endpoint being unreachable
-  (`premiumCodeNetworkError`).
-- **`checkPremiumCode()` calls the Apps Script with GET, not POST** —
-  `?code=...&deviceId=...` query params, handled by `AppsScript.gs`'s
-  `doGet()` (the real handler; `doPost()` is kept only as a fallback).
-  This was a deliberate fix, not the original design: Apps Script Web
-  Apps have a documented history of not reliably sending CORS headers
-  back on POST responses, so a cross-origin `fetch()` POST fails in the
-  browser with "CORS request was blocked because of invalid or missing
-  response headers" even though the identical request works fine as a
-  direct browser visit or via curl (neither enforces CORS). GET doesn't
-  have this problem. Confirmed live against the site owner's actual
-  deployment. If `PREMIUM_VALIDATION_URL` is reachable but every code
-  still fails with the network-error message, re-check the deployment's
-  access setting is exactly **Anyone** (not "Anyone with a Google
-  account" or "Only myself") — either of those redirects requests to a
-  Google sign-in page instead of running the script, which fails the
-  same way.
-- Verified end-to-end against a mock endpoint standing in for the real
-  Apps Script (can't deploy the real one without the site owner's Google
-  account): a fresh visit auto-grants Premium with zero clicks and shows
-  the real validity value, and a validation-URL-unreachable fresh visit
-  still auto-grants PROMO1 locally with no validity shown. The Apps
-  Script's own logic (`findCode`, `checkOrClaimSeat`, `validateCode` —
-  a code with a long-past date still succeeds, plain-text validity is
-  echoed back verbatim, PROMO1 capped at exactly 30 via
-  `CODE_SEAT_LIMITS`, a real code with no override still capped at the
-  default 5) is separately unit-tested in isolation against mocked
-  Sheets/Lock/Content objects.
-- Every `AppsScript.gs` edit requires deploying a **new version** (Deploy
-  → Manage deployments → edit → New version) before it takes effect on
-  the existing `/exec` URL — the URL itself doesn't change, but the code
-  behind it does nothing until redeployed. `Code.gs` must be a script
-  created via **Extensions → Apps Script from inside the "Premium Code"
-  sheet itself** — a standalone project (created from script.google.com
-  or Google Drive directly) is never bound to any spreadsheet, so
-  `SpreadsheetApp.getActiveSpreadsheet()` always returns `null` and
-  every request 500s. Confirmed live: this exact mistake produced
-  `TypeError: Cannot read properties of null (reading 'getSheetByName')`
-  in the Apps Script execution log, which the browser then only ever
-  saw as a generic "couldn't reach the activation server" (that crash
-  page carries no CORS headers).
-- **"Buy Premium Code"** — a `.small-btn` (`#buyPremiumBtn`) under the
-  code-entry form in Settings → Premium opens a small info modal
-  (`#buyPremiumOverlay`, `openBuyPremiumModal()`/`closeBuyPremiumModal()`)
-  that leads with **why** — a "Why go Premium?" bullet list of the
-  actual gated features (company logo, editable receipt numbers/prefix,
-  customer screen, inventory tracking with export, the downloadable
-  offline version) — before the price ($9.99 USD, one-time), three
-  terms bullets (no expiration, up to 5 active browsers, non-refundable),
-  and a line linking out to `contact.html` to actually buy — this repo
-  has no payment processing, purchasing is handled manually by the site
-  owner via that contact form. Purely informational; doesn't touch
-  `activatePremiumCode()` or any validation logic. The whole feature
-  (button + modal + its two JS functions) lives inside its own
-  `OFFLINE-STRIP:BUY-PREMIUM-BUTTON`/`BUY-PREMIUM-MODAL`/`BUY-PREMIUM-JS`
-  marker blocks and is stripped from the downloadable offline package —
-  an offline copy is already Premium-unlocked via its own separate code,
-  so there's nothing to sell it.
+- **Sign-in is open to everyone, unlike the old code-entry flow which was
+  itself the "free" tier.** A new `profiles` row (`subscription_status:
+  'free'`, `premium_until: null`) is auto-created for every new
+  `auth.users` row by `handle_new_user()` in `supabase/schema.sql` -
+  extended from the trigger that already provisioned a default
+  `store_settings` row (see "Cloud Sync" above). There is **no more
+  auto-grant** - unlike the old `PROMO1`/`autoGrantDefaultPremium()`
+  behavior, a brand-new signed-in account starts genuinely free and stays
+  that way until a code is redeemed. `PROMO1`/`DEFAULT_PREMIUM_CODE`/
+  `CODE_SEAT_LIMITS`/per-device seat limiting are all gone from the live
+  system - Premium now follows the signed-in **account**, not a
+  per-browser code entry, so there's no device cap to enforce; sign in
+  anywhere, Premium comes with you.
+- **`modules/account.js`** is the live site's only Premium mechanism now
+  - `getSupabaseClient()` (shared with `modules/cloud-sync.js`),
+  `initAccount()` (session restore + auth-state listener, called from
+  `initPremiumSystem()` in `init()`), `fetchOrCreateProfile()` (reads the
+  trigger-provisioned profile; falls back to inserting one itself if
+  somehow missing - `profiles` has an owner-insert RLS policy for exactly
+  this), `isProfilePremium()` (the actual source of truth -
+  `premium_until` in the future - never trusts the `subscription_status`
+  text label alone), `lazyExpireProfileIfStale()` (corrects a profile's
+  label back to `'free'` in the database the next time it's loaded after
+  `premium_until` has passed, so the site owner's own view of the table
+  in the Supabase dashboard stays accurate without needing a cron job),
+  `signInWithGoogle()`/`signOutAccount()`, `renderAccountPanel()`, and
+  `redeemCodeNow()` (calls the `redeem_code` Postgres RPC - see
+  `supabase/schema.sql` - and refreshes local state on success).
+  `premiumUnlocked` (the same global every Premium-gated feature already
+  checked) is now set from `isProfilePremium(currentProfile)` instead of
+  a locally-stored flag.
+- **Settings → Premium is now "Account & Subscription"**, wrapped in a
+  new `<!-- OFFLINE-SWAP:PREMIUM-PANEL:START/END -->` marker (the tab
+  itself, `data-tab="premium"`/`premiumTabLabel`, is unchanged - only the
+  panel's inner content is swapped, the same "Backup" tab leading to a
+  "Backup & Restore" heading precedent already established elsewhere in
+  this file) - signed-out shows a single "Sign in with Google" button
+  (`#accountSignedOut`); signed-in shows the account's email
+  (`#accountEmail`), a Free/Premium status line with the premium-until
+  date when applicable (`#accountStatusFree`/`#accountStatusPremium`/
+  `#accountPremiumUntil`, formatted by `formatPremiumUntil()`), a Redeem
+  Code field + button (`#redeemCodeInput`/`redeemCodeNow()`), and Sign
+  Out. "Buy Premium Code" (`#buyPremiumBtn`/`#buyPremiumOverlay`) is
+  unchanged in mechanism - still a purely informational modal pointing to
+  `contact.html`, still `OFFLINE-STRIP`-wrapped - only its two feature
+  bullets were reworded (`buyPremiumFeature1`/`2`) since "No expiration"/
+  "Up to 5 active browsers" no longer describe how a code behaves under
+  the new redeemable-and-account-bound model.
+- **Cloud Sync's own gating simplified** now that there's exactly one way
+  to be Premium on the live site: `applyPremiumLocks()` toggles
+  `#cloudSyncLockMsg`/`#cloudSyncUnlockedContent` directly from
+  `premiumUnlocked`, the same as every other Premium-gated element in
+  that function (logo, receipt number, inventory, customer screen,
+  offline download) - the earlier `hasRealPremiumCode()`/
+  `refreshCloudSyncLock()` PROMO1-exclusion logic in
+  `modules/cloud-sync.js` is gone, since there's no PROMO1-equivalent
+  free code to exclude anymore. The Backup tab's Cloud Sync section no
+  longer has its own separate sign-in button either - being
+  `premiumUnlocked` already implies being signed in (that's the only way
+  to get there now), so it just shows Backup/Restore buttons directly
+  once unlocked, with the lock message pointing to Settings → Premium to
+  sign in and redeem a code.
+- **`redemption_codes` is where the site owner creates codes** - open the
+  Supabase dashboard, Table Editor → `redemption_codes` → Insert row,
+  fill in `code` (redemption is case/whitespace-insensitive -
+  `redeem_code()` does `upper(trim(p_code))`) and `duration_days` (how
+  many days that specific code grants), optionally a `note` for the
+  owner's own reference (e.g. "batch for Facebook promo, Aug 2026"). No
+  app code or extra tooling is needed for this - see
+  `supabase/README.md`. The table has **zero RLS policies** (default
+  deny for anon/authenticated) precisely so a signed-in user can never
+  browse, enumerate, or tamper with it directly - the dashboard's own
+  service-role access bypasses RLS the same way the `redeem_code()`
+  function's `SECURITY DEFINER` does.
+- **`redeem_code(p_code)`** (Postgres function, `supabase/schema.sql`) is
+  the *only* way `redemption_codes` is ever read or written by anything
+  other than the dashboard - called via `supabase.rpc('redeem_code', {
+  p_code: '...' })`. Requires a real `auth.uid()` (never takes a user id
+  as a parameter, so there's no way to redeem "on behalf of" someone
+  else), row-locks the matching code (`for update`) so two people
+  redeeming the same code at the same instant can't both succeed, marks
+  it used (`is_used`/`used_by`/`used_at`), and extends the caller's own
+  `profiles.premium_until` **additively** - redeeming while already
+  Premium stacks the new code's days on top of whatever time remains,
+  rather than overwriting it, so redeeming early never costs a
+  subscriber any remaining days. Returns a small JSON result
+  (`{success, reason}` on failure - `not_authenticated`/`invalid`/
+  `already_used`; `{success: true, premium_until}` on success) that
+  `redeemCodeNow()` maps to the right translated message
+  (`redeemCodeInvalid`/`redeemCodeAlreadyUsed`/`redeemCodeSuccess`/
+  `redeemCodeNetworkError`).
+- **The offline package keeps its own, completely separate, network-free
+  Premium mechanism** - unchanged in spirit from before this rework, just
+  relocated. `vendor/supabase.min.js`/`modules/account.js`/
+  `modules/cloud-sync.js` are wrapped in one
+  `OFFLINE-STRIP:ACCOUNT-SCRIPT` marker (renamed from the old
+  `CLOUD-SYNC-SCRIPT`, same idea, now covering all three since none of
+  them can do anything useful without a network connection) and excluded
+  entirely - a downloaded copy has no `window.supabase`, no
+  `getSupabaseClient`, no `initAccount`. In their place,
+  `modules/offline-builder.js` still uses the
+  `OFFLINE-SWAP:PREMIUM-ACTIVATION` marker (same name as before, content
+  rewritten) to inject a self-contained `initPremiumSystem()` +
+  `activatePremiumCode()` + `unlockPremiumLocally()` +
+  `renderPremiumStatus()` that auto-grants Premium on first launch
+  (`pos-premium-unlocked` is `null`) using the same
+  `OFFLINE_PREMIUM_CODE` constant it always has (`"GOOFFLINE-LIFETIME"`
+  placeholder - change it before distributing), and a new
+  `OFFLINE-SWAP:PREMIUM-PANEL` marker injects the **old** simple
+  status-box + single-input + Activate-button HTML (reusing the
+  `premiumPanelTitle`/`premiumPanelInfo`/`premiumActiveLabel`/
+  `premiumCodeLabel`/`premiumActivateBtn`/`premiumCodeInvalid`
+  translation keys, which are consequently now offline-only - harmless
+  dead references on the live build, where those element ids no longer
+  exist, same as the `cloudSyncTitle` precedent noted under "Cloud Sync"
+  above). The old dropdown-with-a-default-option / change-code / edit
+  mode / validity-display machinery (`premiumCodeSelect`,
+  `OFFLINE-SWAP:DEFAULT-CODE-OPTION`, `openPremiumCodeEdit()`,
+  `pos-premium-validity`) was dropped in the same pass - it existed to
+  accommodate the old PROMO1-vs-custom-code distinction, which has no
+  offline equivalent (the offline copy only ever recognizes the one
+  `OFFLINE_PREMIUM_CODE` string) - so the offline form is now a plain
+  text input, no dropdown.
+- **Verified two ways, not just by reading the code**: (1) against a
+  throwaway local PostgreSQL 16 instance with stub `auth.users`/
+  `auth.uid()`/`authenticated` role objects standing in for Supabase's
+  own built-ins - a brand-new `auth.users` insert correctly
+  auto-provisions a `'free'` profile via the trigger; redeeming a valid
+  code correctly extends `premium_until`, marks the code used, and a
+  second redeem of the *same* code correctly fails with
+  `already_used`; redeeming a second, different code while already
+  Premium correctly **stacks** (extends from the existing
+  `premium_until`, not from `now()`); an invalid code fails cleanly;
+  an unauthenticated call correctly returns `not_authenticated`; the full
+  file is idempotent on a second run and upgrades a database that
+  already had the pre-`profiles`/`redemption_codes` version applied. (2)
+  End-to-end with Playwright against the real app.html (mocking only the
+  Supabase client itself, the same pattern used for Cloud Sync and for
+  the old Google-Sheet-based Premium system before it, since this
+  sandbox's egress policy blocks `*.supabase.co` outright - see "Cloud
+  Sync" above): signed-out
+  state correctly locks every Premium feature including Cloud Sync;
+  signing in on the **free** tier correctly still leaves everything
+  locked (a plain account is not enough - a redemption is required);
+  simulating a Premium profile correctly unlocks logo/receipt-number/
+  inventory/customer-screen/offline-download/cloud-sync all at once and
+  flips the header badge to "Premium"; a stale expired-but-still-labeled-
+  `'premium'` profile is correctly lazily corrected back to `'free'`;
+  the redeem flow correctly handles both success and an
+  already-used-code failure with the right messages. Separately, the
+  *actual built offline `app.html`* (not just a string check) was loaded
+  in a real browser and exercised end-to-end: it auto-grants Premium on
+  first launch with zero network calls and zero console errors, correctly
+  rejects a wrong code and accepts `GOOFFLINE-LIFETIME` when entered
+  manually, defines none of `account.js`'s functions or `window.supabase`
+  at all, and has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
@@ -1644,19 +1651,22 @@ remember. The whole mechanism lives inside `app.html` itself:
   `barcode-generator.html`).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
-  marked block (the live site's Google-Sheet-validated activation flow —
-  see "Premium code validation" above) gets replaced wholesale with a
-  simple local `entered === OFFLINE_PREMIUM_CODE` string compare, so a
-  downloaded copy needs zero network to unlock — it never even starts out
-  auto-unlocked (same as the live site). `OFFLINE_PREMIUM_CODE` is a
-  placeholder value in the source — **change it to something not published
-  anywhere before distributing**. It's a plain string compared
-  client-side inside a file every offline copy ships with, so it's a
-  soft/honor-system gate, not real DRM — anyone with dev tools open on an
-  offline copy can read it. This is deliberately disconnected from the
-  live site's sheet/seat-limit system (per design: the download button
-  itself already required being Premium online, so the offline copy
-  doesn't need to re-prove that against the network).
+  marked block (the live site's `initPremiumSystem()` → Supabase Account
+  & Subscription flow — see "Account & Subscription" above) gets replaced
+  wholesale with a self-contained local `entered === OFFLINE_PREMIUM_CODE`
+  string compare, and the `<!-- OFFLINE-SWAP:PREMIUM-PANEL:START/END -->`
+  marked HTML (the live sign-in/redeem panel) gets replaced with a plain
+  status-box + single-input + Activate-button form - so a downloaded copy
+  needs zero network to unlock, and auto-unlocks on first launch exactly
+  like it always has. `OFFLINE_PREMIUM_CODE` is a placeholder value in
+  the source — **change it to something not published anywhere before
+  distributing**. It's a plain string compared client-side inside a file
+  every offline copy ships with, so it's a soft/honor-system gate, not
+  real DRM — anyone with dev tools open on an offline copy can read it.
+  This is deliberately disconnected from the live site's Supabase-based
+  system (per design: the download button itself already required being
+  Premium online, so the offline copy doesn't need to re-prove that
+  against the network - and couldn't anyway, since it has none).
 - `offline/README.txt` + `offline/start-server.sh` / `-mac.command` /
   `.bat` are static, rarely-changing files (not generated) that get pulled
   into the zip as-is. The launchers run a local Python `http.server` and
@@ -2566,10 +2576,12 @@ the address is visible and gives no confirmation the message actually
 reached anyone. The whole three-step flow lives in `contact.html`
 itself; there is no server of ours involved, just a Google Apps Script
 Web App in `contact-form/` (see `contact-form/README.md` for full setup
-- deploy steps, constants, debugging) that the page calls the same way
-`app.html` calls `premium-validation/AppsScript.gs` for Premium code
-checks: GET requests with query params, for the same documented CORS
-reason (Apps Script Web Apps don't reliably send CORS headers back on
+- deploy steps, constants, debugging) that the page calls with GET
+requests and query params, the same convention `app.html` used to use
+for its own (now-retired, see "Account & Subscription") Premium code
+checks against `premium-validation/AppsScript.gs`, for the same
+documented CORS reason (Apps Script Web Apps don't reliably send CORS
+headers back on
 POST responses).
 
 - **Step 1 - the form:** Name/Email/Message, all required, with basic
@@ -2578,10 +2590,10 @@ POST responses).
   `maxlength="1000"` with a live character counter - long enough for a
   real inquiry, short enough to keep the GET request's query string
   well within every browser's URL-length limit, since the whole message
-  travels as a URL-encoded query param (`callApi()` builds it with the
-  same manual `encodeURIComponent()` string-building style
-  `checkPremiumCode()` already uses in `app.html`, not `URLSearchParams`,
-  to match the codebase's existing convention). Submitting calls
+  travels as a URL-encoded query param (`callApi()` builds it with a
+  manual `encodeURIComponent()` string-building style, not
+  `URLSearchParams`, matching the same convention the now-retired
+  `checkPremiumCode()` used to use in `app.html`). Submitting calls
   `action=requestOtp` - Apps Script emails a 6-digit code to the address
   entered and holds the name/email/message server-side (see
   `contact-form/README.md` for exactly where) until it's verified or
@@ -2617,17 +2629,17 @@ POST responses).
 - **`CONTACT_FORM_URL`** near the top of `contact.html`'s script is a
   placeholder (`"REPLACE_WITH_YOUR_CONTACT_FORM_APPS_SCRIPT_URL"`) -
   must be replaced with the deployed Apps Script's own `/exec` URL
-  before this works, same as `PREMIUM_VALIDATION_URL` in `app.html`.
-  Unlike that one, this Apps Script project is **not** bound to any
-  Google Sheet (see `contact-form/README.md`) - it holds the
+  before this works, the same pattern `PREMIUM_VALIDATION_URL` used to
+  follow in `app.html` before the Premium system moved to Supabase (see
+  "Account & Subscription"). This Apps Script project is **not** bound
+  to any Google Sheet (see `contact-form/README.md`) - it holds the
   in-progress name/email/message/OTP in `CacheService` between the two
   steps, a built-in short-lived key-value store, since nothing here
-  needs to persist longer than one contact-form submission, unlike
-  Premium seat records.
+  needs to persist longer than one contact-form submission.
 - Verified end-to-end with Playwright against a mocked endpoint (can't
   deploy the real Apps Script without the site owner's Google account,
-  same limitation as Premium code validation's own testing): empty-field
-  and invalid-email submissions are caught client-side before any
+  the same class of limitation the old Premium code system's own testing
+  had): empty-field and invalid-email submissions are caught client-side before any
   network call; a valid submission moves to Step 2 and shows the
   address the code was sent to; a wrong code shows the correct
   attempts-remaining message and stays on Step 2; the resend cooldown

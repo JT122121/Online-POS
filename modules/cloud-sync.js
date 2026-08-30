@@ -1,59 +1,9 @@
-// Optional Cloud Sync (Premium, purchased code only - see hasRealPremiumCode()).
-// Uses Supabase Auth (Google or any other enabled provider) + the tables in
-// supabase/schema.sql. The anon/public key below is meant to be embedded
-// client-side - it's not a secret, every write it makes is still enforced
-// by the Row Level Security policies in that schema.
-const SUPABASE_URL = "https://kimaefdizuvkxzvttzhh.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_n3YJh5yBQkzNg-xv6OgeoQ_f_owgu-9";
-
-let cloudSyncClient = null;
-let cloudSyncUser = null;
-
-function getCloudSyncClient() {
-  if (!cloudSyncClient && window.supabase && typeof window.supabase.createClient === "function") {
-    cloudSyncClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  }
-  return cloudSyncClient;
-}
-
-async function initCloudSync() {
-  const client = getCloudSyncClient();
-  if (!client) return;
-  client.auth.onAuthStateChange(function() {
-    client.auth.getSession().then(function(res) {
-      cloudSyncUser = (res.data && res.data.session && res.data.session.user) || null;
-      renderCloudSyncStatus();
-    });
-  });
-  const initial = await client.auth.getSession();
-  cloudSyncUser = (initial.data && initial.data.session && initial.data.session.user) || null;
-  renderCloudSyncStatus();
-}
-
-async function hasRealPremiumCode() {
-  if (!premiumUnlocked) return false;
-  const code = await storageGet("pos-premium-code-used");
-  return !!code && code !== "PROMO1";
-}
-
-async function refreshCloudSyncLock() {
-  const allowed = await hasRealPremiumCode();
-  const lockMsg = document.getElementById("cloudSyncLockMsg");
-  const content = document.getElementById("cloudSyncUnlockedContent");
-  if (lockMsg) lockMsg.classList.toggle("hidden", allowed);
-  if (content) content.classList.toggle("hidden", !allowed);
-}
-
-function renderCloudSyncStatus() {
-  const signedOutEl = document.getElementById("cloudSyncSignedOut");
-  const signedInEl = document.getElementById("cloudSyncSignedIn");
-  const emailEl = document.getElementById("cloudSyncEmail");
-  if (!signedOutEl || !signedInEl) return;
-  const signedIn = !!cloudSyncUser;
-  signedOutEl.classList.toggle("hidden", signedIn);
-  signedInEl.classList.toggle("hidden", !signedIn);
-  if (emailEl) emailEl.textContent = cloudSyncUser ? (cloudSyncUser.email || "") : "";
-}
+// Cloud Sync (Settings -> Backup) - push/pull the app's full local state to
+// Supabase. Uses the shared Supabase session from modules/account.js
+// (getSupabaseClient(), currentUser) - being signed in with an active
+// subscription (premiumUnlocked) is what gates this feature; there is no
+// separate sign-in step here anymore, see account.js's Account &
+// Subscription panel for that.
 
 function cloudSyncShowError() {
   const box = document.getElementById("cloudSyncError");
@@ -62,25 +12,6 @@ function cloudSyncShowError() {
 function cloudSyncClearError() {
   const box = document.getElementById("cloudSyncError");
   if (box) box.classList.add("hidden");
-}
-
-async function cloudSignIn() {
-  const client = getCloudSyncClient();
-  if (!client) { cloudSyncShowError(); return; }
-  cloudSyncClearError();
-  const { error } = await client.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: window.location.href }
-  });
-  if (error) { console.error("Cloud sync sign-in failed:", error); cloudSyncShowError(); }
-}
-
-async function cloudSignOut() {
-  const client = getCloudSyncClient();
-  if (!client) return;
-  await client.auth.signOut();
-  cloudSyncUser = null;
-  renderCloudSyncStatus();
 }
 
 function chunkArray(arr, size) {
@@ -112,13 +43,12 @@ function isoToSaleDateTime(iso) {
 }
 
 async function pushBackupToCloud() {
-  const client = getCloudSyncClient();
+  const client = getSupabaseClient();
   const session = client ? (await client.auth.getSession()).data.session : null;
   if (!client || !session) { cloudSyncShowError(); return false; }
   const userId = session.user.id;
   const backup = await buildBackupPayload();
   const settings = backup.settings || {};
-  const codeUsed = (await storageGet("pos-premium-code-used")) || "";
 
   const storeSettingsRow = {
     user_id: userId,
@@ -134,7 +64,6 @@ async function pushBackupToCloud() {
     language: settings.language || "en",
     paper_size: settings.paperSize || "80",
     premium_unlocked: !!premiumUnlocked,
-    premium_code_used: codeUsed,
     footer1: settings.footer1 || "",
     footer2: settings.footer2 || "",
     settings: {
@@ -206,7 +135,7 @@ async function pushBackupToCloud() {
 }
 
 async function pullBackupFromCloud() {
-  const client = getCloudSyncClient();
+  const client = getSupabaseClient();
   const session = client ? (await client.auth.getSession()).data.session : null;
   if (!client || !session) { cloudSyncShowError(); return false; }
   const userId = session.user.id;
@@ -282,7 +211,7 @@ async function pullBackupFromCloud() {
 }
 
 async function cloudBackupNow() {
-  if (!(await hasRealPremiumCode())) return;
+  if (!premiumUnlocked) return;
   if (!confirm(tr("cloudSyncBackupConfirm"))) return;
   const btn = document.getElementById("cloudSyncBackupButton");
   const label = document.getElementById("cloudSyncBackupButtonLabel");
@@ -305,7 +234,7 @@ async function cloudBackupNow() {
 }
 
 async function cloudRestoreNow() {
-  if (!(await hasRealPremiumCode())) return;
+  if (!premiumUnlocked) return;
   if (!confirm(tr("cloudSyncRestoreConfirm"))) return;
   const btn = document.getElementById("cloudSyncRestoreButton");
   const label = document.getElementById("cloudSyncRestoreButtonLabel");
