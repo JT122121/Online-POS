@@ -175,18 +175,20 @@ all of them under one pattern:
   `terms.html` (own `<h1 class="doc-title">`) and `invoice.html`/
   `receipt.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
   use `<h2>` so the page keeps exactly one real `<h1>`.
-- **The 5-button `.cta-btn` row is identical and in the same order on
+- **The 6-button `.cta-btn` row is identical and in the same order on
   every page** — Free Invoice Generator → Free Receipt Generator → Free
   Barcode & QR Code (`href="barcode"`) → Free VAT Calculator
-  (`href="vat"`) → Free Point of Sale (`href="app"`), always
-  extension-less. `index.html` used to be the only page with this row
-  (2 buttons, no POS link); a later pass added the third button there
-  and rolled the whole row out site-wide, a later pass added the
-  fourth (Barcode & QR Code) once `barcode.html` was ready to connect,
-  and a still-later pass added the fifth (VAT Calculator) once
-  `vat.html` shipped — see each tool's own section below — so **any
-  older note in this file describing the CTA row as unique to
-  `index.html`, or as only 3 or 4 buttons, is stale**.
+  (`href="vat"`) → Free Pricing Calculator (`href="pricing"`) → Free
+  Point of Sale (`href="app"`), always extension-less. `index.html`
+  used to be the only page with this row (2 buttons, no POS link); a
+  later pass added the third button there and rolled the whole row out
+  site-wide, a later pass added the fourth (Barcode & QR Code) once
+  `barcode.html` was ready to connect, a still-later pass added the
+  fifth (VAT Calculator) once `vat.html` shipped, and a still-later pass
+  added the sixth (Pricing Calculator) once `pricing.html` shipped — see
+  each tool's own section below — so **any older note in this file
+  describing the CTA row as unique to `index.html`, or as only 3, 4, or
+  5 buttons, is stale**.
 - **`.site-nav` is always Homepage → Blog, in that order, everywhere** —
   originally "About" (linking to `about.html`), renamed to "Homepage"
   (linking to `/`) once `about.html`'s content moved onto `index.html`
@@ -240,8 +242,9 @@ all of them under one pattern:
   should show versus what only needs to live inside Settings:
   - **`.header-links`** (next to the app title/Premium/Special-Access
     badges): Homepage, Blog, Free Invoice Generator, Free Receipt
-    Generator, Free Barcode & QR Code, Free VAT Calculator, in that
-    order - six **text-only** buttons (no emoji icon, unlike most of
+    Generator, Free Barcode & QR Code, Free VAT Calculator, Free
+    Pricing Calculator, in that
+    order - seven **text-only** buttons (no emoji icon, unlike most of
     the rest of the toolbar), all sharing the exact same dark-green
     (`--accent-dark`) pill styling so they read as one consistent row
     rather than differently-weighted actions. Free Barcode & QR Code
@@ -301,6 +304,16 @@ all of them under one pattern:
     lesson: a new `.header-links` button needs the CSS color rule, the
     `changeLanguage()` `ids` map entry, *and* the
     `modules/translations.js` key, not just the button markup itself.
+    **`#createPricingButton` → `openCreatePricing()` was added last**,
+    once `pricing.html` shipped - same `window.open(...)` new-tab
+    pattern, same `OFFLINE-STRIP:CREATE-PRICING-BUTTON`/
+    `CREATE-PRICING-JS` marker wrapping, and the same
+    `createPricingShortcutLabel` translation key added across all six
+    `modules/translations.js` language blocks - and this time the
+    dark-green CSS selector and the `changeLanguage()` `ids` map entry
+    were both added in the same pass as the button itself, per the
+    lesson two paragraphs up, rather than being discovered missing
+    afterward.
   - **`.header-actions` (the toolbar) now shows exactly six things:**
     Hide Toolbar, the Cashier select, How To Use, Settings, End of Day,
     Customer Screen, Backup - deliberately trimmed down from a longer
@@ -503,7 +516,16 @@ all of them under one pattern:
   full rows with nothing dangling. Verified via Playwright (comparing
   each card's `getBoundingClientRect().top`) that the last row is a
   full row of 3 at the 1400px desktop width the 3-column layout applies
-  at.
+  at. **A 16th card, "Price your products right" (a dollar-sign SVG
+  icon), was added right after "Create receipts"** once `pricing.html`
+  connected site-wide, explaining the Pricing Calculator's value
+  proposition (margin vs. markup, batch/recipe cost support) rather than
+  just linking to it. This reopens the exact row-count problem the
+  13→15 change above was meant to fix - 16 cards is 5 full rows of 3
+  plus a single lone card on its own 6th row at the 1400px 3-column
+  layout. Flagged, not yet resolved as of this card's addition; a 17th
+  or 18th filler/real card (or a different column count) would restore
+  a clean grid the same way 13→15 did.
 - **The `.app-preview` mock's 3 catalog products are Pepperoni Pizza /
   Cheeseburger / French Fries with real embedded photos**, not the
   earlier Coca Cola/White Bread/Bottled Water line-up (which used flat
@@ -1892,32 +1914,35 @@ the time this was built.
   `translations` dictionary only supplies the `createVatShortcutLabel`
   header-links text; the calculator itself is English-only.
 
-## `pricing.html` — standalone product pricing calculator (unlinked, in review)
+## `pricing.html` — standalone product pricing calculator
 
-A free-standing product pricing / markup-vs-margin calculator, built on
-the same architecture as `invoice.html`/`receipt.html`/`barcode.html`/
-`vat.html` (own `--ink`/`--accent`/`--gold` design tokens copied
-verbatim, own cookie-consent banner, own autosave-draft + explicit
-Save/Saved-list pattern, the same `invoice.html`-derived `CURRENCIES`
-map). **Deliberately disconnected while the site owner reviews it** -
-this is the same "URL-only, unlinked" phase `barcode.html` went through
-before it was wired in (see that page's own section above): `<meta
-name="robots">` is `noindex, follow`, it is **not** in `sitemap.xml`,
-**not** one of `index.html`'s JSON-LD `SiteNavigationElement` entries,
-**not** in any page's header `.cta-btn` row (including its own - its
-`site-header` shows the same five buttons every other page shows, just
-without a sixth one for itself), and **not** wired into `app.html`'s
-`.header-links` row. Reachable only by typing the URL directly. Before
-connecting it site-wide the same way `barcode.html`/`vat.html` were,
-repeat that same rollout: add the sixth `.cta-btn` to every page
-(including this one) in the established order, add `#createPricingButton`
-→ an `openCreatePricing()` function to `app.html`'s `.header-links` (with
-`OFFLINE-STRIP` marker wrapping and a `createPricingShortcutLabel`
-translation key across all six `modules/translations.js` blocks - and
-remember the `changeLanguage()` `ids` map entry and the dark-green CSS
-selector, both easy to forget the same way they were on the Barcode
-button - see "Site-wide header, nav & footer" above), a `sitemap.xml`
-entry, and a sixth `SiteNavigationElement` entry on `index.html`.
+A free-standing product pricing / markup-vs-margin calculator, the fifth
+sibling in the `invoice.html`/`receipt.html`/`barcode.html`/`vat.html`
+family of free tools, built on the same architecture (own
+`--ink`/`--accent`/`--gold` design tokens copied verbatim, own
+cookie-consent banner, own autosave-draft + explicit Save/Saved-list
+pattern, the same `invoice.html`-derived `CURRENCIES` map). It started
+out deliberately disconnected (URL-only, `noindex, follow`) while the
+site owner reviewed it - the same "unlinked" phase `barcode.html` went
+through - then was wired in site-wide the same way `barcode.html`/
+`vat.html` were once ready: `<meta name="robots">` is `index, follow`,
+it has a `sitemap.xml` entry, it's one of the six `SiteNavigationElement`
+entries in `index.html`'s own JSON-LD, and every page's shared header
+carries a sixth **"Free Pricing Calculator"** `.cta-btn` linking to it
+(see "Site-wide header, nav & footer" above - inserted right after "Free
+VAT Calculator" and before "Free Point of Sale"). `app.html`'s own
+`.header-links` row picked up a matching `#createPricingButton` →
+`openCreatePricing()` (`window.open(...)` to `pricing`, same new-tab
+pattern as Create Invoice/Receipt/Barcode/VAT, same
+`OFFLINE-STRIP:CREATE-PRICING-BUTTON`/`CREATE-PRICING-JS` marker wrapping
+since `pricing.html` isn't in the offline package either -
+`modules/offline-builder.js` strips both), and `modules/translations.js`
+picked up a `createPricingShortcutLabel` key across all six language
+blocks to match - the dark-green CSS selector list and the
+`changeLanguage()` `ids` map both got their `#createPricingButton`/
+`createPricingShortcutLabel` entries in the same pass this time, avoiding
+the two easy-to-forget omissions that bit the Barcode button rollout
+(see "Site-wide header, nav & footer" above).
 - **Built to address a specific, named problem, not just to be another
   markup calculator** - the tool was scoped around researching what
   actually trips up small sellers (mostly the site's own target
@@ -2212,7 +2237,8 @@ POST responses).
   — the original `SoftwareApplication` schema (name/description/
   featureList/offer), and a second block: a JSON array of
   `SiteNavigationElement` entries (Free Point of Sale, Free Invoice
-  Generator, Free Receipt Generator, Free Barcode & QR Code, Blog), each
+  Generator, Free Receipt Generator, Free Barcode & QR Code, Free VAT
+  Calculator, Free Pricing Calculator, Blog), each
   with its own `name`/`url`. This is a **best-effort hint**, not a
   guarantee - Google decides
   on its own whether to render sitelinks beneath a search result, and
