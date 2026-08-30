@@ -234,6 +234,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .payment-row input { flex: 1; }
 .payment-row-remove { flex-shrink: 0; width: 38px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--danger-tint); color: var(--danger); font-size: 16px; }
 .payment-row-remove:hover { background: #f5d5d0; }
+.sdi-item-wrapper { margin-top: 8px; }
+.sdi-item-wrapper .payment-row { margin-top: 0; }
+.sdi-description { margin-top: 4px; font-size: 12.5px; padding: 7px 9px; }
 .split-payment-btn { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 9px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-top: 8px; }
 .split-payment-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
 
@@ -378,6 +381,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-item-name-input:empty:before { content: attr(data-placeholder); color: #999; font-weight: 400; }
 .receipt-item-qty { text-align: center; }
 .receipt-item-total { text-align: right; white-space: nowrap; font-weight: 600; }
+.receipt-item-description-input { border: none; background: transparent; padding: 0; font: inherit; font-size: 7.5pt; font-style: italic; color: #5b655e; word-break: break-word; white-space: normal; min-height: 1.2em; margin-top: .5mm; cursor: text; }
+.receipt-item-description-input:focus { outline: none; border-bottom: 1px dashed var(--accent); }
+.receipt-item-description-input:empty:before { content: attr(data-placeholder); color: #999; font-style: normal; }
 .receipt-item-detail-print { text-align: right; font-size: 7.5pt; margin-top: .5mm; color: #5b655e; }
 .receipt-item-controls { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 1.5mm; }
 .receipt-item-controls .price-input { width: 55px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; font-size: 7.5pt; text-align: right; font-family: var(--font-mono); }
@@ -385,8 +391,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-item-controls .qty-btn { width: 19px; height: 19px; border: 1px solid var(--line); background: #f5f4ee; border-radius: 4px; font-size: 10px; line-height: 1; padding: 0; }
 .receipt-item-controls .qty-btn:hover { background: var(--accent-tint); border-color: #bfe0cf; }
 .receipt-item-controls .remove-cart-btn { background: var(--danger-tint); color: var(--danger); border: 1px solid #f0c2bd; border-radius: 4px; font-size: 7pt; font-weight: 600; padding: 2px 6px; }
-.receipt-item-controls .cart-tax-exempt-label { display: flex; align-items: center; gap: 3px; font-size: 7pt; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
-.receipt-item-controls .cart-tax-exempt-label input { width: 11px; height: 11px; margin: 0; }
+.receipt-item-controls .cart-tax-exempt-label, .receipt-item-controls .cart-description-label { display: flex; align-items: center; gap: 3px; font-size: 7pt; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.receipt-item-controls .cart-tax-exempt-label input, .receipt-item-controls .cart-description-label input { width: 11px; height: 11px; margin: 0; }
 
 .dashed-line { border-top: 1px dashed #a9a495; margin: 3mm 0; }
 .receipt-total-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; color: #3c463f; }
@@ -422,9 +428,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   .receipt::after { display: none; }
   .receipt-logo { filter: grayscale(1) contrast(1.1); }
   .receipt-header, .receipt-column-header, .dashed-line, .receipt-footer { border-color: #000 !important; }
-  .receipt-store-details, .receipt-meta, .receipt-total-line, .receipt-item-detail-print, .receipt-footer, .receipt-grand-total { color: #000 !important; }
+  .receipt-store-details, .receipt-meta, .receipt-total-line, .receipt-item-detail-print, .receipt-item-description-input, .receipt-footer, .receipt-grand-total { color: #000 !important; }
   .no-print { display: none !important; }
-  .receipt-item-name-input { pointer-events: none; border-bottom: none !important; }
+  .receipt-item-name-input, .receipt-item-description-input { pointer-events: none; border-bottom: none !important; }
 }
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
 .cookie-consent.hidden { display: none !important; }
@@ -2099,7 +2105,7 @@ async function saveCurrentSaleToHistory() {
     change: Math.max(0, totalEntered() - totals.grandTotal),
     itemCount: cartTotalCount(),
     items: cart.map(function(c) {
-      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0), taxExempt: !!c.taxExempt };
+      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0), taxExempt: !!c.taxExempt, description: (c.showDescription && c.description) ? c.description.trim() : "" };
     })
   };
 
@@ -2221,7 +2227,7 @@ function openSaleDetail(receiptNumber) {
   const record = salesHistory.find(function(s) { return s.receiptNumber === receiptNumber; });
   if (!record) return;
   editingSaleRecord = record;
-  saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price, taxExempt: !!it.taxExempt }; });
+  saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price, taxExempt: !!it.taxExempt, description: it.description || "", showDescription: !!it.description }; });
   saleDetailPayments = (record.payments && record.payments.length)
     ? record.payments.map(function(p) { return { method: p.method, amount: p.amount }; })
     : [{ method: record.paymentMethod || (paymentMethods[0] || ""), amount: record.amountReceived || 0 }];
@@ -2266,6 +2272,8 @@ function renderSaleDetailItems() {
   const container = document.getElementById("saleDetailItemsList");
   container.innerHTML = "";
   saleDetailItems.forEach(function(it, index) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "sdi-item-wrapper";
     const row = document.createElement("div");
     row.className = "payment-row";
     row.innerHTML =
@@ -2275,21 +2283,39 @@ function renderSaleDetailItems() {
       "<label style=\"display:flex; align-items:center; gap:3px; font-size:11px; color:var(--ink-soft); white-space:nowrap; flex:0 0 auto;\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
         "<input class=\"sdi-tax-exempt\" type=\"checkbox\"" + (it.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
       "</label>" +
+      "<label style=\"display:flex; align-items:center; gap:3px; font-size:11px; color:var(--ink-soft); white-space:nowrap; flex:0 0 auto;\" title=\"" + escapeAttr(tr("itemDescriptionLabel")) + "\">" +
+        "<input class=\"sdi-description-toggle\" type=\"checkbox\"" + (it.showDescription ? " checked" : "") + "> " + escapeHtml(tr("itemDescriptionTag")) +
+      "</label>" +
       "<button type=\"button\" class=\"payment-row-remove\">×</button>";
+    wrapper.appendChild(row);
+
+    const descInput = document.createElement("input");
+    descInput.type = "text";
+    descInput.className = "sdi-description" + (it.showDescription ? "" : " hidden");
+    descInput.placeholder = tr("itemDescriptionPlaceholder");
+    descInput.value = it.description || "";
+    wrapper.appendChild(descInput);
+
     row.querySelector(".sdi-name").addEventListener("input", function() { it.name = this.value; });
     row.querySelector(".sdi-qty").addEventListener("input", function() { it.qty = Number(this.value) || 0; recomputeSaleDetailTotals(); });
     row.querySelector(".sdi-price").addEventListener("input", function() { it.price = Number(this.value) || 0; recomputeSaleDetailTotals(); });
     row.querySelector(".sdi-tax-exempt").addEventListener("change", function() { it.taxExempt = this.checked; recomputeSaleDetailTotals(); });
+    row.querySelector(".sdi-description-toggle").addEventListener("change", function() {
+      it.showDescription = this.checked;
+      descInput.classList.toggle("hidden", !it.showDescription);
+      if (it.showDescription) descInput.focus();
+    });
+    descInput.addEventListener("input", function() { it.description = this.value; });
     row.querySelector(".payment-row-remove").addEventListener("click", function() {
       saleDetailItems.splice(index, 1);
       renderSaleDetailItems();
       recomputeSaleDetailTotals();
     });
-    container.appendChild(row);
+    container.appendChild(wrapper);
   });
 }
 function addSaleDetailItem() {
-  saleDetailItems.push({ name: "", qty: 1, price: 0, taxExempt: false });
+  saleDetailItems.push({ name: "", qty: 1, price: 0, taxExempt: false, description: "", showDescription: false });
   renderSaleDetailItems();
   recomputeSaleDetailTotals();
 }
@@ -2353,7 +2379,7 @@ async function saveSaleDetailEdits() {
   const change = Math.max(0, received - totals.grandTotal);
 
   const cleanItems = saleDetailItems.filter(function(it) { return it.name.trim() !== ""; }).map(function(it) {
-    return { name: it.name.trim(), qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0), taxExempt: !!it.taxExempt };
+    return { name: it.name.trim(), qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0), taxExempt: !!it.taxExempt, description: (it.showDescription && it.description) ? it.description.trim() : "" };
   });
   const cleanPayments = saleDetailPayments.filter(function(p) { return Number(p.amount) > 0; }).map(function(p) {
     return { method: p.method, amount: Number(p.amount) || 0 };
@@ -2406,6 +2432,7 @@ function printHistoricalReceipt(record) {
         "<span class=\"receipt-item-qty\">" + it.qty + "</span>" +
         "<span class=\"receipt-item-total\">" + escapeHtml(symbol) + " " + Number(it.lineTotal).toFixed(d) + "</span>" +
       "</div>" +
+      (it.description ? "<div class=\"receipt-item-description-input\">" + escapeHtml(it.description) + "</div>" : "") +
       "<div class=\"receipt-item-detail-print\">" + escapeHtml(symbol) + " " + Number(it.price).toFixed(d) + " × " + it.qty + "</div>";
     receiptItems.appendChild(div);
   });
@@ -2830,7 +2857,7 @@ function trackEvent(name, params) {
 function addProductToCart(product) {
   const idx = findCartIndexByNamePrice(product.name, product.price);
   if (idx > -1) { cart[idx].qty += 1; }
-  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, taxExempt: !!product.taxExempt }); }
+  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, taxExempt: !!product.taxExempt, description: "", showDescription: false }); }
   updateReceipt();
   trackEvent("add_to_cart", {
     currency: val("currencyCode") || "USD",
@@ -2841,7 +2868,7 @@ function addProductToCart(product) {
 
 function addCustomItem() {
   itemCounter++;
-  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false });
+  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false, description: "", showDescription: false });
   updateReceipt();
   setTimeout(function() {
     const input = document.querySelector('.receipt-item[data-id="' + itemCounter + '"] .receipt-item-name-input');

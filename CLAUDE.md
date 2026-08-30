@@ -957,6 +957,46 @@ zero network calls.
   `discountType` and each item's `taxExempt` are saved on the
   `salesHistory` record so reopening a past sale for editing recomputes
   correctly instead of silently reverting to percent-only/all-taxable.
+  **Optional per-item description, tick-to-reveal, at checkout and in
+  Sales History editing only** — each `cart[]`/`saleDetailItems[]` entry
+  carries `description` (string) and `showDescription` (boolean); the
+  tick (`.cart-description-label` in the cart, `.sdi-description-toggle`
+  in the Sales History edit modal) toggles a small text field under the
+  item name (`.receipt-item-description-input`, a `contenteditable` div
+  in the cart, matching `.receipt-item-name-input`'s own pattern; a
+  plain `<input class="sdi-description">` in the edit modal). Unticking
+  hides the field but keeps whatever was typed, so re-ticking restores
+  it — same "toggle hides, doesn't clear" convention as
+  `receipt-generator.html`'s Remarks toggle. **Deliberately not on the
+  product itself** — `products[]` has no `description` field and
+  Settings → Products was not touched; a description is something a
+  cashier adds fresh per sale (e.g. "no onions", "gift wrapped"), not a
+  catalog default. Persisted onto the `salesHistory` record only when
+  the tick is on and the text isn't blank
+  (`(c.showDescription && c.description) ? c.description.trim() : ""`
+  in `saveCurrentSaleToHistory()`/`saveSaleDetailEdits()`), so a plain
+  sale with no descriptions used produces byte-identical `items[]`
+  entries to before this feature existed. Prints as a small italic line
+  under the item name (`.receipt-item-detail-print`'s same muted-gray
+  treatment, forced to solid black in `@media print` like every other
+  receipt line) - **only when non-empty**, so an item without a
+  description gets zero extra vertical space on the printed receipt,
+  not an empty line. The tick/checkbox itself lives inside
+  `.receipt-item-controls`, which already carries `no-print`, so it
+  never appears on paper. `printHistoricalReceipt()` (the Sales History
+  reprint path) renders the same conditional description line from the
+  saved record. Ships in the offline package same as the rest of
+  `app.html`/`modules/receipt.js` - no `OFFLINE-STRIP` marker, since
+  this isn't a network-dependent or Premium-only feature. Verified with
+  Playwright end-to-end: tick reveals the field, text persists through
+  untick/retick, print media hides the controls row and renders the
+  description in black with `pointer-events: none`, a completed sale
+  saves the description into `salesHistory`, reopening it in Sales
+  History shows and lets you edit it, the edit persists back to
+  `salesHistory`, the reprint path renders it, an item with no
+  description produces no stray `.receipt-item-description-input` div
+  at all, and the built offline `app.html` carries the CSS/markup with
+  zero leftover `OFFLINE-STRIP` markers.
 - **Sales history:** completed sales pushed into `salesHistory` and
   rendered grouped by date (`renderSalesHistoryPanel`,
   `saleDateKey`/`toggleHistoryGroup`); each sale can be reopened
