@@ -52,13 +52,22 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   amount. Indexable and linked from every page's header CTA row and
   `app.html`'s own header-links from the day it shipped. See
   "`vat.html` — standalone VAT calculator" below.
-- **`pricing.html`** — a standalone product pricing / markup-vs-margin
-  calculator, the fifth sibling in the free-tools family, currently
-  **unlinked and `noindex`** while the site owner reviews it — the
-  same "URL-only, disconnected" phase `barcode.html` went through
-  before launch (see below), not yet in any `.cta-btn` row,
-  `app.html`'s `.header-links`, or `sitemap.xml`. See "`pricing.html`
-  — standalone product pricing calculator" below.
+- **`pricing-calculator.html`** — a standalone product pricing /
+  markup-vs-margin calculator, the fifth sibling in the free-tools
+  family, connected site-wide (indexable, in every page's `.cta-btn`
+  row, `app.html`'s `.header-links`, and `sitemap.xml`) - see
+  "`pricing-calculator.html` — standalone product pricing calculator"
+  below. **Filename deliberately doesn't match its sibling tools'
+  one-word convention** (`invoice.html`/`receipt.html`/`barcode.html`/
+  `vat.html`) - it shipped first as `pricing.html`, but that URL
+  (`/pricing`) read as ambiguous/confusing (easy to mistake for a
+  SaaS-style "our pricing/plans" page rather than a calculator tool),
+  so the file was renamed to `pricing-calculator.html` shortly after
+  connecting it site-wide. Every reference across the repo - the
+  `.cta-btn` `href` on all 13 pages, `app.html`'s `openCreatePricing()`,
+  `sitemap.xml`, and `index.html`'s `SiteNavigationElement` JSON-LD -
+  uses the longer `pricing-calculator` path. Don't "fix" it back to
+  match the other tools' shorter names; the mismatch is intentional.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -178,15 +187,16 @@ all of them under one pattern:
 - **The 6-button `.cta-btn` row is identical and in the same order on
   every page** — Free Invoice Generator → Free Receipt Generator → Free
   Barcode & QR Code (`href="barcode"`) → Free VAT Calculator
-  (`href="vat"`) → Free Pricing Calculator (`href="pricing"`) → Free
-  Point of Sale (`href="app"`), always extension-less. `index.html`
-  used to be the only page with this row (2 buttons, no POS link); a
-  later pass added the third button there and rolled the whole row out
-  site-wide, a later pass added the fourth (Barcode & QR Code) once
-  `barcode.html` was ready to connect, a still-later pass added the
-  fifth (VAT Calculator) once `vat.html` shipped, and a still-later pass
-  added the sixth (Pricing Calculator) once `pricing.html` shipped — see
-  each tool's own section below — so **any older note in this file
+  (`href="vat"`) → Free Pricing Calculator (`href="pricing-calculator"`)
+  → Free Point of Sale (`href="app"`), always extension-less.
+  `index.html` used to be the only page with this row (2 buttons, no
+  POS link); a later pass added the third button there and rolled the
+  whole row out site-wide, a later pass added the fourth (Barcode & QR
+  Code) once `barcode.html` was ready to connect, a still-later pass
+  added the fifth (VAT Calculator) once `vat.html` shipped, and a
+  still-later pass added the sixth (Pricing Calculator) once
+  `pricing-calculator.html` shipped — see each tool's own section below
+  — so **any older note in this file
   describing the CTA row as unique to `index.html`, or as only 3, 4, or
   5 buttons, is stale**.
 - **On narrow viewports (`@media (max-width: 640px)`), `.header-right`
@@ -333,8 +343,11 @@ all of them under one pattern:
     `changeLanguage()` `ids` map entry, *and* the
     `modules/translations.js` key, not just the button markup itself.
     **`#createPricingButton` → `openCreatePricing()` was added last**,
-    once `pricing.html` shipped - same `window.open(...)` new-tab
-    pattern, same `OFFLINE-STRIP:CREATE-PRICING-BUTTON`/
+    once `pricing-calculator.html` shipped - same `window.open(...)`
+    new-tab pattern (opening the extension-less `pricing-calculator`
+    path, not `pricing` - see that page's own section below for why the
+    filename doesn't match its siblings' shorter names), same
+    `OFFLINE-STRIP:CREATE-PRICING-BUTTON`/
     `CREATE-PRICING-JS` marker wrapping, and the same
     `createPricingShortcutLabel` translation key added across all six
     `modules/translations.js` language blocks - and this time the
@@ -558,7 +571,7 @@ all of them under one pattern:
   to a clean 15 cards / 5 full rows) and rebuilt as `.tool-spotlight`: a
   full-width `--accent-tint` panel (icon left, heading + the same
   explainer copy in the middle, a dark-green "Try the Free Pricing
-  Calculator →" button on the right, `href="pricing"`) that spans the
+  Calculator →" button on the right, `href="pricing-calculator"`) that spans the
   section's whole width instead of sharing a grid cell. `@media
   (max-width: 700px)` stacks it to a single column (icon, then heading/
   copy, then a full-width button) rather than squeezing all three
@@ -1952,7 +1965,7 @@ the time this was built.
   `translations` dictionary only supplies the `createVatShortcutLabel`
   header-links text; the calculator itself is English-only.
 
-## `pricing.html` — standalone product pricing calculator
+## `pricing-calculator.html` — standalone product pricing calculator
 
 A free-standing product pricing / markup-vs-margin calculator, the fifth
 sibling in the `invoice.html`/`receipt.html`/`barcode.html`/`vat.html`
@@ -1968,12 +1981,22 @@ it has a `sitemap.xml` entry, it's one of the six `SiteNavigationElement`
 entries in `index.html`'s own JSON-LD, and every page's shared header
 carries a sixth **"Free Pricing Calculator"** `.cta-btn` linking to it
 (see "Site-wide header, nav & footer" above - inserted right after "Free
-VAT Calculator" and before "Free Point of Sale"). `app.html`'s own
-`.header-links` row picked up a matching `#createPricingButton` →
-`openCreatePricing()` (`window.open(...)` to `pricing`, same new-tab
-pattern as Create Invoice/Receipt/Barcode/VAT, same
-`OFFLINE-STRIP:CREATE-PRICING-BUTTON`/`CREATE-PRICING-JS` marker wrapping
-since `pricing.html` isn't in the offline package either -
+VAT Calculator" and before "Free Point of Sale"). **Shipped first as
+`pricing.html`, then renamed to `pricing-calculator.html`** shortly
+after connecting it site-wide - `/pricing` on its own read as
+ambiguous (easy to mistake for a SaaS "our pricing/plans" page rather
+than a calculator tool), so every reference (the `.cta-btn` `href` on
+all 13 pages, `app.html`'s own link, `sitemap.xml`, the JSON-LD entry,
+and this file's own `<link rel="canonical">`/`og:url`) points at the
+longer `pricing-calculator` path instead. This is the one tool in the
+family whose filename doesn't match its siblings' shorter one-word
+convention - deliberately, not an oversight; don't rename it back.
+`app.html`'s own `.header-links` row picked up a matching
+`#createPricingButton` → `openCreatePricing()` (`window.open(...)` to
+`pricing-calculator`, same new-tab pattern as Create Invoice/Receipt/
+Barcode/VAT, same `OFFLINE-STRIP:CREATE-PRICING-BUTTON`/
+`CREATE-PRICING-JS` marker wrapping since `pricing-calculator.html`
+isn't in the offline package either -
 `modules/offline-builder.js` strips both), and `modules/translations.js`
 picked up a `createPricingShortcutLabel` key across all six language
 blocks to match - the dark-green CSS selector list and the
@@ -2075,11 +2098,9 @@ the two easy-to-forget omissions that bit the Barcode button rollout
   packaging → `(45+15)/30+0.20 = $2.20`/unit, both correct), "Use This
   Cost Below" correctly filling the main Cost Per Unit field, the ≥100%
   margin warning correctly blocking a nonsense result, currency
-  switching, and Save/Saved Calculations round-tripping. Confirmed the
-  page is genuinely unlinked: not in any page's `.cta-btn` row, not in
-  `app.html`'s `.header-links`, and grepping the whole repo for
-  `pricing.html`/`href="pricing"` outside the file itself returns
-  nothing. Zero console errors throughout.
+  switching, and Save/Saved Calculations round-tripping (this pass ran
+  before the page was connected site-wide - see above for the later
+  rollout and rename). Zero console errors throughout.
 
 ## `end-of-day.html` — POS closing report
 
