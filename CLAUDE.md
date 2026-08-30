@@ -601,6 +601,41 @@ all of them under one pattern:
     cards in 5 clean rows, FAQ is 13 items in the new order, zero
     console errors and zero horizontal overflow at 360/390/414px and at
     1400px desktop.
+  - **Follow-up polish pass**, per an open-ended "make it the best
+    landing page" request scoped down to "same theme, refine further"
+    (confirmed before touching anything - a full visual redesign was
+    explicitly declined). Two changes: `#free-tools` got a
+    `background: var(--accent-tint); border-radius: var(--radius);
+    padding: 44px 32px;` panel treatment - reusing the exact tint token
+    the retired `.tool-spotlight` used, not a new color - so it reads
+    as a visually distinct zone from the plain-background `.feature-grid`
+    section right above it, reinforcing the POS-vs-tools separation
+    this whole refresh was about, rather than the two grids blending
+    into one undifferentiated 7-row stretch of near-identical cards.
+    And the About section's tools paragraph was rewritten - it had
+    drifted stale (still individually linking only 4 of the 5 tools,
+    missing Pricing Calculator, a real content bug) and now duplicated
+    the new `#free-tools` section's job; trimmed to one sentence naming
+    all five tools plus a single link down to `#free-tools` instead of
+    four separate `<a>` tags repeating the same pitch. The other three
+    About paragraphs were also tightened for the same short-sentence
+    brand voice already established elsewhere on this page, no content
+    removed. A live full-page screenshot audit surfaced one other thing
+    worth recording as a **known, deliberately-not-fixed issue**: the
+    sitewide `.cookie-consent` banner (`position: fixed; bottom: 12px`)
+    can overlap the bottom of the hero's `.app-preview` mock on a
+    fresh visit at shorter viewport heights, since a fixed-bottom
+    banner and a tall hero will always compete for the same screen
+    space on some window sizes. This is pre-existing, identical on
+    every page sharing the banner, not something this pass introduced
+    or worsened, and fixing it would mean changing shared banner
+    behavior site-wide - out of bounds for a landing-page-only pass.
+    Verified with Playwright: `#free-tools`'s background resolves to
+    the `--accent-tint` token, the About section's copy mentions all
+    five tools and its `#free-tools` link actually scrolls there, and
+    the full existing regression suite (hero copy, tool links,
+    feature-grid card count, FAQ count, zero console errors, zero
+    mobile overflow at 360/390/414px) still passes unchanged.
 - **The Hero's `.app-preview` mock (the fake screenshot of the POS)
   lives inside a `.browser-frame` desktop-browser chrome mockup** -
   three traffic-light `.browser-dot`s plus a pill `.browser-url` bar
