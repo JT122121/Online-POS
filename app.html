@@ -589,7 +589,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div id="receipt" class="receipt">
 <div class="receipt-header">
 <img id="receiptLogo" class="receipt-logo hidden" alt="">
-<h2 id="receiptStoreName">GoOnlinePOS.com</h2>
+<h2 id="receiptStoreName">Demo Store</h2>
 <div id="receiptStoreDetails" class="receipt-store-details"></div>
 <div id="receiptDocumentTitle" class="receipt-document-title">Receipt</div>
 <div class="receipt-meta">
@@ -817,12 +817,12 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <div class="settings-panel-content" id="panel-store">
         <h3 id="storeTitle">Store Information</h3>
         <label id="storeNameLabel">Store Name</label>
-        <input id="storeName" value="GoOnlinePOS.com" oninput="updateReceipt()">
+        <input id="storeName" value="Demo Store" oninput="updateReceipt()">
         <label id="storeDetailsLabel">Store Details</label>
         <textarea id="storeDetails" oninput="updateReceipt()">Your Company Address:
-Tel: +1 123-4567
-Email: example@goonlinepos.com
-Website: goonlinepos.com</textarea>
+Tel: +000 000 000
+Email: Demo@example.com
+Website: Goonlinepos.com</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
         <label><span id="storeLogoLabel">Company Logo</span> <span class="premium-badge" id="premiumBadgeLogo">Premium</span></label>
         <div class="logo-upload-row">
@@ -2381,7 +2381,7 @@ function printHistoricalReceipt(record) {
   const symbol = record.currencySymbol || symbolNow();
   const d = (typeof record.decimalPlaces === "number") ? record.decimalPlaces : decimalsNow();
 
-  document.getElementById("receiptStoreName").textContent = record.storeName || "GoOnlinePOS.com";
+  document.getElementById("receiptStoreName").textContent = record.storeName || "Demo Store";
   document.getElementById("receiptStoreDetails").innerHTML = escapeHtml(record.storeDetails !== undefined ? record.storeDetails : val("storeDetails")).replace(/\n/g, "<br>");
   document.getElementById("receiptDocumentTitle").textContent = record.documentType || getDocumentTitle();
   document.getElementById("receiptNumber").textContent = record.receiptNumber;
@@ -2726,7 +2726,7 @@ function broadcastCustomerScreenOrder() {
   broadcastCustomerScreenState({
     stage: "ordering",
     lang: currentLang(),
-    storeName: val("storeName") || "GoOnlinePOS.com",
+    storeName: val("storeName") || "Demo Store",
     logo: logoDataUrl || "",
     symbol: symbolNow(),
     decimals: decimalsNow(),
@@ -2744,7 +2744,7 @@ function broadcastCustomerScreenCompleted(record) {
   broadcastCustomerScreenState({
     stage: "completed",
     lang: currentLang(),
-    storeName: record.storeName || "GoOnlinePOS.com",
+    storeName: record.storeName || "Demo Store",
     logo: logoDataUrl || "",
     symbol: record.currencySymbol || "$",
     decimals: decimalsNow(),

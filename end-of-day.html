@@ -221,7 +221,7 @@ body.paper-80mm .wrap { max-width: 360px; }
     <div class="rh-store">
       <div class="rh-logo hidden" id="rhLogoWrap"><img id="rhLogo" alt="Store logo"></div>
       <div>
-        <div class="rh-store-name" id="rhStoreName">GoOnlinePOS.com</div>
+        <div class="rh-store-name" id="rhStoreName">Demo Store</div>
         <div class="rh-store-details" id="rhStoreDetails"></div>
       </div>
     </div>
@@ -601,7 +601,7 @@ body.paper-80mm .wrap { max-width: 360px; }
     currencySymbol = settings.currencySymbol || "$";
     decimalPlaces = (settings.decimalPlaces != null && settings.decimalPlaces !== "") ? Number(settings.decimalPlaces) : 2;
 
-    document.getElementById("rhStoreName").textContent = settings.storeName || "GoOnlinePOS.com";
+    document.getElementById("rhStoreName").textContent = settings.storeName || "Demo Store";
     document.getElementById("rhStoreDetails").textContent = settings.storeDetails || "";
 
     var logo = await storageGet("pos-logo");
