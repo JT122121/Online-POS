@@ -1257,6 +1257,35 @@ only by `barcode-generator.html` — see that page's own section below. None of
 the three are referenced by `app.html`/`offline-builder.js`, so they
 have no bearing on the offline package.
 
+## `supabase/` — Supabase schema (authored, not connected)
+
+`supabase/schema.sql` + `supabase/README.md` are a Supabase PostgreSQL
+schema (tables, indexes, RLS policies, a `handle_new_user()` trigger)
+for the POS app to eventually save its data to, authored ahead of any
+actual integration - per an explicit "without connecting yet" request.
+**Nothing in `app.html` or anywhere else in the repo talks to Supabase**;
+no project URL or API key exists anywhere in this codebase; this schema
+has never been run against a live project, only verified locally against
+a throwaway PostgreSQL 16 instance with stub `auth.users`/`auth.uid()`
+objects standing in for Supabase's own built-ins (confirmed idempotent -
+safe to re-run - and that the new-user trigger correctly auto-provisions
+a default `store_settings` row with the same "Demo Store" defaults
+`app.html` itself ships). Tables: `store_settings` (Settings panel,
+one row per user, plus a catch-all `settings jsonb` column for anything
+not worth its own column), `products`, `cashiers`, `payment_methods`,
+`sales` (header/totals, with store name/details/footer snapshotted at
+sale time for reprints, same as `app.html`'s own `salesHistory`),
+`sale_items` (line items, including the optional per-item `description`
+field), `sale_payments`. Every table carries its own `user_id` (not just
+reachable via a join) so RLS can be a single `auth.uid() = user_id`
+policy per table. Auth is Supabase's own built-in `auth.users` - there is
+no separate users table here - so enabling Google (or any other OAuth
+provider) is a Supabase-dashboard-only step (Authentication -> Providers),
+not a SQL change; see `supabase/README.md` for the exact steps. Follow
+this same "dedicated folder + setup README, no live credentials in the
+repo" convention (matching `contact-form/`/`premium-validation/`) if this
+schema is later extended or actually wired up to `app.html`.
+
 ## Premium code validation (live site only)
 
 The live site auto-grants Premium to every visitor — no code entry
