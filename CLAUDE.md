@@ -431,7 +431,19 @@ all of them under one pattern:
   📅 End of Day icon) between "Sales history, editable" and "Full
   backup & restore", so it now sits in the same neighborhood as the
   other reporting/data-safety cards it was grouped with in the user's
-  own framing ("along with backup and offline mode").
+  own framing ("along with backup and offline mode"). **Two more cards
+  were added right after that** - "Create invoices" (a file/document
+  icon) and "Create receipts" (a zigzag-bottomed receipt icon), each
+  pointing at the free `invoice.html`/`receipt.html` tools reachable
+  from the header's own "Free Invoice Generator"/"Free Receipt
+  Generator" buttons - explicitly requested to balance the grid's row
+  count: with the End of Day card the grid stood at 13 cards, leaving a
+  single card alone on its own row-of-3 at the bottom
+  (`grid-template-columns: repeat(3, 1fr)`); 13 → 15 makes it a clean 5
+  full rows with nothing dangling. Verified via Playwright (comparing
+  each card's `getBoundingClientRect().top`) that the last row is a
+  full row of 3 at the 1400px desktop width the 3-column layout applies
+  at.
 
 ## `app.html` — architecture
 
