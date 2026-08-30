@@ -150,8 +150,8 @@ button:active { transform: translateY(1px); }
 #customerScreenButton:hover { background: #fafaf7; border-color: #cfccbf; }
 #howToUseButton { background: var(--panel); color: var(--ink); border-color: var(--line); }
 #howToUseButton:hover { background: #fafaf7; border-color: #cfccbf; }
-#homepageShortcutButton, #blogShortcutButton, #createInvoiceButton, #createReceiptButton, #createBarcodeButton { background: var(--accent-dark); color: #fff; }
-#homepageShortcutButton:hover, #blogShortcutButton:hover, #createInvoiceButton:hover, #createReceiptButton:hover, #createBarcodeButton:hover { background: #0d3a28; }
+#homepageShortcutButton, #blogShortcutButton, #createInvoiceButton, #createReceiptButton, #createBarcodeButton, #createVatButton { background: var(--accent-dark); color: #fff; }
+#homepageShortcutButton:hover, #blogShortcutButton:hover, #createInvoiceButton:hover, #createReceiptButton:hover, #createBarcodeButton:hover, #createVatButton:hover { background: #0d3a28; }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 .new-sale-catalog-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px 12px; margin: 10px 0 2px; border: 0; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; }
@@ -476,6 +476,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:START -->
 <button id="createBarcodeButton" onclick="openCreateBarcode()" title="Create a barcode or QR code"><span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
 <!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:START -->
+<button id="createVatButton" onclick="openCreateVat()" title="Calculate VAT"><span id="createVatShortcutLabel">Free VAT Calculator</span></button>
+<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:END -->
 </div>
 </div>
 <div class="header-actions">
@@ -2775,6 +2778,13 @@ function openCreateBarcode() {
 }
 /* OFFLINE-STRIP:CREATE-BARCODE-JS:END */
 
+/* OFFLINE-STRIP:CREATE-VAT-JS:START */
+function openCreateVat() {
+  const url = location.pathname.replace(/[^/]*$/, "") + "vat";
+  window.open(url, "_blank");
+}
+/* OFFLINE-STRIP:CREATE-VAT-JS:END */
+
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
@@ -3341,7 +3351,7 @@ function changeLanguage() {
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     premiumPromoNoticeText: "premiumPromoNoticeText", premiumPromoNoticeButton: "premiumActivateBtn",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
-    customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", addProductStockLabel: "addProductStockLabel",
+    customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", createBarcodeShortcutLabel: "createBarcodeShortcutLabel", createVatShortcutLabel: "createVatShortcutLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
     premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",
