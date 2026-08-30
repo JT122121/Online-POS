@@ -520,7 +520,10 @@ all of them under one pattern:
     keeping it a third time in the paragraph too read as flatly
     repetitive on one screen - trimmed once reviewed via screenshot,
     not shipped as first written. CTAs: primary `.btn-primary` "Open
-    the app" → **"Open POS — Free"** (same `href="app"`, unchanged);
+    the app" → **"Open POS - Free"** (same `href="app"`, unchanged) -
+    a plain hyphen, not an em dash, per the site's own "No em dashes
+    anywhere in site text" rule below - missed on the first pass and
+    corrected once flagged;
     secondary `.btn-secondary` "See how it works" (`href="#how-it-works"`)
     → **"Explore Free Tools"**, retargeted to `href="#free-tools"` (the
     new tools section below). `#how-it-works` itself is untouched and
@@ -576,7 +579,7 @@ all of them under one pattern:
   - **Final `.cta-band`** - heading "Ready to ring up your first sale?"
     → **"Ready to Start Selling?"**; supporting `<p>` "No signup. No
     login. Just open the app." → **"Open GoOnlinePOS and try it without
-    creating an account."**; button label → **"Open POS — Free"**
+    creating an account."**; button label → **"Open POS - Free"**
     (`href="app"` unchanged); a new `.cta-band-note` `<p>` added below
     the button, **"No signup. No login. No installation."** - kept
     separate from the existing `.cta-band p` (which sits *above* the
