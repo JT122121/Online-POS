@@ -130,7 +130,9 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 @media (max-width: 640px) {
   .site-nav { gap: 14px; }
   .site-nav a.nav-highlight::after { display: none; }
-  .site-header .header-right { gap: 10px; }
+  .site-header .header-right { gap: 8px; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); justify-content: stretch; }
+  .site-header .header-right .site-nav { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; }
+  .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
 }
 
 .card { max-width: 520px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 32px; text-align: center; }

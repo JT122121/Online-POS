@@ -189,6 +189,34 @@ all of them under one pattern:
   each tool's own section below — so **any older note in this file
   describing the CTA row as unique to `index.html`, or as only 3, 4, or
   5 buttons, is stale**.
+- **On narrow viewports (`@media (max-width: 640px)`), `.header-right`
+  (the `.site-nav` pills plus all 6 `.cta-btn`s) switches from a
+  right-aligned wrapping flex row to a 2-column CSS grid, full width**
+  (`display: grid; grid-template-columns: repeat(2, 1fr); width: 100%`,
+  with `.site-nav` itself set to `grid-column: 1 / -1` and its own
+  2-column grid so Homepage/Blog occupy the top row) - every button
+  stretches to fill its cell and its text is centered
+  (`.site-header .header-right .site-nav a, .site-header .cta-btn {
+  text-align: center; }`). This was a fix, not the original mobile
+  layout: with 8 pills total (2 nav + 6 CTA) and the base rule's
+  `justify-content: flex-end`, each one wrapped onto its own line but
+  stayed hugged to the right edge, leaving a large ragged gap of empty
+  background down the left side of every row instead of using the
+  screen's own width - reported as the mobile header not being
+  "arranged well" and not maximizing the space. The 2-column grid fills
+  that gap and turns the row count from 8 lopsided single-item rows into
+  4 balanced two-up rows. Applied identically across all 13 pages
+  sharing this header (same copy-verbatim CSS block, two textually
+  different variants - `index.html` and `contact.html`/`privacy.html`/
+  `terms.html` lack the block's trailing `.site-header { margin-top:
+  12px; }` line the other 9 pages have - both variants got the same
+  three new/changed lines). Verified via Playwright at 360/390/414px on
+  every one of the 13 pages: zero horizontal overflow, zero console
+  errors. `app.html`'s own separate `.header-links`/`.header-actions`
+  toolbar (see "`app.html` — architecture" below) was deliberately left
+  alone - its buttons are natural-width (not right-hugged single-column)
+  and already wrap into balanced multi-per-row lines with no wasted-space
+  problem, confirmed via the same Playwright overflow check.
 - **`.site-nav` is always Homepage → Blog, in that order, everywhere** —
   originally "About" (linking to `about.html`), renamed to "Homepage"
   (linking to `/`) once `about.html`'s content moved onto `index.html`
@@ -516,16 +544,26 @@ all of them under one pattern:
   full rows with nothing dangling. Verified via Playwright (comparing
   each card's `getBoundingClientRect().top`) that the last row is a
   full row of 3 at the 1400px desktop width the 3-column layout applies
-  at. **A 16th card, "Price your products right" (a dollar-sign SVG
-  icon), was added right after "Create receipts"** once `pricing.html`
-  connected site-wide, explaining the Pricing Calculator's value
-  proposition (margin vs. markup, batch/recipe cost support) rather than
-  just linking to it. This reopens the exact row-count problem the
-  13→15 change above was meant to fix - 16 cards is 5 full rows of 3
-  plus a single lone card on its own 6th row at the 1400px 3-column
-  layout. Flagged, not yet resolved as of this card's addition; a 17th
-  or 18th filler/real card (or a different column count) would restore
-  a clean grid the same way 13→15 did.
+  at. **The Pricing Calculator's own explainer is deliberately not a
+  17th `.feature-card`** - a `.tool-spotlight` full-width panel instead,
+  placed directly below `.feature-grid`'s closing `</div>` but still
+  inside the same "Set it up your way" `<section>`. This was tried both
+  ways: a first pass added it as a 16th grid card ("Price your products
+  right", a dollar-sign SVG icon) right after "Create receipts", which
+  reopened the exact row-count problem the 13→15 change above was meant
+  to fix (16 cards = 5 full rows of 3 plus one lone card stranded on its
+  own 6th row) - and per an explicit request that the Pricing Calculator
+  get "a separate block full length" rather than another same-size grid
+  tile, it was pulled back out of the grid entirely (restoring the grid
+  to a clean 15 cards / 5 full rows) and rebuilt as `.tool-spotlight`: a
+  full-width `--accent-tint` panel (icon left, heading + the same
+  explainer copy in the middle, a dark-green "Try the Free Pricing
+  Calculator →" button on the right, `href="pricing"`) that spans the
+  section's whole width instead of sharing a grid cell. `@media
+  (max-width: 700px)` stacks it to a single column (icon, then heading/
+  copy, then a full-width button) rather than squeezing all three
+  side-by-side. Verified via Playwright at 1100px (desktop, single row)
+  and 390px (mobile, stacked) with zero console errors.
 - **The `.app-preview` mock's 3 catalog products are Pepperoni Pizza /
   Cheeseburger / French Fries with real embedded photos**, not the
   earlier Coca Cola/White Bread/Bottled Water line-up (which used flat
