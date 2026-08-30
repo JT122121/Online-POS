@@ -10,7 +10,7 @@ same as the hosted version at goonlinepos.com, except:
   - Fonts fall back to your system's own fonts instead of downloading
     Space Grotesk / Inter / JetBrains Mono from Google Fonts. Purely
     cosmetic — nothing else is different.
-  - No standalone invoice generator (invoice.html). That's a separate
+  - No standalone invoice generator (invoice-generator.html). That's a separate
     free tool on goonlinepos.com, not part of the offline POS package,
     so the "Create Invoice" button doesn't appear in this copy.
 

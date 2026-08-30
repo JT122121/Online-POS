@@ -14,25 +14,25 @@
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/invoice</loc>
+    <loc>https://goonlinepos.com/invoice-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/receipt</loc>
+    <loc>https://goonlinepos.com/receipt-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/barcode</loc>
+    <loc>https://goonlinepos.com/barcode-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/vat</loc>
+    <loc>https://goonlinepos.com/vat-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
