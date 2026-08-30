@@ -235,7 +235,17 @@ all of them under one pattern:
     `OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
     wrapping, and the same `createBarcodeShortcutLabel` translation key
     added across all six `modules/translations.js` language blocks, as
-    Free Invoice/Receipt Generator below. This
+    Free Invoice/Receipt Generator below. **Its dark-green styling was
+    missed at the time** - the shared CSS rule
+    (`#homepageShortcutButton, #blogShortcutButton, #createInvoiceButton,
+    #createReceiptButton { background: var(--accent-dark); ... }`) never
+    had `#createBarcodeButton` added to its selector list, so the button
+    silently fell back to the plain unstyled default and stood out from
+    its four siblings until a later pass added it to both the
+    `background`/`color` rule and its `:hover` rule - a reminder to grep
+    for the new button's `id` across `app.html`'s CSS, not just its
+    HTML/JS, whenever a new `.header-links` entry is added the same way.
+    This
     row was briefly trimmed down to just the Homepage button alone (Blog/
     Invoice/Receipt/a separate Home button were deleted outright, per an
     earlier design call that the POS app shouldn't link out to any of
