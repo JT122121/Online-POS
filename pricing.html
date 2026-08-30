@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+  };
+  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+  window.acceptCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "accepted"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+  window.declineCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "declined"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+  window.closeCookieBanner = function() { hideBanner(); };
+
+  var consent = null, seen = null;
+  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+  }
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Product Pricing Calculator - Free Markup &amp; Margin Calculator | GoOnlinePOS.com</title>
+<meta name="description" content="Work out the right selling price for your product, for free. Calculate by target margin or markup, or work out your cost per unit straight from a batch or recipe first. Right in your browser, no signup required.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://goonlinepos.com/pricing">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://goonlinepos.com/pricing">
+<meta property="og:title" content="Product Pricing Calculator | GoOnlinePOS.com">
+<meta property="og:description" content="Work out the right selling price for your product - by margin, by markup, or straight from a batch or recipe cost. Free, right in your browser.">
+<meta property="og:site_name" content="Go Online POS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Product Pricing Calculator | GoOnlinePOS.com">
+<meta name="twitter:description" content="Work out the right selling price for your product - by margin, by markup, or straight from a batch or recipe cost. Free, right in your browser.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 20px; }
+
+.masthead { text-align: center; padding: 30px 20px 18px; }
+.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: -.02em; margin: 0 0 8px; }
+.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 500px; }
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 900px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 10px; }
+  .site-header { margin-top: 12px; }
+}
+
+.gen-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 26px; margin: 22px 0; }
+
+.type-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+.type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
+.type-tab:hover { border-color: #cfccbf; }
+.type-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.currency-inline { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.currency-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
+.field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.field-input, select.field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+.field-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.field-row { margin-bottom: 16px; }
+.field-hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; line-height: 1.5; }
+.field-hint.warn { color: #9a6a00; font-weight: 600; }
+
+.checkbox-row { margin: 4px 0 16px; }
+.checkbox-row label { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--ink-soft); cursor: pointer; }
+.checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+
+.hidden { display: none !important; }
+
+.batch-helper { background: #fafaf7; border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 16px; margin: 0 0 18px; }
+.batch-helper h3 { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; margin: 0 0 12px; color: var(--ink); }
+.batch-result { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 10px 14px; margin: 4px 0 14px; }
+.batch-result .br-label { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.batch-result .br-value { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent-dark); }
+.use-cost-btn { width: 100%; background: var(--accent); color: #fff; border: 0; font-size: 13px; font-weight: 700; padding: 10px 16px; border-radius: var(--radius-sm); cursor: pointer; }
+.use-cost-btn:hover { background: var(--accent-dark); }
+
+.divider-line { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
+
+.results-area { margin-top: 6px; }
+.preview-label { font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; text-align: center; }
+.results-box { background: #fafaf7; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 16px 18px; }
+.result-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
+.result-row:last-child { border-bottom: none; }
+.result-label { font-size: 13.5px; color: var(--ink-soft); font-weight: 600; }
+.result-value { font-family: var(--font-mono); font-size: 15px; color: var(--ink); font-weight: 600; }
+.result-row.result-total { padding-top: 12px; }
+.result-row.result-total .result-label { color: var(--ink); font-weight: 700; }
+.result-row.result-total .result-value { font-size: 19px; color: var(--accent-dark); font-weight: 800; }
+
+.action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
+.action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
+#savePricingBtn { background: var(--accent); color: #fff; }
+#savePricingBtn:hover { background: var(--accent-dark); }
+#savedPricingBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#savedPricingBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+#clearPricingBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#clearPricingBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+.autosave-note { text-align: center; font-size: 12px; color: var(--muted); margin: 10px 0 30px; }
+
+.save-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 400; }
+.save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(22,33,29,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 350; }
+.modal-overlay.hidden { display: none !important; }
+.modal-box { background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; color: var(--ink); }
+.modal-close-btn { border: none; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.modal-close-btn:hover { background: var(--line-soft); color: var(--ink); }
+.modal-body { padding: 10px 12px; overflow-y: auto; }
+.saved-code-row { display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.saved-code-row:hover { background: var(--accent-tint); }
+.saved-code-badge { flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); border-radius: 6px; padding: 4px 7px; }
+.saved-code-row.type-qr .saved-code-badge { color: #8a6417; background: var(--gold-tint); }
+.saved-code-main { flex: 1; min-width: 0; }
+.saved-code-title { font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.saved-code-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.saved-code-delete { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 8px; border-radius: 6px; flex-shrink: 0; }
+.saved-code-delete:hover { background: #fbe9e7; color: #b3261e; }
+.saved-codes-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 30px 16px; }
+
+.info-section { max-width: 640px; margin: 10px auto 30px; }
+.info-section h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); margin: 30px 0 12px; }
+.info-section p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; margin: 0 0 14px; }
+.info-section ol, .info-section ul { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 14px; }
+.info-section dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
+.info-section dd { color: var(--ink-soft); font-size: 14px; margin: 4px 0 0; }
+.example-box { background: var(--accent-tint); border: 1px solid #cfe6d9; border-radius: var(--radius-sm); padding: 14px 16px; margin: 0 0 16px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+.example-box strong { color: var(--ink); }
+
+.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
+.site-footer span { margin: 0 8px; }
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 27px; }
+  .gen-card { padding: 20px; }
+}
+
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+.cookie-consent.hidden { display: none !important; }
+.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
+.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
+.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cookie-notice-view.hidden { display: none !important; }
+.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
+.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-choice-view.hidden { display: none !important; }
+.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
+.cc-decline:hover { border-color: rgba(255,255,255,.6); }
+.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
+.cc-accept:hover { background: #cf9631; }
+.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-declined-view.hidden { display: none !important; }
+.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+.cc-close:hover { background: #e6e4d9; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="site-header">
+<a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+<div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+<h2>GoOnlinePOS.com</h2>
+</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="/">Homepage</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="barcode">Free Barcode &amp; QR Code</a>
+<a class="cta-btn" href="vat">Free VAT Calculator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+</header>
+
+<header class="masthead">
+<div class="kicker">Free Tool</div>
+<h1>Pricing Calculator</h1>
+<p>Work out the right selling price for your product - by target margin, by target markup, or straight from a batch or recipe cost. No signup, nothing leaves this browser.</p>
+</header>
+
+<div class="gen-card" id="genCard">
+
+  <div class="checkbox-row">
+    <label><input type="checkbox" id="showBatchHelper"> I don't know my cost per unit yet - help me calculate it from a batch or recipe</label>
+  </div>
+
+  <div class="batch-helper hidden" id="batchHelper">
+    <h3>Batch / Recipe Cost Calculator</h3>
+
+    <div class="field-row">
+      <label class="field-label" for="batchTotalCost">Total Batch Cost (materials/ingredients)</label>
+      <input type="number" class="field-input" id="batchTotalCost" min="0" step="0.01" placeholder="0.00">
+    </div>
+    <div class="field-row">
+      <label class="field-label" for="batchYield">Batch Yield (units this batch makes)</label>
+      <input type="number" class="field-input" id="batchYield" min="0" step="1" placeholder="e.g. 24">
+    </div>
+    <div class="field-row">
+      <label class="field-label" for="batchLabor">Labor Cost For This Batch (optional)</label>
+      <input type="number" class="field-input" id="batchLabor" min="0" step="0.01" placeholder="0.00">
+    </div>
+    <div class="field-row">
+      <label class="field-label" for="batchPackaging">Packaging / Other Cost Per Unit (optional)</label>
+      <input type="number" class="field-input" id="batchPackaging" min="0" step="0.01" placeholder="0.00">
+    </div>
+
+    <div class="batch-result">
+      <span class="br-label">Cost Per Unit</span>
+      <span class="br-value" id="batchCostResult">$0.00</span>
+    </div>
+
+    <button type="button" class="use-cost-btn" id="useBatchCostBtn">Use This Cost Below ↓</button>
+  </div>
+
+  <div class="form-section">
+
+    <div class="currency-inline">
+      <label for="pricingCurrency">Currency</label>
+      <select id="pricingCurrency"></select>
+    </div>
+
+    <div class="field-row">
+      <label class="field-label" for="unitCost">Cost Per Unit</label>
+      <input type="number" class="field-input" id="unitCost" min="0" step="0.01" placeholder="0.00">
+    </div>
+
+    <div class="type-tabs">
+      <button type="button" class="type-tab active" id="tabMargin" data-mode="margin">Target Margin %</button>
+      <button type="button" class="type-tab" id="tabMarkup" data-mode="markup">Target Markup %</button>
+    </div>
+
+    <div class="field-row">
+      <label class="field-label" for="targetPercent" id="targetPercentLabel">Target Margin (%)</label>
+      <input type="number" class="field-input" id="targetPercent" min="0" step="0.1" value="30">
+      <p class="field-hint" id="percentHint"></p>
+    </div>
+
+  </div>
+
+  <div class="results-area">
+    <div class="preview-label">Result</div>
+    <div class="results-box">
+      <div class="result-row result-total">
+        <span class="result-label">Suggested Selling Price</span>
+        <span class="result-value" id="resultPrice">$0.00</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Profit Per Unit</span>
+        <span class="result-value" id="resultProfit">$0.00</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Margin</span>
+        <span class="result-value" id="resultMargin">0%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Markup</span>
+        <span class="result-value" id="resultMarkup">0%</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="action-bar">
+  <button type="button" id="savePricingBtn">💾 Save</button>
+  <button type="button" id="savedPricingBtn">📂 Saved Calculations</button>
+  <button type="button" id="clearPricingBtn">🗑 Clear / New</button>
+</div>
+<p class="autosave-note">Your current calculation is saved automatically in this browser as you type. Click "Save" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.</p>
+
+<div class="modal-overlay hidden" id="savedPricingOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Saved Calculations</h3>
+      <button type="button" class="modal-close-btn" id="closeSavedPricingBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="savedPricingList"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">Saved</div>
+
+<div class="info-section">
+
+  <h2>Why pricing your product correctly matters</h2>
+  <p>
+  Getting the price wrong is one of the quietest ways a small business loses money. Underpricing doesn't look like a problem - sales still happen, the till still rings - but every sale is worth less than it should be, and that gap adds up fast once you're selling in volume. Overpricing is the opposite mistake: it loses the sale before a customer ever gets to ask a question, and you never even find out you were too expensive.
+  </p>
+  <p>
+  Most small sellers set a price by guessing, copying a competitor, or going with what "feels right" - without ever actually adding up what the product costs to make. That means a sale can look successful and still be losing money once materials, time, and packaging are accounted for. This calculator exists to close that gap: put in your real costs, decide what you want to earn, and see the actual number - not a guess.
+  </p>
+
+  <h2>Markup vs. margin - the mix-up that costs sellers money</h2>
+  <p>
+  These two terms get used interchangeably in everyday conversation, but they are not the same percentage, and mixing them up is probably the single most common pricing mistake small sellers make.
+  </p>
+  <ul>
+  <li><strong>Markup</strong> is profit calculated as a percentage of your <em>cost</em>.</li>
+  <li><strong>Margin</strong> is profit calculated as a percentage of your <em>selling price</em>.</li>
+  </ul>
+  <div class="example-box">
+  <strong>Example.</strong> Say your cost is $10.<br>
+  A <strong>50% markup</strong> gives a price of <strong>$15</strong> (profit $5, which works out to a 33% margin).<br>
+  A <strong>50% margin</strong> gives a price of <strong>$20</strong> (profit $10, which works out to a 100% markup).<br>
+  Same "50%," two very different prices - and the gap only gets bigger as the percentage climbs.
+  </div>
+  <p>
+  If you mean "I want 50% margin" but type "50%" into a calculator that assumes markup, you'll undercharge without ever realizing it. This calculator always shows both figures side by side, whichever one you calculate from, so you can see exactly what you're actually getting either way.
+  </p>
+
+  <h2>How to use this calculator</h2>
+  <ol>
+    <li>If you don't already know your cost per unit - for example, you buy ingredients in bulk for a batch - check "I don't know my cost per unit yet" and fill in the batch/recipe details: total cost, how many units it makes, and any labor or packaging cost. Click "Use This Cost Below" to carry the result into the main calculator.</li>
+    <li>Enter (or confirm) your Cost Per Unit and pick your currency.</li>
+    <li>Choose whether you know your target Margin or your target Markup, and enter the percentage.</li>
+    <li>Your suggested Selling Price, Profit Per Unit, and both Margin and Markup appear instantly, so you can see exactly what you're getting either way.</li>
+    <li>Click "Save" to keep this calculation in your Saved Calculations list for later.</li>
+  </ol>
+
+  <h2>Pricing Calculator FAQ</h2>
+  <dl>
+    <dt>What's the difference between markup and margin?</dt>
+    <dd>Markup is profit as a percentage of your cost; margin is profit as a percentage of your selling price. They describe the same profit in two different ways, and they're never the same number except at 0%. See the example above for exactly how far apart they can be.</dd>
+    <dt>How do I price a homemade or handmade product?</dt>
+    <dd>Add up all of your real costs first - materials, your own time at a fair rate, packaging, and a fair share of anything like a market stall fee or delivery cost - then apply your target margin or markup on top of that total. Pricing off materials alone is the most common way handmade sellers end up working for less than they think.</dd>
+    <dt>Should I count my own labor as a cost?</dt>
+    <dd>Yes. Unpaid labor isn't free - it's time you could have spent elsewhere. If you don't pay yourself in the price, you're effectively working for nothing once the materials are covered. Use the batch/recipe calculator's "Labor Cost" field to fold it in.</dd>
+    <dt>What margin or markup should I aim for?</dt>
+    <dd>This varies widely by industry, product, and market, so treat any number you see online as a reference point, not a rule - this tool doesn't provide business advice. What matters is that the number you choose actually covers your real costs and leaves you with a profit you're comfortable with.</dd>
+    <dt>Does this work for services, not just physical products?</dt>
+    <dd>Yes - "Cost Per Unit" can just as easily mean the cost to deliver one unit of a service (your time and materials for one haircut, one consultation, one session). The math is identical either way.</dd>
+    <dt>Is there a limit on how many calculations I can do?</dt>
+    <dd>No. Every calculation happens locally in your browser, with no server calls and no usage cap. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.</dd>
+    <dt>Does this store my data anywhere?</dt>
+    <dd>No. Everything - your costs, percentages, and saved calculations - is stored only in this browser's local storage. Nothing is uploaded anywhere, and clearing your browser data removes it.</dd>
+  </dl>
+
+</div>
+
+</div>
+
+<footer class="site-footer">
+<a href="contact">Contact</a>
+<span>·</span>
+<a href="privacy">Privacy Policy</a>
+<span>·</span>
+<a href="terms">Terms of Service</a>
+<span>·</span>
+<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+</footer>
+
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+<div id="cookieNoticeView" class="cookie-notice-view">
+<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+</div>
+<div id="cookieChoiceView" class="cc-choice-view hidden">
+<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy">Learn more</a></div>
+<div class="cc-actions">
+<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
+<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+</div>
+</div>
+<div id="cookieDeclinedView" class="cc-declined-view hidden">
+<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+</div>
+</div>
+
+<script>
+(function() {
+  var DRAFT_KEY = "goonlinepos-pricing-draft";
+  var HISTORY_KEY = "goonlinepos-pricing-history";
+
+  var CURRENCIES = {
+    AED: "د.إ", AFN: "؋", ALL: "L", AMD: "դր.", ANG: "ƒ", AOA: "Kz", ARS: "$", AUD: "A$",
+    AWG: "ƒ", AZN: "₼", BAM: "KM", BBD: "$", BDT: "৳", BGN: "лв", BHD: ".د.ب", BIF: "FBu",
+    BMD: "$", BND: "$", BOB: "Bs.", BRL: "R$", BSD: "$", BTN: "Nu.", BWP: "P", BYN: "Br",
+    BZD: "BZ$", CAD: "C$", CDF: "FC", CHF: "CHF", CLP: "$", CNY: "¥", COP: "$", CRC: "₡",
+    CUP: "$", CVE: "$", CZK: "Kč", DJF: "Fdj", DKK: "kr", DOP: "RD$", DZD: "دج", EGP: "E£",
+    ERN: "Nfk", ETB: "Br", EUR: "€", FJD: "$", FKP: "£", GBP: "£", GEL: "₾", GHS: "₵",
+    GIP: "£", GMD: "D", GNF: "FG", GTQ: "Q", GYD: "$", HKD: "HK$", HNL: "L", HRK: "kn",
+    HTG: "G", HUF: "Ft", IDR: "Rp", ILS: "₪", INR: "₹", IQD: "ع.د", IRR: "﷼", ISK: "kr",
+    JMD: "J$", JOD: "د.ا", JPY: "¥", KES: "KSh", KGS: "с", KHR: "៛", KMF: "CF", KPW: "₩",
+    KRW: "₩", KWD: "د.ك", KYD: "$", KZT: "₸", LAK: "₭", LBP: "ل.ل", LKR: "₨", LRD: "$",
+    LSL: "L", LYD: "ل.د", MAD: "د.م.", MDL: "L", MGA: "Ar", MKD: "ден", MMK: "K", MNT: "₮",
+    MOP: "MOP$", MRU: "UM", MUR: "₨", MVR: ".ރ", MWK: "MK", MXN: "$", MYR: "RM", MZN: "MT",
+    NAD: "$", NGN: "₦", NIO: "C$", NOK: "kr", NPR: "₨", NZD: "$", OMR: "ر.ع.", PAB: "B/.",
+    PEN: "S/", PGK: "K", PHP: "₱", PKR: "₨", PLN: "zł", PYG: "₲", QAR: "ر.ق", RON: "lei",
+    RSD: "дин.", RUB: "₽", RWF: "FRw", SAR: "﷼", SBD: "$", SCR: "₨", SDG: "ج.س.", SEK: "kr",
+    SGD: "S$", SHP: "£", SLE: "Le", SOS: "S", SRD: "$", SSP: "£", STN: "Db", SVC: "$",
+    SYP: "£", SZL: "L", THB: "฿", TJS: "ЅМ", TMT: "m", TND: "د.ت", TOP: "T$", TRY: "₺",
+    TTD: "TT$", TWD: "NT$", TZS: "TSh", UAH: "₴", UGX: "USh", USD: "$", UYU: "$U", UZS: "so'm",
+    VES: "Bs.", VND: "₫", VUV: "VT", WST: "T", XAF: "FCFA", XCD: "$", XOF: "CFA", XPF: "₣",
+    YER: "﷼", ZAR: "R", ZMW: "ZK", ZWL: "$"
+  };
+
+  var showBatchHelperCheckbox = document.getElementById("showBatchHelper");
+  var batchHelper = document.getElementById("batchHelper");
+  var batchTotalCostInput = document.getElementById("batchTotalCost");
+  var batchYieldInput = document.getElementById("batchYield");
+  var batchLaborInput = document.getElementById("batchLabor");
+  var batchPackagingInput = document.getElementById("batchPackaging");
+  var batchCostResult = document.getElementById("batchCostResult");
+  var useBatchCostBtn = document.getElementById("useBatchCostBtn");
+
+  var currencySelect = document.getElementById("pricingCurrency");
+  var unitCostInput = document.getElementById("unitCost");
+  var tabMargin = document.getElementById("tabMargin");
+  var tabMarkup = document.getElementById("tabMarkup");
+  var targetPercentInput = document.getElementById("targetPercent");
+  var targetPercentLabel = document.getElementById("targetPercentLabel");
+  var percentHint = document.getElementById("percentHint");
+
+  var resultPrice = document.getElementById("resultPrice");
+  var resultProfit = document.getElementById("resultProfit");
+  var resultMargin = document.getElementById("resultMargin");
+  var resultMarkup = document.getElementById("resultMarkup");
+
+  var currentMode = "margin";
+  var currentCalcId = null;
+  var saveTimer = null;
+
+  function makeId() {
+    return "price_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  Object.keys(CURRENCIES).forEach(function(code) {
+    var opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = code + " (" + CURRENCIES[code] + ")";
+    currencySelect.appendChild(opt);
+  });
+  currencySelect.value = "USD";
+
+  function currencySymbolFor(code) {
+    return CURRENCIES[code] || "$";
+  }
+
+  function formatAmount(value, code) {
+    return currencySymbolFor(code) + (isFinite(value) ? value.toFixed(2) : "0.00");
+  }
+
+  function formatPercent(value) {
+    return (isFinite(value) ? Math.round(value * 10) / 10 : 0) + "%";
+  }
+
+  function computeBatchCost() {
+    var total = parseFloat(batchTotalCostInput.value) || 0;
+    var yieldUnits = parseFloat(batchYieldInput.value) || 0;
+    var labor = parseFloat(batchLaborInput.value) || 0;
+    var packaging = parseFloat(batchPackagingInput.value) || 0;
+    if (yieldUnits <= 0) return null;
+    return (total + labor) / yieldUnits + packaging;
+  }
+
+  function renderBatchResult() {
+    var cost = computeBatchCost();
+    var code = currencySelect.value;
+    batchCostResult.textContent = cost === null ? "--" : formatAmount(cost, code);
+  }
+
+  showBatchHelperCheckbox.addEventListener("change", function() {
+    batchHelper.classList.toggle("hidden", !showBatchHelperCheckbox.checked);
+    scheduleSave();
+  });
+
+  [batchTotalCostInput, batchYieldInput, batchLaborInput, batchPackagingInput].forEach(function(el) {
+    el.addEventListener("input", function() { renderBatchResult(); scheduleSave(); });
+  });
+
+  useBatchCostBtn.addEventListener("click", function() {
+    var cost = computeBatchCost();
+    if (cost === null) return;
+    unitCostInput.value = cost.toFixed(2);
+    renderResults();
+    scheduleSave();
+    unitCostInput.focus();
+  });
+
+  function currentPercent() {
+    var v = parseFloat(targetPercentInput.value);
+    return isNaN(v) || v < 0 ? 0 : v;
+  }
+
+  function computeResults() {
+    var cost = parseFloat(unitCostInput.value);
+    if (isNaN(cost) || cost < 0) cost = 0;
+    var pct = currentPercent();
+    var price;
+
+    if (currentMode === "margin") {
+      var m = pct / 100;
+      price = m >= 1 ? null : cost / (1 - m);
+    } else {
+      var k = pct / 100;
+      price = cost * (1 + k);
+    }
+
+    if (price === null) {
+      return { cost: cost, price: 0, profit: 0, marginPct: 0, markupPct: 0, invalid: true };
+    }
+
+    var profit = price - cost;
+    var marginPct = price > 0 ? (profit / price) * 100 : 0;
+    var markupPct = cost > 0 ? (profit / cost) * 100 : 0;
+
+    return { cost: cost, price: price, profit: profit, marginPct: marginPct, markupPct: markupPct, invalid: false };
+  }
+
+  function renderResults() {
+    var r = computeResults();
+    var code = currencySelect.value;
+
+    if (r.invalid) {
+      percentHint.textContent = "Margin must be less than 100% - try a lower percentage, or switch to Target Markup instead.";
+      percentHint.className = "field-hint warn";
+      resultPrice.textContent = "--";
+      resultProfit.textContent = "--";
+      resultMargin.textContent = "--";
+      resultMarkup.textContent = "--";
+      return;
+    }
+
+    percentHint.textContent = "";
+    percentHint.className = "field-hint";
+    resultPrice.textContent = formatAmount(r.price, code);
+    resultProfit.textContent = formatAmount(r.profit, code);
+    resultMargin.textContent = formatPercent(r.marginPct);
+    resultMarkup.textContent = formatPercent(r.markupPct);
+  }
+
+  function updateModeUI() {
+    var isMargin = currentMode === "margin";
+    tabMargin.classList.toggle("active", isMargin);
+    tabMarkup.classList.toggle("active", !isMargin);
+    targetPercentLabel.textContent = isMargin ? "Target Margin (%)" : "Target Markup (%)";
+  }
+
+  function switchMode(mode) {
+    if (currentMode === mode) return;
+    currentMode = mode;
+    updateModeUI();
+    renderResults();
+    scheduleSave();
+  }
+
+  tabMargin.addEventListener("click", function() { switchMode("margin"); });
+  tabMarkup.addEventListener("click", function() { switchMode("markup"); });
+
+  [unitCostInput, targetPercentInput, currencySelect].forEach(function(el) {
+    el.addEventListener("input", function() { renderResults(); renderBatchResult(); scheduleSave(); });
+    el.addEventListener("change", function() { renderResults(); renderBatchResult(); scheduleSave(); });
+  });
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 400);
+  }
+
+  function collectState() {
+    return {
+      id: currentCalcId,
+      mode: currentMode,
+      currency: currencySelect.value,
+      unitCost: unitCostInput.value,
+      targetPercent: targetPercentInput.value,
+      showBatch: showBatchHelperCheckbox.checked,
+      batchTotalCost: batchTotalCostInput.value,
+      batchYield: batchYieldInput.value,
+      batchLabor: batchLaborInput.value,
+      batchPackaging: batchPackagingInput.value
+    };
+  }
+
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory(list) {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function showToast(text) {
+    var toast = document.getElementById("saveToast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(function() { toast.classList.remove("show"); }, 1800);
+  }
+
+  function saveCalcExplicit() {
+    if (!currentCalcId) currentCalcId = makeId();
+    var state = collectState();
+    state.id = currentCalcId;
+    var r = computeResults();
+    var entry = {
+      id: currentCalcId,
+      mode: state.mode,
+      currency: state.currency,
+      cost: r.cost,
+      targetPercent: state.targetPercent,
+      price: r.price,
+      profit: r.profit,
+      savedAt: Date.now(),
+      state: state
+    };
+    var list = loadHistory();
+    var idx = list.findIndex(function(e) { return e.id === currentCalcId; });
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    saveHistory(list);
+    saveDraft();
+    showToast("Saved");
+  }
+
+  function renderSavedList() {
+    var list = loadHistory().slice().sort(function(a, b) { return b.savedAt - a.savedAt; });
+    var container = document.getElementById("savedPricingList");
+    container.innerHTML = "";
+    if (!list.length) {
+      container.innerHTML = '<div class="saved-codes-empty">No saved calculations yet. Work out a price and click "Save" to keep it here.</div>';
+      return;
+    }
+    list.forEach(function(entry) {
+      var row = document.createElement("div");
+      row.className = "saved-code-row" + (entry.mode === "markup" ? " type-qr" : "");
+      var d = new Date(entry.savedAt);
+      var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      row.innerHTML =
+        '<span class="saved-code-badge">' + (entry.mode === "markup" ? "Markup" : "Margin") + '</span>' +
+        '<div class="saved-code-main">' +
+          '<div class="saved-code-title">' + escapeHtml(formatAmount(entry.price, entry.currency)) + ' price (cost ' + escapeHtml(formatAmount(entry.cost, entry.currency)) + ')</div>' +
+          '<div class="saved-code-meta">' + escapeHtml(dateStr) + '</div>' +
+        '</div>' +
+        '<button type="button" class="saved-code-delete" aria-label="Delete saved calculation">✕</button>';
+      row.querySelector(".saved-code-main").addEventListener("click", function() { openSavedCalc(entry.id); });
+      row.querySelector(".saved-code-delete").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (!confirm("Delete this saved calculation? This can't be undone.")) return;
+        deleteSavedCalc(entry.id);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function openSavedCalc(id) {
+    var entry = loadHistory().find(function(e) { return e.id === id; });
+    if (!entry) return;
+    applyState(entry.state);
+    saveDraft();
+    closeSavedPricingModal();
+  }
+
+  function deleteSavedCalc(id) {
+    saveHistory(loadHistory().filter(function(e) { return e.id !== id; }));
+    renderSavedList();
+  }
+
+  function openSavedPricingModal() {
+    renderSavedList();
+    document.getElementById("savedPricingOverlay").classList.remove("hidden");
+  }
+  function closeSavedPricingModal() {
+    document.getElementById("savedPricingOverlay").classList.add("hidden");
+  }
+
+  function applyState(state) {
+    state = state || {};
+    currentCalcId = state.id || null;
+    currentMode = state.mode === "markup" ? "markup" : "margin";
+    updateModeUI();
+
+    currencySelect.value = CURRENCIES.hasOwnProperty(state.currency) ? state.currency : "USD";
+    unitCostInput.value = state.unitCost != null && state.unitCost !== "" ? state.unitCost : "";
+    targetPercentInput.value = state.targetPercent != null && state.targetPercent !== "" ? state.targetPercent : 30;
+
+    showBatchHelperCheckbox.checked = !!state.showBatch;
+    batchHelper.classList.toggle("hidden", !showBatchHelperCheckbox.checked);
+    batchTotalCostInput.value = state.batchTotalCost || "";
+    batchYieldInput.value = state.batchYield || "";
+    batchLaborInput.value = state.batchLabor || "";
+    batchPackagingInput.value = state.batchPackaging || "";
+
+    renderBatchResult();
+    renderResults();
+  }
+
+  function loadDraft() {
+    var raw = null;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
+    if (raw) {
+      try {
+        applyState(JSON.parse(raw));
+        return;
+      } catch (e) {}
+    }
+    applyState({});
+  }
+
+  document.getElementById("savePricingBtn").addEventListener("click", saveCalcExplicit);
+  document.getElementById("savedPricingBtn").addEventListener("click", openSavedPricingModal);
+  document.getElementById("closeSavedPricingBtn").addEventListener("click", closeSavedPricingModal);
+  document.getElementById("savedPricingOverlay").addEventListener("click", function(e) {
+    if (e.target.id === "savedPricingOverlay") closeSavedPricingModal();
+  });
+  document.getElementById("clearPricingBtn").addEventListener("click", function() {
+    if (!confirm("Clear this calculation and start a new one? This can't be undone.")) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    currentCalcId = null;
+    applyState({});
+  });
+
+  loadDraft();
+})();
+</script>
+
+</body>
+</html>
