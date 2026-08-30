@@ -52,6 +52,13 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   amount. Indexable and linked from every page's header CTA row and
   `app.html`'s own header-links from the day it shipped. See
   "`vat.html` — standalone VAT calculator" below.
+- **`pricing.html`** — a standalone product pricing / markup-vs-margin
+  calculator, the fifth sibling in the free-tools family, currently
+  **unlinked and `noindex`** while the site owner reviews it — the
+  same "URL-only, disconnected" phase `barcode.html` went through
+  before launch (see below), not yet in any `.cta-btn` row,
+  `app.html`'s `.header-links`, or `sitemap.xml`. See "`pricing.html`
+  — standalone product pricing calculator" below.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -1884,6 +1891,132 @@ the time this was built.
   `invoice.html`/`receipt.html`/`barcode.html` - `app.html`'s
   `translations` dictionary only supplies the `createVatShortcutLabel`
   header-links text; the calculator itself is English-only.
+
+## `pricing.html` — standalone product pricing calculator (unlinked, in review)
+
+A free-standing product pricing / markup-vs-margin calculator, built on
+the same architecture as `invoice.html`/`receipt.html`/`barcode.html`/
+`vat.html` (own `--ink`/`--accent`/`--gold` design tokens copied
+verbatim, own cookie-consent banner, own autosave-draft + explicit
+Save/Saved-list pattern, the same `invoice.html`-derived `CURRENCIES`
+map). **Deliberately disconnected while the site owner reviews it** -
+this is the same "URL-only, unlinked" phase `barcode.html` went through
+before it was wired in (see that page's own section above): `<meta
+name="robots">` is `noindex, follow`, it is **not** in `sitemap.xml`,
+**not** one of `index.html`'s JSON-LD `SiteNavigationElement` entries,
+**not** in any page's header `.cta-btn` row (including its own - its
+`site-header` shows the same five buttons every other page shows, just
+without a sixth one for itself), and **not** wired into `app.html`'s
+`.header-links` row. Reachable only by typing the URL directly. Before
+connecting it site-wide the same way `barcode.html`/`vat.html` were,
+repeat that same rollout: add the sixth `.cta-btn` to every page
+(including this one) in the established order, add `#createPricingButton`
+→ an `openCreatePricing()` function to `app.html`'s `.header-links` (with
+`OFFLINE-STRIP` marker wrapping and a `createPricingShortcutLabel`
+translation key across all six `modules/translations.js` blocks - and
+remember the `changeLanguage()` `ids` map entry and the dark-green CSS
+selector, both easy to forget the same way they were on the Barcode
+button - see "Site-wide header, nav & footer" above), a `sitemap.xml`
+entry, and a sixth `SiteNavigationElement` entry on `index.html`.
+- **Built to address a specific, named problem, not just to be another
+  markup calculator** - the tool was scoped around researching what
+  actually trips up small sellers (mostly the site's own target
+  audience of market stalls, home bakers, food carts, and new
+  businesses - see `index.html`'s "Who is GoOnlinePOS for?" section)
+  when they price a product: confusing markup with margin (they are
+  different percentages of different bases and are never equal except
+  at 0%), pricing off raw material cost alone and forgetting labor or
+  packaging, and not knowing how to turn a batch/recipe cost into a
+  per-unit cost before they can even start. The `info-section`'s "Why
+  pricing your product correctly matters" and "Markup vs. margin"
+  sections exist to explain the actual problem, not just document the
+  UI, per an explicit request for "more explanation why this tool is
+  important."
+- **Two calculators in one page, connected by a single button.** The
+  main calculator (always visible) takes a **Cost Per Unit**, a choice
+  between **Target Margin %** or **Target Markup %** (the same
+  `.type-tabs` pill pattern `barcode.html`/`vat.html` use), and shows
+  **all four** figures at once - Suggested Selling Price, Profit Per
+  Unit, Margin, and Markup - regardless of which one was the input, so
+  the markup/margin gap described above is always visible rather than
+  hidden behind whichever mode happens to be selected. A checkbox ("I
+  don't know my cost per unit yet...") reveals a second, optional
+  **Batch / Recipe Cost Calculator** above it - Total Batch Cost, Batch
+  Yield (units), optional Labor Cost for the batch, optional Packaging/
+  Other Cost Per Unit - whose "Use This Cost Below ↓" button copies its
+  computed per-unit cost straight into the main calculator's Cost Per
+  Unit field. This two-stage flow (batch → per-unit cost → price) is
+  the piece that differentiates it from a generic online markup
+  calculator and is specifically aimed at the food/handmade-goods
+  segment of the site's audience, who normally know a batch cost long
+  before they know a per-unit one.
+- **The math, standard and currency/region-agnostic on purpose** (per
+  an explicit "make sure it's standard international use" requirement -
+  no country-specific tax entanglement, no region-locked reference
+  numbers, and the same ~150-currency `CURRENCIES` map `invoice.html`
+  already has, not a USD-only tool): given cost `C` and a target margin
+  `m` (as a decimal), `price = C / (1 - m)`; given cost `C` and a target
+  markup `k`, `price = C * (1 + k)`. Once price is known, `profit =
+  price - cost`, `actualMarginPct = profit / price * 100`, and
+  `actualMarkupPct = profit / cost * 100` (shown as `0%` when cost is
+  `0`, since markup-on-zero-cost is undefined). A margin of 100% or
+  more is mathematically invalid (`price` would be infinite or
+  negative) - `computeResults()` returns an `invalid` flag in that case
+  and the UI shows a `field-hint warn` message plus `--` in every result
+  field instead of a nonsense number, the same "don't silently compute
+  garbage" pattern `barcode.html`'s density warning uses. Deliberately
+  **no VAT/sales-tax math anywhere on this page** - that's `vat.html`'s
+  job; mixing the two would make this page's math depend on the
+  visitor's jurisdiction, defeating the international-by-default goal.
+- **Save/Saved Calculations** follows the exact same
+  explicit-save-plus-list pattern as `barcode.html`/`vat.html`'s own
+  Save/Saved Codes/Calculations: "💾 Save" pushes the current
+  calculation into a `goonlinepos-pricing-history` `localStorage` array
+  (`{id, mode, currency, cost, targetPercent, price, profit, savedAt,
+  state}` - `state` also carries the batch-helper's own fields, so
+  reopening a saved entry restores whether the helper was shown and
+  what was in it, not just the final numbers) and shows a `.save-toast`;
+  "📂 Saved Calculations" opens a `.modal-overlay` listing entries
+  newest-first with a `Margin`/`Markup` badge (green/gold, reusing
+  `barcode.html`'s `.saved-code-badge`/`.type-qr` CSS verbatim). The
+  current in-progress calculation - main fields and batch-helper fields
+  both - also autosaves to `goonlinepos-pricing-draft`, same as the
+  other three calculators.
+- **No Print/Download output**, same reasoning as `vat.html` - a price
+  is a few numbers, not a document or image, so the action bar is
+  Save/Saved Calculations/Clear-New only.
+- **FAQ deliberately avoids prescribing a "correct" margin or markup**
+  ("What margin or markup should I aim for?" answers that it varies by
+  industry/product/market and that any number shown online is a
+  reference point, not a rule, this tool doesn't provide business
+  advice) - consistent with `vat.html`'s own disclaimer about its rate
+  presets being for reference only, and for the same reason: real
+  answers depend on a business's actual costs and market, not a single
+  global constant.
+- **Deliberately NOT bundled into the "Download Offline POS" package** -
+  same policy as `invoice.html`/`receipt.html`/`barcode.html`/
+  `vat.html`, a separate free web tool rather than part of the offline
+  POS itself. Since it also isn't linked from `app.html` at all yet
+  (see above), there is currently no button anywhere that would need an
+  `OFFLINE-STRIP` marker for it regardless.
+- Six-language UI strings are **not** part of this page, matching
+  `invoice.html`/`receipt.html`/`barcode.html`/`vat.html` - the
+  calculator itself is English-only; a `createPricingShortcutLabel`
+  translation key only gets added once `app.html`'s `.header-links`
+  button is added, per the rollout checklist above.
+- Verified with Playwright against the worked example in the page's own
+  FAQ (cost $10: 50% markup → $15.00 price, $5.00 profit, 33.3% margin,
+  50% markup; 50% margin → $20.00 price, $10.00 profit, 50% margin,
+  100% markup - both match by hand), the batch calculator (`$45` total
+  ÷ `30` yield → `$1.50`/unit, then with `$15` labor and `$0.20`
+  packaging → `(45+15)/30+0.20 = $2.20`/unit, both correct), "Use This
+  Cost Below" correctly filling the main Cost Per Unit field, the ≥100%
+  margin warning correctly blocking a nonsense result, currency
+  switching, and Save/Saved Calculations round-tripping. Confirmed the
+  page is genuinely unlinked: not in any page's `.cta-btn` row, not in
+  `app.html`'s `.header-links`, and grepping the whole repo for
+  `pricing.html`/`href="pricing"` outside the file itself returns
+  nothing. Zero console errors throughout.
 
 ## `end-of-day.html` — POS closing report
 
