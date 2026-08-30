@@ -316,43 +316,67 @@ all of them under one pattern:
   stale nav/footer) - but for a different reason: its body content was
   copied into `index.html` itself, as a new
   `<section class="section" id="about-goonlinepos">` (heading "About
-  GoOnlinePOS", then a `.doc` card) inserted **directly after
-  `index.html`'s own `site-header`, before its hero section** -
-  deliberately the first thing a visitor reads on the homepage, not
-  tucked below the fold. `index.html` needed `.doc`/`.audience-list`/
-  `.requirements` CSS added for this (it never had these classes
-  before); no collision with `index.html`'s own pre-existing `.hero`/
-  `.cta-band` since the migrated content deliberately excludes
+  GoOnlinePOS", then a `.doc` card). `index.html` needed `.doc`/
+  `.audience-list` CSS added for this (it never had these classes
+  before). **Its position on the page changed twice.** It first landed
+  directly after `index.html`'s own `site-header`, before the hero -
+  deliberately the first thing a visitor read, per an explicit early
+  instruction. That was later reversed after a full-page "act as website
+  expert" redundancy/landing-page-structure pass: the Hero (with its
+  primary CTA) now sits immediately after the header instead, matching
+  standard landing-page convention (value proposition + CTA above the
+  fold, not a long essay first), and the About section was moved down to
+  sit **between the "Set it up your way" feature-grid section and the
+  FAQ section**. No collision with `index.html`'s own pre-existing
+  `.hero`/`.cta-band` since the migrated content deliberately excludes
   `about.html`'s own mini-hero and closing CTA band - those would have
-  been redundant with `index.html`'s hero and CTA band appearing right
-  after. **The `index.html` copy is trimmed well below what `about.html`
-  itself has** - after the redundancy pass, only four `<h2>` sections
-  survive there: "What can you do with GoOnlinePOS?", "Who is
-  GoOnlinePOS for?" (the `.audience-list` grid), "What does GoOnlinePOS
-  require?" (the `.requirements` grid), and "Why choose a browser-based
-  POS?". Removed entirely: "How GoOnlinePOS works" (restated what the
-  hero/steps sections below it already say), "See the real GoOnlinePOS
-  app" along with its `.guide-box` callout (another "open the app and
-  click How To Use" prompt that was now competing with the hero's own
-  primary CTA a few paragraphs above it), and "Free online POS software
-  for small businesses" (generic filler restating points made earlier in
-  the article) - `.guide-box`/`.inline-link` CSS was removed from
-  `index.html` along with the last callout that used them, since nothing
-  on that page needs those classes anymore. `about.html` itself still
+  been redundant with `index.html`'s hero and CTA band appearing
+  elsewhere on the same page. **The `index.html` copy is trimmed well
+  below what `about.html` itself has**, and was trimmed in three passes
+  as more duplication surfaced. First pass (right after the initial
+  migration): dropped the redundant `.guide-box` callout. Second pass:
+  dropped "How GoOnlinePOS works" (restated what the hero/steps sections
+  already say), "See the real GoOnlinePOS app" along with its
+  `.guide-box` callout (another "open the app and click How To Use"
+  prompt competing with the hero's own primary CTA), and "Free online POS
+  software for small businesses" (generic filler restating points made
+  earlier in the article) - `.guide-box`/`.inline-link` CSS was removed
+  along with the last callout that used them. Third pass (the
+  hero-reorder/redundancy pass above): dropped "What can you do with
+  GoOnlinePOS?" (already covered by the "How it works" steps and the
+  "Set it up your way" feature-grid cards) and "What does GoOnlinePOS
+  require?" (its "free, no signup, no install" claims already covered by
+  the Hero's own eyebrow/tagline and the FAQ's "Is it really free?"
+  answer) - `.requirements`/`.doc ul`/`.doc li` CSS was removed along
+  with them, since nothing on `index.html` uses those classes anymore.
+  **What survives on `index.html` today is just two `<h2>` sections**:
+  the intro (condensed to 4 paragraphs, folding the browser/device detail
+  into the closing paragraph and dropping the standalone "No signup. No
+  login. No monthly fee." paragraph as redundant with the Hero's own
+  tagline) and "Who is GoOnlinePOS for?" (the `.audience-list` 6-card
+  grid, kept because it's differentiated targeting content stated
+  nowhere else on the page) - "Why choose a browser-based POS?" was also
+  dropped in this third pass as generic filler. `about.html` itself still
   has all of this content in full, unedited, since its own file content
-  was left untouched per the retirement policy - only the copy that
-  landed on `index.html` was trimmed, and it was trimmed twice: once to
-  drop the redundant first `.guide-box` right after the initial
-  migration, then again to drop the three sections above once they too
-  turned out to duplicate content elsewhere on the homepage. The
-  now-redundant `.about-teaser` blockquote pull-quote (`"GoOnlinePOS is
-  an independently developed project..." → "Read the full story →"`)
-  that used to sit further down `index.html` and link out to
-  `about.html` was deleted outright, CSS and all, in the same first
-  trimming pass - the "full story" it teased is now already on the same
-  page, above it. Since the content lives on `index.html` now, every
-  page's `.site-nav` "About" link was renamed **"Homepage"** and
-  repointed from `about` to `/` - see the `.site-nav` bullet above.
+  was left untouched per the retirement policy - only the copy on
+  `index.html` was trimmed/repositioned. The now-redundant
+  `.about-teaser` blockquote pull-quote (`"GoOnlinePOS is an
+  independently developed project..." → "Read the full story →"`) that
+  used to sit further down `index.html` and link out to `about.html` was
+  deleted outright, CSS and all, in the first trimming pass - the "full
+  story" it teased is now already on the same page. Since the content
+  lives on `index.html` now, every page's `.site-nav` "About" link was
+  renamed **"Homepage"** and repointed from `about` to `/` - see the
+  `.site-nav` bullet above. **The homepage's FAQ was also trimmed** in
+  the same hero-reorder pass, from 16 `<details>` items down to 11:
+  removed "Do I need to create an account?" (redundant with Hero/About
+  messaging), "Can I scan product barcodes?" (redundant with the "Scan
+  barcodes" feature-grid card), "Can multiple cashiers use the POS?"
+  (redundant with the "Multiple cashiers" feature-grid card), "Can I
+  export my sales?" (redundant with the "Sales history, editable"
+  feature-grid card), and "Will it work with my printer?" (merged into
+  "Can I print receipts?", which now also covers Auto paper size vs.
+  choosing an exact size in Settings → Paper & Zoom).
 
 ## `app.html` — architecture
 
