@@ -496,7 +496,111 @@ all of them under one pattern:
   export my sales?" (redundant with the "Sales history, editable"
   feature-grid card), and "Will it work with my printer?" (merged into
   "Can I print receipts?", which now also covers Auto paper size vs.
-  choosing an exact size in Settings → Paper & Zoom).
+  choosing an exact size in Settings → Paper & Zoom). **"Do I need to
+  create an account?" and "Can I export my sales?" were both brought
+  back** in the later "Landing-page branding refresh" pass below, per
+  an explicit new brief listing both as priority FAQ questions -
+  superseding this trim's "redundant" rationale for those two
+  specifically; the other three trims here still stand. See that
+  section for the FAQ's current full order and count.
+- **Landing-page branding refresh.** A messaging/hierarchy/copy pass
+  over `index.html` only, per an explicit brief that the POS is the
+  main product and the five free tools are supporting it - **no other
+  page, no `app.html`, no tool page, no theme token, and no
+  functionality changed**. Verified via `git diff` against the `:root`
+  CSS-variable block that no color/font/radius/shadow token moved.
+  - **Hero** - headline changed from "Ring up sales from any browser"
+    to **"Free POS for Small Businesses"** (leads with the brand
+    position directly). The supporting `<p>` was trimmed to a single
+    sentence, **"Open your browser and start selling with a simple POS
+    built for small businesses"** - it originally also opened with "No
+    signup. No login. No installation.", but with the pre-existing
+    `.eyebrow` pill above the headline *and* the new trust bar below
+    the buttons (next bullet) both already carrying that exact claim,
+    keeping it a third time in the paragraph too read as flatly
+    repetitive on one screen - trimmed once reviewed via screenshot,
+    not shipped as first written. CTAs: primary `.btn-primary` "Open
+    the app" → **"Open POS — Free"** (same `href="app"`, unchanged);
+    secondary `.btn-secondary` "See how it works" (`href="#how-it-works"`)
+    → **"Explore Free Tools"**, retargeted to `href="#free-tools"` (the
+    new tools section below). `#how-it-works` itself is untouched and
+    still a valid in-page anchor, just no longer what the hero's second
+    button points at.
+  - **`.trust-bar`** - new, a single centered `<p>` right after
+    `.hero .actions`, plain text (no pill/background, unlike
+    `.eyebrow`, to avoid visually reading as a duplicate of it):
+    **"Free · No Signup · No Installation · Browser-Based · Offline
+    Capable"**. Every claim is already true and already documented
+    elsewhere in this file (offline via `end-of-day.html`'s Offline
+    Mode POS card and the "Download Offline POS" feature, browser-based
+    via the whole `app.html` architecture).
+  - **`#free-tools` - new section, "More Free Tools for Your
+    Business"** (sub: "Useful tools that work alongside your everyday
+    selling tasks."), placed directly after `.feature-grid`'s section.
+    Five `.tool-card` anchors in a `.tools-grid`
+    (`grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))`,
+    same auto-fit convention as `.feature-grid`/`blog.html`'s
+    `.post-grid`) - Receipt Generator, Invoice Generator, Pricing
+    Calculator, VAT Calculator, Barcode & QR Generator, each linking to
+    its real page (`receipt-generator`/`invoice-generator`/
+    `pricing-calculator`/`vat-calculator`/`barcode-generator`, all
+    extension-less per this file's own convention). `.tool-card` reuses
+    `.feature-card`'s exact visual tokens (`--panel`/`--line`/
+    `--radius`/`--accent-tint`/`--accent-dark`, same `.fc-icon` icon
+    treatment) but is its own class rather than `.feature-card` applied
+    to an `<a>` - needed `display: block`, `text-decoration: none`,
+    `color: inherit`, and a hover state (`border-color: var(--accent);
+    box-shadow: var(--shadow);`) that plain informational
+    `.feature-card`s never needed, since these cards are real
+    navigation, not just information. This section is where the old
+    "Create invoices"/"Create receipts" `.feature-card`s and the old
+    `.tool-spotlight` Pricing Calculator panel both retired to - see
+    the `.feature-grid` bullet above for the card-count consequences
+    that had on that section.
+  - **`.privacy-note` - new, small callout** ("Your Data, Your Device"),
+    placed in its own `<section>` directly before the FAQ. A `.doc`-style
+    bordered/shadowed card (reusing those exact tokens) but lighter -
+    two short sentences: local-browser-storage/no-account messaging,
+    then a backup reminder. Deliberately not a heavier full section;
+    this same ground is already covered in more depth by the FAQ's
+    "Where is my data stored?" answer, so the callout stays brief by
+    design rather than duplicating it.
+  - **FAQ** - two questions restored from the earlier "About" trim (see
+    that bullet above) per this brief's explicit priority list: **"Do I
+    need to create an account?"** (new answer, not the old one) and
+    **"Can I export my sales?"**. Also **"Is it really free?" moved to
+    the very first position** (previously ninth of eleven) since the
+    brief lists it first among its FAQ priorities. Net: 11 items → 13,
+    same simple one-`<p>`-answer style as every existing entry, no
+    other reordering.
+  - **Final `.cta-band`** - heading "Ready to ring up your first sale?"
+    → **"Ready to Start Selling?"**; supporting `<p>` "No signup. No
+    login. Just open the app." → **"Open GoOnlinePOS and try it without
+    creating an account."**; button label → **"Open POS — Free"**
+    (`href="app"` unchanged); a new `.cta-band-note` `<p>` added below
+    the button, **"No signup. No login. No installation."** - kept
+    separate from the existing `.cta-band p` (which sits *above* the
+    button and needed its own, more prominent styling) via a more
+    specific `.cta-band p.cta-band-note` selector, smaller/dimmer than
+    the main supporting line.
+  - **SEO meta** - `<title>`/`meta description`/`og:title`/
+    `og:description`/`twitter:title`/`twitter:description` all
+    re-worded to lead with "Free POS for Small Businesses" (matching
+    the new hero headline) while keeping the existing supporting
+    keywords (barcode scanning, inventory, split payments, multiple
+    cashiers); `meta keywords` gained a few of the brief's specific
+    supporting terms ("free pos for small business", "browser-based
+    pos", "pos without signup/login", "small business pos", "online
+    pos") in place of a couple of the weaker existing ones, not simply
+    appended - kept to a reasonable total length rather than
+    keyword-stuffed. `sitemap.xml`/canonical/JSON-LD were not touched -
+    the URL itself didn't change, only on-page copy.
+  - Verified end-to-end with Playwright: every new/changed CTA href
+    resolves (including the new `#free-tools` anchor actually scrolling
+    there), all five `.tool-card` links 200, `.feature-grid` still 15
+    cards in 5 clean rows, FAQ is 13 items in the new order, zero
+    console errors and zero horizontal overflow at 360/390/414px and at
+    1400px desktop.
 - **The Hero's `.app-preview` mock (the fake screenshot of the POS)
   lives inside a `.browser-frame` desktop-browser chrome mockup** -
   three traffic-light `.browser-dot`s plus a pill `.browser-url` bar
@@ -551,38 +655,43 @@ all of them under one pattern:
   📅 End of Day icon) between "Sales history, editable" and "Full
   backup & restore", so it now sits in the same neighborhood as the
   other reporting/data-safety cards it was grouped with in the user's
-  own framing ("along with backup and offline mode"). **Two more cards
-  were added right after that** - "Create invoices" (a file/document
-  icon) and "Create receipts" (a zigzag-bottomed receipt icon), each
-  pointing at the free `invoice-generator.html`/`receipt-generator.html` tools reachable
-  from the header's own "Free Invoice Generator"/"Free Receipt
-  Generator" buttons - explicitly requested to balance the grid's row
-  count: with the End of Day card the grid stood at 13 cards, leaving a
-  single card alone on its own row-of-3 at the bottom
-  (`grid-template-columns: repeat(3, 1fr)`); 13 → 15 makes it a clean 5
-  full rows with nothing dangling. Verified via Playwright (comparing
-  each card's `getBoundingClientRect().top`) that the last row is a
-  full row of 3 at the 1400px desktop width the 3-column layout applies
-  at. **The Pricing Calculator's own explainer is deliberately not a
-  17th `.feature-card`** - a `.tool-spotlight` full-width panel instead,
-  placed directly below `.feature-grid`'s closing `</div>` but still
-  inside the same "Set it up your way" `<section>`. This was tried both
-  ways: a first pass added it as a 16th grid card ("Price your products
-  right", a dollar-sign SVG icon) right after "Create receipts", which
-  reopened the exact row-count problem the 13→15 change above was meant
-  to fix (16 cards = 5 full rows of 3 plus one lone card stranded on its
-  own 6th row) - and per an explicit request that the Pricing Calculator
-  get "a separate block full length" rather than another same-size grid
-  tile, it was pulled back out of the grid entirely (restoring the grid
-  to a clean 15 cards / 5 full rows) and rebuilt as `.tool-spotlight`: a
-  full-width `--accent-tint` panel (icon left, heading + the same
-  explainer copy in the middle, a dark-green "Try the Free Pricing
-  Calculator →" button on the right, `href="pricing-calculator"`) that spans the
-  section's whole width instead of sharing a grid cell. `@media
-  (max-width: 700px)` stacks it to a single column (icon, then heading/
-  copy, then a full-width button) rather than squeezing all three
-  side-by-side. Verified via Playwright at 1100px (desktop, single row)
-  and 390px (mobile, stacked) with zero console errors.
+  own framing ("along with backup and offline mode"). **"Create
+  invoices"/"Create receipts" cards and the Pricing Calculator's
+  `.tool-spotlight` panel, both once part of this grid, are now
+  retired** - see "Landing-page branding refresh" below for the full
+  story. All tool-promo content (all five free tools, not just
+  Invoice/Receipt/Pricing) now lives in its own dedicated `#free-tools`
+  section further down the page instead, so `.feature-grid` holds only
+  genuine POS capabilities again. To keep a clean 5-full-rows-of-3
+  layout once those cards left (which would otherwise have dropped the
+  grid back to 13 cards and reopened the exact stranded-last-card
+  problem the 13→15 change above was meant to fix), two more real,
+  previously-undocumented-on-the-homepage capabilities were added
+  instead of re-using tool promos: **"Search & filter products"** (a
+  magnifying-glass icon, right after "Upload your products" -
+  `#productSearch`'s live search plus `#categoryChips`'s category
+  filter chips in `app.html`'s catalog panel, confirmed real via
+  `app.html:536,538`) and **"Multiple currencies"** (a circled
+  dollar-sign icon, right before "Six languages" - Settings → Currency's
+  `#currencyCode`/`#currencySymbol` fields, confirmed real via
+  `app.html:1005-1013` and the homepage's own pre-existing "Can I
+  change the currency?" FAQ answer). `.feature-grid`'s
+  `grid-template-columns` also changed from a fixed `repeat(3, 1fr)` to
+  `repeat(auto-fit, minmax(260px, 1fr))` (the same pattern `blog.html`'s
+  `.post-grid` already uses) as part of the same pass - **this alone
+  does not fix a stranded last-row card**, a lesson worth keeping: a
+  single CSS grid computes one shared set of column tracks for every
+  row, so a lone item in the last row still sits in just the first
+  track at full column width, with the remaining tracks empty beside it
+  - identical to what a fixed `repeat(3, 1fr)` already did. `auto-fit`
+  only changes how many columns exist at a given viewport width (useful
+  for responsiveness), it does not center or stretch a short final row.
+  The real fix for a stranded card is still what it always was on this
+  page: keep the card count a clean multiple of the column count.
+  Verified via Playwright (comparing each card's
+  `getBoundingClientRect().top`/`width`) that the last row is a full,
+  evenly-widthed row of 3 at 1400px desktop width, with zero console
+  errors.
 - **The `.app-preview` mock's 3 catalog products are Pepperoni Pizza /
   Cheeseburger / French Fries with real embedded photos**, not the
   earlier Coca Cola/White Bread/Bottled Water line-up (which used flat

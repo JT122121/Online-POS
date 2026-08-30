@@ -66,24 +66,24 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Online POS - No Signup, No Login | GoOnlinePOS.com</title>
-<meta name="description" content="A free point-of-sale that lives entirely in your browser. No signup, no login. Scan barcodes, split payments, track inventory, manage multiple cashiers, and show customers a live order screen - all free, forever.">
-<meta name="keywords" content="free online pos, no signup pos, no login point of sale, browser pos system, barcode scanner pos, pos inventory tracking, split payment pos, multiple cashiers pos, customer facing display, print receipts online, simple pos app, cash register app, pos data backup">
+<title>Free POS for Small Businesses - No Signup, No Login | GoOnlinePOS.com</title>
+<meta name="description" content="Free POS for small businesses - no signup, no login, no installation. Sell, manage inventory, print receipts, and use free tools like invoicing and VAT calculators, all in your browser.">
+<meta name="keywords" content="free pos for small business, free online pos, browser-based pos, pos without signup, pos without login, offline pos, small business pos, online pos, barcode scanner pos, pos inventory tracking, split payment pos, multiple cashiers pos, print receipts online, pos data backup">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://goonlinepos.com/">
 <meta name="theme-color" content="#16211d">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://goonlinepos.com/">
-<meta property="og:title" content="Free Online POS - Barcode Scanning, Inventory, No Signup">
-<meta property="og:description" content="Scan barcodes, track inventory, split payments, and run multiple cashiers - free, right in your browser. No account, no install.">
+<meta property="og:title" content="Free POS for Small Businesses - No Signup, No Login">
+<meta property="og:description" content="No signup, no login, no installation. Sell, manage inventory, and print receipts free, right in your browser - plus free tools like invoicing and VAT calculators.">
 <meta property="og:site_name" content="Go Online POS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://goonlinepos.com/">
-<meta name="twitter:title" content="Free Online POS - Barcode Scanning, Inventory, No Signup">
-<meta name="twitter:description" content="Scan barcodes, track inventory, split payments, and run multiple cashiers - free, right in your browser. No account, no install.">
+<meta name="twitter:title" content="Free POS for Small Businesses - No Signup, No Login">
+<meta name="twitter:description" content="No signup, no login, no installation. Sell, manage inventory, and print receipts free, right in your browser - plus free tools like invoicing and VAT calculators.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
 <link rel="shortcut icon" href="favicon.ico">
@@ -146,6 +146,7 @@ img { max-width: 100%; display: block; }
 .hero h2 { font-family: var(--font-display); font-weight: 700; font-size: 42px; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 16px; }
 .hero p { font-size: 16.5px; color: var(--ink-soft); max-width: 560px; margin: 0 auto 28px; line-height: 1.6; }
 .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.trust-bar { font-size: 13px; font-weight: 700; color: var(--accent-dark); margin: 22px 0 0; }
 .btn-primary { font-size: 15px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 14px 26px; border-radius: var(--radius-sm); box-shadow: var(--shadow); }
 .btn-primary:hover { background: var(--accent-dark); }
 .btn-secondary { font-size: 15px; font-weight: 700; color: var(--ink); text-decoration: none; background: #fff; border: 1px solid var(--line); padding: 14px 26px; border-radius: var(--radius-sm); }
@@ -162,6 +163,10 @@ img { max-width: 100%; display: block; }
 .audience-list span { display: block; font-size: 24px; margin-bottom: 10px; }
 .audience-list strong { display: block; font-family: var(--font-display); font-size: 14px; color: var(--ink); margin-bottom: 7px; }
 .audience-list p { font-size: 13px; line-height: 1.55; margin: 0; color: var(--ink-soft); }
+.privacy-note { max-width: 640px; margin: 0 auto; text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; }
+.privacy-note h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; margin: 0 0 8px; }
+.privacy-note p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 8px; }
+.privacy-note-reminder { color: var(--muted); font-size: 12.5px; margin: 0; }
 
 .preview-wrap { position: relative; max-width: 820px; margin: 28px auto 22px; }
 .browser-frame { border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-lg); overflow: hidden; background: var(--panel); }
@@ -230,21 +235,20 @@ img { max-width: 100%; display: block; }
 .step-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 15.5px; margin: 0 0 8px; }
 .step-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
 
-.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .feature-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
 .feature-card .fc-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
 .feature-card .fc-icon svg { width: 20px; height: 20px; }
 .feature-card:nth-child(even) .fc-icon { background: var(--gold-tint); color: #8a6417; }
 .feature-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; margin: 0 0 6px; }
 .feature-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
-.tool-spotlight { display: flex; align-items: center; gap: 20px; background: var(--accent-tint); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 28px; margin-top: 14px; }
-.tool-spotlight .fc-icon { width: 46px; height: 46px; border-radius: 12px; background: #fff; color: var(--accent-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 0; }
-.tool-spotlight .fc-icon svg { width: 24px; height: 24px; }
-.tool-spotlight-body { flex: 1; min-width: 0; }
-.tool-spotlight-body h3 { font-family: var(--font-display); font-weight: 600; font-size: 16.5px; margin: 0 0 6px; }
-.tool-spotlight-body p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
-.tool-spotlight .btn-spotlight { flex-shrink: 0; font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 11px 20px; border-radius: var(--radius-sm); white-space: nowrap; }
-.tool-spotlight .btn-spotlight:hover { background: #0d3a28; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tool-card { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; text-decoration: none; color: inherit; transition: border-color .15s ease, box-shadow .15s ease; }
+.tool-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.tool-card .fc-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.tool-card .fc-icon svg { width: 20px; height: 20px; }
+.tool-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; margin: 0 0 6px; }
+.tool-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
 
 .faq { max-width: 720px; margin: 0 auto; }
 .faq details { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 10px; }
@@ -259,6 +263,7 @@ img { max-width: 100%; display: block; }
 .cta-band p { color: #b7c0ba; font-size: 14.5px; margin: 0 0 24px; }
 .cta-band .btn-primary { background: var(--gold); color: var(--ink); }
 .cta-band .btn-primary:hover { background: #cf9631; }
+.cta-band p.cta-band-note { color: #8a9690; font-size: 12.5px; margin: 18px 0 0; }
 
 .social-section { text-align: center; padding: 30px 12px 6px; }
 .social-heading { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
@@ -274,16 +279,14 @@ img { max-width: 100%; display: block; }
 @media (max-width: 860px) {
   .steps { grid-template-columns: repeat(2, 1fr); }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
   .hero h2 { font-size: 32px; }
   .app-preview { grid-template-columns: 1fr; }
-}
-@media (max-width: 700px) {
-  .tool-spotlight { flex-direction: column; align-items: flex-start; text-align: left; padding: 20px; }
-  .tool-spotlight .btn-spotlight { align-self: stretch; text-align: center; }
 }
 @media (max-width: 560px) {
   .steps { grid-template-columns: 1fr; }
   .feature-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
 }
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
 .cookie-consent.hidden { display: none !important; }
@@ -355,13 +358,14 @@ img { max-width: 100%; display: block; }
 
 <section class="hero">
 <span class="eyebrow">Free · No signup · No login</span>
-<h2>Ring up sales from any browser</h2>
-<p>Free to Start. No Signup. No Installation. Sell Online or Offline.
+<h2>Free POS for Small Businesses</h2>
+<p>Open your browser and start selling with a simple POS built for small businesses.
 </p>
 <div class="actions">
-<a class="btn-primary" href="app">Open the app</a>
-<a class="btn-secondary" href="#how-it-works">See how it works</a>
+<a class="btn-primary" href="app">Open POS — Free</a>
+<a class="btn-secondary" href="#free-tools">Explore Free Tools</a>
 </div>
+<p class="trust-bar">Free · No Signup · No Installation · Browser-Based · Offline Capable</p>
 </section>
 
 <div class="preview-wrap">
@@ -471,6 +475,11 @@ img { max-width: 100%; display: block; }
 <p>Add items one by one, or upload a CSV with names, prices, categories, and stock levels in Settings → Products to load your whole catalog at once.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+<h3>Search & filter products</h3>
+<p>Find items instantly with live search, or tap a category chip to filter your catalog down to what you need.</p>
+</div>
+<div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 21V12h6v9"></path></svg></div>
 <h3>Your logo & store details</h3>
 <p>Upload your own logo and store info in Settings → Store - it prints at the top of every receipt.</p>
@@ -506,6 +515,11 @@ img { max-width: 100%; display: block; }
 <p>Set a tax name and rate in Settings → Tax. Discounts are applied per sale at checkout, as a percent or a flat amount - totals recalculate automatically either way.</p>
 </div>
 <div class="feature-card">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v2m0 8v2M9.5 9a2.5 2.5 0 0 1 2.5-1.5 2.5 2.5 0 0 1 0 5h-1a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 2.5-1.5"></path></svg></div>
+<h3>Multiple currencies</h3>
+<p>Set your currency code and symbol in Settings → Currency, and choose how many decimal places to show.</p>
+</div>
+<div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"></path></svg></div>
 <h3>Six languages</h3>
 <p>Switch the whole interface - English, Arabic, Filipino, Hindi, Spanish, or Thai - from Settings → Language.</p>
@@ -530,24 +544,38 @@ img { max-width: 100%; display: block; }
 <h3>Offline Mode POS</h3>
 <p>Use your POS even without an internet connection. Keep recording sales and managing your products anytime, anywhere.</p>
 </div>
-<div class="feature-card">
-<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>
-<h3>Create invoices</h3>
-<p>Need a formal invoice for a customer? Open the free Invoice Generator from the header for net-terms billing - a separate tool from the POS cart, so it never touches an in-progress sale.</p>
 </div>
-<div class="feature-card">
+</section>
+
+<section class="section" id="free-tools">
+<h2 class="section-title">More Free Tools for Your Business</h2>
+<p class="section-sub">Useful tools that work alongside your everyday selling tasks.</p>
+<div class="tools-grid">
+<a class="tool-card" href="receipt-generator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h16v20l-3-2-3 2-3-2-3 2-3-2-1 1z"></path><line x1="8" y1="7" x2="16" y2="7"></line><line x1="8" y1="11" x2="16" y2="11"></line></svg></div>
-<h3>Create receipts</h3>
-<p>Just need a quick payment receipt, no cart required? Open the free Receipt Generator from the header - itemized, with a payment split and Amount in Words.</p>
-</div>
-</div>
-<div class="tool-spotlight">
+<h3>Receipt Generator</h3>
+<p>Create and print professional receipts, no cart required.</p>
+</a>
+<a class="tool-card" href="invoice-generator">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>
+<h3>Invoice Generator</h3>
+<p>Create invoices quickly, without complicated software.</p>
+</a>
+<a class="tool-card" href="pricing-calculator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-<div class="tool-spotlight-body">
-<h3>Price your products right</h3>
-<p>Not sure what to charge? The free Pricing Calculator turns a cost into a selling price by target margin or markup - and shows both, since confusing the two is the easiest way to quietly underprice. Works straight from a batch or recipe cost too.</p>
-</div>
-<a class="btn-spotlight" href="pricing-calculator">Try the Free Pricing Calculator →</a>
+<h3>Pricing Calculator</h3>
+<p>Work out costs, markup, margin, and the right selling price.</p>
+</a>
+<a class="tool-card" href="vat-calculator">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
+<h3>VAT Calculator</h3>
+<p>Calculate VAT quickly and accurately, either direction.</p>
+</a>
+<a class="tool-card" href="barcode-generator">
+<div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="7" y2="16"></line><line x1="10" y1="8" x2="10" y2="16"></line><line x1="14" y1="8" x2="14" y2="16"></line><line x1="17" y1="8" x2="17" y2="16"></line></svg></div>
+<h3>Barcode &amp; QR Generator</h3>
+<p>Create barcodes and QR codes for your products and labels.</p>
+</a>
 </div>
 </section>
 
@@ -626,9 +654,27 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
 </section>
 
 <section class="section">
+<div class="privacy-note">
+<h3>Your Data, Your Device</h3>
+<p>Your POS data is stored locally in your browser. No account or cloud database is required for basic use.</p>
+<p class="privacy-note-reminder">Back up your data regularly - clearing your browser or site data may remove locally stored information.</p>
+</div>
+</section>
+
+<section class="section">
   <h2 class="section-title">Common questions</h2>
 
   <div class="faq">
+
+    <details>
+      <summary>Is it really free?</summary>
+      <p>Yes. You can use the basic GoOnlinePOS for free with no subscription required. Premium features are currently available for free as part of a limited promotion and may require a Premium code in the future. The basic POS will remain available to use for free.</p>
+    </details>
+
+    <details>
+      <summary>Do I need to create an account?</summary>
+      <p>No. GoOnlinePOS works with no signup and no login. Just open the app in your browser and start selling.</p>
+    </details>
 
     <details>
       <summary>Can I use the POS without internet?</summary>
@@ -643,6 +689,11 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
     <details>
       <summary>Can I backup and restore my data?</summary>
       <p>Yes. Go to <strong>Settings → Backup</strong> to download a complete backup of your POS data. You can restore the backup later to recover the data contained in that backup.</p>
+    </details>
+
+    <details>
+      <summary>Can I export my sales?</summary>
+      <p>Yes. Export a two-tab Excel report of your sales and inventory anytime from <strong>Settings → Sales History</strong>.</p>
     </details>
 
     <details>
@@ -671,11 +722,6 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
     </details>
 
     <details>
-      <summary>Is it really free?</summary>
-      <p>Yes. You can use the basic GoOnlinePOS for free with no subscription required. Premium features are currently available for free as part of a limited promotion and may require a Premium code in the future. The basic POS will remain available to use for free.</p>
-    </details>
-
-    <details>
       <summary>Is Premium a subscription?</summary>
       <p>No. Premium is not a subscription. A Premium code unlocks the Premium features for a lifetime on your device. There are no recurring monthly or yearly payments.</p>
     </details>
@@ -689,9 +735,10 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
 </section>
 <section class="section">
 <div class="cta-band">
-<h2>Ready to ring up your first sale?</h2>
-<p>No signup. No login. Just open the app.</p>
-<a class="btn-primary" href="app">Open the app</a>
+<h2>Ready to Start Selling?</h2>
+<p>Open GoOnlinePOS and try it without creating an account.</p>
+<a class="btn-primary" href="app">Open POS — Free</a>
+<p class="cta-band-note">No signup. No login. No installation.</p>
 </div>
 </section>
 
