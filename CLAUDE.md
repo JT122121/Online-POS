@@ -1509,18 +1509,46 @@ nav & footer" above) the same way Invoice/Receipt were added.
   and scales `#codeCanvas`'s CSS `width`/`height` (not its underlying
   pixel buffer) to fit whatever room is left once the optional top/value
   text rows are accounted for, preserving the raster's aspect ratio.
-  The barcode raster itself is rendered at a bar height of
-  `clamp(50, heightMm * 4, 160)` px and a fixed 2px module width -
-  deliberately capped rather than scaled all the way up with label
-  height, since an early version scaled bar height too aggressively
-  (`heightMm * 8`) and, combined with the box's original `6mm` CSS
-  padding, made even a short 15-character CODE128 value falsely trip
-  the "too dense to scan" warning on the default 2x1in label; both the
-  padding (now `2.5mm`) and the height multiplier were tuned down after
-  visually confirming the false warning with Playwright screenshots.
-  If the final fit scale still comes out under `0.35`, `#sizeHint`
-  shows a genuine "try a larger size or a shorter value" warning
-  instead of the normal "Label size: W x H mm" caption.
+- **Source raster resolution is a fixed `RENDER_PX_PER_MM` (12, ≈300 DPI)**,
+  and both renderers target it directly rather than a small fixed size
+  that then gets *upscaled* by `fitCanvasInBox()` to fill a bigger label -
+  the first shipped version rendered barcodes at a flat 2px module width/
+  small bar height and QR at a flat 10px/module regardless of the chosen
+  label size, so anything bigger than a small label was stretching a
+  low-res source image, and a site owner reported both barcode and QR
+  scans failing as a result. QR now computes `pxPerModule` straight from
+  the chosen label width (`RENDER_PX_PER_MM * widthMm / (moduleCount +
+  quietZone*2)`), so the raster is generated already close to its true
+  printed size instead of being resized into it. Barcode can't do that
+  precisely up front (JsBarcode decides the raster width itself, from
+  module count × module width, and module count isn't known until
+  content length is known), so it renders at a constant, resolution-
+  matched module width/bar height instead (`RENDER_PX_PER_MM * 0.4` and
+  `heightMm * RENDER_PX_PER_MM * 0.6`) and lets `fitCanvasInBox()` only
+  ever scale *down* for the common case.
+- **The "too dense to scan" hint under `#sizeHint` is computed from real
+  physical geometry, not from the on-screen fit scale** - `fitScale`
+  conflates two unrelated things (the ~96 DPI screen vs. the ~300 DPI
+  source raster, and genuine content density) and using it directly for
+  the warning meant the warning would fire on essentially *every*
+  render once the raster resolution above was fixed, screen-DPI mismatch
+  alone was enough to trip it. `updateSizeHint()` instead computes the
+  real final printed module width in millimeters - exactly, for QR
+  (`labelWidthMm / (moduleCount + quietZone*2)`, matching how the raster
+  was generated), and approximately for barcode (`moduleWidthPx *
+  labelWidthMm / codeCanvas.width`, assuming the common width-bound fit
+  case) - and only warns below `0.25mm`, a realistic minimum module width
+  for reliable scanning. Verified by actually decoding generated codes
+  with `pyzbar`/`zbar` (installed into the sandbox for this one check,
+  not a repo dependency): a 12-digit EAN-13 and a 45-character CODE128
+  value both render on a 1.5x1in label, the EAN-13 decodes correctly and
+  shows the plain "Label size" caption, while the 45-character value
+  correctly fails to decode *and* correctly shows the density warning
+  (530+ modules doesn't fit legibly even on the largest 4x6in preset at
+  a safe module width) - confirming the warning threshold means what it
+  says rather than being either a false alarm or silent about a real
+  problem. A plain QR, one with a center-text overlay, and one with a
+  center overlay at the largest QR preset all decoded correctly too.
 - **QR center content** (`#enableCenterContent`, QR-only) lets the user
   add either an uploaded image or up to 4 characters of text into the
   middle of the code, via the same small Image/Text `.type-tabs.small`

@@ -529,6 +529,12 @@ img { max-width: 100%; display: block; }
     pharmacode: "Accepts a single number from 3 to 131070."
   };
 
+  // Source raster resolution, in pixels per physical millimeter (~300 DPI).
+  // Both renderers target this so the canvas is generated close to its
+  // final printed/on-screen size rather than being upscaled later, which
+  // is what was making printed codes look soft and hard to scan.
+  var RENDER_PX_PER_MM = 12;
+
   var typeTabBarcode = document.getElementById("tabBarcode");
   var typeTabQr = document.getElementById("tabQr");
   var barcodeTypeRow = document.getElementById("barcodeTypeRow");
@@ -570,6 +576,7 @@ img { max-width: 100%; display: block; }
   var currentCodeId = null;
   var centerImageDataUrl = "";
   var saveTimer = null;
+  var lastFinalModuleMm = null;
 
   function makeId() {
     return "code_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
@@ -626,7 +633,6 @@ img { max-width: 100%; display: block; }
     previewBox.style.width = size.w + "mm";
     previewBox.style.height = size.h + "mm";
     ensureDynamicPageSizeTag().textContent = "@page { size: " + size.w + "mm " + size.h + "mm; margin: 0; }";
-    sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
   }
 
   function updateTypeUI() {
@@ -750,12 +756,13 @@ img { max-width: 100%; display: block; }
 
   function renderBarcodeToCanvas(value) {
     var size = currentSizeMm();
-    var barHeightPx = Math.max(50, Math.min(160, Math.round(size.h * 4)));
+    var barHeightPx = Math.max(120, Math.round(size.h * RENDER_PX_PER_MM * 0.6));
+    var moduleWidthPx = Math.max(3, Math.round(RENDER_PX_PER_MM * 0.4));
     try {
       window.JsBarcode(codeCanvas, value || " ", {
         format: barcodeFormatSelect.value,
         displayValue: false,
-        width: 2,
+        width: moduleWidthPx,
         height: barHeightPx,
         margin: 10,
         background: "#ffffff",
@@ -773,6 +780,7 @@ img { max-width: 100%; display: block; }
           }
         }
       });
+      lastFinalModuleMm = moduleWidthPx * (size.w / codeCanvas.width);
     } catch (e) {
       codeValueHint.textContent = "This value isn't valid for " + barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0] + ". " + (BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "");
       codeValueHint.className = "field-hint error";
@@ -781,6 +789,7 @@ img { max-width: 100%; display: block; }
       ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 300, 100);
       ctx.fillStyle = "#b3261e"; ctx.font = "13px Arial"; ctx.textAlign = "center";
       ctx.fillText("Enter a valid value", 150, 54);
+      lastFinalModuleMm = null;
     }
   }
 
@@ -805,13 +814,16 @@ img { max-width: 100%; display: block; }
         var ctx0 = codeCanvas.getContext("2d");
         codeCanvas.width = 200; codeCanvas.height = 200;
         ctx0.fillStyle = "#fff"; ctx0.fillRect(0, 0, 200, 200);
+        lastFinalModuleMm = null;
         return;
       }
     }
     var moduleCount = qr.getModuleCount();
-    var pxPerModule = 10;
     var quietZone = 4;
+    var size = currentSizeMm();
+    var pxPerModule = Math.max(8, Math.round(RENDER_PX_PER_MM * size.w / (moduleCount + quietZone * 2)));
     var total = (moduleCount + quietZone * 2) * pxPerModule;
+    lastFinalModuleMm = size.w / (moduleCount + quietZone * 2);
     codeCanvas.width = total;
     codeCanvas.height = total;
     var ctx = codeCanvas.getContext("2d");
@@ -867,12 +879,21 @@ img { max-width: 100%; display: block; }
     var dispH = Math.max(1, Math.round(nativeH * scale));
     codeCanvas.style.width = dispW + "px";
     codeCanvas.style.height = dispH + "px";
+  }
 
-    if (scale < 0.35) {
+  // The on-screen CSS scale computed in fitCanvasInBox() only reflects the
+  // mismatch between screen DPI (~96) and the ~300 DPI source raster - it
+  // says nothing about whether the code will actually be dense once
+  // printed at its real physical size. This instead works out the real
+  // printed module width in millimeters (moduleWidthPx scaled down to the
+  // chosen label's physical width) and warns only when that's genuinely
+  // too fine to scan reliably.
+  function updateSizeHint(finalModuleMm) {
+    var size = currentSizeMm();
+    if (finalModuleMm != null && finalModuleMm < 0.25) {
       sizeHint.textContent = "⚠ This is quite dense for the selected label size - try a larger size or a shorter value for reliable scanning.";
       sizeHint.className = "preview-hint no-print warn";
     } else {
-      var size = currentSizeMm();
       sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
       sizeHint.className = "preview-hint no-print";
     }
@@ -897,11 +918,12 @@ img { max-width: 100%; display: block; }
       renderQrToCanvas(value);
     }
     fitCanvasInBox();
+    updateSizeHint(value ? lastFinalModuleMm : null);
   }
 
   function buildExportCanvas() {
     var size = currentSizeMm();
-    var pxPerMm = 12;
+    var pxPerMm = RENDER_PX_PER_MM;
     var W = Math.round(size.w * pxPerMm);
     var H = Math.round(size.h * pxPerMm);
     var out = document.createElement("canvas");
