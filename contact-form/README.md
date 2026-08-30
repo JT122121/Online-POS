@@ -57,7 +57,7 @@ means there's nothing to set up (no sheet, no tab names to get right) and
 nothing left behind afterward - a verified inquiry is emailed out and the
 cache entry is deleted in the same step; an abandoned one (someone requests
 a code and never enters it) simply expires on its own after
-`OTP_TTL_SECONDS` (10 minutes) with nothing to clean up manually. This is a
+`OTP_TTL_SECONDS` (1 minute) with nothing to clean up manually. This is a
 deliberate difference from `premium-validation/AppsScript.gs`, which *does*
 need a spreadsheet since Premium seat records have to persist indefinitely
 - there's nothing here that needs to survive longer than one contact-form
@@ -65,13 +65,16 @@ submission.
 
 **Constants at the top of `AppsScript.gs`, all safe to tune:**
 
-- `OTP_TTL_SECONDS` (600 = 10 minutes) - how long a code stays valid.
+- `OTP_TTL_SECONDS` (60 = 1 minute) - how long a code stays valid. Set to
+  match `RESEND_COOLDOWN_SECONDS` deliberately - a code lasts exactly as
+  long as the wait before "Resend code" unlocks, so a visitor is never
+  stuck holding an expired code with no way to request a fresh one yet.
 - `RESEND_COOLDOWN_SECONDS` (60) - minimum gap between two OTP requests
   for the same email address, so "Resend code" can't be hammered.
 - `MAX_VERIFY_ATTEMPTS` (5) - wrong-code guesses allowed before the code
   is invalidated outright and a fresh one has to be requested. Guessing
   wrong doesn't extend the code's lifetime either - it always expires at
-  its original 10-minute mark regardless of how many attempts were made
+  its original 1-minute mark regardless of how many attempts were made
   against it.
 
 **Why `contact.html` calls this with GET, not POST:** the exact same
