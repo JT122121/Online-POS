@@ -377,8 +377,37 @@ all of them under one pattern:
   feature-grid card), and "Will it work with my printer?" (merged into
   "Can I print receipts?", which now also covers Auto paper size vs.
   choosing an exact size in Settings → Paper & Zoom).
-
-## `app.html` — architecture
+- **The Hero's `.app-preview` mock (the fake screenshot of the POS)
+  lives inside a `.browser-frame` desktop-browser chrome mockup** -
+  three traffic-light `.browser-dot`s plus a pill `.browser-url` bar
+  reading "🔒 goonlinepos.com/app" (a lock SVG plus the text, not a
+  real browser feature, just a static visual to read as a genuine
+  desktop tab) - rather than sitting as a bare card straight on the
+  page background like before. Two small rotated `.preview-badge`
+  pills float at the frame's top-left and bottom-right corners ("⚡ No
+  installs, opens instantly" / "🔒 Runs 100% in your browser") for a
+  catchier, more typical modern-SaaS-landing-page look; both are
+  `position: absolute` with small positive corner offsets (`top: -16px;
+  left: 28px` / `bottom: -16px; right: 28px`), deliberately **not**
+  negative-into-the-margin offsets - an earlier attempt positioned them
+  further outside the card (`left: -22px` etc.) which read fine on very
+  wide viewports but overlapped straight on top of the toolbar content
+  on narrower ones, so it was corrected to sit just inside/at the
+  frame's own corners instead. Both badges are hidden below `900px`
+  (`@media (max-width: 900px) { .preview-badge { display: none; } }`)
+  since there's no room for them once `.app-preview` collapses to a
+  single column. **The mock's toolbar was also brought back in sync
+  with `app.html`'s real, already-trimmed toolbar** (see
+  "`app.html` — architecture" below) - it had drifted stale, still
+  showing Premium/Summary/Print/Inventory icons and a toolbar "+ New
+  Sale" pill that don't exist in the real app anymore. It now shows,
+  in the real app's exact order: a "☰ Hide Toolbar" chip, the Cashier
+  select, then icon buttons for How To Use (❓), Settings (⚙), End of
+  Day (📅), Customer Screen (📺), and Backup (💾) - and "+ New Sale"
+  moved out of the toolbar row entirely into the product panel itself,
+  as a full-width `.ap-new-sale-btn` directly under the Barcode Scanner
+  toggle and above the search box, mirroring exactly where
+  `#newSaleButton` actually lives in `#catalogView`.
 
 Client-only, no server. All persistence is local to the browser. The one
 exception is Premium code activation, which calls out to a Google Apps
