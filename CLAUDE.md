@@ -1448,9 +1448,12 @@ A free-standing barcode and QR code generator, `invoice.html`/
 `receipt.html`'s third sibling free tool, built by mirroring their
 exact architecture (own `--ink`/`--accent`/`--gold` design tokens
 copied verbatim, own cookie-consent banner, own autosave-draft +
-explicit Save/Saved-list pattern, `window.print()` + a dynamically
-rewritten `@page` rule for physical-size-accurate printing, an
-"info-section" How-to + FAQ block). **Now fully connected**, the same
+explicit Save/Saved-list pattern, an "info-section" How-to + FAQ
+block). **There is no Print/PDF output** - a `window.print()` action
+plus a dynamically rewritten `@page` rule existed early on but was
+removed at the site owner's explicit request; see the "chosen size
+drives the on-screen preview" bullet below for the full removal and
+what replaced it. **Now fully connected**, the same
 way Invoice/Receipt already were: `<meta name="robots">` is
 `index, follow`, it has a `sitemap.xml` entry, it's one of the five
 `SiteNavigationElement` entries in `index.html`'s own JSON-LD (see
@@ -1485,26 +1488,30 @@ just no longer via an unlinked page.
   millimeters throughout, matching `app.html`'s own Paper & Zoom
   convention (58mm/80mm/A4/A5/custom, never inches) rather than
   introducing a new unit to the codebase.
-- **The chosen size drives both the on-screen preview and the printed
-  output identically** - `#previewBox`'s CSS `width`/`height` are set
-  directly in `mm` (a real physical CSS unit, same trick `.receipt`'s
-  fixed `80mm` width in `app.html` already relies on), and
-  `applyBoxSize()` simultaneously rewrites a `<style id="dynamicPageSize">`
-  tag's `@page { size: <w>mm <h>mm; margin: 0; }` rule - the exact same
+- **The chosen size drives the on-screen preview directly** -
+  `#previewBox`'s CSS `width`/`height` are set directly in `mm` (a real
+  physical CSS unit, same trick `.receipt`'s fixed `80mm` width in
+  `app.html` already relies on) via `applyBoxSize()`. **There is no
+  Print option** - an earlier version had one (a "🖨 Print / Save as
+  PDF" action-bar button, a `@page { size: <w>mm <h>mm; margin: 0; }`
+  rule kept in sync with the chosen size via a `<style
+  id="dynamicPageSize">` tag rewritten from `applyBoxSize()` - the same
   "dynamic page-size style tag" pattern `end-of-day.html`'s
-  `applyPaperSize()` already uses for its 80mm-thermal-vs-A4 choice
-  (see that page's own section above), just parameterized to an
-  arbitrary width/height instead of two fixed presets. This same
-  `@page { margin: 0 }` is also what keeps the browser's own print
-  header/footer (page title, URL, date, page number) off the printed
-  label - confirmed by generating PDFs of both `barcode.html` and
-  `invoice.html` with the header/footer explicitly forced on: **both**
-  pages render that browser chrome identically when forced, since
-  forcing it bypasses the margin-starves-it trick entirely - meaning
-  there's no real difference between the two pages here, `barcode.html`
-  already matches `invoice.html`'s print behavior exactly. A real
-  browser's native print dialog (not a forced PDF export) respects the
-  zero margin and squeezes that chrome away on both pages the same way.
+  `applyPaperSize()` uses for its own 80mm-thermal-vs-A4 choice - and a
+  full `@media print` block hiding everything but `#previewBox`), but it
+  was removed outright at the site owner's explicit request, along with
+  every supporting piece: the button, its CSS rule, the `@page`/`@media
+  print` block, the `dynamicPageSizeTag`/`ensureDynamicPageSizeTag()`
+  mechanism, the `.no-print` class from every element that carried it
+  (it had nothing left to gate once the print stylesheet was gone), and
+  every piece of copy that mentioned printing (meta description, OG/
+  Twitter descriptions, the masthead paragraph, the "How to create"
+  steps, two FAQ entries). **Download PNG and Save are now the only two
+  ways to take a code out of the browser.** Since Border (below) used to
+  rely entirely on the print stylesheet to ever show up anywhere real,
+  removing print without also fixing Border would have left it a
+  purely decorative, functionally pointless on-screen-only toggle - see
+  the Border bullet below for how that was addressed in the same pass.
 - **Barcode rendering** uses the self-hosted `vendor/jsbarcode.min.js`
   (see "`vendor/` — self-hosted third-party libraries" below) via
   `JsBarcode(canvas, value, options)`, format chosen from a curated
@@ -1552,7 +1559,7 @@ just no longer via an unlinked page.
   scans failing as a result. QR now computes `pxPerModule` straight from
   the chosen label width (`RENDER_PX_PER_MM * widthMm / (moduleCount +
   quietZone*2)`), so the raster is generated already close to its true
-  printed size instead of being resized into it. Barcode can't do that
+  final size instead of being resized into it. Barcode can't do that
   precisely up front (JsBarcode decides the raster width itself, from
   module count × module width, and module count isn't known until
   content length is known), so it renders at a constant, resolution-
@@ -1566,7 +1573,7 @@ just no longer via an unlinked page.
   the warning meant the warning would fire on essentially *every*
   render once the raster resolution above was fixed, screen-DPI mismatch
   alone was enough to trip it. `updateSizeHint()` instead computes the
-  real final printed module width in millimeters - exactly, for QR
+  real final module width in millimeters - exactly, for QR
   (`labelWidthMm / (moduleCount + quietZone*2)`, matching how the raster
   was generated), and approximately for barcode (`moduleWidthPx *
   labelWidthMm / codeCanvas.width`, assuming the common width-bound fit
@@ -1599,19 +1606,36 @@ just no longer via an unlinked page.
   `.logo-preview`/`.remove-logo-btn`/`.type-tabs.small` CSS are gone
   entirely rather than left disabled.
 - **Border** (`#borderStyle`, shared by both Barcode and QR) applies a
-  line style around `#previewBox` - None, Solid Strong (3px), Solid
-  Medium (1.5px), Dashed, or Dotted - via `applyBorderStyle()` setting
-  `previewBox.style.border` directly from a `BORDER_STYLES` map. This
-  is deliberately a plain inline style rather than a CSS class swap:
-  an inline style always wins over the base `.preview-box` rule's own
-  `border: 1px solid var(--line-soft)` (the subtle on-screen framing
-  default, used whenever `borderStyle` is `"none"`) *and* over the
-  print stylesheet's `.preview-box { border: none; ... }` reset, with
-  no `!important` needed on either side - so a chosen border shows up
-  identically on screen and on the printed label, while `"none"` still
-  correctly prints border-free. The border is screen/print-only, not
-  baked into the canvas raster - `buildExportCanvas()` composites only
-  from `#codeCanvas`, so "Download PNG" never includes it.
+  line style around `#previewBox` - None, Solid Strong, Solid Medium,
+  Dashed, or Dotted - via `applyBorderStyle()` setting
+  `previewBox.style.border` directly from a `BORDER_STYLES` map (a
+  plain inline style, so it always wins over the base `.preview-box`
+  rule's own `border: 1px solid var(--line-soft)` on-screen framing
+  default with no `!important` needed). **Also baked into the
+  downloaded PNG**, via a second, physical-units map,
+  `BORDER_EXPORT` (`{ widthMm, dash }` per style, `dash` as a
+  millimeter-based on/off pattern for `ctx.setLineDash()`) - added in
+  the same pass that removed Print (above): with print gone, Download
+  PNG became the only remaining way to take a border out of the
+  browser at all, so `buildExportCanvas()` now `ctx.strokeRect()`s the
+  chosen border around the composited image, after the code/text are
+  drawn, scaled by the same `pxPerMm` the rest of the export uses.
+  Before this, the border was screen-only decoration with no real
+  output; leaving it that way once Print was removed would have made
+  the whole control pointless. **Solid Strong's export width was
+  deliberately tuned down from an initial `0.8mm` to `0.5mm`** after
+  `pyzbar`/zbar decode testing (same methodology as the raster-
+  resolution fix documented above) caught a real regression: a CODE128
+  barcode downloaded with the strong border looked visually correct
+  (a clean white quiet-zone gap between the border and the bars) but
+  **failed to decode** - a thick solid black frame evidently confuses
+  zbar's global thresholding/scanline algorithm even with adequate
+  clearance from the bars themselves. QR with the identical border
+  style decoded fine, so this was specific to barcode's greater
+  sensitivity to a heavy near-field frame. Verified by generating and
+  decoding all 5 border styles x both code types (10 combinations) -
+  all 10 decode correctly at the current widths (`solid-strong: 0.5mm`,
+  `solid-medium: 0.4mm`, `dashed: 0.5mm`, `dotted: 0.6mm`).
 - **Save/Saved Codes** follows the exact same explicit-save-plus-list
   pattern as `invoice.html`/`receipt.html`'s own Save/Saved
   Invoices/Receipts: "💾 Save" pushes the current form into a
@@ -1628,14 +1652,15 @@ just no longer via an unlinked page.
   instead of duplicating it - only "Clear / New" resets it to `null`.
   The current in-progress code also autosaves to
   `goonlinepos-barcode-draft` exactly like the other two tools.
-- **"⬇ Download PNG"** is a bonus fourth action beyond the required
-  Save/Print - `buildExportCanvas()` composites a fresh, higher-
-  resolution (`12px/mm`) canvas from scratch (white background, the
-  top text and value text drawn as real canvas text, then the live
-  `#codeCanvas` raster scaled/centered into the remaining space) so the
-  downloaded image matches what the on-screen/printed label actually
-  shows, rather than just exporting the bare code without its
-  surrounding text.
+- **"⬇ Download PNG"** is, alongside Save, one of only two ways to take
+  a code out of the browser now that Print is gone (see above) -
+  `buildExportCanvas()` composites a fresh, higher-resolution
+  (`12px/mm`) canvas from scratch (white background, the top text and
+  value text drawn as real canvas text, the live `#codeCanvas` raster
+  scaled/centered into the remaining space, then the chosen border
+  stroked on top - see the Border bullet above) so the downloaded image
+  matches what the on-screen label actually shows, rather than just
+  exporting the bare code without its surrounding text or border.
 - **Sourcing the vendored libraries**: both `jsbarcode` (3.12.3, MIT)
   and `qrcode-generator` (2.0.4, MIT) were pulled directly from
   `registry.npmjs.org` (reachable in this sandbox even when most of the

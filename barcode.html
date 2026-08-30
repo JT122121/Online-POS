@@ -70,14 +70,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Create Barcode / QR Code - Free Barcode &amp; QR Code Generator | GoOnlinePOS.com</title>
-<meta name="description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, add optional text above or below, and add a logo or short text to the center of a QR code. Save, download, or print - no signup required.">
+<meta name="description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, add optional text above or below, and add short text to the center of a QR code. Save or download - no signup required.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://goonlinepos.com/barcode">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://goonlinepos.com/barcode">
 <meta property="og:title" content="Create Barcode / QR Code | GoOnlinePOS.com">
-<meta property="og:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save, download, or print it.">
+<meta property="og:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save or download it.">
 <meta property="og:site_name" content="Go Online POS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -85,7 +85,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Create Barcode / QR Code | GoOnlinePOS.com">
-<meta name="twitter:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save, download, or print it.">
+<meta name="twitter:description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, then save or download it.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
 
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
@@ -194,8 +194,6 @@ img { max-width: 100%; display: block; }
 
 .action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
 .action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
-#printCodeBtn { background: var(--ink); color: #fff; }
-#printCodeBtn:hover { background: #263832; }
 #saveCodeBtn { background: var(--accent); color: #fff; }
 #saveCodeBtn:hover { background: var(--accent-dark); }
 #downloadCodeBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
@@ -245,18 +243,6 @@ img { max-width: 100%; display: block; }
   .custom-size-row { grid-template-columns: 1fr; }
 }
 
-@page { size: 60mm 40mm; margin: 0; }
-@media print {
-  html, body { background: #fff; }
-  .masthead, .site-header, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
-  .wrap { max-width: none; padding: 0; margin: 0; }
-  .gen-card { box-shadow: none; border: none; padding: 0; margin: 0; }
-  .no-print { display: none !important; }
-  .preview-label { display: none !important; }
-  .preview-box-outer { padding: 0; }
-  .preview-box { border: none; box-shadow: none; padding: 0; width: 100% !important; height: 100vh !important; }
-}
-
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
 .cookie-consent.hidden { display: none !important; }
 .cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
@@ -302,17 +288,17 @@ img { max-width: 100%; display: block; }
 <header class="masthead">
 <div class="kicker">Free Tool</div>
 <h1>Create Barcode / QR Code</h1>
-<p>Generate a barcode or QR code in your browser, choose a standard or custom label size, then print it, download it, or save it for later. No signup, nothing leaves this browser.</p>
+<p>Generate a barcode or QR code in your browser, choose a standard or custom label size, then download it or save it for later. No signup, nothing leaves this browser.</p>
 </header>
 
 <div class="gen-card" id="genCard">
 
-  <div class="type-tabs no-print">
+  <div class="type-tabs">
     <button type="button" class="type-tab active" id="tabBarcode" data-type="barcode">▮▮▮ Barcode</button>
     <button type="button" class="type-tab" id="tabQr" data-type="qr">▦ QR Code</button>
   </div>
 
-  <div class="form-section no-print">
+  <div class="form-section">
 
     <div class="field-row">
       <label class="field-label" for="codeValue" id="codeValueLabel">Barcode Value</label>
@@ -397,7 +383,7 @@ img { max-width: 100%; display: block; }
   </div>
 
   <div class="preview-area">
-    <div class="preview-label no-print">Preview</div>
+    <div class="preview-label">Preview</div>
     <div class="preview-box-outer">
       <div class="preview-box" id="previewBox">
         <div class="preview-top-text hidden" id="previewTopText"></div>
@@ -405,21 +391,20 @@ img { max-width: 100%; display: block; }
         <div class="preview-value-text hidden" id="previewValueText"></div>
       </div>
     </div>
-    <p class="preview-hint no-print" id="sizeHint"></p>
+    <p class="preview-hint" id="sizeHint"></p>
   </div>
 
 </div>
 
-<div class="action-bar no-print">
+<div class="action-bar">
   <button type="button" id="saveCodeBtn">💾 Save</button>
   <button type="button" id="savedCodesBtn">📂 Saved Codes</button>
   <button type="button" id="downloadCodeBtn">⬇ Download PNG</button>
-  <button type="button" id="printCodeBtn">🖨 Print / Save as PDF</button>
   <button type="button" id="clearCodeBtn">🗑 Clear / New</button>
 </div>
-<p class="autosave-note no-print">Your current barcode or QR code is saved automatically in this browser as you type. Click "Save" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.</p>
+<p class="autosave-note">Your current barcode or QR code is saved automatically in this browser as you type. Click "Save" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.</p>
 
-<div class="modal-overlay hidden no-print" id="savedCodesOverlay">
+<div class="modal-overlay hidden" id="savedCodesOverlay">
   <div class="modal-box">
     <div class="modal-header">
       <h3>Saved Codes</h3>
@@ -431,15 +416,15 @@ img { max-width: 100%; display: block; }
 
 <div class="save-toast" id="saveToast">Saved</div>
 
-<div class="info-section no-print">
+<div class="info-section">
   <h2>How to create a barcode or QR code</h2>
   <ol>
     <li>Choose Barcode or QR Code at the top.</li>
     <li>Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
-    <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're printing for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
+    <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're using it for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
     <li>Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.</li>
     <li>For a QR code, you can also add up to 4 characters of text to the center - a high error-correction level is used automatically so it still scans correctly.</li>
-    <li>Click "Save" to keep it in your Saved Codes list, "Download PNG" to save an image file, or "Print / Save as PDF" to print it directly.</li>
+    <li>Click "Save" to keep it in your Saved Codes list, or "Download PNG" to save an image file you can use anywhere.</li>
   </ol>
 
   <h2>Barcode / QR Code FAQ</h2>
@@ -449,19 +434,19 @@ img { max-width: 100%; display: block; }
     <dt>Where can I see my saved codes?</dt>
     <dd>Click "Save" to add the current one to your list, then click "Saved Codes" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
     <dt>Will my barcode scan correctly?</dt>
-    <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid printing the label too small.</dd>
+    <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid making the label too small.</dd>
     <dt>Can I add text to the middle of a QR code?</dt>
     <dd>Yes - turn on "Add text in the center" under QR Code and type up to 4 characters. A high error-correction level keeps the code scannable even with part of the center covered.</dd>
-    <dt>What sizes can I print at?</dt>
-    <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the printed output match exactly.</dd>
+    <dt>What label sizes can I use?</dt>
+    <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the downloaded PNG match exactly.</dd>
     <dt>Can I add a border around the code?</dt>
-    <dd>Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted) so a printed label can have a clean cutting edge if you want one.</dd>
+    <dd>Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted). It shows in the on-screen preview and in the downloaded PNG.</dd>
   </dl>
 </div>
 
 </div>
 
-<footer class="site-footer no-print">
+<footer class="site-footer">
 <a href="contact">Contact</a>
 <span>·</span>
 <a href="privacy">Privacy Policy</a>
@@ -526,8 +511,8 @@ img { max-width: 100%; display: block; }
 
   // Source raster resolution, in pixels per physical millimeter (~300 DPI).
   // Both renderers target this so the canvas is generated close to its
-  // final printed/on-screen size rather than being upscaled later, which
-  // is what was making printed codes look soft and hard to scan.
+  // final on-screen/downloaded size rather than being upscaled later,
+  // which is what was making downloaded codes look soft and hard to scan.
   var RENDER_PX_PER_MM = 12;
 
   var typeTabBarcode = document.getElementById("tabBarcode");
@@ -557,7 +542,6 @@ img { max-width: 100%; display: block; }
   var previewValueText = document.getElementById("previewValueText");
   var codeCanvas = document.getElementById("codeCanvas");
   var sizeHint = document.getElementById("sizeHint");
-  var dynamicPageSizeTag = null;
 
   var BORDER_STYLES = {
     "none": "",
@@ -565,6 +549,19 @@ img { max-width: 100%; display: block; }
     "solid-medium": "1.5px solid #000",
     "dashed": "2px dashed #000",
     "dotted": "2.5px dotted #000"
+  };
+
+  // Physical (mm) equivalents of BORDER_STYLES, used when compositing the
+  // downloaded PNG in buildExportCanvas() - the on-screen border is a CSS
+  // pixel value on #previewBox, which has no printed output to carry it
+  // now that printing is gone, so Download PNG is the only place a chosen
+  // border actually shows up in something the user takes away.
+  var BORDER_EXPORT = {
+    "none": null,
+    "solid-strong": { widthMm: 0.5, dash: [] },
+    "solid-medium": { widthMm: 0.4, dash: [] },
+    "dashed": { widthMm: 0.5, dash: [3, 2] },
+    "dotted": { widthMm: 0.6, dash: [0.6, 1.2] }
   };
 
   var currentType = "barcode";
@@ -613,20 +610,10 @@ img { max-width: 100%; display: block; }
     return { w: found.w, h: found.h };
   }
 
-  function ensureDynamicPageSizeTag() {
-    if (!dynamicPageSizeTag) {
-      dynamicPageSizeTag = document.createElement("style");
-      dynamicPageSizeTag.id = "dynamicPageSize";
-      document.head.appendChild(dynamicPageSizeTag);
-    }
-    return dynamicPageSizeTag;
-  }
-
   function applyBoxSize() {
     var size = currentSizeMm();
     previewBox.style.width = size.w + "mm";
     previewBox.style.height = size.h + "mm";
-    ensureDynamicPageSizeTag().textContent = "@page { size: " + size.w + "mm " + size.h + "mm; margin: 0; }";
   }
 
   function updateTypeUI() {
@@ -818,19 +805,19 @@ img { max-width: 100%; display: block; }
 
   // The on-screen CSS scale computed in fitCanvasInBox() only reflects the
   // mismatch between screen DPI (~96) and the ~300 DPI source raster - it
-  // says nothing about whether the code will actually be dense once
-  // printed at its real physical size. This instead works out the real
-  // printed module width in millimeters (moduleWidthPx scaled down to the
-  // chosen label's physical width) and warns only when that's genuinely
-  // too fine to scan reliably.
+  // says nothing about whether the code will actually be dense once used
+  // at its real physical size. This instead works out the real final
+  // module width in millimeters (moduleWidthPx scaled down to the chosen
+  // label's physical width) and warns only when that's genuinely too fine
+  // to scan reliably.
   function updateSizeHint(finalModuleMm) {
     var size = currentSizeMm();
     if (finalModuleMm != null && finalModuleMm < 0.25) {
       sizeHint.textContent = "⚠ This is quite dense for the selected label size - try a larger size or a shorter value for reliable scanning.";
-      sizeHint.className = "preview-hint no-print warn";
+      sizeHint.className = "preview-hint warn";
     } else {
       sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
-      sizeHint.className = "preview-hint no-print";
+      sizeHint.className = "preview-hint";
     }
   }
 
@@ -896,6 +883,16 @@ img { max-width: 100%; display: block; }
     var dx = (W - dw) / 2;
     var dy = topH + (availH - dh) / 2 + padding / 2;
     ctx.drawImage(codeCanvas, dx, dy, dw, dh);
+
+    var border = BORDER_EXPORT[borderStyleSelect.value];
+    if (border) {
+      var lw = Math.max(1, Math.round(border.widthMm * pxPerMm));
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = lw;
+      ctx.setLineDash(border.dash.map(function(d) { return d * pxPerMm; }));
+      ctx.strokeRect(lw / 2, lw / 2, W - lw, H - lw);
+      ctx.setLineDash([]);
+    }
 
     return out;
   }
@@ -1085,7 +1082,6 @@ img { max-width: 100%; display: block; }
     if (e.target.id === "savedCodesOverlay") closeSavedCodesModal();
   });
   document.getElementById("downloadCodeBtn").addEventListener("click", downloadPng);
-  document.getElementById("printCodeBtn").addEventListener("click", function() { window.print(); });
   document.getElementById("clearCodeBtn").addEventListener("click", function() {
     if (!confirm("Clear this code and start a new one? This can't be undone.")) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
