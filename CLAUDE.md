@@ -313,24 +313,35 @@ all of them under one pattern:
   stale nav/footer) - but for a different reason: its entire body
   content (the "GoOnlinePOS is an independently developed..." essay,
   `.audience-list`, `.requirements` grid, both `.guide-box` callouts,
-  every section) was copied verbatim into `index.html` itself, as a new
-  `<section class="section" id="about-goonlinepos">` (heading "About
-  GoOnlinePOS", then the same `.doc` card `about.html` used) inserted
-  **directly after `index.html`'s own `site-header`, before its hero
-  section** - deliberately the first thing a visitor reads on the
+  every section) was originally copied verbatim into `index.html` itself,
+  as a new `<section class="section" id="about-goonlinepos">` (heading
+  "About GoOnlinePOS", then the same `.doc` card `about.html` used)
+  inserted **directly after `index.html`'s own `site-header`, before its
+  hero section** - deliberately the first thing a visitor reads on the
   homepage, not tucked below the fold. `index.html` needed `.doc`/
   `.audience-list`/`.requirements`/`.guide-box`/`.inline-link` CSS added
   for this (it never had these classes before); no collision with
   `index.html`'s own pre-existing `.hero`/`.cta-band` since the migrated
   content deliberately excludes `about.html`'s own mini-hero and closing
   CTA band - those would have been redundant with `index.html`'s hero
-  and CTA band appearing right after. The now-redundant `.about-teaser`
-  blockquote pull-quote (`"GoOnlinePOS is an independently developed
-  project..." → "Read the full story →"`) that used to sit further down
-  `index.html` and link out to `about.html` was deleted outright, CSS
-  and all - the "full story" it teased is now already on the same page,
-  above it. Since the content lives on `index.html` now, every page's
-  `.site-nav` "About" link was renamed **"Homepage"** and repointed from
+  and CTA band appearing right after. **Only one of the two `.guide-box`
+  callouts survives on `index.html` today** - the first one ("Want to
+  see the process step by step?" → "Open GoOnlinePOS and see it for
+  yourself →") was removed outright once the content landed on the
+  homepage, since it was now a second "open the app" prompt sitting a
+  few paragraphs above the hero's own primary CTA; the second one
+  ("Explore the complete GoOnlinePOS walkthrough" → pointing at How To
+  Use inside the app) stayed, since it's pointing somewhere the hero CTA
+  doesn't. `about.html` itself still has both, unedited, since its own
+  file content was left untouched per the retirement policy - only the
+  copy that landed on `index.html` was trimmed. The now-redundant
+  `.about-teaser` blockquote pull-quote (`"GoOnlinePOS is an
+  independently developed project..." → "Read the full story →"`) that
+  used to sit further down `index.html` and link out to `about.html`
+  was deleted outright, CSS and all - the "full story" it teased is now
+  already on the same page, above it. Since the content lives on
+  `index.html` now, every page's `.site-nav` "About" link was renamed
+  **"Homepage"** and repointed from
   `about` to `/` - see the `.site-nav` bullet above.
 
 ## `app.html` — architecture
@@ -1359,6 +1370,21 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   (`twitter:card` = `summary_large_image`/`twitter:title`/
   `twitter:description`/`twitter:image`). Keep new pages consistent with
   this — copy an existing page's block rather than reinventing it.
+- **`index.html` carries two `<script type="application/ld+json">` blocks**
+  — the original `SoftwareApplication` schema (name/description/
+  featureList/offer), and a second block: a JSON array of
+  `SiteNavigationElement` entries (Free Point of Sale, Free Invoice
+  Generator, Free Receipt Generator, Blog), each with its own `name`/
+  `url`. This is a **best-effort hint**, not a guarantee - Google decides
+  on its own whether to render sitelinks beneath a search result, and
+  there's no way to force it - but `SiteNavigationElement` is the
+  standard schema.org signal for "these are the site's important
+  sub-pages," and giving Google that signal is the most a site can
+  actually do to make Free Invoice Generator/Free Receipt Generator more
+  likely to show up as sitelinks under the main goonlinepos.com search
+  result. Only on `index.html`, matching where the existing
+  `SoftwareApplication` schema already lives - no other page has any
+  JSON-LD.
 - **`og-image.jpg`** (1200×630, root) is the shared social-share card used
   by every page's `og:image`/`twitter:image` — generated once via a
   Playwright screenshot of a small branded HTML template (not committed;
