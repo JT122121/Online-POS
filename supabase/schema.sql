@@ -133,6 +133,7 @@ create table if not exists public.sales (
 
   receipt_number text not null default '',
   sale_datetime timestamptz not null default now(),
+  document_type text not null default '', -- 'Receipt' | 'Invoice' | 'Payment' (app.html's getDocumentTitle())
 
   cashier_name text not null default '',
   customer_name text not null default '',
@@ -156,8 +157,18 @@ create table if not exists public.sales (
   footer1_snapshot text not null default '',
   footer2_snapshot text not null default '',
 
+  -- catch-all for smaller per-sale display fields that don't warrant their
+  -- own column (currencyCode/currencySymbol/decimalPlaces at the moment of
+  -- sale) - same "settings jsonb" convention as store_settings above.
+  meta jsonb not null default '{}'::jsonb,
+
   created_at timestamptz not null default now()
 );
+
+-- Upgrade path for a project where this table was already created before
+-- document_type/meta existed - safe to run against a brand-new table too.
+alter table public.sales add column if not exists document_type text not null default '';
+alter table public.sales add column if not exists meta jsonb not null default '{}'::jsonb;
 
 create index if not exists sales_user_id_idx on public.sales(user_id);
 create index if not exists sales_user_id_sale_datetime_idx on public.sales(user_id, sale_datetime);
