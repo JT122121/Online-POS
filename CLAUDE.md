@@ -7,18 +7,20 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 
 ## Repo layout
 
-- **Marketing/site pages:** `index.html`, `about.html`, `contact.html`,
+- **Marketing/site pages:** `index.html`, `contact.html`,
   `privacy.html`, `terms.html`, `blog.html` + its articles:
   `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`. All of these, plus
   `invoice.html`/`receipt.html` below, share one canonical site-wide
   header/nav/footer — see "Site-wide header, nav & footer" below.
-  `guide.html` and `how-it-works.html` still exist on disk but are
-  **retired** — `noindex`, removed from every page's nav/footer and from
-  `sitemap.xml`, their walkthrough content now living inside `app.html`
-  itself as the "How To Use" panel instead. See "Site-wide header, nav &
-  footer" and the SEO section below for the full story.
+  `guide.html`, `how-it-works.html`, and `about.html` still exist on disk
+  but are **retired** — `noindex`, removed from every page's nav/footer
+  and from `sitemap.xml`. `guide.html`/`how-it-works.html`'s content now
+  lives inside `app.html` itself as the "How To Use" panel;
+  `about.html`'s content now lives at the top of `index.html` itself.
+  See "Site-wide header, nav & footer" and the SEO section below for the
+  full story on both.
 - **`app.html`** (~4,050 lines) — the actual POS application. Most logic
   still runs client-side in one big inline `<script>` block near the
   bottom of the file; a few self-contained pieces (barcode scanner,
@@ -98,7 +100,7 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   same badge to any future blog photo that isn't a genuine, literal
   photo of the thing it's illustrating.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (lists `/`, `app.html`, `invoice.html`, `receipt.html`, `about.html`,
+  (lists `/`, `app.html`, `invoice.html`, `receipt.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -135,7 +137,7 @@ all of them under one pattern:
 </a>
 <div class="header-right">
 <nav class="site-nav">
-<a href="about">About</a>
+<a href="/">Homepage</a>
 <a href="blog" class="nav-highlight">Blog</a>
 </nav>
 <a class="cta-btn" href="invoice">Free Invoice Generator</a>
@@ -160,14 +162,17 @@ all of them under one pattern:
   both added the third button there and rolled the whole row out
   site-wide, so **any older note in this file describing the CTA row as
   unique to `index.html` is stale** — it isn't anymore.
-- **`.site-nav` is always About → Blog, in that order, everywhere** —
-  `index.html` briefly shipped with Blog first (with the `nav-highlight`
-  "NEW" badge drawing the eye there) before being corrected to match
-  every other page, which had About first from the start. Keep new pages
-  consistent with About-then-Blog; don't copy `index.html`'s markup from
-  before this fix.
-- **`.site-nav a` (About/Blog) renders as a solid dark-green pill, not a
-  plain text link** — `background: var(--accent-dark)`, white text,
+- **`.site-nav` is always Homepage → Blog, in that order, everywhere** —
+  originally "About" (linking to `about.html`), renamed to "Homepage"
+  (linking to `/`) once `about.html`'s content moved onto `index.html`
+  itself — see "Retired: `about.html`" below for the full story. Before
+  that rename, `index.html` briefly shipped with Blog first (with the
+  `nav-highlight` "NEW" badge drawing the eye there) before being
+  corrected to match every other page, which had About/Homepage first
+  from the start. Keep new pages consistent with Homepage-then-Blog;
+  don't copy `index.html`'s markup from before either fix.
+- **`.site-nav a` (Homepage/Blog) renders as a solid dark-green pill, not
+  a plain text link** — `background: var(--accent-dark)`, white text,
   same `border-radius: var(--radius-sm)` padding treatment as `.cta-btn`
   but visually distinct from it (`--accent-dark`, the darker of the two
   greens, vs. `.cta-btn`'s brighter `--accent`) so the nav items and the
@@ -209,25 +214,30 @@ all of them under one pattern:
   below it, matching an explicit design brief for what the POS toolbar
   should show versus what only needs to live inside Settings:
   - **`.header-links`** (next to the app title/Premium/Special-Access
-    badges): About, Blog, Free Invoice Generator, Free Receipt Generator,
-    Home, in that order. About/Blog/Home render as dark-green
-    (`--accent-dark`) pills matching `.site-nav a` elsewhere; Free
-    Invoice/Receipt Generator (still `#createInvoiceButton`/
-    `#createReceiptButton` → `openCreateInvoice()`/`openCreateReceipt()`,
-    just relabeled from "Create Invoice"/"Create Receipt" to match the
-    marketing-page CTA wording and moved up here) render in the brighter
-    `--accent`, matching `.cta-btn` elsewhere - same two-weight visual
-    split as the marketing pages' nav-pill-vs-CTA-button distinction.
-    Every link here opens in a new tab (`window.open(...)` for About/Blog,
-    the existing `openCreateInvoice()`/`openCreateReceipt()` for the
-    other two) except **Home**, which still goes through `goHome()`'s
-    cart-safety confirm rather than a raw link - see "Header brand mark
-    is not a link" below, unchanged. About/Blog/Create Invoice/Create
-    Receipt stay wrapped in their existing `OFFLINE-STRIP:ABOUT-BUTTON`/
-    `BLOG-BUTTON`/`CREATE-INVOICE-BUTTON`/`CREATE-RECEIPT-BUTTON` marker
-    blocks (only the label text and position changed, not the markers),
-    since none of `about.html`/`blog.html`/`invoice.html`/`receipt.html`
-    ship in the offline package.
+    badges) is down to a **single button**: `#homepageShortcutButton`
+    ("🏠 Homepage" → `window.open('/', '_blank')`), styled as the same
+    dark-green (`--accent-dark`) pill `.site-nav a` uses elsewhere. It
+    used to also carry Blog, Free Invoice Generator, Free Receipt
+    Generator, and a separate Home button, but per an explicit design
+    call none of those belong in the POS app itself - they were deleted
+    outright (not hidden), along with their now-orphaned JS:
+    `openCreateInvoice()`/`openCreateReceipt()` (the "Free Invoice/
+    Receipt Generator" handlers) and `goHome()` (the old Home button's
+    cart-safety-confirm navigator - see "Header brand mark is not a
+    link" below, which this made moot) were all removed since nothing
+    else called them, and the corresponding dead translation keys
+    (`blogShortcutLabel`, `createInvoiceShortcutLabel`,
+    `createReceiptShortcutLabel`, `homeShortcutLabel`, `goHomeConfirm`)
+    were dropped from all six `modules/translations.js` language blocks.
+    The surviving button was renamed from `#aboutShortcutButton` to
+    `#homepageShortcutButton` (`aboutShortcutLabel` →
+    `homepageShortcutLabel` in translations) and its target from
+    `about` to `/`, matching the same "About" → "Homepage" rename
+    applied to `.site-nav` everywhere else - see "Retired:
+    `about.html`" below. It stays wrapped in
+    `OFFLINE-STRIP:HOMEPAGE-BUTTON` (renamed from the old
+    `ABOUT-BUTTON` marker) and stripped by `buildOfflineAppHtml()`,
+    since `index.html` isn't bundled in the offline package either.
   - **`.header-actions` (the toolbar) now shows exactly six things:**
     Hide Toolbar, the Cashier select, How To Use, Settings, End of Day,
     Customer Screen, Backup - deliberately trimmed down from a longer
@@ -297,6 +307,31 @@ all of them under one pattern:
   separate page (e.g. `about.html`'s two `.guide-box` callouts) was
   repointed to just open `app.html` and click How To Use there, rather
   than linking to either retired page.
+- **Retired: `about.html`.** Same treatment as `guide.html`/
+  `how-it-works.html` above (`noindex, follow`, dropped from
+  `sitemap.xml`, file left otherwise untouched on disk including its own
+  stale nav/footer) - but for a different reason: its entire body
+  content (the "GoOnlinePOS is an independently developed..." essay,
+  `.audience-list`, `.requirements` grid, both `.guide-box` callouts,
+  every section) was copied verbatim into `index.html` itself, as a new
+  `<section class="section" id="about-goonlinepos">` (heading "About
+  GoOnlinePOS", then the same `.doc` card `about.html` used) inserted
+  **directly after `index.html`'s own `site-header`, before its hero
+  section** - deliberately the first thing a visitor reads on the
+  homepage, not tucked below the fold. `index.html` needed `.doc`/
+  `.audience-list`/`.requirements`/`.guide-box`/`.inline-link` CSS added
+  for this (it never had these classes before); no collision with
+  `index.html`'s own pre-existing `.hero`/`.cta-band` since the migrated
+  content deliberately excludes `about.html`'s own mini-hero and closing
+  CTA band - those would have been redundant with `index.html`'s hero
+  and CTA band appearing right after. The now-redundant `.about-teaser`
+  blockquote pull-quote (`"GoOnlinePOS is an independently developed
+  project..." → "Read the full story →"`) that used to sit further down
+  `index.html` and link out to `about.html` was deleted outright, CSS
+  and all - the "full story" it teased is now already on the same page,
+  above it. Since the content lives on `index.html` now, every page's
+  `.site-nav` "About" link was renamed **"Homepage"** and repointed from
+  `about` to `/` - see the `.site-nav` bullet above.
 
 ## `app.html` — architecture
 
@@ -340,11 +375,11 @@ zero network calls.
   `#toolbarToggleBtn` (`toggleToolbar()`) which toggles `.hidden` on that
   group to collapse the whole row down to just itself — reclaiming
   vertical space for the product grid/receipt below. **The top row's
-  `.header-links` (About/Blog/Free Invoice Generator/Free Receipt
-  Generator/Home) is a sibling of `.header-actions`, not inside
-  `#headerActionsGroup`** - hiding the toolbar never hides that row, since
-  those are "leave the app" links rather than per-sale operational
-  shortcuts. Deliberately **not persisted** — every fresh page load
+  `.header-links` (just the single Homepage button now - see "Site-wide
+  header, nav & footer" above) is a sibling of `.header-actions`, not
+  inside `#headerActionsGroup`** - hiding the toolbar never hides that
+  row, since it's a "leave the app" link rather than a per-sale
+  operational shortcut. Deliberately **not persisted** — every fresh page load
   starts expanded regardless of what was chosen last time;
   `renderToolbarToggle()` keeps the button's own label
   (`toolbarHideLabel`/`toolbarShowLabel`) in sync with its current state
@@ -372,19 +407,15 @@ zero network calls.
   double as an unguarded way back to the homepage, but that bypassed
   the in-progress-cart safety check entirely (`cart` is in-memory only,
   never persisted — navigating away loses it) and was easy to trigger
-  by accident. The only way back to the homepage now is the explicit
-  **`#homeShortcutButton`** ("🏠 Home", last item in the header
-  toolbar) → `goHome()`, which confirms first via `goHomeConfirm` if
-  `cart.length` is non-zero, then navigates to
-  `location.pathname.replace(/[^/]*$/, "")` (the current directory) -
-  **not** a hardcoded `"/"` or `"index.html"`. This matters because
-  `app.html` is also shipped inside the offline `.zip`: on the live
-  site this resolves to `/` (loads the bare domain, no `index.html` in
-  the URL bar); under `file://` or the offline package's local server,
-  a literal `"/"` would jump to the actual OS filesystem root, which
-  this pattern avoids by staying within the current folder instead
-  (same directory-derivation pattern `customerScreenUrl()` and
-  `openCreateInvoice()` already use).
+  by accident. There used to be a dedicated `#homeShortcutButton` →
+  `goHome()` (confirm-then-navigate-in-place) for this; both the button
+  and the function were **deleted outright** once `.header-links`'
+  `#homepageShortcutButton` (see "Site-wide header, nav & footer" above)
+  became the only "leave the app" link left in the toolbar - and unlike
+  the old Home button, it opens `/` in a **new tab**
+  (`window.open('/', '_blank')`), so the cart-loss risk `goHome()` was
+  written to guard against doesn't exist for it in the first place: the
+  original tab with the in-progress sale never navigates anywhere.
 - **Product photos:** each `products[]` entry has an optional `photo`
   field (a compressed JPEG data URL) alongside `name`/`price`/
   `category`/`sku`/`stock`. `compressProductPhoto(file)` downsizes any
@@ -894,16 +925,15 @@ remember. The whole mechanism lives inside `app.html` itself:
   the "Cookie Settings" footer link, the `jszip.min.js` script tag, the
   `modules/offline-builder.js` script tag (its own module, dead code
   once there's no button to trigger it), the download section/modal
-  HTML, the Premium heartbeat call site (no network calls offline), the
-  "🧾 Create Invoice" button + its `openCreateInvoice()` function
-  (`CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` - there's no
-  `invoice.html` in the offline copy for it to open), the "🧾 Create
-  Receipt" button + its `openCreateReceipt()` function
-  (`CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`, the same treatment for
-  `receipt.html`), and the "ℹ️ About"/"📰 Blog" toolbar shortcut buttons
-  (`ABOUT-BUTTON`/`BLOG-BUTTON` - see "Site-wide header, nav & footer"
-  above), since neither `about.html` nor `blog.html` ships in the
-  offline package for them to open.
+  HTML, the Premium heartbeat call site (no network calls offline), and
+  the "🏠 Homepage" toolbar shortcut button (`HOMEPAGE-BUTTON` - see
+  "Site-wide header, nav & footer" above), since `index.html` doesn't
+  ship in the offline package for it to open. The Create Invoice/Create
+  Receipt buttons and their `openCreateInvoice()`/`openCreateReceipt()`
+  functions no longer exist at all (deleted along with the rest of
+  `.header-links`, not just offline-stripped - see the same section),
+  so their old `CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS`/
+  `CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS` markers are gone too.
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
@@ -975,16 +1005,18 @@ dark-mode skin), own simplified feature set, and no third-party branding,
 ads network, account system, or footer link farm to tools that don't
 exist here. It's for one-off invoices sent to a customer (net terms,
 formal billing) - a different job from `app.html`'s point-of-sale
-receipts, which is why it's `app.html`'s **"🧾 Create Invoice"** header
-shortcut button (`openCreateInvoice()`, next to Customer Screen) that
-opens it, via `window.open(...)` in a **new tab** rather than in-place
-navigation - a cashier mid-sale shouldn't risk losing their unsaved cart
-by clicking it. It's also directly reachable/shareable on its own
-(indexable, in `sitemap.xml`) as a free tool independent of the POS app.
-The page's own `<h1>` reads **"Create Invoice"**, matching the header
-button's label exactly (the `<title>`/meta description still lead with
-"Free Invoice Generator" for its SEO search-term value, but the visible
-on-page heading and the button that links to it now say the same thing).
+receipts. `app.html` used to have its own **"🧾 Create Invoice"** header
+shortcut button (`openCreateInvoice()`) opening this page in a new tab;
+that button (and `openCreateReceipt()` for `receipt.html`) was deleted
+outright per an explicit design call that the POS app shouldn't link out
+to either tool - see "Site-wide header, nav & footer" above. This page
+is still directly reachable/shareable on its own (indexable, in
+`sitemap.xml`, linked from every marketing page's `.cta-btn` row) as a
+free tool independent of the POS app - it just isn't linked *from*
+`app.html` anymore. The page's own `<h1>` reads **"Create Invoice"** (the
+`<title>`/meta description lead with "Free Invoice Generator" for its
+SEO search-term value, matching the marketing-page CTA wording, while
+the on-page heading stays the more natural "Create Invoice").
 - **Header layout follows common commercial-invoice convention**: a
   `.doc-header` two-column row - `.doc-header-left` (logo + "From",
   formerly "Bill From") on the left, `.doc-header-right` (the
@@ -1000,8 +1032,8 @@ on-page heading and the button that links to it now say the same thing).
   field kept its original `id` (`invFrom`, `invTo`, `invDate`, etc.) so
   none of the JS (`collectState`/`applyState`/`recalcTotals`) needed to
   change.
-- **Every page's header `.cta-btn` row** (next to the `Blog`/`About` nav
-  links, `.site-header .cta-btn`) links here (`href="invoice"`, labeled
+- **Every page's header `.cta-btn` row** (next to the `Homepage`/`Blog`
+  nav links, `.site-header .cta-btn`) links here (`href="invoice"`, labeled
   "Free Invoice Generator", first of the 3 CTA buttons) - a deliberate
   choice to give the free tool prime header real estate as a lead-in,
   since `app.html` still has its own prominent "Open the app" buttons in
@@ -1095,18 +1127,16 @@ on-page heading and the button that links to it now say the same thing).
   (see below) - it's a separate free web tool, not part of the offline
   POS itself. It was briefly included (a `buildOfflineInvoiceHtml()`
   step, mirroring `app.html`/`customer.html`'s own marker-stripping)
-  before being pulled back out. `app.html`'s own **"🧾 Create Invoice"**
-  button and `openCreateInvoice()` function are wrapped in their own
-  `OFFLINE-STRIP:CREATE-INVOICE-BUTTON`/`CREATE-INVOICE-JS` marker
-  blocks so they don't appear in the offline copy either - there would
-  be nothing for the button to open there. `offline/README.txt`
-  explicitly calls out this exclusion in its "except" list, next to the
+  before being pulled back out. `app.html`'s own former **"🧾 Create
+  Invoice"** button and `openCreateInvoice()` function are gone entirely
+  now (deleted, not just offline-stripped - see "Site-wide header, nav &
+  footer" above), so there's no longer any offline-package marker for
+  this page to worry about either way. `offline/README.txt` still calls
+  out this page's exclusion in its "except" list, next to the
   cookie-banner/analytics/fonts differences that were already there.
-- Six-language UI strings are **not** part of this page - `app.html`'s
-  `translations` dictionary only supplies the `createInvoiceShortcutLabel`
-  header-button text; the invoice tool itself is English-only for now,
-  consistent with it being a new, separate feature rather than a
-  from-day-one part of the translated POS app.
+- Six-language UI strings are **not** part of this page - the invoice
+  tool itself is English-only, consistent with it being a new, separate
+  feature rather than a from-day-one part of the translated POS app.
 
 ## `receipt.html` — standalone receipt generator
 
@@ -1120,14 +1150,15 @@ Received summary, was missing both) - see the items/payment bullet
 below - though it's still lighter than `invoice.html`: no tax/discount
 math, since a receipt records what was already paid rather than
 computing a bill.
-`app.html`'s own **"🧾 Create Receipt"** header shortcut button
-(`openCreateReceipt()`, next to Create Invoice) opens it via
-`window.open(...)` in a **new tab**, same reasoning as Create Invoice - a
-cashier mid-sale shouldn't risk losing their unsaved cart. It's also
-directly reachable/shareable on its own (indexable, in `sitemap.xml`).
-The page's own `<h1>` reads **"Create Receipt"**, matching the header
-button's label (the `<title>`/meta description lead with "Free Receipt
-Generator" for SEO search-term value, same pattern as `invoice.html`).
+`app.html` used to have its own **"🧾 Create Receipt"** header shortcut
+button (`openCreateReceipt()`) opening this page in a new tab; it was
+deleted along with Create Invoice - see `invoice.html`'s own section
+above. This page is still directly reachable/shareable on its own
+(indexable, in `sitemap.xml`, linked from every marketing page's
+`.cta-btn` row) as a free tool independent of the POS app. The page's
+own `<h1>` reads **"Create Receipt"** (the `<title>`/meta description
+lead with "Free Receipt Generator" for SEO search-term value, same
+pattern as `invoice.html`).
 - **Every page's header `.cta-btn` row** has "Free Invoice Generator"
   (`href="invoice"`) and "Free Receipt Generator" (`href="receipt"`) as
   its first two buttons, in that order, before "Free Point of Sale" -
@@ -1213,15 +1244,11 @@ Generator" for SEO search-term value, same pattern as `invoice.html`).
   this page can be visited directly.
 - **Deliberately NOT bundled into the "Download Offline POS" package** -
   same policy as `invoice.html`, a separate free web tool rather than
-  part of the offline POS itself. `app.html`'s own "🧾 Create Receipt"
-  button and `openCreateReceipt()` function are wrapped in their own
-  `OFFLINE-STRIP:CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS` marker
-  blocks (mirroring Create Invoice's exact markers) so they don't appear
-  in the offline copy either.
+  part of the offline POS itself. `app.html`'s own former "🧾 Create
+  Receipt" button and `openCreateReceipt()` function are gone entirely
+  now, same as Create Invoice - see `invoice.html`'s own section above.
 - Six-language UI strings are **not** part of this page, same as
-  `invoice.html` - `app.html`'s `translations` dictionary only supplies
-  the `createReceiptShortcutLabel` header-button text; the receipt tool
-  itself is English-only.
+  `invoice.html` - the receipt tool itself is English-only.
 
 ## `end-of-day.html` — POS closing report
 
@@ -1240,8 +1267,8 @@ existing sales data, not a public lead-gen page like invoice/receipt.
 - `app.html`'s header toolbar has a **"📅 End of Day"** button
   (`#endOfDayButton` → `openEndOfDayReport()`, replacing the old
   `#summaryButton`) that opens this page in a **new tab**, same
-  `window.open(...)` pattern as Create Invoice/Create Receipt - except
-  it opens the literal `end-of-day.html` filename rather than an
+  `window.open(...)` pattern the `#homepageShortcutButton` link uses -
+  except it opens the literal `end-of-day.html` filename rather than an
   extension-less URL, the same reasoning `customerScreenUrl()` already
   follows for `customer.html`: this page **does** ship in the offline
   package (see below), where extension-less resolution doesn't exist.
@@ -1348,7 +1375,7 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `invoice.html`, `receipt.html`, `about.html`,
+  `invoice.html`, `receipt.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -1460,15 +1487,18 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   a real filename on their filesystem, not a browser link - occurs in
   `app.html`'s own offline-download modal copy and in
   `modules/translations.js`'s `offlineModalHowList`, all six
-  languages). `openCreateInvoice()`/`openCreateReceipt()`, by contrast,
-  **were** changed to extension-less `"invoice"`/`"receipt"`, since
-  neither `invoice.html` nor `receipt.html` is in the offline package
-  (see their own sections above) - the buttons that call them are
-  stripped from the offline copy entirely, so these functions only ever
-  run on the live site. `app.html`'s own
-  `goHome()` predates this sweep and already uses a directory-relative
-  path rather than a hardcoded `"/"` - see "Header brand mark is not a
-  link" above for why (same offline-vs-live reasoning).
+  languages). `app.html`'s own `#homepageShortcutButton` (see "Site-wide
+  header, nav & footer" above) is extension-less (`window.open('/', ...)`)
+  and doesn't need any directory-relative trick, since it's wrapped in
+  `OFFLINE-STRIP:HOMEPAGE-BUTTON` and only ever runs on the live site -
+  the offline package has no `index.html` to open either way. Its
+  now-deleted predecessors `openCreateInvoice()`/`openCreateReceipt()`/
+  `goHome()` followed the same two patterns while they existed: the
+  first two used a hardcoded extension-less relative path since they too
+  were offline-stripped, while `goHome()` (the old Home button, distinct
+  from the current Homepage link - see "Header brand mark is not a
+  link" above) needed the directory-relative trick because it had to
+  work identically on **both** the live site and the offline package.
 - **No em dashes ("—") anywhere in site text** - explicit standing
   instruction. Every em dash across every page (marketing pages and
   `app.html`, all UI strings and all six `translations` language blocks)
