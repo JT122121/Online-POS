@@ -1983,6 +1983,86 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   right body class and page size; zero console errors throughout on
   both `app.html` and `end-of-day.html`.
 
+## `contact.html` — OTP-verified contact form
+
+Used to be a plain click-to-reveal email address (an anti-spam-bot
+pattern: the address stayed out of the page source until a button was
+clicked, so scrapers never saw it). Replaced entirely with a proper
+contact form, since a bare mailto: link has no way to stop spam once
+the address is visible and gives no confirmation the message actually
+reached anyone. The whole three-step flow lives in `contact.html`
+itself; there is no server of ours involved, just a Google Apps Script
+Web App in `contact-form/` (see `contact-form/README.md` for full setup
+- deploy steps, constants, debugging) that the page calls the same way
+`app.html` calls `premium-validation/AppsScript.gs` for Premium code
+checks: GET requests with query params, for the same documented CORS
+reason (Apps Script Web Apps don't reliably send CORS headers back on
+POST responses).
+
+- **Step 1 - the form:** Name/Email/Message, all required, with basic
+  client-side validation (non-empty, an email-shaped `Email` value)
+  before anything hits the network. `Message` is capped at
+  `maxlength="1000"` with a live character counter - long enough for a
+  real inquiry, short enough to keep the GET request's query string
+  well within every browser's URL-length limit, since the whole message
+  travels as a URL-encoded query param (`callApi()` builds it with the
+  same manual `encodeURIComponent()` string-building style
+  `checkPremiumCode()` already uses in `app.html`, not `URLSearchParams`,
+  to match the codebase's existing convention). Submitting calls
+  `action=requestOtp` - Apps Script emails a 6-digit code to the address
+  entered and holds the name/email/message server-side (see
+  `contact-form/README.md` for exactly where) until it's verified or
+  expires.
+- **Step 2 - verify:** a 6-digit code input (digits-only, auto-stripped
+  of anything else on `input`), "Verify & Send", "Resend code" (starts
+  disabled with a live client-side countdown matching
+  `RESEND_COOLDOWN_SECONDS` in `AppsScript.gs` - purely a UX nicety, the
+  real cooldown enforcement is server-side so a modified client can't
+  bypass it), and "← Edit your message" (goes back to Step 1 without
+  losing what was typed, since the fields aren't cleared). A wrong code
+  shows how many attempts remain (`attemptsLeft` from the API response);
+  running out or letting the code expire surfaces a clear message to
+  request a fresh one rather than a dead end.
+- **Step 3 - success:** confirms the message was sent and a confirmation
+  email is on its way, plus "Send another message" which fully resets
+  the form (including the character counter and any error boxes) back
+  to Step 1.
+- **Two emails go out on a successful verify**, both from
+  `contact-form/AppsScript.gs`: one to the site owner (`OWNER_EMAIL` in
+  that file), subject `GoOnlinePOS.com Site Inquiry`, with the visitor's
+  name/email/message and `Reply-To` set to the visitor's address so
+  replying is a single click in Gmail; and one to the visitor, same
+  subject, a short "thank you for your inquiry, I've received your
+  message and will get back to you" auto-reply that echoes their
+  message back, explicitly labeled as an automated message in both
+  emails. This was a deliberate design decision, not just following the
+  request literally - a contact form that only auto-replies to the
+  visitor and never actually notifies the site owner would leave every
+  inquiry undiscovered unless someone thought to check their own Gmail
+  "Sent" folder, which defeats the point of having a contact form at
+  all.
+- **`CONTACT_FORM_URL`** near the top of `contact.html`'s script is a
+  placeholder (`"REPLACE_WITH_YOUR_CONTACT_FORM_APPS_SCRIPT_URL"`) -
+  must be replaced with the deployed Apps Script's own `/exec` URL
+  before this works, same as `PREMIUM_VALIDATION_URL` in `app.html`.
+  Unlike that one, this Apps Script project is **not** bound to any
+  Google Sheet (see `contact-form/README.md`) - it holds the
+  in-progress name/email/message/OTP in `CacheService` between the two
+  steps, a built-in short-lived key-value store, since nothing here
+  needs to persist longer than one contact-form submission, unlike
+  Premium seat records.
+- Verified end-to-end with Playwright against a mocked endpoint (can't
+  deploy the real Apps Script without the site owner's Google account,
+  same limitation as Premium code validation's own testing): empty-field
+  and invalid-email submissions are caught client-side before any
+  network call; a valid submission moves to Step 2 and shows the
+  address the code was sent to; a wrong code shows the correct
+  attempts-remaining message and stays on Step 2; the resend cooldown
+  button is disabled immediately after a successful send and its
+  countdown actually ticks down; the correct code moves to Step 3; and
+  "Send another message" fully resets back to Step 1 with the name
+  field genuinely empty. Zero console errors throughout.
+
 ## SEO
 
 - **Every indexable page** (i.e. every page whose own `<meta name="robots">`
