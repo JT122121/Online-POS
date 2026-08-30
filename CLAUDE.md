@@ -407,7 +407,33 @@ all of them under one pattern:
   moved out of the toolbar row entirely into the product panel itself,
   as a full-width `.ap-new-sale-btn` directly under the Barcode Scanner
   toggle and above the search box, mirroring exactly where
-  `#newSaleButton` actually lives in `#catalogView`.
+  `#newSaleButton` actually lives in `#catalogView`. **The toolbar row
+  is grouped for wrapping, not a single flat flex row** - `.ap-toolbar`
+  has two children, `.ap-toolbar-left` (Hide Toolbar chip + Cashier
+  select) and `.ap-toolbar-icons` (the 5 icon buttons, `margin-left:
+  auto`), with `flex-wrap: wrap` on the parent. This was a fix, not the
+  original structure: a single flat row of Hide-Toolbar-chip / Cashier
+  select / spacer / 5 icons had no `flex-wrap`, so on narrow mobile
+  viewports the icons simply overflowed past the card's right edge
+  (the Backup icon visibly rendered outside the white
+  `.browser-frame`) instead of wrapping inside it. Grouping the icons
+  into their own wrapper means the whole group wraps as one unit onto
+  its own line under the left group when space is tight, rather than
+  splitting mid-row and spilling the last icon or two outside the
+  card - verified with Playwright at 360/390/414/480px that every
+  `.ap-toolbar-icon`, Backup included, stays fully inside
+  `.browser-frame`'s own box at each width. **The feature grid below
+  (`.feature-grid`, "Set it up your way" section) was missing an End of
+  Day card** - it listed Sales History, Full backup & restore, and
+  Offline Mode POS but never mentioned the End of Day report feature
+  (see `end-of-day.html` below) at all. Added a "End of Day report"
+  `.feature-card` (a calendar SVG icon, matching the mock toolbar's own
+  📅 End of Day icon) between "Sales history, editable" and "Full
+  backup & restore", so it now sits in the same neighborhood as the
+  other reporting/data-safety cards it was grouped with in the user's
+  own framing ("along with backup and offline mode").
+
+## `app.html` — architecture
 
 Client-only, no server. All persistence is local to the browser. The one
 exception is Premium code activation, which calls out to a Google Apps
