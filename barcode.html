@@ -70,7 +70,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Create Barcode / QR Code - Free Barcode &amp; QR Code Generator | GoOnlinePOS.com</title>
-<meta name="description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size, add optional text above or below, and add short text to the center of a QR code. Save or download - no signup required.">
+<meta name="description" content="Create a barcode or QR code for free, right in your browser. Choose a standard or custom label size and add optional text above or below. Save or download - no signup required.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://goonlinepos.com/barcode">
 
@@ -177,8 +177,6 @@ img { max-width: 100%; display: block; }
 .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
 
 .hidden { display: none !important; }
-
-.center-content-block { background: #fafaf7; border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 14px; margin: 0 0 16px; }
 
 .divider-line { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
@@ -369,17 +367,6 @@ img { max-width: 100%; display: block; }
       <label><input type="checkbox" id="showQrValueBelow"> Show the QR value underneath</label>
     </div>
 
-    <div class="checkbox-row hidden" id="centerContentToggleRow">
-      <label><input type="checkbox" id="enableCenterContent"> Add text in the center</label>
-    </div>
-    <div class="center-content-block hidden" id="centerContentBlock">
-      <div class="field-row" style="margin: 0;">
-        <label class="field-label" for="centerText">Center Text</label>
-        <input type="text" class="field-input" id="centerText" maxlength="4" placeholder="e.g. GO">
-      </div>
-      <p class="field-hint">A high error-correction level is used automatically whenever center text is on, so the code still scans correctly with the middle covered. Keep it to 2-4 characters.</p>
-    </div>
-
   </div>
 
   <div class="preview-area">
@@ -423,7 +410,6 @@ img { max-width: 100%; display: block; }
     <li>Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
     <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're using it for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
     <li>Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.</li>
-    <li>For a QR code, you can also add up to 4 characters of text to the center - a high error-correction level is used automatically so it still scans correctly.</li>
     <li>Click "Save" to keep it in your Saved Codes list, or "Download PNG" to save an image file you can use anywhere.</li>
   </ol>
 
@@ -437,8 +423,6 @@ img { max-width: 100%; display: block; }
     <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid making the label too small.</dd>
     <dt>Can I scan this with my phone?</dt>
     <dd>Most phone camera apps can scan QR codes directly, no extra app needed. Traditional barcodes (CODE128, EAN-13, UPC-A, and similar) usually aren't recognized by a phone's built-in camera - you'll need a dedicated barcode scanner app to read those.</dd>
-    <dt>Can I add text to the middle of a QR code?</dt>
-    <dd>Yes - turn on "Add text in the center" under QR Code and type up to 4 characters. A high error-correction level keeps the code scannable even with part of the center covered.</dd>
     <dt>What label sizes can I use?</dt>
     <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the downloaded PNG match exactly.</dd>
     <dt>Can I add a border around the code?</dt>
@@ -522,8 +506,6 @@ img { max-width: 100%; display: block; }
   var barcodeTypeRow = document.getElementById("barcodeTypeRow");
   var showValueRow = document.getElementById("showValueRow");
   var showQrValueRow = document.getElementById("showQrValueRow");
-  var centerContentToggleRow = document.getElementById("centerContentToggleRow");
-  var centerContentBlock = document.getElementById("centerContentBlock");
   var sizePresetSelect = document.getElementById("sizePreset");
   var customBarcodeRow = document.getElementById("customSizeBarcodeRow");
   var customQrRow = document.getElementById("customSizeQrRow");
@@ -536,8 +518,6 @@ img { max-width: 100%; display: block; }
   var topTextInput = document.getElementById("topText");
   var showValueBelowCheckbox = document.getElementById("showValueBelow");
   var showQrValueBelowCheckbox = document.getElementById("showQrValueBelow");
-  var enableCenterContentCheckbox = document.getElementById("enableCenterContent");
-  var centerTextInput = document.getElementById("centerText");
   var borderStyleSelect = document.getElementById("borderStyle");
   var previewBox = document.getElementById("previewBox");
   var previewTopText = document.getElementById("previewTopText");
@@ -625,8 +605,6 @@ img { max-width: 100%; display: block; }
     barcodeTypeRow.classList.toggle("hidden", !isBarcode);
     showValueRow.classList.toggle("hidden", !isBarcode);
     showQrValueRow.classList.toggle("hidden", isBarcode);
-    centerContentToggleRow.classList.toggle("hidden", isBarcode);
-    centerContentBlock.classList.toggle("hidden", isBarcode || !enableCenterContentCheckbox.checked);
     codeValueLabel.textContent = isBarcode ? "Barcode Value" : "QR Code Value / Data";
     codeValueInput.placeholder = isBarcode ? "e.g. 123456789012" : "e.g. https://example.com or any text";
   }
@@ -679,13 +657,7 @@ img { max-width: 100%; display: block; }
     renderPreview();
     scheduleSave();
   });
-  enableCenterContentCheckbox.addEventListener("change", function() {
-    centerContentBlock.classList.toggle("hidden", !enableCenterContentCheckbox.checked);
-    renderPreview();
-    scheduleSave();
-  });
-
-  [codeValueInput, barcodeFormatSelect, topTextInput, centerTextInput].forEach(function(el) {
+  [codeValueInput, barcodeFormatSelect, topTextInput].forEach(function(el) {
     el.addEventListener("input", function() { renderPreview(); scheduleSave(); });
     el.addEventListener("change", function() { renderPreview(); scheduleSave(); });
   });
@@ -735,7 +707,7 @@ img { max-width: 100%; display: block; }
   function renderQrToCanvas(value) {
     codeValueHint.textContent = "";
     codeValueHint.className = "field-hint";
-    var ecLevel = enableCenterContentCheckbox.checked ? "H" : "M";
+    var ecLevel = "M";
     var text = value || " ";
     var qr;
     try {
@@ -775,17 +747,6 @@ img { max-width: 100%; display: block; }
           ctx.fillRect((c + quietZone) * pxPerModule, (r + quietZone) * pxPerModule, pxPerModule, pxPerModule);
         }
       }
-    }
-
-    if (enableCenterContentCheckbox.checked && centerTextInput.value.trim()) {
-      var boxSize = Math.round(total * 0.26);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(Math.round((total - boxSize) / 2), Math.round((total - boxSize) / 2), boxSize, boxSize);
-      ctx.fillStyle = "#000000";
-      ctx.font = "bold " + Math.round(boxSize * 0.42) + "px " + getComputedStyle(document.body).fontFamily;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(centerTextInput.value.trim().slice(0, 4), total / 2, total / 2 + 1);
     }
   }
 
@@ -933,8 +894,6 @@ img { max-width: 100%; display: block; }
       topText: topTextInput.value,
       showValueBelow: showValueBelowCheckbox.checked,
       showQrValueBelow: showQrValueBelowCheckbox.checked,
-      enableCenterContent: enableCenterContentCheckbox.checked,
-      centerText: centerTextInput.value,
       borderStyle: borderStyleSelect.value
     };
   }
@@ -1053,10 +1012,6 @@ img { max-width: 100%; display: block; }
 
     showValueBelowCheckbox.checked = state.showValueBelow !== false;
     showQrValueBelowCheckbox.checked = !!state.showQrValueBelow;
-
-    enableCenterContentCheckbox.checked = !!state.enableCenterContent;
-    centerContentBlock.classList.toggle("hidden", currentType === "barcode" || !enableCenterContentCheckbox.checked);
-    centerTextInput.value = state.centerText || "";
 
     borderStyleSelect.value = BORDER_STYLES.hasOwnProperty(state.borderStyle) ? state.borderStyle : "none";
     applyBorderStyle();

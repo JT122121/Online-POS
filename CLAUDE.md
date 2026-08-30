@@ -1537,9 +1537,11 @@ just no longer via an unlinked page.
   `createImgTag`/`createSvgTag` helpers, the code walks the raw module
   matrix itself (`qr.getModuleCount()`/`qr.isDark(row, col)`) and
   paints it onto `#codeCanvas` by hand, with its own 4-module quiet
-  zone - this is what makes the center-content overlay possible (see
-  below), since the matrix is available as data rather than a
-  pre-rendered image.
+  zone - originally chosen because it's what made the now-retired
+  center-content overlay possible (see below), since the matrix was
+  available as data rather than a pre-rendered image. Kept as-is after
+  that feature's removal since it's no worse than the library's own
+  helpers for plain rendering either way.
 - **Both the "value" text and any "text above" are plain HTML, not
   baked into the canvas** - `#previewTopText`/`#previewValueText` are
   separate `<div>`s positioned above/below `#codeCanvas` inside
@@ -1595,24 +1597,28 @@ just no longer via an unlinked page.
   (530+ modules doesn't fit legibly even on the largest 4x6in preset at
   a safe module width) - confirming the warning threshold means what it
   says rather than being either a false alarm or silent about a real
-  problem. A plain QR, one with a center-text overlay, and one with a
-  center overlay at the largest QR preset all decoded correctly too.
-- **QR center content** (`#enableCenterContent`, QR-only) lets the user
-  add up to 4 characters of text into the middle of the code. Turning it
-  on **always bumps the QR error-correction level from `M` to `H`**
-  (`qrcode(0, ecLevel)`, `ecLevel = enableCenterContent ? "H" : "M"`) so
-  the extra ~30% redundancy budget can absorb the obscured center - a
-  plain white square covering ~26% of the code's width is painted
-  first, then the text (`fillText`, bold, sized to the box) is drawn on
-  top of it. **This was originally an Image-or-Text choice** (a small
-  Image/Text `.type-tabs.small` toggle, an uploaded logo drawn via
-  `drawImage`) but the image option was deliberately removed at the
-  site owner's request, text-only being simpler and enough for the
-  center-content use case - `centerImageDataUrl`/`currentCenterMode`/
-  `setCenterImage()`/`updateCenterModeUI()`, the upload `<input>`, and
-  the now-orphaned `.logo-upload-label`/`.hidden-file-input`/
-  `.logo-preview`/`.remove-logo-btn`/`.type-tabs.small` CSS are gone
-  entirely rather than left disabled.
+  problem. A plain QR and one at the largest QR preset both decoded
+  correctly too.
+- **Retired: QR center content.** QR codes used to support adding up to
+  4 characters of text into the middle of the code
+  (`#enableCenterContent`, QR-only - always bumping the QR
+  error-correction level from `M` to `H` so the extra ~30% redundancy
+  budget could absorb the obscured center, a plain white square covering
+  ~26% of the code's width painted first, then the text drawn on top of
+  it). This was itself a text-only replacement for an even earlier
+  Image-or-Text choice (a small Image/Text toggle, an uploaded logo
+  drawn via `drawImage`) that had already been removed once at the site
+  owner's request. The whole feature - the checkbox, the `Center Text`
+  input and its surrounding `.center-content-block`, the EC-level bump
+  (`renderQrToCanvas()` now always uses a plain `var ecLevel = "M";`),
+  the center-square-and-text drawing in `renderQrToCanvas()`, its
+  `collectState()`/`applyState()` round-trip, the "add short text to the
+  center" mention in the meta description, the "For a QR code, you can
+  also add up to 4 characters..." How-to step, and the "Can I add text
+  to the middle of a QR code?" FAQ entry - was removed outright at the
+  site owner's explicit request, not just hidden, following this
+  repo's established convention of not leaving dead code/CSS behind
+  when a feature is cut (see e.g. Print's removal above).
 - **Border** (`#borderStyle`, shared by both Barcode and QR) applies a
   line style around `#previewBox` - None, Solid Strong, Solid Medium,
   Dashed, or Dotted - via `applyBorderStyle()` setting
