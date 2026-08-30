@@ -12,7 +12,7 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`. All of these, plus
-  `invoice.html`/`receipt.html` below, share one canonical site-wide
+  `invoice-generator.html`/`receipt-generator.html` below, share one canonical site-wide
   header/nav/footer — see "Site-wide header, nav & footer" below.
   `guide.html`, `how-it-works.html`, and `about.html` still exist on disk
   but are **retired** — `noindex`, removed from every page's nav/footer
@@ -29,45 +29,50 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
 - **`customer.html`** — a second, lightweight page meant to be opened in a
   separate window/tab/tablet facing the customer; mirrors live order state
   from `app.html`.
-- **`invoice.html`** — a standalone, free invoice generator, unrelated to
-  the cart/checkout flow. See "`invoice.html` — standalone invoice
+- **`invoice-generator.html`** — a standalone, free invoice generator, unrelated to
+  the cart/checkout flow. See "`invoice-generator.html` — standalone invoice
   generator" below.
-- **`receipt.html`** — a standalone, free payment-receipt generator
-  (simple summary, not itemized), a sibling tool to `invoice.html`. See
-  "`receipt.html` — standalone receipt generator" below.
+- **`receipt-generator.html`** — a standalone, free payment-receipt generator
+  (simple summary, not itemized), a sibling tool to `invoice-generator.html`. See
+  "`receipt-generator.html` — standalone receipt generator" below.
 - **`end-of-day.html`** — a printable/saveable POS closing report, opened
-  from `app.html`'s header toolbar; unlike `invoice.html`/`receipt.html`
+  from `app.html`'s header toolbar; unlike `invoice-generator.html`/`receipt-generator.html`
   it reads `app.html`'s own storage directly and ships in the offline
   package. See "`end-of-day.html` — POS closing report" below.
-- **`barcode.html`** — a standalone, free barcode/QR code generator,
-  `invoice.html`/`receipt.html`'s third sibling tool, linked from every
+- **`barcode-generator.html`** — a standalone, free barcode/QR code generator,
+  `invoice-generator.html`/`receipt-generator.html`'s third sibling tool, linked from every
   page's header CTA row and `app.html`'s own header-links, indexable,
   and in `sitemap.xml` — it started out deliberately disconnected
   (URL-only, `noindex`) while still being built, then was wired in once
-  ready. See "`barcode.html` — standalone barcode / QR code generator"
+  ready. See "`barcode-generator.html` — standalone barcode / QR code generator"
   below.
-- **`vat.html`** — a standalone, free VAT calculator, the fourth
-  sibling in the `invoice.html`/`receipt.html`/`barcode.html` family
+- **`vat-calculator.html`** — a standalone, free VAT calculator, the fourth
+  sibling in the `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html` family
   of free tools — add VAT to a net amount or remove VAT from a gross
   amount. Indexable and linked from every page's header CTA row and
   `app.html`'s own header-links from the day it shipped. See
-  "`vat.html` — standalone VAT calculator" below.
+  "`vat-calculator.html` — standalone VAT calculator" below.
 - **`pricing-calculator.html`** — a standalone product pricing /
   markup-vs-margin calculator, the fifth sibling in the free-tools
   family, connected site-wide (indexable, in every page's `.cta-btn`
   row, `app.html`'s `.header-links`, and `sitemap.xml`) - see
   "`pricing-calculator.html` — standalone product pricing calculator"
-  below. **Filename deliberately doesn't match its sibling tools'
-  one-word convention** (`invoice.html`/`receipt.html`/`barcode.html`/
-  `vat.html`) - it shipped first as `pricing.html`, but that URL
-  (`/pricing`) read as ambiguous/confusing (easy to mistake for a
-  SaaS-style "our pricing/plans" page rather than a calculator tool),
-  so the file was renamed to `pricing-calculator.html` shortly after
-  connecting it site-wide. Every reference across the repo - the
-  `.cta-btn` `href` on all 13 pages, `app.html`'s `openCreatePricing()`,
-  `sitemap.xml`, and `index.html`'s `SiteNavigationElement` JSON-LD -
-  uses the longer `pricing-calculator` path. Don't "fix" it back to
-  match the other tools' shorter names; the mismatch is intentional.
+  below. **All five free-tool filenames/URLs are descriptive two-word
+  slugs, not the original bare one-word names** -
+  `invoice-generator.html`/`receipt-generator.html`/
+  `barcode-generator.html`/`vat-calculator.html`/
+  `pricing-calculator.html`, matching their `.cta-btn` labels ("Free
+  Invoice Generator", etc.) rather than the shorter `invoice.html`/
+  `receipt.html`/`barcode.html`/`vat.html`/`pricing.html` they all
+  originally shipped as. `pricing.html` was renamed first, once
+  `/pricing` on its own turned out to read as ambiguous (easy to
+  mistake for a SaaS "our pricing/plans" page rather than a calculator
+  tool); the same reasoning was then applied to the other four so the
+  whole family reads unambiguously and consistently. Every reference
+  across the repo - the `.cta-btn` `href` on all 13 pages, each of
+  `app.html`'s five `openCreateX()` functions, `sitemap.xml`, and
+  `index.html`'s `SiteNavigationElement` JSON-LD - uses the longer,
+  descriptive path for all five tools.
 - **`modules/`** — `translations.js`, `usb-scanner.js`, `receipt.js`,
   `offline-builder.js`, plain global-scope scripts split out of
   `app.html`'s inline block to keep it smaller. See "`modules/` —
@@ -129,7 +134,7 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   same badge to any future blog photo that isn't a genuine, literal
   photo of the thing it's illustrating.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
-  (lists `/`, `app.html`, `invoice.html`, `receipt.html`, `barcode.html`,
+  (lists `/`, `app.html`, `invoice-generator.html`, `receipt-generator.html`, `barcode-generator.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -149,8 +154,8 @@ almost entirely through the GitHub web UI, not a local dev workflow.
 ## Site-wide header, nav & footer
 
 Every marketing/tool page — `index.html`, `about.html`, `contact.html`,
-`privacy.html`, `terms.html`, `blog.html` + its 3 articles, `invoice.html`,
-`receipt.html` — shares one canonical `<header class="site-header">`
+`privacy.html`, `terms.html`, `blog.html` + its 3 articles, `invoice-generator.html`,
+`receipt-generator.html` — shares one canonical `<header class="site-header">`
 structure and CSS block, copied verbatim page to page (`.site-header`,
 `.site-header .brand`/`.brand-mark`, `.site-header .header-right`,
 `.site-nav`, `.cta-btn`). Before this, the site had **four divergent
@@ -169,8 +174,8 @@ all of them under one pattern:
 <a href="/">Homepage</a>
 <a href="blog" class="nav-highlight">Blog</a>
 </nav>
-<a class="cta-btn" href="invoice">Free Invoice Generator</a>
-<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="invoice-generator">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt-generator">Free Receipt Generator</a>
 <a class="cta-btn" href="app">Free Point of Sale</a>
 </div>
 </header>
@@ -181,19 +186,19 @@ all of them under one pattern:
   for `privacy.html`/`terms.html` before this change (see SEO below):
   `index.html`/`about.html`/`contact.html`/`blog.html` (which have no
   other `<h1>`) use `<h1>GoOnlinePOS.com</h1>` here; `privacy.html`/
-  `terms.html` (own `<h1 class="doc-title">`) and `invoice.html`/
-  `receipt.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
+  `terms.html` (own `<h1 class="doc-title">`) and `invoice-generator.html`/
+  `receipt-generator.html` (own `<h1>` reading "Create Invoice"/"Create Receipt")
   use `<h2>` so the page keeps exactly one real `<h1>`.
 - **The 6-button `.cta-btn` row is identical and in the same order on
   every page** — Free Invoice Generator → Free Receipt Generator → Free
-  Barcode & QR Code (`href="barcode"`) → Free VAT Calculator
-  (`href="vat"`) → Free Pricing Calculator (`href="pricing-calculator"`)
+  Barcode & QR Code (`href="barcode-generator"`) → Free VAT Calculator
+  (`href="vat-calculator"`) → Free Pricing Calculator (`href="pricing-calculator"`)
   → Free Point of Sale (`href="app"`), always extension-less.
   `index.html` used to be the only page with this row (2 buttons, no
   POS link); a later pass added the third button there and rolled the
   whole row out site-wide, a later pass added the fourth (Barcode & QR
-  Code) once `barcode.html` was ready to connect, a still-later pass
-  added the fifth (VAT Calculator) once `vat.html` shipped, and a
+  Code) once `barcode-generator.html` was ready to connect, a still-later pass
+  added the fifth (VAT Calculator) once `vat-calculator.html` shipped, and a
   still-later pass added the sixth (Pricing Calculator) once
   `pricing-calculator.html` shipped — see each tool's own section below
   — so **any older note in this file
@@ -257,12 +262,12 @@ all of them under one pattern:
   About/Blog/Facebook too); its Cookie Settings link stays wrapped in the
   `OFFLINE-STRIP:COOKIE-SETTINGS-LINK` marker like before, since the
   offline build has no cookie-consent flow to link to.
-- **`invoice.html`/`receipt.html`** keep their own existing `<header
+- **`invoice-generator.html`/`receipt-generator.html`** keep their own existing `<header
   class="masthead">` (with the page's real `<h1>` — "Create Invoice"/
   "Create Receipt" — and the doc's own from/logo controls) **unchanged
   below** the new `site-header`; the new header was added above it, not
   merged into it. Their old `.top-actions` div (a back-link plus, on
-  `invoice.html`, a second "Open the POS App" button) was removed
+  `invoice-generator.html`, a second "Open the POS App" button) was removed
   entirely as redundant with the new nav — its CSS and the
   `.top-actions` mention in the print hide-list were removed too (the
   print hide-list now hides `.site-header` instead). Neither page had a
@@ -286,7 +291,7 @@ all of them under one pattern:
     the rest of the toolbar), all sharing the exact same dark-green
     (`--accent-dark`) pill styling so they read as one consistent row
     rather than differently-weighted actions. Free Barcode & QR Code
-    (`#createBarcodeButton` → `openCreateBarcode()`) was added once `barcode.html` was ready
+    (`#createBarcodeButton` → `openCreateBarcode()`) was added once `barcode-generator.html` was ready
     to connect - same `window.open(...)` new-tab pattern, same
     `OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
     wrapping, and the same `createBarcodeShortcutLabel` translation key
@@ -321,10 +326,10 @@ all of them under one pattern:
     `CREATE-RECEIPT-BUTTON` marker blocks (JS wrapped in
     `CREATE-INVOICE-JS`/`CREATE-RECEIPT-JS`), same as Homepage's own
     `OFFLINE-STRIP:HOMEPAGE-BUTTON`, and stripped by
-    `buildOfflineAppHtml()` - none of `blog.html`/`invoice.html`/
-    `receipt.html`/`index.html` ship in the offline package for them to
+    `buildOfflineAppHtml()` - none of `blog.html`/`invoice-generator.html`/
+    `receipt-generator.html`/`index.html` ship in the offline package for them to
     open. **`#createVatButton` → `openCreateVat()` was added last**,
-    once `vat.html` shipped - same `window.open(...)` new-tab pattern,
+    once `vat-calculator.html` shipped - same `window.open(...)` new-tab pattern,
     same `OFFLINE-STRIP:CREATE-VAT-BUTTON`/`CREATE-VAT-JS` marker
     wrapping, and the same `createVatShortcutLabel` translation key
     added across all six `modules/translations.js` language blocks, as
@@ -345,8 +350,9 @@ all of them under one pattern:
     **`#createPricingButton` → `openCreatePricing()` was added last**,
     once `pricing-calculator.html` shipped - same `window.open(...)`
     new-tab pattern (opening the extension-less `pricing-calculator`
-    path, not `pricing` - see that page's own section below for why the
-    filename doesn't match its siblings' shorter names), same
+    path, not `pricing` - see that page's own section below for why
+    every tool in this family uses a descriptive multi-word path
+    rather than the shorter names they all originally shipped as), same
     `OFFLINE-STRIP:CREATE-PRICING-BUTTON`/
     `CREATE-PRICING-JS` marker wrapping, and the same
     `createPricingShortcutLabel` translation key added across all six
@@ -548,7 +554,7 @@ all of them under one pattern:
   own framing ("along with backup and offline mode"). **Two more cards
   were added right after that** - "Create invoices" (a file/document
   icon) and "Create receipts" (a zigzag-bottomed receipt icon), each
-  pointing at the free `invoice.html`/`receipt.html` tools reachable
+  pointing at the free `invoice-generator.html`/`receipt-generator.html` tools reachable
   from the header's own "Free Invoice Generator"/"Free Receipt
   Generator" buttons - explicitly requested to balance the grid's row
   count: with the End of Day card the grid stood at 13 cards, leaving a
@@ -969,8 +975,8 @@ zero network calls.
   unlike Buy Premium, there's nothing about it that depends on the
   network. `howToUseShortcutLabel` is the only piece of this feature in
   `modules/translations.js` (the button label, all six languages); the
-  panel's own content is English-only, same as `invoice.html`/
-  `receipt.html`/`end-of-day.html`.
+  panel's own content is English-only, same as `invoice-generator.html`/
+  `receipt-generator.html`/`end-of-day.html`.
 
 ## `modules/` — split-out app.html pieces
 
@@ -1057,7 +1063,7 @@ was removed along with the camera barcode scanner — see "Barcode
 scanning" above.) `vendor/jsbarcode.min.js` and `vendor/qrcode.js` +
 `vendor/qrcode_UTF8.js` (load in that order — the `_UTF8` file patches
 the core file) are the same "unmodified npm build" convention, used
-only by `barcode.html` — see that page's own section below. None of
+only by `barcode-generator.html` — see that page's own section below. None of
 the three are referenced by `app.html`/`offline-builder.js`, so they
 have no bearing on the offline package.
 
@@ -1240,7 +1246,7 @@ remember. The whole mechanism lives inside `app.html` itself:
   actual download — see `confirmOfflineDownload()`.
 - On confirm, it `fetch()`es the **currently live** `app.html`,
   `customer.html`, and `end-of-day.html` (same-origin, `cache: "no-store"`)
-  - **not** `invoice.html`/`receipt.html`/`barcode.html`, all three
+  - **not** `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`, all three
   deliberately excluded (see their own sections above) - plus the
   static ingredients under `offline/`
   (`README.txt`, the three `start-server.*` launchers,
@@ -1283,13 +1289,13 @@ remember. The whole mechanism lives inside `app.html` itself:
   neither `index.html` nor `blog.html` ships in the offline package for
   them to open, and the "Free Invoice Generator" button + its
   `openCreateInvoice()` function (`CREATE-INVOICE-BUTTON`/
-  `CREATE-INVOICE-JS` - there's no `invoice.html` in the offline copy
+  `CREATE-INVOICE-JS` - there's no `invoice-generator.html` in the offline copy
   for it to open), the "Free Receipt Generator" button + its
   `openCreateReceipt()` function (`CREATE-RECEIPT-BUTTON`/
-  `CREATE-RECEIPT-JS`, the same treatment for `receipt.html`), and the
+  `CREATE-RECEIPT-JS`, the same treatment for `receipt-generator.html`), and the
   "Free Barcode & QR Code" button + its `openCreateBarcode()` function
   (`CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS`, the same treatment for
-  `barcode.html`).
+  `barcode-generator.html`).
 - **Gate B — the offline copy's own Premium lock is separate from the
   live site's.** The `/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START/END */`
   marked block (the live site's Google-Sheet-validated activation flow —
@@ -1351,7 +1357,7 @@ is needed on this page; it silently does nothing if that key isn't
 every other analytics/ads script is stripped from the offline package —
 zero network calls there.
 
-## `invoice.html` — standalone invoice generator
+## `invoice-generator.html` — standalone invoice generator
 
 A free-standing invoice builder, loosely modeled after invoice-generator.com
 (a reference copy was provided for the request) but **not a copy of it** -
@@ -1389,7 +1395,7 @@ the on-page heading stays the more natural "Create Invoice").
   none of the JS (`collectState`/`applyState`/`recalcTotals`) needed to
   change.
 - **Every page's header `.cta-btn` row** (next to the `Homepage`/`Blog`
-  nav links, `.site-header .cta-btn`) links here (`href="invoice"`, labeled
+  nav links, `.site-header .cta-btn`) links here (`href="invoice-generator"`, labeled
   "Free Invoice Generator", first of the 4 CTA buttons) - a deliberate
   choice to give the free tool prime header real estate as a lead-in,
   since `app.html` still has its own prominent "Open the app" buttons in
@@ -1496,16 +1502,16 @@ the on-page heading stays the more natural "Create Invoice").
   consistent with it being a new, separate feature rather than a
   from-day-one part of the translated POS app.
 
-## `receipt.html` — standalone receipt generator
+## `receipt-generator.html` — standalone receipt generator
 
-A free-standing **payment receipt** builder, `invoice.html`'s sibling tool
+A free-standing **payment receipt** builder, `invoice-generator.html`'s sibling tool
 and built by mirroring its architecture closely (own `--ink`/`--accent`/
 `--gold` design tokens, own cookie-consent banner, own autosave-draft +
 explicit Save/Saved-list pattern, `window.print()` + `@media print` for
 PDF export). It now supports line items and a payment split (added after
 initial feedback that the first version, a non-itemized single Total/
 Received summary, was missing both) - see the items/payment bullet
-below - though it's still lighter than `invoice.html`: no tax/discount
+below - though it's still lighter than `invoice-generator.html`: no tax/discount
 math, since a receipt records what was already paid rather than
 computing a bill.
 `app.html`'s own **"Free Receipt Generator"** header-links button
@@ -1517,42 +1523,42 @@ linked from every marketing page's `.cta-btn` row) as a free tool
 independent of the POS app. The page's
 own `<h1>` reads **"Create Receipt"** (the `<title>`/meta description
 lead with "Free Receipt Generator" for SEO search-term value, same
-pattern as `invoice.html`).
+pattern as `invoice-generator.html`).
 - **Every page's header `.cta-btn` row** has "Free Invoice Generator"
-  (`href="invoice"`) and "Free Receipt Generator" (`href="receipt"`) as
+  (`href="invoice-generator"`) and "Free Receipt Generator" (`href="receipt-generator"`) as
   its first two buttons, in that order, before "Free Point of Sale" -
   see "Site-wide header, nav & footer" above for the full pattern.
 - **Header layout follows common commercial-receipt convention**, the
   same `.doc-header`/`.doc-header-left`/`.doc-header-right`/`.doc-meta`/
-  `.bill-to-block`/`.currency-inline` structure as `invoice.html` (see
+  `.bill-to-block`/`.currency-inline` structure as `invoice-generator.html` (see
   its own section above for the full breakdown) - logo + "From" on the
   left, the right-aligned "RECEIPT" title/number/Date on the right, a
   no-print `.currency-inline` picker tucked above the title instead of a
   printed "Currency" field, and "Received From" (renamed from
-  `invoice.html`'s "Bill To") as its own block below the header. Only
+  `invoice-generator.html`'s "Bill To") as its own block below the header. Only
   markup/CSS changed - every field kept its original `id` so no JS
   needed to change.
 - **Line items and a payment split**: an `.items-table` (`#rcItemsBody`,
-  Description/Amount - no Qty/Rate split like `invoice.html`, since a
+  Description/Amount - no Qty/Rate split like `invoice-generator.html`, since a
   receipt line is usually a flat amount, not a quantity × rate
   calculation) whose row amounts sum into **Total**, and a
   **Payment Received** block (`#rcPaymentsBody`, one `.payment-row` per
   payment method + amount) whose row amounts sum into **Total Received**.
   Both start with one row on a new receipt and can't go below one (the
   remove button disables itself on the last row), mirroring
-  `invoice.html`'s own items table. **Total Due** stays computed as
+  `invoice-generator.html`'s own items table. **Total Due** stays computed as
   Total − Total Received. Payment methods are a `<select>` seeded from
   `DEFAULT_PAYMENT_METHODS` (Cash/Card/Bank Transfer/Cheque/Other) plus
   any custom ones a user has typed before (persisted in
   `localStorage["goonlinepos-receipt-payment-methods"]`, shared across
   all receipts in that browser) - picking "+ Add New..." prompts for a
   name and adds it to that list. There is still no discount/tax math
-  (unlike `invoice.html`) - itemizing here is about listing what was
+  (unlike `invoice-generator.html`) - itemizing here is about listing what was
   paid for and how, not computing a bill.
 - **Amount in Words** (`amountToWords()`) - auto-converts the Total into
   words underneath the totals box, currency-aware via a `CURRENCIES` map
   (`{symbol, name, subunit, decimals}` per code) richer than
-  `invoice.html`'s plain `{code: symbol}` map, since it needs the
+  `invoice-generator.html`'s plain `{code: symbol}` map, since it needs the
   currency's spoken name/subunit and decimal precision (e.g. Bahraini
   Dinar/Kuwaiti Dinar use 3 decimals/"Fils", not the usual 2). Whole
   amounts read e.g. "Five Hundred Seventeen Bahraini Dinars Only";
@@ -1573,7 +1579,7 @@ pattern as `invoice.html`).
   the autosave draft and through Saved Receipts (reopening a saved
   receipt restores the original remarks and toggle state exactly).
 - **"Save Receipt" / "Saved Receipts"** - the same explicit-save-plus-list
-  pattern as `invoice.html`'s "Save Invoice"/"Saved Invoices": "💾 Save
+  pattern as `invoice-generator.html`'s "Save Invoice"/"Saved Invoices": "💾 Save
   Receipt" pushes the current form into a `goonlinepos-receipt-history`
   `localStorage` array (`{id, number, receivedFrom, total, date,
   savedAt, state}`) and shows a `.save-toast`; "📂 Saved Receipts" opens
@@ -1586,12 +1592,12 @@ pattern as `invoice.html`).
   **update** its existing history entry instead of duplicating it - only
   "Clear / New Receipt" resets it to `null`.
 - **A4/Letter print sizing** (`@page { size: A4; margin: 0; }`), matching
-  `invoice.html`'s own print CSS rather than `app.html`'s 80mm thermal
+  `invoice-generator.html`'s own print CSS rather than `app.html`'s 80mm thermal
   receipt convention - this tool is meant to print or save as a regular
   document/PDF, not on a thermal receipt printer. (An earlier version
   used `@page { size: 80mm auto; margin: 0; }` to match `app.html`'s
-  thermal receipts, but was changed to A4/Letter to match `invoice.html`
-  instead, per explicit feedback.) Like `invoice.html`, `@page` margin is
+  thermal receipts, but was changed to A4/Letter to match `invoice-generator.html`
+  instead, per explicit feedback.) Like `invoice-generator.html`, `@page` margin is
   `0` and the visual page margin comes from `.wrap { padding: 12mm }` in
   print instead, so the browser's own print header/footer (title, URL,
   date, page number) has no room to render - and every `<select>`
@@ -1599,24 +1605,24 @@ pattern as `invoice.html`).
   `appearance: none` (plus the `-webkit-`/`-moz-` prefixes) in print so
   no dropdown-arrow icon shows next to the now-borderless select.
 - **Has its own full cookie-consent banner**, same reasoning as
-  `invoice.html` - a separate `goonlinepos-cookie-consent` check since
+  `invoice-generator.html` - a separate `goonlinepos-cookie-consent` check since
   this page can be visited directly.
 - **Deliberately NOT bundled into the "Download Offline POS" package** -
-  same policy as `invoice.html`, a separate free web tool rather than
+  same policy as `invoice-generator.html`, a separate free web tool rather than
   part of the offline POS itself. `app.html`'s own "Free Receipt
   Generator" button and `openCreateReceipt()` function are wrapped in
   their own `OFFLINE-STRIP:CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`
   marker blocks (mirroring Create Invoice's exact markers) so they
   don't appear in the offline copy either.
 - Six-language UI strings are **not** part of this page, same as
-  `invoice.html` - `app.html`'s `translations` dictionary only supplies
+  `invoice-generator.html` - `app.html`'s `translations` dictionary only supplies
   the `createReceiptShortcutLabel` header-links text; the receipt tool
   itself is English-only.
 
-## `barcode.html` — standalone barcode / QR code generator
+## `barcode-generator.html` — standalone barcode / QR code generator
 
-A free-standing barcode and QR code generator, `invoice.html`/
-`receipt.html`'s third sibling free tool, built by mirroring their
+A free-standing barcode and QR code generator, `invoice-generator.html`/
+`receipt-generator.html`'s third sibling free tool, built by mirroring their
 exact architecture (own `--ink`/`--accent`/`--gold` design tokens
 copied verbatim, own cookie-consent banner, own autosave-draft +
 explicit Save/Saved-list pattern, an "info-section" How-to + FAQ
@@ -1635,15 +1641,15 @@ disconnected (URL-only, `noindex`) while the tool itself was still
 being built, and was wired in only once the feature set was confirmed
 ready. `app.html`'s own `.header-links` row picked up a matching
 `#createBarcodeButton` → `openCreateBarcode()` (`window.open(...)` to
-`barcode`, same new-tab pattern as Create Invoice/Create Receipt, same
+`barcode-generator`, same new-tab pattern as Create Invoice/Create Receipt, same
 `OFFLINE-STRIP:CREATE-BARCODE-BUTTON`/`CREATE-BARCODE-JS` marker
-wrapping since `barcode.html` isn't in the offline package either -
+wrapping since `barcode-generator.html` isn't in the offline package either -
 `modules/offline-builder.js` strips both), and
 `modules/translations.js` picked up a `createBarcodeShortcutLabel` key
 across all six language blocks to match. `vendor/LICENSES.txt`'s "not
 yet linked from any other page" note for `jsbarcode.min.js`/
 `qrcode.js`/`qrcode_UTF8.js` is now stale now that the page linking to
-them is connected - the libraries themselves are still barcode.html-only,
+them is connected - the libraries themselves are still barcode-generator.html-only,
 just no longer via an unlinked page.
 - **Type toggle**: two `.type-tab` pill buttons, Barcode vs QR Code
   (`#tabBarcode`/`#tabQr`), switching which form rows/size-preset list
@@ -1829,7 +1835,7 @@ just no longer via an unlinked page.
   all 10 decode correctly at the current widths (`solid-strong: 0.5mm`,
   `solid-medium: 0.4mm`, `dashed: 0.5mm`, `dotted: 0.6mm`).
 - **Save/Saved Codes** follows the exact same explicit-save-plus-list
-  pattern as `invoice.html`/`receipt.html`'s own Save/Saved
+  pattern as `invoice-generator.html`/`receipt-generator.html`'s own Save/Saved
   Invoices/Receipts: "💾 Save" pushes the current form into a
   `goonlinepos-barcode-history` `localStorage` array (`{id, type,
   value, sizeLabel, savedAt, state}`) and shows a `.save-toast`;
@@ -1866,28 +1872,28 @@ just no longer via an unlinked page.
   `qrcode-generator` (a single ready-to-use classic script, no bundler
   needed) was used instead.
 
-## `vat.html` — standalone VAT calculator
+## `vat-calculator.html` — standalone VAT calculator
 
-A free-standing VAT calculator, `invoice.html`/`receipt.html`/
-`barcode.html`'s fourth sibling free tool, built by mirroring their
+A free-standing VAT calculator, `invoice-generator.html`/`receipt-generator.html`/
+`barcode-generator.html`'s fourth sibling free tool, built by mirroring their
 exact architecture (own `--ink`/`--accent`/`--gold` design tokens
 copied verbatim, own cookie-consent banner, own autosave-draft +
 explicit Save/Saved-list pattern, an "info-section" How-to + FAQ
 block, own `<meta name="robots">` of `index, follow`, its own
 `sitemap.xml` entry, its own `SiteNavigationElement` JSON-LD entry on
 `index.html`). Indexable and connected from day one - unlike
-`barcode.html`, there was no unlinked/building period, since the
+`barcode-generator.html`, there was no unlinked/building period, since the
 calculator/save-list pattern was already proven three times over by
 the time this was built.
 - **Every page's header `.cta-btn` row** picked up a fifth button,
-  **"Free VAT Calculator"** (`href="vat"`), inserted right after "Free
+  **"Free VAT Calculator"** (`href="vat-calculator"`), inserted right after "Free
   Barcode & QR Code" and before "Free Point of Sale" - see "Site-wide
   header, nav & footer" below for the full row and why the order is
   what it is. `app.html`'s own `.header-links` row picked up a
   matching `#createVatButton` → `openCreateVat()` (`window.open(...)`
-  to `vat`, same new-tab pattern as Create Invoice/Receipt/Barcode,
+  to `vat-calculator`, same new-tab pattern as Create Invoice/Receipt/Barcode,
   same `OFFLINE-STRIP:CREATE-VAT-BUTTON`/`CREATE-VAT-JS` marker
-  wrapping since `vat.html` isn't in the offline package either -
+  wrapping since `vat-calculator.html` isn't in the offline package either -
   `modules/offline-builder.js` strips both), and
   `modules/translations.js` picked up a `createVatShortcutLabel` key
   across all six language blocks to match. This surfaced a real,
@@ -1895,7 +1901,7 @@ the time this was built.
   Barcode & QR Code button too - see "Site-wide header, nav & footer"
   above, under `.header-links`, for the full story and fix.
 - **Two modes, one shared result set**: `#tabAddVat`/`#tabRemoveVat`
-  (the same `.type-tabs`/`.type-tab` pill pattern `barcode.html` uses
+  (the same `.type-tabs`/`.type-tab` pill pattern `barcode-generator.html` uses
   for Barcode/QR Code) switch between "Add VAT" (the entered amount is
   treated as Net, before tax) and "Remove VAT" (the entered amount is
   treated as Gross, already including tax) - `#vatAmountLabel`'s text
@@ -1907,7 +1913,7 @@ the time this was built.
   gross - net`, the standard VAT math either direction.
 - **VAT Rate is a curated preset list plus Custom**, the same
   `<select>`-with-a-`Custom`-option-that-reveals-a-field pattern
-  `barcode.html`'s Label Size uses: `VAT_RATES` holds common standard
+  `barcode-generator.html`'s Label Size uses: `VAT_RATES` holds common standard
   rates (20%/UK, France; 21%/Netherlands, Belgium; 19%/Germany;
   15%/South Africa, NZ GST; 12%/Philippines; 10%/Australia GST;
   7%/Thailand; 5%/UAE; 0%/zero-rated) each labeled with the rate and a
@@ -1918,30 +1924,30 @@ the time this was built.
   by product/service type, and that this tool doesn't provide tax
   advice; the presets exist to save typing a common rate, not to
   assert a rate is correct for any specific business.
-- **Currency is the same plain `{code: symbol}` map `invoice.html`
-  already has** (`CURRENCIES`, copied verbatim - see `invoice.html`'s
+- **Currency is the same plain `{code: symbol}` map `invoice-generator.html`
+  already has** (`CURRENCIES`, copied verbatim - see `invoice-generator.html`'s
   own section above) via a `.currency-inline` picker (same class/CSS
-  as `invoice.html`/`receipt.html`'s own currency control) above the
+  as `invoice-generator.html`/`receipt-generator.html`'s own currency control) above the
   amount field. `formatAmount(value, code)` is the shared money
   formatter, always 2 decimals regardless of currency, matching
-  `invoice.html`'s own `money()` - this tool doesn't need
-  `receipt.html`'s richer per-currency decimals/subunit handling since
+  `invoice-generator.html`'s own `money()` - this tool doesn't need
+  `receipt-generator.html`'s richer per-currency decimals/subunit handling since
   there's no "Amount in Words" feature here.
-- **No Print/Download output** - unlike `barcode.html` (Download PNG)
-  or `invoice.html`/`receipt.html` (print-to-PDF), a VAT calculation is
+- **No Print/Download output** - unlike `barcode-generator.html` (Download PNG)
+  or `invoice-generator.html`/`receipt-generator.html` (print-to-PDF), a VAT calculation is
   just three numbers, not a document or image, so there's nothing
   meaningful to export as a file. The action bar is Save/Saved
   Calculations/Clear-New only, three buttons instead of the other
   tools' four.
 - **Save/Saved Calculations** follows the exact same
-  explicit-save-plus-list pattern as `invoice.html`/`receipt.html`/
-  `barcode.html`'s own Save/Saved Invoices/Receipts/Codes: "💾 Save"
+  explicit-save-plus-list pattern as `invoice-generator.html`/`receipt-generator.html`/
+  `barcode-generator.html`'s own Save/Saved Invoices/Receipts/Codes: "💾 Save"
   pushes the current calculation into a `goonlinepos-vat-history`
   `localStorage` array (`{id, mode, currency, rateLabel, net, vat,
   gross, savedAt, state}`) and shows a `.save-toast`; "📂 Saved
   Calculations" opens a `.modal-overlay` (`#savedVatOverlay`) listing
   entries newest-first, each row carrying a small `Add VAT`/`Remove
-  VAT` badge (reusing `barcode.html`'s `.saved-code-badge`/`.type-qr`
+  VAT` badge (reusing `barcode-generator.html`'s `.saved-code-badge`/`.type-qr`
   CSS verbatim - green for Add VAT, gold for Remove VAT, same
   two-accent-color convention) and reopening the full state on click,
   or deletable via its own ✕ with a `confirm()`. `currentCalcId`
@@ -1952,31 +1958,31 @@ the time this was built.
   in-progress calculation also autosaves to `goonlinepos-vat-draft`
   exactly like the other three tools.
 - **FAQ includes the now-standard "Is there a limit on how many
-  calculations I can do?" entry** (matching `barcode.html`'s own
+  calculations I can do?" entry** (matching `barcode-generator.html`'s own
   "Is there a limit on how many codes I can generate?" - see that
   page's section above), since every tool in this free-tools family
   now answers that question the same way: no, everything runs
   client-side with no server call and no usage cap.
 - **Deliberately NOT bundled into the "Download Offline POS" package** -
-  same policy as `invoice.html`/`receipt.html`/`barcode.html`, a
+  same policy as `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`, a
   separate free web tool rather than part of the offline POS itself.
 - Six-language UI strings are **not** part of this page, same as
-  `invoice.html`/`receipt.html`/`barcode.html` - `app.html`'s
+  `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html` - `app.html`'s
   `translations` dictionary only supplies the `createVatShortcutLabel`
   header-links text; the calculator itself is English-only.
 
 ## `pricing-calculator.html` — standalone product pricing calculator
 
 A free-standing product pricing / markup-vs-margin calculator, the fifth
-sibling in the `invoice.html`/`receipt.html`/`barcode.html`/`vat.html`
+sibling in the `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`/`vat-calculator.html`
 family of free tools, built on the same architecture (own
 `--ink`/`--accent`/`--gold` design tokens copied verbatim, own
 cookie-consent banner, own autosave-draft + explicit Save/Saved-list
-pattern, the same `invoice.html`-derived `CURRENCIES` map). It started
+pattern, the same `invoice-generator.html`-derived `CURRENCIES` map). It started
 out deliberately disconnected (URL-only, `noindex, follow`) while the
-site owner reviewed it - the same "unlinked" phase `barcode.html` went
-through - then was wired in site-wide the same way `barcode.html`/
-`vat.html` were once ready: `<meta name="robots">` is `index, follow`,
+site owner reviewed it - the same "unlinked" phase `barcode-generator.html` went
+through - then was wired in site-wide the same way `barcode-generator.html`/
+`vat-calculator.html` were once ready: `<meta name="robots">` is `index, follow`,
 it has a `sitemap.xml` entry, it's one of the six `SiteNavigationElement`
 entries in `index.html`'s own JSON-LD, and every page's shared header
 carries a sixth **"Free Pricing Calculator"** `.cta-btn` linking to it
@@ -1988,9 +1994,13 @@ ambiguous (easy to mistake for a SaaS "our pricing/plans" page rather
 than a calculator tool), so every reference (the `.cta-btn` `href` on
 all 13 pages, `app.html`'s own link, `sitemap.xml`, the JSON-LD entry,
 and this file's own `<link rel="canonical">`/`og:url`) points at the
-longer `pricing-calculator` path instead. This is the one tool in the
-family whose filename doesn't match its siblings' shorter one-word
-convention - deliberately, not an oversight; don't rename it back.
+longer `pricing-calculator` path instead. This was the first of the
+five free tools to get a descriptive multi-word URL - `invoice.html`/
+`receipt.html`/`barcode.html`/`vat.html` were each renamed to
+`invoice-generator.html`/`receipt-generator.html`/
+`barcode-generator.html`/`vat-calculator.html` shortly after, for the
+same clarity reason (see the repo-layout bullet near the top of this
+file). Don't rename any of the five back to their original bare names.
 `app.html`'s own `.header-links` row picked up a matching
 `#createPricingButton` → `openCreatePricing()` (`window.open(...)` to
 `pricing-calculator`, same new-tab pattern as Create Invoice/Receipt/
@@ -2021,7 +2031,7 @@ the two easy-to-forget omissions that bit the Barcode button rollout
 - **Two calculators in one page, connected by a single button.** The
   main calculator (always visible) takes a **Cost Per Unit**, a choice
   between **Target Margin %** or **Target Markup %** (the same
-  `.type-tabs` pill pattern `barcode.html`/`vat.html` use), and shows
+  `.type-tabs` pill pattern `barcode-generator.html`/`vat-calculator.html` use), and shows
   **all four** figures at once - Suggested Selling Price, Profit Per
   Unit, Margin, and Markup - regardless of which one was the input, so
   the markup/margin gap described above is always visible rather than
@@ -2039,7 +2049,7 @@ the two easy-to-forget omissions that bit the Barcode button rollout
 - **The math, standard and currency/region-agnostic on purpose** (per
   an explicit "make sure it's standard international use" requirement -
   no country-specific tax entanglement, no region-locked reference
-  numbers, and the same ~150-currency `CURRENCIES` map `invoice.html`
+  numbers, and the same ~150-currency `CURRENCIES` map `invoice-generator.html`
   already has, not a USD-only tool): given cost `C` and a target margin
   `m` (as a decimal), `price = C / (1 - m)`; given cost `C` and a target
   markup `k`, `price = C * (1 + k)`. Once price is known, `profit =
@@ -2050,12 +2060,12 @@ the two easy-to-forget omissions that bit the Barcode button rollout
   negative) - `computeResults()` returns an `invalid` flag in that case
   and the UI shows a `field-hint warn` message plus `--` in every result
   field instead of a nonsense number, the same "don't silently compute
-  garbage" pattern `barcode.html`'s density warning uses. Deliberately
-  **no VAT/sales-tax math anywhere on this page** - that's `vat.html`'s
+  garbage" pattern `barcode-generator.html`'s density warning uses. Deliberately
+  **no VAT/sales-tax math anywhere on this page** - that's `vat-calculator.html`'s
   job; mixing the two would make this page's math depend on the
   visitor's jurisdiction, defeating the international-by-default goal.
 - **Save/Saved Calculations** follows the exact same
-  explicit-save-plus-list pattern as `barcode.html`/`vat.html`'s own
+  explicit-save-plus-list pattern as `barcode-generator.html`/`vat-calculator.html`'s own
   Save/Saved Codes/Calculations: "💾 Save" pushes the current
   calculation into a `goonlinepos-pricing-history` `localStorage` array
   (`{id, mode, currency, cost, targetPercent, price, profit, savedAt,
@@ -2064,29 +2074,29 @@ the two easy-to-forget omissions that bit the Barcode button rollout
   what was in it, not just the final numbers) and shows a `.save-toast`;
   "📂 Saved Calculations" opens a `.modal-overlay` listing entries
   newest-first with a `Margin`/`Markup` badge (green/gold, reusing
-  `barcode.html`'s `.saved-code-badge`/`.type-qr` CSS verbatim). The
+  `barcode-generator.html`'s `.saved-code-badge`/`.type-qr` CSS verbatim). The
   current in-progress calculation - main fields and batch-helper fields
   both - also autosaves to `goonlinepos-pricing-draft`, same as the
   other three calculators.
-- **No Print/Download output**, same reasoning as `vat.html` - a price
+- **No Print/Download output**, same reasoning as `vat-calculator.html` - a price
   is a few numbers, not a document or image, so the action bar is
   Save/Saved Calculations/Clear-New only.
 - **FAQ deliberately avoids prescribing a "correct" margin or markup**
   ("What margin or markup should I aim for?" answers that it varies by
   industry/product/market and that any number shown online is a
   reference point, not a rule, this tool doesn't provide business
-  advice) - consistent with `vat.html`'s own disclaimer about its rate
+  advice) - consistent with `vat-calculator.html`'s own disclaimer about its rate
   presets being for reference only, and for the same reason: real
   answers depend on a business's actual costs and market, not a single
   global constant.
 - **Deliberately NOT bundled into the "Download Offline POS" package** -
-  same policy as `invoice.html`/`receipt.html`/`barcode.html`/
-  `vat.html`, a separate free web tool rather than part of the offline
+  same policy as `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`/
+  `vat-calculator.html`, a separate free web tool rather than part of the offline
   POS itself. Since it also isn't linked from `app.html` at all yet
   (see above), there is currently no button anywhere that would need an
   `OFFLINE-STRIP` marker for it regardless.
 - Six-language UI strings are **not** part of this page, matching
-  `invoice.html`/`receipt.html`/`barcode.html`/`vat.html` - the
+  `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`/`vat-calculator.html` - the
   calculator itself is English-only; a `createPricingShortcutLabel`
   translation key only gets added once `app.html`'s `.header-links`
   button is added, per the rollout checklist above.
@@ -2107,7 +2117,7 @@ the two easy-to-forget omissions that bit the Barcode button rollout
 Replaces the old in-app "Sales Summary" panel (`toggleSalesSummary()`/
 `renderSalesSummary()`/`saleMethodBreakdown()`, all removed from
 `app.html`) with a standalone, printable, saveable report. Unlike
-`invoice.html`/`receipt.html`, this page is **not** decoupled from
+`invoice-generator.html`/`receipt-generator.html`, this page is **not** decoupled from
 `app.html` - it's a real POS report, so it deliberately reads the same
 storage keys `app.html` writes (`pos-sales-history`, `pos-cashiers`,
 `pos-settings`, `pos-logo`), via the exact same
@@ -2181,8 +2191,8 @@ existing sales data, not a public lead-gen page like invoice/receipt.
   cross-tab sync mechanism here (unlike the customer-facing screen's
   `BroadcastChannel`), since this report is meant to be pulled up
   on demand at closing time, not kept open continuously.
-- **Included in the offline package** (unlike `invoice.html`/
-  `receipt.html`) - `modules/offline-builder.js` fetches
+- **Included in the offline package** (unlike `invoice-generator.html`/
+  `receipt-generator.html`) - `modules/offline-builder.js` fetches
   `end-of-day.html` alongside `app.html`/`customer.html` and runs it
   through its own `buildOfflineEndOfDayHtml()`, which strips the same
   `GOOGLE-FONTS` marker every offline page strips plus its own
@@ -2325,7 +2335,7 @@ POST responses).
   plain PNG-in-ICO wrapper — see git history for the generation script) or
   the two will drift. The offline package (see below) bundles both.
 - **`sitemap.xml` lists every indexable page** — `/`, `app.html`,
-  `invoice.html`, `receipt.html`, `barcode.html`,
+  `invoice-generator.html`, `receipt-generator.html`, `barcode-generator.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
   `blog-create-your-own-pos-with-appsheet.html`,
   `blog-from-excel-to-appsheet-expert.html`, `contact.html`,
@@ -2424,7 +2434,7 @@ POST responses).
   `href="/index"`. `sitemap.xml`'s `<loc>` entries were updated to match.
   This is safe for every marketing page (`index.html`, `about.html`,
   `contact.html`, `guide.html`, `how-it-works.html`, `privacy.html`,
-  `terms.html`, `blog.html` + its articles, `invoice.html`, `receipt.html`)
+  `terms.html`, `blog.html` + its articles, `invoice-generator.html`, `receipt-generator.html`)
   since none of them are bundled into the offline `.zip`, where extension-less
   resolution doesn't exist (plain Python `http.server` and `file://`
   both need the real filename). **Two deliberate exceptions inside
@@ -2438,8 +2448,9 @@ POST responses).
   `app.html`'s own offline-download modal copy and in
   `modules/translations.js`'s `offlineModalHowList`, all six
   languages). `openCreateInvoice()`/`openCreateReceipt()`, by contrast,
-  **were** changed to extension-less `"invoice"`/`"receipt"`, since
-  neither `invoice.html` nor `receipt.html` is in the offline package
+  **were** changed to extension-less `"invoice-generator"`/
+  `"receipt-generator"`, since
+  neither `invoice-generator.html` nor `receipt-generator.html` is in the offline package
   (see their own sections above) - the buttons that call them are
   stripped from the offline copy entirely, so these functions only ever
   run on the live site. `app.html`'s own `#homepageShortcutButton`/
