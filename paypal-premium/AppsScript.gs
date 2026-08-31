@@ -29,7 +29,7 @@ var SUPABASE_SERVICE_ROLE_KEY = "REPLACE_WITH_YOUR_SUPABASE_SERVICE_ROLE_KEY";
 // Must match the prices shown in app.html's Buy Premium modal exactly
 // (as strings, since that's how PayPal echoes the amount back). Update
 // both places together if pricing ever changes.
-var PLAN_DAYS_BY_AMOUNT = { "0.50": 3, "3.99": 30, "9.99": 90, "19.99": 365 };
+var PLAN_DAYS_BY_AMOUNT = { "0.39": 3, "3.99": 30, "9.99": 90, "19.99": 365 };
 
 function doPost(e) {
   var params = {};
