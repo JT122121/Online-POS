@@ -119,7 +119,25 @@ function formatPremiumUntil(iso) {
   return d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
 }
 
+function renderWelcomeBadge() {
+  const subtitleEl = document.getElementById("appSubtitle");
+  const welcomeEl = document.getElementById("accountWelcomeBadge");
+  const textEl = document.getElementById("accountWelcomeText");
+  if (!welcomeEl || !textEl || !subtitleEl) return;
+  if (!currentUser) {
+    welcomeEl.classList.add("hidden");
+    subtitleEl.classList.remove("hidden");
+    return;
+  }
+  const name = (currentUser.user_metadata && (currentUser.user_metadata.full_name || currentUser.user_metadata.name)) || currentUser.email;
+  const statusLabel = premiumUnlocked ? tr("premiumBadgeLabel") : tr("basicBadgeLabel");
+  textEl.textContent = tr("accountWelcomeLabel") + " " + name + " · " + statusLabel;
+  welcomeEl.classList.remove("hidden");
+  subtitleEl.classList.add("hidden");
+}
+
 function renderAccountPanel() {
+  renderWelcomeBadge();
   const signedOut = document.getElementById("accountSignedOut");
   const signedIn = document.getElementById("accountSignedIn");
   if (!signedOut || !signedIn) return;

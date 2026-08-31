@@ -1469,7 +1469,25 @@ live code calls it anymore.
   date when applicable (`#accountStatusFree`/`#accountStatusPremium`/
   `#accountPremiumUntil`, formatted by `formatPremiumUntil()`), a Redeem
   Code field + button (`#redeemCodeInput`/`redeemCodeNow()`), and Sign
-  Out. **"Get Your Free Trial"** (`#freeTrialBtn` → `openFreeTrial()`,
+  Out.
+  - **A signed-in visitor also sees a header welcome line on the main
+    POS screen itself**, not just inside the Account panel -
+    `#accountWelcomeBadge` (`👋 Welcome, <name> · <Basic/Premium>`)
+    swaps in for the normal `#appSubtitle` ("No signup. No login...")
+    right under the app title, wrapped in its own
+    `OFFLINE-STRIP:ACCOUNT-WELCOME` marker since it has no offline
+    equivalent. `renderWelcomeBadge()` (`modules/account.js`) builds the
+    name from the signed-in Google profile
+    (`currentUser.user_metadata.full_name`/`.name`, falling back to the
+    email if neither is set) and the subscription word from the same
+    `premiumBadgeLabel`/`basicBadgeLabel` translation keys the header's
+    own Premium/Basic badge already uses, so the two stay in sync by
+    construction. Called from `renderAccountPanel()` (so it updates on
+    every sign-in/out/redeem) and from `changeLanguage()` (guarded with
+    a `typeof` check, since the function doesn't exist offline) so the
+    composed sentence re-translates correctly on a language switch
+    instead of freezing in whatever language was active at sign-in.
+  **"Get Your Free Trial"** (`#freeTrialBtn` → `openFreeTrial()`,
   wrapped in its own `OFFLINE-STRIP:FREE-TRIAL-BUTTON`/`FREE-TRIAL-JS`
   marker pair) sits directly above "Buy Premium Code" - a single click
   opens `contact` in a new tab (`window.open("contact", "_blank")`, the
