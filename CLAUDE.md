@@ -1821,6 +1821,37 @@ live code calls it anymore.
   copy correctly (checked against Spanish), and the offline package
   build has zero leftover markers with both sections correctly absent
   there (neither has anything to sell/trial once a copy is offline).
+- **`index.html`'s Premium-related FAQ answers brought back in sync with
+  the account model**, after the "Is it really free?" answer was flagged
+  as stale - it still described the old, since-retired free-promo/
+  auto-grant system ("Premium features are currently available for free
+  as part of a limited promotion and may require a Premium code in the
+  future"), which stopped being true the moment Account & Subscription
+  replaced that system entirely (see above). Three FAQ answers (from the
+  original set built in "Landing-page branding refresh" further up this
+  file) were rewritten to match the current reality: **"Is it really
+  free?"** now states the Basic plan is free forever with no signup, and
+  that Premium is a paid add-on starting at $3.99/month (mentioning the
+  discounted 3-month/annual plans and the free 7-day trial) redeemed
+  after signing in with Google. **"Do I need to create an account?"**
+  changed from an unqualified "No" to "Not for the free Basic plan" -
+  true when this answer was first written (Premium didn't exist as a
+  sign-in-gated system yet), but Premium now genuinely does require
+  signing in, so the old unqualified answer had become misleading.
+  **"Is Premium a subscription?"** flipped from "No... lifetime on your
+  device... no recurring payments" (accurate for the old one-time
+  Google-Sheet-code system, completely wrong for the current one) to
+  "Yes" - it follows the signed-in account rather than one device, is
+  redeemed in 30/90/365-day increments matching the three pricing tiers,
+  and stacks additively on top of remaining time, mirroring
+  `redeem_code()`'s own real behavior exactly (see "Account &
+  Subscription" above). **"What do I get with Premium?"** picked up the
+  ad-free benefit alongside its existing list, matching
+  `buyPremiumBenefit6` above. Verified with Playwright: the stale
+  "limited promotion"/"lifetime on your device" strings are both gone
+  from the rendered page, all four new answers are present, and the
+  FAQ's item count and every other answer are unchanged, zero console
+  errors.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
