@@ -2022,6 +2022,179 @@ live code calls it anymore.
   FAQ's item count and every other answer are unchanged, zero console
   errors.
 
+## Automated Premium sales via PayPal — no more manually creating codes
+
+The Buy Premium modal's three pricing tiers now each carry a real PayPal
+Smart Payment Button, so a purchase automatically grants Premium on the
+buyer's own account the moment PayPal confirms payment - the site owner no
+longer has to open the Supabase dashboard and hand-create a
+`redemption_codes` row for every sale. Manually creating a code (see the
+`redemption_codes` bullet above) still works and stays the right tool for
+comps/trials/promos - this is purely an additional, automatic path for a
+real cash purchase. Built per an explicit "how can we manage the selling of
+codes without me manually doing it?" request; PayPal, one-time payment (not
+a recurring subscription), was the user's own explicit choice over
+Stripe/Lemon Squeezy/Paddle and over an auto-renewing model - matching how
+codes already work (`duration_days` extends `premium_until`, no recurring
+billing anywhere in this system).
+
+- **Client side (`app.html`, inside the pre-existing
+  `OFFLINE-STRIP:BUY-PREMIUM-JS`/`BUY-PREMIUM-MODAL`/`BUY-PREMIUM-BUTTON`
+  markers - no new markers needed, since the whole Buy Premium modal was
+  already excluded from the offline package).** Each `.pricing-tier`
+  card gained a `.paypal-btn-box` div (`#paypalButtonBox1/2/3`) that
+  PayPal's own Smart Payment Buttons render into. The PayPal JS SDK
+  (`https://www.paypal.com/sdk/js?client-id=...`) is loaded from PayPal's
+  own domain - necessarily external, can't be self-hosted in `vendor/`,
+  same precedent as Google Fonts/Analytics/AdSense already being
+  live-loaded rather than vendored - and **lazily, only when the Buy
+  Premium modal is actually open and the visitor is signed in**
+  (`renderPaypalArea()`, called from `openBuyPremiumModal()` and, guarded,
+  from `modules/account.js`'s `renderAccountPanel()` so a redeem/sign-in
+  refresh mid-flow doesn't leave stale buttons). **Deliberately not called
+  unconditionally on every `renderAccountPanel()` refresh** - an early
+  draft did that, which would have loaded PayPal's SDK for every
+  signed-in visitor regardless of whether they ever open Buy Premium,
+  defeating the point of lazy-loading it; fixed by gating on
+  `#buyPremiumOverlay` actually being visible before calling
+  `renderPaypalArea()`. Signed-out visitors see `#paypalSignInPrompt`
+  ("🔑 Sign in with Google above to pay with PayPal.") instead of empty
+  button boxes - PayPal needs to know *whose* account to credit
+  (`custom_id`), so payment isn't offered until that's known.
+  `paypal.Buttons({...}).render(...)` is called once per tier
+  (`PAYPAL_PLANS`, `{boxId, amount, label}` for 1 Month/$3.99, 3
+  Months/$9.99, 1 Year/$19.99 - matching the existing pricing tiers
+  exactly), each button's `createOrder` sets `custom_id: currentUser.id`
+  and `amount`/`description` from that tier. On `onApprove`, the client
+  calls `actions.order.capture()` (PayPal-side capture, using PayPal's own
+  SDK - the client never touches card details) and then, **not
+  trusting that client-side success alone**, POSTs `{orderID, userId}` to
+  the new Apps Script backend (`PAYPAL_VERIFY_URL`) for real server-side
+  verification and Premium-granting; `showPaypalStatus()` reflects
+  processing/success/failure in `#paypalStatusBox`, and a success calls
+  `refreshAccountState()` so the header badge/Account panel update
+  immediately without a page reload. `PAYPAL_CLIENT_ID`/`PAYPAL_VERIFY_URL`
+  are placeholders in the source (`"REPLACE_WITH_YOUR_..."`) - must be
+  filled in with the real PayPal app Client ID and the deployed Apps
+  Script's `/exec` URL before this works, same convention as every other
+  placeholder secret in this repo (`CONTACT_FORM_URL`,
+  `OFFLINE_PREMIUM_CODE`, the retired `PREMIUM_VALIDATION_URL`).
+  `#buyPremiumContactText` was reworded to "Prefer another way to pay, or
+  PayPal not working for you? Contact us and we'll get you set up with a
+  code instead." (all six `modules/translations.js` languages) - the
+  manual/contact-us path stays as a fallback, it just isn't the primary
+  flow anymore. New translation keys (`paypalSignInPromptText`,
+  `paypalProcessing`, `paypalSuccess`, `paypalVerifyFailed`,
+  `paypalError`, `paypalLoadError`) exist in all six languages, wired into
+  `changeLanguage()`'s `ids` map like everything else in this panel -
+  `paypalSignInPromptText`'s ids-map entry is a harmless no-op on the
+  offline build, same class of dead reference already documented
+  elsewhere in this file, since the whole modal (this entry's target
+  element included) doesn't exist there.
+- **Why verification happens server-side against PayPal's own API, not
+  from a webhook.** PayPal's officially-recommended integration pattern is
+  webhook-signature verification (`PAYPAL-TRANSMISSION-SIG` and friends),
+  but Google Apps Script's `doPost(e)` cannot read arbitrary incoming HTTP
+  headers - only the parsed body/query params - which rules that pattern
+  out on this platform (the same class of Apps Script limitation that
+  already shaped `contact-form/AppsScript.gs`'s GET-with-query-params
+  design). Instead, the browser reports only non-secret **references** -
+  an order ID and the buyer's Supabase user id - to the Apps Script right
+  after client-side capture, and the Apps Script **independently**
+  re-confirms the order's true status/amount/`custom_id` by calling
+  PayPal's own REST API directly (`POST /v1/oauth2/token` for an OAuth
+  token via Basic auth with its own Client ID:Secret, then
+  `GET /v2/checkout/orders/{orderId}`) before crediting anything. This is
+  secure without needing header verification at all - a malicious caller
+  can only ask "is order X really COMPLETED", which only PayPal's own
+  servers can answer truthfully; forging a fake order id or claiming
+  someone else's real order id under a different `userId` both fail,
+  since the Apps Script checks the order's own `custom_id` against the
+  claimed `userId` and refuses (`user_mismatch`) on a mismatch. This is a
+  known, honest platform limitation, not an oversight - documented in
+  `paypal-premium/README.md`'s own "known limitation" section.
+- **`paypal-premium/AppsScript.gs`** (new file, matching
+  `contact-form/AppsScript.gs`'s established style exactly - `var`
+  declarations, `doPost(e)` routing, `UrlFetchApp.fetch()` for outbound
+  calls, `jsonOut()` wrapping `ContentService.createTextOutput(...)`,
+  placeholder secrets that live only in the deployed script.google.com
+  project copy and must never be committed back with real values):
+  `fetchPaypalOrder(orderId)` + `getPaypalAccessToken()` do the PayPal
+  API round-trip above; `grantPremiumInSupabase(orderId, userId, amount,
+  days)` then calls the new `grant_premium_from_paypal` Postgres RPC
+  using the **service role key** (not the public anon key) via a direct
+  REST call to Supabase's PostgREST endpoint - this is the one piece of
+  the whole Account & Subscription system that runs with elevated
+  database privilege, and it lives entirely server-side in this Apps
+  Script, never in any file shipped to a browser. Deploy as a Web App,
+  **Execute as Me, Who has access: Anyone** (same requirement
+  `contact-form/AppsScript.gs` already documents, for the same CORS
+  reason - Apps Script Web Apps don't reliably send CORS headers back on
+  POST responses otherwise).
+- **`grant_premium_from_paypal(p_order_id, p_user_id, p_amount_usd,
+  p_days)`** (new Postgres function, `supabase/schema.sql`) is
+  deliberately **not** grantable to `authenticated`/`anon`, unlike
+  `redeem_code()` - `redeem_code()` is safe to expose because it requires
+  possessing a real, unused code; this function has no equivalent gate,
+  so if it were callable with the ordinary public key, any signed-in
+  visitor could grant themselves free Premium forever by calling it
+  directly with a fabricated order id and their own user id. `revoke all
+  on function ... from public` plus no `grant execute ... to
+  authenticated` means only the service role (used exclusively from
+  `paypal-premium/AppsScript.gs`) can ever call it - confirmed directly
+  via `has_function_privilege('authenticated', ...)` returning `false`
+  against a local test database. It extends `premium_until`
+  **additively**, the identical `greatest(now(), coalesce(v_current_until,
+  now())) + make_interval(days => p_days)` formula `redeem_code()` already
+  uses, so an early repurchase never costs remaining time. A new
+  `paypal_purchases` table (one row per successfully verified order,
+  `order_id` `unique`) is what makes the function **idempotent** - a
+  retried or replayed verification call for the same order hits the
+  unique constraint and returns `{success:false, reason:
+  'already_processed'}` instead of double-crediting, rather than raising
+  an error. Same `enable row level security` + zero policies pattern as
+  `redemption_codes` (default-deny for anon/authenticated; only this
+  `SECURITY DEFINER` function or the dashboard's service-role access can
+  touch it).
+- **Verified two ways, matching this repo's established convention for
+  Account & Subscription changes.** (1) Against a throwaway local
+  PostgreSQL 16 instance (stub `auth.users`/`auth.uid()`/role objects,
+  same harness used for the original `redeem_code()`/`profiles` schema):
+  a fresh purchase correctly extends `premium_until` and inserts a
+  `paypal_purchases` row; replaying the exact same order id correctly
+  no-ops with `already_processed` and leaves `premium_until` unchanged;
+  purchasing a second tier while already Premium correctly **stacks**
+  from the existing `premium_until`, not from `now()`; and the
+  `authenticated` role is confirmed unable to execute the function at
+  all. (2) End-to-end with Playwright against the real `app.html`
+  (mocking `currentUser`/`currentProfile`, the same method used
+  throughout Account & Subscription, since this sandbox cannot reach
+  `paypal.com` or `supabase.co`): signed-out shows the sign-in prompt and
+  empty button boxes; signing in hides the prompt and attempts to load
+  PayPal's SDK (confirmed via the injected `<script src="...paypal.com/
+  sdk...">` tag); a genuine SDK load failure (network-blocked, same as an
+  ad-blocker or connectivity issue would produce for a real visitor) is
+  caught gracefully with zero page errors and the correct
+  `paypalLoadError` message shown in `#paypalStatusBox`, rather than a
+  broken modal. Separately, the built offline `app.html` was verified to
+  have zero leftover `OFFLINE-STRIP` markers, define none of
+  `renderPaypalArea`/`window.paypal`/`window.supabase`, and have no
+  `#buyPremiumBtn` at all - the entire feature is absent there exactly
+  like the rest of the Buy Premium modal already was, with only the same
+  harmless-dead-CSS/dead-ids-map-entry pattern already established for
+  `.pricing-tier`/`.google-signin-btn` and friends (a `.paypal-btn-box`
+  CSS rule with nothing left to apply to).
+- **What the site owner still needs to do before this is actually live** -
+  fully documented in `paypal-premium/README.md`: create a PayPal
+  Developer app (Sandbox first, then Live) for the Client ID/Secret,
+  re-run the updated `supabase/schema.sql` in the Supabase SQL Editor,
+  get the project's service role key (Settings → API, **not** the public
+  anon key), deploy `AppsScript.gs` as a Web App and copy its `/exec`
+  URL, replace `PAYPAL_CLIENT_ID`/`PAYPAL_VERIFY_URL` in `app.html` and
+  `PAYPAL_CLIENT_SECRET`/`SUPABASE_SERVICE_ROLE_KEY` in the deployed Apps
+  Script's own copy (never committed to this repo), test end-to-end with
+  PayPal Sandbox buyer accounts, then switch to Live credentials.
+
 ## "Download Offline POS" (Premium) — dynamic offline package
 
 Settings → Backup has a Premium-gated "Download Offline POS" button that

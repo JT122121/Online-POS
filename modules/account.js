@@ -185,6 +185,14 @@ function renderWelcomeBadge() {
 
 function renderAccountPanel() {
   renderWelcomeBadge();
+  // Only touch the PayPal area (which lazy-loads PayPal's SDK) while the
+  // Buy Premium modal is actually open - never eagerly on every sign-in/
+  // redeem refresh, or every signed-in visitor would load PayPal's script
+  // whether they ever open that modal or not.
+  const buyPremiumOverlay = document.getElementById("buyPremiumOverlay");
+  if (typeof renderPaypalArea === "function" && buyPremiumOverlay && !buyPremiumOverlay.classList.contains("hidden")) {
+    renderPaypalArea();
+  }
   const signedOut = document.getElementById("accountSignedOut");
   const signedIn = document.getElementById("accountSignedIn");
   if (!signedOut || !signedIn) return;
