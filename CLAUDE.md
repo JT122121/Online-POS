@@ -2042,8 +2042,8 @@ billing anywhere in this system).
   `OFFLINE-STRIP:BUY-PREMIUM-JS`/`BUY-PREMIUM-MODAL`/`BUY-PREMIUM-BUTTON`
   markers - no new markers needed, since the whole Buy Premium modal was
   already excluded from the offline package).** Each `.pricing-tier`
-  card gained a `.paypal-btn-box` div (`#paypalButtonBox1/2/3`) that
-  PayPal's own Smart Payment Buttons render into. The PayPal JS SDK
+  card gained a `.paypal-btn-box` div (`#paypalButtonBoxTrial`/`1`/`2`/`3`)
+  that PayPal's own Smart Payment Buttons render into. The PayPal JS SDK
   (`https://www.paypal.com/sdk/js?client-id=...`) is loaded from PayPal's
   own domain - necessarily external, can't be self-hosted in `vendor/`,
   same precedent as Google Fonts/Analytics/AdSense already being
@@ -2062,9 +2062,10 @@ billing anywhere in this system).
   button boxes - PayPal needs to know *whose* account to credit
   (`custom_id`), so payment isn't offered until that's known.
   `paypal.Buttons({...}).render(...)` is called once per tier
-  (`PAYPAL_PLANS`, `{boxId, amount, label}` for 1 Month/$3.99, 3
-  Months/$9.99, 1 Year/$19.99 - matching the existing pricing tiers
-  exactly), each button's `createOrder` sets `custom_id: currentUser.id`
+  (`PAYPAL_PLANS`, `{boxId, amount, label}` for 3-Day Trial/$0.50, 1
+  Month/$3.99, 3 Months/$9.99, 1 Year/$19.99 - matching the pricing
+  tiers shown in the modal exactly), each button's `createOrder` sets
+  `custom_id: currentUser.id`
   and `amount`/`description` from that tier. On `onApprove`, the client
   calls `actions.order.capture()` (PayPal-side capture, using PayPal's own
   SDK - the client never touches card details) and then, **not
@@ -2156,6 +2157,35 @@ billing anywhere in this system).
   `redemption_codes` (default-deny for anon/authenticated; only this
   `SECURITY DEFINER` function or the dashboard's service-role access can
   touch it).
+- **`days` is never trusted from the client - it's looked up server-side
+  from the confirmed payment amount.** `AppsScript.gs`'s `doPost(e)`
+  reads the actual `amount` PayPal itself reports for the captured order
+  (never anything the browser sends), then maps it through a fixed
+  `PLAN_DAYS_BY_AMOUNT` table (`{"0.50": 3, "3.99": 30, "9.99": 90,
+  "19.99": 365}`) to get `days` before calling
+  `grant_premium_from_paypal()` - an unrecognized amount (a price that
+  doesn't match any tier) is refused outright (`unrecognized_amount`)
+  rather than granted with some default. This table's keys must be kept
+  in exact sync with `PAYPAL_PLANS`' `amount` values in `app.html` (as
+  strings, since that's how PayPal echoes the amount back) - **update
+  both together** any time a tier's price changes or a tier is
+  added/removed. **Follow-up: added a $0.50/3-day trial tier**, a fourth
+  `.pricing-tier` (`#paypalButtonBoxTrial`, `buyPremiumPlanTrialName`/
+  `Sub`, all six `modules/translations.js` languages, wired into
+  `changeLanguage()`'s `ids` map like the other three) placed first in
+  `PAYPAL_PLANS` and in the modal - a low-commitment, real-payment entry
+  point ahead of the cheapest existing recurring-priced tier (1 Month).
+  This is distinct from the existing free "🎁 Try Premium Free for 7
+  Days" section further down the same modal (see below) - that one is
+  free and requires contacting the site owner for a manually-issued
+  code; this one is a genuine $0.50 PayPal purchase that grants Premium
+  automatically like the other three tiers, just for 3 days instead of
+  30/90/365. `PLAN_DAYS_BY_AMOUNT` in `paypal-premium/AppsScript.gs`
+  picked up the matching `"0.50": 3` entry in the same pass - a tier
+  added to `app.html` without its `AppsScript.gs` counterpart would
+  silently fail every purchase at that price with `unrecognized_amount`,
+  so the two were edited together deliberately, not as an
+  afterthought.
 - **Verified two ways, matching this repo's established convention for
   Account & Subscription changes.** (1) Against a throwaway local
   PostgreSQL 16 instance (stub `auth.users`/`auth.uid()`/role objects,
