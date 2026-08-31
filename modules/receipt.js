@@ -176,4 +176,19 @@ function updateTotalsAndHeader() {
 function updateReceipt() {
   renderReceiptItems();
   updateTotalsAndHeader();
+  syncQuickReceiptFields();
+}
+
+function syncQuickReceiptFields() {
+  const pairs = [
+    ["quickStoreName", "storeName"], ["quickStoreDetails", "storeDetails"],
+    ["quickTaxName", "taxName"], ["quickTaxRate", "taxRate"],
+    ["quickFooter1", "footer1"], ["quickFooter2", "footer2"],
+    ["quickLanguage", "language"]
+  ];
+  pairs.forEach(function(p) {
+    const qEl = document.getElementById(p[0]);
+    if (!qEl || document.activeElement === qEl) return;
+    qEl.value = val(p[1]);
+  });
 }
