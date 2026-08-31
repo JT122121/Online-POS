@@ -950,10 +950,14 @@ has zero network calls.
     matching what the real field's own `oninput` does), and - **the one
     genuinely Premium-gated pair** - Current Receipt Number and Receipt
     Number Prefix (`#quickReceiptNumberInput`/`#quickReceiptPrefixInput`).
-    Company Logo was deliberately left out - a file-upload control with a
-    thumbnail preview doesn't fit this compact mirror-field pattern the
-    way a text/number/select input does, and it's a set-once item, not
-    something worth a quick-edit shortcut.
+    Company Logo was deliberately left out at first - a file-upload
+    control with a thumbnail preview doesn't fit this compact
+    mirror-field pattern the way a text/number/select input does, and
+    it's a set-once item, not something worth a quick-edit shortcut -
+    **but was added back in a follow-up pass once explicitly asked for**
+    (see below); the "doesn't fit the pattern" reasoning turned out not
+    to be a good enough reason to leave out a field the ask explicitly
+    named.
     - **Premium gating applies identically to the quick mirrors.**
       `applyPremiumLocks()` now also sets
       `quickReceiptNumberInput.disabled`/`quickReceiptPrefixInput.disabled`
@@ -1005,6 +1009,46 @@ has zero network calls.
       (prefix + zero-padded counter); and the built offline package
       (which auto-unlocks Premium) has the same two-way sync working
       with zero leftover markers and zero console errors.
+  - **Follow-up: Company Logo added after all**, per explicit follow-up
+    feedback that specifically named it alongside Receipt Number/Prefix
+    as missing (it wasn't - those two shipped in the pass right above -
+    but Company Logo genuinely had been left out on purpose, and the ask
+    made clear that exclusion wasn't wanted). `#quickLogoFileInput`/
+    `#quickLogoPreviewBox`/`#quickLogoPreview`/`#quickLogoPreviewEmptyText`/
+    `#quickRemoveLogoButton` sit right after Store Details, reusing the
+    exact same `.logo-upload-row`/`.logo-preview-box`/
+    `.logo-upload-actions`/`.remove-logo-btn` CSS classes as the real
+    Settings → Store panel - no new styling needed. Unlike the other
+    quick fields, this isn't a `syncQuickField()` mirror at all - both
+    the real and quick file inputs call the exact same
+    `handleLogoUpload(event)` directly (it already reads generically off
+    `event.target`, so it doesn't care which input triggered it), and
+    both write to the single `logoDataUrl` module variable. `renderLogo()`
+    was generalized from hardcoding one set of preview/empty-text/
+    remove-button ids to looping over **both** the real and quick id sets,
+    so one call updates every place the logo can appear (the receipt
+    itself, plus both preview boxes) instead of needing a second explicit
+    call site. `removeLogo()`/`resetRemoveLogoButton()` were similarly
+    generalized to update both remove buttons together from the same
+    `removeLogoPending` flag - clicking either one arms both, showing
+    the "confirm removal" state in lockstep, since it's genuinely one
+    action with two entry points, not two independent pending removals.
+    Same Premium gating as Receipt Number/Prefix -
+    `applyPremiumLocks()` also disables `#quickLogoFileInput` from
+    `premiumUnlocked`, with a matching inline `.premium-badge` "Premium"
+    tag next to the quick label (`quickPremiumBadgeLogo`, reusing
+    `premiumBadgeLabel`) - the Remove button itself stays enabled
+    regardless of tier both places, matching the real button's own
+    behavior (removing a logo you already have isn't gated, only
+    uploading a new one is). Verified with Playwright on both builds:
+    the quick upload input is disabled on Basic and enabled once Premium
+    is unlocked (mocked live, auto-unlocked offline); uploading a real
+    PNG through the quick input correctly updates the real Settings-tab
+    preview, the printed receipt's logo, and the quick preview itself;
+    clicking the quick Remove button puts the real button into the same
+    "confirm removal" armed state; a second click removes the logo
+    everywhere; zero leftover markers and zero console errors in the
+    offline package build.
 - **Header brand mark is not a link.** `.brand` (logo + title + Premium
   badge) is a plain `<div>`, not an `<a href="/">` — it used to
   double as an unguarded way back to the homepage, but that bypassed

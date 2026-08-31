@@ -641,6 +641,17 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <input id="quickStoreName" oninput="syncQuickField('storeName', this.value)">
 <label id="quickStoreDetailsLabel">Store Details</label>
 <textarea id="quickStoreDetails" oninput="syncQuickField('storeDetails', this.value)"></textarea>
+<label><span id="quickStoreLogoLabel">Company Logo</span> <span class="premium-badge" id="quickPremiumBadgeLogo">Premium</span></label>
+<div class="logo-upload-row">
+<div class="logo-preview-box empty" id="quickLogoPreviewBox">
+<span id="quickLogoPreviewEmptyText">No logo</span>
+<img id="quickLogoPreview" class="hidden" alt="Company logo preview">
+</div>
+<div class="logo-upload-actions">
+<input id="quickLogoFileInput" type="file" accept="image/*" onchange="handleLogoUpload(event)">
+<button type="button" class="remove-logo-btn hidden" id="quickRemoveLogoButton" onclick="removeLogo()">Remove logo</button>
+</div>
+</div>
 <label id="quickDocumentTypeLabel">Document Type</label>
 <select id="quickDocumentType" onchange="syncQuickField('documentType', this.value)">
 <option value="receipt">Receipt</option>
@@ -1675,17 +1686,22 @@ async function loadLogo() {
 function renderLogo() {
   resetRemoveLogoButton();
   const receiptLogo = document.getElementById("receiptLogo");
-  const previewImg = document.getElementById("logoPreview");
-  const previewBox = document.getElementById("logoPreviewBox");
-  const emptyText = document.getElementById("logoPreviewEmptyText");
-  const removeBtn = document.getElementById("removeLogoButton");
   const hasLogo = !!logoDataUrl;
-
   if (receiptLogo) { receiptLogo.src = logoDataUrl || ""; receiptLogo.classList.toggle("hidden", !hasLogo); }
-  if (previewImg) { previewImg.src = logoDataUrl || ""; previewImg.classList.toggle("hidden", !hasLogo); }
-  if (previewBox) previewBox.classList.toggle("empty", !hasLogo);
-  if (emptyText) emptyText.classList.toggle("hidden", hasLogo);
-  if (removeBtn) removeBtn.classList.toggle("hidden", !hasLogo);
+
+  [
+    ["logoPreview", "logoPreviewBox", "logoPreviewEmptyText", "removeLogoButton"],
+    ["quickLogoPreview", "quickLogoPreviewBox", "quickLogoPreviewEmptyText", "quickRemoveLogoButton"]
+  ].forEach(function(ids) {
+    const previewImg = document.getElementById(ids[0]);
+    const previewBox = document.getElementById(ids[1]);
+    const emptyText = document.getElementById(ids[2]);
+    const removeBtn = document.getElementById(ids[3]);
+    if (previewImg) { previewImg.src = logoDataUrl || ""; previewImg.classList.toggle("hidden", !hasLogo); }
+    if (previewBox) previewBox.classList.toggle("empty", !hasLogo);
+    if (emptyText) emptyText.classList.toggle("hidden", hasLogo);
+    if (removeBtn) removeBtn.classList.toggle("hidden", !hasLogo);
+  });
 }
 function handleLogoUpload(event) {
   const file = event.target.files[0];
@@ -1767,10 +1783,12 @@ let removeLogoPending = false;
 let removeLogoTimer = null;
 async function removeLogo() {
   if (!logoDataUrl) return;
-  const btn = document.getElementById("removeLogoButton");
   if (!removeLogoPending) {
     removeLogoPending = true;
-    if (btn) { btn.textContent = tr("removeLogoConfirmButton"); btn.classList.add("confirm-pending"); }
+    ["removeLogoButton", "quickRemoveLogoButton"].forEach(function(id) {
+      const btn = document.getElementById(id);
+      if (btn) { btn.textContent = tr("removeLogoConfirmButton"); btn.classList.add("confirm-pending"); }
+    });
     clearTimeout(removeLogoTimer);
     removeLogoTimer = setTimeout(function() { resetRemoveLogoButton(); }, 3000);
     return;
@@ -1784,8 +1802,10 @@ async function removeLogo() {
 function resetRemoveLogoButton() {
   removeLogoPending = false;
   clearTimeout(removeLogoTimer);
-  const btn = document.getElementById("removeLogoButton");
-  if (btn) { btn.textContent = tr("removeLogoButton"); btn.classList.remove("confirm-pending"); }
+  ["removeLogoButton", "quickRemoveLogoButton"].forEach(function(id) {
+    const btn = document.getElementById(id);
+    if (btn) { btn.textContent = tr("removeLogoButton"); btn.classList.remove("confirm-pending"); }
+  });
 }
 async function loadSalesHistory() {
   const raw = await storageGet("pos-sales-history");
@@ -1806,6 +1826,8 @@ function applyPremiumLocks() {
   if (logoInput) logoInput.disabled = !premiumUnlocked;
   const logoLockMsg = document.getElementById("logoLockMsg");
   if (logoLockMsg) logoLockMsg.classList.toggle("hidden", premiumUnlocked);
+  const quickLogoInput = document.getElementById("quickLogoFileInput");
+  if (quickLogoInput) quickLogoInput.disabled = !premiumUnlocked;
 
   const receiptNumInput = document.getElementById("receiptNumberInput");
   const receiptPrefixInput = document.getElementById("receiptPrefixInput");
@@ -3418,6 +3440,8 @@ function changeLanguage() {
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
     quickLanguageLabel: "languageLabel",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
+    quickStoreLogoLabel: "storeLogoLabel", quickPremiumBadgeLogo: "premiumBadgeLabel",
+    quickLogoPreviewEmptyText: "logoEmptyLabel", quickRemoveLogoButton: "removeLogoButton",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel", premiumToolbarLabel: "premiumToolbarLabel",
