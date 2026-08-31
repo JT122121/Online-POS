@@ -1,8 +1,8 @@
 @echo off
 REM Runs GoOnlinePOS locally via http://localhost, which is what makes the
-REM Customer Screen and camera barcode scanner reliable across browsers.
+REM Customer Screen reliable across browsers.
 REM (Opening app.html directly with a double-click also works for ringing up
-REM sales and printing -- this script is only needed for those two features.)
+REM sales and printing -- this script is only needed for the Customer Screen.)
 setlocal
 cd /d "%~dp0"
 set PORT=8080
@@ -15,9 +15,9 @@ if not defined PYCMD (where python3 >nul 2>nul && set PYCMD=python3)
 if not defined PYCMD (
   echo Python wasn't found on this computer, so the local server can't start.
   echo You can still use GoOnlinePOS by double-clicking app.html directly --
-  echo the register works fine that way. The Customer Screen and camera
-  echo barcode scanner are more reliable through this launcher, though, so
-  echo installing Python from https://python.org is worth it if you need those.
+  echo the register works fine that way. The Customer Screen is more
+  echo reliable through this launcher, though, so installing Python from
+  echo https://python.org is worth it if you need that.
   echo.
   pause
   exit /b 1

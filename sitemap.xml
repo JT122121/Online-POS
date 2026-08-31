@@ -8,49 +8,79 @@
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/app.html</loc>
+    <loc>https://goonlinepos.com/app</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/how-it-works.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://goonlinepos.com/about.html</loc>
+    <loc>https://goonlinepos.com/invoice-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/blog.html</loc>
+    <loc>https://goonlinepos.com/receipt-generator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/barcode-generator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/vat-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/pricing-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/blog-why-your-business-needs-a-pos.html</loc>
+    <loc>https://goonlinepos.com/blog-why-your-business-needs-a-pos</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/contact.html</loc>
+    <loc>https://goonlinepos.com/blog-create-your-own-pos-with-appsheet</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/blog-from-excel-to-appsheet-expert</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://goonlinepos.com/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/privacy.html</loc>
+    <loc>https://goonlinepos.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://goonlinepos.com/terms.html</loc>
+    <loc>https://goonlinepos.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

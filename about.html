@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <script>
@@ -6,88 +7,116 @@
   var CONSENT_KEY = "goonlinepos-cookie-consent";
   var SEEN_KEY = "goonlinepos-cookie-notice-seen";
 
-  function loadAnalyticsAndAds() {
-    var adsScript = document.createElement("script");
-    adsScript.async = true;
-    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
-    adsScript.crossOrigin = "anonymous";
-    document.head.appendChild(adsScript);
+function loadAnalyticsAndAds() {
+var adsScript = document.createElement("script");
+adsScript.async = true;
+adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+adsScript.crossOrigin = "anonymous";
+document.head.appendChild(adsScript);
 
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-7WMTJVB3VY');
+window.dataLayer = window.dataLayer || [];
+window.gtag = function(){ window.dataLayer.push(arguments); };
+window.gtag('js', new Date());
+window.gtag('config', 'G-7WMTJVB3VY');
 
-    var gtagScript = document.createElement("script");
-    gtagScript.async = true;
-    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
-    document.head.appendChild(gtagScript);
-  }
+var gtagScript = document.createElement("script");
+gtagScript.async = true;
+gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+document.head.appendChild(gtagScript);
 
-  function showView(id) {
-    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
-      var el = document.getElementById(v);
-      if (el) el.classList.toggle("hidden", v !== id);
-    });
-    var b = document.getElementById("cookieConsentBanner");
-    if (b) b.classList.remove("hidden");
-  }
-  function hideBanner() {
-    var b = document.getElementById("cookieConsentBanner");
-    if (b) b.classList.add("hidden");
-  }
+}
 
-  window.closeCookieNotice = function() {
-    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
-    hideBanner();
-  };
-  window.openCookieSettings = function() { showView("cookieChoiceView"); };
-  window.acceptCookies = function() {
-    try { localStorage.setItem(CONSENT_KEY, "accepted"); } catch (e) {}
-    hideBanner();
-    loadAnalyticsAndAds();
-  };
-  window.declineCookies = function() {
-    try { localStorage.setItem(CONSENT_KEY, "declined"); } catch (e) {}
-    showView("cookieDeclinedView");
-  };
-  window.closeCookieBanner = function() { hideBanner(); };
+function showView(id) {
+["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+var el = document.getElementById(v);
+if (el) el.classList.toggle("hidden", v !== id);
+});
 
-  var consent = null, seen = null;
-  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+var b = document.getElementById("cookieConsentBanner");
+if (b) b.classList.remove("hidden");
 
-  if (consent === "accepted") {
-    loadAnalyticsAndAds();
-  } else if (consent !== "declined" && !seen) {
-    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
-  }
-})();
-</script>
+}
+
+function hideBanner() {
+var b = document.getElementById("cookieConsentBanner");
+if (b) b.classList.add("hidden");
+}
+
+window.closeCookieNotice = function() {
+try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+hideBanner();
+};
+
+window.openCookieSettings = function() {
+showView("cookieChoiceView");
+};
+
+window.acceptCookies = function() {
+try { localStorage.setItem(CONSENT_KEY, "accepted"); } catch (e) {}
+hideBanner();
+loadAnalyticsAndAds();
+};
+
+window.declineCookies = function() {
+try { localStorage.setItem(CONSENT_KEY, "declined"); } catch (e) {}
+showView("cookieDeclinedView");
+};
+
+window.closeCookieBanner = function() {
+hideBanner();
+};
+
+var consent = null;
+var seen = null;
+
+try {
+consent = localStorage.getItem(CONSENT_KEY);
+seen = localStorage.getItem(SEEN_KEY);
+} catch (e) {}
+
+if (consent === "accepted") {
+loadAnalyticsAndAds();
+} else if (consent !== "declined" && !seen) {
+document.addEventListener("DOMContentLoaded", function() {
+showView("cookieNoticeView");
+});
+}
+})(); </script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About | GoOnlinePOS.com</title>
-<meta name="description" content="GoOnlinePOS.com exists for small businesses who can't afford a point of sale system, or don't want the complicated setup that comes with one. Free, forever, no signup.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://goonlinepos.com/about.html">
+
+<title>About GoOnlinePOS | Free Online POS System for Small Businesses</title>
+
+<meta name="description" content="Learn about GoOnlinePOS, a free online POS system for small businesses. Manage products, sales, payments and receipts from your phone, tablet or laptop with no signup or monthly fee.">
+
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://goonlinepos.com/about">
+
 <meta name="theme-color" content="#16211d">
+
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://goonlinepos.com/about.html">
-<meta property="og:title" content="About GoOnlinePOS.com">
-<meta property="og:description" content="Built for small businesses who can't afford a POS system, or don't want the complicated setup that comes with one.">
-<meta property="og:site_name" content="Go Online POS">
+<meta property="og:url" content="https://goonlinepos.com/about">
+<meta property="og:title" content="About GoOnlinePOS | Free Online POS System">
+<meta property="og:description" content="A simple free online POS system built for small businesses. Manage products, sales, payments and receipts directly from your browser.">
+<meta property="og:site_name" content="GoOnlinePOS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="About GoOnlinePOS.com">
-<meta name="twitter:description" content="Built for small businesses who can't afford a POS system, or don't want the complicated setup that comes with one.">
+<meta name="twitter:title" content="About GoOnlinePOS | Free Online POS System">
+<meta name="twitter:description" content="A simple free online POS system built for small businesses.">
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
 <link rel="shortcut icon" href="favicon.ico">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --ink: #16211d;
@@ -101,192 +130,801 @@
   --accent-dark: #124f36;
   --accent-tint: #e7f2ec;
   --gold: #d9a441;
-  --gold-tint: #faf1dd;
   --danger: #b3261e;
-  --danger-tint: #fbeae8;
   --radius: 12px;
   --radius-sm: 8px;
   --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
   --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
   --font-body: "Inter", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
 }
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); padding: 20px; -webkit-font-smoothing: antialiased; }
-a { color: inherit; }
 
-.wrap { max-width: 760px; margin: 0 auto; }
+* {
+  box-sizing: border-box;
+}
 
-.page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-.page-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.page-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
-.page-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.page-header h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
-.page-header .back-link { font-size: 13.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; border: 1px solid var(--line); background: #fff; padding: 9px 15px; border-radius: 8px; }
-.page-header .back-link:hover { border-color: #c9c6ba; }
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
-.hero { text-align: center; padding: 20px 8px 40px; }
-.hero .eyebrow { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
-.hero h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+}
 
-.doc { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 40px 40px; margin-bottom: 20px; }
-.doc p { line-height: 1.75; font-size: 15px; color: var(--ink-soft); margin: 0 0 18px; }
-.doc p:last-child { margin-bottom: 0; }
-.doc p strong { color: var(--ink); }
+a {
+  color: inherit;
+}
 
-.for-title { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -.01em; margin: 44px 0 8px; }
-.for-sub { text-align: center; color: var(--muted); font-size: 14px; margin: 0 0 26px; }
-.for-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 44px; }
-.for-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
-.for-card .emoji { font-size: 22px; margin-bottom: 8px; }
-.for-card p { margin: 0; font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
 
-.compare-title { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -.01em; margin: 0 0 26px; }
-.compare-table { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 44px; }
-.compare-row { display: grid; grid-template-columns: 1fr 1fr; }
-.compare-row + .compare-row { border-top: 1px solid var(--line-soft); }
-.compare-cell { padding: 14px 18px; font-size: 13.5px; line-height: 1.5; }
-.compare-cell.old { color: var(--muted); }
-.compare-cell.old::before { content: "✕ "; color: var(--danger); font-weight: 700; }
-.compare-cell.new { color: var(--ink); font-weight: 600; background: var(--accent-tint); }
-.compare-cell.new::before { content: "✓ "; color: var(--accent-dark); font-weight: 700; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h1, .site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
 
-.cta-band { text-align: center; background: linear-gradient(155deg, var(--ink) 0%, #1e2f28 100%); border-radius: var(--radius); padding: 44px 24px; color: #fff; }
-.cta-band h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0 0 10px; }
-.cta-band p { color: #b7c0ba; font-size: 14px; margin: 0 0 22px; }
-.btn-primary { font-size: 15px; font-weight: 700; text-decoration: none; padding: 13px 26px; border-radius: var(--radius-sm); display: inline-block; background: var(--gold); color: var(--ink); }
-.btn-primary:hover { background: #cf9631; }
+.hero {
+  text-align: center;
+  padding: 20px 8px 40px;
+}
 
-.site-footer { max-width: 760px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
-.site-footer a { color: var(--muted); text-decoration: none; }
-.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
-.site-footer span { margin: 0 8px; }
+.hero .eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-tint);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.hero h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin: 0;
+}
+
+.doc {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 40px 40px;
+  margin-bottom: 20px;
+}
+
+.doc h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 40px 0 14px;
+  letter-spacing: -.01em;
+}
+
+.doc h2:first-of-type {
+  margin-top: 34px;
+}
+
+.doc p {
+  line-height: 1.75;
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin: 0 0 18px;
+}
+
+.doc p:last-child {
+  margin-bottom: 0;
+}
+
+.doc p strong {
+  color: var(--ink);
+}
+
+.doc ul {
+  margin: 0 0 20px;
+  padding-left: 22px;
+  color: var(--ink-soft);
+}
+
+.doc li {
+  font-size: 14.5px;
+  line-height: 1.8;
+  padding-left: 4px;
+}
+
+.audience-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 24px 0 34px;
+}
+
+.audience-list > div {
+  border: 1px solid var(--line);
+  background: #fafaf7;
+  border-radius: var(--radius-sm);
+  padding: 18px;
+}
+
+.audience-list span {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.audience-list strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.audience-list p {
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.requirements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0 34px;
+}
+
+.requirements > div {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 17px;
+  background: #fafaf7;
+}
+
+.requirements strong {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.requirements span {
+  display: block;
+  color: var(--accent-dark);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.guide-box {
+  background: var(--accent-tint);
+  border: 1px solid #d2e7db;
+  border-radius: var(--radius-sm);
+  padding: 22px;
+  margin: 24px 0 10px;
+}
+
+.guide-box p {
+  margin-bottom: 14px;
+}
+
+.inline-link {
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.inline-link:hover {
+  text-decoration: underline;
+}
+
+.cta-band {
+  text-align: center;
+  background: linear-gradient(155deg, var(--ink) 0%, #1e2f28 100%);
+  border-radius: var(--radius);
+  padding: 44px 24px;
+  color: #fff;
+}
+
+.cta-band h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 0 10px;
+}
+
+.cta-band p {
+  color: #b7c0ba;
+  font-size: 14px;
+  margin: 0 0 22px;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  transition: .2s ease;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.btn-primary:hover {
+  background: #cf9631;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.35);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.06);
+}
+
+.site-footer {
+  max-width: 760px;
+  margin: 20px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 20px 20px 40px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+.site-footer span {
+  margin: 0 8px;
+}
+
+.cookie-consent {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  z-index: 300;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  padding: 14px 16px;
+}
+
+.cookie-consent.hidden {
+  display: none !important;
+}
+
+.cookie-consent .cc-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 200px;
+  color: #d7dcd8;
+}
+
+.cookie-consent .cc-text a {
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cookie-notice-view,
+.cc-choice-view,
+.cc-declined-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cookie-notice-view.hidden,
+.cc-choice-view.hidden,
+.cc-declined-view.hidden {
+  display: none !important;
+}
+
+.cookie-notice-view .cn-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  color: #b7c0ba;
+  font-size: 19px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.cookie-notice-view .cn-close:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+
+.cc-choice-view {
+  flex-wrap: wrap;
+}
+
+.cc-actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.cc-decline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.3);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-decline:hover {
+  border-color: rgba(255,255,255,.6);
+}
+
+.cc-accept {
+  background: var(--gold);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-accept:hover {
+  background: #cf9631;
+}
+
+.cc-declined-view {
+  flex-wrap: wrap;
+}
+
+.cc-close {
+  background: var(--panel);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cc-close:hover {
+  background: #e6e4d9;
+}
 
 @media (max-width: 640px) {
-  .doc { padding: 26px 22px 30px; }
-  .for-grid { grid-template-columns: 1fr 1fr; }
-  .compare-row { grid-template-columns: 1fr; }
-  .compare-cell.old { border-bottom: 1px solid var(--line-soft); }
-  .hero h2 { font-size: 27px; }
+  body {
+    padding: 14px;
+  }
+
+  .site-nav {
+    gap: 14px;
+  }
+
+  .site-nav a.nav-highlight::after {
+    display: none;
+  }
+
+  .site-header .header-right {
+    gap: 10px;
+  }
+
+  .hero {
+    padding: 14px 5px 30px;
+  }
+
+  .hero h2 {
+    font-size: 27px;
+  }
+
+  .doc {
+    padding: 26px 22px 30px;
+  }
+
+  .doc h2 {
+    font-size: 20px;
+  }
+
+  .audience-list,
+  .requirements {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-band {
+    padding: 36px 20px;
+  }
+
+  .cta-band h2 {
+    font-size: 22px;
+  }
+
+  .cookie-notice-view,
+  .cc-choice-view,
+  .cc-declined-view {
+    align-items: flex-start;
+  }
 }
-.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
-.cookie-consent.hidden { display: none !important; }
-.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
-.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
-.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.cookie-notice-view.hidden { display: none !important; }
-.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
-.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
-.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.cc-choice-view.hidden { display: none !important; }
-.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
-.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
-.cc-decline:hover { border-color: rgba(255,255,255,.6); }
-.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
-.cc-accept:hover { background: #cf9631; }
-.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.cc-declined-view.hidden { display: none !important; }
-.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
-.cc-close:hover { background: #e6e4d9; }
 </style>
+
 </head>
+
 <body>
 
 <div class="wrap">
 
-<header class="page-header">
-<a class="brand" href="index.html">
-<div class="brand-mark"><img src="data:image/png;base64,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" alt=""></div>
-<h1>GoOnlinePOS.com</h1>
+<header class="site-header">
+
+<a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+  <div class="brand-mark">
+    <img src="data:image/png;base64,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" alt="GoOnlinePOS logo">
+  </div>
+  <h1>GoOnlinePOS.com</h1>
 </a>
-<a class="back-link" href="index.html">← Back to home</a>
+
+<div class="header-right">
+<nav class="site-nav">
+<a href="about">About</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt">Free Receipt Generator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+
 </header>
 
 <section class="hero">
-<span class="eyebrow">Why we built this</span>
-<h2>Not every business can afford a POS system. That's the whole point of this one.</h2>
+
+<span class="eyebrow">Free Online POS System for Small Businesses</span>
+
+<h2>A simple POS system for businesses that just want to start selling.</h2>
+
 </section>
 
 <div class="doc">
-<p>GoOnlinePOS is an independently developed project created for small businesses.</p>
-<p>Most point-of-sale software is built for businesses that already have money to spend - a monthly subscription, a card reader, sometimes a whole checkout counter's worth of hardware, and a sales call before you can even try it. If you're running a market stall, a home bakery, a food cart, or just starting out with barely enough stock to fill a shelf, none of that is really built for you.</p>
-<p><strong>GoOnlinePOS.com exists for exactly that gap.</strong> It's for the business that can't afford a "proper" POS system, and just as much for the one that could afford it but doesn't want the complexity, the contracts, or the polish that comes bundled with it whether you asked for it or not.</p>
-<p>No signup. No login. No monthly fee. No sales call. Open the page, add your products, and start ringing up sales - that's the whole onboarding process. It runs entirely in your browser, so there's nothing to install and nothing standing between you and your first sale.</p>
-<p>GoOnlinePOS focuses on the essential tools a small business needs - take payments, print receipts, and keep sales records - without unnecessary complexity.</p>
+
+<p><strong>GoOnlinePOS is an independently developed free online POS system built for small businesses.</strong></p>
+
+<p>
+We created GoOnlinePOS around a simple idea: getting a point-of-sale system should not require a monthly subscription, expensive POS hardware, a complicated installation, or a sales call before you can use it.
+</p>
+
+<p>
+If you run a market stall, home bakery, food cart, pop-up shop, small independent store, or a new business, you may simply need a reliable way to manage products, record sales, accept different payment methods, and create receipts.
+</p>
+
+<p>
+<strong>GoOnlinePOS.com was created to fill that gap.</strong>
+It is a browser-based POS system designed to keep everyday selling simple.
+</p>
+
+<p>
+<strong>No signup. No login. No monthly fee.</strong>
+Open the app, enter your store details, add your products, and start making sales.
+</p>
+
+<p>
+GoOnlinePOS works directly in your web browser. You can use it on a phone, tablet, or laptop without installing traditional POS software or buying dedicated checkout hardware.
+</p>
+
+<h2>What can you do with GoOnlinePOS?</h2>
+
+<p>
+GoOnlinePOS focuses on the practical tools a small business needs when making everyday sales.
+</p>
+
+<ul>
+<li>Add and manage products</li>
+<li>Set product names and prices</li>
+<li>Build a sale quickly</li>
+<li>Select payment methods</li>
+<li>Record completed transactions</li>
+<li>Create and print receipts</li>
+<li>Keep sales records</li>
+<li>Configure your store details</li>
+</ul>
+
+<p>
+<strong>Built around your actual checkout.</strong>
+The app is designed to take you from store setup to a completed sale without unnecessary steps. Enter your store information, add products, choose how you accept payment, and use the checkout to complete your transaction.
+</p>
+
+<h2>Who is GoOnlinePOS for?</h2>
+
+<p>
+GoOnlinePOS is designed for small businesses that need a simple point-of-sale system without the cost and complexity of traditional POS software.
+</p>
+
+<div class="audience-list">
+
+<div>
+<span>🧺</span>
+<strong>Market Stalls &amp; Pop-Ups</strong>
+<p>A simple POS for markets, events, fairs and temporary selling locations.</p>
 </div>
 
-<h2 class="for-title">Who it's for</h2>
-<p class="for-sub">If any of this sounds like you, this was built with you in mind.</p>
-<div class="for-grid">
-<div class="for-card"><div class="emoji">🧺</div><p>Market stalls & pop-ups</p></div>
-<div class="for-card"><div class="emoji">🧁</div><p>Home bakers & makers</p></div>
-<div class="for-card"><div class="emoji">🚚</div><p>Food carts & trucks</p></div>
-<div class="for-card"><div class="emoji">🌱</div><p>Businesses just starting out</p></div>
-<div class="for-card"><div class="emoji">🛍️</div><p>Small independent shops</p></div>
-<div class="for-card"><div class="emoji">🧾</div><p>Anyone tired of complicated setup</p></div>
+<div>
+<span>🧁</span>
+<strong>Home Bakers &amp; Makers</strong>
+<p>Keep products, prices and sales organized without investing in a traditional POS system.</p>
 </div>
 
-<h2 class="compare-title">What it asks of you</h2>
-<div class="compare-table">
-<div class="compare-row">
-<div class="compare-cell old">A monthly subscription</div>
-<div class="compare-cell new">Free, forever</div>
+<div>
+<span>🚚</span>
+<strong>Food Carts &amp; Food Businesses</strong>
+<p>Record sales, payments and receipts directly from a web browser.</p>
 </div>
-<div class="compare-row">
-<div class="compare-cell old">Signup, verification, a sales call</div>
-<div class="compare-cell new">Just open the page</div>
+
+<div>
+<span>🌱</span>
+<strong>New Businesses</strong>
+<p>Start selling without committing to expensive POS software or dedicated hardware.</p>
 </div>
-<div class="compare-row">
-<div class="compare-cell old">Special hardware or a card reader</div>
-<div class="compare-cell new">Any phone, tablet, or laptop</div>
+
+<div>
+<span>🛍️</span>
+<strong>Small Independent Shops</strong>
+<p>Handle everyday transactions with a straightforward online point-of-sale system.</p>
 </div>
-<div class="compare-row">
-<div class="compare-cell old">A long setup wizard</div>
-<div class="compare-cell new">Ringing up your first sale in minutes</div>
+
+<div>
+<span>🧾</span>
+<strong>Businesses Tired of Complex POS Systems</strong>
+<p>If you just want to add products and start selling, GoOnlinePOS keeps the process simple.</p>
 </div>
+
+</div>
+
+<h2>What does GoOnlinePOS require?</h2>
+
+<div class="requirements">
+
+<div>
+<strong>Monthly subscription</strong>
+<span>Free to get started</span>
+</div>
+
+<div>
+<strong>Signup and verification</strong>
+<span>Just open the app</span>
+</div>
+
+<div>
+<strong>Dedicated POS hardware</strong>
+<span>Use a phone, tablet or laptop</span>
+</div>
+
+<div>
+<strong>Long setup process</strong>
+<span>Start selling in minutes</span>
+</div>
+
+</div>
+
+<h2>How GoOnlinePOS works</h2>
+
+<p>
+Getting started is straightforward. Open GoOnlinePOS, enter your store details, add your products and prices, then use the sales screen to build your transaction.
+</p>
+
+<p>
+When a customer is ready to pay, select the appropriate payment method and complete the sale. You can then create or print the receipt and keep the transaction in your sales records.
+</p>
+
+<p>
+The goal is not to turn a simple sale into a complicated software process. The goal is to give a small business the essential POS tools it needs and let the business get on with selling.
+</p>
+
+<div class="guide-box">
+
+<p>
+<strong>Want to see the process step by step?</strong>
+</p>
+
+<p>
+See how GoOnlinePOS takes you from store setup to completed sales.
+</p>
+
+<a class="inline-link" href="app">Open GoOnlinePOS and see it for yourself →</a>
+
+</div>
+
+<h2>See the real GoOnlinePOS app</h2>
+
+<p>
+Want to see what the app actually looks like before using it?
+</p>
+
+<p>
+Open the app and click <strong>How To Use</strong> in the header toolbar for a complete walkthrough of the interface, starting with <strong>Store Details</strong> and continuing through product setup, checkout, payment methods, receipts, sales records and <strong>Premium</strong> features.
+</p>
+
+<p>
+It's built right into the app itself, so it's always describing the exact screens you're looking at, not stock photos or generic mockups.
+</p>
+
+<div class="guide-box">
+
+<p>
+<strong>Explore the complete GoOnlinePOS walkthrough.</strong>
+</p>
+
+<p>
+Open the app, then click How To Use to learn how it works before you start using it.
+</p>
+
+<a class="inline-link" href="app">Open GoOnlinePOS →</a>
+
+</div>
+
+<h2>Why choose a browser-based POS?</h2>
+
+<p>
+A browser-based point-of-sale system can be useful for small businesses because it removes some of the barriers associated with traditional POS installations.
+</p>
+
+<p>
+Instead of setting up a dedicated checkout computer or installing large POS software packages, GoOnlinePOS can be opened through a modern web browser. This makes it practical for businesses that sell from different locations or simply want a lightweight way to record sales.
+</p>
+
+<p>
+Whether you are selling products at a market, running a small shop, taking orders from a food business, or starting your first business, the basic idea remains the same: open the POS, add your products, make the sale and keep the record.
+</p>
+
+<h2>Free online POS software for small businesses</h2>
+
+<p>
+Many POS systems are designed around subscriptions, dedicated hardware and larger retail operations. GoOnlinePOS takes a different approach by focusing on the basic point-of-sale features that small businesses actually need.
+</p>
+
+<p>
+There is no requirement to schedule a sales call or purchase a dedicated POS terminal before trying the system. You can open GoOnlinePOS and see how it fits your business.
+</p>
+
+<p>
+<strong>Less setup. Less complexity. A simple POS for everyday selling.</strong>
+</p>
+
 </div>
 
 <section class="cta-band">
-<h2>Give it a try - it costs nothing to find out</h2>
-<p>No signup. No login. Just open the app.</p>
-<a class="btn-primary" href="app.html">Open the app</a>
+
+<h2>Ready to start selling?</h2>
+
+<p>
+No signup. No login. Just open GoOnlinePOS and see how it works.
+</p>
+
+<div class="cta-buttons">
+
+<a class="btn-primary" href="app">
+Open GoOnlinePOS
+</a>
+
+</div>
+
 </section>
 
 </div>
 
 <footer class="site-footer">
-<a href="how-it-works.html">How to Use</a>
-<span>·</span>
-<a href="blog.html">Blog</a>
-<span>·</span>
-<a href="contact.html">Contact</a>
-<span>·</span>
-<a href="privacy.html">Privacy Policy</a>
-<span>·</span>
-<a href="terms.html">Terms of Service</a>
-<span>·</span>
-<a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">Facebook</a>
-<span>·</span>
-<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+
+<a href="contact">Contact</a> <span>·</span>
+
+<a href="privacy">Privacy Policy</a> <span>·</span>
+
+<a href="terms">Terms of Service</a> <span>·</span>
+
+<a href="#" onclick="openCookieSettings(); return false;">
+Cookie Settings
+</a>
+
 </footer>
 
 <div id="cookieConsentBanner" class="cookie-consent hidden">
+
 <div id="cookieNoticeView" class="cookie-notice-view">
-<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
-<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+
+<div class="cc-text">
+🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in
+<a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.
 </div>
+
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">
+×
+</button>
+
+</div>
+
 <div id="cookieChoiceView" class="cc-choice-view hidden">
-<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy.html">Learn more</a></div>
+
+<div class="cc-text">
+Set your preference: allow cookies for analytics and ads, or decline them.
+<a href="privacy">Learn more</a>
+</div>
+
 <div class="cc-actions">
-<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
-<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+
+<button type="button" class="cc-decline" onclick="declineCookies()">
+Decline
+</button>
+
+<button type="button" class="cc-accept" onclick="acceptCookies()">
+Accept
+</button>
+
 </div>
+
 </div>
+
 <div id="cookieDeclinedView" class="cc-declined-view hidden">
-<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
-<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+
+<div class="cc-text">
+Got it. Analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via Cookie Settings in the footer.
 </div>
+
+<button type="button" class="cc-close" onclick="closeCookieBanner()">
+Close
+</button>
+
+</div>
+
 </div>
 
 </body>

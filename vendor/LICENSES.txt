@@ -10,13 +10,6 @@ xlsx.full.min.js
   Source  : https://www.npmjs.com/package/xlsx
   Used by : app.html, offline/app.html (Excel export)
 
-zxing-browser.min.js
-  Package : @zxing/browser
-  Version : 0.2.1
-  License : MIT
-  Source  : https://www.npmjs.com/package/@zxing/browser
-  Used by : app.html, offline/app.html (camera barcode scanning)
-
 jszip.min.js
   Package : jszip
   Version : 3.10.1
@@ -25,3 +18,33 @@ jszip.min.js
   Used by : app.html only, to assemble the "Download Offline POS" .zip
             client-side. Not included in the offline package itself —
             the offline copy never needs to zip anything.
+
+jsbarcode.min.js
+  Package : jsbarcode
+  Version : 3.12.3
+  License : MIT
+  Source  : https://www.npmjs.com/package/jsbarcode
+  Used by : barcode-generator.html only (barcode rendering).
+
+qrcode.js
+qrcode_UTF8.js
+  Package : qrcode-generator
+  Version : 2.0.4
+  License : MIT
+  Source  : https://www.npmjs.com/package/qrcode-generator
+  Used by : barcode-generator.html only (QR code rendering). qrcode_UTF8.js is the
+            package's own optional UTF-8 string-encoding patch and must
+            load after qrcode.js.
+
+supabase.min.js
+  Package : @supabase/supabase-js
+  Version : 2.112.4
+  License : MIT
+  Source  : https://www.npmjs.com/package/@supabase/supabase-js
+  Used by : app.html only (Account & Subscription, Settings → Premium —
+            sign in with Google and redeem a code to unlock Premium).
+            The prebuilt dist/umd/supabase.js from the published package,
+            unmodified. Wrapped in its own OFFLINE-STRIP marker in app.html
+            and never fetched into the "Download Offline POS" package —
+            sign-in needs a network connection, which the offline copy
+            deliberately has none of.

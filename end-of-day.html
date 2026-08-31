@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End of Day Report | GoOnlinePOS.com</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:START -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:END -->
+
+<!-- OFFLINE-STRIP:EOD-ANALYTICS:START -->
+<script>
+(function() {
+  var consent = null;
+  try { consent = localStorage.getItem("goonlinepos-cookie-consent"); } catch (e) {}
+  if (consent !== "accepted") return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function() { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", "G-7WMTJVB3VY");
+  var gtagScript = document.createElement("script");
+  gtagScript.async = true;
+  gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+  document.head.appendChild(gtagScript);
+})();
+</script>
+<!-- OFFLINE-STRIP:EOD-ANALYTICS:END -->
+
+<style id="dynamicPageSize">@page { size: A4; margin: 0; }</style>
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 20px; }
+
+.masthead { text-align: center; padding: 30px 20px 18px; }
+.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 30px; letter-spacing: -.02em; margin: 0 0 8px; }
+.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 480px; }
+
+.top-actions { display: flex; justify-content: center; gap: 10px; margin: 18px 0 6px; flex-wrap: wrap; }
+.top-actions a { text-decoration: none; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 9px 16px; border-radius: var(--radius-sm); }
+.btn-ghost:hover { background: #fafaf7; border-color: #cfccbf; }
+
+.controls-bar { display: flex; flex-wrap: wrap; align-items: end; justify-content: center; gap: 16px; margin: 6px 0 22px; padding: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.control-field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.control-field select, .control-field input { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 13.5px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+.control-field select:focus, .control-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.report-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 32px; margin: 22px 0; }
+
+.report-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 2px solid var(--ink); margin-bottom: 22px; }
+.rh-store { display: flex; align-items: center; gap: 12px; }
+.rh-logo { width: 52px; height: 52px; border-radius: 10px; background: #fff; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.rh-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.rh-store-name { font-family: var(--font-display); font-weight: 800; font-size: 19px; margin: 0 0 2px; }
+.rh-store-details { color: var(--ink-soft); font-size: 12.5px; white-space: pre-line; line-height: 1.5; }
+.rh-meta { text-align: right; }
+.rh-title { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -.01em; margin: 0 0 6px; }
+.rh-meta-line { font-size: 12.5px; color: var(--ink-soft); }
+.rh-meta-line strong { color: var(--ink); }
+
+.stat-block { text-align: center; padding: 18px 0 24px; }
+.stat-label { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.stat-value { font-family: var(--font-display); font-weight: 800; font-size: 38px; color: var(--accent-dark); }
+
+.section-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--ink); margin: 26px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+
+.eod-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+.eod-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 8px 8px; }
+.eod-table th:last-child, .eod-table td:last-child { text-align: right; }
+.eod-table td { padding: 7px 8px; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
+.eod-table .rank-col { width: 34px; color: var(--muted); font-weight: 700; }
+.eod-empty { color: var(--muted); font-size: 13.5px; padding: 14px 0; }
+
+.cashier-block { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 10px; }
+.cashier-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+.cashier-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); padding: 3px 0; }
+.cashier-row.total { border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 8px; font-weight: 700; color: var(--ink); }
+
+.action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
+.action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
+#printReportBtn { background: var(--ink); color: #fff; }
+#printReportBtn:hover { background: #263832; }
+#saveReportBtn { background: var(--accent); color: #fff; }
+#saveReportBtn:hover { background: var(--accent-dark); }
+#savedReportsBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#savedReportsBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+.autosave-note { text-align: center; font-size: 12px; color: var(--muted); margin: 10px 0 30px; }
+
+.save-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 400; }
+.save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.hidden { display: none !important; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(22,33,29,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 350; }
+.modal-box { background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; color: var(--ink); }
+.modal-close-btn { border: none; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.modal-close-btn:hover { background: var(--line-soft); color: var(--ink); }
+.modal-body { padding: 10px 12px; overflow-y: auto; }
+.saved-report-row { display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.saved-report-row:hover { background: var(--accent-tint); }
+.saved-report-main { flex: 1; min-width: 0; }
+.saved-report-title { font-weight: 700; font-size: 14px; color: var(--ink); }
+.saved-report-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.saved-report-total { font-weight: 700; font-size: 14px; color: var(--ink); flex-shrink: 0; }
+.saved-report-delete { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 8px; border-radius: 6px; flex-shrink: 0; }
+.saved-report-delete:hover { background: #fbe9e7; color: #b3261e; }
+.saved-reports-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 30px 16px; }
+
+.viewing-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--gold-tint); border: 1px solid #ecd8ac; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: #6b4f14; margin-bottom: 16px; }
+.viewing-banner button { border: none; background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 24px; }
+  .report-card { padding: 20px; }
+  .report-header { flex-direction: column; }
+  .rh-meta { text-align: left; }
+}
+
+@media print {
+  html, body { background: #fff; }
+  .masthead, .top-actions, .controls-bar, .action-bar, .autosave-note, #cookieConsentBanner, .modal-overlay, .save-toast, .viewing-banner { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .report-card { box-shadow: none; border: none; padding: 0; margin: 0; }
+  .no-print { display: none !important; }
+  .eod-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+body.paper-a4 .wrap { max-width: 760px; }
+@media print {
+  body.paper-a4 .wrap { padding: 12mm; }
+}
+
+body.paper-80mm .wrap { max-width: 360px; }
+@media print {
+  body.paper-80mm .wrap { max-width: 80mm; padding: 0; }
+  body.paper-80mm .report-card { padding: 3mm; }
+  body.paper-80mm .report-header { flex-direction: column; }
+  body.paper-80mm .rh-meta { text-align: left; margin-top: 8px; }
+  body.paper-80mm .rh-title { font-size: 16px; }
+  body.paper-80mm .stat-value { font-size: 24px; }
+  body.paper-80mm .section-title { font-size: 12px; }
+  body.paper-80mm .eod-table th, body.paper-80mm .eod-table td { font-size: 10.5px; padding: 5px 4px; }
+  body.paper-80mm .cashier-block { padding: 8px 10px; }
+}
+
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+</style>
+</head>
+<body class="paper-a4">
+
+<div class="wrap">
+
+<header class="masthead no-print">
+<div class="kicker">POS Report</div>
+<h1>End of Day Report</h1>
+<p>A closing summary of a day's sales, pulled live from this browser's POS data - total sales, what sold, payment breakdown, and per-cashier collection.</p>
+</header>
+
+<div class="top-actions no-print">
+<a class="btn-ghost" href="app">← Back to POS App</a>
+</div>
+
+<div class="controls-bar no-print">
+  <div class="control-field">
+    <label for="reportDateInput">Report Date</label>
+    <input type="date" id="reportDateInput">
+  </div>
+  <div class="control-field">
+    <label for="paperSizeSelect">Paper Size</label>
+    <select id="paperSizeSelect">
+      <option value="a4">A4 / Letter</option>
+      <option value="80mm">80mm Thermal</option>
+    </select>
+  </div>
+</div>
+
+<div class="viewing-banner hidden no-print" id="viewingSavedBanner">
+  <span>Viewing a saved report - numbers are frozen as of when it was saved.</span>
+  <button type="button" id="backToLiveBtn">Back to Live Report</button>
+</div>
+
+<div class="report-card" id="reportCard">
+
+  <div class="report-header">
+    <div class="rh-store">
+      <div class="rh-logo hidden" id="rhLogoWrap"><img id="rhLogo" alt="Store logo"></div>
+      <div>
+        <div class="rh-store-name" id="rhStoreName">Demo Store</div>
+        <div class="rh-store-details" id="rhStoreDetails"></div>
+      </div>
+    </div>
+    <div class="rh-meta">
+      <div class="rh-title">End of Day Report</div>
+      <div class="rh-meta-line">Report Date: <strong id="rhReportDate">-</strong></div>
+      <div class="rh-meta-line">Generated: <strong id="rhGeneratedAt">-</strong></div>
+    </div>
+  </div>
+
+  <div class="stat-block">
+    <div class="stat-label">Total Sales</div>
+    <div class="stat-value" id="statTotalSales">0.00</div>
+  </div>
+
+  <div class="section-title">Items Sold</div>
+  <table class="eod-table" id="itemsSoldTable">
+    <thead><tr><th>Item</th><th>Qty</th><th>Total</th></tr></thead>
+    <tbody id="itemsSoldBody"></tbody>
+  </table>
+  <div class="eod-empty hidden" id="itemsSoldEmpty">No items sold on this date.</div>
+
+  <div class="section-title">Top 5 Best Sellers (by Qty)</div>
+  <table class="eod-table" id="topSellersTable">
+    <thead><tr><th class="rank-col">#</th><th>Item</th><th>Qty</th></tr></thead>
+    <tbody id="topSellersBody"></tbody>
+  </table>
+  <div class="eod-empty hidden" id="topSellersEmpty">No items sold on this date.</div>
+
+  <div class="section-title">Payment Breakdown</div>
+  <table class="eod-table" id="paymentBreakdownTable">
+    <thead><tr><th>Method</th><th>Amount</th></tr></thead>
+    <tbody id="paymentBreakdownBody"></tbody>
+  </table>
+  <div class="eod-empty hidden" id="paymentBreakdownEmpty">No sales recorded for this date.</div>
+
+  <div class="section-title hidden" id="cashierSectionTitle">Cashier Collection</div>
+  <div id="cashierBreakdownBody"></div>
+
+</div>
+
+<div class="action-bar no-print">
+  <button type="button" id="saveReportBtn">💾 Save Report</button>
+  <button type="button" id="savedReportsBtn">📂 Saved Reports</button>
+  <button type="button" id="printReportBtn">🖨 Print / Save as PDF</button>
+</div>
+<p class="autosave-note no-print">This report is generated live from sales recorded in this browser. Click "Save Report" to keep a frozen copy of these numbers in your Saved Reports list so you can reopen it later even if the underlying sales history changes.</p>
+
+<div class="modal-overlay hidden no-print" id="savedReportsOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Saved Reports</h3>
+      <button type="button" class="modal-close-btn" id="closeSavedReportsBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="savedReportsList"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">Report saved</div>
+
+</div>
+
+<div id="cookieConsentBanner" class="cookie-consent hidden"></div>
+
+<script>
+(function() {
+  var EOD_HISTORY_KEY = "eod-report-history";
+  var EOD_PAPER_KEY = "eod-paper-size";
+
+  function hasArtifactStorage() {
+    return typeof window !== "undefined" && !!window.storage && typeof window.storage.get === "function";
+  }
+  async function storageGet(key) {
+    if (hasArtifactStorage()) {
+      try { var res = await window.storage.get(key, false); return (res && res.value !== undefined) ? res.value : null; }
+      catch (e) { return null; }
+    }
+    try { return localStorage.getItem("onlinepos_" + key); } catch (e) { return null; }
+  }
+  async function storageSet(key, value) {
+    if (hasArtifactStorage()) {
+      try { await window.storage.set(key, value, false); } catch (e) { console.error("Could not save " + key, e); }
+      return;
+    }
+    try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
+  }
+
+  function saleDateKey(dateTimeStr) {
+    var datePart = (dateTimeStr || "").split(" ")[0];
+    var parts = datePart.split("/");
+    if (parts.length !== 3) return datePart;
+    return parts[2] + "-" + parts[1] + "-" + parts[0];
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function todayIso() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function formatDisplayDate(iso) {
+    if (!iso) return "-";
+    var parts = iso.split("-");
+    if (parts.length !== 3) return iso;
+    return parts[2] + "/" + parts[1] + "/" + parts[0];
+  }
+
+  function formatGeneratedAt(d) {
+    d = d || new Date();
+    var dd = String(d.getDate()).padStart(2, "0");
+    var mm = String(d.getMonth() + 1).padStart(2, "0");
+    var yyyy = d.getFullYear();
+    var hh = String(d.getHours()).padStart(2, "0");
+    var min = String(d.getMinutes()).padStart(2, "0");
+    return dd + "/" + mm + "/" + yyyy + " " + hh + ":" + min;
+  }
+
+  // Same tendered-vs-applied netting rule the POS app's own Sales Summary
+  // uses: a payment row's stored amount is what the cashier entered/
+  // tendered, not necessarily what was applied to the sale - a cash row
+  // in particular can include change that was handed back. Subtract the
+  // sale's single change amount from its "Cash" row (or the last row if
+  // none is named Cash) so cash breakdowns reflect cash actually kept,
+  // not cash tendered.
+  function saleMethodBreakdown(s) {
+    var rows;
+    if (s.payments && s.payments.length) {
+      rows = s.payments.map(function(p) { return { method: p.method || "Unspecified", amount: Number(p.amount) || 0 }; });
+    } else {
+      rows = [{ method: s.paymentMethod || "Unspecified", amount: Number(s.grandTotal) || 0 }];
+    }
+    var change = Number(s.change) || 0;
+    if (change > 0) {
+      var idx = rows.findIndex(function(r) { return (r.method || "").trim().toLowerCase() === "cash"; });
+      if (idx === -1) idx = rows.length - 1;
+      rows[idx].amount = Math.max(0, rows[idx].amount - change);
+    }
+    return rows;
+  }
+
+  var currencySymbol = "$";
+  var decimalPlaces = 2;
+  function fmt(n) {
+    if (!isFinite(n)) n = 0;
+    return currencySymbol + n.toFixed(decimalPlaces);
+  }
+
+  var salesHistory = [];
+  var cashiers = [];
+  var currentReportId = null;
+  var lastComputed = null;
+
+  function computeReport(dateIso) {
+    var salesForDate = salesHistory.filter(function(s) { return saleDateKey(s.dateTime) === dateIso; });
+
+    var totalSales = 0;
+    var itemTotals = {};
+    var paymentTotals = {};
+    var cashierTotals = {};
+
+    salesForDate.forEach(function(s) {
+      totalSales += Number(s.grandTotal) || 0;
+
+      (s.items || []).forEach(function(it) {
+        var key = it.name || "Custom Item";
+        if (!itemTotals[key]) itemTotals[key] = { qty: 0, total: 0 };
+        itemTotals[key].qty += Number(it.qty) || 0;
+        itemTotals[key].total += (it.lineTotal != null ? Number(it.lineTotal) : (Number(it.qty) || 0) * (Number(it.price) || 0));
+      });
+
+      saleMethodBreakdown(s).forEach(function(p) {
+        paymentTotals[p.method] = (paymentTotals[p.method] || 0) + p.amount;
+      });
+
+      var cashierKey = s.cashierName || "No Cashier";
+      if (!cashierTotals[cashierKey]) cashierTotals[cashierKey] = { total: 0, methods: {} };
+      cashierTotals[cashierKey].total += Number(s.grandTotal) || 0;
+      saleMethodBreakdown(s).forEach(function(p) {
+        cashierTotals[cashierKey].methods[p.method] = (cashierTotals[cashierKey].methods[p.method] || 0) + p.amount;
+      });
+    });
+
+    var itemsSold = Object.keys(itemTotals).map(function(name) {
+      return { name: name, qty: itemTotals[name].qty, total: itemTotals[name].total };
+    }).sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+    var topSellers = itemsSold.slice().sort(function(a, b) { return b.qty - a.qty; }).slice(0, 5);
+
+    var paymentBreakdown = Object.keys(paymentTotals).sort().map(function(method) {
+      return { method: method, amount: paymentTotals[method] };
+    });
+
+    var showCashierSection = cashiers.length > 0 && salesForDate.length > 0;
+    var cashierBreakdown = showCashierSection ? Object.keys(cashierTotals).sort().map(function(name) {
+      var methods = Object.keys(cashierTotals[name].methods).sort().map(function(method) {
+        return { method: method, amount: cashierTotals[name].methods[method] };
+      });
+      return { name: name, total: cashierTotals[name].total, methods: methods };
+    }) : [];
+
+    return {
+      dateIso: dateIso,
+      generatedAt: formatGeneratedAt(),
+      currencySymbol: currencySymbol,
+      decimalPlaces: decimalPlaces,
+      totalSales: totalSales,
+      itemsSold: itemsSold,
+      topSellers: topSellers,
+      paymentBreakdown: paymentBreakdown,
+      showCashierSection: showCashierSection,
+      cashierBreakdown: cashierBreakdown
+    };
+  }
+
+  function renderReport(data) {
+    lastComputed = data;
+    currencySymbol = data.currencySymbol;
+    decimalPlaces = data.decimalPlaces;
+
+    document.getElementById("rhReportDate").textContent = formatDisplayDate(data.dateIso);
+    document.getElementById("rhGeneratedAt").textContent = data.generatedAt;
+    document.getElementById("statTotalSales").textContent = fmt(data.totalSales);
+
+    var itemsBody = document.getElementById("itemsSoldBody");
+    itemsBody.innerHTML = "";
+    document.getElementById("itemsSoldEmpty").classList.toggle("hidden", data.itemsSold.length > 0);
+    data.itemsSold.forEach(function(it) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + escapeHtml(it.name) + "</td><td>" + it.qty + "</td><td>" + fmt(it.total) + "</td>";
+      itemsBody.appendChild(tr);
+    });
+
+    var topBody = document.getElementById("topSellersBody");
+    topBody.innerHTML = "";
+    document.getElementById("topSellersEmpty").classList.toggle("hidden", data.topSellers.length > 0);
+    data.topSellers.forEach(function(it, i) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td class=\"rank-col\">" + (i + 1) + "</td><td>" + escapeHtml(it.name) + "</td><td>" + it.qty + "</td>";
+      topBody.appendChild(tr);
+    });
+
+    var payBody = document.getElementById("paymentBreakdownBody");
+    payBody.innerHTML = "";
+    document.getElementById("paymentBreakdownEmpty").classList.toggle("hidden", data.paymentBreakdown.length > 0);
+    data.paymentBreakdown.forEach(function(p) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + escapeHtml(p.method) + "</td><td>" + fmt(p.amount) + "</td>";
+      payBody.appendChild(tr);
+    });
+
+    var cashierTitle = document.getElementById("cashierSectionTitle");
+    var cashierBody = document.getElementById("cashierBreakdownBody");
+    cashierBody.innerHTML = "";
+    cashierTitle.classList.toggle("hidden", !data.showCashierSection);
+    data.cashierBreakdown.forEach(function(c) {
+      var block = document.createElement("div");
+      block.className = "cashier-block";
+      var rows = c.methods.map(function(m) {
+        return "<div class=\"cashier-row\"><span>" + escapeHtml(m.method) + "</span><span>" + fmt(m.amount) + "</span></div>";
+      }).join("");
+      block.innerHTML =
+        "<div class=\"cashier-name\">" + escapeHtml(c.name) + "</div>" +
+        rows +
+        "<div class=\"cashier-row total\"><span>Total Collected</span><span>" + fmt(c.total) + "</span></div>";
+      cashierBody.appendChild(block);
+    });
+  }
+
+  function renderLiveForSelectedDate() {
+    currentReportId = null;
+    document.getElementById("viewingSavedBanner").classList.add("hidden");
+    var dateIso = document.getElementById("reportDateInput").value || todayIso();
+    renderReport(computeReport(dateIso));
+  }
+
+  function makeId() {
+    return "eod_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  async function loadHistory() {
+    try {
+      var raw = await storageGet(EOD_HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  async function saveHistory(list) {
+    try { await storageSet(EOD_HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function showToast(text) {
+    var toast = document.getElementById("saveToast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(function() { toast.classList.remove("show"); }, 1800);
+  }
+
+  async function saveReportExplicit() {
+    if (!lastComputed) return;
+    if (!currentReportId) currentReportId = makeId();
+    var entry = {
+      id: currentReportId,
+      dateIso: lastComputed.dateIso,
+      generatedAt: lastComputed.generatedAt,
+      totalSales: fmt(lastComputed.totalSales),
+      savedAt: Date.now(),
+      data: lastComputed
+    };
+    var list = await loadHistory();
+    var idx = list.findIndex(function(e) { return e.id === currentReportId; });
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    await saveHistory(list);
+    showToast("Report saved");
+  }
+
+  async function renderSavedReportsList() {
+    var list = (await loadHistory()).slice().sort(function(a, b) { return b.savedAt - a.savedAt; });
+    var container = document.getElementById("savedReportsList");
+    container.innerHTML = "";
+    if (!list.length) {
+      container.innerHTML = "<div class=\"saved-reports-empty\">No saved reports yet. Pick a date and click \"Save Report\" to keep it here.</div>";
+      return;
+    }
+    list.forEach(function(entry) {
+      var row = document.createElement("div");
+      row.className = "saved-report-row";
+      row.innerHTML =
+        "<div class=\"saved-report-main\">" +
+          "<div class=\"saved-report-title\">" + escapeHtml(formatDisplayDate(entry.dateIso)) + "</div>" +
+          "<div class=\"saved-report-meta\">Saved " + escapeHtml(new Date(entry.savedAt).toLocaleString()) + "</div>" +
+        "</div>" +
+        "<div class=\"saved-report-total\">" + escapeHtml(entry.totalSales || "") + "</div>" +
+        "<button type=\"button\" class=\"saved-report-delete\" aria-label=\"Delete saved report\">✕</button>";
+      row.querySelector(".saved-report-main").addEventListener("click", function() { openSavedReport(entry); });
+      row.querySelector(".saved-report-delete").addEventListener("click", async function(e) {
+        e.stopPropagation();
+        if (!confirm("Delete this saved report? This can't be undone.")) return;
+        var list2 = await loadHistory();
+        await saveHistory(list2.filter(function(x) { return x.id !== entry.id; }));
+        renderSavedReportsList();
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function openSavedReport(entry) {
+    currentReportId = entry.id;
+    document.getElementById("reportDateInput").value = entry.dateIso;
+    renderReport(entry.data);
+    document.getElementById("viewingSavedBanner").classList.remove("hidden");
+    closeSavedReportsModal();
+  }
+
+  function openSavedReportsModal() {
+    renderSavedReportsList();
+    document.getElementById("savedReportsOverlay").classList.remove("hidden");
+  }
+  function closeSavedReportsModal() {
+    document.getElementById("savedReportsOverlay").classList.add("hidden");
+  }
+
+  function applyPaperSize(size) {
+    document.body.classList.toggle("paper-80mm", size === "80mm");
+    document.body.classList.toggle("paper-a4", size !== "80mm");
+    var pageStyle = document.getElementById("dynamicPageSize");
+    pageStyle.textContent = (size === "80mm")
+      ? "@page { size: 80mm auto; margin: 0; }"
+      : "@page { size: A4; margin: 0; }";
+  }
+
+  async function init() {
+    var settingsRaw = await storageGet("pos-settings");
+    var settings = {};
+    try { settings = settingsRaw ? JSON.parse(settingsRaw) : {}; } catch (e) {}
+    currencySymbol = settings.currencySymbol || "$";
+    decimalPlaces = (settings.decimalPlaces != null && settings.decimalPlaces !== "") ? Number(settings.decimalPlaces) : 2;
+
+    document.getElementById("rhStoreName").textContent = settings.storeName || "Demo Store";
+    document.getElementById("rhStoreDetails").textContent = settings.storeDetails || "";
+
+    var logo = await storageGet("pos-logo");
+    if (logo && logo !== "removed") {
+      document.getElementById("rhLogo").src = logo;
+      document.getElementById("rhLogoWrap").classList.remove("hidden");
+    }
+
+    var salesRaw = await storageGet("pos-sales-history");
+    try { salesHistory = salesRaw ? JSON.parse(salesRaw) : []; } catch (e) { salesHistory = []; }
+
+    var cashiersRaw = await storageGet("pos-cashiers");
+    try { cashiers = cashiersRaw ? JSON.parse(cashiersRaw) : []; } catch (e) { cashiers = []; }
+
+    var savedPaperSize = await storageGet(EOD_PAPER_KEY);
+    var paperSelect = document.getElementById("paperSizeSelect");
+    paperSelect.value = (savedPaperSize === "80mm") ? "80mm" : "a4";
+    applyPaperSize(paperSelect.value);
+
+    document.getElementById("reportDateInput").value = todayIso();
+    renderLiveForSelectedDate();
+
+    document.getElementById("reportDateInput").addEventListener("change", renderLiveForSelectedDate);
+    paperSelect.addEventListener("change", function() {
+      applyPaperSize(paperSelect.value);
+      storageSet(EOD_PAPER_KEY, paperSelect.value);
+    });
+    document.getElementById("backToLiveBtn").addEventListener("click", renderLiveForSelectedDate);
+    document.getElementById("printReportBtn").addEventListener("click", function() { window.print(); });
+    document.getElementById("saveReportBtn").addEventListener("click", saveReportExplicit);
+    document.getElementById("savedReportsBtn").addEventListener("click", openSavedReportsModal);
+    document.getElementById("closeSavedReportsBtn").addEventListener("click", closeSavedReportsModal);
+    document.getElementById("savedReportsOverlay").addEventListener("click", function(e) {
+      if (e.target.id === "savedReportsOverlay") closeSavedReportsModal();
+    });
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>

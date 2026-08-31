@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:START -->
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+  };
+  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+  window.acceptCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "accepted"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+  window.declineCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "declined"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+  window.closeCookieBanner = function() { hideBanner(); };
+
+  var consent = null, seen = null;
+  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+  }
+})();
+</script>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Invoice - Free Invoice Generator | GoOnlinePOS.com</title>
+<meta name="description" content="Create a professional invoice for free, right in your browser. Add your logo, line items with per-item tax exemption, tax, and discount, then print or save it as a PDF. No signup required.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://goonlinepos.com/invoice-generator">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://goonlinepos.com/invoice-generator">
+<meta property="og:title" content="Create Invoice | GoOnlinePOS.com">
+<meta property="og:description" content="Create a professional invoice for free, right in your browser. Add your logo, line items, tax, and discount, then print or save it as a PDF.">
+<meta property="og:site_name" content="Go Online POS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create Invoice | GoOnlinePOS.com">
+<meta name="twitter:description" content="Create a professional invoice for free, right in your browser. Add your logo, line items, tax, and discount, then print or save it as a PDF.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:START -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:END -->
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+.masthead { text-align: center; padding: 30px 20px 18px; }
+.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: -.02em; margin: 0 0 8px; }
+.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 520px; }
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 900px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 8px; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); justify-content: stretch; }
+  .site-header .header-right .site-nav { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; }
+  .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
+  .site-header { margin-top: 12px; }
+}
+
+.btn-ghost { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 9px 16px; border-radius: var(--radius-sm); }
+.btn-ghost:hover { background: #fafaf7; border-color: #cfccbf; }
+.btn-solid { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); border: 1px solid var(--accent); padding: 9px 16px; border-radius: var(--radius-sm); }
+.btn-solid:hover { background: var(--accent-dark); }
+
+.invoice-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 32px; margin: 22px 0; }
+
+.doc-header { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 22px; align-items: start; }
+.doc-header-left { display: flex; flex-direction: column; }
+.doc-header-right { display: flex; flex-direction: column; align-items: flex-end; }
+.doc-header-right .title-input { text-align: right; width: 100%; }
+.doc-header-right .number-row { justify-content: flex-end; }
+
+.title-input { font-family: var(--font-display); font-weight: 800; font-size: 28px; letter-spacing: -.01em; border: none; background: transparent; color: var(--ink); width: 220px; padding: 4px 0; }
+.title-input:focus { outline: none; border-bottom: 2px solid var(--accent); }
+.number-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 13px; color: var(--muted); }
+.number-row input { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 13px; width: 130px; }
+
+.currency-inline { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.currency-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
+.doc-meta { margin-top: 14px; width: 100%; max-width: 260px; }
+.doc-meta-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 5px 0; font-size: 13px; border-bottom: 1px solid var(--line-soft); }
+.doc-meta-row:last-child { border-bottom: none; }
+.doc-meta-row .dm-label { color: var(--muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; flex-shrink: 0; }
+.doc-meta-row input { text-align: right; border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; font-size: 13px; width: 140px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+.doc-meta-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.bill-to-block { max-width: 380px; margin-bottom: 24px; }
+
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.logo-upload-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px dashed var(--line); padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; }
+.logo-upload-label:hover { background: #fafaf7; border-color: #cfccbf; }
+.hidden-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.logo-preview { max-width: 160px; max-height: 70px; object-fit: contain; border-radius: 6px; }
+.remove-logo-btn { border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.remove-logo-btn:hover { background: #fbe9e7; color: #b3261e; }
+.logo-preview.hidden, .remove-logo-btn.hidden, .logo-upload-label.hidden { display: none !important; }
+
+.field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+textarea, .field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+textarea { resize: none; min-height: 66px; overflow-y: hidden; }
+textarea:focus, .field-input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.items-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+.items-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 9px 8px; }
+.items-table th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.items-table th:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; text-align: right; }
+.items-table td { padding: 6px 6px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.items-table input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: #fff; }
+.items-table input:hover { border-color: #cfccbf; }
+.items-table input:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
+.items-table .col-qty, .items-table .col-rate { width: 90px; }
+.items-table .col-amount { width: 110px; text-align: right; }
+.items-table .col-amount input { text-align: right; background: var(--line-soft); }
+.items-table .col-tax-exempt { width: 74px; text-align: center; }
+.items-table .col-tax-exempt input { width: auto; border: none; background: transparent; padding: 0; }
+.items-table .col-remove { width: 34px; text-align: center; }
+.line-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.line-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
+.line-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
+.line-remove-btn:disabled:hover { background: transparent; color: var(--muted); }
+
+.add-line-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-dark); background: var(--accent-tint); border: 1px dashed #b9d9c8; padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; margin: 8px 0 26px; }
+.add-line-btn:hover { background: #dcefe4; }
+
+.totals-row { display: flex; justify-content: flex-end; }
+.totals-box { width: 100%; max-width: 340px; }
+.totals-line { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13.5px; gap: 10px; }
+.totals-line .tl-label { color: var(--ink-soft); font-weight: 600; flex-shrink: 0; }
+.totals-line .tl-controls { display: flex; align-items: center; gap: 6px; }
+.totals-line .tl-controls select { font-size: 12px; padding: 5px 6px; border: 1px solid var(--line); border-radius: 6px; }
+.totals-line .tl-controls input { width: 90px; text-align: right; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 13px; }
+.totals-line.grand { border-top: 2px solid var(--ink); margin-top: 4px; padding-top: 12px; font-size: 17px; }
+.totals-line.grand .tl-label { color: var(--ink); font-weight: 800; }
+.totals-line.balance { background: var(--accent-tint); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 8px; }
+.totals-line.balance .tl-label { color: var(--accent-dark); font-weight: 800; }
+.totals-line.balance .tl-value { color: var(--accent-dark); font-weight: 800; font-size: 16px; }
+
+.notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 26px; }
+
+.action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
+.action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
+#printInvoiceBtn { background: var(--ink); color: #fff; }
+#printInvoiceBtn:hover { background: #263832; }
+#saveInvoiceBtn { background: var(--accent); color: #fff; }
+#saveInvoiceBtn:hover { background: var(--accent-dark); }
+#savedInvoicesBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#savedInvoicesBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+#clearInvoiceBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#clearInvoiceBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+.autosave-note { text-align: center; font-size: 12px; color: var(--muted); margin: 10px 0 30px; }
+
+.save-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 400; }
+.save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(22,33,29,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 350; }
+.modal-overlay.hidden { display: none !important; }
+.modal-box { background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; color: var(--ink); }
+.modal-close-btn { border: none; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.modal-close-btn:hover { background: var(--line-soft); color: var(--ink); }
+.modal-body { padding: 10px 12px; overflow-y: auto; }
+.saved-invoice-row { display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.saved-invoice-row:hover { background: var(--accent-tint); }
+.saved-invoice-main { flex: 1; min-width: 0; }
+.saved-invoice-title { font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.saved-invoice-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.saved-invoice-total { font-weight: 700; font-size: 14px; color: var(--ink); flex-shrink: 0; }
+.saved-invoice-delete { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 8px; border-radius: 6px; flex-shrink: 0; }
+.saved-invoice-delete:hover { background: #fbe9e7; color: #b3261e; }
+.saved-invoices-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 30px 16px; }
+
+.info-section { max-width: 720px; margin: 10px auto 30px; }
+.info-section h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); margin: 30px 0 12px; }
+.info-section ol, .info-section ul { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 14px; }
+.info-section dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
+.info-section dd { color: var(--ink-soft); font-size: 14px; margin: 4px 0 0; }
+
+.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
+.site-footer span { margin: 0 8px; }
+
+@media (max-width: 720px) {
+  .masthead h1 { font-size: 27px; }
+  .notes-grid { grid-template-columns: 1fr; }
+  .doc-header { grid-template-columns: 1fr; }
+  .doc-header-right { align-items: flex-start; }
+  .doc-header-right .title-input { text-align: left; }
+  .doc-header-right .number-row { justify-content: flex-start; }
+  .doc-meta { max-width: none; }
+  .doc-meta-row input { text-align: left; width: auto; flex: 1; margin-left: 10px; }
+  .bill-to-block { max-width: none; }
+  .invoice-card { padding: 20px; }
+  .items-table thead { display: none; }
+  .items-table, .items-table tbody, .items-table tr, .items-table td {
+    display: block;
+    width: 100% !important;
+  }
+  .items-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 6px; }
+  .items-table td { padding: 4px 0; border-bottom: none; }
+  .items-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .items-table .col-tax-exempt { display: flex; align-items: center; gap: 8px; text-align: left; }
+  .items-table .col-tax-exempt::before { margin-bottom: 0 !important; }
+  .items-table .col-amount, .items-table .col-amount input { text-align: left; }
+  .items-table .col-remove { text-align: right; }
+}
+
+@page { margin: 0; }
+@media print {
+  html, body { background: #fff; }
+  .masthead, .site-header, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
+  .wrap { max-width: none; padding: 12mm; }
+  .invoice-card { box-shadow: none; border: none; padding: 0; margin: 0; }
+  .no-print { display: none !important; }
+  textarea, .field-input, .items-table input, .doc-meta-row input, .number-row input, .totals-line .tl-controls input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
+  textarea { min-height: 0 !important; }
+  select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
+  input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+  input[type="date"]::-webkit-inner-spin-button { display: none !important; }
+  .add-line-btn, .line-remove-btn, .logo-upload-label, .remove-logo-btn { display: none !important; }
+  .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .totals-line.balance { background: #f1f1ee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+.cookie-consent.hidden { display: none !important; }
+.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
+.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
+.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cookie-notice-view.hidden { display: none !important; }
+.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
+.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-choice-view.hidden { display: none !important; }
+.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
+.cc-decline:hover { border-color: rgba(255,255,255,.6); }
+.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
+.cc-accept:hover { background: #cf9631; }
+.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-declined-view.hidden { display: none !important; }
+.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+.cc-close:hover { background: #e6e4d9; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="site-header">
+<a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+<div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+<h2>GoOnlinePOS.com</h2>
+</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="/">Homepage</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice-generator">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt-generator">Free Receipt Generator</a>
+<a class="cta-btn" href="barcode-generator">Free Barcode &amp; QR Code</a>
+<a class="cta-btn" href="vat-calculator">Free VAT Calculator</a>
+<a class="cta-btn" href="pricing-calculator">Free Pricing Calculator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+</header>
+
+<header class="masthead">
+<div class="kicker">Free Tool</div>
+<h1>Create Invoice</h1>
+<p>Build a professional invoice in your browser, add your logo and line items, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
+</header>
+
+<div class="invoice-card" id="invoiceCard">
+
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <div class="logo-area">
+        <input type="file" id="invLogoInput" accept="image/*" class="hidden-file-input">
+        <label for="invLogoInput" class="logo-upload-label no-print" id="logoUploadLabel">🖼 Add Logo</label>
+        <img id="invLogoPreview" class="logo-preview hidden" alt="Company logo">
+        <button type="button" id="removeLogoBtn" class="remove-logo-btn no-print hidden" aria-label="Remove logo">✕ Remove</button>
+      </div>
+      <label class="field-label" for="invFrom">From</label>
+      <textarea id="invFrom" placeholder="Your business name, address, phone, email"></textarea>
+    </div>
+    <div class="doc-header-right">
+      <div class="currency-inline no-print">
+        <label for="invCurrency">Currency</label>
+        <select id="invCurrency"></select>
+      </div>
+      <input type="text" class="title-input" id="invTitle" value="INVOICE" aria-label="Document title">
+      <div class="number-row">
+        <span>#</span>
+        <input type="text" id="invNumber" placeholder="INV-0001" aria-label="Invoice number">
+      </div>
+      <div class="doc-meta">
+        <div class="doc-meta-row"><span class="dm-label">Date</span><input type="date" id="invDate"></div>
+        <div class="doc-meta-row"><span class="dm-label">Due Date</span><input type="date" id="invDueDate"></div>
+        <div class="doc-meta-row"><span class="dm-label">Terms</span><input type="text" id="invTerms" placeholder="e.g. Net 15"></div>
+        <div class="doc-meta-row"><span class="dm-label">PO #</span><input type="text" id="invPO" placeholder="(optional)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bill-to-block">
+    <label class="field-label" for="invTo">Bill To</label>
+    <textarea id="invTo" placeholder="Customer name, address, phone, email"></textarea>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="col-qty">Qty</th>
+        <th class="col-rate">Rate</th>
+        <th class="col-tax-exempt">Tax Free</th>
+        <th class="col-amount">Amount</th>
+        <th class="col-remove"></th>
+      </tr>
+    </thead>
+    <tbody id="invItemsBody"></tbody>
+  </table>
+
+  <button type="button" class="add-line-btn no-print" id="addLineBtn">+ Add Line Item</button>
+
+  <div class="totals-row">
+    <div class="totals-box">
+      <div class="totals-line">
+        <span class="tl-label">Subtotal</span>
+        <span class="tl-value" id="invSubtotal">0.00</span>
+      </div>
+      <div class="totals-line">
+        <span class="tl-label">Discount</span>
+        <div class="tl-controls">
+          <select id="invDiscountType"><option value="percent">%</option><option value="flat">Flat</option></select>
+          <input type="number" id="invDiscountValue" value="0" min="0" step="0.01">
+        </div>
+      </div>
+      <div class="totals-line">
+        <span class="tl-label">Tax</span>
+        <div class="tl-controls">
+          <select id="invTaxType"><option value="percent">%</option><option value="flat">Flat</option></select>
+          <input type="number" id="invTaxValue" value="0" min="0" step="0.01">
+        </div>
+      </div>
+      <div class="totals-line grand">
+        <span class="tl-label">Total</span>
+        <span class="tl-value" id="invTotal">0.00</span>
+      </div>
+      <div class="totals-line">
+        <span class="tl-label">Amount Paid</span>
+        <div class="tl-controls">
+          <input type="number" id="invAmountPaid" value="0" min="0" step="0.01">
+        </div>
+      </div>
+      <div class="totals-line balance">
+        <span class="tl-label">Balance Due</span>
+        <span class="tl-value" id="invBalanceDue">0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-grid">
+    <div>
+      <label class="field-label" for="invNotes">Notes</label>
+      <textarea id="invNotes" placeholder="Thank you for your business!"></textarea>
+    </div>
+    <div>
+      <label class="field-label" for="invTermsText">Terms</label>
+      <textarea id="invTermsText" placeholder="Late payments, delivery schedule, etc."></textarea>
+    </div>
+  </div>
+
+</div>
+
+<div class="action-bar no-print">
+  <button type="button" id="saveInvoiceBtn">💾 Save Invoice</button>
+  <button type="button" id="savedInvoicesBtn">📂 Saved Invoices</button>
+  <button type="button" id="printInvoiceBtn">🖨 Print / Save as PDF</button>
+  <button type="button" id="clearInvoiceBtn">🗑 Clear / New Invoice</button>
+</div>
+<p class="autosave-note no-print">Your current invoice is saved automatically in this browser as you type. Click "Save Invoice" to add it to your Saved Invoices list so you can find it again later - nothing is uploaded anywhere.</p>
+
+<div class="modal-overlay hidden no-print" id="savedInvoicesOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Saved Invoices</h3>
+      <button type="button" class="modal-close-btn" id="closeSavedInvoicesBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="savedInvoicesList"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">Invoice saved</div>
+
+<div class="info-section no-print">
+  <h2>How to make an invoice</h2>
+  <ol>
+    <li>Add your logo (optional) and fill in who the invoice is from and who it's billed to.</li>
+    <li>Add an invoice number, date, due date, and payment terms.</li>
+    <li>List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed.</li>
+    <li>Add tax and a discount if they apply, then check the balance due.</li>
+    <li>Click "Save Invoice" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.</li>
+  </ol>
+
+  <h2>Invoice FAQ</h2>
+  <dl>
+    <dt>Is this invoice generator free?</dt>
+    <dd>Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.</dd>
+    <dt>Where can I see my saved invoices?</dt>
+    <dd>Click "Save Invoice" to add the current one to your list, then click "Saved Invoices" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt>How do I save it as a PDF?</dt>
+    <dd>Click "Print / Save as PDF" and pick "Save as PDF" (or "Microsoft Print to PDF") as the destination in the print dialog your browser opens.</dd>
+    <dt>Is this the same as GoOnlinePOS's receipts?</dt>
+    <dd>No. Receipts are for point-of-sale checkout inside <a href="app">the POS app</a>. This tool is for one-off invoices you send to a customer before or after the sale.</dd>
+  </dl>
+</div>
+
+</div>
+
+<footer class="site-footer no-print">
+<a href="contact">Contact</a>
+<span>·</span>
+<a href="privacy">Privacy Policy</a>
+<span>·</span>
+<a href="terms">Terms of Service</a>
+<span>·</span>
+<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+</footer>
+
+<!-- OFFLINE-STRIP:COOKIE-BANNER:START -->
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+<div id="cookieNoticeView" class="cookie-notice-view">
+<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+</div>
+<div id="cookieChoiceView" class="cc-choice-view hidden">
+<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy">Learn more</a></div>
+<div class="cc-actions">
+<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
+<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+</div>
+</div>
+<div id="cookieDeclinedView" class="cc-declined-view hidden">
+<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+</div>
+</div>
+<!-- OFFLINE-STRIP:COOKIE-BANNER:END -->
+
+<script>
+(function() {
+  var DRAFT_KEY = "goonlinepos-invoice-draft";
+  var HISTORY_KEY = "goonlinepos-invoice-history";
+  var DEFAULTS_KEY = "goonlinepos-invoice-defaults";
+  var CURRENCIES = {
+    AED: "د.إ", AFN: "؋", ALL: "L", AMD: "դր.", ANG: "ƒ", AOA: "Kz", ARS: "$", AUD: "A$",
+    AWG: "ƒ", AZN: "₼", BAM: "KM", BBD: "$", BDT: "৳", BGN: "лв", BHD: ".د.ب", BIF: "FBu",
+    BMD: "$", BND: "$", BOB: "Bs.", BRL: "R$", BSD: "$", BTN: "Nu.", BWP: "P", BYN: "Br",
+    BZD: "BZ$", CAD: "C$", CDF: "FC", CHF: "CHF", CLP: "$", CNY: "¥", COP: "$", CRC: "₡",
+    CUP: "$", CVE: "$", CZK: "Kč", DJF: "Fdj", DKK: "kr", DOP: "RD$", DZD: "دج", EGP: "E£",
+    ERN: "Nfk", ETB: "Br", EUR: "€", FJD: "$", FKP: "£", GBP: "£", GEL: "₾", GHS: "₵",
+    GIP: "£", GMD: "D", GNF: "FG", GTQ: "Q", GYD: "$", HKD: "HK$", HNL: "L", HRK: "kn",
+    HTG: "G", HUF: "Ft", IDR: "Rp", ILS: "₪", INR: "₹", IQD: "ع.د", IRR: "﷼", ISK: "kr",
+    JMD: "J$", JOD: "د.ا", JPY: "¥", KES: "KSh", KGS: "с", KHR: "៛", KMF: "CF", KPW: "₩",
+    KRW: "₩", KWD: "د.ك", KYD: "$", KZT: "₸", LAK: "₭", LBP: "ل.ل", LKR: "₨", LRD: "$",
+    LSL: "L", LYD: "ل.د", MAD: "د.م.", MDL: "L", MGA: "Ar", MKD: "ден", MMK: "K", MNT: "₮",
+    MOP: "MOP$", MRU: "UM", MUR: "₨", MVR: ".ރ", MWK: "MK", MXN: "$", MYR: "RM", MZN: "MT",
+    NAD: "$", NGN: "₦", NIO: "C$", NOK: "kr", NPR: "₨", NZD: "$", OMR: "ر.ع.", PAB: "B/.",
+    PEN: "S/", PGK: "K", PHP: "₱", PKR: "₨", PLN: "zł", PYG: "₲", QAR: "ر.ق", RON: "lei",
+    RSD: "дин.", RUB: "₽", RWF: "FRw", SAR: "﷼", SBD: "$", SCR: "₨", SDG: "ج.س.", SEK: "kr",
+    SGD: "S$", SHP: "£", SLE: "Le", SOS: "S", SRD: "$", SSP: "£", STN: "Db", SVC: "$",
+    SYP: "£", SZL: "L", THB: "฿", TJS: "ЅМ", TMT: "m", TND: "د.ت", TOP: "T$", TRY: "₺",
+    TTD: "TT$", TWD: "NT$", TZS: "TSh", UAH: "₴", UGX: "USh", USD: "$", UYU: "$U", UZS: "so'm",
+    VES: "Bs.", VND: "₫", VUV: "VT", WST: "T", XAF: "FCFA", XCD: "$", XOF: "CFA", XPF: "₣",
+    YER: "﷼", ZAR: "R", ZMW: "ZK", ZWL: "$"
+  };
+  var itemsBody = document.getElementById("invItemsBody");
+  var currencySelect = document.getElementById("invCurrency");
+  var saveTimer = null;
+  var currentLogoDataUrl = "";
+  var currentInvoiceId = null;
+  var logoInput = document.getElementById("invLogoInput");
+  var logoPreview = document.getElementById("invLogoPreview");
+  var logoUploadLabel = document.getElementById("logoUploadLabel");
+  var removeLogoBtn = document.getElementById("removeLogoBtn");
+
+  function setLogo(dataUrl) {
+    currentLogoDataUrl = dataUrl || "";
+    if (currentLogoDataUrl) {
+      logoPreview.src = currentLogoDataUrl;
+      logoPreview.classList.remove("hidden");
+      logoUploadLabel.classList.add("hidden");
+      removeLogoBtn.classList.remove("hidden");
+    } else {
+      logoPreview.src = "";
+      logoPreview.classList.add("hidden");
+      logoUploadLabel.classList.remove("hidden");
+      removeLogoBtn.classList.add("hidden");
+    }
+  }
+
+  function compressLogo(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var img = new Image();
+      img.onload = function() {
+        var maxW = 320;
+        var scale = Math.min(1, maxW / img.width);
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        callback(canvas.toDataURL("image/png"));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  logoInput.addEventListener("change", function() {
+    var file = logoInput.files && logoInput.files[0];
+    if (!file) return;
+    compressLogo(file, function(dataUrl) {
+      setLogo(dataUrl);
+      scheduleSave();
+      saveDefaults();
+    });
+    logoInput.value = "";
+  });
+
+  removeLogoBtn.addEventListener("click", function() {
+    setLogo("");
+    scheduleSave();
+    saveDefaults();
+  });
+
+  Object.keys(CURRENCIES).forEach(function(code) {
+    var opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = code + " (" + CURRENCIES[code] + ")";
+    currencySelect.appendChild(opt);
+  });
+  currencySelect.value = "USD";
+
+  function currencySymbol() {
+    return CURRENCIES[currencySelect.value] || "$";
+  }
+
+  function fmt(n) {
+    if (!isFinite(n)) n = 0;
+    return currencySymbol() + n.toFixed(2);
+  }
+
+  function makeLineRow(desc, qty, rate, exempt) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td data-label="Description"><input type="text" class="line-desc" placeholder="Item or service description" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
+      '<td class="col-qty" data-label="Qty"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
+      '<td class="col-rate" data-label="Rate"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
+      '<td class="col-tax-exempt" data-label="Tax Free"><input type="checkbox" class="line-tax-exempt"' + (exempt ? " checked" : "") + '></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
+      '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
+    itemsBody.appendChild(tr);
+    wireRow(tr);
+    updateRowAmount(tr);
+    return tr;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function updateRemoveButtons() {
+    var onlyOne = itemsBody.children.length <= 1;
+    itemsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
+  function wireRow(tr) {
+    tr.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
+      el.addEventListener("input", function() { updateRowAmount(tr); recalcTotals(); scheduleSave(); });
+    });
+    tr.querySelector(".line-tax-exempt").addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+    tr.querySelector(".line-remove-btn").addEventListener("click", function() {
+      if (itemsBody.children.length <= 1) { return; }
+      tr.remove();
+      updateRemoveButtons();
+      recalcTotals();
+      scheduleSave();
+    });
+    updateRemoveButtons();
+  }
+
+  function updateRowAmount(tr) {
+    var qty = parseFloat(tr.querySelector(".line-qty").value) || 0;
+    var rate = parseFloat(tr.querySelector(".line-rate").value) || 0;
+    tr.querySelector(".line-amount").value = (qty * rate).toFixed(2);
+  }
+
+  function recalcTotals() {
+    var subtotal = 0;
+    var taxableSubtotal = 0;
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      var amount = parseFloat(tr.querySelector(".line-amount").value) || 0;
+      subtotal += amount;
+      if (!tr.querySelector(".line-tax-exempt").checked) taxableSubtotal += amount;
+    });
+
+    var discountType = document.getElementById("invDiscountType").value;
+    var discountValue = parseFloat(document.getElementById("invDiscountValue").value) || 0;
+    var discountAmount = discountType === "percent" ? subtotal * (discountValue / 100) : discountValue;
+    if (discountAmount > subtotal) discountAmount = subtotal;
+
+    var afterDiscount = subtotal - discountAmount;
+
+    var taxableRatio = subtotal > 0 ? taxableSubtotal / subtotal : 0;
+    var taxableAfterDiscount = afterDiscount * taxableRatio;
+
+    var taxType = document.getElementById("invTaxType").value;
+    var taxValue = parseFloat(document.getElementById("invTaxValue").value) || 0;
+    var taxAmount = taxType === "percent" ? taxableAfterDiscount * (taxValue / 100) : taxableRatio * taxValue;
+
+    var total = afterDiscount + taxAmount;
+    var paid = parseFloat(document.getElementById("invAmountPaid").value) || 0;
+    var balance = total - paid;
+
+    document.getElementById("invSubtotal").textContent = fmt(subtotal);
+    document.getElementById("invTotal").textContent = fmt(total);
+    document.getElementById("invBalanceDue").textContent = fmt(balance);
+  }
+
+  function scheduleSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 400);
+  }
+
+  function collectState() {
+    var items = [];
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      items.push({
+        desc: tr.querySelector(".line-desc").value,
+        qty: tr.querySelector(".line-qty").value,
+        rate: tr.querySelector(".line-rate").value,
+        exempt: tr.querySelector(".line-tax-exempt").checked
+      });
+    });
+    return {
+      id: currentInvoiceId,
+      title: document.getElementById("invTitle").value,
+      number: document.getElementById("invNumber").value,
+      currency: currencySelect.value,
+      logo: currentLogoDataUrl,
+      from: document.getElementById("invFrom").value,
+      to: document.getElementById("invTo").value,
+      date: document.getElementById("invDate").value,
+      dueDate: document.getElementById("invDueDate").value,
+      terms: document.getElementById("invTerms").value,
+      po: document.getElementById("invPO").value,
+      items: items,
+      discountType: document.getElementById("invDiscountType").value,
+      discountValue: document.getElementById("invDiscountValue").value,
+      taxType: document.getElementById("invTaxType").value,
+      taxValue: document.getElementById("invTaxValue").value,
+      amountPaid: document.getElementById("invAmountPaid").value,
+      notes: document.getElementById("invNotes").value,
+      termsText: document.getElementById("invTermsText").value
+    };
+  }
+
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
+  }
+
+  function loadDefaults() {
+    try {
+      var raw = localStorage.getItem(DEFAULTS_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveDefaults() {
+    try {
+      localStorage.setItem(DEFAULTS_KEY, JSON.stringify({
+        logo: currentLogoDataUrl,
+        from: document.getElementById("invFrom").value,
+        currency: currencySelect.value
+      }));
+    } catch (e) {}
+  }
+
+  function defaultsAsInitialState() {
+    var d = loadDefaults();
+    return { logo: d.logo || "", from: d.from || "", currency: d.currency || "USD" };
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory(list) {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function showToast(text) {
+    var toast = document.getElementById("saveToast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(function() { toast.classList.remove("show"); }, 1800);
+  }
+
+  function saveInvoiceExplicit() {
+    if (!currentInvoiceId) {
+      currentInvoiceId = "inv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    }
+    var state = collectState();
+    state.id = currentInvoiceId;
+    var entry = {
+      id: currentInvoiceId,
+      number: state.number || "",
+      to: (state.to || "").split("\n")[0] || "",
+      total: document.getElementById("invTotal").textContent,
+      date: state.date || "",
+      savedAt: Date.now(),
+      state: state
+    };
+    var list = loadHistory();
+    var idx = list.findIndex(function(e) { return e.id === currentInvoiceId; });
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    saveHistory(list);
+    saveDraft();
+    showToast("Invoice saved");
+  }
+
+  function renderSavedInvoicesList() {
+    var list = loadHistory().slice().sort(function(a, b) { return b.savedAt - a.savedAt; });
+    var container = document.getElementById("savedInvoicesList");
+    container.innerHTML = "";
+    if (!list.length) {
+      container.innerHTML = '<div class="saved-invoices-empty">No saved invoices yet. Fill out an invoice and click "Save Invoice" to keep it here.</div>';
+      return;
+    }
+    list.forEach(function(entry) {
+      var row = document.createElement("div");
+      row.className = "saved-invoice-row";
+      row.innerHTML =
+        '<div class="saved-invoice-main">' +
+          '<div class="saved-invoice-title">' + escapeHtml(entry.number || "(no number)") + (entry.to ? " - " + escapeHtml(entry.to) : "") + '</div>' +
+          '<div class="saved-invoice-meta">' + escapeHtml(entry.date || "") + '</div>' +
+        '</div>' +
+        '<div class="saved-invoice-total">' + escapeHtml(entry.total || "") + '</div>' +
+        '<button type="button" class="saved-invoice-delete" aria-label="Delete saved invoice">✕</button>';
+      row.querySelector(".saved-invoice-main").addEventListener("click", function() { openSavedInvoice(entry.id); });
+      row.querySelector(".saved-invoice-delete").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (!confirm("Delete this saved invoice? This can't be undone.")) return;
+        deleteSavedInvoice(entry.id);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function openSavedInvoice(id) {
+    var entry = loadHistory().find(function(e) { return e.id === id; });
+    if (!entry) return;
+    applyState(entry.state);
+    saveDraft();
+    closeSavedInvoicesModal();
+  }
+
+  function deleteSavedInvoice(id) {
+    saveHistory(loadHistory().filter(function(e) { return e.id !== id; }));
+    renderSavedInvoicesList();
+  }
+
+  function openSavedInvoicesModal() {
+    renderSavedInvoicesList();
+    document.getElementById("savedInvoicesOverlay").classList.remove("hidden");
+  }
+
+  function closeSavedInvoicesModal() {
+    document.getElementById("savedInvoicesOverlay").classList.add("hidden");
+  }
+
+  function todayIso() {
+    var d = new Date();
+    var mm = String(d.getMonth() + 1).padStart(2, "0");
+    var dd = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + mm + "-" + dd;
+  }
+
+  function applyState(state) {
+    currentInvoiceId = state.id || null;
+    document.getElementById("invTitle").value = state.title || "INVOICE";
+    document.getElementById("invNumber").value = state.number || "";
+    currencySelect.value = state.currency || "USD";
+    setLogo(state.logo || "");
+    document.getElementById("invFrom").value = state.from || "";
+    document.getElementById("invTo").value = state.to || "";
+    document.getElementById("invDate").value = state.date || todayIso();
+    document.getElementById("invDueDate").value = state.dueDate || "";
+    document.getElementById("invTerms").value = state.terms || "";
+    document.getElementById("invPO").value = state.po || "";
+    document.getElementById("invDiscountType").value = state.discountType || "percent";
+    document.getElementById("invDiscountValue").value = state.discountValue || 0;
+    document.getElementById("invTaxType").value = state.taxType || "percent";
+    document.getElementById("invTaxValue").value = state.taxValue || 0;
+    document.getElementById("invAmountPaid").value = state.amountPaid || 0;
+    document.getElementById("invNotes").value = state.notes || "";
+    document.getElementById("invTermsText").value = state.termsText || "";
+
+    itemsBody.innerHTML = "";
+    var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: 0, exempt: false }];
+    items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate, it.exempt); });
+    recalcTotals();
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
+  }
+
+  function loadDraft() {
+    var raw = null;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
+    if (raw) {
+      try {
+        applyState(JSON.parse(raw));
+        return;
+      } catch (e) {}
+    }
+    applyState(defaultsAsInitialState());
+  }
+
+  ["invTitle", "invNumber", "invTo", "invDate", "invDueDate", "invTerms", "invPO", "invNotes", "invTermsText"].forEach(function(id) {
+    document.getElementById(id).addEventListener("input", scheduleSave);
+  });
+
+  document.getElementById("invFrom").addEventListener("input", function() {
+    scheduleSave();
+    saveDefaults();
+  });
+
+  ["invDiscountType", "invDiscountValue", "invTaxType", "invTaxValue", "invAmountPaid"].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.addEventListener("input", function() { recalcTotals(); scheduleSave(); });
+    el.addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+  });
+
+  currencySelect.addEventListener("change", function() { recalcTotals(); scheduleSave(); saveDefaults(); });
+
+  document.getElementById("addLineBtn").addEventListener("click", function() {
+    makeLineRow("", 1, 0);
+    recalcTotals();
+    scheduleSave();
+  });
+
+  document.getElementById("printInvoiceBtn").addEventListener("click", function() {
+    window.print();
+  });
+
+  document.getElementById("clearInvoiceBtn").addEventListener("click", function() {
+    if (!confirm("Clear this invoice and start a new one? This can't be undone.")) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    applyState(defaultsAsInitialState());
+  });
+
+  document.getElementById("saveInvoiceBtn").addEventListener("click", saveInvoiceExplicit);
+  document.getElementById("savedInvoicesBtn").addEventListener("click", openSavedInvoicesModal);
+  document.getElementById("closeSavedInvoicesBtn").addEventListener("click", closeSavedInvoicesModal);
+  document.getElementById("savedInvoicesOverlay").addEventListener("click", function(e) {
+    if (e.target.id === "savedInvoicesOverlay") closeSavedInvoicesModal();
+  });
+
+  function autosizeTextarea(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+  function autosizeAllTextareas() {
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
+  }
+  document.querySelectorAll("textarea").forEach(function(el) {
+    el.addEventListener("input", function() { autosizeTextarea(el); });
+  });
+  // Print CSS relaxes textarea min-height so short fields (e.g. a one-line
+  // "From" address) don't leave a tall blank box on the printed page - but
+  // that only takes effect once print media is active, so the fit height
+  // has to be re-measured at beforeprint (and restored at afterprint for
+  // on-screen editing) rather than computed once up front.
+  window.addEventListener("beforeprint", autosizeAllTextareas);
+  window.addEventListener("afterprint", autosizeAllTextareas);
+
+  loadDraft();
+})();
+</script>
+
+</body>
+</html>

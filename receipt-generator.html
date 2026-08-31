@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:START -->
+<script>
+(function() {
+  var CONSENT_KEY = "goonlinepos-cookie-consent";
+  var SEEN_KEY = "goonlinepos-cookie-notice-seen";
+
+  function loadAnalyticsAndAds() {
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
+
+    var gtagScript = document.createElement("script");
+    gtagScript.async = true;
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
+    document.head.appendChild(gtagScript);
+  }
+
+  function showView(id) {
+    ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
+      var el = document.getElementById(v);
+      if (el) el.classList.toggle("hidden", v !== id);
+    });
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.remove("hidden");
+  }
+  function hideBanner() {
+    var b = document.getElementById("cookieConsentBanner");
+    if (b) b.classList.add("hidden");
+  }
+
+  window.closeCookieNotice = function() {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+  };
+  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+  window.acceptCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "accepted"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    hideBanner();
+    loadAnalyticsAndAds();
+  };
+  window.declineCookies = function() {
+    try { localStorage.setItem(CONSENT_KEY, "declined"); localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    showView("cookieDeclinedView");
+  };
+  window.closeCookieBanner = function() { hideBanner(); };
+
+  var consent = null, seen = null;
+  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+
+  if (consent === "accepted") {
+    loadAnalyticsAndAds();
+  } else if (consent !== "declined" && !seen) {
+    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+  }
+})();
+</script>
+<!-- OFFLINE-STRIP:COOKIE-CONSENT:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Receipt - Free Receipt Generator | GoOnlinePOS.com</title>
+<meta name="description" content="Create a professional payment receipt for free, right in your browser. Add remarks, an amount-in-words line, and your logo, then print or save it as a PDF. No signup required.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://goonlinepos.com/receipt-generator">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://goonlinepos.com/receipt-generator">
+<meta property="og:title" content="Create Receipt | GoOnlinePOS.com">
+<meta property="og:description" content="Create a professional payment receipt for free, right in your browser. Add remarks and your logo, then print or save it as a PDF.">
+<meta property="og:site_name" content="Go Online POS">
+<meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create Receipt | GoOnlinePOS.com">
+<meta name="twitter:description" content="Create a professional payment receipt for free, right in your browser. Add remarks and your logo, then print or save it as a PDF.">
+<meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:START -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<!-- OFFLINE-STRIP:GOOGLE-FONTS:END -->
+
+<style>
+:root {
+  --ink: #16211d;
+  --ink-soft: #4b5750;
+  --muted: #7a8580;
+  --bg: #eeede6;
+  --panel: #ffffff;
+  --line: #e3e0d6;
+  --line-soft: #ecebe3;
+  --accent: #1b6e4c;
+  --accent-dark: #124f36;
+  --accent-tint: #e7f2ec;
+  --gold: #d9a441;
+  --gold-tint: #faf1dd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-dark); }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 640px; margin: 0 auto; padding: 20px; }
+
+.masthead { text-align: center; padding: 30px 20px 18px; }
+.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: -.02em; margin: 0 0 8px; }
+.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 480px; }
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 900px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 8px; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); justify-content: stretch; }
+  .site-header .header-right .site-nav { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; }
+  .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
+  .site-header { margin-top: 12px; }
+}
+
+.btn-ghost { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 9px 16px; border-radius: var(--radius-sm); }
+.btn-ghost:hover { background: #fafaf7; border-color: #cfccbf; }
+.btn-solid { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); border: 1px solid var(--accent); padding: 9px 16px; border-radius: var(--radius-sm); }
+.btn-solid:hover { background: var(--accent-dark); }
+
+.receipt-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 28px; margin: 22px 0; }
+
+.doc-header { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 22px; align-items: start; }
+.doc-header-left { display: flex; flex-direction: column; }
+.doc-header-right { display: flex; flex-direction: column; align-items: flex-end; }
+.doc-header-right .title-input { text-align: right; width: 100%; }
+.doc-header-right .number-row { justify-content: flex-end; }
+
+.currency-inline { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.currency-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
+.doc-meta { margin-top: 14px; width: 100%; max-width: 260px; }
+.doc-meta-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 5px 0; font-size: 13px; border-bottom: 1px solid var(--line-soft); }
+.doc-meta-row:last-child { border-bottom: none; }
+.doc-meta-row .dm-label { color: var(--muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; flex-shrink: 0; }
+.doc-meta-row input { text-align: right; border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; font-size: 13px; width: 140px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+.doc-meta-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.bill-to-block { max-width: 380px; margin-bottom: 20px; }
+
+.logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.logo-upload-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); background: var(--panel); border: 1px dashed var(--line); padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; }
+.logo-upload-label:hover { background: #fafaf7; border-color: #cfccbf; }
+.hidden-file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.logo-preview { max-width: 150px; max-height: 64px; object-fit: contain; border-radius: 6px; }
+.remove-logo-btn { border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.remove-logo-btn:hover { background: #fbe9e7; color: #b3261e; }
+.logo-preview.hidden, .remove-logo-btn.hidden, .logo-upload-label.hidden { display: none !important; }
+
+.title-input { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -.01em; border: none; background: transparent; color: var(--ink); width: 220px; padding: 4px 0; text-align: center; }
+.title-input:focus { outline: none; border-bottom: 2px solid var(--accent); }
+.number-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px; font-size: 13px; color: var(--muted); }
+.number-row input { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 13px; width: 130px; text-align: center; }
+
+.field-label { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+textarea, .field-input { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 14px; font-family: var(--font-body); color: var(--ink); background: #fff; }
+textarea { resize: none; min-height: 58px; overflow-y: hidden; }
+textarea:focus, .field-input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.items-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+.items-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: var(--ink); padding: 9px 8px; }
+.items-table th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.items-table th:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; text-align: right; }
+.items-table td { padding: 6px 6px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.items-table input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: #fff; }
+.items-table input:hover { border-color: #cfccbf; }
+.items-table input:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
+.items-table .col-amount { width: 130px; text-align: right; }
+.items-table .col-amount input { text-align: right; }
+.items-table .col-remove { width: 34px; text-align: center; }
+.line-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+.line-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
+.line-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
+.line-remove-btn:disabled:hover { background: transparent; color: var(--muted); }
+
+.add-line-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-dark); background: var(--accent-tint); border: 1px dashed #b9d9c8; padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; margin: 8px 0 22px; }
+.add-line-btn:hover { background: #dcefe4; }
+
+.totals-box { padding-top: 12px; margin-top: 4px; }
+.payments-block { margin: 4px 0 14px; }
+.payments-label { margin-bottom: 8px; }
+.payment-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.payment-row select { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; background: #fff; }
+.payment-row select:hover, .payment-row input:hover { border-color: #cfccbf; }
+.payment-row select:focus, .payment-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.payment-row input { width: 120px; flex-shrink: 0; border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; font-size: 13.5px; text-align: right; background: #fff; }
+.payment-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; flex-shrink: 0; }
+.payment-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
+.payment-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
+.payment-remove-btn:disabled:hover { background: transparent; color: var(--muted); }
+.add-payment-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-dark); background: var(--accent-tint); border: 1px dashed #b9d9c8; padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; }
+.add-payment-btn:hover { background: #dcefe4; }
+.totals-line { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; gap: 10px; }
+.totals-line .tl-label { color: var(--ink-soft); font-weight: 700; letter-spacing: .02em; text-transform: uppercase; font-size: 12.5px; }
+.totals-line .tl-controls input { width: 130px; text-align: right; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 13px; }
+.totals-line.grand { border-top: 2px solid var(--ink); margin-top: 4px; padding-top: 12px; font-size: 16px; }
+.totals-line.grand .tl-label { color: var(--ink); font-weight: 800; }
+.totals-line.due .tl-label { color: var(--ink); font-weight: 800; }
+.totals-line.due .tl-value { font-weight: 800; }
+
+.amount-words-block { background: var(--accent-tint); border-radius: var(--radius-sm); padding: 12px 14px; margin: 14px 0 0; }
+.amount-words-block .aw-label { font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-dark); margin-bottom: 4px; }
+.amount-words-block .aw-value { font-size: 13.5px; color: var(--ink); font-style: italic; }
+
+.remarks-toggle-row { margin: 18px 0 4px; }
+.remarks-toggle-row label { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+.remarks-block { margin: 8px 0 18px; }
+.remarks-block.hidden { display: none !important; }
+
+.action-bar { display: flex; justify-content: center; gap: 10px; margin: 24px 0 6px; flex-wrap: wrap; }
+.action-bar button { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-sm); padding: 11px 20px; cursor: pointer; border: 1px solid transparent; }
+#printReceiptBtn { background: var(--ink); color: #fff; }
+#printReceiptBtn:hover { background: #263832; }
+#saveReceiptBtn { background: var(--accent); color: #fff; }
+#saveReceiptBtn:hover { background: var(--accent-dark); }
+#savedReceiptsBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#savedReceiptsBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+#clearReceiptBtn { background: var(--panel); color: var(--ink-soft); border-color: var(--line); }
+#clearReceiptBtn:hover { background: #fafaf7; border-color: #cfccbf; }
+.autosave-note { text-align: center; font-size: 12px; color: var(--muted); margin: 10px 0 30px; }
+
+.save-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 400; }
+.save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(22,33,29,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 350; }
+.modal-overlay.hidden { display: none !important; }
+.modal-box { background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.modal-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; color: var(--ink); }
+.modal-close-btn { border: none; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.modal-close-btn:hover { background: var(--line-soft); color: var(--ink); }
+.modal-body { padding: 10px 12px; overflow-y: auto; }
+.saved-receipt-row { display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.saved-receipt-row:hover { background: var(--accent-tint); }
+.saved-receipt-main { flex: 1; min-width: 0; }
+.saved-receipt-title { font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.saved-receipt-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.saved-receipt-total { font-weight: 700; font-size: 14px; color: var(--ink); flex-shrink: 0; }
+.saved-receipt-delete { border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 8px; border-radius: 6px; flex-shrink: 0; }
+.saved-receipt-delete:hover { background: #fbe9e7; color: #b3261e; }
+.saved-receipts-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 30px 16px; }
+
+.info-section { max-width: 640px; margin: 10px auto 30px; }
+.info-section h2 { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--ink); margin: 30px 0 12px; }
+.info-section ol, .info-section ul { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; padding-left: 22px; margin: 0 0 14px; }
+.info-section dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
+.info-section dd { color: var(--ink-soft); font-size: 14px; margin: 4px 0 0; }
+
+.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
+.site-footer span { margin: 0 8px; }
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 27px; }
+  .doc-header { grid-template-columns: 1fr; }
+  .doc-header-right { align-items: flex-start; }
+  .doc-header-right .title-input { text-align: left; }
+  .doc-header-right .number-row { justify-content: flex-start; }
+  .doc-meta { max-width: none; }
+  .doc-meta-row input { text-align: left; width: auto; flex: 1; margin-left: 10px; }
+  .bill-to-block { max-width: none; }
+  .receipt-card { padding: 20px; }
+  .items-table thead { display: none; }
+  .items-table, .items-table tbody, .items-table tr, .items-table td {
+    display: block;
+    width: 100% !important;
+  }
+  .items-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 6px; }
+  .items-table td { padding: 4px 0; border-bottom: none; }
+  .items-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .items-table .col-amount, .items-table .col-amount input { text-align: left; }
+  .items-table .col-remove { text-align: right; }
+}
+
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { background: #fff; }
+  .masthead, .site-header, .action-bar, .autosave-note, .info-section, .site-footer, #cookieConsentBanner, .modal-overlay, .save-toast { display: none !important; }
+  .wrap { max-width: none; padding: 12mm; }
+  .receipt-card { box-shadow: none; border: none; padding: 0; margin: 0; }
+  .no-print { display: none !important; }
+  textarea, .field-input, .items-table input, .doc-meta-row input, .number-row input, .totals-line .tl-controls input, .payment-row input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
+  textarea { min-height: 0 !important; }
+  select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
+  input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+  input[type="date"]::-webkit-inner-spin-button { display: none !important; }
+  .logo-upload-label, .remove-logo-btn { display: none !important; }
+  .add-line-btn, .line-remove-btn { display: none !important; }
+  .add-payment-btn, .payment-remove-btn { display: none !important; }
+  .payment-row { gap: 4px; }
+  .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .amount-words-block { background: transparent !important; border-top: 1px dashed #000; border-radius: 0; }
+  .totals-line.grand { border-top: 1px solid #000; }
+
+  /* Keep the receipt table in table layout when printing from a mobile-sized browser. */
+  .items-table { display: table !important; width: 100% !important; }
+  .items-table thead { display: table-header-group !important; }
+  .items-table tbody { display: table-row-group !important; }
+  .items-table tr { display: table-row !important; width: auto !important; border-bottom: 0 !important; padding: 0 !important; margin: 0 !important; }
+  .items-table th, .items-table td { display: table-cell !important; width: auto !important; }
+  .items-table td[data-label]::before { display: none !important; content: none !important; }
+  .items-table .col-amount { width: 130px !important; text-align: right !important; }
+  .items-table .col-amount input { text-align: right !important; }
+  .items-table .col-remove { display: none !important; }
+}
+
+.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
+.cookie-consent.hidden { display: none !important; }
+.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
+.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
+.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cookie-notice-view.hidden { display: none !important; }
+.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
+.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
+.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-choice-view.hidden { display: none !important; }
+.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
+.cc-decline:hover { border-color: rgba(255,255,255,.6); }
+.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
+.cc-accept:hover { background: #cf9631; }
+.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cc-declined-view.hidden { display: none !important; }
+.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+.cc-close:hover { background: #e6e4d9; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="site-header">
+<a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+<div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+<h2>GoOnlinePOS.com</h2>
+</a>
+<div class="header-right">
+<nav class="site-nav">
+<a href="/">Homepage</a>
+<a href="blog" class="nav-highlight">Blog</a>
+</nav>
+<a class="cta-btn" href="invoice-generator">Free Invoice Generator</a>
+<a class="cta-btn" href="receipt-generator">Free Receipt Generator</a>
+<a class="cta-btn" href="barcode-generator">Free Barcode &amp; QR Code</a>
+<a class="cta-btn" href="vat-calculator">Free VAT Calculator</a>
+<a class="cta-btn" href="pricing-calculator">Free Pricing Calculator</a>
+<a class="cta-btn" href="app">Free Point of Sale</a>
+</div>
+</header>
+
+<header class="masthead">
+<div class="kicker">Free Tool</div>
+<h1>Create Receipt</h1>
+<p>Build a professional payment receipt in your browser, add remarks and your logo, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
+</header>
+
+<div class="receipt-card" id="receiptCard">
+
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <div class="logo-area">
+        <input type="file" id="rcLogoInput" accept="image/*" class="hidden-file-input">
+        <label for="rcLogoInput" class="logo-upload-label no-print" id="logoUploadLabel">🖼 Add Logo</label>
+        <img id="rcLogoPreview" class="logo-preview hidden" alt="Company logo">
+        <button type="button" id="removeLogoBtn" class="remove-logo-btn no-print hidden" aria-label="Remove logo">✕ Remove</button>
+      </div>
+      <label class="field-label" for="rcFrom">From</label>
+      <textarea id="rcFrom" placeholder="Your business name, address, phone"></textarea>
+    </div>
+    <div class="doc-header-right">
+      <div class="currency-inline no-print">
+        <label for="rcCurrency">Currency</label>
+        <select id="rcCurrency"></select>
+      </div>
+      <input type="text" class="title-input" id="rcTitle" value="RECEIPT" aria-label="Document title">
+      <div class="number-row">
+        <span>#</span>
+        <input type="text" id="rcNumber" placeholder="RCPT-0001" aria-label="Receipt number">
+      </div>
+      <div class="doc-meta">
+        <div class="doc-meta-row"><span class="dm-label">Date</span><input type="date" id="rcDate"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bill-to-block">
+    <label class="field-label" for="rcReceivedFrom">Received From</label>
+    <textarea id="rcReceivedFrom" placeholder="Customer name, address, phone"></textarea>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="col-amount">Amount</th>
+        <th class="col-remove"></th>
+      </tr>
+    </thead>
+    <tbody id="rcItemsBody"></tbody>
+  </table>
+
+  <button type="button" class="add-line-btn no-print" id="addLineBtn">+ Add Line Item</button>
+
+  <div class="totals-box">
+    <div class="totals-line grand">
+      <span class="tl-label">Total</span>
+      <span class="tl-value" id="rcTotal">0.00</span>
+    </div>
+    <div class="payments-block">
+      <span class="field-label payments-label">Payment Received</span>
+      <div id="rcPaymentsBody"></div>
+      <button type="button" class="add-payment-btn no-print" id="addPaymentBtn">+ Add Payment</button>
+    </div>
+
+    <div class="totals-line">
+      <span class="tl-label">Total Received</span>
+      <span class="tl-value" id="rcReceivedTotal">0.00</span>
+    </div>
+    <div class="totals-line due">
+      <span class="tl-label">Total Due</span>
+      <span class="tl-value" id="rcTotalDue">0.00</span>
+    </div>
+  </div>
+
+  <div class="amount-words-block">
+    <div class="aw-label">Amount in Words</div>
+    <div class="aw-value" id="rcAmountWords">Zero Dollars Only</div>
+  </div>
+
+  <div class="remarks-toggle-row no-print">
+    <label>
+      <input type="checkbox" id="rcShowRemarks" checked> Show Remarks
+    </label>
+  </div>
+  <div class="remarks-block" id="remarksBlock">
+    <label class="field-label" for="rcRemarks">Remarks</label>
+    <textarea id="rcRemarks" placeholder=" "></textarea>
+  </div>
+
+
+</div>
+
+<div class="action-bar no-print">
+  <button type="button" id="saveReceiptBtn">💾 Save Receipt</button>
+  <button type="button" id="savedReceiptsBtn">📂 Saved Receipts</button>
+  <button type="button" id="printReceiptBtn">🖨 Print / Save as PDF</button>
+  <button type="button" id="clearReceiptBtn">🗑 Clear / New Receipt</button>
+</div>
+<p class="autosave-note no-print">Your current receipt is saved automatically in this browser as you type. Click "Save Receipt" to add it to your Saved Receipts list so you can find it again later - nothing is uploaded anywhere.</p>
+
+<div class="modal-overlay hidden no-print" id="savedReceiptsOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Saved Receipts</h3>
+      <button type="button" class="modal-close-btn" id="closeSavedReceiptsBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="savedReceiptsList"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">Receipt saved</div>
+
+<div class="info-section no-print">
+  <h2>How to make a receipt</h2>
+  <ol>
+    <li>Add your logo (optional) and fill in who the receipt is from and who paid.</li>
+    <li>Add a receipt number and date.</li>
+    <li>Add a line for each item or service with its amount - the Total, Amount in Words, and Total Due update automatically.</li>
+    <li>Under Payment Received, add one row per payment method used (pick from the list or choose "+ Add New..." to add your own) - split a payment across Cash, Card, and more, and it all adds up to Total Received.</li>
+    <li>Add Remarks if you need to, or uncheck "Show Remarks" to leave it off the receipt entirely.</li>
+    <li>Click "Save Receipt" to keep it in your Saved Receipts list, and Print / Save as PDF whenever you're ready to hand it over.</li>
+  </ol>
+
+  <h2>Receipt FAQ</h2>
+  <dl>
+    <dt>Is this receipt generator free?</dt>
+    <dd>Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.</dd>
+    <dt>Where can I see my saved receipts?</dt>
+    <dd>Click "Save Receipt" to add the current one to your list, then click "Saved Receipts" any time to browse, reopen, or delete them, remarks included. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt>How do I save it as a PDF?</dt>
+    <dd>Click "Print / Save as PDF" and pick "Save as PDF" (or "Microsoft Print to PDF") as the destination in the print dialog your browser opens. It's formatted for standard A4/Letter paper, same as the invoice tool.</dd>
+    <dt>Is this the same as GoOnlinePOS's checkout receipts?</dt>
+    <dd>No. Checkout receipts are printed automatically inside <a href="app">the POS app</a> when you ring up a sale. This tool is for standalone payment receipts you fill in by hand - a deposit, a partial payment, a service call - without ringing up a full sale.</dd>
+  </dl>
+</div>
+
+</div>
+
+<footer class="site-footer no-print">
+<a href="contact">Contact</a>
+<span>·</span>
+<a href="privacy">Privacy Policy</a>
+<span>·</span>
+<a href="terms">Terms of Service</a>
+<span>·</span>
+<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+</footer>
+
+<!-- OFFLINE-STRIP:COOKIE-BANNER:START -->
+<div id="cookieConsentBanner" class="cookie-consent hidden">
+<div id="cookieNoticeView" class="cookie-notice-view">
+<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
+<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
+</div>
+<div id="cookieChoiceView" class="cc-choice-view hidden">
+<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy">Learn more</a></div>
+<div class="cc-actions">
+<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
+<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
+</div>
+</div>
+<div id="cookieDeclinedView" class="cc-declined-view hidden">
+<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
+<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
+</div>
+</div>
+<!-- OFFLINE-STRIP:COOKIE-BANNER:END -->
+
+<script>
+(function() {
+  var DRAFT_KEY = "goonlinepos-receipt-draft";
+  var HISTORY_KEY = "goonlinepos-receipt-history";
+  var CURRENCIES = {
+    USD: { symbol: "$", name: "Dollar", subunit: "Cent", decimals: 2 },
+    EUR: { symbol: "€", name: "Euro", subunit: "Cent", decimals: 2 },
+    GBP: { symbol: "£", name: "Pound", subunit: "Pence", decimals: 2 },
+    JPY: { symbol: "¥", name: "Yen", subunit: "", decimals: 0 },
+    CNY: { symbol: "¥", name: "Yuan", subunit: "Fen", decimals: 2 },
+    HKD: { symbol: "HK$", name: "Hong Kong Dollar", subunit: "Cent", decimals: 2 },
+    TWD: { symbol: "NT$", name: "New Taiwan Dollar", subunit: "Cent", decimals: 2 },
+    KRW: { symbol: "₩", name: "Won", subunit: "", decimals: 0 },
+    SGD: { symbol: "S$", name: "Singapore Dollar", subunit: "Cent", decimals: 2 },
+    MYR: { symbol: "RM", name: "Ringgit", subunit: "Sen", decimals: 2 },
+    THB: { symbol: "฿", name: "Baht", subunit: "Satang", decimals: 2 },
+    IDR: { symbol: "Rp", name: "Rupiah", subunit: "Sen", decimals: 2 },
+    PHP: { symbol: "₱", name: "Peso", subunit: "Centavo", decimals: 2 },
+    VND: { symbol: "₫", name: "Dong", subunit: "", decimals: 0 },
+    INR: { symbol: "₹", name: "Rupee", subunit: "Paisa", decimals: 2 },
+    PKR: { symbol: "Rs", name: "Rupee", subunit: "Paisa", decimals: 2 },
+    BDT: { symbol: "৳", name: "Taka", subunit: "Poisha", decimals: 2 },
+    LKR: { symbol: "Rs", name: "Rupee", subunit: "Cent", decimals: 2 },
+    NPR: { symbol: "Rs", name: "Rupee", subunit: "Paisa", decimals: 2 },
+    MMK: { symbol: "K", name: "Kyat", subunit: "Pya", decimals: 2 },
+    KHR: { symbol: "៛", name: "Riel", subunit: "Sen", decimals: 2 },
+    LAK: { symbol: "₭", name: "Kip", subunit: "Att", decimals: 2 },
+    MNT: { symbol: "₮", name: "Tugrik", subunit: "Mongo", decimals: 2 },
+    KZT: { symbol: "₸", name: "Tenge", subunit: "Tiyn", decimals: 2 },
+    UZS: { symbol: "UZS ", name: "Som", subunit: "Tiyin", decimals: 2 },
+    TJS: { symbol: "SM", name: "Somoni", subunit: "Diram", decimals: 2 },
+    KGS: { symbol: "KGS ", name: "Som", subunit: "Tyiyn", decimals: 2 },
+    TMT: { symbol: "TMT ", name: "Manat", subunit: "Tenge", decimals: 2 },
+    AFN: { symbol: "AFN ", name: "Afghani", subunit: "Pul", decimals: 2 },
+    BND: { symbol: "B$", name: "Brunei Dollar", subunit: "Cent", decimals: 2 },
+    BTN: { symbol: "Nu.", name: "Ngultrum", subunit: "Chetrum", decimals: 2 },
+    MVR: { symbol: "Rf", name: "Rufiyaa", subunit: "Laari", decimals: 2 },
+    AUD: { symbol: "A$", name: "Australian Dollar", subunit: "Cent", decimals: 2 },
+    NZD: { symbol: "NZ$", name: "New Zealand Dollar", subunit: "Cent", decimals: 2 },
+    FJD: { symbol: "FJ$", name: "Fijian Dollar", subunit: "Cent", decimals: 2 },
+    PGK: { symbol: "K", name: "Kina", subunit: "Toea", decimals: 2 },
+    WST: { symbol: "T", name: "Tala", subunit: "Sene", decimals: 2 },
+    TOP: { symbol: "T$", name: "Pa'anga", subunit: "Seniti", decimals: 2 },
+    VUV: { symbol: "VT", name: "Vatu", subunit: "", decimals: 0 },
+    SBD: { symbol: "SI$", name: "Solomon Islands Dollar", subunit: "Cent", decimals: 2 },
+    XPF: { symbol: "₣", name: "CFP Franc", subunit: "", decimals: 0 },
+    CAD: { symbol: "C$", name: "Canadian Dollar", subunit: "Cent", decimals: 2 },
+    MXN: { symbol: "MX$", name: "Mexican Peso", subunit: "Centavo", decimals: 2 },
+    BRL: { symbol: "R$", name: "Real", subunit: "Centavo", decimals: 2 },
+    ARS: { symbol: "AR$", name: "Argentine Peso", subunit: "Centavo", decimals: 2 },
+    CLP: { symbol: "CLP$", name: "Chilean Peso", subunit: "", decimals: 0 },
+    COP: { symbol: "COL$", name: "Colombian Peso", subunit: "Centavo", decimals: 2 },
+    PEN: { symbol: "S/", name: "Sol", subunit: "Centimo", decimals: 2 },
+    UYU: { symbol: "$U", name: "Uruguayan Peso", subunit: "Centesimo", decimals: 2 },
+    PYG: { symbol: "₲", name: "Guarani", subunit: "", decimals: 0 },
+    BOB: { symbol: "Bs", name: "Boliviano", subunit: "Centavo", decimals: 2 },
+    VES: { symbol: "Bs.S", name: "Bolivar", subunit: "Centimo", decimals: 2 },
+    GTQ: { symbol: "Q", name: "Quetzal", subunit: "Centavo", decimals: 2 },
+    HNL: { symbol: "L", name: "Lempira", subunit: "Centavo", decimals: 2 },
+    NIO: { symbol: "C$", name: "Cordoba", subunit: "Centavo", decimals: 2 },
+    CRC: { symbol: "₡", name: "Colon", subunit: "Centimo", decimals: 2 },
+    PAB: { symbol: "B/.", name: "Balboa", subunit: "Centesimo", decimals: 2 },
+    DOP: { symbol: "RD$", name: "Dominican Peso", subunit: "Centavo", decimals: 2 },
+    JMD: { symbol: "J$", name: "Jamaican Dollar", subunit: "Cent", decimals: 2 },
+    TTD: { symbol: "TT$", name: "Trinidad and Tobago Dollar", subunit: "Cent", decimals: 2 },
+    BSD: { symbol: "B$", name: "Bahamian Dollar", subunit: "Cent", decimals: 2 },
+    BBD: { symbol: "Bds$", name: "Barbadian Dollar", subunit: "Cent", decimals: 2 },
+    BZD: { symbol: "BZ$", name: "Belize Dollar", subunit: "Cent", decimals: 2 },
+    XCD: { symbol: "EC$", name: "East Caribbean Dollar", subunit: "Cent", decimals: 2 },
+    HTG: { symbol: "G", name: "Gourde", subunit: "Centime", decimals: 2 },
+    CUP: { symbol: "$MN", name: "Cuban Peso", subunit: "Centavo", decimals: 2 },
+    CHF: { symbol: "CHF ", name: "Swiss Franc", subunit: "Rappen", decimals: 2 },
+    NOK: { symbol: "kr", name: "Norwegian Krone", subunit: "Ore", decimals: 2 },
+    SEK: { symbol: "kr", name: "Swedish Krona", subunit: "Ore", decimals: 2 },
+    DKK: { symbol: "kr", name: "Danish Krone", subunit: "Ore", decimals: 2 },
+    ISK: { symbol: "kr", name: "Icelandic Krona", subunit: "", decimals: 0 },
+    PLN: { symbol: "zł", name: "Zloty", subunit: "Grosz", decimals: 2 },
+    CZK: { symbol: "Kč", name: "Koruna", subunit: "Haler", decimals: 2 },
+    HUF: { symbol: "Ft", name: "Forint", subunit: "Filler", decimals: 2 },
+    RON: { symbol: "lei", name: "Leu", subunit: "Ban", decimals: 2 },
+    BGN: { symbol: "лв", name: "Lev", subunit: "Stotinka", decimals: 2 },
+    RSD: { symbol: "RSD ", name: "Dinar", subunit: "Para", decimals: 2 },
+    ALL: { symbol: "L", name: "Lek", subunit: "Qindarke", decimals: 2 },
+    MKD: { symbol: "MKD ", name: "Denar", subunit: "Deni", decimals: 2 },
+    BAM: { symbol: "KM", name: "Convertible Mark", subunit: "Fening", decimals: 2 },
+    MDL: { symbol: "MDL ", name: "Leu", subunit: "Ban", decimals: 2 },
+    UAH: { symbol: "₴", name: "Hryvnia", subunit: "Kopiyka", decimals: 2 },
+    RUB: { symbol: "₽", name: "Ruble", subunit: "Kopeck", decimals: 2 },
+    BYN: { symbol: "BYN ", name: "Ruble", subunit: "Kopeck", decimals: 2 },
+    GEL: { symbol: "₾", name: "Lari", subunit: "Tetri", decimals: 2 },
+    AMD: { symbol: "֏", name: "Dram", subunit: "Luma", decimals: 2 },
+    AZN: { symbol: "₼", name: "Manat", subunit: "Qapik", decimals: 2 },
+    TRY: { symbol: "₺", name: "Lira", subunit: "Kurus", decimals: 2 },
+    AED: { symbol: "د.إ", name: "UAE Dirham", subunit: "Fils", decimals: 2 },
+    SAR: { symbol: "SR", name: "Saudi Riyal", subunit: "Halala", decimals: 2 },
+    QAR: { symbol: "QR", name: "Qatari Riyal", subunit: "Dirham", decimals: 2 },
+    KWD: { symbol: "KD", name: "Kuwaiti Dinar", subunit: "Fils", decimals: 3 },
+    BHD: { symbol: "BD", name: "Bahraini Dinar", subunit: "Fils", decimals: 3 },
+    OMR: { symbol: "RO", name: "Omani Rial", subunit: "Baisa", decimals: 3 },
+    JOD: { symbol: "JD", name: "Jordanian Dinar", subunit: "Piastre", decimals: 3 },
+    ILS: { symbol: "₪", name: "Shekel", subunit: "Agora", decimals: 2 },
+    LBP: { symbol: "LL", name: "Lebanese Pound", subunit: "Piastre", decimals: 2 },
+    IQD: { symbol: "ID", name: "Iraqi Dinar", subunit: "Fils", decimals: 3 },
+    IRR: { symbol: "IRR ", name: "Rial", subunit: "", decimals: 2 },
+    YER: { symbol: "YER ", name: "Yemeni Rial", subunit: "Fils", decimals: 2 },
+    SYP: { symbol: "SYP ", name: "Syrian Pound", subunit: "Piastre", decimals: 2 },
+    EGP: { symbol: "E£", name: "Egyptian Pound", subunit: "Piastre", decimals: 2 },
+    MAD: { symbol: "MAD ", name: "Moroccan Dirham", subunit: "Centime", decimals: 2 },
+    DZD: { symbol: "DA", name: "Algerian Dinar", subunit: "Centime", decimals: 2 },
+    TND: { symbol: "DT", name: "Tunisian Dinar", subunit: "Millime", decimals: 3 },
+    LYD: { symbol: "LD", name: "Libyan Dinar", subunit: "Dirham", decimals: 3 },
+    NGN: { symbol: "₦", name: "Naira", subunit: "Kobo", decimals: 2 },
+    GHS: { symbol: "GH₵", name: "Cedi", subunit: "Pesewa", decimals: 2 },
+    KES: { symbol: "KSh", name: "Shilling", subunit: "Cent", decimals: 2 },
+    TZS: { symbol: "TSh", name: "Shilling", subunit: "Cent", decimals: 2 },
+    UGX: { symbol: "USh", name: "Shilling", subunit: "", decimals: 0 },
+    RWF: { symbol: "RF", name: "Franc", subunit: "", decimals: 0 },
+    ETB: { symbol: "Br", name: "Birr", subunit: "Santim", decimals: 2 },
+    ZAR: { symbol: "R", name: "Rand", subunit: "Cent", decimals: 2 },
+    ZMW: { symbol: "ZK", name: "Kwacha", subunit: "Ngwee", decimals: 2 },
+    BWP: { symbol: "P", name: "Pula", subunit: "Thebe", decimals: 2 },
+    NAD: { symbol: "N$", name: "Namibian Dollar", subunit: "Cent", decimals: 2 },
+    SZL: { symbol: "L", name: "Lilangeni", subunit: "Cent", decimals: 2 },
+    LSL: { symbol: "L", name: "Loti", subunit: "Sente", decimals: 2 },
+    MWK: { symbol: "MK", name: "Kwacha", subunit: "Tambala", decimals: 2 },
+    MZN: { symbol: "MT", name: "Metical", subunit: "Centavo", decimals: 2 },
+    AOA: { symbol: "Kz", name: "Kwanza", subunit: "Centimo", decimals: 2 },
+    XOF: { symbol: "CFA", name: "CFA Franc", subunit: "", decimals: 0 },
+    XAF: { symbol: "FCFA", name: "CFA Franc", subunit: "", decimals: 0 },
+    GMD: { symbol: "D", name: "Dalasi", subunit: "Butut", decimals: 2 },
+    SLE: { symbol: "Le", name: "Leone", subunit: "Cent", decimals: 2 },
+    GNF: { symbol: "FG", name: "Franc", subunit: "", decimals: 0 },
+    LRD: { symbol: "L$", name: "Liberian Dollar", subunit: "Cent", decimals: 2 },
+    CVE: { symbol: "CVE ", name: "Escudo", subunit: "Centavo", decimals: 2 },
+    STN: { symbol: "Db", name: "Dobra", subunit: "Centimo", decimals: 2 },
+    DJF: { symbol: "Fdj", name: "Franc", subunit: "", decimals: 0 },
+    SOS: { symbol: "Sh", name: "Shilling", subunit: "Cent", decimals: 2 },
+    SDG: { symbol: "SDG ", name: "Sudanese Pound", subunit: "Piastre", decimals: 2 },
+    SSP: { symbol: "SSP ", name: "South Sudanese Pound", subunit: "Piastre", decimals: 2 },
+    ERN: { symbol: "Nfk", name: "Nakfa", subunit: "Cent", decimals: 2 },
+    KMF: { symbol: "CF", name: "Franc", subunit: "", decimals: 0 },
+    MGA: { symbol: "Ar", name: "Ariary", subunit: "Iraimbilanja", decimals: 2 },
+    MUR: { symbol: "Rs", name: "Rupee", subunit: "Cent", decimals: 2 },
+    SCR: { symbol: "SR", name: "Rupee", subunit: "Cent", decimals: 2 },
+    MRU: { symbol: "UM", name: "Ouguiya", subunit: "Khoums", decimals: 2 }
+  };
+
+  var PAYMENT_METHODS_KEY = "goonlinepos-receipt-payment-methods";
+  var DEFAULT_PAYMENT_METHODS = ["Cash", "Card", "Bank Transfer", "Cheque", "Other"];
+  var ADD_NEW_PAYMENT_VALUE = "__add_new_payment_method__";
+
+  var currencySelect = document.getElementById("rcCurrency");
+  var paymentsBody = document.getElementById("rcPaymentsBody");
+  var saveTimer = null;
+  var currentLogoDataUrl = "";
+  var currentReceiptId = null;
+  var itemsBody = document.getElementById("rcItemsBody");
+  var logoInput = document.getElementById("rcLogoInput");
+  var logoPreview = document.getElementById("rcLogoPreview");
+  var logoUploadLabel = document.getElementById("logoUploadLabel");
+  var removeLogoBtn = document.getElementById("removeLogoBtn");
+  var remarksBlock = document.getElementById("remarksBlock");
+  var showRemarksCheckbox = document.getElementById("rcShowRemarks");
+
+  Object.keys(CURRENCIES).forEach(function(code) {
+    var opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = code + " (" + CURRENCIES[code].symbol.trim() + ")";
+    currencySelect.appendChild(opt);
+  });
+
+  function currentCurrency() {
+    return CURRENCIES[currencySelect.value] || CURRENCIES.USD;
+  }
+
+  function fmt(n) {
+    if (!isFinite(n)) n = 0;
+    return currentCurrency().symbol + n.toFixed(currentCurrency().decimals);
+  }
+
+  function currencyStep() {
+    var decimals = currentCurrency().decimals;
+    return decimals > 0 ? (1 / Math.pow(10, decimals)).toFixed(decimals) : "1";
+  }
+
+  function updateAmountInputSteps() {
+    var step = currencyStep();
+    document.querySelectorAll(".line-amount, .payment-amount").forEach(function(input) {
+      input.step = step;
+    });
+  }
+
+  function loadCustomPaymentMethods() {
+    try {
+      var raw = localStorage.getItem(PAYMENT_METHODS_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+
+  function saveCustomPaymentMethods(list) {
+    try { localStorage.setItem(PAYMENT_METHODS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function allPaymentMethods() {
+    var all = DEFAULT_PAYMENT_METHODS.slice();
+    loadCustomPaymentMethods().forEach(function(m) {
+      if (all.indexOf(m) === -1) all.push(m);
+    });
+    return all;
+  }
+
+  function populateMethodSelect(selectEl, selectedValue) {
+    var methods = allPaymentMethods();
+    if (selectedValue && methods.indexOf(selectedValue) === -1) {
+      methods.push(selectedValue);
+    }
+    selectEl.innerHTML = "";
+    methods.forEach(function(m) {
+      var opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      selectEl.appendChild(opt);
+    });
+    var addOpt = document.createElement("option");
+    addOpt.value = ADD_NEW_PAYMENT_VALUE;
+    addOpt.textContent = "+ Add New...";
+    selectEl.appendChild(addOpt);
+    selectEl.value = (selectedValue && methods.indexOf(selectedValue) !== -1) ? selectedValue : methods[0];
+    selectEl.setAttribute("data-prev", selectEl.value);
+  }
+
+  function wireMethodSelect(selectEl) {
+    selectEl.addEventListener("focus", function() {
+      if (selectEl.value !== ADD_NEW_PAYMENT_VALUE) {
+        selectEl.setAttribute("data-prev", selectEl.value);
+      }
+    });
+    selectEl.addEventListener("change", function() {
+      if (selectEl.value !== ADD_NEW_PAYMENT_VALUE) {
+        selectEl.setAttribute("data-prev", selectEl.value);
+        recalcTotals();
+        scheduleSave();
+        return;
+      }
+      var previous = selectEl.getAttribute("data-prev") || DEFAULT_PAYMENT_METHODS[0];
+      var name = prompt("Add a new payment type:");
+      if (name) name = name.trim();
+      if (!name) {
+        populateMethodSelect(selectEl, previous);
+        return;
+      }
+      var alreadyExists = allPaymentMethods().some(function(m) { return m.toLowerCase() === name.toLowerCase(); });
+      if (!alreadyExists) {
+        var custom = loadCustomPaymentMethods();
+        custom.push(name);
+        saveCustomPaymentMethods(custom);
+      }
+      populateMethodSelect(selectEl, name);
+      recalcTotals();
+      scheduleSave();
+    });
+  }
+
+  function updatePaymentRemoveButtons() {
+    var onlyOne = paymentsBody.children.length <= 1;
+    paymentsBody.querySelectorAll(".payment-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
+  function makePaymentRow(method, amount) {
+    var row = document.createElement("div");
+    row.className = "payment-row";
+    row.innerHTML =
+      '<select class="payment-method-select" aria-label="Payment method"></select>' +
+      '<input type="number" class="payment-amount" min="0" step="' + currencyStep() + '" value="' + (amount != null ? amount : 0) + '" aria-label="Amount received">' +
+      '<button type="button" class="payment-remove-btn no-print" aria-label="Remove payment">✕</button>';
+    paymentsBody.appendChild(row);
+    var sel = row.querySelector(".payment-method-select");
+    populateMethodSelect(sel, method || DEFAULT_PAYMENT_METHODS[0]);
+    wireMethodSelect(sel);
+    row.querySelector(".payment-amount").addEventListener("input", function() { recalcTotals(); scheduleSave(); });
+    row.querySelector(".payment-remove-btn").addEventListener("click", function() {
+      if (paymentsBody.children.length <= 1) return;
+      row.remove();
+      updatePaymentRemoveButtons();
+      recalcTotals();
+      scheduleSave();
+    });
+    updatePaymentRemoveButtons();
+    return row;
+  }
+
+  var ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  var TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  var SCALES = ["", "Thousand", "Million", "Billion"];
+
+  function threeDigitsToWords(n) {
+    var str = "";
+    if (n >= 100) {
+      str += ONES[Math.floor(n / 100)] + " Hundred";
+      n = n % 100;
+      if (n > 0) str += " ";
+    }
+    if (n >= 20) {
+      str += TENS[Math.floor(n / 10)];
+      if (n % 10 > 0) str += "-" + ONES[n % 10];
+    } else if (n > 0) {
+      str += ONES[n];
+    }
+    return str;
+  }
+
+  function integerToWords(n) {
+    n = Math.floor(n);
+    if (n === 0) return "Zero";
+    var groups = [];
+    while (n > 0) {
+      groups.push(n % 1000);
+      n = Math.floor(n / 1000);
+    }
+    var parts = [];
+    for (var i = groups.length - 1; i >= 0; i--) {
+      if (groups[i] > 0) {
+        var words = threeDigitsToWords(groups[i]);
+        if (SCALES[i]) words += " " + SCALES[i];
+        parts.push(words);
+      }
+    }
+    return parts.join(" ");
+  }
+
+  function pluralize(word, n) {
+    return n === 1 ? word : word + "s";
+  }
+
+  function amountToWords(amount, meta) {
+    amount = Math.max(0, Number(amount) || 0);
+    var fracMultiplier = Math.pow(10, meta.decimals);
+    var rounded = meta.decimals > 0
+      ? Math.round((amount + Number.EPSILON) * fracMultiplier) / fracMultiplier
+      : Math.round(amount);
+
+    var intPart = Math.floor(rounded);
+    var fracPart = meta.decimals > 0
+      ? Math.round((rounded - intPart) * fracMultiplier)
+      : 0;
+
+    if (fracPart >= fracMultiplier && meta.decimals > 0) {
+      intPart += 1;
+      fracPart = 0;
+    }
+
+    var words = integerToWords(intPart) + " " + pluralize(meta.name, intPart);
+    if (fracPart > 0 && meta.subunit) {
+      words += " and " + integerToWords(fracPart) + " " + pluralize(meta.subunit, fracPart);
+    }
+    return words + " Only";
+  }
+
+  function makeId() {
+    return "rcpt_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function setLogo(dataUrl) {
+    currentLogoDataUrl = dataUrl || "";
+    if (currentLogoDataUrl) {
+      logoPreview.src = currentLogoDataUrl;
+      logoPreview.classList.remove("hidden");
+      logoUploadLabel.classList.add("hidden");
+      removeLogoBtn.classList.remove("hidden");
+    } else {
+      logoPreview.src = "";
+      logoPreview.classList.add("hidden");
+      logoUploadLabel.classList.remove("hidden");
+      removeLogoBtn.classList.add("hidden");
+    }
+  }
+
+  function compressLogo(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var img = new Image();
+      img.onload = function() {
+        var maxW = 320;
+        var scale = Math.min(1, maxW / img.width);
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        callback(canvas.toDataURL("image/png"));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  logoInput.addEventListener("change", function() {
+    var file = logoInput.files && logoInput.files[0];
+    if (!file) return;
+    compressLogo(file, function(dataUrl) {
+      setLogo(dataUrl);
+      scheduleSave();
+    });
+    logoInput.value = "";
+  });
+
+  removeLogoBtn.addEventListener("click", function() {
+    setLogo("");
+    scheduleSave();
+  });
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function updateRemoveButtons() {
+    var onlyOne = itemsBody.children.length <= 1;
+    itemsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
+  }
+
+  function wireRow(tr) {
+    tr.querySelectorAll(".line-desc, .line-amount").forEach(function(el) {
+      el.addEventListener("input", function() { recalcTotals(); scheduleSave(); });
+    });
+    tr.querySelector(".line-remove-btn").addEventListener("click", function() {
+      if (itemsBody.children.length <= 1) { return; }
+      tr.remove();
+      updateRemoveButtons();
+      recalcTotals();
+      scheduleSave();
+    });
+    updateRemoveButtons();
+  }
+
+  function makeLineRow(desc, amount) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td data-label="Description"><input type="text" class="line-desc" placeholder="What this payment is for" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
+      '<td class="col-amount" data-label="Amount"><input type="number" class="line-amount" min="0" step="' + currencyStep() + '" value="' + (amount != null ? amount : 0) + '"></td>' +
+      '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
+    itemsBody.appendChild(tr);
+    wireRow(tr);
+    return tr;
+  }
+
+  function applyRemarksVisibility() {
+    remarksBlock.classList.toggle("hidden", !showRemarksCheckbox.checked);
+  }
+
+  function recalcTotals() {
+    var total = 0;
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      total += parseFloat(tr.querySelector(".line-amount").value) || 0;
+    });
+    var received = 0;
+    paymentsBody.querySelectorAll(".payment-row").forEach(function(row) {
+      received += parseFloat(row.querySelector(".payment-amount").value) || 0;
+    });
+    var due = total - received;
+    document.getElementById("rcTotal").textContent = fmt(total);
+    document.getElementById("rcReceivedTotal").textContent = fmt(received);
+    document.getElementById("rcTotalDue").textContent = fmt(due);
+    document.getElementById("rcAmountWords").textContent = amountToWords(total, currentCurrency());
+  }
+
+  function scheduleSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 400);
+  }
+
+  function collectState() {
+    var items = [];
+    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+      items.push({
+        desc: tr.querySelector(".line-desc").value,
+        amount: tr.querySelector(".line-amount").value
+      });
+    });
+    var payments = [];
+    paymentsBody.querySelectorAll(".payment-row").forEach(function(row) {
+      payments.push({
+        method: row.querySelector(".payment-method-select").value,
+        amount: row.querySelector(".payment-amount").value
+      });
+    });
+    return {
+      id: currentReceiptId,
+      title: document.getElementById("rcTitle").value,
+      number: document.getElementById("rcNumber").value,
+      currency: currencySelect.value,
+      logo: currentLogoDataUrl,
+      from: document.getElementById("rcFrom").value,
+      receivedFrom: document.getElementById("rcReceivedFrom").value,
+      date: document.getElementById("rcDate").value,
+      items: items,
+      payments: payments,
+      showRemarks: showRemarksCheckbox.checked,
+      remarks: document.getElementById("rcRemarks").value
+    };
+  }
+
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory(list) {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function showToast(text) {
+    var toast = document.getElementById("saveToast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(function() { toast.classList.remove("show"); }, 1800);
+  }
+
+  function saveReceiptExplicit() {
+    if (!currentReceiptId) currentReceiptId = makeId();
+    var state = collectState();
+    state.id = currentReceiptId;
+    var entry = {
+      id: currentReceiptId,
+      number: state.number || "",
+      receivedFrom: (state.receivedFrom || "").split("\n")[0] || "",
+      total: document.getElementById("rcTotal").textContent,
+      date: state.date || "",
+      savedAt: Date.now(),
+      state: state
+    };
+    var list = loadHistory();
+    var idx = list.findIndex(function(e) { return e.id === currentReceiptId; });
+    if (idx >= 0) list[idx] = entry; else list.unshift(entry);
+    saveHistory(list);
+    saveDraft();
+    showToast("Receipt saved");
+  }
+
+  function renderSavedReceiptsList() {
+    var list = loadHistory().slice().sort(function(a, b) { return b.savedAt - a.savedAt; });
+    var container = document.getElementById("savedReceiptsList");
+    container.innerHTML = "";
+    if (!list.length) {
+      container.innerHTML = '<div class="saved-receipts-empty">No saved receipts yet. Fill out a receipt and click "Save Receipt" to keep it here.</div>';
+      return;
+    }
+    list.forEach(function(entry) {
+      var row = document.createElement("div");
+      row.className = "saved-receipt-row";
+      row.innerHTML =
+        '<div class="saved-receipt-main">' +
+          '<div class="saved-receipt-title">' + escapeHtml(entry.number || "(no number)") + (entry.receivedFrom ? " - " + escapeHtml(entry.receivedFrom) : "") + '</div>' +
+          '<div class="saved-receipt-meta">' + escapeHtml(entry.date || "") + '</div>' +
+        '</div>' +
+        '<div class="saved-receipt-total">' + escapeHtml(entry.total || "") + '</div>' +
+        '<button type="button" class="saved-receipt-delete" aria-label="Delete saved receipt">✕</button>';
+      row.querySelector(".saved-receipt-main").addEventListener("click", function() { openSavedReceipt(entry.id); });
+      row.querySelector(".saved-receipt-delete").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (!confirm("Delete this saved receipt? This can't be undone.")) return;
+        deleteSavedReceipt(entry.id);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  function openSavedReceipt(id) {
+    var entry = loadHistory().find(function(e) { return e.id === id; });
+    if (!entry) return;
+    applyState(entry.state);
+    saveDraft();
+    closeSavedReceiptsModal();
+  }
+
+  function deleteSavedReceipt(id) {
+    saveHistory(loadHistory().filter(function(e) { return e.id !== id; }));
+    renderSavedReceiptsList();
+  }
+
+  function openSavedReceiptsModal() {
+    renderSavedReceiptsList();
+    document.getElementById("savedReceiptsOverlay").classList.remove("hidden");
+  }
+
+  function closeSavedReceiptsModal() {
+    document.getElementById("savedReceiptsOverlay").classList.add("hidden");
+  }
+
+  function todayIso() {
+    var d = new Date();
+    var mm = String(d.getMonth() + 1).padStart(2, "0");
+    var dd = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + mm + "-" + dd;
+  }
+
+  function applyState(state) {
+    currentReceiptId = state.id || null;
+    document.getElementById("rcTitle").value = state.title || "RECEIPT";
+    document.getElementById("rcNumber").value = state.number || "";
+    currencySelect.value = state.currency || "USD";
+    setLogo(state.logo || "");
+    document.getElementById("rcFrom").value = state.from || "";
+    document.getElementById("rcReceivedFrom").value = state.receivedFrom || "";
+    document.getElementById("rcDate").value = state.date || todayIso();
+    showRemarksCheckbox.checked = state.showRemarks !== false;
+    document.getElementById("rcRemarks").value = state.remarks || "";
+
+    itemsBody.innerHTML = "";
+    var items = (state.items && state.items.length) ? state.items : [{ desc: "", amount: 0 }];
+    items.forEach(function(it) { makeLineRow(it.desc, it.amount); });
+
+    paymentsBody.innerHTML = "";
+    var payments = (state.payments && state.payments.length)
+      ? state.payments
+      : (state.paymentMethod || state.received)
+        ? [{ method: state.paymentMethod || DEFAULT_PAYMENT_METHODS[0], amount: state.received || 0 }]
+        : [{ method: DEFAULT_PAYMENT_METHODS[0], amount: 0 }];
+    payments.forEach(function(p) { makePaymentRow(p.method, p.amount); });
+
+    applyRemarksVisibility();
+    updateAmountInputSteps();
+    recalcTotals();
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
+  }
+
+  function loadDraft() {
+    var raw = null;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
+    if (raw) {
+      try {
+        applyState(JSON.parse(raw));
+        return;
+      } catch (e) {}
+    }
+    applyState({});
+  }
+
+  ["rcTitle", "rcNumber", "rcFrom", "rcReceivedFrom", "rcDate", "rcRemarks"].forEach(function(id) {
+    document.getElementById(id).addEventListener("input", scheduleSave);
+    document.getElementById(id).addEventListener("change", scheduleSave);
+  });
+
+  document.getElementById("addPaymentBtn").addEventListener("click", function() {
+    makePaymentRow(DEFAULT_PAYMENT_METHODS[0], 0);
+    recalcTotals();
+    scheduleSave();
+  });
+
+  currencySelect.addEventListener("change", function() {
+    updateAmountInputSteps();
+    recalcTotals();
+    scheduleSave();
+  });
+
+  showRemarksCheckbox.addEventListener("change", function() {
+    applyRemarksVisibility();
+    scheduleSave();
+  });
+
+  document.getElementById("addLineBtn").addEventListener("click", function() {
+    makeLineRow("", 0);
+    recalcTotals();
+    scheduleSave();
+  });
+
+  document.getElementById("printReceiptBtn").addEventListener("click", function() {
+    window.print();
+  });
+
+  document.getElementById("clearReceiptBtn").addEventListener("click", function() {
+    if (!confirm("Clear this receipt and start a new one? This can't be undone.")) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    applyState({});
+  });
+
+  document.getElementById("saveReceiptBtn").addEventListener("click", saveReceiptExplicit);
+  document.getElementById("savedReceiptsBtn").addEventListener("click", openSavedReceiptsModal);
+  document.getElementById("closeSavedReceiptsBtn").addEventListener("click", closeSavedReceiptsModal);
+  document.getElementById("savedReceiptsOverlay").addEventListener("click", function(e) {
+    if (e.target.id === "savedReceiptsOverlay") closeSavedReceiptsModal();
+  });
+
+  function autosizeTextarea(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+  function autosizeAllTextareas() {
+    document.querySelectorAll("textarea").forEach(autosizeTextarea);
+  }
+  document.querySelectorAll("textarea").forEach(function(el) {
+    el.addEventListener("input", function() { autosizeTextarea(el); });
+  });
+  // Print CSS relaxes textarea min-height so short fields (e.g. a one-line
+  // "From" address) don't leave a tall blank box on the printed page - but
+  // that only takes effect once print media is active, so the fit height
+  // has to be re-measured at beforeprint (and restored at afterprint for
+  // on-screen editing) rather than computed once up front.
+  window.addEventListener("beforeprint", autosizeAllTextareas);
+  window.addEventListener("afterprint", autosizeAllTextareas);
+
+  loadDraft();
+})();
+</script>
+
+</body>
+</html>

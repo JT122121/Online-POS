@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <script>
 (function() {
   var CONSENT_KEY = "goonlinepos-cookie-consent";
@@ -29,64 +30,113 @@
       var el = document.getElementById(v);
       if (el) el.classList.toggle("hidden", v !== id);
     });
+
     var b = document.getElementById("cookieConsentBanner");
     if (b) b.classList.remove("hidden");
   }
+
   function hideBanner() {
     var b = document.getElementById("cookieConsentBanner");
     if (b) b.classList.add("hidden");
   }
 
   window.closeCookieNotice = function() {
-    try { localStorage.setItem(SEEN_KEY, "1"); } catch (e) {}
+    try {
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
     hideBanner();
   };
-  window.openCookieSettings = function() { showView("cookieChoiceView"); };
+
+  window.openCookieSettings = function() {
+    showView("cookieChoiceView");
+  };
+
   window.acceptCookies = function() {
-    try { localStorage.setItem(CONSENT_KEY, "accepted"); } catch (e) {}
+    try {
+      localStorage.setItem(CONSENT_KEY, "accepted");
+    } catch (e) {}
+
     hideBanner();
     loadAnalyticsAndAds();
   };
+
   window.declineCookies = function() {
-    try { localStorage.setItem(CONSENT_KEY, "declined"); } catch (e) {}
+    try {
+      localStorage.setItem(CONSENT_KEY, "declined");
+    } catch (e) {}
+
     showView("cookieDeclinedView");
   };
-  window.closeCookieBanner = function() { hideBanner(); };
 
-  var consent = null, seen = null;
-  try { consent = localStorage.getItem(CONSENT_KEY); seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+  window.closeCookieBanner = function() {
+    hideBanner();
+  };
+
+  var consent = null;
+  var seen = null;
+
+  try {
+    consent = localStorage.getItem(CONSENT_KEY);
+    seen = localStorage.getItem(SEEN_KEY);
+  } catch (e) {}
 
   if (consent === "accepted") {
     loadAnalyticsAndAds();
   } else if (consent !== "declined" && !seen) {
-    document.addEventListener("DOMContentLoaded", function() { showView("cookieNoticeView"); });
+    document.addEventListener("DOMContentLoaded", function() {
+      showView("cookieNoticeView");
+    });
   }
 })();
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Blog | GoOnlinePOS.com - News & Tips for Small Business Owners</title>
-<meta name="description" content="Practical articles on running a small business, point-of-sale tips, and industry news - from the team behind GoOnlinePOS.com.">
+
+<meta
+  name="description"
+  content="Practical articles on running a small business, point-of-sale tips, and industry news - from the team behind GoOnlinePOS.com."
+>
+
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://goonlinepos.com/blog.html">
+
+<link rel="canonical" href="https://goonlinepos.com/blog">
+
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://goonlinepos.com/blog.html">
+<meta property="og:url" content="https://goonlinepos.com/blog">
 <meta property="og:title" content="Blog | GoOnlinePOS.com">
-<meta property="og:description" content="Practical articles on running a small business and getting the most out of your point of sale.">
+<meta
+  property="og:description"
+  content="Practical articles on running a small business and getting the most out of your point of sale."
+>
 <meta property="og:site_name" content="Go Online POS">
 <meta property="og:image" content="https://goonlinepos.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Blog | GoOnlinePOS.com">
-<meta name="twitter:description" content="Practical articles on running a small business and getting the most out of your point of sale.">
+<meta
+  name="twitter:description"
+  content="Practical articles on running a small business and getting the most out of your point of sale."
+>
 <meta name="twitter:image" content="https://goonlinepos.com/og-image.jpg">
+
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
 <link rel="shortcut icon" href="favicon.ico">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
 <style>
+
 :root {
   --ink: #16211d;
   --ink-soft: #4b5750;
@@ -102,153 +152,797 @@
   --gold-tint: #faf1dd;
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 1px 2px rgba(22,33,29,.06), 0 8px 24px -12px rgba(22,33,29,.18);
-  --shadow-lg: 0 2px 4px rgba(22,33,29,.06), 0 20px 40px -20px rgba(22,33,29,.28);
+  --shadow: 0 1px 2px rgba(22,33,29,.06),
+            0 8px 24px -12px rgba(22,33,29,.18);
+  --shadow-lg: 0 2px 4px rgba(22,33,29,.06),
+               0 20px 40px -20px rgba(22,33,29,.28);
   --font-display: "Space Grotesk", "Inter", Arial, sans-serif;
   --font-body: "Inter", Arial, sans-serif;
 }
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
-a { color: inherit; }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 20px; }
 
-.masthead { text-align: center; padding: 34px 20px 22px; border-bottom: 3px solid var(--ink); margin-bottom: 6px; }
-.masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 44px; letter-spacing: -.02em; margin: 0 0 8px; }
-.masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0; }
-.masthead-meta { display: flex; justify-content: center; gap: 14px; margin-top: 14px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+* {
+  box-sizing: border-box;
+}
 
-.back-link-row { text-align: center; margin: 14px 0 0; }
-.back-link { font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
-.back-link:hover { color: var(--accent-dark); }
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
-.featured-post { max-width: 780px; margin: 0 auto 30px; padding: 28px 0 36px; border-bottom: 1px solid var(--line); text-align: center; }
-.featured-post .fp-img { width: 100%; max-width: 640px; border-radius: var(--radius); box-shadow: var(--shadow-lg); margin: 0 auto 22px; display: block; }
-.featured-post .fp-tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 4px 11px; border-radius: 999px; margin-bottom: 12px; }
-.featured-post h2 { font-family: var(--font-display); font-weight: 700; font-size: 27px; line-height: 1.25; letter-spacing: -.01em; margin: 0 0 12px; }
-.featured-post h2 a { text-decoration: none; color: var(--ink); }
-.featured-post h2 a:hover { color: var(--accent-dark); }
-.featured-post p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.65; margin: 0 auto 14px; max-width: 560px; }
-.post-meta { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
 
-.post-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; margin-bottom: 30px; }
-.post-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-.post-card .pc-art { background: var(--accent-tint); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; border-bottom: 1px solid var(--line); }
-.post-card .pc-body { padding: 18px 20px 20px; }
-.post-card .pc-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; }
-.post-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 17px; line-height: 1.35; margin: 0 0 8px; }
-.post-card h3 a { text-decoration: none; color: var(--ink); }
-.post-card h3 a:hover { color: var(--accent-dark); }
-.post-card p { color: var(--ink-soft); font-size: 13px; line-height: 1.6; margin: 0 0 12px; }
+a {
+  color: inherit;
+}
 
-.coming-soon { background: var(--panel); border: 1px dashed var(--line); border-radius: var(--radius); padding: 30px 24px; text-align: center; color: var(--muted); font-size: 13.5px; margin-bottom: 30px; }
-.coming-soon strong { display: block; color: var(--ink-soft); font-family: var(--font-display); font-size: 16px; margin-bottom: 6px; font-weight: 600; }
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
-.site-footer a { color: var(--muted); text-decoration: none; }
-.site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
-.site-footer span { margin: 0 8px; }
+.masthead {
+  text-align: center;
+  padding: 34px 20px 22px;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 6px;
+}
+
+.masthead .kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -.02em;
+  margin: 0 0 8px;
+}
+
+.masthead p {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  margin: 0;
+}
+
+.masthead-meta {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.back-link-row {
+  text-align: center;
+  margin: 14px 0 0;
+}
+
+.back-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--accent-dark);
+}
+
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 1040px; }
+.site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
+.site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.site-header h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+.site-header .cta-btn { font-size: 13.5px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent); padding: 10px 18px; border-radius: var(--radius-sm); }
+.site-header .cta-btn:hover { background: var(--accent-dark); }
+.site-header .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+.site-nav { display: flex; align-items: center; gap: 10px; }
+.site-nav a { font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; background: var(--accent-dark); padding: 8px 14px; border-radius: var(--radius-sm); }
+.site-nav a:hover { background: #0d3a28; }
+.site-nav a.nav-highlight { position: relative; }
+.site-nav a.nav-highlight::after { content: "NEW"; position: absolute; top: -8px; right: -8px; font-size: 8.5px; font-weight: 800; letter-spacing: .03em; background: var(--gold); color: var(--ink); padding: 1px 5px; border-radius: 5px; }
+@media (max-width: 640px) {
+  .site-nav { gap: 14px; }
+  .site-nav a.nav-highlight::after { display: none; }
+  .site-header .header-right { gap: 8px; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); justify-content: stretch; }
+  .site-header .header-right .site-nav { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; }
+  .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
+  .site-header { margin-top: 12px; }
+}
+
+.featured-post {
+  max-width: 780px;
+  margin: 0 auto 30px;
+  padding: 28px 0 36px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.fp-photo {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 22px;
+}
+
+.featured-post .fp-img {
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  margin: 0;
+  display: block;
+}
+
+.photo-disclaimer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.post-card .pc-art .photo-disclaimer {
+  font-size: 9px;
+  padding: 4px 6px;
+  border-radius: 0;
+}
+
+.featured-post .fp-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-tint);
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.featured-post h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  margin: 0 0 12px;
+}
+
+.featured-post h2 a {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.featured-post h2 a:hover {
+  color: var(--accent-dark);
+}
+
+.featured-post p {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 auto 14px;
+  max-width: 560px;
+}
+
+.post-meta {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 26px;
+  margin-bottom: 30px;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.post-card .pc-art {
+  position: relative;
+  background: var(--accent-tint);
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  border-bottom: 1px solid var(--line);
+}
+
+.post-card .pc-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card .pc-body {
+  padding: 18px 20px 20px;
+}
+
+.post-card .pc-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-tint);
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.post-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  margin: 0 0 12px;
+}
+
+.post-card h3 a {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.post-card h3 a:hover {
+  color: var(--accent-dark);
+}
+
+.post-card p {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 0 14px;
+}
+
+.coming-soon {
+  background: var(--panel);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 30px 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-bottom: 30px;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.coming-soon strong {
+  display: block;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.site-footer {
+  max-width: 1040px;
+  margin: 20px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 20px 20px 40px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+.site-footer span {
+  margin: 0 8px;
+}
 
 @media (max-width: 720px) {
-  .masthead h1 { font-size: 32px; }
-  .post-grid { grid-template-columns: 1fr; }
+
+  .masthead h1 {
+    font-size: 32px;
+  }
+
+  .post-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
-.cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
-.cookie-consent.hidden { display: none !important; }
-.cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
-.cookie-consent .cc-text a { color: var(--gold); text-decoration: underline; cursor: pointer; }
-.cookie-notice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.cookie-notice-view.hidden { display: none !important; }
-.cookie-notice-view .cn-close { flex-shrink: 0; background: transparent; border: 0; color: #b7c0ba; font-size: 19px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 6px; }
-.cookie-notice-view .cn-close:hover { background: rgba(255,255,255,.1); color: #fff; }
-.cc-choice-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.cc-choice-view.hidden { display: none !important; }
-.cc-actions { display: flex; gap: 7px; flex-shrink: 0; }
-.cc-decline { background: transparent; border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 7px; cursor: pointer; }
-.cc-decline:hover { border-color: rgba(255,255,255,.6); }
-.cc-accept { background: var(--gold); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; }
-.cc-accept:hover { background: #cf9631; }
-.cc-declined-view { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.cc-declined-view.hidden { display: none !important; }
-.cc-close { background: var(--panel); border: 0; color: var(--ink); font-size: 12px; font-weight: 700; padding: 7px 15px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
-.cc-close:hover { background: #e6e4d9; }
+
+.cookie-consent {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  z-index: 300;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  padding: 14px 16px;
+}
+
+.cookie-consent.hidden {
+  display: none !important;
+}
+
+.cookie-consent .cc-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 200px;
+  color: #d7dcd8;
+}
+
+.cookie-consent .cc-text a {
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cookie-notice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cookie-notice-view.hidden {
+  display: none !important;
+}
+
+.cookie-notice-view .cn-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  color: #b7c0ba;
+  font-size: 19px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.cookie-notice-view .cn-close:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+
+.cc-choice-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-choice-view.hidden {
+  display: none !important;
+}
+
+.cc-actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.cc-decline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.3);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-decline:hover {
+  border-color: rgba(255,255,255,.6);
+}
+
+.cc-accept {
+  background: var(--gold);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.cc-accept:hover {
+  background: #cf9631;
+}
+
+.cc-declined-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cc-declined-view.hidden {
+  display: none !important;
+}
+
+.cc-close {
+  background: var(--panel);
+  border: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cc-close:hover {
+  background: #e6e4d9;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <div class="wrap">
 
-<header class="masthead">
-<div class="kicker">The GoOnlinePOS Journal</div>
-<h1>Small Business, Big Ledger</h1>
-<p>Practical articles on running a shop, getting paid, and keeping the books straight - from the team behind GoOnlinePOS.com.</p>
-<div class="masthead-meta">
-<span>No fluff</span>
-<span>·</span>
-<span>No paywall</span>
-<span>·</span>
-<span>Updated regularly</span>
-</div>
-</header>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="GoOnlinePOS.com home">
+      <div class="brand-mark"><img src="data:image/png;base64,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" alt="GoOnlinePOS logo"></div>
+      <h2>GoOnlinePOS.com</h2>
+    </a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/">Homepage</a>
+        <a href="blog" class="nav-highlight">Blog</a>
+      </nav>
+      <a class="cta-btn" href="invoice-generator">Free Invoice Generator</a>
+      <a class="cta-btn" href="receipt-generator">Free Receipt Generator</a>
+      <a class="cta-btn" href="barcode-generator">Free Barcode &amp; QR Code</a>
+      <a class="cta-btn" href="vat-calculator">Free VAT Calculator</a>
+      <a class="cta-btn" href="pricing-calculator">Free Pricing Calculator</a>
+      <a class="cta-btn" href="app">Free Point of Sale</a>
+    </div>
+  </header>
 
-<div class="back-link-row">
-<a class="back-link" href="index.html">← Back to GoOnlinePOS.com</a>
-</div>
+  <header class="masthead">
 
-<article class="featured-post">
-<img class="fp-img" src="blog-hero-illustration.svg" alt="Illustration of a point-of-sale checkout screen, card reader, and printed receipt">
-<span class="fp-tag">Getting Started</span>
-<h2><a href="blog-why-your-business-needs-a-pos.html">Why Every Business Needs a POS System (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)</a></h2>
-<p>If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you - and why a proper point-of-sale system stopped being a luxury a long time ago.</p>
-<div class="post-meta">FEATURED · 5 MIN READ</div>
-</article>
+    <div class="kicker">
+      The GoOnlinePOS Journal
+    </div>
 
-<div class="post-grid">
+    <h1>
+      Small Business, Big Ledger
+    </h1>
 
-<div class="coming-soon" style="grid-column: 1 / -1;">
-<strong>More articles on the way</strong>
-New posts get added here regularly - check back soon, or follow the Facebook page for updates when a new one goes live.
-</div>
+    <p>
+      Practical articles on running a shop, getting paid, and keeping the books straight - from the team behind GoOnlinePOS.com.
+    </p>
 
-</div>
+    <div class="masthead-meta">
+      <span>No fluff</span>
+      <span>·</span>
+      <span>No paywall</span>
+      <span>·</span>
+      <span>Updated regularly</span>
+    </div>
+
+  </header>
+
+  <article class="featured-post">
+
+    <div class="fp-photo">
+      <img
+        class="fp-img"
+        src="blog-hero-illustration.png"
+        alt="Cashier ringing up a sale on GoOnlinePOS at a retail checkout counter"
+        loading="lazy"
+      >
+      <span class="photo-disclaimer">Photo for illustration purposes only</span>
+    </div>
+
+    <span class="fp-tag">
+      Getting Started
+    </span>
+
+    <h2>
+      <a href="blog-why-your-business-needs-a-pos">
+        Why Every Business Needs a POS System (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)
+      </a>
+    </h2>
+
+    <p>
+      If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you - and why a proper point-of-sale system stopped being a luxury a long time ago.
+    </p>
+
+    <div class="post-meta">
+      FEATURED · Last updated: <time datetime="2026-08">August 2026</time> · 5 MIN READ
+    </div>
+
+  </article>
+
+  <div class="post-grid">
+
+    <div class="post-card">
+
+      <div class="pc-art">
+        <img
+          src="appsheet-logo.png"
+          alt="AppSheet No-Code POS"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="pc-body">
+
+        <span
+          class="pc-tag"
+          style="display:inline-flex; align-items:center; gap:5px;"
+        >
+
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 35 36"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+
+            <path
+              d="m29.0098 6.30417h-7.6818l-3.0989 4.40413-1.8448 4.3641 4.9437.5578 5.1352-.5377 3.8117-6.59901c.5596-.97344-.1422-2.18932-1.2651-2.18932z"
+              fill="#0060d9"
+            />
+
+            <path
+              d="m3.10253 8.49714 3.19192 5.47426c.39193.6708 1.10834 1.0846 1.8849 1.0846l8.20315.0164 4.9455-8.76823h-16.96584c-1.12656 0-1.82656 1.22135-1.25963 2.19297z"
+              fill="#4285f4"
+            />
+
+            <path
+              d="m18.0122 29.8453c-.556.9662-1.9469.9789-2.5175.0201l-3.1791-5.3375c-.4011-.6745-.412-1.5112-.0256-2.1948l4.0943-7.2625 10.0771.02z"
+              fill="#4285f4"
+            />
+
+          </svg>
+
+          No-Code
+
+        </span>
+
+        <h3>
+          <a href="blog-create-your-own-pos-with-appsheet">
+            Create Your Own POS Using No-Code AppSheet
+          </a>
+        </h3>
+
+        <p>
+          Thinking about building your own point-of-sale app with Google AppSheet? Here's what a DIY build actually involves, where it shines, where it falls short - and a much faster path if you'd rather skip straight to selling.
+        </p>
+
+        <div class="post-meta">
+          Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="post-card">
+
+      <div class="pc-art">
+        <img
+          src="blog-excel-photo.png"
+          alt="Office employee reviewing a sales spreadsheet in Excel"
+          loading="lazy"
+        >
+        <span class="photo-disclaimer">Photo for illustration purposes only</span>
+      </div>
+
+      <div class="pc-body">
+
+        <span class="pc-tag">
+          Founder Story
+        </span>
+
+        <h3>
+          <a href="blog-from-excel-to-appsheet-expert">
+            From Excel to AppSheet Expert
+          </a>
+        </h3>
+
+        <p>
+          How managing spreadsheets during COVID led to five years of building real AppSheet apps for clients, a YouTube channel, and eventually GoOnlinePOS.
+        </p>
+
+        <div class="post-meta">
+          Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="coming-soon">
+
+    <strong>
+      More articles on the way
+    </strong>
+
+    New posts get added here regularly - check back soon, or follow the Facebook page for updates when a new one goes live.
+
+  </div>
 
 </div>
 
 <footer class="site-footer">
-<a href="how-it-works.html">How to Use</a>
-<span>·</span>
-<a href="about.html">About</a>
-<span>·</span>
-<a href="blog.html">Blog</a>
-<span>·</span>
-<a href="privacy.html">Privacy Policy</a>
-<span>·</span>
-<a href="terms.html">Terms of Service</a>
-<span>·</span>
-<a href="contact.html">Contact</a>
-<span>·</span>
-<a href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener">Facebook</a>
-<span>·</span>
-<a href="#" onclick="openCookieSettings(); return false;">Cookie Settings</a>
+
+  <a href="contact">
+    Contact
+  </a>
+
+  <span>·</span>
+
+  <a href="privacy">
+    Privacy Policy
+  </a>
+
+  <span>·</span>
+
+  <a href="terms">
+    Terms of Service
+  </a>
+
+  <span>·</span>
+
+  <a
+    href="#"
+    onclick="openCookieSettings(); return false;"
+  >
+    Cookie Settings
+  </a>
+
 </footer>
 
-<div id="cookieConsentBanner" class="cookie-consent hidden">
-<div id="cookieNoticeView" class="cookie-notice-view">
-<div class="cc-text">🍪 We use cookies for analytics and to show relevant ads. Manage your preference anytime in <a onclick="openCookieSettings(); return false;" href="#">Cookie Settings</a>.</div>
-<button type="button" class="cn-close" onclick="closeCookieNotice()" aria-label="Close">×</button>
-</div>
-<div id="cookieChoiceView" class="cc-choice-view hidden">
-<div class="cc-text">Set your preference: allow cookies for analytics and ads, or decline them. <a href="privacy.html">Learn more</a></div>
-<div class="cc-actions">
-<button type="button" class="cc-decline" onclick="declineCookies()">Decline</button>
-<button type="button" class="cc-accept" onclick="acceptCookies()">Accept</button>
-</div>
-</div>
-<div id="cookieDeclinedView" class="cc-declined-view hidden">
-<div class="cc-text">Got it - analytics and ads won't load on this device. The site itself works exactly the same either way. You can change this anytime via "Cookie Settings" in the footer.</div>
-<button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
-</div>
+<div
+  id="cookieConsentBanner"
+  class="cookie-consent hidden"
+>
+
+  <div
+    id="cookieNoticeView"
+    class="cookie-notice-view"
+  >
+
+    <div class="cc-text">
+      🍪 We use cookies for analytics and to show relevant ads.
+      Manage your preference anytime in
+      <a
+        onclick="openCookieSettings(); return false;"
+        href="#"
+      >
+        Cookie Settings
+      </a>.
+    </div>
+
+    <button
+      type="button"
+      class="cn-close"
+      onclick="closeCookieNotice()"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div
+    id="cookieChoiceView"
+    class="cc-choice-view hidden"
+  >
+
+    <div class="cc-text">
+      Set your preference: allow cookies for analytics and ads,
+      or decline them.
+      <a href="privacy">
+        Learn more
+      </a>
+    </div>
+
+    <div class="cc-actions">
+
+      <button
+        type="button"
+        class="cc-decline"
+        onclick="declineCookies()"
+      >
+        Decline
+      </button>
+
+      <button
+        type="button"
+        class="cc-accept"
+        onclick="acceptCookies()"
+      >
+        Accept
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    id="cookieDeclinedView"
+    class="cc-declined-view hidden"
+  >
+
+    <div class="cc-text">
+      Got it - analytics and ads won't load on this device.
+      The site itself works exactly the same either way.
+      You can change this anytime via "Cookie Settings" in the footer.
+    </div>
+
+    <button
+      type="button"
+      class="cc-close"
+      onclick="closeCookieBanner()"
+    >
+      Close
+    </button>
+
+  </div>
+
 </div>
 
 </body>
