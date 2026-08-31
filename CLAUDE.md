@@ -2577,7 +2577,15 @@ the on-page heading stays the more natural "Create Invoice").
   (Currency, Discount %/Flat, Tax %/Flat) also gets
   `-webkit-appearance: none; -moz-appearance: none; appearance: none;`
   in print, so the native dropdown-arrow icon doesn't print alongside
-  the now-borderless select - printed selects read as plain text.
+  the now-borderless select - printed selects read as plain text. Every
+  `input[type="number"]` (line Qty/Rate, Discount, Tax) gets the same
+  treatment for its own native chrome - `::-webkit-inner/outer-spin-button
+  { -webkit-appearance: none; }` plus `-moz-appearance: textfield` - this
+  was missing even though the equivalent fix already existed for
+  `input[type="date"]`'s calendar icon right above it; without it the
+  little up/down stepper arrows printed next to every number field,
+  which is what a "the preview looks right but printing looks different"
+  report traced back to. Fixed identically in `receipt-generator.html`.
 - **Autosaves as you type** to plain `localStorage` (`goonlinepos-invoice-draft`,
   debounced) so a refresh doesn't lose an in-progress invoice - this is a
   fully standalone page like `customer.html`, outside `app.html`'s

@@ -326,6 +326,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
   input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
   input[type="date"]::-webkit-inner-spin-button { display: none !important; }
+  input[type="number"] { -moz-appearance: textfield !important; }
+  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none !important; margin: 0 !important; }
   .add-line-btn, .line-remove-btn, .logo-upload-label, .remove-logo-btn { display: none !important; }
   .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .totals-line.balance { background: #f1f1ee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
