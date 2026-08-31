@@ -1547,15 +1547,13 @@ live code calls it anymore.
     and that Premium still wasn't prominent enough. Three changes:
     (1) the free-tier badge/label text (`basicBadgeLabel`, shown by the
     header's `#premiumBadgeAppTitle` pill, the main-screen welcome line,
-    and `#premiumPromoNotice`'s "You're on the ... plan" copy) changed
-    from **"Basic"** to **"Free"** in all six languages - it was
-    inconsistent with the Account panel's own status line
-    (`accountStatusFreeText`, "Your subscription: Free") using a
-    different word for the same tier, and "Free" also matches this
-    site's own "free POS" brand voice better than "Basic" did. The
-    `.basic-badge` CSS class name itself is unchanged (an internal
-    identifier, not user-facing text) - only the translated label value
-    moved. (2) A seventh toolbar button, `#premiumToolbarButton` (🔓
+    and `#premiumPromoNotice`'s "You're on the ... plan" copy) briefly
+    changed from **"Basic"** to **"Free"** in all six languages, since it
+    read inconsistently against the Account panel's own status line
+    (`accountStatusFreeText`) - **this was reverted back to "Basic" in a
+    later pass, see below**; the `.basic-badge` CSS class name itself was
+    never touched either way (an internal identifier, not user-facing
+    text). (2) A seventh toolbar button, `#premiumToolbarButton` (🔓
     `premiumToolbarLabel`, gold-tinted like `#backupShortcutButton`),
     was added to `.header-actions` as the very first real action button
     - right after the Cashier select, before How To Use - calling the
@@ -1570,12 +1568,46 @@ live code calls it anymore.
     heading carries it now) - the explanation used to be unlabeled body
     text with no visual cue for what it was about before a reader got to
     the first sentence. Verified with Playwright: the header/welcome/
-    banner text all read "Free" (not "Basic") while unlocked, in every
-    language checked, with zero leftover `\bBasic\b` en-US string in the
-    live UI; the new toolbar button is present, gold-tinted, sits before
+    banner text all read the new label consistently in every language
+    checked; the new toolbar button is present, gold-tinted, sits before
     How To Use, and `openAccountSettings()` still opens Settings on the
     Premium tab on both builds; and the Account Security label renders
     with its own visible heading with zero console errors.
+  - **"Basic" reinstated, plus a dismiss button on the promo banner**,
+    per explicit follow-up feedback naming "Basic" as the actual plan
+    name to use. `basicBadgeLabel` (all six languages), the promo
+    banner's "You're on the ... plan" copy (`premiumPromoText`, all six
+    languages), and the Account panel's own `accountStatusFreeText`
+    ("Your subscription: ...", all six languages) all moved back to
+    "Basic" together in the same pass, so the three places a visitor can
+    see their tier name never disagree with each other again - the same
+    consistency goal as the first rename, just landing on the opposite
+    word this time. `#premiumPromoNotice` also gained a dismiss button
+    (`.bn-dismiss-btn`, the exact same `×` markup/class `#backupNotice`
+    already uses) - it was deliberately non-dismissible in the original
+    "Premium visibility/legitimacy pass" above, but that was reversed
+    once asked for a close option. Dismissal is **persisted**, matching
+    `dismissBackupNotice()`'s own convention exactly: `let
+    premiumPromoDismissed` (in-memory, since `applyPremiumLocks()` runs
+    synchronously and can't `await` a storage read on every call) is
+    loaded once via `loadPremiumPromoNoticeState()` in `init()` (same
+    step `loadBackupNoticeState()` already happens at, storage key
+    `"pos-premium-promo-dismissed"`), and `dismissPremiumPromoNotice()`
+    sets both the in-memory flag and the persisted one when the visitor
+    clicks the button - `applyPremiumLocks()`'s own hide/show line became
+    `promoNotice.classList.toggle("hidden", premiumUnlocked ||
+    premiumPromoDismissed)`, so either becoming Premium or dismissing the
+    banner hides it, and a dismissal survives a reload/new session
+    exactly like the Backup notice's own dismissal does. Verified with
+    Playwright: the badge/banner/status text all read "Basic" again in
+    every language checked; the dismiss button is present, hides the
+    banner immediately, survives a subsequent `applyPremiumLocks()` call
+    (a redeem, a sign-in/out) without reappearing, and survives a full
+    page reload via the persisted storage key; and the offline package
+    build has zero leftover markers with `dismissPremiumPromoNotice()`/
+    `loadPremiumPromoNoticeState()` correctly no-oping there (guarded
+    `document.getElementById` lookups, same pattern as every other
+    Premium-lock element check in `applyPremiumLocks()`).
 - **`redemption_codes` is where the site owner creates codes** - open the
   Supabase dashboard, Table Editor → `redemption_codes` → Insert row,
   fill in `code` (redemption is case/whitespace-insensitive on **both**

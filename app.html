@@ -539,6 +539,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="bn-text">🔓 <span id="premiumPromoText">You're on the Basic plan. Sign in and redeem a Premium code to unlock Company Logo, Customer Screen, Inventory editing, and more.</span></div>
 <div class="bn-actions">
 <button type="button" class="bn-backup-btn" onclick="openAccountSettings()" id="premiumPromoButton">Go Premium</button>
+<button type="button" class="bn-dismiss-btn" onclick="dismissPremiumPromoNotice()" aria-label="Dismiss">×</button>
 </div>
 </div>
 <!-- OFFLINE-STRIP:PREMIUM-PROMO-NOTICE:END -->
@@ -1102,7 +1103,7 @@ Website: Goonlinepos.com</textarea>
         <div id="accountSignedIn" class="hidden">
           <div class="info" style="display:block; margin-top:12px;"><span id="accountSignedInAs">Signed in as</span> <strong id="accountEmail"></strong></div>
 
-          <div id="accountStatusFree" class="info hidden" style="display:block; margin-top:8px;"><span id="accountStatusFreeText">Your subscription: Free</span></div>
+          <div id="accountStatusFree" class="info hidden" style="display:block; margin-top:8px;"><span id="accountStatusFreeText">Your subscription: Basic</span></div>
           <div id="accountStatusPremium" class="success-text hidden" style="margin-top:8px;">✅ <span id="accountStatusPremiumText">Your subscription: Premium</span> <span id="accountPremiumUntil"></span></div>
 
           <div style="margin-top:16px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px;">
@@ -1729,7 +1730,7 @@ function applyPremiumLocks() {
   if (offlineLockMsg) offlineLockMsg.classList.toggle("hidden", premiumUnlocked);
 
   const promoNotice = document.getElementById("premiumPromoNotice");
-  if (promoNotice) promoNotice.classList.toggle("hidden", premiumUnlocked);
+  if (promoNotice) promoNotice.classList.toggle("hidden", premiumUnlocked || premiumPromoDismissed);
 
   renderAppTitleBadge();
 }
@@ -2494,6 +2495,18 @@ async function loadBackupNoticeState() {
 async function dismissBackupNotice() {
   document.getElementById("backupNotice").classList.add("hidden");
   await storageSet("pos-backup-notice-dismissed", "1");
+}
+
+let premiumPromoDismissed = false;
+async function loadPremiumPromoNoticeState() {
+  premiumPromoDismissed = (await storageGet("pos-premium-promo-dismissed")) === "1";
+  if (typeof applyPremiumLocks === "function") applyPremiumLocks();
+}
+async function dismissPremiumPromoNotice() {
+  premiumPromoDismissed = true;
+  const notice = document.getElementById("premiumPromoNotice");
+  if (notice) notice.classList.add("hidden");
+  await storageSet("pos-premium-promo-dismissed", "1");
 }
 
 function buildSalesExportRows(list) {
@@ -3437,6 +3450,7 @@ async function init() {
   await loadLogo();
   await loadSalesHistory();
   await loadBackupNoticeState();
+  await loadPremiumPromoNoticeState();
   await loadReceiptPrefix();
   await loadPanelSplit();
   await initPremiumSystem();
