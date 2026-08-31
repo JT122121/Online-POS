@@ -2586,6 +2586,60 @@ the on-page heading stays the more natural "Create Invoice").
   little up/down stepper arrows printed next to every number field,
   which is what a "the preview looks right but printing looks different"
   report traced back to. Fixed identically in `receipt-generator.html`.
+- **`.doc-addr-box` gives "From" and "Bill To" a bordered box**, matching
+  standard commercial-invoice layout, per explicit feedback that both
+  blocks should be "fitted with line box as standard." A shared class
+  (`border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 10px 12px;`) wraps the From label+textarea inside
+  `.doc-header-left` (the logo stays outside the box, above it) and is
+  added directly onto `.bill-to-block` itself (already its own div with
+  nothing else in it, so no markup restructuring needed there). On
+  screen this reads as a soft `--line`-colored box nested around the
+  textarea's own input border; in print, the textarea's own border is
+  already stripped (see the number/date-input rules above), so the
+  `.doc-addr-box` border is the only line left and reads as a single
+  clean rectangle - `@media print` overrides its color to solid `#000`
+  and its radius to `0` (`.doc-addr-box { border-color: #000 !important;
+  border-radius: 0 !important; }`), matching the sharp-cornered box
+  convention real printed invoices use rather than the site's normal
+  rounded-corner UI style. The same `.doc-addr-box` class is reused in
+  `receipt-generator.html` below.
+- **`receipt-generator.html`'s printed receipt got a full "standard
+  format" line/box treatment**, per explicit feedback that it needed
+  "some line and box if needed like a standard format." `.doc-addr-box`
+  (see above) boxes From, Received From, and now Remarks too (added
+  directly to `#remarksBlock`, alongside its existing `.hidden` toggle
+  class - unaffected by the extra class). `.items-table` picked up a
+  `border: 1px solid var(--line)` (dark `#000` in print) around the
+  whole table, not just the existing per-row bottom rules and the black
+  header background - `.items-table th:first-child`/`:last-child`'s
+  rounded header corners get `border-radius: 0 !important` in print
+  specifically, since a rounded header corner sitting inside a new
+  square outer table border left a small white gap artifact at the
+  corner (caught via the real `page.pdf()` render, not just reading the
+  CSS - the gap wasn't visible until actually rendered at zoom). `.totals-box`
+  (Total / Payment Received / Total Received / Total Due) is now its
+  own bordered box (`border: 1px solid var(--line); border-radius:
+  var(--radius-sm); padding: 14px 16px;`, same `#000`/`0` print
+  override as `.doc-addr-box`/`.items-table`) instead of bare
+  `padding-top`/`margin-top`, so the totals read as a distinct summary
+  block rather than floating text. **The printed `.receipt-card`'s
+  outer border was restored** - it used to be explicitly stripped in
+  print (`border: none; padding: 0;`) on the assumption that `.wrap`'s
+  own 12mm page padding was enough whitespace; that left the printed
+  receipt with no enclosing frame at all despite every section inside
+  it now being boxed, so it's back to `border: 1px solid #000; padding:
+  16px;` in print, giving the whole document one outer frame around all
+  the inner boxes rather than leaving it looking cut off at the page
+  edges. The existing `.amount-words-block`'s print-only dashed
+  top-border (already established) needed no change - it already fit
+  this same "line" convention. Verified with real `page.pdf()` renders
+  (not just CSS reading) at 2.5x zoom, including a cropped close-up of
+  the items-table header corner to confirm the border-radius fix
+  actually closed the gap, plus a 390px mobile screenshot of both pages
+  confirming zero horizontal overflow and zero console errors - the box
+  styling is on-screen and print, not print-only, so both needed
+  checking.
 - **Autosaves as you type** to plain `localStorage` (`goonlinepos-invoice-draft`,
   debounced) so a refresh doesn't lose an in-progress invoice - this is a
   fully standalone page like `customer.html`, outside `app.html`'s

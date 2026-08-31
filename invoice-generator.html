@@ -182,6 +182,8 @@ img { max-width: 100%; display: block; }
 .doc-meta-row input { text-align: right; border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; font-size: 13px; width: 140px; font-family: var(--font-body); color: var(--ink); background: #fff; }
 .doc-meta-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
 
+.doc-addr-box { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; }
+
 .bill-to-block { max-width: 380px; margin-bottom: 24px; }
 
 .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
@@ -328,6 +330,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   input[type="date"]::-webkit-inner-spin-button { display: none !important; }
   input[type="number"] { -moz-appearance: textfield !important; }
   input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none !important; margin: 0 !important; }
+  .doc-addr-box { border-color: #000 !important; border-radius: 0 !important; }
   .add-line-btn, .line-remove-btn, .logo-upload-label, .remove-logo-btn { display: none !important; }
   .items-table th { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .totals-line.balance { background: #f1f1ee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -393,8 +396,10 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         <img id="invLogoPreview" class="logo-preview hidden" alt="Company logo">
         <button type="button" id="removeLogoBtn" class="remove-logo-btn no-print hidden" aria-label="Remove logo">✕ Remove</button>
       </div>
-      <label class="field-label" for="invFrom">From</label>
-      <textarea id="invFrom" placeholder="Your business name, address, phone, email"></textarea>
+      <div class="doc-addr-box">
+        <label class="field-label" for="invFrom">From</label>
+        <textarea id="invFrom" placeholder="Your business name, address, phone, email"></textarea>
+      </div>
     </div>
     <div class="doc-header-right">
       <div class="currency-inline no-print">
@@ -415,7 +420,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     </div>
   </div>
 
-  <div class="bill-to-block">
+  <div class="bill-to-block doc-addr-box">
     <label class="field-label" for="invTo">Bill To</label>
     <textarea id="invTo" placeholder="Customer name, address, phone, email"></textarea>
   </div>
