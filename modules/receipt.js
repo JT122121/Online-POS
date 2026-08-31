@@ -117,6 +117,18 @@ function updateTotalsAndHeader() {
   if (document.activeElement !== document.getElementById("receiptNumberInput")) {
     document.getElementById("receiptNumberInput").value = receiptCounterValue;
   }
+  const quickReceiptNumberInput = document.getElementById("quickReceiptNumberInput");
+  if (quickReceiptNumberInput && document.activeElement !== quickReceiptNumberInput) {
+    quickReceiptNumberInput.value = receiptCounterValue;
+  }
+  const quickReceiptPrefixInput = document.getElementById("quickReceiptPrefixInput");
+  if (quickReceiptPrefixInput && document.activeElement !== quickReceiptPrefixInput) {
+    quickReceiptPrefixInput.value = receiptPrefix;
+  }
+  const receiptPrefixInput = document.getElementById("receiptPrefixInput");
+  if (receiptPrefixInput && document.activeElement !== receiptPrefixInput) {
+    receiptPrefixInput.value = receiptPrefix;
+  }
 
   const cashierName = activeCashierName;
   document.getElementById("receiptCashierName").textContent = cashierName;
@@ -171,18 +183,20 @@ function updateTotalsAndHeader() {
   renderProductCatalog();
   saveSettings();
   broadcastCustomerScreenOrder();
+  syncQuickReceiptFields();
 }
 
 function updateReceipt() {
   renderReceiptItems();
   updateTotalsAndHeader();
-  syncQuickReceiptFields();
 }
 
 function syncQuickReceiptFields() {
   const pairs = [
     ["quickStoreName", "storeName"], ["quickStoreDetails", "storeDetails"],
+    ["quickDocumentType", "documentType"],
     ["quickTaxName", "taxName"], ["quickTaxRate", "taxRate"],
+    ["quickCurrencyCode", "currencyCode"], ["quickCurrencySymbol", "currencySymbol"], ["quickDecimalPlaces", "decimalPlaces"],
     ["quickFooter1", "footer1"], ["quickFooter2", "footer2"],
     ["quickLanguage", "language"]
   ];

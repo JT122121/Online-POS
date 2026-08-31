@@ -641,6 +641,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <input id="quickStoreName" oninput="syncQuickField('storeName', this.value)">
 <label id="quickStoreDetailsLabel">Store Details</label>
 <textarea id="quickStoreDetails" oninput="syncQuickField('storeDetails', this.value)"></textarea>
+<label id="quickDocumentTypeLabel">Document Type</label>
+<select id="quickDocumentType" onchange="syncQuickField('documentType', this.value)">
+<option value="receipt">Receipt</option>
+<option value="invoice">Invoice</option>
+<option value="payment">Payment Received</option>
+</select>
+<label><span id="quickReceiptNumberLabel">Current Receipt Number</span> <span class="premium-badge" id="quickPremiumBadgeReceiptNumber">Premium</span></label>
+<input id="quickReceiptNumberInput" type="text" inputmode="numeric" oninput="handleReceiptNumberEdit(this)">
+<label><span id="quickReceiptPrefixLabel">Receipt Number Prefix</span> <span class="premium-badge" id="quickPremiumBadgeReceiptPrefix">Premium</span></label>
+<input id="quickReceiptPrefixInput" maxlength="8" placeholder="e.g. INV-" oninput="handleReceiptPrefixEdit(this)">
 <div class="quick-settings-row">
 <div>
 <label id="quickTaxNameLabel">Tax Name</label>
@@ -651,6 +661,18 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <input id="quickTaxRate" type="number" min="0" step="0.01" oninput="syncQuickField('taxRate', this.value)">
 </div>
 </div>
+<div class="quick-settings-row">
+<div>
+<label id="quickCurrencyCodeLabel">Currency Code</label>
+<input id="quickCurrencyCode" oninput="syncQuickField('currencyCode', this.value)">
+</div>
+<div>
+<label id="quickCurrencySymbolLabel">Currency Symbol</label>
+<input id="quickCurrencySymbol" oninput="syncQuickCurrencySymbol(this.value)">
+</div>
+</div>
+<label id="quickDecimalPlacesLabel">Decimal Places</label>
+<input id="quickDecimalPlaces" type="number" min="0" max="4" step="1" oninput="syncQuickDecimalPlaces(this.value)">
 <label id="quickFooterLine1Label">Footer Line 1</label>
 <input id="quickFooter1" oninput="syncQuickField('footer1', this.value)">
 <label id="quickFooterLine2Label">Footer Line 2</label>
@@ -1584,6 +1606,15 @@ function syncQuickLanguage(value) {
   changeLanguage();
   saveSettings();
 }
+function syncQuickCurrencySymbol(value) {
+  document.getElementById("currencySymbol").value = value;
+  updateReceipt();
+  renderProductCatalog();
+}
+function syncQuickDecimalPlaces(value) {
+  document.getElementById("decimalPlaces").value = value;
+  handleDecimalPlacesChange();
+}
 async function toggleQuickReceiptSettings() {
   const body = document.getElementById("quickSettingsBody");
   body.classList.toggle("hidden");
@@ -1782,6 +1813,11 @@ function applyPremiumLocks() {
   if (receiptPrefixInput) receiptPrefixInput.disabled = !premiumUnlocked;
   const receiptLockMsg = document.getElementById("receiptNumberLockMsg");
   if (receiptLockMsg) receiptLockMsg.classList.toggle("hidden", premiumUnlocked);
+
+  const quickReceiptNumInput = document.getElementById("quickReceiptNumberInput");
+  const quickReceiptPrefixInput = document.getElementById("quickReceiptPrefixInput");
+  if (quickReceiptNumInput) quickReceiptNumInput.disabled = !premiumUnlocked;
+  if (quickReceiptPrefixInput) quickReceiptPrefixInput.disabled = !premiumUnlocked;
 
   const invExportBtn = document.getElementById("inventoryExportButton");
   if (invExportBtn) invExportBtn.disabled = !premiumUnlocked;
@@ -3387,7 +3423,9 @@ function changeLanguage() {
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel", premiumToolbarLabel: "premiumToolbarLabel",
     homepageShortcutLabel: "homepageShortcutLabel", blogShortcutLabel: "blogShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
-    documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
+    documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
+    quickReceiptNumberLabel: "receiptNumberLabel", quickReceiptPrefixLabel: "receiptPrefixLabel",
+    quickPremiumBadgeReceiptNumber: "premiumBadgeLabel", quickPremiumBadgeReceiptPrefix: "premiumBadgeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
     discountMovedInfo: "discountMovedInfo",
@@ -3406,6 +3444,7 @@ function changeLanguage() {
     zoomLabel: "zoomLabel", zoomValueLabel: "zoomValueLabel",
     currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
     decimalPlacesLabel: "decimalPlacesLabel", decimalPlacesInfo: "decimalPlacesInfo",
+    quickCurrencyCodeLabel: "currencyCodeLabel", quickCurrencySymbolLabel: "currencySymbolLabel", quickDecimalPlacesLabel: "decimalPlacesLabel",
     languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
@@ -3481,6 +3520,12 @@ function changeLanguage() {
   const offlineProgress = document.getElementById("offlineDownloadProgress");
   if (offlineProgress) offlineProgress.textContent = tr("offlineDownloadPreparing");
 
+  const qdt = document.getElementById("quickDocumentType");
+  if (qdt) {
+    qdt.options[0].textContent = tr("receipt");
+    qdt.options[1].textContent = tr("invoice");
+    qdt.options[2].textContent = tr("payment");
+  }
   const dt = document.getElementById("documentType");
   if (dt) {
     dt.options[0].textContent = tr("receipt");
