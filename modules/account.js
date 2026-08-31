@@ -71,6 +71,8 @@ async function refreshAccountState() {
     currentProfile = null;
     premiumUnlocked = false;
   }
+  lastActivityWriteTime = 0;
+  await recordActivity();
   renderAccountPanel();
   if (typeof applyPremiumLocks === "function") applyPremiumLocks();
 }
@@ -80,6 +82,45 @@ async function initAccount() {
   if (!client) return;
   client.auth.onAuthStateChange(function() { refreshAccountState(); });
   await refreshAccountState();
+  initInactivityLogout();
+}
+
+// Auto sign-out after 8 hours of inactivity - enforces Premium
+// re-verification rather than letting a signed-in tab stay open
+// indefinitely as a way around it. Only ever active while signed in;
+// harmless no-ops otherwise.
+const INACTIVITY_LOGOUT_MS = 8 * 60 * 60 * 1000;
+const INACTIVITY_CHECK_INTERVAL_MS = 60 * 1000;
+let inactivityCheckTimer = null;
+let lastActivityWriteTime = 0;
+
+async function recordActivity() {
+  if (!currentUser) return;
+  const now = Date.now();
+  if (now - lastActivityWriteTime < 60 * 1000) return;
+  lastActivityWriteTime = now;
+  await storageSet("account-last-activity", String(now));
+}
+
+async function checkInactivityLogout() {
+  if (!currentUser) return;
+  const stored = await storageGet("account-last-activity");
+  const lastActivity = stored ? parseInt(stored, 10) : NaN;
+  if (!lastActivity || isNaN(lastActivity)) {
+    await recordActivity();
+    return;
+  }
+  if (Date.now() - lastActivity >= INACTIVITY_LOGOUT_MS) {
+    await signOutAccount();
+  }
+}
+
+function initInactivityLogout() {
+  if (inactivityCheckTimer) return;
+  ["mousedown", "keydown", "touchstart", "scroll"].forEach(function(evt) {
+    document.addEventListener(evt, recordActivity, { passive: true });
+  });
+  inactivityCheckTimer = setInterval(checkInactivityLogout, INACTIVITY_CHECK_INTERVAL_MS);
 }
 
 function accountShowError(text) {

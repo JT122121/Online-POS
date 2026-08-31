@@ -1367,6 +1367,37 @@ live code calls it anymore.
   `premiumUnlocked` (the same global every Premium-gated feature already
   checked) is now set from `isProfilePremium(currentProfile)` instead of
   a locally-stored flag.
+- **Auto sign-out after 8 hours of inactivity**, so a signed-in tab left
+  open indefinitely can't become a loophole around re-verifying Premium -
+  `INACTIVITY_LOGOUT_MS` (8h) and `initInactivityLogout()` in
+  `modules/account.js`. `recordActivity()` persists a
+  `"account-last-activity"` timestamp via `storageGet`/`storageSet` (so
+  the 8-hour clock survives a page reload, unlike an in-memory-only
+  timer) whenever `mousedown`/`keydown`/`touchstart`/`scroll` fires on
+  `document`, throttled to at most once a minute so it isn't writing to
+  storage on every keystroke; `checkInactivityLogout()` runs on a 60s
+  `setInterval` and calls `signOutAccount()` once the stored timestamp is
+  more than 8 hours old. Both functions no-op immediately when
+  `currentUser` is null, so this is entirely inert while signed out -
+  `initInactivityLogout()` is only ever started once, from the end of
+  `initAccount()`. `refreshAccountState()` also stamps a fresh activity
+  timestamp itself (bypassing the throttle) every time it runs with a
+  signed-in user - covers the moment of sign-in and every
+  `onAuthStateChange` firing, not just later DOM activity. This is
+  `modules/account.js`-only, so - like the rest of Account & Subscription
+  - it's naturally absent from the offline package (`vendor/supabase.min.js`/
+  `modules/account.js` are both `OFFLINE-STRIP`-wrapped - see "The offline
+  package keeps its own... Premium mechanism" below) - there's no
+  session to time out there anyway, since the offline build's Premium
+  unlock isn't tied to a signed-in account. Verified with Playwright by
+  manipulating the stored timestamp directly (a real 8-hour wait isn't
+  practical): a signed-in session with a 9-hour-old stored timestamp is
+  signed out by `checkInactivityLogout()`; one with a 5-minute-old
+  timestamp is left alone; a signed-out session is a no-op regardless of
+  the stored timestamp's age; `recordActivity()` correctly throttles two
+  back-to-back calls to a single write; and a real `keydown` event
+  dispatched on `document` after calling `initInactivityLogout()`
+  correctly results in a fresh stored timestamp.
 - **Settings → Premium is now "Account & Subscription"**, wrapped in a
   new `<!-- OFFLINE-SWAP:PREMIUM-PANEL:START/END -->` marker (the tab
   itself, `data-tab="premium"`/`premiumTabLabel`, is unchanged - only the
