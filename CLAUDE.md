@@ -2704,11 +2704,94 @@ the on-page heading stays the more natural "Create Invoice").
   would be nothing for the button to open there. `offline/README.txt`
   explicitly calls out this exclusion in its "except" list, next to the
   cookie-banner/analytics/fonts differences that were already there.
-- Six-language UI strings are **not** part of this page - `app.html`'s
-  `translations` dictionary only supplies the `createInvoiceShortcutLabel`
-  header-links text; the invoice tool itself is English-only for now,
-  consistent with it being a new, separate feature rather than a
-  from-day-one part of the translated POS app.
+- **Now translated into the same six languages as `app.html`** (en/ar/
+  fil/hi/es/th) - its own self-contained `translations` object and
+  `translate()`/`currentLang()`/`changeLanguage()` functions, living
+  entirely inside this page's own inline script (not `app.html`'s
+  `modules/translations.js`, which this standalone page never loads -
+  same "no dependency on `app.html`" decoupling as everything else on
+  this page). A new **Language** picker (`#invLanguage`, the same
+  `.currency-inline no-print` pill styling as the existing Currency
+  picker, stacked directly above it) drives it - `en`/`ar`/`fil`/`hi`/
+  `es`/`th` options with the identical native-name labels
+  ("English"/"العربية"/"Filipino"/"हिन्दी"/"Español"/"ไทย") `app.html`'s
+  own `#language` select uses. Covers every static UI string on the
+  page - masthead, From/Bill To labels and placeholders, the Date/Due
+  Date/Terms/PO# meta row, the items-table headers (including the
+  `data-label` attributes the mobile responsive view reads via
+  `attr(data-label)`, re-applied to already-rendered rows by a new
+  `relabelItemRows()` and set correctly on any newly-added row by
+  `makeLineRow()` itself), Subtotal/Discount/Tax/Total/Amount Paid/
+  Balance Due, the Flat option label, Notes/Terms placeholders, all
+  four action-bar buttons, the autosave note, the Saved Invoices modal
+  (title, empty-state text, the "(no number)" fallback), both
+  `confirm()` dialogs, the save-toast text, and the full How-To-Make-
+  an-Invoice + Invoice FAQ info-section (the FAQ's POS-app link
+  translated via `innerHTML`, same pattern `app.html`'s own
+  `buyPremiumContactText` uses for an embedded link) - **not** the
+  shared `.site-header`/`.site-nav`/`.cta-btn` row, the footer, or the
+  cookie-consent banner, since none of those are translated anywhere
+  else in the codebase either (confirmed against `app.html`'s own
+  `translations.js`, which doesn't have a single cookie-banner key) -
+  this page's chrome stays consistent with every other page's English
+  chrome, only the tool's own product content is localized. Also
+  **not** translated: `#invTitle`'s document-title text and `#invNumber`'s
+  `"INV-0001"` placeholder - the first is free-text content the visitor
+  types/edits themselves (same category as From/Bill To/Notes, which
+  were never auto-overwritten by a language switch either - doing so
+  for the title alone would silently clobber a custom "TAX INVOICE" a
+  visitor had already typed), and the second is a format example, not
+  real language content.
+  - **A real, easy-to-hit naming collision was caught before it shipped**:
+    `makeLineRow()` (and `wireRow()`/`updateRowAmount()`/two other
+    `forEach` callbacks) already used `tr` as the local variable name
+    for a table-row DOM element, the obvious short name to reach for -
+    but `tr()` is also `app.html`'s own established name for its
+    translation-lookup function. Naming this page's translator function
+    `tr` too would have made every `tr("someKey")` call **inside those
+    same functions** silently resolve to the local row-element variable
+    instead of the translator (a DOM node isn't callable - `tr is not a
+    function` at runtime, only inside the one function that actually
+    needed to call it). Fixed by renaming the row-element variable to
+    `row` everywhere in the file and naming the translator `translate()`
+    instead - avoids the collision entirely rather than working around
+    it, and doubles as a reminder that copying `app.html`'s `tr()`
+    naming convention verbatim isn't automatically safe in a file that
+    already has its own unrelated meaning for the same short identifier.
+  - **Language choice persists independently of any saved invoice** -
+    `storageSet`/`storageGet`'s embedded-host abstraction doesn't apply
+    here (this is a fully standalone page, plain `localStorage` like
+    the rest of it), via its own `goonlinepos-invoice-lang` key,
+    separate from the per-invoice `goonlinepos-invoice-draft`/
+    `-history` state. This is deliberate: the UI language is a
+    browser/device preference like Currency already is (see
+    `saveDefaults()`), not part of any one invoice's content - reopening
+    an invoice you saved in Spanish still shows its own typed text
+    exactly as typed, but the surrounding buttons/labels stay in
+    whatever language you currently have selected, not whatever was
+    active when that invoice was saved. `loadLanguagePref()` runs before
+    `loadDraft()` on page load so the very first paint - masthead, empty
+    line-item row, all of it - already reflects the stored language
+    rather than flashing English first.
+  - **RTL for Arabic works the same minimal way `app.html` already
+    does it** - `document.body.dir = lang === "ar" ? "rtl" : "ltr"` and
+    nothing else; no extra RTL-specific CSS exists anywhere in
+    `app.html` either, so none was added here - the browser's native
+    RTL layout (text direction, and every flex row's own visual order)
+    handles the mirroring on its own once `dir` is set.
+  - Verified with Playwright: switching to Arabic translates the
+    masthead/labels/buttons/table headers, flips `document.body.dir` to
+    `rtl` and `document.documentElement.lang` to `ar`, and a newly
+    added line-item row's `data-label` attributes and description
+    placeholder come out already in Arabic; a real `page.pdf()` render
+    of the Arabic invoice (not just a screenshot) shows the whole
+    layout correctly mirrored with no leftover LTR artifacts; switching
+    to Spanish keeps the FAQ's `<a href="app">` link intact inside the
+    translated sentence; reloading the page after picking Arabic keeps
+    it selected and RTL without needing to reselect it; and the existing
+    box/line print styling, 390px mobile layout, and zero-console-error
+    baseline from the earlier passes on this file all still hold
+    unchanged.
 
 ## `receipt-generator.html` — standalone receipt generator
 

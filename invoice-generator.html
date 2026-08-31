@@ -381,9 +381,9 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 </header>
 
 <header class="masthead">
-<div class="kicker">Free Tool</div>
-<h1>Create Invoice</h1>
-<p>Build a professional invoice in your browser, add your logo and line items, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
+<div class="kicker" id="mastheadKicker">Free Tool</div>
+<h1 id="mastheadTitle">Create Invoice</h1>
+<p id="mastheadSubtitle">Build a professional invoice in your browser, add your logo and line items, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.</p>
 </header>
 
 <div class="invoice-card" id="invoiceCard">
@@ -397,13 +397,24 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         <button type="button" id="removeLogoBtn" class="remove-logo-btn no-print hidden" aria-label="Remove logo">✕ Remove</button>
       </div>
       <div class="doc-addr-box">
-        <label class="field-label" for="invFrom">From</label>
+        <label class="field-label" for="invFrom" id="fromLabel">From</label>
         <textarea id="invFrom" placeholder="Your business name, address, phone, email"></textarea>
       </div>
     </div>
     <div class="doc-header-right">
       <div class="currency-inline no-print">
-        <label for="invCurrency">Currency</label>
+        <label for="invLanguage" id="languageLabelInv">Language</label>
+        <select id="invLanguage">
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+          <option value="fil">Filipino</option>
+          <option value="hi">हिन्दी</option>
+          <option value="es">Español</option>
+          <option value="th">ไทย</option>
+        </select>
+      </div>
+      <div class="currency-inline no-print">
+        <label for="invCurrency" id="currencyLabelInv">Currency</label>
         <select id="invCurrency"></select>
       </div>
       <input type="text" class="title-input" id="invTitle" value="INVOICE" aria-label="Document title">
@@ -412,67 +423,67 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
         <input type="text" id="invNumber" placeholder="INV-0001" aria-label="Invoice number">
       </div>
       <div class="doc-meta">
-        <div class="doc-meta-row"><span class="dm-label">Date</span><input type="date" id="invDate"></div>
-        <div class="doc-meta-row"><span class="dm-label">Due Date</span><input type="date" id="invDueDate"></div>
-        <div class="doc-meta-row"><span class="dm-label">Terms</span><input type="text" id="invTerms" placeholder="e.g. Net 15"></div>
-        <div class="doc-meta-row"><span class="dm-label">PO #</span><input type="text" id="invPO" placeholder="(optional)"></div>
+        <div class="doc-meta-row"><span class="dm-label" id="dateLabel">Date</span><input type="date" id="invDate"></div>
+        <div class="doc-meta-row"><span class="dm-label" id="dueDateLabel">Due Date</span><input type="date" id="invDueDate"></div>
+        <div class="doc-meta-row"><span class="dm-label" id="termsMetaLabel">Terms</span><input type="text" id="invTerms" placeholder="e.g. Net 15"></div>
+        <div class="doc-meta-row"><span class="dm-label" id="poLabel">PO #</span><input type="text" id="invPO" placeholder="(optional)"></div>
       </div>
     </div>
   </div>
 
   <div class="bill-to-block doc-addr-box">
-    <label class="field-label" for="invTo">Bill To</label>
+    <label class="field-label" for="invTo" id="billToLabel">Bill To</label>
     <textarea id="invTo" placeholder="Customer name, address, phone, email"></textarea>
   </div>
 
   <table class="items-table">
     <thead>
       <tr>
-        <th>Description</th>
-        <th class="col-qty">Qty</th>
-        <th class="col-rate">Rate</th>
-        <th class="col-tax-exempt">Tax Free</th>
-        <th class="col-amount">Amount</th>
+        <th id="thDescription">Description</th>
+        <th class="col-qty" id="thQty">Qty</th>
+        <th class="col-rate" id="thRate">Rate</th>
+        <th class="col-tax-exempt" id="thTaxFree">Tax Free</th>
+        <th class="col-amount" id="thAmount">Amount</th>
         <th class="col-remove"></th>
       </tr>
     </thead>
     <tbody id="invItemsBody"></tbody>
   </table>
 
-  <button type="button" class="add-line-btn no-print" id="addLineBtn">+ Add Line Item</button>
+  <button type="button" class="add-line-btn no-print" id="addLineBtn">+ <span id="addLineBtnLabel">Add Line Item</span></button>
 
   <div class="totals-row">
     <div class="totals-box">
       <div class="totals-line">
-        <span class="tl-label">Subtotal</span>
+        <span class="tl-label" id="subtotalLabel">Subtotal</span>
         <span class="tl-value" id="invSubtotal">0.00</span>
       </div>
       <div class="totals-line">
-        <span class="tl-label">Discount</span>
+        <span class="tl-label" id="discountLabelInv">Discount</span>
         <div class="tl-controls">
-          <select id="invDiscountType"><option value="percent">%</option><option value="flat">Flat</option></select>
+          <select id="invDiscountType"><option value="percent">%</option><option value="flat" id="discountFlatOption">Flat</option></select>
           <input type="number" id="invDiscountValue" value="0" min="0" step="0.01">
         </div>
       </div>
       <div class="totals-line">
-        <span class="tl-label">Tax</span>
+        <span class="tl-label" id="taxLabelInv">Tax</span>
         <div class="tl-controls">
-          <select id="invTaxType"><option value="percent">%</option><option value="flat">Flat</option></select>
+          <select id="invTaxType"><option value="percent">%</option><option value="flat" id="taxFlatOption">Flat</option></select>
           <input type="number" id="invTaxValue" value="0" min="0" step="0.01">
         </div>
       </div>
       <div class="totals-line grand">
-        <span class="tl-label">Total</span>
+        <span class="tl-label" id="totalLabelInv">Total</span>
         <span class="tl-value" id="invTotal">0.00</span>
       </div>
       <div class="totals-line">
-        <span class="tl-label">Amount Paid</span>
+        <span class="tl-label" id="amountPaidLabel">Amount Paid</span>
         <div class="tl-controls">
           <input type="number" id="invAmountPaid" value="0" min="0" step="0.01">
         </div>
       </div>
       <div class="totals-line balance">
-        <span class="tl-label">Balance Due</span>
+        <span class="tl-label" id="balanceDueLabel">Balance Due</span>
         <span class="tl-value" id="invBalanceDue">0.00</span>
       </div>
     </div>
@@ -480,11 +491,11 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
   <div class="notes-grid">
     <div>
-      <label class="field-label" for="invNotes">Notes</label>
+      <label class="field-label" for="invNotes" id="notesLabel">Notes</label>
       <textarea id="invNotes" placeholder="Thank you for your business!"></textarea>
     </div>
     <div>
-      <label class="field-label" for="invTermsText">Terms</label>
+      <label class="field-label" for="invTermsText" id="termsTextLabel">Terms</label>
       <textarea id="invTermsText" placeholder="Late payments, delivery schedule, etc."></textarea>
     </div>
   </div>
@@ -492,17 +503,17 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 </div>
 
 <div class="action-bar no-print">
-  <button type="button" id="saveInvoiceBtn">💾 Save Invoice</button>
-  <button type="button" id="savedInvoicesBtn">📂 Saved Invoices</button>
-  <button type="button" id="printInvoiceBtn">🖨 Print / Save as PDF</button>
-  <button type="button" id="clearInvoiceBtn">🗑 Clear / New Invoice</button>
+  <button type="button" id="saveInvoiceBtn">💾 <span id="saveInvoiceBtnLabel">Save Invoice</span></button>
+  <button type="button" id="savedInvoicesBtn">📂 <span id="savedInvoicesBtnLabel">Saved Invoices</span></button>
+  <button type="button" id="printInvoiceBtn">🖨 <span id="printInvoiceBtnLabel">Print / Save as PDF</span></button>
+  <button type="button" id="clearInvoiceBtn">🗑 <span id="clearInvoiceBtnLabel">Clear / New Invoice</span></button>
 </div>
-<p class="autosave-note no-print">Your current invoice is saved automatically in this browser as you type. Click "Save Invoice" to add it to your Saved Invoices list so you can find it again later - nothing is uploaded anywhere.</p>
+<p class="autosave-note no-print" id="autosaveNote">Your current invoice is saved automatically in this browser as you type. Click "Save Invoice" to add it to your Saved Invoices list so you can find it again later - nothing is uploaded anywhere.</p>
 
 <div class="modal-overlay hidden no-print" id="savedInvoicesOverlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>Saved Invoices</h3>
+      <h3 id="savedInvoicesModalTitle">Saved Invoices</h3>
       <button type="button" class="modal-close-btn" id="closeSavedInvoicesBtn" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="savedInvoicesList"></div>
@@ -512,25 +523,25 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 <div class="save-toast" id="saveToast">Invoice saved</div>
 
 <div class="info-section no-print">
-  <h2>How to make an invoice</h2>
+  <h2 id="howToTitle">How to make an invoice</h2>
   <ol>
-    <li>Add your logo (optional) and fill in who the invoice is from and who it's billed to.</li>
-    <li>Add an invoice number, date, due date, and payment terms.</li>
-    <li>List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed.</li>
-    <li>Add tax and a discount if they apply, then check the balance due.</li>
-    <li>Click "Save Invoice" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.</li>
+    <li id="howToStep1">Add your logo (optional) and fill in who the invoice is from and who it's billed to.</li>
+    <li id="howToStep2">Add an invoice number, date, due date, and payment terms.</li>
+    <li id="howToStep3">List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed.</li>
+    <li id="howToStep4">Add tax and a discount if they apply, then check the balance due.</li>
+    <li id="howToStep5">Click "Save Invoice" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.</li>
   </ol>
 
-  <h2>Invoice FAQ</h2>
+  <h2 id="faqTitle">Invoice FAQ</h2>
   <dl>
-    <dt>Is this invoice generator free?</dt>
-    <dd>Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.</dd>
-    <dt>Where can I see my saved invoices?</dt>
-    <dd>Click "Save Invoice" to add the current one to your list, then click "Saved Invoices" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
-    <dt>How do I save it as a PDF?</dt>
-    <dd>Click "Print / Save as PDF" and pick "Save as PDF" (or "Microsoft Print to PDF") as the destination in the print dialog your browser opens.</dd>
-    <dt>Is this the same as GoOnlinePOS's receipts?</dt>
-    <dd>No. Receipts are for point-of-sale checkout inside <a href="app">the POS app</a>. This tool is for one-off invoices you send to a customer before or after the sale.</dd>
+    <dt id="faq1Q">Is this invoice generator free?</dt>
+    <dd id="faq1A">Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.</dd>
+    <dt id="faq2Q">Where can I see my saved invoices?</dt>
+    <dd id="faq2A">Click "Save Invoice" to add the current one to your list, then click "Saved Invoices" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt id="faq3Q">How do I save it as a PDF?</dt>
+    <dd id="faq3A">Click "Print / Save as PDF" and pick "Save as PDF" (or "Microsoft Print to PDF") as the destination in the print dialog your browser opens.</dd>
+    <dt id="faq4Q">Is this the same as GoOnlinePOS's receipts?</dt>
+    <dd id="faq4A">No. Receipts are for point-of-sale checkout inside <a href="app">the POS app</a>. This tool is for one-off invoices you send to a customer before or after the sale.</dd>
   </dl>
 </div>
 
@@ -571,6 +582,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   var DRAFT_KEY = "goonlinepos-invoice-draft";
   var HISTORY_KEY = "goonlinepos-invoice-history";
   var DEFAULTS_KEY = "goonlinepos-invoice-defaults";
+  var LANG_KEY = "goonlinepos-invoice-lang";
   var CURRENCIES = {
     AED: "د.إ", AFN: "؋", ALL: "L", AMD: "դր.", ANG: "ƒ", AOA: "Kz", ARS: "$", AUD: "A$",
     AWG: "ƒ", AZN: "₼", BAM: "KM", BBD: "$", BDT: "৳", BGN: "лв", BHD: ".د.ب", BIF: "FBu",
@@ -593,6 +605,245 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     VES: "Bs.", VND: "₫", VUV: "VT", WST: "T", XAF: "FCFA", XCD: "$", XOF: "CFA", XPF: "₣",
     YER: "﷼", ZAR: "R", ZMW: "ZK", ZWL: "$"
   };
+  var translations = {
+    en: {
+      freeToolLabel: "Free Tool", createInvoiceTitle: "Create Invoice",
+      mastheadSubtitle: "Build a professional invoice in your browser, add your logo and line items, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.",
+      languageLabel: "Language", currencyLabel: "Currency",
+      fromLabel: "From", fromPlaceholder: "Your business name, address, phone, email",
+      billToLabel: "Bill To", billToPlaceholder: "Customer name, address, phone, email",
+      dateLabel: "Date", dueDateLabel: "Due Date", termsWord: "Terms", termsMetaPlaceholder: "e.g. Net 15", poLabel: "PO #", optionalLabel: "(optional)",
+      descriptionLabel: "Description", qtyLabel: "Qty", rateLabel: "Rate", taxFreeLabel: "Tax Free", amountLabel: "Amount",
+      itemDescPlaceholder: "Item or service description", addLineItemLabel: "Add Line Item",
+      subtotalLabel: "Subtotal", discountLabel: "Discount", taxLabel: "Tax", totalLabel: "Total",
+      amountPaidLabel: "Amount Paid", balanceDueLabel: "Balance Due", flatLabel: "Flat",
+      notesLabel: "Notes", notesPlaceholder: "Thank you for your business!", termsTextPlaceholder: "Late payments, delivery schedule, etc.",
+      saveInvoiceLabel: "Save Invoice", savedInvoicesLabel: "Saved Invoices", printSaveLabel: "Print / Save as PDF", clearNewLabel: "Clear / New Invoice",
+      autosaveNoteText: "Your current invoice is saved automatically in this browser as you type. Click \"Save Invoice\" to add it to your Saved Invoices list so you can find it again later - nothing is uploaded anywhere.",
+      invoiceSavedToast: "Invoice saved",
+      savedInvoicesEmptyText: "No saved invoices yet. Fill out an invoice and click \"Save Invoice\" to keep it here.",
+      noNumberLabel: "(no number)",
+      deleteSavedConfirm: "Delete this saved invoice? This can't be undone.",
+      clearInvoiceConfirm: "Clear this invoice and start a new one? This can't be undone.",
+      howToTitle: "How to make an invoice",
+      howToStep1: "Add your logo (optional) and fill in who the invoice is from and who it's billed to.",
+      howToStep2: "Add an invoice number, date, due date, and payment terms.",
+      howToStep3: "List each line item with a quantity and rate - the amount is calculated for you. Check \"Tax Free\" on any item that shouldn't be taxed.",
+      howToStep4: "Add tax and a discount if they apply, then check the balance due.",
+      howToStep5: "Click \"Save Invoice\" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.",
+      faqTitle: "Invoice FAQ",
+      faq1Q: "Is this invoice generator free?", faq1A: "Yes. It runs entirely in your browser - no signup, no account, and no data leaves your device.",
+      faq2Q: "Where can I see my saved invoices?", faq2A: "Click \"Save Invoice\" to add the current one to your list, then click \"Saved Invoices\" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.",
+      faq3Q: "How do I save it as a PDF?", faq3A: "Click \"Print / Save as PDF\" and pick \"Save as PDF\" (or \"Microsoft Print to PDF\") as the destination in the print dialog your browser opens.",
+      faq4Q: "Is this the same as GoOnlinePOS's receipts?", faq4A: "No. Receipts are for point-of-sale checkout inside <a href=\"app\">the POS app</a>. This tool is for one-off invoices you send to a customer before or after the sale."
+    },
+    ar: {
+      freeToolLabel: "أداة مجانية", createInvoiceTitle: "إنشاء فاتورة",
+      mastheadSubtitle: "أنشئ فاتورة احترافية في متصفحك، أضف شعارك وبنود الفاتورة، ثم اطبعها أو احفظها كملف PDF. بدون تسجيل، ولا يُحفظ أي شيء إلا في هذا المتصفح.",
+      languageLabel: "اللغة", currencyLabel: "العملة",
+      fromLabel: "من", fromPlaceholder: "اسم شركتك، العنوان، الهاتف، البريد الإلكتروني",
+      billToLabel: "فاتورة إلى", billToPlaceholder: "اسم العميل، العنوان، الهاتف، البريد الإلكتروني",
+      dateLabel: "التاريخ", dueDateLabel: "تاريخ الاستحقاق", termsWord: "الشروط", termsMetaPlaceholder: "مثال: صافي 15 يوم", poLabel: "رقم أمر الشراء", optionalLabel: "(اختياري)",
+      descriptionLabel: "الوصف", qtyLabel: "الكمية", rateLabel: "السعر", taxFreeLabel: "معفى من الضريبة", amountLabel: "المبلغ",
+      itemDescPlaceholder: "وصف السلعة أو الخدمة", addLineItemLabel: "إضافة بند",
+      subtotalLabel: "المجموع الفرعي", discountLabel: "الخصم", taxLabel: "الضريبة", totalLabel: "الإجمالي",
+      amountPaidLabel: "المبلغ المدفوع", balanceDueLabel: "الرصيد المستحق", flatLabel: "مبلغ ثابت",
+      notesLabel: "ملاحظات", notesPlaceholder: "شكراً لتعاملكم معنا!", termsTextPlaceholder: "شروط التأخر في الدفع، جدول التسليم، إلخ.",
+      saveInvoiceLabel: "حفظ الفاتورة", savedInvoicesLabel: "الفواتير المحفوظة", printSaveLabel: "طباعة / حفظ كملف PDF", clearNewLabel: "مسح / فاتورة جديدة",
+      autosaveNoteText: "يتم حفظ فاتورتك الحالية تلقائياً في هذا المتصفح أثناء الكتابة. اضغط \"حفظ الفاتورة\" لإضافتها إلى قائمة الفواتير المحفوظة حتى تجدها لاحقاً - لا يتم رفع أي شيء إلى الإنترنت.",
+      invoiceSavedToast: "تم حفظ الفاتورة",
+      savedInvoicesEmptyText: "لا توجد فواتير محفوظة بعد. املأ فاتورة واضغط \"حفظ الفاتورة\" لحفظها هنا.",
+      noNumberLabel: "(بدون رقم)",
+      deleteSavedConfirm: "هل تريد حذف هذه الفاتورة المحفوظة؟ لا يمكن التراجع عن هذا الإجراء.",
+      clearInvoiceConfirm: "هل تريد مسح هذه الفاتورة والبدء بفاتورة جديدة؟ لا يمكن التراجع عن هذا الإجراء.",
+      howToTitle: "كيفية إنشاء فاتورة",
+      howToStep1: "أضف شعارك (اختياري) واملأ من هي الفاتورة ولمن موجهة.",
+      howToStep2: "أضف رقم الفاتورة والتاريخ وتاريخ الاستحقاق وشروط الدفع.",
+      howToStep3: "أدرج كل بند مع الكمية والسعر - يتم احتساب المبلغ تلقائياً. ضع علامة \"معفى من الضريبة\" على أي بند لا ينبغي أن يُفرض عليه ضريبة.",
+      howToStep4: "أضف الضريبة والخصم إن وجدا، ثم تحقق من الرصيد المستحق.",
+      howToStep5: "اضغط \"حفظ الفاتورة\" لحفظها في قائمة الفواتير المحفوظة، ثم \"طباعة / حفظ كملف PDF\" عندما تكون جاهزاً لإرسالها.",
+      faqTitle: "الأسئلة الشائعة حول الفواتير",
+      faq1Q: "هل مولّد الفواتير هذا مجاني؟", faq1A: "نعم. يعمل بالكامل داخل متصفحك - بدون تسجيل، بدون حساب، ولا تغادر أي بيانات جهازك.",
+      faq2Q: "أين يمكنني رؤية فواتيري المحفوظة؟", faq2A: "اضغط \"حفظ الفاتورة\" لإضافة الفاتورة الحالية إلى قائمتك، ثم اضغط \"الفواتير المحفوظة\" في أي وقت لتصفحها أو إعادة فتحها أو حذفها. تُحفظ فقط في هذا المتصفح - مسح بيانات المتصفح يحذفها.",
+      faq3Q: "كيف أحفظها كملف PDF؟", faq3A: "اضغط \"طباعة / حفظ كملف PDF\" واختر \"حفظ كملف PDF\" (أو \"Microsoft Print to PDF\") كوجهة في نافذة الطباعة التي يفتحها متصفحك.",
+      faq4Q: "هل هذا هو نفسه إيصالات GoOnlinePOS؟", faq4A: "لا. الإيصالات مخصصة لعمليات البيع في نقطة البيع داخل <a href=\"app\">تطبيق نقطة البيع</a>. أما هذه الأداة فهي لإنشاء فواتير فردية ترسلها للعميل قبل البيع أو بعده."
+    },
+    fil: {
+      freeToolLabel: "Libreng Tool", createInvoiceTitle: "Gumawa ng Invoice",
+      mastheadSubtitle: "Gumawa ng propesyonal na invoice sa iyong browser, idagdag ang iyong logo at mga line item, pagkatapos i-print o i-save bilang PDF. Walang signup, walang na-save maliban dito sa browser na ito.",
+      languageLabel: "Wika", currencyLabel: "Currency",
+      fromLabel: "Mula Kay", fromPlaceholder: "Pangalan ng negosyo mo, address, telepono, email",
+      billToLabel: "I-bill Kay", billToPlaceholder: "Pangalan ng customer, address, telepono, email",
+      dateLabel: "Petsa", dueDateLabel: "Due Date", termsWord: "Terms", termsMetaPlaceholder: "hal. Net 15", poLabel: "PO #", optionalLabel: "(opsyonal)",
+      descriptionLabel: "Description", qtyLabel: "Qty", rateLabel: "Rate", taxFreeLabel: "Walang Buwis", amountLabel: "Halaga",
+      itemDescPlaceholder: "Paglalarawan ng item o serbisyo", addLineItemLabel: "Magdagdag ng Line Item",
+      subtotalLabel: "Subtotal", discountLabel: "Discount", taxLabel: "Buwis", totalLabel: "Total",
+      amountPaidLabel: "Halagang Bayad", balanceDueLabel: "Balanseng Dapat Bayaran", flatLabel: "Fixed na Halaga",
+      notesLabel: "Mga Tala", notesPlaceholder: "Salamat sa iyong negosyo!", termsTextPlaceholder: "Late payment, schedule ng delivery, atbp.",
+      saveInvoiceLabel: "I-save ang Invoice", savedInvoicesLabel: "Mga Naka-save na Invoice", printSaveLabel: "I-print / I-save bilang PDF", clearNewLabel: "I-clear / Bagong Invoice",
+      autosaveNoteText: "Awtomatikong na-save ang kasalukuyang invoice mo sa browser na ito habang nagta-type ka. I-click ang \"I-save ang Invoice\" para idagdag ito sa listahan ng Mga Naka-save na Invoice para mahanap mo ulit ito - walang ina-upload kahit saan.",
+      invoiceSavedToast: "Na-save ang invoice",
+      savedInvoicesEmptyText: "Wala pang naka-save na invoice. Punan ang isang invoice at i-click ang \"I-save ang Invoice\" para itago dito.",
+      noNumberLabel: "(walang numero)",
+      deleteSavedConfirm: "Tanggalin ang naka-save na invoice na ito? Hindi na ito mababawi.",
+      clearInvoiceConfirm: "I-clear ang invoice na ito at magsimula ng bago? Hindi na ito mababawi.",
+      howToTitle: "Paano gumawa ng invoice",
+      howToStep1: "Idagdag ang logo mo (opsyonal) at punan kung kanino galing at kanino ipapadala ang invoice.",
+      howToStep2: "Magdagdag ng invoice number, petsa, due date, at payment terms.",
+      howToStep3: "Ilista ang bawat line item na may quantity at rate - awtomatikong makukuha ang halaga. I-check ang \"Walang Buwis\" sa item na hindi dapat singilan ng buwis.",
+      howToStep4: "Magdagdag ng buwis at discount kung meron, pagkatapos tingnan ang balanseng dapat bayaran.",
+      howToStep5: "I-click ang \"I-save ang Invoice\" para itago ito sa listahan ng Mga Naka-save na Invoice, at I-print / I-save bilang PDF kapag handa ka na ipadala ito.",
+      faqTitle: "Mga Tanong Tungkol sa Invoice",
+      faq1Q: "Libre ba itong invoice generator?", faq1A: "Oo. Gumagana ito nang buo sa iyong browser - walang signup, walang account, at walang data na umaalis sa device mo.",
+      faq2Q: "Saan ko makikita ang mga naka-save kong invoice?", faq2A: "I-click ang \"I-save ang Invoice\" para idagdag ang kasalukuyan sa listahan mo, pagkatapos i-click ang \"Mga Naka-save na Invoice\" kahit kailan para tingnan, buksan ulit, o burahin ang mga ito. Naka-save lang ito sa browser na ito - mawawala ang mga ito kapag na-clear mo ang data ng browser.",
+      faq3Q: "Paano ko ito i-save bilang PDF?", faq3A: "I-click ang \"I-print / I-save bilang PDF\" at piliin ang \"Save as PDF\" (o \"Microsoft Print to PDF\") bilang destination sa print dialog na bubukas sa browser mo.",
+      faq4Q: "Pareho ba ito ng mga resibo ng GoOnlinePOS?", faq4A: "Hindi. Ang mga resibo ay para sa point-of-sale checkout sa loob ng <a href=\"app\">POS app</a>. Ang tool na ito ay para sa mga one-off invoice na ipinapadala mo sa customer bago o pagkatapos ng benta."
+    },
+    hi: {
+      freeToolLabel: "मुफ़्त टूल", createInvoiceTitle: "इनवॉइस बनाएं",
+      mastheadSubtitle: "अपने ब्राउज़र में एक पेशेवर इनवॉइस बनाएं, अपना लोगो और लाइन आइटम जोड़ें, फिर उसे प्रिंट करें या PDF के रूप में सेव करें। कोई साइनअप नहीं, इस ब्राउज़र के अलावा कहीं कुछ भी सेव नहीं होता।",
+      languageLabel: "भाषा", currencyLabel: "मुद्रा",
+      fromLabel: "से", fromPlaceholder: "आपके व्यवसाय का नाम, पता, फ़ोन, ईमेल",
+      billToLabel: "बिल प्राप्तकर्ता", billToPlaceholder: "ग्राहक का नाम, पता, फ़ोन, ईमेल",
+      dateLabel: "दिनांक", dueDateLabel: "देय तिथि", termsWord: "शर्तें", termsMetaPlaceholder: "जैसे Net 15", poLabel: "PO #", optionalLabel: "(वैकल्पिक)",
+      descriptionLabel: "विवरण", qtyLabel: "मात्रा", rateLabel: "दर", taxFreeLabel: "कर मुक्त", amountLabel: "राशि",
+      itemDescPlaceholder: "वस्तु या सेवा का विवरण", addLineItemLabel: "लाइन आइटम जोड़ें",
+      subtotalLabel: "उप-योग", discountLabel: "छूट", taxLabel: "कर", totalLabel: "कुल",
+      amountPaidLabel: "भुगतान की गई राशि", balanceDueLabel: "बकाया राशि", flatLabel: "निश्चित राशि",
+      notesLabel: "नोट्स", notesPlaceholder: "आपके व्यवसाय के लिए धन्यवाद!", termsTextPlaceholder: "देर से भुगतान, डिलीवरी शेड्यूल, आदि।",
+      saveInvoiceLabel: "इनवॉइस सेव करें", savedInvoicesLabel: "सेव किए गए इनवॉइस", printSaveLabel: "प्रिंट करें / PDF के रूप में सेव करें", clearNewLabel: "साफ़ करें / नया इनवॉइस",
+      autosaveNoteText: "आपका मौजूदा इनवॉइस टाइप करते समय इस ब्राउज़र में अपने आप सेव हो जाता है। इसे बाद में फिर से खोजने के लिए अपने सेव किए गए इनवॉइस की सूची में जोड़ने के लिए \"इनवॉइस सेव करें\" पर क्लिक करें - कहीं भी कुछ भी अपलोड नहीं होता।",
+      invoiceSavedToast: "इनवॉइस सेव हो गया",
+      savedInvoicesEmptyText: "अभी तक कोई सेव किया गया इनवॉइस नहीं है। एक इनवॉइस भरें और इसे यहाँ रखने के लिए \"इनवॉइस सेव करें\" पर क्लिक करें।",
+      noNumberLabel: "(कोई नंबर नहीं)",
+      deleteSavedConfirm: "इस सेव किए गए इनवॉइस को हटाएं? इसे वापस नहीं लाया जा सकता।",
+      clearInvoiceConfirm: "इस इनवॉइस को साफ़ करके नया शुरू करें? इसे वापस नहीं लाया जा सकता।",
+      howToTitle: "इनवॉइस कैसे बनाएं",
+      howToStep1: "अपना लोगो जोड़ें (वैकल्पिक) और भरें कि इनवॉइस किसकी ओर से है और किसे भेजा जा रहा है।",
+      howToStep2: "इनवॉइस नंबर, दिनांक, देय तिथि और भुगतान की शर्तें जोड़ें।",
+      howToStep3: "मात्रा और दर के साथ प्रत्येक लाइन आइटम सूचीबद्ध करें - राशि अपने आप गणना हो जाती है। किसी भी ऐसे आइटम पर \"कर मुक्त\" चेक करें जिस पर कर नहीं लगना चाहिए।",
+      howToStep4: "यदि लागू हो तो कर और छूट जोड़ें, फिर बकाया राशि जांचें।",
+      howToStep5: "इसे अपनी सेव किए गए इनवॉइस की सूची में रखने के लिए \"इनवॉइस सेव करें\" पर क्लिक करें, और भेजने के लिए तैयार होने पर प्रिंट करें / PDF के रूप में सेव करें।",
+      faqTitle: "इनवॉइस से जुड़े सवाल",
+      faq1Q: "क्या यह इनवॉइस जनरेटर मुफ़्त है?", faq1A: "हां। यह पूरी तरह से आपके ब्राउज़र में चलता है - कोई साइनअप नहीं, कोई खाता नहीं, और आपके डिवाइस से कोई डेटा बाहर नहीं जाता।",
+      faq2Q: "मैं अपने सेव किए गए इनवॉइस कहां देख सकता हूं?", faq2A: "वर्तमान इनवॉइस को अपनी सूची में जोड़ने के लिए \"इनवॉइस सेव करें\" पर क्लिक करें, फिर उन्हें ब्राउज़ करने, फिर से खोलने या हटाने के लिए किसी भी समय \"सेव किए गए इनवॉइस\" पर क्लिक करें। ये केवल इस ब्राउज़र में सेव होते हैं - अपने ब्राउज़र का डेटा साफ़ करने से ये हट जाते हैं।",
+      faq3Q: "मैं इसे PDF के रूप में कैसे सेव करूं?", faq3A: "\"प्रिंट करें / PDF के रूप में सेव करें\" पर क्लिक करें और अपने ब्राउज़र द्वारा खोले गए प्रिंट डायलॉग में गंतव्य के रूप में \"Save as PDF\" (या \"Microsoft Print to PDF\") चुनें।",
+      faq4Q: "क्या यह GoOnlinePOS की रसीदों जैसा ही है?", faq4A: "नहीं। रसीदें <a href=\"app\">POS ऐप</a> के अंदर पॉइंट-ऑफ-सेल चेकआउट के लिए हैं। यह टूल उन इनवॉइस के लिए है जो आप बिक्री से पहले या बाद में किसी ग्राहक को भेजते हैं।"
+    },
+    es: {
+      freeToolLabel: "Herramienta Gratuita", createInvoiceTitle: "Crear Factura",
+      mastheadSubtitle: "Crea una factura profesional en tu navegador, agrega tu logo y las líneas de detalle, luego imprímela o guárdala como PDF. Sin registro, no se guarda nada excepto en este navegador.",
+      languageLabel: "Idioma", currencyLabel: "Moneda",
+      fromLabel: "De", fromPlaceholder: "Nombre de tu negocio, dirección, teléfono, correo",
+      billToLabel: "Facturar A", billToPlaceholder: "Nombre del cliente, dirección, teléfono, correo",
+      dateLabel: "Fecha", dueDateLabel: "Fecha de Vencimiento", termsWord: "Términos", termsMetaPlaceholder: "ej. Neto 15", poLabel: "N.º de Orden", optionalLabel: "(opcional)",
+      descriptionLabel: "Descripción", qtyLabel: "Cant.", rateLabel: "Precio", taxFreeLabel: "Sin Impuesto", amountLabel: "Monto",
+      itemDescPlaceholder: "Descripción del artículo o servicio", addLineItemLabel: "Agregar Línea",
+      subtotalLabel: "Subtotal", discountLabel: "Descuento", taxLabel: "Impuesto", totalLabel: "Total",
+      amountPaidLabel: "Monto Pagado", balanceDueLabel: "Saldo Pendiente", flatLabel: "Monto Fijo",
+      notesLabel: "Notas", notesPlaceholder: "¡Gracias por su preferencia!", termsTextPlaceholder: "Pagos atrasados, calendario de entrega, etc.",
+      saveInvoiceLabel: "Guardar Factura", savedInvoicesLabel: "Facturas Guardadas", printSaveLabel: "Imprimir / Guardar como PDF", clearNewLabel: "Limpiar / Nueva Factura",
+      autosaveNoteText: "Tu factura actual se guarda automáticamente en este navegador mientras escribes. Haz clic en \"Guardar Factura\" para agregarla a tu lista de Facturas Guardadas y encontrarla más tarde - no se sube nada a ningún lado.",
+      invoiceSavedToast: "Factura guardada",
+      savedInvoicesEmptyText: "Aún no hay facturas guardadas. Completa una factura y haz clic en \"Guardar Factura\" para guardarla aquí.",
+      noNumberLabel: "(sin número)",
+      deleteSavedConfirm: "¿Eliminar esta factura guardada? Esto no se puede deshacer.",
+      clearInvoiceConfirm: "¿Limpiar esta factura y comenzar una nueva? Esto no se puede deshacer.",
+      howToTitle: "Cómo hacer una factura",
+      howToStep1: "Agrega tu logo (opcional) e indica de parte de quién es la factura y a quién se factura.",
+      howToStep2: "Agrega un número de factura, fecha, fecha de vencimiento y condiciones de pago.",
+      howToStep3: "Enumera cada línea con una cantidad y un precio - el monto se calcula automáticamente. Marca \"Sin Impuesto\" en cualquier artículo que no deba gravarse.",
+      howToStep4: "Agrega el impuesto y un descuento si corresponde, luego revisa el saldo pendiente.",
+      howToStep5: "Haz clic en \"Guardar Factura\" para guardarla en tu lista de Facturas Guardadas, e Imprimir / Guardar como PDF cuando estés listo para enviarla.",
+      faqTitle: "Preguntas Frecuentes sobre Facturas",
+      faq1Q: "¿Este generador de facturas es gratuito?", faq1A: "Sí. Funciona completamente en tu navegador - sin registro, sin cuenta, y ningún dato sale de tu dispositivo.",
+      faq2Q: "¿Dónde puedo ver mis facturas guardadas?", faq2A: "Haz clic en \"Guardar Factura\" para agregar la actual a tu lista, luego haz clic en \"Facturas Guardadas\" en cualquier momento para verlas, reabrirlas o eliminarlas. Se almacenan solo en este navegador - al borrar los datos de tu navegador se eliminan.",
+      faq3Q: "¿Cómo la guardo como PDF?", faq3A: "Haz clic en \"Imprimir / Guardar como PDF\" y elige \"Guardar como PDF\" (o \"Microsoft Print to PDF\") como destino en el diálogo de impresión que abre tu navegador.",
+      faq4Q: "¿Es lo mismo que los recibos de GoOnlinePOS?", faq4A: "No. Los recibos son para el cobro en el punto de venta dentro de <a href=\"app\">la app del POS</a>. Esta herramienta es para facturas individuales que envías a un cliente antes o después de la venta."
+    },
+    th: {
+      freeToolLabel: "เครื่องมือฟรี", createInvoiceTitle: "สร้างใบแจ้งหนี้",
+      mastheadSubtitle: "สร้างใบแจ้งหนี้ระดับมืออาชีพในเบราว์เซอร์ของคุณ เพิ่มโลโก้และรายการสินค้า จากนั้นพิมพ์หรือบันทึกเป็น PDF ไม่ต้องสมัครสมาชิก และไม่มีการบันทึกข้อมูลไว้ที่ใดนอกจากเบราว์เซอร์นี้",
+      languageLabel: "ภาษา", currencyLabel: "สกุลเงิน",
+      fromLabel: "จาก", fromPlaceholder: "ชื่อธุรกิจ ที่อยู่ เบอร์โทร อีเมลของคุณ",
+      billToLabel: "เรียกเก็บเงินจาก", billToPlaceholder: "ชื่อลูกค้า ที่อยู่ เบอร์โทร อีเมล",
+      dateLabel: "วันที่", dueDateLabel: "วันครบกำหนด", termsWord: "เงื่อนไข", termsMetaPlaceholder: "เช่น Net 15", poLabel: "เลขที่ใบสั่งซื้อ", optionalLabel: "(ไม่บังคับ)",
+      descriptionLabel: "รายละเอียด", qtyLabel: "จำนวน", rateLabel: "ราคาต่อหน่วย", taxFreeLabel: "ยกเว้นภาษี", amountLabel: "จำนวนเงิน",
+      itemDescPlaceholder: "รายละเอียดสินค้าหรือบริการ", addLineItemLabel: "เพิ่มรายการ",
+      subtotalLabel: "ยอดรวมย่อย", discountLabel: "ส่วนลด", taxLabel: "ภาษี", totalLabel: "รวม",
+      amountPaidLabel: "จำนวนที่ชำระแล้ว", balanceDueLabel: "ยอดคงเหลือที่ต้องชำระ", flatLabel: "จำนวนคงที่",
+      notesLabel: "หมายเหตุ", notesPlaceholder: "ขอบคุณที่ใช้บริการ!", termsTextPlaceholder: "การชำระเงินล่าช้า กำหนดการจัดส่ง ฯลฯ",
+      saveInvoiceLabel: "บันทึกใบแจ้งหนี้", savedInvoicesLabel: "ใบแจ้งหนี้ที่บันทึกไว้", printSaveLabel: "พิมพ์ / บันทึกเป็น PDF", clearNewLabel: "ล้าง / ใบแจ้งหนี้ใหม่",
+      autosaveNoteText: "ใบแจ้งหนี้ปัจจุบันของคุณจะถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ขณะที่คุณพิมพ์ คลิก \"บันทึกใบแจ้งหนี้\" เพื่อเพิ่มลงในรายการใบแจ้งหนี้ที่บันทึกไว้ เพื่อให้คุณค้นหาได้อีกครั้งในภายหลัง - ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
+      invoiceSavedToast: "บันทึกใบแจ้งหนี้แล้ว",
+      savedInvoicesEmptyText: "ยังไม่มีใบแจ้งหนี้ที่บันทึกไว้ กรอกใบแจ้งหนี้แล้วคลิก \"บันทึกใบแจ้งหนี้\" เพื่อเก็บไว้ที่นี่",
+      noNumberLabel: "(ไม่มีหมายเลข)",
+      deleteSavedConfirm: "ลบใบแจ้งหนี้ที่บันทึกไว้นี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      clearInvoiceConfirm: "ล้างใบแจ้งหนี้นี้แล้วเริ่มใบใหม่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      howToTitle: "วิธีสร้างใบแจ้งหนี้",
+      howToStep1: "เพิ่มโลโก้ของคุณ (ไม่บังคับ) และกรอกว่าใบแจ้งหนี้มาจากใครและเรียกเก็บเงินจากใคร",
+      howToStep2: "เพิ่มหมายเลขใบแจ้งหนี้ วันที่ วันครบกำหนด และเงื่อนไขการชำระเงิน",
+      howToStep3: "ระบุแต่ละรายการพร้อมจำนวนและราคาต่อหน่วย - ระบบจะคำนวณจำนวนเงินให้อัตโนมัติ ทำเครื่องหมาย \"ยกเว้นภาษี\" ในรายการที่ไม่ควรถูกเก็บภาษี",
+      howToStep4: "เพิ่มภาษีและส่วนลดหากมี จากนั้นตรวจสอบยอดคงเหลือที่ต้องชำระ",
+      howToStep5: "คลิก \"บันทึกใบแจ้งหนี้\" เพื่อเก็บไว้ในรายการใบแจ้งหนี้ที่บันทึกไว้ และพิมพ์ / บันทึกเป็น PDF เมื่อคุณพร้อมที่จะส่ง",
+      faqTitle: "คำถามที่พบบ่อยเกี่ยวกับใบแจ้งหนี้",
+      faq1Q: "เครื่องมือสร้างใบแจ้งหนี้นี้ฟรีหรือไม่?", faq1A: "ใช่ ทำงานทั้งหมดในเบราว์เซอร์ของคุณ - ไม่ต้องสมัครสมาชิก ไม่ต้องมีบัญชี และไม่มีข้อมูลใดออกจากอุปกรณ์ของคุณ",
+      faq2Q: "ฉันจะดูใบแจ้งหนี้ที่บันทึกไว้ได้ที่ไหน?", faq2A: "คลิก \"บันทึกใบแจ้งหนี้\" เพื่อเพิ่มใบปัจจุบันลงในรายการของคุณ จากนั้นคลิก \"ใบแจ้งหนี้ที่บันทึกไว้\" เมื่อใดก็ได้เพื่อเรียกดู เปิดใหม่ หรือลบ ใบแจ้งหนี้เหล่านี้จะถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น - การล้างข้อมูลเบราว์เซอร์จะลบออก",
+      faq3Q: "ฉันจะบันทึกเป็น PDF ได้อย่างไร?", faq3A: "คลิก \"พิมพ์ / บันทึกเป็น PDF\" แล้วเลือก \"Save as PDF\" (หรือ \"Microsoft Print to PDF\") เป็นปลายทางในกล่องโต้ตอบการพิมพ์ที่เบราว์เซอร์ของคุณเปิดขึ้น",
+      faq4Q: "นี่เหมือนกับใบเสร็จของ GoOnlinePOS หรือไม่?", faq4A: "ไม่ใช่ ใบเสร็จมีไว้สำหรับการชำระเงิน ณ จุดขายภายใน <a href=\"app\">แอป POS</a> เครื่องมือนี้มีไว้สำหรับใบแจ้งหนี้แบบครั้งเดียวที่คุณส่งให้ลูกค้าก่อนหรือหลังการขาย"
+    }
+  };
+  var langSelect = document.getElementById("invLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      mastheadKicker: "freeToolLabel", mastheadTitle: "createInvoiceTitle", mastheadSubtitle: "mastheadSubtitle",
+      languageLabelInv: "languageLabel", currencyLabelInv: "currencyLabel",
+      fromLabel: "fromLabel", billToLabel: "billToLabel",
+      dateLabel: "dateLabel", dueDateLabel: "dueDateLabel", termsMetaLabel: "termsWord", poLabel: "poLabel",
+      thDescription: "descriptionLabel", thQty: "qtyLabel", thRate: "rateLabel", thTaxFree: "taxFreeLabel", thAmount: "amountLabel",
+      addLineBtnLabel: "addLineItemLabel",
+      subtotalLabel: "subtotalLabel", discountLabelInv: "discountLabel", taxLabelInv: "taxLabel", totalLabelInv: "totalLabel",
+      amountPaidLabel: "amountPaidLabel", balanceDueLabel: "balanceDueLabel",
+      discountFlatOption: "flatLabel", taxFlatOption: "flatLabel",
+      notesLabel: "notesLabel", termsTextLabel: "termsWord",
+      saveInvoiceBtnLabel: "saveInvoiceLabel", savedInvoicesBtnLabel: "savedInvoicesLabel",
+      printInvoiceBtnLabel: "printSaveLabel", clearInvoiceBtnLabel: "clearNewLabel",
+      savedInvoicesModalTitle: "savedInvoicesLabel",
+      howToTitle: "howToTitle", howToStep1: "howToStep1", howToStep2: "howToStep2", howToStep3: "howToStep3", howToStep4: "howToStep4", howToStep5: "howToStep5",
+      faqTitle: "faqTitle", faq1Q: "faq1Q", faq1A: "faq1A", faq2Q: "faq2Q", faq2A: "faq2A", faq3Q: "faq3Q", faq3A: "faq3A", faq4Q: "faq4Q"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+    var autosaveEl = document.getElementById("autosaveNote");
+    if (autosaveEl) autosaveEl.innerHTML = translate("autosaveNoteText");
+    var faq4AEl = document.getElementById("faq4A");
+    if (faq4AEl) faq4AEl.innerHTML = translate("faq4A");
+
+    var fromEl = document.getElementById("invFrom");
+    if (fromEl) fromEl.placeholder = translate("fromPlaceholder");
+    var toEl = document.getElementById("invTo");
+    if (toEl) toEl.placeholder = translate("billToPlaceholder");
+    var termsEl = document.getElementById("invTerms");
+    if (termsEl) termsEl.placeholder = translate("termsMetaPlaceholder");
+    var poEl = document.getElementById("invPO");
+    if (poEl) poEl.placeholder = translate("optionalLabel");
+    var notesEl = document.getElementById("invNotes");
+    if (notesEl) notesEl.placeholder = translate("notesPlaceholder");
+    var termsTextEl = document.getElementById("invTermsText");
+    if (termsTextEl) termsTextEl.placeholder = translate("termsTextPlaceholder");
+
+    if (typeof relabelItemRows === "function") relabelItemRows();
+  }
   var itemsBody = document.getElementById("invItemsBody");
   var currencySelect = document.getElementById("invCurrency");
   var saveTimer = null;
@@ -672,18 +923,18 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   }
 
   function makeLineRow(desc, qty, rate, exempt) {
-    var tr = document.createElement("tr");
-    tr.innerHTML =
-      '<td data-label="Description"><input type="text" class="line-desc" placeholder="Item or service description" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
-      '<td class="col-qty" data-label="Qty"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
-      '<td class="col-rate" data-label="Rate"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
-      '<td class="col-tax-exempt" data-label="Tax Free"><input type="checkbox" class="line-tax-exempt"' + (exempt ? " checked" : "") + '></td>' +
-      '<td class="col-amount" data-label="Amount"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
+    var row = document.createElement("tr");
+    row.innerHTML =
+      '<td data-label="' + translate("descriptionLabel") + '"><input type="text" class="line-desc" placeholder="' + translate("itemDescPlaceholder") + '" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
+      '<td class="col-qty" data-label="' + translate("qtyLabel") + '"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
+      '<td class="col-rate" data-label="' + translate("rateLabel") + '"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
+      '<td class="col-tax-exempt" data-label="' + translate("taxFreeLabel") + '"><input type="checkbox" class="line-tax-exempt"' + (exempt ? " checked" : "") + '></td>' +
+      '<td class="col-amount" data-label="' + translate("amountLabel") + '"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
       '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
-    itemsBody.appendChild(tr);
-    wireRow(tr);
-    updateRowAmount(tr);
-    return tr;
+    itemsBody.appendChild(row);
+    wireRow(row);
+    updateRowAmount(row);
+    return row;
   }
 
   function escapeHtml(s) {
@@ -695,14 +946,14 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     itemsBody.querySelectorAll(".line-remove-btn").forEach(function(btn) { btn.disabled = onlyOne; });
   }
 
-  function wireRow(tr) {
-    tr.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
-      el.addEventListener("input", function() { updateRowAmount(tr); recalcTotals(); scheduleSave(); });
+  function wireRow(row) {
+    row.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
+      el.addEventListener("input", function() { updateRowAmount(row); recalcTotals(); scheduleSave(); });
     });
-    tr.querySelector(".line-tax-exempt").addEventListener("change", function() { recalcTotals(); scheduleSave(); });
-    tr.querySelector(".line-remove-btn").addEventListener("click", function() {
+    row.querySelector(".line-tax-exempt").addEventListener("change", function() { recalcTotals(); scheduleSave(); });
+    row.querySelector(".line-remove-btn").addEventListener("click", function() {
       if (itemsBody.children.length <= 1) { return; }
-      tr.remove();
+      row.remove();
       updateRemoveButtons();
       recalcTotals();
       scheduleSave();
@@ -710,19 +961,32 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     updateRemoveButtons();
   }
 
-  function updateRowAmount(tr) {
-    var qty = parseFloat(tr.querySelector(".line-qty").value) || 0;
-    var rate = parseFloat(tr.querySelector(".line-rate").value) || 0;
-    tr.querySelector(".line-amount").value = (qty * rate).toFixed(2);
+  function updateRowAmount(row) {
+    var qty = parseFloat(row.querySelector(".line-qty").value) || 0;
+    var rate = parseFloat(row.querySelector(".line-rate").value) || 0;
+    row.querySelector(".line-amount").value = (qty * rate).toFixed(2);
+  }
+
+  function relabelItemRows() {
+    itemsBody.querySelectorAll("tr").forEach(function(row) {
+      var cells = row.children;
+      if (cells[0]) cells[0].setAttribute("data-label", translate("descriptionLabel"));
+      if (cells[1]) cells[1].setAttribute("data-label", translate("qtyLabel"));
+      if (cells[2]) cells[2].setAttribute("data-label", translate("rateLabel"));
+      if (cells[3]) cells[3].setAttribute("data-label", translate("taxFreeLabel"));
+      if (cells[4]) cells[4].setAttribute("data-label", translate("amountLabel"));
+      var descInput = row.querySelector(".line-desc");
+      if (descInput) descInput.placeholder = translate("itemDescPlaceholder");
+    });
   }
 
   function recalcTotals() {
     var subtotal = 0;
     var taxableSubtotal = 0;
-    itemsBody.querySelectorAll("tr").forEach(function(tr) {
-      var amount = parseFloat(tr.querySelector(".line-amount").value) || 0;
+    itemsBody.querySelectorAll("tr").forEach(function(row) {
+      var amount = parseFloat(row.querySelector(".line-amount").value) || 0;
       subtotal += amount;
-      if (!tr.querySelector(".line-tax-exempt").checked) taxableSubtotal += amount;
+      if (!row.querySelector(".line-tax-exempt").checked) taxableSubtotal += amount;
     });
 
     var discountType = document.getElementById("invDiscountType").value;
@@ -755,12 +1019,12 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 
   function collectState() {
     var items = [];
-    itemsBody.querySelectorAll("tr").forEach(function(tr) {
+    itemsBody.querySelectorAll("tr").forEach(function(row) {
       items.push({
-        desc: tr.querySelector(".line-desc").value,
-        qty: tr.querySelector(".line-qty").value,
-        rate: tr.querySelector(".line-rate").value,
-        exempt: tr.querySelector(".line-tax-exempt").checked
+        desc: row.querySelector(".line-desc").value,
+        qty: row.querySelector(".line-qty").value,
+        rate: row.querySelector(".line-rate").value,
+        exempt: row.querySelector(".line-tax-exempt").checked
       });
     });
     return {
@@ -789,6 +1053,20 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   function saveDraft() {
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState())); } catch (e) {}
   }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem(LANG_KEY) || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+
+  function saveLanguagePref() {
+    try { localStorage.setItem(LANG_KEY, currentLang()); } catch (e) {}
+  }
+
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
 
   function loadDefaults() {
     try {
@@ -850,7 +1128,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     if (idx >= 0) list[idx] = entry; else list.unshift(entry);
     saveHistory(list);
     saveDraft();
-    showToast("Invoice saved");
+    showToast(translate("invoiceSavedToast"));
   }
 
   function renderSavedInvoicesList() {
@@ -858,7 +1136,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     var container = document.getElementById("savedInvoicesList");
     container.innerHTML = "";
     if (!list.length) {
-      container.innerHTML = '<div class="saved-invoices-empty">No saved invoices yet. Fill out an invoice and click "Save Invoice" to keep it here.</div>';
+      container.innerHTML = '<div class="saved-invoices-empty">' + escapeHtml(translate("savedInvoicesEmptyText")) + '</div>';
       return;
     }
     list.forEach(function(entry) {
@@ -866,7 +1144,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       row.className = "saved-invoice-row";
       row.innerHTML =
         '<div class="saved-invoice-main">' +
-          '<div class="saved-invoice-title">' + escapeHtml(entry.number || "(no number)") + (entry.to ? " - " + escapeHtml(entry.to) : "") + '</div>' +
+          '<div class="saved-invoice-title">' + escapeHtml(entry.number || translate("noNumberLabel")) + (entry.to ? " - " + escapeHtml(entry.to) : "") + '</div>' +
           '<div class="saved-invoice-meta">' + escapeHtml(entry.date || "") + '</div>' +
         '</div>' +
         '<div class="saved-invoice-total">' + escapeHtml(entry.total || "") + '</div>' +
@@ -874,7 +1152,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       row.querySelector(".saved-invoice-main").addEventListener("click", function() { openSavedInvoice(entry.id); });
       row.querySelector(".saved-invoice-delete").addEventListener("click", function(e) {
         e.stopPropagation();
-        if (!confirm("Delete this saved invoice? This can't be undone.")) return;
+        if (!confirm(translate("deleteSavedConfirm"))) return;
         deleteSavedInvoice(entry.id);
       });
       container.appendChild(row);
@@ -977,7 +1255,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   });
 
   document.getElementById("clearInvoiceBtn").addEventListener("click", function() {
-    if (!confirm("Clear this invoice and start a new one? This can't be undone.")) return;
+    if (!confirm(translate("clearInvoiceConfirm"))) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
     applyState(defaultsAsInitialState());
   });
@@ -1007,6 +1285,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   window.addEventListener("beforeprint", autosizeAllTextareas);
   window.addEventListener("afterprint", autosizeAllTextareas);
 
+  loadLanguagePref();
   loadDraft();
 })();
 </script>
