@@ -895,6 +895,47 @@ has zero network calls.
   `.app` already switches to a vertical flex stack, so
   `.panel-resize-handle` is simply hidden there — dragging left/right
   makes no sense once the panels aren't side-by-side.
+- **Quick Settings panel above the live receipt** (`#quickReceiptSettings`,
+  `no-print`, collapsible via `toggleQuickReceiptSettings()`) - a compact
+  form for Store Name, Store Details, Tax Name, Tax Rate, both Footer
+  lines, and Language, sitting directly above `#receipt` in
+  `.preview-area` so the cashier can adjust any of these without leaving
+  the main screen or hunting through Settings → Store/Tax/Footer/
+  Language. Deliberately **not** a separate storage location or duplicate
+  state - `#quickStoreName`/`#quickTaxRate`/etc. are plain mirror fields:
+  `syncQuickField(targetId, value)` writes straight into the real
+  Settings field (`#storeName`, `#taxRate`, ...) and calls the existing
+  `updateReceipt()`, so persistence (`saveSettings()`) and the live
+  receipt re-render both happen through the exact same path a Settings-tab
+  edit already used - no new storage key, no risk of the two places
+  disagreeing. `syncQuickLanguage(value)` does the same for `#language`,
+  calling `changeLanguage()` + `saveSettings()`. **Kept in sync the other
+  direction too** - `updateReceipt()` (in `modules/receipt.js`) now also
+  calls `syncQuickReceiptFields()`, which copies the live value back from
+  each real Settings field into its quick-panel mirror on every render
+  (cart changes, a Settings-tab edit, a language switch), skipping
+  whichever quick field currently has focus so a re-sync never yanks the
+  cursor out from under someone actively typing - the same
+  `document.activeElement` guard already used for `#receiptNumberInput`
+  a few lines above. Collapsed by default, **persists** open/closed via
+  `storageGet`/`storageSet("pos-quick-settings-open")`
+  (`loadQuickReceiptSettingsState()`, called from `init()` alongside the
+  other notice-state loaders) - a workflow convenience, not a safety
+  banner, so unlike the toolbar-hide toggle it's fine to remember. Labels
+  reuse the exact same translation keys as their Settings-tab
+  counterparts (`storeNameLabel`, `taxRateLabel`, `footerLine1Label`,
+  `languageLabel`, ...) via `changeLanguage()`'s `ids` map, so there's
+  only one new translated string in the whole feature -
+  `quickSettingsToggleLabel` ("Quick Settings"), all six languages. Not
+  marker-wrapped anywhere - this is core POS functionality, not
+  Premium/network-dependent, so it ships identically in the offline
+  package. Verified with Playwright on both builds: editing any quick
+  field updates the live receipt and the real Settings field immediately;
+  editing a Settings-tab field updates the quick-panel mirror; the
+  open/closed state survives a reload; switching language via the quick
+  panel re-translates the whole page exactly like the Settings-tab
+  select does; zero horizontal overflow at 390px; and the panel is
+  correctly absent from the printed receipt (`no-print`).
 - **Header brand mark is not a link.** `.brand` (logo + title + Premium
   badge) is a plain `<div>`, not an `<a href="/">` — it used to
   double as an unguarded way back to the homepage, but that bypassed

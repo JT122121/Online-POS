@@ -385,8 +385,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 8px 8px 2px; margin-bottom: 6px; }
 .sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
-.preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; justify-content: center; align-items: flex-start; overflow: auto; padding: 5px; }
+.preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
 .receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d8d5c9; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
+.quick-receipt-settings { width: 80mm; max-width: 100%; margin: 0 0 8px; flex-shrink: 0; }
+.quick-settings-toggle { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; }
+.quick-settings-toggle:hover { border-color: var(--accent); color: var(--accent-dark); }
+.quick-settings-toggle::after { content: "▾"; font-size: 10px; transition: transform .15s; }
+.quick-receipt-settings.open .quick-settings-toggle::after { transform: rotate(180deg); }
+.quick-settings-body { margin-top: 8px; padding: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.quick-settings-row { display: flex; gap: 8px; }
+.quick-settings-row > div { flex: 1; }
 .receipt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 8px; background-image: radial-gradient(circle at 6px 0, transparent 5px, white 5.5px); background-size: 12px 8px; background-repeat: repeat-x; }
 
 .receipt-header { text-align: center; border-bottom: 1px dashed #999; padding-bottom: 3mm; margin-bottom: 3mm; }
@@ -626,6 +634,38 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
+<div class="quick-receipt-settings no-print" id="quickReceiptSettings">
+<button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()">⚙ <span id="quickSettingsToggleLabel">Quick Settings</span></button>
+<div class="quick-settings-body hidden" id="quickSettingsBody">
+<label id="quickStoreNameLabel">Store Name</label>
+<input id="quickStoreName" oninput="syncQuickField('storeName', this.value)">
+<label id="quickStoreDetailsLabel">Store Details</label>
+<textarea id="quickStoreDetails" oninput="syncQuickField('storeDetails', this.value)"></textarea>
+<div class="quick-settings-row">
+<div>
+<label id="quickTaxNameLabel">Tax Name</label>
+<input id="quickTaxName" oninput="syncQuickField('taxName', this.value)">
+</div>
+<div>
+<label id="quickTaxRateLabel">Tax Rate (%)</label>
+<input id="quickTaxRate" type="number" min="0" step="0.01" oninput="syncQuickField('taxRate', this.value)">
+</div>
+</div>
+<label id="quickFooterLine1Label">Footer Line 1</label>
+<input id="quickFooter1" oninput="syncQuickField('footer1', this.value)">
+<label id="quickFooterLine2Label">Footer Line 2</label>
+<input id="quickFooter2" oninput="syncQuickField('footer2', this.value)">
+<label id="quickLanguageLabel">Select Language</label>
+<select id="quickLanguage" onchange="syncQuickLanguage(this.value)">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</div>
+</div>
 <div id="receipt" class="receipt">
 <div class="receipt-header">
 <img id="receiptLogo" class="receipt-logo hidden" alt="">
@@ -1532,6 +1572,31 @@ async function saveSettings() {
 }
 function toggleBarcodeScannerSetting() {
   saveSettings();
+}
+function syncQuickField(targetId, value) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  el.value = value;
+  updateReceipt();
+}
+function syncQuickLanguage(value) {
+  document.getElementById("language").value = value;
+  changeLanguage();
+  saveSettings();
+}
+async function toggleQuickReceiptSettings() {
+  const body = document.getElementById("quickSettingsBody");
+  body.classList.toggle("hidden");
+  const open = !body.classList.contains("hidden");
+  document.getElementById("quickReceiptSettings").classList.toggle("open", open);
+  await storageSet("pos-quick-settings-open", open ? "1" : "0");
+}
+async function loadQuickReceiptSettingsState() {
+  const open = (await storageGet("pos-quick-settings-open")) === "1";
+  if (open) {
+    document.getElementById("quickSettingsBody").classList.remove("hidden");
+    document.getElementById("quickReceiptSettings").classList.add("open");
+  }
 }
 function openBarcodeScannerInfo() {
   document.getElementById("barcodeScannerInfoOverlay").classList.remove("hidden");
@@ -3311,6 +3376,11 @@ function changeLanguage() {
     backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
+    quickSettingsToggleLabel: "quickSettingsToggleLabel",
+    quickStoreNameLabel: "storeNameLabel", quickStoreDetailsLabel: "storeDetailsLabel",
+    quickTaxNameLabel: "taxNameLabel", quickTaxRateLabel: "taxRateLabel",
+    quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
+    quickLanguageLabel: "languageLabel",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
@@ -3458,6 +3528,7 @@ async function init() {
   await loadSalesHistory();
   await loadBackupNoticeState();
   await loadPremiumPromoNoticeState();
+  await loadQuickReceiptSettingsState();
   await loadReceiptPrefix();
   await loadPanelSplit();
   await initPremiumSystem();
