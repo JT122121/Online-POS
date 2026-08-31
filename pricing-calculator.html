@@ -152,6 +152,9 @@ img { max-width: 100%; display: block; }
 
 .gen-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 26px; margin: 22px 0; }
 
+.lang-inline { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.lang-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
 .type-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
 .type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
 .type-tab:hover { border-color: #cfccbf; }
@@ -290,60 +293,72 @@ img { max-width: 100%; display: block; }
 </header>
 
 <header class="masthead">
-<div class="kicker">Free Tool</div>
-<h1>Pricing Calculator</h1>
-<p>Work out the right selling price for your product - by target margin, by target markup, or straight from a batch or recipe cost. No signup, nothing leaves this browser.</p>
+<div class="kicker" id="mastheadKicker">Free Tool</div>
+<h1 id="mastheadTitle">Pricing Calculator</h1>
+<p id="mastheadSubtitle">Work out the right selling price for your product - by target margin, by target markup, or straight from a batch or recipe cost. No signup, nothing leaves this browser.</p>
 </header>
 
 <div class="gen-card" id="genCard">
 
+  <div class="lang-inline">
+    <label for="pricingLanguage" id="languageLabelInv">Language</label>
+    <select id="pricingLanguage">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+      <option value="fil">Filipino</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+      <option value="th">ไทย</option>
+    </select>
+  </div>
+
   <div class="checkbox-row">
-    <label><input type="checkbox" id="showBatchHelper"> I don't know my cost per unit yet - help me calculate it from a batch or recipe</label>
+    <label><input type="checkbox" id="showBatchHelper"> <span id="showBatchHelperLabel">I don't know my cost per unit yet - help me calculate it from a batch or recipe</span></label>
   </div>
 
   <div class="batch-helper hidden" id="batchHelper">
-    <h3>Batch / Recipe Cost Calculator</h3>
+    <h3 id="batchHelperTitle">Batch / Recipe Cost Calculator</h3>
 
     <div class="field-row">
-      <label class="field-label" for="batchTotalCost">Total Batch Cost (materials/ingredients)</label>
+      <label class="field-label" for="batchTotalCost" id="batchTotalCostLabel">Total Batch Cost (materials/ingredients)</label>
       <input type="number" class="field-input" id="batchTotalCost" min="0" step="0.01" placeholder="0.00">
     </div>
     <div class="field-row">
-      <label class="field-label" for="batchYield">Batch Yield (units this batch makes)</label>
+      <label class="field-label" for="batchYield" id="batchYieldLabel">Batch Yield (units this batch makes)</label>
       <input type="number" class="field-input" id="batchYield" min="0" step="1" placeholder="e.g. 24">
     </div>
     <div class="field-row">
-      <label class="field-label" for="batchLabor">Labor Cost For This Batch (optional)</label>
+      <label class="field-label" for="batchLabor" id="batchLaborLabel">Labor Cost For This Batch (optional)</label>
       <input type="number" class="field-input" id="batchLabor" min="0" step="0.01" placeholder="0.00">
     </div>
     <div class="field-row">
-      <label class="field-label" for="batchPackaging">Packaging / Other Cost Per Unit (optional)</label>
+      <label class="field-label" for="batchPackaging" id="batchPackagingLabel">Packaging / Other Cost Per Unit (optional)</label>
       <input type="number" class="field-input" id="batchPackaging" min="0" step="0.01" placeholder="0.00">
     </div>
 
     <div class="batch-result">
-      <span class="br-label">Cost Per Unit</span>
+      <span class="br-label" id="batchCostPerUnitLabel">Cost Per Unit</span>
       <span class="br-value" id="batchCostResult">$0.00</span>
     </div>
 
-    <button type="button" class="use-cost-btn" id="useBatchCostBtn">Use This Cost Below ↓</button>
+    <button type="button" class="use-cost-btn" id="useBatchCostBtn"><span id="useBatchCostBtnLabel">Use This Cost Below ↓</span></button>
   </div>
 
   <div class="form-section">
 
     <div class="currency-inline">
-      <label for="pricingCurrency">Currency</label>
+      <label for="pricingCurrency" id="currencyLabelInv">Currency</label>
       <select id="pricingCurrency"></select>
     </div>
 
     <div class="field-row">
-      <label class="field-label" for="unitCost">Cost Per Unit</label>
+      <label class="field-label" for="unitCost" id="unitCostLabel">Cost Per Unit</label>
       <input type="number" class="field-input" id="unitCost" min="0" step="0.01" placeholder="0.00">
     </div>
 
     <div class="type-tabs">
-      <button type="button" class="type-tab active" id="tabMargin" data-mode="margin">Target Margin %</button>
-      <button type="button" class="type-tab" id="tabMarkup" data-mode="markup">Target Markup %</button>
+      <button type="button" class="type-tab active" id="tabMargin" data-mode="margin"><span id="tabMarginLabel">Target Margin %</span></button>
+      <button type="button" class="type-tab" id="tabMarkup" data-mode="markup"><span id="tabMarkupLabel">Target Markup %</span></button>
     </div>
 
     <div class="field-row">
@@ -355,22 +370,22 @@ img { max-width: 100%; display: block; }
   </div>
 
   <div class="results-area">
-    <div class="preview-label">Result</div>
+    <div class="preview-label" id="resultLabel">Result</div>
     <div class="results-box">
       <div class="result-row result-total">
-        <span class="result-label">Suggested Selling Price</span>
+        <span class="result-label" id="suggestedPriceLabel">Suggested Selling Price</span>
         <span class="result-value" id="resultPrice">$0.00</span>
       </div>
       <div class="result-row">
-        <span class="result-label">Profit Per Unit</span>
+        <span class="result-label" id="profitPerUnitLabel">Profit Per Unit</span>
         <span class="result-value" id="resultProfit">$0.00</span>
       </div>
       <div class="result-row">
-        <span class="result-label">Margin</span>
+        <span class="result-label" id="marginResultLabel">Margin</span>
         <span class="result-value" id="resultMargin">0%</span>
       </div>
       <div class="result-row">
-        <span class="result-label">Markup</span>
+        <span class="result-label" id="markupResultLabel">Markup</span>
         <span class="result-value" id="resultMarkup">0%</span>
       </div>
     </div>
@@ -379,16 +394,16 @@ img { max-width: 100%; display: block; }
 </div>
 
 <div class="action-bar">
-  <button type="button" id="savePricingBtn">💾 Save</button>
-  <button type="button" id="savedPricingBtn">📂 Saved Calculations</button>
-  <button type="button" id="clearPricingBtn">🗑 Clear / New</button>
+  <button type="button" id="savePricingBtn">💾 <span id="savePricingBtnLabel">Save</span></button>
+  <button type="button" id="savedPricingBtn">📂 <span id="savedPricingBtnLabel">Saved Calculations</span></button>
+  <button type="button" id="clearPricingBtn">🗑 <span id="clearPricingBtnLabel">Clear / New</span></button>
 </div>
-<p class="autosave-note">Your current calculation is saved automatically in this browser as you type. Click "Save" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.</p>
+<p class="autosave-note" id="autosaveNote">Your current calculation is saved automatically in this browser as you type. Click "Save" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.</p>
 
 <div class="modal-overlay hidden" id="savedPricingOverlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>Saved Calculations</h3>
+      <h3 id="savedPricingModalTitle">Saved Calculations</h3>
       <button type="button" class="modal-close-btn" id="closeSavedPricingBtn" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="savedPricingList"></div>
@@ -399,57 +414,57 @@ img { max-width: 100%; display: block; }
 
 <div class="info-section">
 
-  <h2>Why pricing your product correctly matters</h2>
-  <p>
+  <h2 id="section1Title">Why pricing your product correctly matters</h2>
+  <p id="section1Para1">
   Getting the price wrong is one of the quietest ways a small business loses money. Underpricing doesn't look like a problem - sales still happen, the till still rings - but every sale is worth less than it should be, and that gap adds up fast once you're selling in volume. Overpricing is the opposite mistake: it loses the sale before a customer ever gets to ask a question, and you never even find out you were too expensive.
   </p>
-  <p>
+  <p id="section1Para2">
   Most small sellers set a price by guessing, copying a competitor, or going with what "feels right" - without ever actually adding up what the product costs to make. That means a sale can look successful and still be losing money once materials, time, and packaging are accounted for. This calculator exists to close that gap: put in your real costs, decide what you want to earn, and see the actual number - not a guess.
   </p>
 
-  <h2>Markup vs. margin - the mix-up that costs sellers money</h2>
-  <p>
+  <h2 id="section2Title">Markup vs. margin - the mix-up that costs sellers money</h2>
+  <p id="section2Para1">
   These two terms get used interchangeably in everyday conversation, but they are not the same percentage, and mixing them up is probably the single most common pricing mistake small sellers make.
   </p>
   <ul>
-  <li><strong>Markup</strong> is profit calculated as a percentage of your <em>cost</em>.</li>
-  <li><strong>Margin</strong> is profit calculated as a percentage of your <em>selling price</em>.</li>
+  <li id="section2Li1"><strong>Markup</strong> is profit calculated as a percentage of your <em>cost</em>.</li>
+  <li id="section2Li2"><strong>Margin</strong> is profit calculated as a percentage of your <em>selling price</em>.</li>
   </ul>
-  <div class="example-box">
+  <div class="example-box" id="exampleBox">
   <strong>Example.</strong> Say your cost is $10.<br>
   A <strong>50% markup</strong> gives a price of <strong>$15</strong> (profit $5, which works out to a 33% margin).<br>
   A <strong>50% margin</strong> gives a price of <strong>$20</strong> (profit $10, which works out to a 100% markup).<br>
   Same "50%," two very different prices - and the gap only gets bigger as the percentage climbs.
   </div>
-  <p>
+  <p id="section2Para2">
   If you mean "I want 50% margin" but type "50%" into a calculator that assumes markup, you'll undercharge without ever realizing it. This calculator always shows both figures side by side, whichever one you calculate from, so you can see exactly what you're actually getting either way.
   </p>
 
-  <h2>How to use this calculator</h2>
+  <h2 id="howToTitle">How to use this calculator</h2>
   <ol>
-    <li>If you don't already know your cost per unit - for example, you buy ingredients in bulk for a batch - check "I don't know my cost per unit yet" and fill in the batch/recipe details: total cost, how many units it makes, and any labor or packaging cost. Click "Use This Cost Below" to carry the result into the main calculator.</li>
-    <li>Enter (or confirm) your Cost Per Unit and pick your currency.</li>
-    <li>Choose whether you know your target Margin or your target Markup, and enter the percentage.</li>
-    <li>Your suggested Selling Price, Profit Per Unit, and both Margin and Markup appear instantly, so you can see exactly what you're getting either way.</li>
-    <li>Click "Save" to keep this calculation in your Saved Calculations list for later.</li>
+    <li id="howToStep1">If you don't already know your cost per unit - for example, you buy ingredients in bulk for a batch - check "I don't know my cost per unit yet" and fill in the batch/recipe details: total cost, how many units it makes, and any labor or packaging cost. Click "Use This Cost Below" to carry the result into the main calculator.</li>
+    <li id="howToStep2">Enter (or confirm) your Cost Per Unit and pick your currency.</li>
+    <li id="howToStep3">Choose whether you know your target Margin or your target Markup, and enter the percentage.</li>
+    <li id="howToStep4">Your suggested Selling Price, Profit Per Unit, and both Margin and Markup appear instantly, so you can see exactly what you're getting either way.</li>
+    <li id="howToStep5">Click "Save" to keep this calculation in your Saved Calculations list for later.</li>
   </ol>
 
-  <h2>Pricing Calculator FAQ</h2>
+  <h2 id="faqTitle">Pricing Calculator FAQ</h2>
   <dl>
-    <dt>What's the difference between markup and margin?</dt>
-    <dd>Markup is profit as a percentage of your cost; margin is profit as a percentage of your selling price. They describe the same profit in two different ways, and they're never the same number except at 0%. See the example above for exactly how far apart they can be.</dd>
-    <dt>How do I price a homemade or handmade product?</dt>
-    <dd>Add up all of your real costs first - materials, your own time at a fair rate, packaging, and a fair share of anything like a market stall fee or delivery cost - then apply your target margin or markup on top of that total. Pricing off materials alone is the most common way handmade sellers end up working for less than they think.</dd>
-    <dt>Should I count my own labor as a cost?</dt>
-    <dd>Yes. Unpaid labor isn't free - it's time you could have spent elsewhere. If you don't pay yourself in the price, you're effectively working for nothing once the materials are covered. Use the batch/recipe calculator's "Labor Cost" field to fold it in.</dd>
-    <dt>What margin or markup should I aim for?</dt>
-    <dd>This varies widely by industry, product, and market, so treat any number you see online as a reference point, not a rule - this tool doesn't provide business advice. What matters is that the number you choose actually covers your real costs and leaves you with a profit you're comfortable with.</dd>
-    <dt>Does this work for services, not just physical products?</dt>
-    <dd>Yes - "Cost Per Unit" can just as easily mean the cost to deliver one unit of a service (your time and materials for one haircut, one consultation, one session). The math is identical either way.</dd>
-    <dt>Is there a limit on how many calculations I can do?</dt>
-    <dd>No. Every calculation happens locally in your browser, with no server calls and no usage cap. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.</dd>
-    <dt>Does this store my data anywhere?</dt>
-    <dd>No. Everything - your costs, percentages, and saved calculations - is stored only in this browser's local storage. Nothing is uploaded anywhere, and clearing your browser data removes it.</dd>
+    <dt id="faq1Q">What's the difference between markup and margin?</dt>
+    <dd id="faq1A">Markup is profit as a percentage of your cost; margin is profit as a percentage of your selling price. They describe the same profit in two different ways, and they're never the same number except at 0%. See the example above for exactly how far apart they can be.</dd>
+    <dt id="faq2Q">How do I price a homemade or handmade product?</dt>
+    <dd id="faq2A">Add up all of your real costs first - materials, your own time at a fair rate, packaging, and a fair share of anything like a market stall fee or delivery cost - then apply your target margin or markup on top of that total. Pricing off materials alone is the most common way handmade sellers end up working for less than they think.</dd>
+    <dt id="faq3Q">Should I count my own labor as a cost?</dt>
+    <dd id="faq3A">Yes. Unpaid labor isn't free - it's time you could have spent elsewhere. If you don't pay yourself in the price, you're effectively working for nothing once the materials are covered. Use the batch/recipe calculator's "Labor Cost" field to fold it in.</dd>
+    <dt id="faq4Q">What margin or markup should I aim for?</dt>
+    <dd id="faq4A">This varies widely by industry, product, and market, so treat any number you see online as a reference point, not a rule - this tool doesn't provide business advice. What matters is that the number you choose actually covers your real costs and leaves you with a profit you're comfortable with.</dd>
+    <dt id="faq5Q">Does this work for services, not just physical products?</dt>
+    <dd id="faq5A">Yes - "Cost Per Unit" can just as easily mean the cost to deliver one unit of a service (your time and materials for one haircut, one consultation, one session). The math is identical either way.</dd>
+    <dt id="faq6Q">Is there a limit on how many calculations I can do?</dt>
+    <dd id="faq6A">No. Every calculation happens locally in your browser, with no server calls and no usage cap. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.</dd>
+    <dt id="faq7Q">Does this store my data anywhere?</dt>
+    <dd id="faq7A">No. Everything - your costs, percentages, and saved calculations - is stored only in this browser's local storage. Nothing is uploaded anywhere, and clearing your browser data removes it.</dd>
   </dl>
 
 </div>
@@ -511,6 +526,406 @@ img { max-width: 100%; display: block; }
     VES: "Bs.", VND: "₫", VUV: "VT", WST: "T", XAF: "FCFA", XCD: "$", XOF: "CFA", XPF: "₣",
     YER: "﷼", ZAR: "R", ZMW: "ZK", ZWL: "$"
   };
+
+  var translations = {
+    en: {
+      freeToolLabel: "Free Tool",
+      mastheadTitleLabel: "Pricing Calculator",
+      mastheadSubtitle: "Work out the right selling price for your product - by target margin, by target markup, or straight from a batch or recipe cost. No signup, nothing leaves this browser.",
+      languageLabel: "Language",
+      showBatchHelperLabel: "I don't know my cost per unit yet - help me calculate it from a batch or recipe",
+      batchHelperTitle: "Batch / Recipe Cost Calculator",
+      batchTotalCostLabel: "Total Batch Cost (materials/ingredients)",
+      batchYieldLabel: "Batch Yield (units this batch makes)",
+      batchLaborLabel: "Labor Cost For This Batch (optional)",
+      batchPackagingLabel: "Packaging / Other Cost Per Unit (optional)",
+      costPerUnitLabel: "Cost Per Unit",
+      useBatchCostBtnLabel: "Use This Cost Below ↓",
+      currencyLabel: "Currency",
+      targetMarginTabLabel: "Target Margin %",
+      targetMarkupTabLabel: "Target Markup %",
+      targetMarginFieldLabel: "Target Margin (%)",
+      targetMarkupFieldLabel: "Target Markup (%)",
+      resultLabel: "Result",
+      suggestedPriceLabel: "Suggested Selling Price",
+      profitPerUnitLabel: "Profit Per Unit",
+      marginLabel: "Margin",
+      markupLabel: "Markup",
+      saveLabel: "Save",
+      savedCalculationsLabel: "Saved Calculations",
+      clearNewLabel: "Clear / New",
+      autosaveNoteText: "Your current calculation is saved automatically in this browser as you type. Click \"Save\" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.",
+      savedToast: "Saved",
+      savedCalcsEmptyText: "No saved calculations yet. Work out a price and click \"Save\" to keep it here.",
+      priceWordLabel: "price",
+      costWordLabel: "cost",
+      deleteSavedConfirm: "Delete this saved calculation? This can't be undone.",
+      clearCalcConfirm: "Clear this calculation and start a new one? This can't be undone.",
+      marginInvalidHint: "Margin must be less than 100% - try a lower percentage, or switch to Target Markup instead.",
+      section1Title: "Why pricing your product correctly matters",
+      section1Para1: "Getting the price wrong is one of the quietest ways a small business loses money. Underpricing doesn't look like a problem - sales still happen, the till still rings - but every sale is worth less than it should be, and that gap adds up fast once you're selling in volume. Overpricing is the opposite mistake: it loses the sale before a customer ever gets to ask a question, and you never even find out you were too expensive.",
+      section1Para2: "Most small sellers set a price by guessing, copying a competitor, or going with what \"feels right\" - without ever actually adding up what the product costs to make. That means a sale can look successful and still be losing money once materials, time, and packaging are accounted for. This calculator exists to close that gap: put in your real costs, decide what you want to earn, and see the actual number - not a guess.",
+      section2Title: "Markup vs. margin - the mix-up that costs sellers money",
+      section2Para1: "These two terms get used interchangeably in everyday conversation, but they are not the same percentage, and mixing them up is probably the single most common pricing mistake small sellers make.",
+      section2Li1Html: "<strong>Markup</strong> is profit calculated as a percentage of your <em>cost</em>.",
+      section2Li2Html: "<strong>Margin</strong> is profit calculated as a percentage of your <em>selling price</em>.",
+      exampleBoxHtml: "<strong>Example.</strong> Say your cost is $10.<br>A <strong>50% markup</strong> gives a price of <strong>$15</strong> (profit $5, which works out to a 33% margin).<br>A <strong>50% margin</strong> gives a price of <strong>$20</strong> (profit $10, which works out to a 100% markup).<br>Same \"50%,\" two very different prices - and the gap only gets bigger as the percentage climbs.",
+      section2Para2: "If you mean \"I want 50% margin\" but type \"50%\" into a calculator that assumes markup, you'll undercharge without ever realizing it. This calculator always shows both figures side by side, whichever one you calculate from, so you can see exactly what you're actually getting either way.",
+      howToTitle: "How to use this calculator",
+      howToStep1: "If you don't already know your cost per unit - for example, you buy ingredients in bulk for a batch - check \"I don't know my cost per unit yet\" and fill in the batch/recipe details: total cost, how many units it makes, and any labor or packaging cost. Click \"Use This Cost Below\" to carry the result into the main calculator.",
+      howToStep2: "Enter (or confirm) your Cost Per Unit and pick your currency.",
+      howToStep3: "Choose whether you know your target Margin or your target Markup, and enter the percentage.",
+      howToStep4: "Your suggested Selling Price, Profit Per Unit, and both Margin and Markup appear instantly, so you can see exactly what you're getting either way.",
+      howToStep5: "Click \"Save\" to keep this calculation in your Saved Calculations list for later.",
+      faqTitle: "Pricing Calculator FAQ",
+      faq1Q: "What's the difference between markup and margin?",
+      faq1A: "Markup is profit as a percentage of your cost; margin is profit as a percentage of your selling price. They describe the same profit in two different ways, and they're never the same number except at 0%. See the example above for exactly how far apart they can be.",
+      faq2Q: "How do I price a homemade or handmade product?",
+      faq2A: "Add up all of your real costs first - materials, your own time at a fair rate, packaging, and a fair share of anything like a market stall fee or delivery cost - then apply your target margin or markup on top of that total. Pricing off materials alone is the most common way handmade sellers end up working for less than they think.",
+      faq3Q: "Should I count my own labor as a cost?",
+      faq3A: "Yes. Unpaid labor isn't free - it's time you could have spent elsewhere. If you don't pay yourself in the price, you're effectively working for nothing once the materials are covered. Use the batch/recipe calculator's \"Labor Cost\" field to fold it in.",
+      faq4Q: "What margin or markup should I aim for?",
+      faq4A: "This varies widely by industry, product, and market, so treat any number you see online as a reference point, not a rule - this tool doesn't provide business advice. What matters is that the number you choose actually covers your real costs and leaves you with a profit you're comfortable with.",
+      faq5Q: "Does this work for services, not just physical products?",
+      faq5A: "Yes - \"Cost Per Unit\" can just as easily mean the cost to deliver one unit of a service (your time and materials for one haircut, one consultation, one session). The math is identical either way.",
+      faq6Q: "Is there a limit on how many calculations I can do?",
+      faq6A: "No. Every calculation happens locally in your browser, with no server calls and no usage cap. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.",
+      faq7Q: "Does this store my data anywhere?",
+      faq7A: "No. Everything - your costs, percentages, and saved calculations - is stored only in this browser's local storage. Nothing is uploaded anywhere, and clearing your browser data removes it."
+    },
+    ar: {
+      freeToolLabel: "أداة مجانية",
+      mastheadTitleLabel: "حاسبة التسعير",
+      mastheadSubtitle: "احسب سعر البيع المناسب لمنتجك - عن طريق هامش الربح المستهدف، أو نسبة الربح المستهدفة على التكلفة، أو مباشرة من تكلفة دفعة أو وصفة. بدون تسجيل، ولا تغادر أي بيانات هذا المتصفح.",
+      languageLabel: "اللغة",
+      showBatchHelperLabel: "لا أعرف تكلفة الوحدة بعد - ساعدني في حسابها من دفعة أو وصفة",
+      batchHelperTitle: "حاسبة تكلفة الدفعة / الوصفة",
+      batchTotalCostLabel: "إجمالي تكلفة الدفعة (المواد/المكونات)",
+      batchYieldLabel: "ناتج الدفعة (عدد الوحدات التي تنتجها هذه الدفعة)",
+      batchLaborLabel: "تكلفة العمالة لهذه الدفعة (اختياري)",
+      batchPackagingLabel: "تكلفة التغليف / تكاليف أخرى لكل وحدة (اختياري)",
+      costPerUnitLabel: "تكلفة الوحدة",
+      useBatchCostBtnLabel: "استخدم هذه التكلفة أدناه ↓",
+      currencyLabel: "العملة",
+      targetMarginTabLabel: "نسبة هامش الربح المستهدف",
+      targetMarkupTabLabel: "نسبة الربح المستهدفة على التكلفة",
+      targetMarginFieldLabel: "هامش الربح المستهدف (%)",
+      targetMarkupFieldLabel: "نسبة الربح المستهدفة على التكلفة (%)",
+      resultLabel: "النتيجة",
+      suggestedPriceLabel: "سعر البيع المقترح",
+      profitPerUnitLabel: "الربح لكل وحدة",
+      marginLabel: "هامش الربح",
+      markupLabel: "نسبة الربح على التكلفة",
+      saveLabel: "حفظ",
+      savedCalculationsLabel: "الحسابات المحفوظة",
+      clearNewLabel: "مسح / جديد",
+      autosaveNoteText: "يتم حفظ حسابك الحالي تلقائيًا في هذا المتصفح أثناء الكتابة. اضغط على \"حفظ\" لإضافته إلى قائمة الحسابات المحفوظة حتى تتمكن من العثور عليه لاحقًا - لا يتم رفع أي شيء إلى أي مكان.",
+      savedToast: "تم الحفظ",
+      savedCalcsEmptyText: "لا توجد حسابات محفوظة بعد. احسب سعرًا واضغط على \"حفظ\" للاحتفاظ به هنا.",
+      priceWordLabel: "السعر",
+      costWordLabel: "التكلفة",
+      deleteSavedConfirm: "هل تريد حذف هذا الحساب المحفوظ؟ لا يمكن التراجع عن هذا الإجراء.",
+      clearCalcConfirm: "هل تريد مسح هذا الحساب وبدء حساب جديد؟ لا يمكن التراجع عن هذا الإجراء.",
+      marginInvalidHint: "يجب أن يكون هامش الربح أقل من 100% - جرب نسبة أقل، أو بدّل إلى نسبة الربح المستهدفة على التكلفة بدلاً من ذلك.",
+      section1Title: "لماذا يهم تسعير منتجك بشكل صحيح",
+      section1Para1: "تسعير المنتج بشكل خاطئ هو أحد أكثر الطرق هدوءًا التي تخسر بها الشركات الصغيرة المال. التسعير المنخفض لا يبدو مشكلة - فالمبيعات لا تزال تحدث، والصندوق لا يزال يرن - لكن كل عملية بيع تساوي أقل مما ينبغي، وتتراكم هذه الفجوة بسرعة عند البيع بكميات كبيرة. التسعير المرتفع هو الخطأ المعاكس: فهو يفقد البيع قبل أن يصل العميل حتى إلى طرح سؤال، ولن تكتشف أبدًا أنك كنت مرتفع السعر.",
+      section1Para2: "يقوم معظم صغار البائعين بتحديد السعر عن طريق التخمين، أو نسخ منافس، أو الذهاب مع ما \"يبدو صحيحًا\" - دون جمع التكلفة الفعلية لصنع المنتج. هذا يعني أن عملية البيع قد تبدو ناجحة لكنها في الواقع تخسر المال بمجرد احتساب المواد والوقت والتغليف. توجد هذه الحاسبة لسد هذه الفجوة: أدخل تكاليفك الحقيقية، وحدد ما تريد ربحه، وشاهد الرقم الفعلي - وليس تخمينًا.",
+      section2Title: "نسبة الربح على التكلفة مقابل هامش الربح - الخلط الذي يكلف البائعين المال",
+      section2Para1: "يُستخدم هذان المصطلحان بالتبادل في المحادثة اليومية، لكنهما ليسا نفس النسبة المئوية، والخلط بينهما هو على الأرجح الخطأ الأكثر شيوعًا الذي يرتكبه صغار البائعين في التسعير.",
+      section2Li1Html: "<strong>نسبة الربح على التكلفة (Markup)</strong> هي الربح محسوبًا كنسبة مئوية من <em>تكلفتك</em>.",
+      section2Li2Html: "<strong>هامش الربح (Margin)</strong> هو الربح محسوبًا كنسبة مئوية من <em>سعر البيع</em>.",
+      exampleBoxHtml: "<strong>مثال.</strong> لنفترض أن تكلفتك هي 10$.<br><strong>نسبة ربح 50% على التكلفة</strong> تعطي سعرًا قدره <strong>15$</strong> (ربح 5$، وهو ما يعادل هامش ربح 33%).<br><strong>هامش ربح 50%</strong> يعطي سعرًا قدره <strong>20$</strong> (ربح 10$، وهو ما يعادل نسبة ربح 100% على التكلفة).<br>نفس نسبة \"50%\"، لكن سعرين مختلفين تمامًا - وتزداد الفجوة كلما ارتفعت النسبة.",
+      section2Para2: "إذا كنت تقصد \"أريد هامش ربح 50%\" لكنك أدخلت \"50%\" في حاسبة تفترض نسبة الربح على التكلفة، فستُقلل السعر دون أن تدرك ذلك أبدًا. تعرض هذه الحاسبة دائمًا كلا الرقمين جنبًا إلى جنب، أيًا كان الذي تحسب منه، حتى تتمكن من معرفة ما تحصل عليه فعليًا في كلتا الحالتين.",
+      howToTitle: "كيفية استخدام هذه الحاسبة",
+      howToStep1: "إذا كنت لا تعرف تكلفة الوحدة بعد - على سبيل المثال، تشتري المكونات بكميات كبيرة لدفعة واحدة - فعّل خيار \"لا أعرف تكلفة الوحدة بعد\" واملأ تفاصيل الدفعة/الوصفة: التكلفة الإجمالية، وعدد الوحدات التي تنتجها، وأي تكلفة عمالة أو تغليف. اضغط على \"استخدم هذه التكلفة أدناه\" لنقل النتيجة إلى الحاسبة الرئيسية.",
+      howToStep2: "أدخل (أو أكد) تكلفة الوحدة واختر عملتك.",
+      howToStep3: "اختر ما إذا كنت تعرف هامش الربح المستهدف أو نسبة الربح المستهدفة على التكلفة، وأدخل النسبة المئوية.",
+      howToStep4: "يظهر سعر البيع المقترح والربح لكل وحدة وكل من هامش الربح ونسبة الربح على التكلفة على الفور، حتى تتمكن من معرفة ما تحصل عليه بالضبط في كلتا الحالتين.",
+      howToStep5: "اضغط على \"حفظ\" للاحتفاظ بهذا الحساب في قائمة الحسابات المحفوظة لاستخدامه لاحقًا.",
+      faqTitle: "الأسئلة الشائعة حول حاسبة التسعير",
+      faq1Q: "ما الفرق بين نسبة الربح على التكلفة وهامش الربح؟",
+      faq1A: "نسبة الربح على التكلفة هي الربح كنسبة مئوية من تكلفتك؛ وهامش الربح هو الربح كنسبة مئوية من سعر بيعك. يصفان نفس الربح بطريقتين مختلفتين، ولا يتساويان أبدًا إلا عند 0%. راجع المثال أعلاه لمعرفة مدى الفرق بينهما بالضبط.",
+      faq2Q: "كيف أسعّر منتجًا منزلي الصنع أو يدوي الصنع؟",
+      faq2A: "اجمع أولاً جميع تكاليفك الحقيقية - المواد، ووقتك الخاص بمعدل عادل، والتغليف، وحصة عادلة من أي شيء مثل رسوم كشك السوق أو تكلفة التوصيل - ثم طبّق هامش الربح أو نسبة الربح المستهدفة فوق ذلك الإجمالي. تسعير المنتج بناءً على المواد فقط هو الطريقة الأكثر شيوعًا التي ينتهي بها الأمر ببائعي المنتجات اليدوية بالعمل مقابل أقل مما يعتقدون.",
+      faq3Q: "هل يجب أن أحتسب عملي الخاص كتكلفة؟",
+      faq3A: "نعم. العمل غير المدفوع الأجر ليس مجانيًا - إنه وقت كان يمكن أن تقضيه في مكان آخر. إذا لم تدفع لنفسك في السعر، فأنت تعمل فعليًا مجانًا بمجرد تغطية المواد. استخدم حقل \"تكلفة العمالة\" في حاسبة الدفعة/الوصفة لإدراجها.",
+      faq4Q: "ما هو هامش الربح أو نسبة الربح على التكلفة التي يجب أن أستهدفها؟",
+      faq4A: "يختلف هذا بشكل كبير حسب الصناعة والمنتج والسوق، لذا تعامل مع أي رقم تراه على الإنترنت كنقطة مرجعية، وليس كقاعدة - هذه الأداة لا تقدم استشارات تجارية. المهم هو أن الرقم الذي تختاره يغطي فعليًا تكاليفك الحقيقية ويترك لك ربحًا مريحًا لك.",
+      faq5Q: "هل يعمل هذا مع الخدمات، وليس فقط المنتجات المادية؟",
+      faq5A: "نعم - يمكن أن تعني \"تكلفة الوحدة\" بسهولة تكلفة تقديم وحدة واحدة من خدمة (وقتك وموادك لقصة شعر واحدة، أو استشارة واحدة، أو جلسة واحدة). الحسابات متطابقة في كلتا الحالتين.",
+      faq6Q: "هل هناك حد لعدد الحسابات التي يمكنني إجراؤها؟",
+      faq6A: "لا. تحدث كل عملية حساب محليًا في متصفحك، بدون أي اتصالات بخادم وبدون حد للاستخدام. الحد العملي الوحيد هو مساحة تخزين متصفحك نفسه إذا حفظت عددًا كبيرًا جدًا في قائمة الحسابات المحفوظة.",
+      faq7Q: "هل يخزن هذا بياناتي في أي مكان؟",
+      faq7A: "لا. كل شيء - تكاليفك ونسبك المئوية وحساباتك المحفوظة - يُخزن فقط في التخزين المحلي لهذا المتصفح. لا يتم رفع أي شيء إلى أي مكان، ومسح بيانات متصفحك يزيله."
+    },
+    fil: {
+      freeToolLabel: "Libreng Tool",
+      mastheadTitleLabel: "Calculator ng Presyo",
+      mastheadSubtitle: "Kalkulahin ang tamang presyo ng iyong produkto - gamit ang target na Margin, target na Markup, o direkta mula sa halaga ng isang batch o recipe. Walang pag-sign up, walang lumalabas sa browser na ito.",
+      languageLabel: "Wika",
+      showBatchHelperLabel: "Hindi ko pa alam ang cost per unit - tulungan akong kalkulahin ito mula sa isang batch o recipe",
+      batchHelperTitle: "Calculator ng Halaga ng Batch / Recipe",
+      batchTotalCostLabel: "Kabuuang Halaga ng Batch (materyales/sangkap)",
+      batchYieldLabel: "Bilang ng Nagagawa (units na nagagawa ng batch na ito)",
+      batchLaborLabel: "Halaga ng Paggawa Para sa Batch na Ito (opsyonal)",
+      batchPackagingLabel: "Packaging / Iba Pang Halaga Kada Unit (opsyonal)",
+      costPerUnitLabel: "Cost Per Unit",
+      useBatchCostBtnLabel: "Gamitin ang Halagang Ito Sa Ibaba ↓",
+      currencyLabel: "Currency",
+      targetMarginTabLabel: "Target na Margin %",
+      targetMarkupTabLabel: "Target na Markup %",
+      targetMarginFieldLabel: "Target na Margin (%)",
+      targetMarkupFieldLabel: "Target na Markup (%)",
+      resultLabel: "Resulta",
+      suggestedPriceLabel: "Iminumungkahing Presyo ng Pagbebenta",
+      profitPerUnitLabel: "Kita Kada Unit",
+      marginLabel: "Margin",
+      markupLabel: "Markup",
+      saveLabel: "I-save",
+      savedCalculationsLabel: "Mga Naka-save na Kalkulasyon",
+      clearNewLabel: "I-clear / Bago",
+      autosaveNoteText: "Awtomatikong nase-save ang iyong kasalukuyang kalkulasyon sa browser na ito habang nagta-type ka. I-click ang \"I-save\" para idagdag ito sa iyong listahan ng Mga Naka-save na Kalkulasyon para mahanap mo ito ulit sa susunod - walang ina-upload kahit saan.",
+      savedToast: "Na-save",
+      savedCalcsEmptyText: "Wala pang naka-save na kalkulasyon. Kumuha ng presyo at i-click ang \"I-save\" para itago ito dito.",
+      priceWordLabel: "presyo",
+      costWordLabel: "halaga",
+      deleteSavedConfirm: "Burahin ang naka-save na kalkulasyon na ito? Hindi na ito maibabalik.",
+      clearCalcConfirm: "I-clear ang kalkulasyong ito at magsimula ng bago? Hindi na ito maibabalik.",
+      marginInvalidHint: "Dapat mas mababa sa 100% ang Margin - subukan ang mas mababang porsyento, o lumipat sa Target na Markup na lang.",
+      section1Title: "Bakit Mahalaga ang Tamang Presyo ng Iyong Produkto",
+      section1Para1: "Ang maling presyo ay isa sa pinaka-tahimik na paraan na nawawalan ng pera ang maliit na negosyo. Ang mababang presyo ay hindi mukhang problema - patuloy pa rin ang benta, patuloy pa rin tumutunog ang cash register - pero mas mababa ang halaga ng bawat benta kaysa dapat, at mabilis na dumarami ang pagkukulang na ito kapag marami ka nang binebenta. Ang sobrang mataas na presyo naman ay kabaligtaran na pagkakamali: nawawala ang benta bago pa man makapagtanong ang customer, at hindi mo malalaman na masyado kang mahal.",
+      section1Para2: "Karamihan sa maliliit na nagtitinda ay nagtatakda ng presyo sa pamamagitan ng pagtantsa, pagkopya sa kakumpitensya, o sa \"pakiramdam lang\" - nang hindi talaga tinutuos ang totoong halaga ng paggawa ng produkto. Ibig sabihin, maaaring mukhang matagumpay ang isang benta pero talagang nawawalan pa rin ng pera kapag isinama na ang materyales, oras, at packaging. Ginawa ang calculator na ito para tapusin ang agwat na iyan: ilagay ang iyong totoong halaga, magpasya kung magkano ang gusto mong kitain, at makita ang tunay na numero - hindi lang tantiya.",
+      section2Title: "Markup Kumpara sa Margin - Ang Pagkalito na Nagkakahalaga ng Pera sa Mga Nagtitinda",
+      section2Para1: "Madalas gamitin nang magkapalit ang dalawang terminong ito sa pang-araw-araw na usapan, pero hindi sila magkatulad na porsyento, at ang paglilito sa kanila ang malamang na pinakakaraniwang pagkakamali sa pagpepresyo na ginagawa ng maliliit na nagtitinda.",
+      section2Li1Html: "<strong>Markup</strong> ay kita na kinakalkula bilang porsyento ng iyong <em>halaga (cost)</em>.",
+      section2Li2Html: "<strong>Margin</strong> ay kita na kinakalkula bilang porsyento ng iyong <em>presyo ng pagbebenta</em>.",
+      exampleBoxHtml: "<strong>Halimbawa.</strong> Sabihin nating ang halaga mo ay $10.<br>Ang <strong>50% markup</strong> ay nagbibigay ng presyong <strong>$15</strong> (kitang $5, na katumbas ng 33% margin).<br>Ang <strong>50% margin</strong> ay nagbibigay ng presyong <strong>$20</strong> (kitang $10, na katumbas ng 100% markup).<br>Parehong \"50%,\" pero dalawang magkaibang presyo - at lumalaki pa ang agwat habang tumataas ang porsyento.",
+      section2Para2: "Kung ang ibig mong sabihin ay \"gusto ko ng 50% margin\" pero nag-type ka ng \"50%\" sa isang calculator na markup ang inaasahan, magkukulang ka sa presyo nang hindi mo namamalayan. Palaging ipinapakita ng calculator na ito ang dalawang numero nang magkatabi, kahit alin man ang pinagbatayan mo, para makita mo nang eksakto kung ano talaga ang natatanggap mo sa alinmang paraan.",
+      howToTitle: "Paano Gamitin ang Calculator na Ito",
+      howToStep1: "Kung hindi mo pa alam ang cost per unit mo - halimbawa, bumibili ka ng maraming sangkap para sa isang batch - i-check ang \"Hindi ko pa alam ang cost per unit\" at punan ang detalye ng batch/recipe: kabuuang halaga, ilang unit ang nagagawa, at anumang halaga ng paggawa o packaging. I-click ang \"Gamitin ang Halagang Ito Sa Ibaba\" para dalhin ang resulta sa pangunahing calculator.",
+      howToStep2: "Ilagay (o kumpirmahin) ang iyong Cost Per Unit at piliin ang iyong currency.",
+      howToStep3: "Piliin kung alam mo ang target mong Margin o target na Markup, at ilagay ang porsyento.",
+      howToStep4: "Agad na lalabas ang iyong iminumungkahing Presyo ng Pagbebenta, Kita Kada Unit, at pareho ang Margin at Markup, para makita mo agad kung ano talaga ang nakukuha mo sa alinmang paraan.",
+      howToStep5: "I-click ang \"I-save\" para itago ang kalkulasyong ito sa iyong listahan ng Mga Naka-save na Kalkulasyon para sa susunod.",
+      faqTitle: "Mga Madalas Itanong Tungkol sa Pricing Calculator",
+      faq1Q: "Ano ang pagkakaiba ng markup at margin?",
+      faq1A: "Ang markup ay kita bilang porsyento ng iyong halaga; ang margin ay kita bilang porsyento ng iyong presyo ng pagbebenta. Parehong inilalarawan nila ang parehong kita sa dalawang magkaibang paraan, at hindi sila kailanman magkatulad na numero maliban sa 0%. Tingnan ang halimbawa sa itaas para makita kung gaano kalayo ang agwat nila.",
+      faq2Q: "Paano ko presyuhan ang isang homemade o handmade na produkto?",
+      faq2A: "Tuusin muna ang lahat ng iyong totoong halaga - materyales, ang sarili mong oras sa patas na rate, packaging, at patas na bahagi ng anumang tulad ng bayad sa puwesto sa palengke o delivery cost - pagkatapos ilapat ang target mong margin o markup sa ibabaw ng kabuuang iyon. Ang pagpepresyo base lang sa materyales ang pinakakaraniwang dahilan kung bakit natatapos ang mga nagbebenta ng handmade na produkto na kumikita ng mas kaunti kaysa sa akala nila.",
+      faq3Q: "Dapat ko bang isama ang sarili kong paggawa bilang halaga?",
+      faq3A: "Oo. Ang hindi bayad na paggawa ay hindi libre - ito ay oras na maaari mo sanang ginamit sa ibang bagay. Kung hindi mo babayaran ang sarili mo sa presyo, epektibo kang nagtatrabaho nang walang bayad kapag natakpan na ang materyales. Gamitin ang field na \"Labor Cost\" sa batch/recipe calculator para isama ito.",
+      faq4Q: "Anong margin o markup ang dapat kong tunguhin?",
+      faq4A: "Malawak itong nag-iiba depende sa industriya, produkto, at merkado, kaya ituring na reference point lang ang anumang numerong nakikita mo online, hindi patakaran - hindi nagbibigay ng payo sa negosyo ang tool na ito. Ang mahalaga ay talagang natatakpan ng numerong pinili mo ang iyong totoong halaga at may naiiwan kang kitang komportable ka.",
+      faq5Q: "Gumagana ba ito para sa mga serbisyo, hindi lang pisikal na produkto?",
+      faq5A: "Oo - ang \"Cost Per Unit\" ay puwede ring mangahulugan ng halaga para maihatid ang isang unit ng serbisyo (ang oras at materyales mo para sa isang gupit ng buhok, isang konsultasyon, isang session). Pareho lang ang matematika sa dalawang paraan.",
+      faq6Q: "May limit ba sa bilang ng kalkulasyong pwede kong gawin?",
+      faq6A: "Wala. Nangyayari ang bawat kalkulasyon nang lokal sa iyong browser, walang server call at walang limitasyon sa paggamit. Ang tanging praktikal na limitasyon ay ang sarili mong storage space sa browser kung nag-save ka ng napakaraming entry sa listahan ng Mga Naka-save na Kalkulasyon.",
+      faq7Q: "Ino-store ba nito ang aking data kahit saan?",
+      faq7A: "Hindi. Lahat - ang iyong halaga, porsyento, at mga naka-save na kalkulasyon - ay naka-store lang sa local storage ng browser na ito. Walang ina-upload kahit saan, at aalisin ito ng pag-clear ng data ng iyong browser."
+    },
+    hi: {
+      freeToolLabel: "मुफ़्त टूल",
+      mastheadTitleLabel: "प्राइसिंग कैलकुलेटर",
+      mastheadSubtitle: "अपने उत्पाद के लिए सही बिक्री मूल्य पता करें - लक्ष्य मार्जिन, लक्ष्य मार्कअप, या सीधे किसी बैच या रेसिपी की लागत से। कोई साइनअप नहीं, कुछ भी इस ब्राउज़र से बाहर नहीं जाता।",
+      languageLabel: "भाषा",
+      showBatchHelperLabel: "मुझे अभी अपनी प्रति यूनिट लागत नहीं पता - मुझे किसी बैच या रेसिपी से इसकी गणना करने में मदद करें",
+      batchHelperTitle: "बैच / रेसिपी लागत कैलकुलेटर",
+      batchTotalCostLabel: "कुल बैच लागत (सामग्री)",
+      batchYieldLabel: "बैच उपज (इस बैच से बनने वाली इकाइयाँ)",
+      batchLaborLabel: "इस बैच के लिए श्रम लागत (वैकल्पिक)",
+      batchPackagingLabel: "पैकेजिंग / अन्य प्रति यूनिट लागत (वैकल्पिक)",
+      costPerUnitLabel: "प्रति यूनिट लागत",
+      useBatchCostBtnLabel: "इस लागत का उपयोग नीचे करें ↓",
+      currencyLabel: "मुद्रा",
+      targetMarginTabLabel: "लक्ष्य मार्जिन %",
+      targetMarkupTabLabel: "लक्ष्य मार्कअप %",
+      targetMarginFieldLabel: "लक्ष्य मार्जिन (%)",
+      targetMarkupFieldLabel: "लक्ष्य मार्कअप (%)",
+      resultLabel: "परिणाम",
+      suggestedPriceLabel: "सुझाया गया विक्रय मूल्य",
+      profitPerUnitLabel: "प्रति यूनिट लाभ",
+      marginLabel: "मार्जिन",
+      markupLabel: "मार्कअप",
+      saveLabel: "सेव करें",
+      savedCalculationsLabel: "सहेजे गए कैलकुलेशन",
+      clearNewLabel: "साफ़ करें / नया",
+      autosaveNoteText: "आपका मौजूदा कैलकुलेशन टाइप करते समय इस ब्राउज़र में अपने आप सेव हो जाता है। इसे अपनी सहेजे गए कैलकुलेशन सूची में जोड़ने के लिए \"सेव करें\" पर क्लिक करें ताकि आप इसे बाद में फिर से पा सकें - कहीं भी कुछ भी अपलोड नहीं होता।",
+      savedToast: "सेव हो गया",
+      savedCalcsEmptyText: "अभी तक कोई सहेजा गया कैलकुलेशन नहीं है। एक मूल्य निकालें और उसे यहाँ रखने के लिए \"सेव करें\" पर क्लिक करें।",
+      priceWordLabel: "मूल्य",
+      costWordLabel: "लागत",
+      deleteSavedConfirm: "इस सहेजे गए कैलकुलेशन को हटाएं? इसे पूर्ववत नहीं किया जा सकता।",
+      clearCalcConfirm: "इस कैलकुलेशन को साफ़ करें और नया शुरू करें? इसे पूर्ववत नहीं किया जा सकता।",
+      marginInvalidHint: "मार्जिन 100% से कम होना चाहिए - कम प्रतिशत आज़माएं, या इसके बजाय लक्ष्य मार्कअप पर स्विच करें।",
+      section1Title: "अपने उत्पाद की सही कीमत तय करना क्यों ज़रूरी है",
+      section1Para1: "कीमत गलत तय करना छोटे व्यवसाय के पैसे गंवाने का सबसे शांत तरीका है। कम कीमत रखना समस्या जैसा नहीं लगता - बिक्री होती रहती है, गल्ला बजता रहता है - लेकिन हर बिक्री उतनी कीमती नहीं होती जितनी होनी चाहिए, और जब आप बड़ी मात्रा में बेचते हैं तो यह अंतर तेज़ी से बढ़ता जाता है। अधिक कीमत रखना इसके विपरीत गलती है: ग्राहक के सवाल पूछने से पहले ही बिक्री खो जाती है, और आपको पता भी नहीं चलता कि आपकी कीमत बहुत ज़्यादा थी।",
+      section1Para2: "अधिकतर छोटे विक्रेता अनुमान लगाकर, प्रतिस्पर्धी की नकल करके, या जो \"सही लगे\" उसे अपनाकर कीमत तय करते हैं - बिना यह जोड़े कि उत्पाद बनाने में असल में कितना खर्च आता है। इसका मतलब है कि सामग्री, समय और पैकेजिंग का हिसाब लगाने के बाद एक बिक्री सफल दिखते हुए भी नुकसान में हो सकती है। यह कैलकुलेटर इसी अंतर को दूर करने के लिए है: अपनी असली लागत डालें, तय करें कि आप कितना कमाना चाहते हैं, और असली आंकड़ा देखें - अनुमान नहीं।",
+      section2Title: "मार्कअप बनाम मार्जिन - वह भ्रम जो विक्रेताओं को पैसे खर्च कराता है",
+      section2Para1: "इन दोनों शब्दों को रोज़मर्रा की बातचीत में एक-दूसरे के बदले इस्तेमाल किया जाता है, लेकिन ये एक जैसा प्रतिशत नहीं हैं, और इन्हें आपस में मिला देना शायद छोटे विक्रेताओं की सबसे आम कीमत-निर्धारण गलती है।",
+      section2Li1Html: "<strong>मार्कअप</strong> आपकी <em>लागत</em> के प्रतिशत के रूप में गणना किया गया लाभ है।",
+      section2Li2Html: "<strong>मार्जिन</strong> आपके <em>विक्रय मूल्य</em> के प्रतिशत के रूप में गणना किया गया लाभ है।",
+      exampleBoxHtml: "<strong>उदाहरण।</strong> मान लीजिए आपकी लागत $10 है।<br><strong>50% मार्कअप</strong> से कीमत <strong>$15</strong> बनती है (लाभ $5, जो 33% मार्जिन के बराबर है)।<br><strong>50% मार्जिन</strong> से कीमत <strong>$20</strong> बनती है (लाभ $10, जो 100% मार्कअप के बराबर है)।<br>एक जैसा \"50%,\" लेकिन दो बहुत अलग कीमतें - और प्रतिशत बढ़ने के साथ यह अंतर और बड़ा होता जाता है।",
+      section2Para2: "यदि आपका मतलब है \"मुझे 50% मार्जिन चाहिए\" लेकिन आप एक ऐसे कैलकुलेटर में \"50%\" टाइप करते हैं जो मार्कअप मानता है, तो आप बिना जाने कम कीमत लगा देंगे। यह कैलकुलेटर हमेशा दोनों आंकड़े साथ-साथ दिखाता है, चाहे आप किसी से भी गणना करें, ताकि आप देख सकें कि आपको वास्तव में क्या मिल रहा है।",
+      howToTitle: "इस कैलकुलेटर का उपयोग कैसे करें",
+      howToStep1: "यदि आपको अभी अपनी प्रति यूनिट लागत नहीं पता - उदाहरण के लिए, आप किसी बैच के लिए थोक में सामग्री खरीदते हैं - तो \"मुझे अभी अपनी प्रति यूनिट लागत नहीं पता\" चेक करें और बैच/रेसिपी विवरण भरें: कुल लागत, यह कितनी इकाइयाँ बनाता है, और कोई श्रम या पैकेजिंग लागत। परिणाम को मुख्य कैलकुलेटर में ले जाने के लिए \"इस लागत का उपयोग नीचे करें\" पर क्लिक करें।",
+      howToStep2: "अपनी प्रति यूनिट लागत दर्ज करें (या पुष्टि करें) और अपनी मुद्रा चुनें।",
+      howToStep3: "चुनें कि क्या आप अपना लक्ष्य मार्जिन या लक्ष्य मार्कअप जानते हैं, और प्रतिशत दर्ज करें।",
+      howToStep4: "आपका सुझाया गया विक्रय मूल्य, प्रति यूनिट लाभ, और मार्जिन और मार्कअप दोनों तुरंत दिखाई देते हैं, ताकि आप ठीक-ठीक देख सकें कि आपको हर तरह से क्या मिल रहा है।",
+      howToStep5: "इस कैलकुलेशन को बाद के लिए अपनी सहेजे गए कैलकुलेशन सूची में रखने के लिए \"सेव करें\" पर क्लिक करें।",
+      faqTitle: "प्राइसिंग कैलकुलेटर सामान्य प्रश्न",
+      faq1Q: "मार्कअप और मार्जिन में क्या अंतर है?",
+      faq1A: "मार्कअप आपकी लागत के प्रतिशत के रूप में लाभ है; मार्जिन आपके विक्रय मूल्य के प्रतिशत के रूप में लाभ है। वे एक ही लाभ को दो अलग-अलग तरीकों से बताते हैं, और 0% को छोड़कर वे कभी एक जैसी संख्या नहीं होते। यह देखने के लिए कि वे कितने अलग हो सकते हैं, ऊपर दिया गया उदाहरण देखें।",
+      faq2Q: "मैं घर में बने या हस्तनिर्मित उत्पाद की कीमत कैसे तय करूं?",
+      faq2A: "पहले अपनी सभी असली लागतें जोड़ें - सामग्री, उचित दर पर अपना समय, पैकेजिंग, और मार्केट स्टॉल शुल्क या डिलीवरी लागत जैसी किसी भी चीज़ का उचित हिस्सा - फिर उस कुल राशि पर अपना लक्ष्य मार्जिन या मार्कअप लागू करें। केवल सामग्री के आधार पर कीमत तय करना सबसे आम तरीका है जिससे हस्तनिर्मित विक्रेता अपनी सोच से कम कमाते हैं।",
+      faq3Q: "क्या मुझे अपने खुद के श्रम को लागत के रूप में गिनना चाहिए?",
+      faq3A: "हाँ। अवैतनिक श्रम मुफ़्त नहीं है - यह वह समय है जिसे आप कहीं और बिता सकते थे। यदि आप कीमत में खुद को भुगतान नहीं करते हैं, तो सामग्री की भरपाई होने के बाद आप वास्तव में मुफ़्त में काम कर रहे हैं। इसे शामिल करने के लिए बैच/रेसिपी कैलकुलेटर के \"श्रम लागत\" फ़ील्ड का उपयोग करें।",
+      faq4Q: "मुझे किस मार्जिन या मार्कअप का लक्ष्य रखना चाहिए?",
+      faq4A: "यह उद्योग, उत्पाद और बाज़ार के अनुसार बहुत भिन्न होता है, इसलिए ऑनलाइन दिखने वाले किसी भी आंकड़े को एक नियम नहीं बल्कि एक संदर्भ बिंदु मानें - यह टूल व्यवसाय संबंधी सलाह नहीं देता। महत्वपूर्ण यह है कि आपके द्वारा चुना गया आंकड़ा वास्तव में आपकी असली लागतों को कवर करे और आपको एक ऐसा लाभ दे जिससे आप सहज हों।",
+      faq5Q: "क्या यह सेवाओं के लिए भी काम करता है, न कि केवल भौतिक उत्पादों के लिए?",
+      faq5A: "हाँ - \"प्रति यूनिट लागत\" का मतलब किसी सेवा की एक इकाई देने की लागत भी उतनी ही आसानी से हो सकता है (एक हेयरकट, एक परामर्श, एक सत्र के लिए आपका समय और सामग्री)। गणित दोनों तरह से समान है।",
+      faq6Q: "क्या मैं कितनी भी गणनाएं कर सकता हूं, इसकी कोई सीमा है?",
+      faq6A: "नहीं। हर कैलकुलेशन आपके ब्राउज़र में स्थानीय रूप से होता है, बिना किसी सर्वर कॉल और बिना किसी उपयोग सीमा के। एकमात्र व्यावहारिक सीमा आपके ब्राउज़र की अपनी स्टोरेज स्पेस है, यदि आप अपनी सहेजे गए कैलकुलेशन सूची में बहुत बड़ी संख्या सेव करते हैं।",
+      faq7Q: "क्या यह मेरा डेटा कहीं संग्रहीत करता है?",
+      faq7A: "नहीं। सब कुछ - आपकी लागतें, प्रतिशत, और सहेजे गए कैलकुलेशन - केवल इस ब्राउज़र के लोकल स्टोरेज में संग्रहीत होते हैं। कहीं भी कुछ अपलोड नहीं होता, और आपका ब्राउज़र डेटा साफ़ करने से यह हट जाता है।"
+    },
+    es: {
+      freeToolLabel: "Herramienta Gratuita",
+      mastheadTitleLabel: "Calculadora de Precios",
+      mastheadSubtitle: "Calcula el precio de venta correcto para tu producto: por margen objetivo, por recargo objetivo, o directamente a partir del costo de un lote o receta. Sin registro, nada sale de este navegador.",
+      languageLabel: "Idioma",
+      showBatchHelperLabel: "Todavía no sé mi costo por unidad - ayúdame a calcularlo a partir de un lote o receta",
+      batchHelperTitle: "Calculadora de Costo de Lote / Receta",
+      batchTotalCostLabel: "Costo Total del Lote (materiales/ingredientes)",
+      batchYieldLabel: "Rendimiento del Lote (unidades que produce este lote)",
+      batchLaborLabel: "Costo de Mano de Obra Para Este Lote (opcional)",
+      batchPackagingLabel: "Empaque / Otro Costo Por Unidad (opcional)",
+      costPerUnitLabel: "Costo Por Unidad",
+      useBatchCostBtnLabel: "Usar Este Costo Abajo ↓",
+      currencyLabel: "Moneda",
+      targetMarginTabLabel: "% de Margen Objetivo",
+      targetMarkupTabLabel: "% de Recargo Objetivo",
+      targetMarginFieldLabel: "Margen Objetivo (%)",
+      targetMarkupFieldLabel: "Recargo Objetivo (%)",
+      resultLabel: "Resultado",
+      suggestedPriceLabel: "Precio de Venta Sugerido",
+      profitPerUnitLabel: "Ganancia Por Unidad",
+      marginLabel: "Margen",
+      markupLabel: "Recargo",
+      saveLabel: "Guardar",
+      savedCalculationsLabel: "Cálculos Guardados",
+      clearNewLabel: "Borrar / Nuevo",
+      autosaveNoteText: "Tu cálculo actual se guarda automáticamente en este navegador mientras escribes. Haz clic en \"Guardar\" para agregarlo a tu lista de Cálculos Guardados y encontrarlo más tarde - no se sube nada a ningún lado.",
+      savedToast: "Guardado",
+      savedCalcsEmptyText: "Aún no hay cálculos guardados. Calcula un precio y haz clic en \"Guardar\" para conservarlo aquí.",
+      priceWordLabel: "precio",
+      costWordLabel: "costo",
+      deleteSavedConfirm: "¿Eliminar este cálculo guardado? Esto no se puede deshacer.",
+      clearCalcConfirm: "¿Borrar este cálculo y empezar uno nuevo? Esto no se puede deshacer.",
+      marginInvalidHint: "El margen debe ser menor al 100% - prueba un porcentaje más bajo, o cambia a Recargo Objetivo en su lugar.",
+      section1Title: "Por Qué Importa Fijar Bien el Precio de Tu Producto",
+      section1Para1: "Fijar mal el precio es una de las formas más silenciosas en que un pequeño negocio pierde dinero. Un precio muy bajo no parece un problema: las ventas siguen ocurriendo, la caja sigue sonando, pero cada venta vale menos de lo que debería, y esa diferencia se acumula rápido cuando vendes en volumen. Un precio muy alto es el error opuesto: pierdes la venta antes de que el cliente llegue a hacer una pregunta, y nunca llegas a saber que eras demasiado caro.",
+      section1Para2: "La mayoría de los pequeños vendedores fijan un precio adivinando, copiando a un competidor, o guiándose por lo que \"se siente correcto\" - sin sumar realmente lo que cuesta hacer el producto. Eso significa que una venta puede parecer exitosa y aun así estar perdiendo dinero una vez que se cuentan los materiales, el tiempo y el empaque. Esta calculadora existe para cerrar esa brecha: ingresa tus costos reales, decide cuánto quieres ganar, y mira el número real - no una suposición.",
+      section2Title: "Recargo vs. Margen - La Confusión Que Cuesta Dinero a los Vendedores",
+      section2Para1: "Estos dos términos se usan indistintamente en la conversación diaria, pero no son el mismo porcentaje, y confundirlos es probablemente el error de precios más común que cometen los pequeños vendedores.",
+      section2Li1Html: "<strong>El Recargo</strong> es la ganancia calculada como un porcentaje de tu <em>costo</em>.",
+      section2Li2Html: "<strong>El Margen</strong> es la ganancia calculada como un porcentaje de tu <em>precio de venta</em>.",
+      exampleBoxHtml: "<strong>Ejemplo.</strong> Supongamos que tu costo es de $10.<br>Un <strong>recargo del 50%</strong> da un precio de <strong>$15</strong> (ganancia de $5, que equivale a un margen del 33%).<br>Un <strong>margen del 50%</strong> da un precio de <strong>$20</strong> (ganancia de $10, que equivale a un recargo del 100%).<br>El mismo \"50%\", pero dos precios muy diferentes - y la brecha solo se hace más grande a medida que sube el porcentaje.",
+      section2Para2: "Si quieres decir \"quiero un margen del 50%\" pero escribes \"50%\" en una calculadora que asume recargo, cobrarás de menos sin darte cuenta. Esta calculadora siempre muestra ambas cifras lado a lado, sin importar desde cuál calcules, para que veas exactamente lo que realmente obtienes de cualquier manera.",
+      howToTitle: "Cómo Usar Esta Calculadora",
+      howToStep1: "Si aún no sabes tu costo por unidad - por ejemplo, compras ingredientes al por mayor para un lote - marca \"Todavía no sé mi costo por unidad\" y completa los detalles del lote/receta: costo total, cuántas unidades produce, y cualquier costo de mano de obra o empaque. Haz clic en \"Usar Este Costo Abajo\" para llevar el resultado a la calculadora principal.",
+      howToStep2: "Ingresa (o confirma) tu Costo Por Unidad y elige tu moneda.",
+      howToStep3: "Elige si conoces tu Margen objetivo o tu Recargo objetivo, e ingresa el porcentaje.",
+      howToStep4: "Tu Precio de Venta Sugerido, Ganancia Por Unidad, y tanto el Margen como el Recargo aparecen al instante, para que veas exactamente lo que obtienes de cualquier manera.",
+      howToStep5: "Haz clic en \"Guardar\" para conservar este cálculo en tu lista de Cálculos Guardados para después.",
+      faqTitle: "Preguntas Frecuentes de la Calculadora de Precios",
+      faq1Q: "¿Cuál es la diferencia entre recargo y margen?",
+      faq1A: "El recargo es la ganancia como porcentaje de tu costo; el margen es la ganancia como porcentaje de tu precio de venta. Describen la misma ganancia de dos formas diferentes, y nunca son el mismo número excepto en 0%. Consulta el ejemplo anterior para ver exactamente cuán distintos pueden ser.",
+      faq2Q: "¿Cómo le pongo precio a un producto casero o hecho a mano?",
+      faq2A: "Suma primero todos tus costos reales - materiales, tu propio tiempo a una tarifa justa, empaque, y una parte justa de cosas como la cuota de un puesto de mercado o el costo de entrega - luego aplica tu margen o recargo objetivo sobre ese total. Fijar el precio solo con los materiales es la forma más común en que los vendedores de productos hechos a mano terminan trabajando por menos de lo que creen.",
+      faq3Q: "¿Debo contar mi propia mano de obra como un costo?",
+      faq3A: "Sí. El trabajo no pagado no es gratis - es tiempo que podrías haber dedicado a otra cosa. Si no te pagas a ti mismo en el precio, en la práctica estás trabajando gratis una vez cubiertos los materiales. Usa el campo \"Costo de Mano de Obra\" de la calculadora de lote/receta para incluirlo.",
+      faq4Q: "¿A qué margen o recargo debería aspirar?",
+      faq4A: "Esto varía mucho según la industria, el producto y el mercado, así que trata cualquier número que veas en línea como un punto de referencia, no como una regla - esta herramienta no ofrece asesoría comercial. Lo importante es que el número que elijas realmente cubra tus costos reales y te deje una ganancia con la que te sientas cómodo.",
+      faq5Q: "¿Funciona esto para servicios, no solo para productos físicos?",
+      faq5A: "Sí - \"Costo Por Unidad\" puede significar igualmente el costo de entregar una unidad de un servicio (tu tiempo y materiales para un corte de cabello, una consulta, una sesión). Las matemáticas son idénticas en ambos casos.",
+      faq6Q: "¿Hay un límite en la cantidad de cálculos que puedo hacer?",
+      faq6A: "No. Cada cálculo ocurre localmente en tu navegador, sin llamadas al servidor y sin límite de uso. El único límite práctico es el espacio de almacenamiento de tu propio navegador si guardas una cantidad muy grande en tu lista de Cálculos Guardados.",
+      faq7Q: "¿Esto guarda mis datos en algún lugar?",
+      faq7A: "No. Todo - tus costos, porcentajes y cálculos guardados - se almacena solo en el almacenamiento local de este navegador. No se sube nada a ningún lado, y borrar los datos de tu navegador lo elimina."
+    },
+    th: {
+      freeToolLabel: "เครื่องมือฟรี",
+      mastheadTitleLabel: "เครื่องคำนวณราคา",
+      mastheadSubtitle: "คำนวณราคาขายที่เหมาะสมสำหรับสินค้าของคุณ - ด้วยอัตรากำไรเป้าหมาย มาร์กอัพเป้าหมาย หรือคำนวณจากต้นทุนของชุดผลิตหรือสูตรโดยตรง ไม่ต้องสมัครสมาชิก ข้อมูลไม่ออกจากเบราว์เซอร์นี้",
+      languageLabel: "ภาษา",
+      showBatchHelperLabel: "ฉันยังไม่ทราบต้นทุนต่อหน่วย - ช่วยคำนวณจากชุดผลิตหรือสูตรให้หน่อย",
+      batchHelperTitle: "เครื่องคำนวณต้นทุนชุดผลิต / สูตร",
+      batchTotalCostLabel: "ต้นทุนรวมของชุดผลิต (วัตถุดิบ/ส่วนผสม)",
+      batchYieldLabel: "ผลผลิตของชุด (จำนวนหน่วยที่ชุดนี้ผลิตได้)",
+      batchLaborLabel: "ค่าแรงสำหรับชุดผลิตนี้ (ไม่บังคับ)",
+      batchPackagingLabel: "บรรจุภัณฑ์ / ต้นทุนอื่นต่อหน่วย (ไม่บังคับ)",
+      costPerUnitLabel: "ต้นทุนต่อหน่วย",
+      useBatchCostBtnLabel: "ใช้ต้นทุนนี้ด้านล่าง ↓",
+      currencyLabel: "สกุลเงิน",
+      targetMarginTabLabel: "% อัตรากำไรเป้าหมาย",
+      targetMarkupTabLabel: "% มาร์กอัพเป้าหมาย",
+      targetMarginFieldLabel: "อัตรากำไรเป้าหมาย (%)",
+      targetMarkupFieldLabel: "มาร์กอัพเป้าหมาย (%)",
+      resultLabel: "ผลลัพธ์",
+      suggestedPriceLabel: "ราคาขายที่แนะนำ",
+      profitPerUnitLabel: "กำไรต่อหน่วย",
+      marginLabel: "อัตรากำไร",
+      markupLabel: "มาร์กอัพ",
+      saveLabel: "บันทึก",
+      savedCalculationsLabel: "การคำนวณที่บันทึกไว้",
+      clearNewLabel: "ล้าง / ใหม่",
+      autosaveNoteText: "การคำนวณปัจจุบันของคุณจะถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ขณะที่คุณพิมพ์ คลิก \"บันทึก\" เพื่อเพิ่มลงในรายการการคำนวณที่บันทึกไว้ เพื่อให้คุณค้นหาได้อีกครั้งในภายหลัง - ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ใดเลย",
+      savedToast: "บันทึกแล้ว",
+      savedCalcsEmptyText: "ยังไม่มีการคำนวณที่บันทึกไว้ คำนวณราคาแล้วคลิก \"บันทึก\" เพื่อเก็บไว้ที่นี่",
+      priceWordLabel: "ราคา",
+      costWordLabel: "ต้นทุน",
+      deleteSavedConfirm: "ลบการคำนวณที่บันทึกไว้นี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      clearCalcConfirm: "ล้างการคำนวณนี้และเริ่มใหม่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      marginInvalidHint: "อัตรากำไรต้องน้อยกว่า 100% - ลองใช้เปอร์เซ็นต์ที่ต่ำกว่า หรือเปลี่ยนไปใช้มาร์กอัพเป้าหมายแทน",
+      section1Title: "เหตุใดการตั้งราคาสินค้าอย่างถูกต้องจึงสำคัญ",
+      section1Para1: "การตั้งราคาผิดเป็นหนึ่งในวิธีที่เงียบที่สุดที่ธุรกิจขนาดเล็กสูญเสียเงิน การตั้งราคาต่ำเกินไปดูเหมือนจะไม่ใช่ปัญหา - ยอดขายยังคงเกิดขึ้น เงินสดยังคงเข้ามา - แต่ทุกการขายมีมูลค่าน้อยกว่าที่ควรจะเป็น และช่องว่างนี้จะเพิ่มขึ้นอย่างรวดเร็วเมื่อคุณขายในปริมาณมาก การตั้งราคาสูงเกินไปคือความผิดพลาดตรงข้าม: มันทำให้เสียการขายก่อนที่ลูกค้าจะได้ถามคำถามด้วยซ้ำ และคุณจะไม่มีทางรู้เลยว่าคุณตั้งราคาแพงเกินไป",
+      section1Para2: "ผู้ขายรายย่อยส่วนใหญ่ตั้งราคาด้วยการเดา ลอกเลียนคู่แข่ง หรือใช้ความรู้สึกว่า \"น่าจะถูกต้อง\" - โดยไม่เคยรวมต้นทุนที่แท้จริงในการผลิตสินค้าเลย นั่นหมายความว่าการขายอาจดูเหมือนประสบความสำเร็จ แต่ยังคงขาดทุนอยู่เมื่อคิดรวมวัตถุดิบ เวลา และบรรจุภัณฑ์แล้ว เครื่องคำนวณนี้มีขึ้นเพื่อปิดช่องว่างนั้น ใส่ต้นทุนจริงของคุณ ตัดสินใจว่าต้องการกำไรเท่าไร แล้วดูตัวเลขที่แท้จริง - ไม่ใช่การเดา",
+      section2Title: "มาร์กอัพ กับ อัตรากำไร - ความสับสนที่ทำให้ผู้ขายเสียเงิน",
+      section2Para1: "สองคำนี้มักถูกใช้สลับกันในการสนทนาทั่วไป แต่ทั้งสองไม่ใช่เปอร์เซ็นต์เดียวกัน และการสับสนระหว่างสองคำนี้น่าจะเป็นความผิดพลาดในการตั้งราคาที่พบบ่อยที่สุดของผู้ขายรายย่อย",
+      section2Li1Html: "<strong>มาร์กอัพ</strong> คือกำไรที่คำนวณเป็นเปอร์เซ็นต์ของ<em>ต้นทุน</em>ของคุณ",
+      section2Li2Html: "<strong>อัตรากำไร</strong> คือกำไรที่คำนวณเป็นเปอร์เซ็นต์ของ<em>ราคาขาย</em>ของคุณ",
+      exampleBoxHtml: "<strong>ตัวอย่าง.</strong> สมมติว่าต้นทุนของคุณคือ $10<br><strong>มาร์กอัพ 50%</strong> จะได้ราคา <strong>$15</strong> (กำไร $5 ซึ่งเท่ากับอัตรากำไร 33%)<br><strong>อัตรากำไร 50%</strong> จะได้ราคา <strong>$20</strong> (กำไร $10 ซึ่งเท่ากับมาร์กอัพ 100%)<br>ตัวเลข \"50%\" เดียวกัน แต่ราคาต่างกันมาก - และช่องว่างจะยิ่งกว้างขึ้นเมื่อเปอร์เซ็นต์สูงขึ้น",
+      section2Para2: "หากคุณหมายถึง \"ฉันต้องการอัตรากำไร 50%\" แต่พิมพ์ \"50%\" ลงในเครื่องคำนวณที่ถือว่าเป็นมาร์กอัพ คุณจะตั้งราคาต่ำเกินไปโดยไม่รู้ตัว เครื่องคำนวณนี้จะแสดงตัวเลขทั้งสองแบบเคียงข้างกันเสมอ ไม่ว่าคุณจะคำนวณจากตัวใดก็ตาม เพื่อให้คุณเห็นสิ่งที่คุณจะได้รับจริง ๆ ในทั้งสองกรณี",
+      howToTitle: "วิธีใช้เครื่องคำนวณนี้",
+      howToStep1: "หากคุณยังไม่ทราบต้นทุนต่อหน่วย - เช่น คุณซื้อวัตถุดิบจำนวนมากสำหรับหนึ่งชุดผลิต - ให้เลือก \"ฉันยังไม่ทราบต้นทุนต่อหน่วย\" แล้วกรอกรายละเอียดชุดผลิต/สูตร ได้แก่ ต้นทุนรวม จำนวนหน่วยที่ผลิตได้ และค่าแรงหรือค่าบรรจุภัณฑ์ (ถ้ามี) คลิก \"ใช้ต้นทุนนี้ด้านล่าง\" เพื่อนำผลลัพธ์ไปยังเครื่องคำนวณหลัก",
+      howToStep2: "กรอก (หรือยืนยัน) ต้นทุนต่อหน่วยของคุณ และเลือกสกุลเงิน",
+      howToStep3: "เลือกว่าคุณทราบอัตรากำไรเป้าหมายหรือมาร์กอัพเป้าหมาย แล้วกรอกเปอร์เซ็นต์",
+      howToStep4: "ราคาขายที่แนะนำ กำไรต่อหน่วย รวมถึงอัตรากำไรและมาร์กอัพจะปรากฏขึ้นทันที เพื่อให้คุณเห็นสิ่งที่จะได้รับจริง ๆ ในทั้งสองแบบ",
+      howToStep5: "คลิก \"บันทึก\" เพื่อเก็บการคำนวณนี้ไว้ในรายการการคำนวณที่บันทึกไว้สำหรับใช้ภายหลัง",
+      faqTitle: "คำถามที่พบบ่อยเกี่ยวกับเครื่องคำนวณราคา",
+      faq1Q: "มาร์กอัพกับอัตรากำไรต่างกันอย่างไร?",
+      faq1A: "มาร์กอัพคือกำไรเป็นเปอร์เซ็นต์ของต้นทุนของคุณ ส่วนอัตรากำไรคือกำไรเป็นเปอร์เซ็นต์ของราคาขายของคุณ ทั้งสองอธิบายกำไรเดียวกันในสองรูปแบบที่ต่างกัน และจะไม่มีวันเป็นตัวเลขเดียวกันยกเว้นที่ 0% ดูตัวอย่างด้านบนเพื่อดูว่าทั้งสองต่างกันมากแค่ไหน",
+      faq2Q: "ฉันควรตั้งราคาสินค้าโฮมเมดหรือทำมือได้อย่างไร?",
+      faq2A: "รวมต้นทุนที่แท้จริงทั้งหมดก่อน - วัตถุดิบ เวลาของคุณเองในอัตราที่เป็นธรรม ค่าบรรจุภัณฑ์ และส่วนแบ่งที่เป็นธรรมของค่าใช้จ่ายอื่น เช่น ค่าเช่าแผงตลาดหรือค่าจัดส่ง - จากนั้นจึงใส่อัตรากำไรหรือมาร์กอัพเป้าหมายลงบนยอดรวมนั้น การตั้งราคาจากวัตถุดิบเพียงอย่างเดียวเป็นสาเหตุที่พบบ่อยที่สุดที่ทำให้ผู้ขายสินค้าทำมือได้กำไรน้อยกว่าที่คิด",
+      faq3Q: "ฉันควรนับค่าแรงของตัวเองเป็นต้นทุนหรือไม่?",
+      faq3A: "ควร แรงงานที่ไม่ได้รับค่าจ้างไม่ใช่ของฟรี - มันคือเวลาที่คุณสามารถนำไปใช้อย่างอื่นได้ หากคุณไม่จ่ายค่าแรงให้ตัวเองในราคาสินค้า คุณก็กำลังทำงานฟรีอยู่ดีเมื่อหักต้นทุนวัตถุดิบแล้ว ใช้ช่อง \"ค่าแรง\" ในเครื่องคำนวณชุดผลิต/สูตรเพื่อรวมค่านี้เข้าไป",
+      faq4Q: "ฉันควรตั้งเป้าอัตรากำไรหรือมาร์กอัพเท่าไร?",
+      faq4A: "สิ่งนี้แตกต่างกันมากตามอุตสาหกรรม สินค้า และตลาด ดังนั้นให้ถือว่าตัวเลขใด ๆ ที่คุณเห็นทางออนไลน์เป็นเพียงจุดอ้างอิง ไม่ใช่กฎตายตัว - เครื่องมือนี้ไม่ได้ให้คำแนะนำทางธุรกิจ สิ่งสำคัญคือตัวเลขที่คุณเลือกต้องครอบคลุมต้นทุนจริงของคุณและทำให้คุณได้กำไรในระดับที่คุณพอใจ",
+      faq5Q: "เครื่องมือนี้ใช้ได้กับบริการด้วยหรือไม่ ไม่ใช่แค่สินค้าที่จับต้องได้?",
+      faq5A: "ได้ - \"ต้นทุนต่อหน่วย\" อาจหมายถึงต้นทุนในการให้บริการหนึ่งหน่วยได้เช่นกัน (เวลาและวัสดุของคุณสำหรับการตัดผมหนึ่งครั้ง การให้คำปรึกษาหนึ่งครั้ง หรือหนึ่งเซสชัน) วิธีคำนวณเหมือนกันทั้งสองแบบ",
+      faq6Q: "มีการจำกัดจำนวนครั้งที่ฉันสามารถคำนวณได้หรือไม่?",
+      faq6A: "ไม่มี การคำนวณทุกครั้งเกิดขึ้นในเบราว์เซอร์ของคุณเอง โดยไม่มีการเรียกเซิร์ฟเวอร์และไม่มีการจำกัดการใช้งาน ข้อจำกัดในทางปฏิบัติเพียงอย่างเดียวคือพื้นที่จัดเก็บของเบราว์เซอร์คุณเอง หากคุณบันทึกจำนวนมากในรายการการคำนวณที่บันทึกไว้",
+      faq7Q: "เครื่องมือนี้เก็บข้อมูลของฉันไว้ที่ไหนหรือไม่?",
+      faq7A: "ไม่เก็บ ทุกอย่าง - ต้นทุน เปอร์เซ็นต์ และการคำนวณที่บันทึกไว้ของคุณ - จะถูกเก็บไว้เฉพาะในที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์นี้เท่านั้น ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ใดเลย และการล้างข้อมูลเบราว์เซอร์ของคุณจะลบข้อมูลนี้ออกไป"
+    }
+  };
+
+  var langSelect = document.getElementById("pricingLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
 
   var showBatchHelperCheckbox = document.getElementById("showBatchHelper");
   var batchHelper = document.getElementById("batchHelper");
@@ -634,7 +1049,7 @@ img { max-width: 100%; display: block; }
     var code = currencySelect.value;
 
     if (r.invalid) {
-      percentHint.textContent = "Margin must be less than 100% - try a lower percentage, or switch to Target Markup instead.";
+      percentHint.textContent = translate("marginInvalidHint");
       percentHint.className = "field-hint warn";
       resultPrice.textContent = "--";
       resultProfit.textContent = "--";
@@ -655,7 +1070,7 @@ img { max-width: 100%; display: block; }
     var isMargin = currentMode === "margin";
     tabMargin.classList.toggle("active", isMargin);
     tabMarkup.classList.toggle("active", !isMargin);
-    targetPercentLabel.textContent = isMargin ? "Target Margin (%)" : "Target Markup (%)";
+    targetPercentLabel.textContent = isMargin ? translate("targetMarginFieldLabel") : translate("targetMarkupFieldLabel");
   }
 
   function switchMode(mode) {
@@ -738,7 +1153,7 @@ img { max-width: 100%; display: block; }
     if (idx >= 0) list[idx] = entry; else list.unshift(entry);
     saveHistory(list);
     saveDraft();
-    showToast("Saved");
+    showToast(translate("savedToast"));
   }
 
   function renderSavedList() {
@@ -746,7 +1161,7 @@ img { max-width: 100%; display: block; }
     var container = document.getElementById("savedPricingList");
     container.innerHTML = "";
     if (!list.length) {
-      container.innerHTML = '<div class="saved-codes-empty">No saved calculations yet. Work out a price and click "Save" to keep it here.</div>';
+      container.innerHTML = '<div class="saved-codes-empty">' + escapeHtml(translate("savedCalcsEmptyText")) + '</div>';
       return;
     }
     list.forEach(function(entry) {
@@ -755,16 +1170,16 @@ img { max-width: 100%; display: block; }
       var d = new Date(entry.savedAt);
       var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       row.innerHTML =
-        '<span class="saved-code-badge">' + (entry.mode === "markup" ? "Markup" : "Margin") + '</span>' +
+        '<span class="saved-code-badge">' + escapeHtml(entry.mode === "markup" ? translate("markupLabel") : translate("marginLabel")) + '</span>' +
         '<div class="saved-code-main">' +
-          '<div class="saved-code-title">' + escapeHtml(formatAmount(entry.price, entry.currency)) + ' price (cost ' + escapeHtml(formatAmount(entry.cost, entry.currency)) + ')</div>' +
+          '<div class="saved-code-title">' + escapeHtml(formatAmount(entry.price, entry.currency)) + ' ' + escapeHtml(translate("priceWordLabel")) + ' (' + escapeHtml(translate("costWordLabel")) + ' ' + escapeHtml(formatAmount(entry.cost, entry.currency)) + ')</div>' +
           '<div class="saved-code-meta">' + escapeHtml(dateStr) + '</div>' +
         '</div>' +
         '<button type="button" class="saved-code-delete" aria-label="Delete saved calculation">✕</button>';
       row.querySelector(".saved-code-main").addEventListener("click", function() { openSavedCalc(entry.id); });
       row.querySelector(".saved-code-delete").addEventListener("click", function(e) {
         e.stopPropagation();
-        if (!confirm("Delete this saved calculation? This can't be undone.")) return;
+        if (!confirm(translate("deleteSavedConfirm"))) return;
         deleteSavedCalc(entry.id);
       });
       container.appendChild(row);
@@ -832,12 +1247,96 @@ img { max-width: 100%; display: block; }
     if (e.target.id === "savedPricingOverlay") closeSavedPricingModal();
   });
   document.getElementById("clearPricingBtn").addEventListener("click", function() {
-    if (!confirm("Clear this calculation and start a new one? This can't be undone.")) return;
+    if (!confirm(translate("clearCalcConfirm"))) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
     currentCalcId = null;
     applyState({});
   });
 
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+
+    var ids = {
+      mastheadKicker: "freeToolLabel",
+      mastheadTitle: "mastheadTitleLabel",
+      mastheadSubtitle: "mastheadSubtitle",
+      languageLabelInv: "languageLabel",
+      showBatchHelperLabel: "showBatchHelperLabel",
+      batchHelperTitle: "batchHelperTitle",
+      batchTotalCostLabel: "batchTotalCostLabel",
+      batchYieldLabel: "batchYieldLabel",
+      batchLaborLabel: "batchLaborLabel",
+      batchPackagingLabel: "batchPackagingLabel",
+      batchCostPerUnitLabel: "costPerUnitLabel",
+      useBatchCostBtnLabel: "useBatchCostBtnLabel",
+      currencyLabelInv: "currencyLabel",
+      unitCostLabel: "costPerUnitLabel",
+      tabMarginLabel: "targetMarginTabLabel",
+      tabMarkupLabel: "targetMarkupTabLabel",
+      resultLabel: "resultLabel",
+      suggestedPriceLabel: "suggestedPriceLabel",
+      profitPerUnitLabel: "profitPerUnitLabel",
+      marginResultLabel: "marginLabel",
+      markupResultLabel: "markupLabel",
+      savePricingBtnLabel: "saveLabel",
+      savedPricingBtnLabel: "savedCalculationsLabel",
+      clearPricingBtnLabel: "clearNewLabel",
+      autosaveNote: "autosaveNoteText",
+      savedPricingModalTitle: "savedCalculationsLabel",
+      section1Title: "section1Title",
+      section1Para1: "section1Para1",
+      section1Para2: "section1Para2",
+      section2Title: "section2Title",
+      section2Para1: "section2Para1",
+      section2Para2: "section2Para2",
+      howToTitle: "howToTitle",
+      howToStep1: "howToStep1",
+      howToStep2: "howToStep2",
+      howToStep3: "howToStep3",
+      howToStep4: "howToStep4",
+      howToStep5: "howToStep5",
+      faqTitle: "faqTitle",
+      faq1Q: "faq1Q", faq1A: "faq1A",
+      faq2Q: "faq2Q", faq2A: "faq2A",
+      faq3Q: "faq3Q", faq3A: "faq3A",
+      faq4Q: "faq4Q", faq4A: "faq4A",
+      faq5Q: "faq5Q", faq5A: "faq5A",
+      faq6Q: "faq6Q", faq6A: "faq6A",
+      faq7Q: "faq7Q", faq7A: "faq7A"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+
+    var li1 = document.getElementById("section2Li1");
+    if (li1) li1.innerHTML = translate("section2Li1Html");
+    var li2 = document.getElementById("section2Li2");
+    if (li2) li2.innerHTML = translate("section2Li2Html");
+    var exampleBox = document.getElementById("exampleBox");
+    if (exampleBox) exampleBox.innerHTML = translate("exampleBoxHtml");
+
+    updateModeUI();
+    renderResults();
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-pricing-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-pricing-lang", currentLang()); } catch (e) {}
+  }
+
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+
+  loadLanguagePref();
   loadDraft();
 })();
 </script>

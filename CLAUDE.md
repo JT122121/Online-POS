@@ -3598,11 +3598,80 @@ the two easy-to-forget omissions that bit the Barcode button rollout
   POS itself. Since it also isn't linked from `app.html` at all yet
   (see above), there is currently no button anywhere that would need an
   `OFFLINE-STRIP` marker for it regardless.
-- Six-language UI strings are **not** part of this page, matching
-  `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`/`vat-calculator.html` - the
-  calculator itself is English-only; a `createPricingShortcutLabel`
-  translation key only gets added once `app.html`'s `.header-links`
-  button is added, per the rollout checklist above.
+- **Now translated into the same six languages as `app.html` and the
+  other three free tools** (en/ar/fil/hi/es/th) - its own self-contained
+  `translations` object and `translate()`/`currentLang()`/
+  `changeLanguage()`/`loadLanguagePref()`/`saveLanguagePref()` functions,
+  mirroring `vat-calculator.html`'s implementation exactly (own copy, no
+  dependency on `app.html` or any other page). A **Language** picker
+  (`#pricingLanguage`) sits inside its own `.lang-inline` block at the
+  very top of `.gen-card`, above the batch-helper checkbox - ahead of
+  this page's own Currency picker, which stays where it already was
+  inside `.form-section` further down, unlike `vat-calculator.html`
+  where Language and Currency sit in the same top-of-card row. Covers
+  the masthead, the batch/recipe helper (its title, all four
+  field labels, the shared "Cost Per Unit" label used both by the batch
+  result and the main field, and the "Use This Cost Below" button),
+  Currency, both Target Margin/Target Markup tabs and their matching
+  field label (swapped dynamically by `updateModeUI()` on every mode
+  switch and language switch alike), the Result box's four labels, all
+  three action-bar buttons, the autosave note, the Saved Calculations
+  modal, both `confirm()` dialogs, the save toast, the invalid-margin
+  warning hint, and the full two-section explainer (Why Pricing Matters,
+  Markup vs. Margin, including the `<li>` items and the `.example-box`
+  translated via `innerHTML` so the `<strong>`/`<em>` tags survive) plus
+  the 5-step How-To and 7-question FAQ - the most content-heavy of the
+  five tools' translations, since this page carries two long prose
+  sections no other tool page has.
+  - **A real bug caught by the Playwright pass, not just by reading the
+    code**: `renderSavedList()`'s badge span was written to call
+    `translate("markupBadge")`/`translate("marginBadge")`, but the
+    `translations` object only ever defined `marginLabel`/`markupLabel`
+    (the same text is already used for the Result box's own Margin/
+    Markup labels, so a separate badge-only key would have just
+    duplicated it) - `translate()`'s own key-as-fallback behavior meant
+    the badge silently rendered the literal string `"marginBadge"` on
+    every non-English saved-calculation row instead of translated text,
+    exactly the kind of typo that reading the diff alone would not have
+    caught. Fixed by pointing the badge at the existing
+    `marginLabel`/`markupLabel` keys instead of inventing new ones -
+    confirmed by re-running the same Playwright check.
+  - **The example box keeps every number identical across all six
+    languages** ($10 cost, 50% markup → $15/$5 profit/33% margin, 50%
+    margin → $20/$10 profit/100% markup) - only the surrounding sentence
+    structure is translated, including Arabic's own number-before-
+    currency-symbol convention (`10$` rather than `$10`), which reads
+    correctly as the same figures once you account for that convention
+    rather than as a translation gap.
+  - **"Margin" and "Markup" themselves were translated per language
+    using the same real-term-vs-loanword judgment call already
+    established for "VAT"** in `vat-calculator.html`: Spanish uses
+    "Margen"/"Recargo", Arabic uses "هامش الربح"/"نسبة الربح على
+    التكلفة", Hindi uses the short transliterations "मार्जिन"/"मार्कअप"
+    already common in Indian financial contexts (the same reasoning
+    "VAT" became "वैट" there), Thai uses "อัตรากำไร"/"มาร์กอัพ", and
+    Filipino keeps both "Margin" and "Markup" as-is, matching how "VAT"
+    stayed untranslated in Filipino.
+  - **RTL for Arabic** is the same minimal `document.body.dir` toggle
+    used everywhere else in this codebase, no extra CSS.
+  - **Language choice persists independently of any saved calculation**,
+    via its own `goonlinepos-pricing-lang` key - the same "device
+    preference, not part of one document's content" reasoning as the
+    other three tools' own language-preference keys.
+    `loadLanguagePref()` runs before `loadDraft()` so the first paint
+    already reflects the stored language.
+  - Verified with Playwright: language switching translates the
+    masthead, batch helper, Currency/tab/field labels, Result box,
+    action bar, autosave note, Saved Calculations modal, and the full
+    How-To + FAQ across all six languages; the Target Margin/Markup
+    field label swaps correctly both on a tab click and after a language
+    switch; the invalid-margin warning (≥100% margin) reads correctly
+    translated; the `<li>` items and `.example-box` keep their `<strong>`/
+    `<em>` markup intact after an `innerHTML` translation; a saved
+    calculation's badge now correctly reads "Margin"/"Markup" in the
+    active language (post-fix); persisted language choice survives a
+    reload; and zero mobile overflow (390px) and zero console errors
+    throughout.
 - Verified with Playwright against the worked example in the page's own
   FAQ (cost $10: 50% markup → $15.00 price, $5.00 profit, 33.3% margin,
   50% markup; 50% margin → $20.00 price, $10.00 profit, 50% margin,
