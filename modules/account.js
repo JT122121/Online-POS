@@ -56,6 +56,7 @@ async function refreshAccountState() {
   if (!currentUser) {
     currentProfile = null;
     premiumUnlocked = false;
+    await storageSet("account-premium-cached", "0");
     renderAccountPanel();
     if (typeof applyPremiumLocks === "function") applyPremiumLocks();
     return;
@@ -71,6 +72,7 @@ async function refreshAccountState() {
     currentProfile = null;
     premiumUnlocked = false;
   }
+  await storageSet("account-premium-cached", premiumUnlocked ? "1" : "0");
   lastActivityWriteTime = 0;
   await recordActivity();
   renderAccountPanel();
@@ -150,6 +152,7 @@ async function signOutAccount() {
   currentUser = null;
   currentProfile = null;
   premiumUnlocked = false;
+  await storageSet("account-premium-cached", "0");
   renderAccountPanel();
   if (typeof applyPremiumLocks === "function") applyPremiumLocks();
 }
