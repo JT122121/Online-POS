@@ -164,10 +164,12 @@ function renderWelcomeBadge() {
   const subtitleEl = document.getElementById("appSubtitle");
   const welcomeEl = document.getElementById("accountWelcomeBadge");
   const textEl = document.getElementById("accountWelcomeText");
+  const signInPromptEl = document.getElementById("accountSignInPrompt");
   if (!welcomeEl || !textEl || !subtitleEl) return;
   if (!currentUser) {
     welcomeEl.classList.add("hidden");
     subtitleEl.classList.remove("hidden");
+    if (signInPromptEl) signInPromptEl.classList.remove("hidden");
     return;
   }
   const name = (currentUser.user_metadata && (currentUser.user_metadata.full_name || currentUser.user_metadata.name)) || currentUser.email;
@@ -175,6 +177,7 @@ function renderWelcomeBadge() {
   textEl.textContent = tr("accountWelcomeLabel") + " " + name + " · " + statusLabel;
   welcomeEl.classList.remove("hidden");
   subtitleEl.classList.add("hidden");
+  if (signInPromptEl) signInPromptEl.classList.add("hidden");
 }
 
 function renderAccountPanel() {

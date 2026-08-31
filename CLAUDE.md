@@ -1446,6 +1446,94 @@ live code calls it anymore.
   as reworded (`buyPremiumFeature1`/`2` - "Redeem to extend your
   subscription" / "Works on any device you sign in on"), still accurate
   under the new monthly framing.
+- **Premium visibility/legitimacy pass**, per an explicit request to make
+  Premium easier to spot in the app, make the Google sign-in button look
+  like a real Google button, explain why signing in is safe, and make
+  sign in/out clearly visible rather than buried in Settings.
+  - **`#premiumPromoNotice`** - a new gold `.backup-notice`-style banner
+    (reusing that exact class/visual weight, right below `#backupNotice`
+    in the DOM) reading "You're on the Basic plan. Sign in and redeem a
+    Premium code to unlock Company Logo, Customer Screen, Inventory
+    editing, and more." with a "Go Premium" button
+    (`openAccountSettings()`). Toggled by `applyPremiumLocks()` (hidden
+    once `premiumUnlocked` is true), so it's visible on every screen of
+    the app - not just inside Settings - for as long as the visitor is
+    on the free tier. Not dismissible - unlike `#backupNotice`, this is
+    meant to stay spottable, not be closed once and forgotten. Wrapped
+    in `OFFLINE-STRIP:PREMIUM-PROMO-NOTICE` since the offline build
+    auto-grants Premium on first launch and would never need it.
+  - **`#premiumBadgeAppTitle`** (the header's own Premium/Basic pill) is
+    now clickable (`onclick="openAccountSettings()"`, `cursor: pointer`
+    in CSS) on both builds - tapping "Basic" or "Premium" jumps straight
+    to Settings → Premium to check status or redeem a code, instead of
+    being a plain static label.
+  - **`openAccountSettings()`** (new, alongside the existing
+    `openBackupSettings()` - same two-line
+    `settingsOverlay`/`selectSettingsTab("premium")` pattern) is not
+    marker-wrapped, so it works identically on both builds - live opens
+    the Sign In/Redeem panel, offline opens its own local-code
+    activation panel, since both live behind the same `data-tab="premium"`
+    tab regardless of which `OFFLINE-SWAP:PREMIUM-PANEL` content is
+    showing.
+  - **A real Google "G" logo**, not an emoji - `.google-signin-btn`
+    replaces the old plain `.small-btn` with 🔵, styled to read as an
+    actual Google-issued sign-in button (white background, gray border,
+    dark gray text, `#dadce0`/`#3c4043`) rather than a generic app
+    button, with the real four-color Google "G" mark inline as an SVG
+    (`.google-signin-icon`) - the standard, publicly-used
+    18×18 "G" glyph, not a custom recolor - specifically so it reads as
+    a genuine Google sign-in flow rather than something that could be
+    mistaken for a fake login harvesting credentials.
+  - **`#accountSecurityNote`**, a small `.info` box directly under the
+    Google button, new copy (`accountSecurityNoteText`, all 6
+    languages): explains that only the visitor's name/email from Google
+    are used to create the account, that their Google password is never
+    seen or stored, and that signing in exists solely so a Premium
+    subscription follows them across devices - addressing the natural
+    "why does a free POS need me to sign in with Google, and is that
+    safe" hesitation head-on rather than leaving it unexplained.
+  - **Redeem Code is now inside its own gold-tinted box** (reusing the
+    same `--gold-tint`/`#f0dfb0` treatment as the offline-download modal's
+    Terms checkbox), and its button is gold (`--gold`/`--ink`) instead of
+    the default dark `.small-btn` - visually the most prominent action in
+    the signed-in panel, matching the "make redeeming a Premium code easy
+    to spot" ask directly.
+  - **`.account-signout-btn`** replaces Sign Out's old
+    `background:transparent; color:var(--ink-soft)` styling (which
+    visually blended into the panel background, easy to miss) with a
+    clearly visible danger-tinted outline (`--danger`/`--danger-tint`,
+    the same tokens `.error-text` uses) - still a plain everyday action,
+    not styled as aggressively as a destructive delete, but no longer
+    invisible.
+  - **A one-click Sign In/Sign Out is also reachable directly from the
+    main app header**, not just inside Settings - two new lines beside
+    `#appSubtitle`, both inside the existing `OFFLINE-STRIP:ACCOUNT-WELCOME`
+    marker: `#accountWelcomeBadge` (shown when signed in) now also
+    carries an inline `.account-inline-btn-out` "Sign Out" pill next to
+    the welcome text, calling `signOutAccount()` directly with no
+    confirmation needed (it only ends a session, it can't lose cart data
+    or any local POS data); `#accountSignInPrompt` (new, shown when
+    signed out, alongside the unchanged `#appSubtitle` "No signup. No
+    login..." line rather than replacing it) carries a
+    `.account-inline-btn-in` "🔑 Sign in for Premium" pill calling
+    `openAccountSettings()` - routed through Settings rather than calling
+    `signInWithGoogle()` directly, since `signInWithGoogle()`'s own error
+    reporting writes into `#accountError` inside the Account panel, which
+    wouldn't be visible if Settings were still closed. Both toggled by
+    the same `renderWelcomeBadge()` (`modules/account.js`) that already
+    owned this row, so they stay in sync with sign-in state by
+    construction, same as everything else in this row.
+  - Verified with Playwright (mocking only the Supabase client, same
+    method used throughout Account & Subscription): the promo banner
+    shows exactly when `premiumUnlocked` is false and hides when true;
+    the header's inline Sign Out/Sign In prompt toggle correctly with
+    signed-in state and each calls the right function; clicking the
+    header Premium/Basic badge opens Settings on the Premium tab; the
+    Google icon SVG renders with all four brand colors present; and the
+    offline package build has zero leftover `PREMIUM-PROMO-NOTICE`
+    markers and, since the whole Account panel lives inside
+    `OFFLINE-SWAP:PREMIUM-PANEL`, keeps its own unrelated local-code
+    activation UI untouched by any of this.
 - **`redemption_codes` is where the site owner creates codes** - open the
   Supabase dashboard, Table Editor → `redemption_codes` → Insert row,
   fill in `code` (redemption is case/whitespace-insensitive on **both**
