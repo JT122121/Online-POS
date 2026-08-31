@@ -222,7 +222,18 @@ zero network calls.
   real fake-camera-device Playwright run (`--use-fake-device-for-media-stream`
   + a real EAN-13 barcode encoded into a Y4M video file) driving the actual
   scan button, poll loop, and ZXing decode end-to-end into a matched cart
-  item - not just a mocked decode call.
+  item - not just a mocked decode call. The same scanner also drives the SKU
+  field in Settings → Products' "Add Product" form -
+  `#newProductSkuScanBtn` (only shown when the barcode-scanner setting is
+  on, alongside `#scanBtn`) calls `openScanner('newProductSku')`. The
+  optional `targetInputId` param puts the scanner into a different mode:
+  `handleScannedCode()` checks the module-level `scannerTargetInputId` first
+  - when set, it just writes the scanned code straight into that input
+  (firing an `input` event) and auto-closes the scanner after a beat,
+  instead of doing its normal product-SKU lookup/add-to-cart. `openScanner()`
+  with no argument (the main catalog `#scanBtn`) leaves it `null`, so that
+  flow is unchanged; `closeScanner()` always resets it back to `null` so a
+  fill-mode scan can never leak into the next normal scan.
 - **Backup/restore:** "Download Backup" serializes all local state to a
   JSON file; "Restore from Backup" (`handleBackupFileSelect`) replaces
   everything and reloads the page. This is the *only* way data survives a
@@ -270,6 +281,31 @@ zero network calls.
   whatever the dropdown's default option is — safe to do unprompted since
   that default is always the local/no-network code (PROMO1 online,
   `OFFLINE_PREMIUM_CODE` offline).
+- **Printing (`printReceipt()`/`@media print`):** the printed receipt used
+  to look nothing like the on-screen preview - three separate causes, all
+  fixed together. (1) `.app` is a CSS Grid on screen
+  (`grid-template-columns: minmax(320px, var(--catalog-width,75%)) 14px
+  minmax(220px,1fr)`); the print rule hid `.left-panel` via `display:none`
+  but never reset `.app` itself, so the grid kept reserving ~75% of the
+  page width for the now-empty first column, squeezing the receipt into a
+  sliver a few dozen pixels wide. Fixed with `.app { display: block
+  !important; }` inside `@media print`. (2) `#panelResizeHandle` (the
+  drag handle) and `.cookie-consent` (the cookie banner, if still showing
+  when Print is clicked) weren't in the print hide-list, so both could
+  print alongside the receipt - added to the existing
+  `display:none !important` selector list. (3) Paper size "Auto (fit any
+  printer)" set `.receipt { width: 100% !important; }` for print, which
+  on a real Letter/A4 printer stretched the receipt across the whole
+  page instead of keeping it a narrow 80mm column like the preview always
+  shows - `updatePrintStyle("auto")` now keeps `width: 80mm !important`
+  and only lets `@page { size: auto; }` handle physical page-size
+  negotiation, so what prints matches what's previewed regardless of
+  what paper the printer actually has loaded. Explicit paper sizes
+  (58mm/80mm/A5/A4/Custom) were never affected by any of this - only
+  "Auto" stretched, and only print-mode was ever squeezed. Verified with
+  real `page.pdf()` output (not just DOM inspection) across Auto/58mm/A4,
+  confirming the rendered receipt width in each case and that no app
+  chrome or cookie banner leaks into the page.
 - **Cookies/consent + analytics/ads:** `loadAnalyticsAndAds()` at the top
   of the script conditionally injects Google gtag/AdSense based on a
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the

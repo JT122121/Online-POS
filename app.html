@@ -433,7 +433,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel, .backup-notice { display: none !important; }
+  .app-header, .left-panel, .settings-overlay, .site-footer, .sales-summary-panel, .backup-notice, .panel-resize-handle, .cookie-consent { display: none !important; }
+  .app { display: block !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -935,7 +936,10 @@ Website: goonlinepos.com</textarea>
           </div>
         </div>
         <label id="addProductSkuLabel">SKU (optional)</label>
-        <input id="newProductSku" placeholder="e.g. 8901">
+        <div class="search-row">
+          <input id="newProductSku" placeholder="e.g. 8901" style="flex:1;">
+          <button type="button" class="scan-btn hidden" id="newProductSkuScanBtn" onclick="openScanner('newProductSku')" title="Scan barcode">📷</button>
+        </div>
         <label id="addProductStockLabel">Stock Level (optional)</label>
         <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
         <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
@@ -1181,7 +1185,7 @@ en: {
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
   scannerTitle: "Scan Barcode", scannerHint: "Point the camera at a product's barcode", scannerUnsupported: "Barcode scanning isn't available in this browser.",
-  scannerNoCamera: "Couldn't access the camera. Check permissions and try again.", scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
+  scannerNoCamera: "Couldn't access the camera. Check permissions and try again.", scannerFound: "Added:", scannerNotFound: "No product found for barcode:", scannerFilledField: "Filled:",
   customItemLink: "+ Add a custom item", proceedLabel: "Proceed to Payment",
   checkoutHeading: "Payment", totalDueLabel: "Total Due",
   paymentMethodLabel: "Payment Method", totalEnteredLabel: "Entered:", changeLabelInfo: "Change:", addPaymentRowBtn: "+ Split Payment",
@@ -1279,7 +1283,7 @@ ar: {
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
   scannerTitle: "مسح الباركود", scannerHint: "وجّه الكاميرا نحو باركود المنتج", scannerUnsupported: "مسح الباركود غير متاح في هذا المتصفح.",
-  scannerNoCamera: "تعذّر الوصول إلى الكاميرا. تحقق من الأذونات وحاول مرة أخرى.", scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
+  scannerNoCamera: "تعذّر الوصول إلى الكاميرا. تحقق من الأذونات وحاول مرة أخرى.", scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:", scannerFilledField: "تم التعبئة:",
   customItemLink: "+ إضافة صنف مخصص", proceedLabel: "المتابعة إلى الدفع",
   checkoutHeading: "الدفع", totalDueLabel: "المبلغ المستحق",
   paymentMethodLabel: "طريقة الدفع", totalEnteredLabel: "المُدخل:", changeLabelInfo: "الباقي:", addPaymentRowBtn: "+ تقسيم الدفع",
@@ -1425,7 +1429,7 @@ fil: {
   addProductPhotoLabel: "Larawan (opsyonal)", productPhotoUploadError: "Hindi ma-load ang larawang iyon. Subukan ang ibang file.", productPhotoChangeTitle: "I-click para palitan ang larawan", removePhotoLabel: "Alisin",
   addProductButton: "+ Magdagdag ng Produkto", addProductNameError: "Ilagay ang pangalan ng produkto.", addProductPriceError: "Ilagay ang tamang presyo.",
   scannerTitle: "I-scan ang Barcode", scannerHint: "Itutok ang camera sa barcode ng produkto", scannerUnsupported: "Hindi available ang pag-scan ng barcode sa browser na ito.",
-  scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:",
+  scannerNoCamera: "Hindi ma-access ang camera. Suriin ang mga pahintulot at subukan ulit.", scannerFound: "Naidagdag:", scannerNotFound: "Walang nahanap na produkto para sa barcode:", scannerFilledField: "Napunan:",
   manageProductsEmpty: "Wala pang produkto - magdagdag sa itaas o mag-upload ng CSV sa ibaba.",
   productsSampleButton: "I-download ang Sample CSV", productsClearButton: "Alisin ang mga Produkto",
   productsClearConfirm: "Alisin ang lahat ng na-upload na produkto?", productsUploadError: "Hindi mabasa ang file. Siguraduhing CSV ito na may Name at Price column.",
@@ -1514,7 +1518,7 @@ hi: {
   addProductPhotoLabel: "फ़ोटो (वैकल्पिक)", productPhotoUploadError: "वह इमेज लोड नहीं हो सकी। दूसरी फ़ाइल आज़माएं।", productPhotoChangeTitle: "फ़ोटो बदलने के लिए क्लिक करें", removePhotoLabel: "हटाएं",
   addProductButton: "+ उत्पाद जोड़ें", addProductNameError: "उत्पाद का नाम दर्ज करें।", addProductPriceError: "सही कीमत दर्ज करें।",
   scannerTitle: "बारकोड स्कैन करें", scannerHint: "कैमरे को उत्पाद के बारकोड की ओर करें", scannerUnsupported: "इस ब्राउज़र में बारकोड स्कैनिंग उपलब्ध नहीं है।",
-  scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:",
+  scannerNoCamera: "कैमरे तक पहुंच नहीं हो सकी। अनुमतियां जांचें और फिर से प्रयास करें।", scannerFound: "जोड़ा गया:", scannerNotFound: "इस बारकोड के लिए कोई उत्पाद नहीं मिला:", scannerFilledField: "भरा गया:",
   manageProductsEmpty: "अभी कोई उत्पाद नहीं है - ऊपर एक जोड़ें या नीचे CSV अपलोड करें।",
   productsSampleButton: "नमूना CSV डाउनलोड करें", productsClearButton: "उत्पाद हटाएं",
   productsClearConfirm: "सभी अपलोड किए गए उत्पाद हटाएं?", productsUploadError: "फ़ाइल पढ़ी नहीं जा सकी। सुनिश्चित करें कि यह Name और Price कॉलम वाली CSV है।",
@@ -1603,7 +1607,7 @@ es: {
   addProductPhotoLabel: "Foto (opcional)", productPhotoUploadError: "No se pudo cargar esa imagen. Prueba con otro archivo.", productPhotoChangeTitle: "Haz clic para cambiar la foto", removePhotoLabel: "Quitar",
   addProductButton: "+ Agregar Producto", addProductNameError: "Ingresa un nombre de producto.", addProductPriceError: "Ingresa un precio válido.",
   scannerTitle: "Escanear Código de Barras", scannerHint: "Apunta la cámara al código de barras del producto", scannerUnsupported: "El escaneo de códigos de barras no está disponible en este navegador.",
-  scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:",
+  scannerNoCamera: "No se pudo acceder a la cámara. Revisa los permisos e intenta de nuevo.", scannerFound: "Agregado:", scannerNotFound: "No se encontró ningún producto para el código de barras:", scannerFilledField: "Completado:",
   manageProductsEmpty: "Aún no hay productos - agrega uno arriba o sube un CSV abajo.",
   productsSampleButton: "Descargar CSV de Ejemplo", productsClearButton: "Eliminar Productos",
   productsClearConfirm: "¿Eliminar todos los productos cargados?", productsUploadError: "No se pudo leer ese archivo. Asegúrate de que sea un CSV con columnas Name y Price.",
@@ -1692,7 +1696,7 @@ th: {
   addProductPhotoLabel: "รูปภาพ (ไม่บังคับ)", productPhotoUploadError: "โหลดรูปภาพนี้ไม่ได้ ลองไฟล์อื่น", productPhotoChangeTitle: "คลิกเพื่อเปลี่ยนรูปภาพ", removePhotoLabel: "ลบ",
   addProductButton: "+ เพิ่มสินค้า", addProductNameError: "กรุณากรอกชื่อสินค้า", addProductPriceError: "กรุณากรอกราคาที่ถูกต้อง",
   scannerTitle: "สแกนบาร์โค้ด", scannerHint: "เล็งกล้องไปที่บาร์โค้ดของสินค้า", scannerUnsupported: "การสแกนบาร์โค้ดไม่รองรับในเบราว์เซอร์นี้",
-  scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:",
+  scannerNoCamera: "ไม่สามารถเข้าถึงกล้องได้ ตรวจสอบการอนุญาตแล้วลองอีกครั้ง", scannerFound: "เพิ่มแล้ว:", scannerNotFound: "ไม่พบสินค้าสำหรับบาร์โค้ดนี้:", scannerFilledField: "กรอกแล้ว:",
   manageProductsEmpty: "ยังไม่มีสินค้า - เพิ่มด้านบนหรืออัปโหลด CSV ด้านล่าง",
   productsSampleButton: "ดาวน์โหลด CSV ตัวอย่าง", productsClearButton: "ล้างรายการสินค้า",
   productsClearConfirm: "ต้องการลบสินค้าที่อัปโหลดทั้งหมดใช่หรือไม่?", productsUploadError: "ไม่สามารถอ่านไฟล์นี้ได้ กรุณาตรวจสอบว่าเป็น CSV ที่มีคอลัมน์ Name และ Price",
@@ -1908,6 +1912,8 @@ function syncScanButtonVisibility() {
   const toggle = document.getElementById("barcodeScannerToggle");
   const scanBtn = document.getElementById("scanBtn");
   if (toggle && scanBtn) scanBtn.classList.toggle("hidden", !toggle.checked);
+  const skuScanBtn = document.getElementById("newProductSkuScanBtn");
+  if (toggle && skuScanBtn) skuScanBtn.classList.toggle("hidden", !toggle.checked);
 }
 function toggleBarcodeScannerSetting() {
   syncScanButtonVisibility();
@@ -3540,8 +3546,10 @@ let scannerPollTimer = null;
 let scannerMessageTimeout = null;
 let lastScannedCode = "";
 let lastScanTime = 0;
+let scannerTargetInputId = null;
 
-async function openScanner() {
+async function openScanner(targetInputId) {
+  scannerTargetInputId = targetInputId || null;
   const overlay = document.getElementById("scannerOverlay");
   const messageEl = document.getElementById("scannerMessage");
   messageEl.classList.add("hidden");
@@ -3634,6 +3642,7 @@ function pollScannerFrame() {
 
 function closeScanner() {
   document.getElementById("scannerOverlay").classList.add("hidden");
+  scannerTargetInputId = null;
   clearInterval(scannerPollTimer);
   scannerPollTimer = null;
   if (barcodeReader) {
@@ -3663,6 +3672,18 @@ function handleScannedCode(code) {
   if (code === lastScannedCode && (now - lastScanTime) < 2000) return;
   lastScannedCode = code;
   lastScanTime = now;
+
+  if (scannerTargetInputId) {
+    const input = document.getElementById(scannerTargetInputId);
+    if (input) {
+      input.value = code.trim();
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    showScannerMessage(tr("scannerFilledField") + " " + code.trim(), "success");
+    if (navigator.vibrate) navigator.vibrate(80);
+    setTimeout(closeScanner, 700);
+    return;
+  }
 
   const match = products.find(function(p) { return p.sku && p.sku.trim() !== "" && p.sku.trim() === code.trim(); });
   if (match) {
@@ -4139,7 +4160,7 @@ function updatePrintStyle(width) {
     document.head.appendChild(style);
   }
   if (width === "auto") {
-    style.textContent = "@media print { @page { size: auto; margin: 0; } .receipt { width: 100% !important; max-width: none !important; zoom: 1 !important; } }";
+    style.textContent = "@media print { @page { size: auto; margin: 0; } .receipt { width: 80mm !important; max-width: none !important; zoom: 1 !important; } }";
     return;
   }
   style.textContent = "@media print { @page { size: " + width + "mm auto; margin: 0; } .receipt { width: " + width + "mm !important; zoom: 1 !important; } }";
