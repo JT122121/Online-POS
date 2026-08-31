@@ -936,6 +936,75 @@ has zero network calls.
   panel re-translates the whole page exactly like the Settings-tab
   select does; zero horizontal overflow at 390px; and the panel is
   correctly absent from the printed receipt (`no-print`).
+  - **Follow-up pass: the rest of the receipt-affecting settings**, per
+    an explicit "currency too, in short all receipt settings" request.
+    Added Document Type (`#quickDocumentType`, synced via the existing
+    `syncQuickField()`), Currency Code/Symbol (`#quickCurrencyCode`/
+    `#quickCurrencySymbol` - the symbol field needs its own
+    `syncQuickCurrencySymbol()` since the real `#currencySymbol` input's
+    own `oninput` also calls `renderProductCatalog()`, not just
+    `updateReceipt()`, to refresh the catalog's price display), Decimal
+    Places (`#quickDecimalPlaces` → `syncQuickDecimalPlaces()`, which
+    writes into `#decimalPlaces` then calls the real
+    `handleDecimalPlacesChange()` rather than `updateReceipt()` directly,
+    matching what the real field's own `oninput` does), and - **the one
+    genuinely Premium-gated pair** - Current Receipt Number and Receipt
+    Number Prefix (`#quickReceiptNumberInput`/`#quickReceiptPrefixInput`).
+    Company Logo was deliberately left out - a file-upload control with a
+    thumbnail preview doesn't fit this compact mirror-field pattern the
+    way a text/number/select input does, and it's a set-once item, not
+    something worth a quick-edit shortcut.
+    - **Premium gating applies identically to the quick mirrors.**
+      `applyPremiumLocks()` now also sets
+      `quickReceiptNumberInput.disabled`/`quickReceiptPrefixInput.disabled`
+      from the same `premiumUnlocked` flag, right alongside the real
+      fields' own disabling - same small inline `.premium-badge` "Premium"
+      tag next to each quick label (`quickPremiumBadgeReceiptNumber`/
+      `Prefix`, reusing `premiumBadgeLabel`) as the real Settings tab
+      uses, just without that tab's full lock-message paragraph (no room
+      in a compact panel; the badge plus native `disabled` greying is
+      signal enough).
+    - **Two of these needed different sync mechanics than
+      `syncQuickField()`**, because `handleReceiptNumberEdit(el)`/
+      `handleReceiptPrefixEdit(el)` don't read a value back out of any
+      particular input - they mutate the module-level `receiptCounterValue`/
+      `receiptPrefix` directly off whichever `el` was passed in. So the
+      quick inputs call those same handler functions directly
+      (`oninput="handleReceiptNumberEdit(this)"`, exactly like the real
+      field does) rather than going through `syncQuickField()`.
+      `updateTotalsAndHeader()` already had one guarded resync line
+      keeping `#receiptNumberInput` in sync with `receiptCounterValue`
+      whenever it isn't the focused element (so typing in one field
+      doesn't get clobbered while the other catches up) - that same
+      guard pattern was added for `#quickReceiptNumberInput` and, new,
+      for **both** `#receiptPrefixInput` and `#quickReceiptPrefixInput`
+      against `receiptPrefix`. **The real `#receiptPrefixInput` never had
+      this resync before** - harmless with only one prefix field in
+      existence, but adding a second one surfaced it for real: editing
+      the prefix via the quick panel updated the receipt correctly but
+      left the Settings-tab field showing a stale value until something
+      else happened to touch it. Fixed by adding the missing guard for
+      the real field too, not just the new quick one.
+    - `syncQuickReceiptFields()` moved from being called at the end of
+      `updateReceipt()` to the end of `updateTotalsAndHeader()` instead
+      (which `updateReceipt()` already calls) - `handleReceiptNumberEdit`/
+      `handleReceiptPrefixEdit`/`handleDecimalPlacesChange` all call
+      `updateTotalsAndHeader()` (some directly, some via `updateReceipt()`)
+      but not all of them went through `updateReceipt()` specifically, so
+      the old placement missed some of these paths.
+    - `changeLanguage()` now also re-translates `#quickDocumentType`'s
+      three options (`tr("receipt")`/`tr("invoice")`/`tr("payment")`),
+      mirroring the block that already did this for the real
+      `#documentType` select.
+    - Verified with Playwright: on the Basic tier both quick and real
+      Receipt Number/Prefix fields are disabled; Currency/Decimal
+      Places/Document Type work regardless of tier and update the live
+      receipt immediately; once Premium is unlocked (mocked) both quick
+      fields become editable, and editing either one correctly updates
+      the real Settings-tab field *and* the receipt's formatted number
+      (prefix + zero-padded counter); and the built offline package
+      (which auto-unlocks Premium) has the same two-way sync working
+      with zero leftover markers and zero console errors.
 - **Header brand mark is not a link.** `.brand` (logo + title + Premium
   badge) is a plain `<div>`, not an `<a href="/">` — it used to
   double as an unguarded way back to the homepage, but that bypassed
