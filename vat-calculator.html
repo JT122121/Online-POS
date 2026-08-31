@@ -156,6 +156,9 @@ img { max-width: 100%; display: block; }
 
 .gen-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 26px; margin: 22px 0; }
 
+.lang-inline { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.lang-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
 .type-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
 .type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
 .type-tab:hover { border-color: #cfccbf; }
@@ -276,22 +279,34 @@ img { max-width: 100%; display: block; }
 </header>
 
 <header class="masthead">
-<div class="kicker">Free Tool</div>
-<h1>VAT Calculator</h1>
-<p>Add VAT to a net amount or remove VAT from a gross amount, right in your browser. Choose a common rate or enter your own, and see the breakdown instantly. No signup, nothing leaves this browser.</p>
+<div class="kicker" id="mastheadKicker">Free Tool</div>
+<h1 id="mastheadTitle">VAT Calculator</h1>
+<p id="mastheadSubtitle">Add VAT to a net amount or remove VAT from a gross amount, right in your browser. Choose a common rate or enter your own, and see the breakdown instantly. No signup, nothing leaves this browser.</p>
 </header>
 
 <div class="gen-card" id="genCard">
 
+  <div class="lang-inline">
+    <label for="vatLanguage" id="languageLabelInv">Language</label>
+    <select id="vatLanguage">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+      <option value="fil">Filipino</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+      <option value="th">ไทย</option>
+    </select>
+  </div>
+
   <div class="type-tabs">
-    <button type="button" class="type-tab active" id="tabAddVat" data-mode="add">➕ Add VAT</button>
-    <button type="button" class="type-tab" id="tabRemoveVat" data-mode="remove">➖ Remove VAT</button>
+    <button type="button" class="type-tab active" id="tabAddVat" data-mode="add">➕ <span id="tabAddVatLabel">Add VAT</span></button>
+    <button type="button" class="type-tab" id="tabRemoveVat" data-mode="remove">➖ <span id="tabRemoveVatLabel">Remove VAT</span></button>
   </div>
 
   <div class="form-section">
 
     <div class="currency-inline">
-      <label for="vatCurrency">Currency</label>
+      <label for="vatCurrency" id="currencyLabelInv">Currency</label>
       <select id="vatCurrency"></select>
     </div>
 
@@ -301,21 +316,21 @@ img { max-width: 100%; display: block; }
     </div>
 
     <div class="field-row">
-      <label class="field-label" for="vatRatePreset">VAT Rate</label>
+      <label class="field-label" for="vatRatePreset" id="vatRateLabel">VAT Rate</label>
       <select class="field-input" id="vatRatePreset"></select>
     </div>
     <div class="field-row hidden" id="customRateRow">
-      <label class="field-label" for="customRate">Custom Rate (%)</label>
+      <label class="field-label" for="customRate" id="customRateLabel">Custom Rate (%)</label>
       <input type="number" class="field-input" id="customRate" min="0" max="100" step="0.01" value="20">
     </div>
 
   </div>
 
   <div class="results-area">
-    <div class="preview-label">Result</div>
+    <div class="preview-label" id="resultLabel">Result</div>
     <div class="results-box">
       <div class="result-row">
-        <span class="result-label">Net Amount</span>
+        <span class="result-label" id="netAmountResultLabel">Net Amount</span>
         <span class="result-value" id="resultNet">$0.00</span>
       </div>
       <div class="result-row">
@@ -323,7 +338,7 @@ img { max-width: 100%; display: block; }
         <span class="result-value" id="resultVat">$0.00</span>
       </div>
       <div class="result-row result-total">
-        <span class="result-label">Gross Amount</span>
+        <span class="result-label" id="grossAmountResultLabel">Gross Amount</span>
         <span class="result-value" id="resultGross">$0.00</span>
       </div>
     </div>
@@ -332,16 +347,16 @@ img { max-width: 100%; display: block; }
 </div>
 
 <div class="action-bar">
-  <button type="button" id="saveVatBtn">💾 Save</button>
-  <button type="button" id="savedVatBtn">📂 Saved Calculations</button>
-  <button type="button" id="clearVatBtn">🗑 Clear / New</button>
+  <button type="button" id="saveVatBtn">💾 <span id="saveVatBtnLabel">Save</span></button>
+  <button type="button" id="savedVatBtn">📂 <span id="savedVatBtnLabel">Saved Calculations</span></button>
+  <button type="button" id="clearVatBtn">🗑 <span id="clearVatBtnLabel">Clear / New</span></button>
 </div>
-<p class="autosave-note">Your current calculation is saved automatically in this browser as you type. Click "Save" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.</p>
+<p class="autosave-note" id="autosaveNote">Your current calculation is saved automatically in this browser as you type. Click "Save" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.</p>
 
 <div class="modal-overlay hidden" id="savedVatOverlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>Saved Calculations</h3>
+      <h3 id="savedVatModalTitle">Saved Calculations</h3>
       <button type="button" class="modal-close-btn" id="closeSavedVatBtn" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="savedVatList"></div>
@@ -351,29 +366,29 @@ img { max-width: 100%; display: block; }
 <div class="save-toast" id="saveToast">Saved</div>
 
 <div class="info-section">
-  <h2>How to use the VAT Calculator</h2>
+  <h2 id="howToTitle">How to use the VAT Calculator</h2>
   <ol>
-    <li>Choose "Add VAT" if you have an amount before tax, or "Remove VAT" if you have a total that already includes VAT.</li>
-    <li>Enter the amount and pick your currency.</li>
-    <li>Pick a VAT rate from the list, or choose Custom and enter your own rate.</li>
-    <li>The Net Amount, VAT Amount, and Gross Amount update instantly as you type.</li>
-    <li>Click "Save" to keep this calculation in your Saved Calculations list.</li>
+    <li id="howToStep1">Choose "Add VAT" if you have an amount before tax, or "Remove VAT" if you have a total that already includes VAT.</li>
+    <li id="howToStep2">Enter the amount and pick your currency.</li>
+    <li id="howToStep3">Pick a VAT rate from the list, or choose Custom and enter your own rate.</li>
+    <li id="howToStep4">The Net Amount, VAT Amount, and Gross Amount update instantly as you type.</li>
+    <li id="howToStep5">Click "Save" to keep this calculation in your Saved Calculations list.</li>
   </ol>
 
-  <h2>VAT Calculator FAQ</h2>
+  <h2 id="faqTitle">VAT Calculator FAQ</h2>
   <dl>
-    <dt>Is this VAT calculator free?</dt>
-    <dd>Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.</dd>
-    <dt>Is there a limit on how many calculations I can do?</dt>
-    <dd>No. Every calculation happens locally in your browser, with no server calls and no usage cap - calculate as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.</dd>
-    <dt>What is VAT?</dt>
-    <dd>VAT (Value Added Tax) is a consumption tax added to the price of goods and services. It's typically shown either as an amount added on top of a price (net) or already included in it (gross).</dd>
-    <dt>How is VAT calculated?</dt>
-    <dd>To add VAT to a net amount: Gross = Net × (1 + rate). To remove VAT from a gross amount: Net = Gross ÷ (1 + rate), and VAT = Gross − Net. This calculator does both automatically depending on which mode you choose.</dd>
-    <dt>Which VAT rate should I use?</dt>
-    <dd>Rates vary by country and by the type of goods or service - the presets here are common standard rates for reference only. Always confirm the correct rate with your local tax authority; this tool doesn't provide tax advice.</dd>
-    <dt>Where can I see my saved calculations?</dt>
-    <dd>Click "Save" to add the current one to your list, then click "Saved Calculations" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt id="faq1Q">Is this VAT calculator free?</dt>
+    <dd id="faq1A">Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.</dd>
+    <dt id="faq2Q">Is there a limit on how many calculations I can do?</dt>
+    <dd id="faq2A">No. Every calculation happens locally in your browser, with no server calls and no usage cap - calculate as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.</dd>
+    <dt id="faq3Q">What is VAT?</dt>
+    <dd id="faq3A">VAT (Value Added Tax) is a consumption tax added to the price of goods and services. It's typically shown either as an amount added on top of a price (net) or already included in it (gross).</dd>
+    <dt id="faq4Q">How is VAT calculated?</dt>
+    <dd id="faq4A">To add VAT to a net amount: Gross = Net × (1 + rate). To remove VAT from a gross amount: Net = Gross ÷ (1 + rate), and VAT = Gross − Net. This calculator does both automatically depending on which mode you choose.</dd>
+    <dt id="faq5Q">Which VAT rate should I use?</dt>
+    <dd id="faq5A">Rates vary by country and by the type of goods or service - the presets here are common standard rates for reference only. Always confirm the correct rate with your local tax authority; this tool doesn't provide tax advice.</dd>
+    <dt id="faq6Q">Where can I see my saved calculations?</dt>
+    <dd id="faq6A">Click "Save" to add the current one to your list, then click "Saved Calculations" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
   </dl>
 </div>
 
@@ -437,17 +452,224 @@ img { max-width: 100%; display: block; }
     YER: "﷼", ZAR: "R", ZMW: "ZK", ZWL: "$"
   };
 
+  var translations = {
+    en: {
+      freeToolLabel: "Free Tool", mastheadTitleLabel: "VAT Calculator",
+      mastheadSubtitle: "Add VAT to a net amount or remove VAT from a gross amount, right in your browser. Choose a common rate or enter your own, and see the breakdown instantly. No signup, nothing leaves this browser.",
+      languageLabel: "Language", tabAddVatLabel: "Add VAT", tabRemoveVatLabel: "Remove VAT", currencyLabel: "Currency",
+      netAmountLabel: "Net Amount (excl. VAT)", grossAmountLabel: "Gross Amount (incl. VAT)",
+      vatRateLabel: "VAT Rate", customRateLabel: "Custom Rate (%)",
+      resultLabel: "Result", netAmountResultLabel: "Net Amount", vatResultPrefix: "VAT", grossAmountResultLabel: "Gross Amount",
+      saveLabel: "Save", savedCalculationsLabel: "Saved Calculations", clearNewLabel: "Clear / New",
+      autosaveNoteText: "Your current calculation is saved automatically in this browser as you type. Click \"Save\" to add it to your Saved Calculations list so you can find it again later - nothing is uploaded anywhere.",
+      savedToast: "Saved",
+      savedCalcsEmptyText: "No saved calculations yet. Enter an amount and click \"Save\" to keep it here.",
+      addVatBadge: "Add VAT", removeVatBadge: "Remove VAT", totalWordLabel: "total",
+      deleteSavedConfirm: "Delete this saved calculation? This can't be undone.",
+      clearCalcConfirm: "Clear this calculation and start a new one? This can't be undone.",
+      howToTitle: "How to use the VAT Calculator",
+      howToStep1: "Choose \"Add VAT\" if you have an amount before tax, or \"Remove VAT\" if you have a total that already includes VAT.",
+      howToStep2: "Enter the amount and pick your currency.",
+      howToStep3: "Pick a VAT rate from the list, or choose Custom and enter your own rate.",
+      howToStep4: "The Net Amount, VAT Amount, and Gross Amount update instantly as you type.",
+      howToStep5: "Click \"Save\" to keep this calculation in your Saved Calculations list.",
+      faqTitle: "VAT Calculator FAQ",
+      faq1Q: "Is this VAT calculator free?", faq1A: "Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.",
+      faq2Q: "Is there a limit on how many calculations I can do?", faq2A: "No. Every calculation happens locally in your browser, with no server calls and no usage cap - calculate as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Calculations list.",
+      faq3Q: "What is VAT?", faq3A: "VAT (Value Added Tax) is a consumption tax added to the price of goods and services. It's typically shown either as an amount added on top of a price (net) or already included in it (gross).",
+      faq4Q: "How is VAT calculated?", faq4A: "To add VAT to a net amount: Gross = Net × (1 + rate). To remove VAT from a gross amount: Net = Gross ÷ (1 + rate), and VAT = Gross − Net. This calculator does both automatically depending on which mode you choose.",
+      faq5Q: "Which VAT rate should I use?", faq5A: "Rates vary by country and by the type of goods or service - the presets here are common standard rates for reference only. Always confirm the correct rate with your local tax authority; this tool doesn't provide tax advice.",
+      faq6Q: "Where can I see my saved calculations?", faq6A: "Click \"Save\" to add the current one to your list, then click \"Saved Calculations\" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.",
+      rateStandardUkFrance: "Standard (UK, France, and similar)", rateStandardNlBe: "Standard (Netherlands, Belgium, and similar)",
+      rateStandardDe: "Standard (Germany, and similar)", rateStandardZaNz: "Standard (South Africa, New Zealand GST, and similar)",
+      rateStandardPh: "Standard (Philippines, and similar)", rateStandardAu: "Standard (Australia GST, and similar)",
+      rateStandardTh: "Standard (Thailand, and similar)", rateStandardAe: "Standard (UAE, and similar)",
+      rateZero: "Zero-rated", customRateOptionLabel: "Custom rate"
+    },
+    ar: {
+      freeToolLabel: "أداة مجانية", mastheadTitleLabel: "حاسبة ضريبة القيمة المضافة",
+      mastheadSubtitle: "أضف ضريبة القيمة المضافة إلى مبلغ صافٍ أو أزلها من مبلغ إجمالي، مباشرة في متصفحك. اختر معدلاً شائعاً أو أدخل معدلك الخاص، وشاهد التفصيل فوراً. بدون تسجيل، لا يغادر شيء هذا المتصفح.",
+      languageLabel: "اللغة", tabAddVatLabel: "إضافة الضريبة", tabRemoveVatLabel: "إزالة الضريبة", currencyLabel: "العملة",
+      netAmountLabel: "المبلغ الصافي (بدون الضريبة)", grossAmountLabel: "المبلغ الإجمالي (شامل الضريبة)",
+      vatRateLabel: "معدل ضريبة القيمة المضافة", customRateLabel: "معدل مخصص (%)",
+      resultLabel: "النتيجة", netAmountResultLabel: "المبلغ الصافي", vatResultPrefix: "ضريبة القيمة المضافة", grossAmountResultLabel: "المبلغ الإجمالي",
+      saveLabel: "حفظ", savedCalculationsLabel: "الحسابات المحفوظة", clearNewLabel: "مسح / جديد",
+      autosaveNoteText: "يتم حفظ حسابك الحالي تلقائياً في هذا المتصفح أثناء الكتابة. اضغط \"حفظ\" لإضافته إلى قائمة الحسابات المحفوظة حتى تجده لاحقاً - لا يتم رفع أي شيء إلى الإنترنت.",
+      savedToast: "تم الحفظ",
+      savedCalcsEmptyText: "لا توجد حسابات محفوظة بعد. أدخل مبلغاً واضغط \"حفظ\" لحفظه هنا.",
+      addVatBadge: "إضافة الضريبة", removeVatBadge: "إزالة الضريبة", totalWordLabel: "الإجمالي",
+      deleteSavedConfirm: "هل تريد حذف هذا الحساب المحفوظ؟ لا يمكن التراجع عن هذا الإجراء.",
+      clearCalcConfirm: "هل تريد مسح هذا الحساب والبدء بحساب جديد؟ لا يمكن التراجع عن هذا الإجراء.",
+      howToTitle: "كيفية استخدام حاسبة ضريبة القيمة المضافة",
+      howToStep1: "اختر \"إضافة الضريبة\" إذا كان لديك مبلغ قبل الضريبة، أو \"إزالة الضريبة\" إذا كان لديك إجمالي يشمل الضريبة بالفعل.",
+      howToStep2: "أدخل المبلغ واختر عملتك.",
+      howToStep3: "اختر معدل ضريبة من القائمة، أو اختر مخصص وأدخل معدلك الخاص.",
+      howToStep4: "يتم تحديث المبلغ الصافي ومبلغ الضريبة والمبلغ الإجمالي فوراً أثناء الكتابة.",
+      howToStep5: "اضغط \"حفظ\" لحفظ هذا الحساب في قائمة الحسابات المحفوظة.",
+      faqTitle: "الأسئلة الشائعة حول حاسبة ضريبة القيمة المضافة",
+      faq1Q: "هل حاسبة ضريبة القيمة المضافة هذه مجانية؟", faq1A: "نعم. تعمل بالكامل داخل متصفحك - بدون تسجيل، بدون حساب، ولا يُرفع أي شيء إلى أي مكان.",
+      faq2Q: "هل هناك حد لعدد الحسابات التي يمكنني إجراؤها؟", faq2A: "لا. يتم إجراء كل حساب محلياً في متصفحك، بدون أي اتصال بخادم وبدون حد للاستخدام - احسب بقدر ما تحتاج. الحد العملي الوحيد هو مساحة تخزين متصفحك إذا حفظت عدداً كبيراً جداً في قائمة الحسابات المحفوظة.",
+      faq3Q: "ما هي ضريبة القيمة المضافة؟", faq3A: "ضريبة القيمة المضافة هي ضريبة استهلاك تُضاف إلى سعر السلع والخدمات. تُعرض عادةً إما كمبلغ يُضاف فوق السعر (صافي) أو مُدرجة فيه بالفعل (إجمالي).",
+      faq4Q: "كيف تُحسب ضريبة القيمة المضافة؟", faq4A: "لإضافة الضريبة إلى مبلغ صافٍ: الإجمالي = الصافي × (1 + المعدل). لإزالة الضريبة من مبلغ إجمالي: الصافي = الإجمالي ÷ (1 + المعدل)، والضريبة = الإجمالي − الصافي. تقوم هذه الحاسبة بكلا الأمرين تلقائياً حسب الوضع الذي تختاره.",
+      faq5Q: "أي معدل ضريبة يجب أن أستخدمه؟", faq5A: "تختلف المعدلات حسب البلد ونوع السلعة أو الخدمة - المعدلات الجاهزة هنا هي معدلات قياسية شائعة للرجوع إليها فقط. تأكد دائماً من المعدل الصحيح مع سلطة الضرائب المحلية لديك؛ هذه الأداة لا تقدم استشارات ضريبية.",
+      faq6Q: "أين يمكنني رؤية حساباتي المحفوظة؟", faq6A: "اضغط \"حفظ\" لإضافة الحساب الحالي إلى قائمتك، ثم اضغط \"الحسابات المحفوظة\" في أي وقت لتصفحها أو إعادة فتحها أو حذفها. تُحفظ فقط في هذا المتصفح - مسح بيانات المتصفح يحذفها.",
+      rateStandardUkFrance: "قياسي (المملكة المتحدة، فرنسا، وما شابه)", rateStandardNlBe: "قياسي (هولندا، بلجيكا، وما شابه)",
+      rateStandardDe: "قياسي (ألمانيا، وما شابه)", rateStandardZaNz: "قياسي (جنوب أفريقيا، نيوزيلندا GST، وما شابه)",
+      rateStandardPh: "قياسي (الفلبين، وما شابه)", rateStandardAu: "قياسي (أستراليا GST، وما شابه)",
+      rateStandardTh: "قياسي (تايلاند، وما شابه)", rateStandardAe: "قياسي (الإمارات، وما شابه)",
+      rateZero: "معدل صفري", customRateOptionLabel: "معدل مخصص"
+    },
+    fil: {
+      freeToolLabel: "Libreng Tool", mastheadTitleLabel: "VAT Calculator",
+      mastheadSubtitle: "Magdagdag ng VAT sa net amount o alisin ang VAT sa gross amount, dito mismo sa iyong browser. Pumili ng karaniwang rate o maglagay ng sarili mo, at makita agad ang breakdown. Walang signup, walang aalis sa browser na ito.",
+      languageLabel: "Wika", tabAddVatLabel: "Magdagdag ng VAT", tabRemoveVatLabel: "Alisin ang VAT", currencyLabel: "Currency",
+      netAmountLabel: "Net Amount (hindi kasama ang VAT)", grossAmountLabel: "Gross Amount (kasama ang VAT)",
+      vatRateLabel: "VAT Rate", customRateLabel: "Custom Rate (%)",
+      resultLabel: "Resulta", netAmountResultLabel: "Net Amount", vatResultPrefix: "VAT", grossAmountResultLabel: "Gross Amount",
+      saveLabel: "I-save", savedCalculationsLabel: "Mga Naka-save na Kalkulasyon", clearNewLabel: "I-clear / Bago",
+      autosaveNoteText: "Awtomatikong na-save ang kasalukuyang kalkulasyon mo sa browser na ito habang nagta-type ka. I-click ang \"I-save\" para idagdag ito sa listahan ng Mga Naka-save na Kalkulasyon para mahanap mo ulit ito - walang ina-upload kahit saan.",
+      savedToast: "Na-save",
+      savedCalcsEmptyText: "Wala pang naka-save na kalkulasyon. Maglagay ng halaga at i-click ang \"I-save\" para itago dito.",
+      addVatBadge: "Magdagdag ng VAT", removeVatBadge: "Alisin ang VAT", totalWordLabel: "kabuuan",
+      deleteSavedConfirm: "Tanggalin ang naka-save na kalkulasyon na ito? Hindi na ito mababawi.",
+      clearCalcConfirm: "I-clear ang kalkulasyon na ito at magsimula ng bago? Hindi na ito mababawi.",
+      howToTitle: "Paano gamitin ang VAT Calculator",
+      howToStep1: "Piliin ang \"Magdagdag ng VAT\" kung may halaga ka bago ang tax, o \"Alisin ang VAT\" kung may kabuuan ka na kasama na ang VAT.",
+      howToStep2: "Ilagay ang halaga at piliin ang currency mo.",
+      howToStep3: "Pumili ng VAT rate sa listahan, o piliin ang Custom at maglagay ng sarili mong rate.",
+      howToStep4: "Awtomatikong nag-a-update ang Net Amount, VAT Amount, at Gross Amount habang nagta-type ka.",
+      howToStep5: "I-click ang \"I-save\" para itago ang kalkulasyon na ito sa listahan ng Mga Naka-save na Kalkulasyon.",
+      faqTitle: "Mga Tanong Tungkol sa VAT Calculator",
+      faq1Q: "Libre ba itong VAT calculator?", faq1A: "Oo. Gumagana ito nang buo sa iyong browser - walang signup, walang account, at walang ina-upload kahit saan.",
+      faq2Q: "May limitasyon ba sa bilang ng kalkulasyon na pwede kong gawin?", faq2A: "Wala. Nangyayari ang bawat kalkulasyon nang lokal sa iyong browser, walang server call at walang usage cap - mag-calculate nang kahit gaano karami ang kailangan mo. Ang tanging praktikal na limitasyon ay ang storage space ng browser mo kung maraming beses kang nag-save sa listahan ng Mga Naka-save na Kalkulasyon.",
+      faq3Q: "Ano ang VAT?", faq3A: "Ang VAT (Value Added Tax) ay isang consumption tax na idinadagdag sa presyo ng mga produkto at serbisyo. Karaniwang ipinapakita ito alinman bilang halagang idinagdag sa ibabaw ng presyo (net) o kasama na dito (gross).",
+      faq4Q: "Paano kinakalkula ang VAT?", faq4A: "Para magdagdag ng VAT sa net amount: Gross = Net × (1 + rate). Para alisin ang VAT sa gross amount: Net = Gross ÷ (1 + rate), at VAT = Gross − Net. Ginagawa ito ng calculator na ito nang awtomatiko depende sa mode na pinili mo.",
+      faq5Q: "Anong VAT rate ang dapat kong gamitin?", faq5A: "Nag-iiba ang rates depende sa bansa at sa uri ng produkto o serbisyo - ang mga preset dito ay karaniwang standard rates para lang sa reference. Palaging kumpirmahin ang tamang rate sa iyong local tax authority; hindi nagbibigay ang tool na ito ng tax advice.",
+      faq6Q: "Saan ko makikita ang mga naka-save kong kalkulasyon?", faq6A: "I-click ang \"I-save\" para idagdag ang kasalukuyan sa listahan mo, pagkatapos i-click ang \"Mga Naka-save na Kalkulasyon\" kahit kailan para tingnan, buksan ulit, o burahin ang mga ito. Naka-save lang ito sa browser na ito - mawawala ang mga ito kapag na-clear mo ang data ng browser.",
+      rateStandardUkFrance: "Standard (UK, France, at katulad)", rateStandardNlBe: "Standard (Netherlands, Belgium, at katulad)",
+      rateStandardDe: "Standard (Germany, at katulad)", rateStandardZaNz: "Standard (South Africa, New Zealand GST, at katulad)",
+      rateStandardPh: "Standard (Pilipinas, at katulad)", rateStandardAu: "Standard (Australia GST, at katulad)",
+      rateStandardTh: "Standard (Thailand, at katulad)", rateStandardAe: "Standard (UAE, at katulad)",
+      rateZero: "Zero-rated", customRateOptionLabel: "Custom na rate"
+    },
+    hi: {
+      freeToolLabel: "मुफ़्त टूल", mastheadTitleLabel: "वैट कैलकुलेटर",
+      mastheadSubtitle: "अपने ब्राउज़र में ही एक शुद्ध राशि में वैट जोड़ें या सकल राशि से वैट हटाएं। एक सामान्य दर चुनें या अपनी खुद की दर दर्ज करें, और तुरंत विवरण देखें। कोई साइनअप नहीं, इस ब्राउज़र से कुछ भी बाहर नहीं जाता।",
+      languageLabel: "भाषा", tabAddVatLabel: "वैट जोड़ें", tabRemoveVatLabel: "वैट हटाएं", currencyLabel: "मुद्रा",
+      netAmountLabel: "शुद्ध राशि (वैट रहित)", grossAmountLabel: "सकल राशि (वैट सहित)",
+      vatRateLabel: "वैट दर", customRateLabel: "कस्टम दर (%)",
+      resultLabel: "परिणाम", netAmountResultLabel: "शुद्ध राशि", vatResultPrefix: "वैट", grossAmountResultLabel: "सकल राशि",
+      saveLabel: "सेव करें", savedCalculationsLabel: "सेव किए गए हिसाब", clearNewLabel: "साफ़ करें / नया",
+      autosaveNoteText: "आपका मौजूदा हिसाब टाइप करते समय इस ब्राउज़र में अपने आप सेव हो जाता है। इसे बाद में फिर से खोजने के लिए अपनी सेव किए गए हिसाब की सूची में जोड़ने के लिए \"सेव करें\" पर क्लिक करें - कहीं भी कुछ भी अपलोड नहीं होता।",
+      savedToast: "सेव हो गया",
+      savedCalcsEmptyText: "अभी तक कोई सेव किया गया हिसाब नहीं है। एक राशि दर्ज करें और इसे यहाँ रखने के लिए \"सेव करें\" पर क्लिक करें।",
+      addVatBadge: "वैट जोड़ें", removeVatBadge: "वैट हटाएं", totalWordLabel: "कुल",
+      deleteSavedConfirm: "इस सेव किए गए हिसाब को हटाएं? इसे वापस नहीं लाया जा सकता।",
+      clearCalcConfirm: "इस हिसाब को साफ़ करके नया शुरू करें? इसे वापस नहीं लाया जा सकता।",
+      howToTitle: "वैट कैलकुलेटर का उपयोग कैसे करें",
+      howToStep1: "यदि आपके पास कर से पहले की राशि है तो \"वैट जोड़ें\" चुनें, या यदि आपके पास पहले से वैट शामिल कुल राशि है तो \"वैट हटाएं\" चुनें।",
+      howToStep2: "राशि दर्ज करें और अपनी मुद्रा चुनें।",
+      howToStep3: "सूची में से एक वैट दर चुनें, या कस्टम चुनें और अपनी खुद की दर दर्ज करें।",
+      howToStep4: "शुद्ध राशि, वैट राशि, और सकल राशि टाइप करते ही तुरंत अपडेट हो जाते हैं।",
+      howToStep5: "इस हिसाब को अपनी सेव किए गए हिसाब की सूची में रखने के लिए \"सेव करें\" पर क्लिक करें।",
+      faqTitle: "वैट कैलकुलेटर से जुड़े सवाल",
+      faq1Q: "क्या यह वैट कैलकुलेटर मुफ़्त है?", faq1A: "हां। यह पूरी तरह से आपके ब्राउज़र में चलता है - कोई साइनअप नहीं, कोई खाता नहीं, और कहीं भी कुछ भी अपलोड नहीं होता।",
+      faq2Q: "क्या मैं कितने भी हिसाब कर सकता हूं, इसकी कोई सीमा है?", faq2A: "नहीं। हर हिसाब आपके ब्राउज़र में स्थानीय रूप से होता है, बिना किसी सर्वर कॉल और बिना किसी उपयोग सीमा के - जितने चाहें उतने हिसाब करें। एकमात्र व्यावहारिक सीमा आपके ब्राउज़र की अपनी स्टोरेज स्पेस है, अगर आप सेव किए गए हिसाब की सूची में बहुत बड़ी संख्या सेव करते हैं।",
+      faq3Q: "वैट क्या है?", faq3A: "वैट (मूल्य वर्धित कर) एक उपभोग कर है जो वस्तुओं और सेवाओं की कीमत में जोड़ा जाता है। इसे आमतौर पर या तो कीमत के ऊपर जोड़ी गई राशि (शुद्ध) के रूप में दिखाया जाता है या पहले से ही इसमें शामिल (सकल) के रूप में।",
+      faq4Q: "वैट की गणना कैसे की जाती है?", faq4A: "शुद्ध राशि में वैट जोड़ने के लिए: सकल = शुद्ध × (1 + दर)। सकल राशि से वैट हटाने के लिए: शुद्ध = सकल ÷ (1 + दर), और वैट = सकल − शुद्ध। यह कैलकुलेटर आपके द्वारा चुने गए मोड के आधार पर दोनों को अपने आप करता है।",
+      faq5Q: "मुझे कौन सी वैट दर का उपयोग करना चाहिए?", faq5A: "दरें देश और वस्तु या सेवा के प्रकार के अनुसार अलग-अलग होती हैं - यहां दिए गए प्रीसेट केवल संदर्भ के लिए सामान्य मानक दरें हैं। हमेशा अपने स्थानीय कर प्राधिकरण से सही दर की पुष्टि करें; यह टूल कर सलाह प्रदान नहीं करता।",
+      faq6Q: "मैं अपने सेव किए गए हिसाब कहां देख सकता हूं?", faq6A: "वर्तमान हिसाब को अपनी सूची में जोड़ने के लिए \"सेव करें\" पर क्लिक करें, फिर उन्हें ब्राउज़ करने, फिर से खोलने या हटाने के लिए किसी भी समय \"सेव किए गए हिसाब\" पर क्लिक करें। ये केवल इस ब्राउज़र में सेव होते हैं - अपने ब्राउज़र का डेटा साफ़ करने से ये हट जाते हैं।",
+      rateStandardUkFrance: "मानक (यूके, फ्रांस, और समान)", rateStandardNlBe: "मानक (नीदरलैंड, बेल्जियम, और समान)",
+      rateStandardDe: "मानक (जर्मनी, और समान)", rateStandardZaNz: "मानक (दक्षिण अफ्रीका, न्यूज़ीलैंड GST, और समान)",
+      rateStandardPh: "मानक (फ़िलीपींस, और समान)", rateStandardAu: "मानक (ऑस्ट्रेलिया GST, और समान)",
+      rateStandardTh: "मानक (थाईलैंड, और समान)", rateStandardAe: "मानक (यूएई, और समान)",
+      rateZero: "शून्य दर", customRateOptionLabel: "कस्टम दर"
+    },
+    es: {
+      freeToolLabel: "Herramienta Gratuita", mastheadTitleLabel: "Calculadora de IVA",
+      mastheadSubtitle: "Agrega IVA a un monto neto o elimina el IVA de un monto bruto, directamente en tu navegador. Elige una tasa común o ingresa la tuya, y ve el desglose al instante. Sin registro, nada sale de este navegador.",
+      languageLabel: "Idioma", tabAddVatLabel: "Agregar IVA", tabRemoveVatLabel: "Quitar IVA", currencyLabel: "Moneda",
+      netAmountLabel: "Monto Neto (sin IVA)", grossAmountLabel: "Monto Bruto (con IVA)",
+      vatRateLabel: "Tasa de IVA", customRateLabel: "Tasa Personalizada (%)",
+      resultLabel: "Resultado", netAmountResultLabel: "Monto Neto", vatResultPrefix: "IVA", grossAmountResultLabel: "Monto Bruto",
+      saveLabel: "Guardar", savedCalculationsLabel: "Cálculos Guardados", clearNewLabel: "Limpiar / Nuevo",
+      autosaveNoteText: "Tu cálculo actual se guarda automáticamente en este navegador mientras escribes. Haz clic en \"Guardar\" para agregarlo a tu lista de Cálculos Guardados y encontrarlo más tarde - no se sube nada a ningún lado.",
+      savedToast: "Guardado",
+      savedCalcsEmptyText: "Aún no hay cálculos guardados. Ingresa un monto y haz clic en \"Guardar\" para guardarlo aquí.",
+      addVatBadge: "Agregar IVA", removeVatBadge: "Quitar IVA", totalWordLabel: "total",
+      deleteSavedConfirm: "¿Eliminar este cálculo guardado? Esto no se puede deshacer.",
+      clearCalcConfirm: "¿Limpiar este cálculo y comenzar uno nuevo? Esto no se puede deshacer.",
+      howToTitle: "Cómo usar la Calculadora de IVA",
+      howToStep1: "Elige \"Agregar IVA\" si tienes un monto antes de impuestos, o \"Quitar IVA\" si tienes un total que ya incluye el IVA.",
+      howToStep2: "Ingresa el monto y elige tu moneda.",
+      howToStep3: "Elige una tasa de IVA de la lista, o elige Personalizada e ingresa tu propia tasa.",
+      howToStep4: "El Monto Neto, Monto de IVA, y Monto Bruto se actualizan al instante mientras escribes.",
+      howToStep5: "Haz clic en \"Guardar\" para guardar este cálculo en tu lista de Cálculos Guardados.",
+      faqTitle: "Preguntas Frecuentes sobre la Calculadora de IVA",
+      faq1Q: "¿Esta calculadora de IVA es gratuita?", faq1A: "Sí. Funciona completamente en tu navegador - sin registro, sin cuenta, y no se sube nada a ningún lado.",
+      faq2Q: "¿Hay un límite de cuántos cálculos puedo hacer?", faq2A: "No. Cada cálculo ocurre localmente en tu navegador, sin llamadas al servidor y sin límite de uso - calcula tantos como necesites. El único límite práctico es el espacio de almacenamiento de tu propio navegador si guardas una cantidad muy grande en tu lista de Cálculos Guardados.",
+      faq3Q: "¿Qué es el IVA?", faq3A: "El IVA (Impuesto al Valor Agregado) es un impuesto al consumo que se agrega al precio de bienes y servicios. Generalmente se muestra como un monto agregado sobre un precio (neto) o ya incluido en él (bruto).",
+      faq4Q: "¿Cómo se calcula el IVA?", faq4A: "Para agregar IVA a un monto neto: Bruto = Neto × (1 + tasa). Para quitar el IVA de un monto bruto: Neto = Bruto ÷ (1 + tasa), y IVA = Bruto − Neto. Esta calculadora hace ambos automáticamente según el modo que elijas.",
+      faq5Q: "¿Qué tasa de IVA debo usar?", faq5A: "Las tasas varían según el país y el tipo de bien o servicio - los valores preestablecidos aquí son tasas estándar comunes solo como referencia. Siempre confirma la tasa correcta con tu autoridad fiscal local; esta herramienta no ofrece asesoría fiscal.",
+      faq6Q: "¿Dónde puedo ver mis cálculos guardados?", faq6A: "Haz clic en \"Guardar\" para agregar el actual a tu lista, luego haz clic en \"Cálculos Guardados\" en cualquier momento para verlos, reabrirlos o eliminarlos. Se almacenan solo en este navegador - al borrar los datos de tu navegador se eliminan.",
+      rateStandardUkFrance: "Estándar (Reino Unido, Francia, y similares)", rateStandardNlBe: "Estándar (Países Bajos, Bélgica, y similares)",
+      rateStandardDe: "Estándar (Alemania, y similares)", rateStandardZaNz: "Estándar (Sudáfrica, GST de Nueva Zelanda, y similares)",
+      rateStandardPh: "Estándar (Filipinas, y similares)", rateStandardAu: "Estándar (GST de Australia, y similares)",
+      rateStandardTh: "Estándar (Tailandia, y similares)", rateStandardAe: "Estándar (EAU, y similares)",
+      rateZero: "Tasa cero", customRateOptionLabel: "Tasa personalizada"
+    },
+    th: {
+      freeToolLabel: "เครื่องมือฟรี", mastheadTitleLabel: "เครื่องคำนวณภาษีมูลค่าเพิ่ม",
+      mastheadSubtitle: "เพิ่มภาษีมูลค่าเพิ่มให้กับยอดสุทธิ หรือหักภาษีมูลค่าเพิ่มออกจากยอดรวม ได้โดยตรงในเบราว์เซอร์ของคุณ เลือกอัตราทั่วไปหรือป้อนอัตราของคุณเอง และดูรายละเอียดได้ทันที ไม่ต้องสมัครสมาชิก ไม่มีข้อมูลออกจากเบราว์เซอร์นี้",
+      languageLabel: "ภาษา", tabAddVatLabel: "เพิ่มภาษี", tabRemoveVatLabel: "หักภาษี", currencyLabel: "สกุลเงิน",
+      netAmountLabel: "ยอดสุทธิ (ไม่รวมภาษี)", grossAmountLabel: "ยอดรวม (รวมภาษีแล้ว)",
+      vatRateLabel: "อัตราภาษีมูลค่าเพิ่ม", customRateLabel: "อัตรากำหนดเอง (%)",
+      resultLabel: "ผลลัพธ์", netAmountResultLabel: "ยอดสุทธิ", vatResultPrefix: "ภาษีมูลค่าเพิ่ม", grossAmountResultLabel: "ยอดรวม",
+      saveLabel: "บันทึก", savedCalculationsLabel: "การคำนวณที่บันทึกไว้", clearNewLabel: "ล้าง / ใหม่",
+      autosaveNoteText: "การคำนวณปัจจุบันของคุณจะถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ขณะที่คุณพิมพ์ คลิก \"บันทึก\" เพื่อเพิ่มลงในรายการการคำนวณที่บันทึกไว้ เพื่อให้คุณค้นหาได้อีกครั้งในภายหลัง - ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
+      savedToast: "บันทึกแล้ว",
+      savedCalcsEmptyText: "ยังไม่มีการคำนวณที่บันทึกไว้ ป้อนจำนวนเงินแล้วคลิก \"บันทึก\" เพื่อเก็บไว้ที่นี่",
+      addVatBadge: "เพิ่มภาษี", removeVatBadge: "หักภาษี", totalWordLabel: "รวม",
+      deleteSavedConfirm: "ลบการคำนวณที่บันทึกไว้นี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      clearCalcConfirm: "ล้างการคำนวณนี้แล้วเริ่มใหม่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      howToTitle: "วิธีใช้เครื่องคำนวณภาษีมูลค่าเพิ่ม",
+      howToStep1: "เลือก \"เพิ่มภาษี\" หากคุณมียอดเงินก่อนหักภาษี หรือ \"หักภาษี\" หากคุณมียอดรวมที่รวมภาษีมูลค่าเพิ่มไว้แล้ว",
+      howToStep2: "ป้อนจำนวนเงินและเลือกสกุลเงินของคุณ",
+      howToStep3: "เลือกอัตราภาษีมูลค่าเพิ่มจากรายการ หรือเลือกกำหนดเองแล้วป้อนอัตราของคุณเอง",
+      howToStep4: "ยอดสุทธิ จำนวนภาษี และยอดรวมจะอัปเดตทันทีขณะที่คุณพิมพ์",
+      howToStep5: "คลิก \"บันทึก\" เพื่อเก็บการคำนวณนี้ไว้ในรายการการคำนวณที่บันทึกไว้",
+      faqTitle: "คำถามที่พบบ่อยเกี่ยวกับเครื่องคำนวณภาษีมูลค่าเพิ่ม",
+      faq1Q: "เครื่องคำนวณภาษีมูลค่าเพิ่มนี้ฟรีหรือไม่?", faq1A: "ใช่ ทำงานทั้งหมดในเบราว์เซอร์ของคุณ - ไม่ต้องสมัครสมาชิก ไม่ต้องมีบัญชี และไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
+      faq2Q: "มีการจำกัดจำนวนการคำนวณที่ฉันสามารถทำได้หรือไม่?", faq2A: "ไม่มี การคำนวณทุกครั้งเกิดขึ้นในเบราว์เซอร์ของคุณเอง โดยไม่มีการเรียกเซิร์ฟเวอร์และไม่มีการจำกัดการใช้งาน - คำนวณได้มากเท่าที่คุณต้องการ ข้อจำกัดในทางปฏิบัติเพียงอย่างเดียวคือพื้นที่จัดเก็บของเบราว์เซอร์คุณเองหากคุณบันทึกจำนวนมากในรายการการคำนวณที่บันทึกไว้",
+      faq3Q: "ภาษีมูลค่าเพิ่มคืออะไร?", faq3A: "ภาษีมูลค่าเพิ่ม (VAT) เป็นภาษีการบริโภคที่เพิ่มเข้าไปในราคาสินค้าและบริการ โดยทั่วไปจะแสดงเป็นจำนวนที่เพิ่มเข้าไปบนราคา (สุทธิ) หรือรวมอยู่ในราคานั้นแล้ว (รวม)",
+      faq4Q: "ภาษีมูลค่าเพิ่มคำนวณอย่างไร?", faq4A: "การเพิ่มภาษีมูลค่าเพิ่มให้กับยอดสุทธิ: ยอดรวม = ยอดสุทธิ × (1 + อัตรา) การหักภาษีมูลค่าเพิ่มออกจากยอดรวม: ยอดสุทธิ = ยอดรวม ÷ (1 + อัตรา) และภาษี = ยอดรวม − ยอดสุทธิ เครื่องคำนวณนี้ทำทั้งสองอย่างโดยอัตโนมัติขึ้นอยู่กับโหมดที่คุณเลือก",
+      faq5Q: "ฉันควรใช้อัตราภาษีมูลค่าเพิ่มเท่าไร?", faq5A: "อัตราจะแตกต่างกันไปตามประเทศและประเภทของสินค้าหรือบริการ - ค่าที่ตั้งไว้ล่วงหน้าที่นี่เป็นอัตรามาตรฐานทั่วไปเพื่อการอ้างอิงเท่านั้น ควรยืนยันอัตราที่ถูกต้องกับหน่วยงานภาษีในท้องถิ่นของคุณเสมอ เครื่องมือนี้ไม่ได้ให้คำแนะนำด้านภาษี",
+      faq6Q: "ฉันจะดูการคำนวณที่บันทึกไว้ได้ที่ไหน?", faq6A: "คลิก \"บันทึก\" เพื่อเพิ่มรายการปัจจุบันลงในรายการของคุณ จากนั้นคลิก \"การคำนวณที่บันทึกไว้\" เมื่อใดก็ได้เพื่อเรียกดู เปิดใหม่ หรือลบ รายการเหล่านี้จะถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น - การล้างข้อมูลเบราว์เซอร์จะลบออก",
+      rateStandardUkFrance: "มาตรฐาน (สหราชอาณาจักร ฝรั่งเศส และใกล้เคียง)", rateStandardNlBe: "มาตรฐาน (เนเธอร์แลนด์ เบลเยียม และใกล้เคียง)",
+      rateStandardDe: "มาตรฐาน (เยอรมนี และใกล้เคียง)", rateStandardZaNz: "มาตรฐาน (แอฟริกาใต้ GST นิวซีแลนด์ และใกล้เคียง)",
+      rateStandardPh: "มาตรฐาน (ฟิลิปปินส์ และใกล้เคียง)", rateStandardAu: "มาตรฐาน (GST ออสเตรเลีย และใกล้เคียง)",
+      rateStandardTh: "มาตรฐาน (ไทย และใกล้เคียง)", rateStandardAe: "มาตรฐาน (สหรัฐอาหรับเอมิเรตส์ และใกล้เคียง)",
+      rateZero: "อัตราศูนย์", customRateOptionLabel: "อัตรากำหนดเอง"
+    }
+  };
+  var langSelect = document.getElementById("vatLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
   var VAT_RATES = [
-    { key: "20", label: "20% - Standard (UK, France, and similar)", rate: 20 },
-    { key: "21", label: "21% - Standard (Netherlands, Belgium, and similar)", rate: 21 },
-    { key: "19", label: "19% - Standard (Germany, and similar)", rate: 19 },
-    { key: "15", label: "15% - Standard (South Africa, New Zealand GST, and similar)", rate: 15 },
-    { key: "12", label: "12% - Standard (Philippines, and similar)", rate: 12 },
-    { key: "10", label: "10% - Standard (Australia GST, and similar)", rate: 10 },
-    { key: "7", label: "7% - Standard (Thailand, and similar)", rate: 7 },
-    { key: "5", label: "5% - Standard (UAE, and similar)", rate: 5 },
-    { key: "0", label: "0% - Zero-rated", rate: 0 },
-    { key: "custom", label: "Custom rate", rate: null }
+    { key: "20", labelKey: "rateStandardUkFrance", rate: 20 },
+    { key: "21", labelKey: "rateStandardNlBe", rate: 21 },
+    { key: "19", labelKey: "rateStandardDe", rate: 19 },
+    { key: "15", labelKey: "rateStandardZaNz", rate: 15 },
+    { key: "12", labelKey: "rateStandardPh", rate: 12 },
+    { key: "10", labelKey: "rateStandardAu", rate: 10 },
+    { key: "7", labelKey: "rateStandardTh", rate: 7 },
+    { key: "5", labelKey: "rateStandardAe", rate: 5 },
+    { key: "0", labelKey: "rateZero", rate: 0 },
+    { key: "custom", labelKey: "customRateOptionLabel", rate: null }
   ];
 
   var tabAddVat = document.getElementById("tabAddVat");
@@ -483,12 +705,17 @@ img { max-width: 100%; display: block; }
   });
   vatCurrencySelect.value = "USD";
 
-  VAT_RATES.forEach(function(r) {
-    var opt = document.createElement("option");
-    opt.value = r.key;
-    opt.textContent = r.label;
-    vatRatePresetSelect.appendChild(opt);
-  });
+  function populateVatRates(selectedKey) {
+    vatRatePresetSelect.innerHTML = "";
+    VAT_RATES.forEach(function(r) {
+      var opt = document.createElement("option");
+      opt.value = r.key;
+      opt.textContent = r.rate != null ? (r.rate + "% - " + translate(r.labelKey)) : translate(r.labelKey);
+      vatRatePresetSelect.appendChild(opt);
+    });
+    var valid = VAT_RATES.some(function(r) { return r.key === selectedKey; });
+    vatRatePresetSelect.value = valid ? selectedKey : VAT_RATES[0].key;
+  }
 
   function currencySymbolFor(code) {
     return CURRENCIES[code] || "$";
@@ -535,14 +762,14 @@ img { max-width: 100%; display: block; }
     resultNet.textContent = formatAmount(r.net, code);
     resultVat.textContent = formatAmount(r.vat, code);
     resultGross.textContent = formatAmount(r.gross, code);
-    resultVatLabel.textContent = "VAT (" + trimRate(r.rate) + "%)";
+    resultVatLabel.textContent = translate("vatResultPrefix") + " (" + trimRate(r.rate) + "%)";
   }
 
   function updateModeUI() {
     var isAdd = currentMode === "add";
     tabAddVat.classList.toggle("active", isAdd);
     tabRemoveVat.classList.toggle("active", !isAdd);
-    vatAmountLabel.textContent = isAdd ? "Net Amount (excl. VAT)" : "Gross Amount (incl. VAT)";
+    vatAmountLabel.textContent = isAdd ? translate("netAmountLabel") : translate("grossAmountLabel");
     vatAmountInput.placeholder = "0.00";
   }
 
@@ -628,7 +855,7 @@ img { max-width: 100%; display: block; }
     if (idx >= 0) list[idx] = entry; else list.unshift(entry);
     saveHistory(list);
     saveDraft();
-    showToast("Saved");
+    showToast(translate("savedToast"));
   }
 
   function renderSavedList() {
@@ -636,7 +863,7 @@ img { max-width: 100%; display: block; }
     var container = document.getElementById("savedVatList");
     container.innerHTML = "";
     if (!list.length) {
-      container.innerHTML = '<div class="saved-codes-empty">No saved calculations yet. Enter an amount and click "Save" to keep it here.</div>';
+      container.innerHTML = '<div class="saved-codes-empty">' + escapeHtml(translate("savedCalcsEmptyText")) + '</div>';
       return;
     }
     list.forEach(function(entry) {
@@ -645,16 +872,16 @@ img { max-width: 100%; display: block; }
       var d = new Date(entry.savedAt);
       var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       row.innerHTML =
-        '<span class="saved-code-badge">' + (entry.mode === "remove" ? "Remove VAT" : "Add VAT") + '</span>' +
+        '<span class="saved-code-badge">' + (entry.mode === "remove" ? translate("removeVatBadge") : translate("addVatBadge")) + '</span>' +
         '<div class="saved-code-main">' +
-          '<div class="saved-code-title">' + escapeHtml(formatAmount(entry.gross, entry.currency)) + ' total (' + escapeHtml(entry.rateLabel) + ')</div>' +
+          '<div class="saved-code-title">' + escapeHtml(formatAmount(entry.gross, entry.currency)) + ' ' + escapeHtml(translate("totalWordLabel")) + ' (' + escapeHtml(entry.rateLabel) + ')</div>' +
           '<div class="saved-code-meta">' + escapeHtml(dateStr) + '</div>' +
         '</div>' +
         '<button type="button" class="saved-code-delete" aria-label="Delete saved calculation">✕</button>';
       row.querySelector(".saved-code-main").addEventListener("click", function() { openSavedCalc(entry.id); });
       row.querySelector(".saved-code-delete").addEventListener("click", function(e) {
         e.stopPropagation();
-        if (!confirm("Delete this saved calculation? This can't be undone.")) return;
+        if (!confirm(translate("deleteSavedConfirm"))) return;
         deleteSavedCalc(entry.id);
       });
       container.appendChild(row);
@@ -718,12 +945,49 @@ img { max-width: 100%; display: block; }
     if (e.target.id === "savedVatOverlay") closeSavedVatModal();
   });
   document.getElementById("clearVatBtn").addEventListener("click", function() {
-    if (!confirm("Clear this calculation and start a new one? This can't be undone.")) return;
+    if (!confirm(translate("clearCalcConfirm"))) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
     currentCalcId = null;
     applyState({});
   });
 
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      mastheadKicker: "freeToolLabel", mastheadTitle: "mastheadTitleLabel", mastheadSubtitle: "mastheadSubtitle",
+      languageLabelInv: "languageLabel", tabAddVatLabel: "tabAddVatLabel", tabRemoveVatLabel: "tabRemoveVatLabel",
+      currencyLabelInv: "currencyLabel", vatRateLabel: "vatRateLabel", customRateLabel: "customRateLabel",
+      resultLabel: "resultLabel", netAmountResultLabel: "netAmountResultLabel", grossAmountResultLabel: "grossAmountResultLabel",
+      saveVatBtnLabel: "saveLabel", savedVatBtnLabel: "savedCalculationsLabel", clearVatBtnLabel: "clearNewLabel",
+      savedVatModalTitle: "savedCalculationsLabel", autosaveNote: "autosaveNoteText",
+      howToTitle: "howToTitle", howToStep1: "howToStep1", howToStep2: "howToStep2", howToStep3: "howToStep3", howToStep4: "howToStep4", howToStep5: "howToStep5",
+      faqTitle: "faqTitle", faq1Q: "faq1Q", faq1A: "faq1A", faq2Q: "faq2Q", faq2A: "faq2A", faq3Q: "faq3Q", faq3A: "faq3A",
+      faq4Q: "faq4Q", faq4A: "faq4A", faq5Q: "faq5Q", faq5A: "faq5A", faq6Q: "faq6Q", faq6A: "faq6A"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+
+    if (typeof updateModeUI === "function") updateModeUI();
+    if (typeof populateVatRates === "function") populateVatRates(vatRatePresetSelect.value);
+    if (typeof renderResults === "function") renderResults();
+  }
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-vat-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-vat-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+
+  loadLanguagePref();
   loadDraft();
 })();
 </script>

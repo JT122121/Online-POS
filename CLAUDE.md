@@ -3412,10 +3412,67 @@ the time this was built.
 - **Deliberately NOT bundled into the "Download Offline POS" package** -
   same policy as `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html`, a
   separate free web tool rather than part of the offline POS itself.
-- Six-language UI strings are **not** part of this page, same as
-  `invoice-generator.html`/`receipt-generator.html`/`barcode-generator.html` - `app.html`'s
-  `translations` dictionary only supplies the `createVatShortcutLabel`
-  header-links text; the calculator itself is English-only.
+- **Now translated into the same six languages as the other three free
+  tools** (en/ar/fil/hi/es/th) - its own self-contained `translations`
+  object and `translate()`/`currentLang()`/`changeLanguage()` functions,
+  no dependency on any other page. Since this page already has a real
+  Currency picker (unlike `barcode-generator.html`), the new **Language**
+  picker reuses that exact `.currency-inline` visual treatment under a
+  new `.lang-inline` class of its own, placed at the top of `.gen-card`
+  above the Add VAT/Remove VAT tabs - the same placement convention
+  `barcode-generator.html` established. Covers the masthead, both tabs,
+  Currency, the VAT Rate presets, Custom Rate, the Result box's three
+  labels (Net/VAT/Gross Amount), all three action-bar buttons, the
+  autosave note, the Saved Calculations modal, the delete/clear
+  `confirm()` dialogs, the save toast, and the full How-To + 6-question
+  FAQ.
+  - **"VAT" itself was translated into each language's own real,
+    locally-used term rather than kept as a literal acronym** - Spanish
+    uses "IVA" (Impuesto al Valor Agregado, the actual term used in
+    Spanish-speaking countries), Arabic uses "ضريبة القيمة المضافة",
+    Thai uses "ภาษีมูลค่าเพิ่ม", Hindi uses "वैट" (the short
+    transliteration commonly used in Indian financial contexts,
+    distinct from GST), and Filipino keeps "VAT" as-is since that is
+    literally the term the Philippines' own Bureau of Internal Revenue
+    uses - not an English fallback, the locally correct term. This
+    matches how `DEFAULT_PAYMENT_METHODS` and other real-world
+    identifiers are handled elsewhere in this codebase: use the term
+    people in that language actually use, not a mechanical translation.
+  - **`VAT_RATES` was restructured the same way `barcode-generator.html`'s
+    `BARCODE_SIZES`/`QR_SIZES` were** - from a single hardcoded `label`
+    string per entry (`"20% - Standard (UK, France, and similar)"`) into
+    `{rate, labelKey}`, with a new `populateVatRates(selectedKey)`
+    function (replacing the old one-time inline `VAT_RATES.forEach(...)`
+    population) building `rate + "% - " + translate(labelKey)` so the
+    numeric rate stays a fixed, unambiguous number while the
+    description - including the reference country names (UK, France,
+    Netherlands, South Africa, and so on) - is fully translated per
+    language, not just the word "Standard". Called from `changeLanguage()`
+    with the currently-selected key so re-translating never loses the
+    visitor's chosen rate.
+  - **`resultVatLabel`'s dynamic "VAT (20%)" text** is built from
+    `translate("vatResultPrefix") + " (" + trimRate(r.rate) + "%)"` in
+    `renderResults()`, called again from `changeLanguage()` so it
+    re-translates immediately rather than waiting for the next input
+    event.
+  - **RTL for Arabic** is the same minimal `document.body.dir` toggle
+    every other translated page on this site uses - no extra CSS.
+  - **Language choice persists independently of any saved calculation**,
+    via its own `goonlinepos-vat-lang` key, same reasoning as the other
+    three tools. `loadLanguagePref()` runs before `loadDraft()` so the
+    first paint already reflects the stored language.
+  - Verified with Playwright: switching to Arabic translates the
+    masthead/tabs/labels/buttons, flips `dir` to `rtl`, and the VAT
+    Rate dropdown shows the untranslated `20%` prefix with a fully
+    translated description including the country names; the dynamic
+    "VAT (20%)" result label re-translates immediately on language
+    switch and again on every input; the Net/Gross Amount field label
+    swaps correctly between Add VAT and Remove VAT modes in the active
+    language; saving shows a translated toast and a translated
+    Add/Remove badge plus a translated "total" word in the Saved
+    Calculations list; reloading after picking Arabic keeps it selected
+    without needing to reselect it; and a 390px mobile check shows zero
+    horizontal overflow and zero console errors throughout.
 
 ## `pricing-calculator.html` — standalone product pricing calculator
 
