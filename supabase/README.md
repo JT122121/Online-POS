@@ -1,16 +1,22 @@
-# Supabase schema (connected - Account & Subscription + Cloud Sync)
+# Supabase schema (connected - Account & Subscription)
 
 This folder holds the Supabase PostgreSQL schema behind `app.html`'s
-**Account & Subscription** system (Settings → Premium) and its optional
-**Cloud Sync** feature (Settings → Backup → Cloud Sync). Anyone can sign
+**Account & Subscription** system (Settings → Premium). Anyone can sign
 in with Google (or any other provider you enable) to get a free account;
-redeeming a code extends their subscription and unlocks Premium features,
-including Cloud Sync, which backs up data to the cloud and restores it on
-any device. The app itself stays usable with zero signup - `localStorage`
-remains the primary/default storage for everyone on the free tier. See
-`modules/account.js`/`modules/cloud-sync.js` and the "Account &
-Subscription"/"Cloud Sync" sections of `CLAUDE.md` for the integration
-itself; this file covers the database side.
+redeeming a code extends their subscription and unlocks Premium features.
+The app itself stays usable with zero signup - `localStorage` remains the
+primary/default storage for everyone on the free tier. See
+`modules/account.js` and the "Account & Subscription" section of
+`CLAUDE.md` for the integration itself; this file covers the database
+side.
+
+**Cloud Sync (an optional cloud backup/restore feature this schema used
+to also power) has been retired** - see "Retired: Cloud Sync" in
+`CLAUDE.md`. `store_settings`/`products`/`cashiers`/`payment_methods`/
+`sales`/`sale_items`/`sale_payments` below are left in the schema unused
+rather than dropped (same "retire, don't delete" convention this repo
+uses elsewhere) - only `profiles`/`redemption_codes` are actively read or
+written by the app today.
 
 This **replaced** an earlier Google Sheet + Apps Script Premium system
 (`premium-validation/`, left on disk unused - see `CLAUDE.md`) - there is
@@ -28,17 +34,17 @@ One row per signed-in user, everywhere, enforced by Row Level Security -
 no user can ever read or write another user's data, even via the public
 API:
 
-| Table | Mirrors |
-|---|---|
-| `store_settings` | Settings panel (store name/details, tax, currency, receipt numbering, language, paper size, Premium status) |
-| `products` | The product catalog (Settings -> Products / bulk CSV or Excel upload) |
-| `cashiers` | Settings -> Cashiers |
-| `payment_methods` | Settings -> Payment Methods |
-| `sales` | Completed sales (`salesHistory`) - totals/header, plus a `document_type` column and a `meta jsonb` catch-all for smaller per-sale display fields |
-| `sale_items` | Each sale's line items, including the optional per-item description feature |
-| `sale_payments` | Each sale's payment split |
-| `profiles` | Settings -> Premium ("Account & Subscription") - one row per user, subscription status and expiry |
-| `redemption_codes` | Codes you create; redeemed exactly once each via the `redeem_code()` function below |
+| Table | Status | Mirrors |
+|---|---|---|
+| `profiles` | **active** | Settings -> Premium ("Account & Subscription") - one row per user, subscription status and expiry |
+| `redemption_codes` | **active** | Codes you create; redeemed exactly once each via the `redeem_code()` function below |
+| `store_settings` | unused (Cloud Sync retired) | Settings panel (store name/details, tax, currency, receipt numbering, language, paper size, Premium status) |
+| `products` | unused (Cloud Sync retired) | The product catalog (Settings -> Products / bulk CSV or Excel upload) |
+| `cashiers` | unused (Cloud Sync retired) | Settings -> Cashiers |
+| `payment_methods` | unused (Cloud Sync retired) | Settings -> Payment Methods |
+| `sales` | unused (Cloud Sync retired) | Completed sales (`salesHistory`) - totals/header, plus a `document_type` column and a `meta jsonb` catch-all for smaller per-sale display fields |
+| `sale_items` | unused (Cloud Sync retired) | Each sale's line items, including the optional per-item description feature |
+| `sale_payments` | unused (Cloud Sync retired) | Each sale's payment split |
 
 A `handle_new_user()` trigger on Supabase's own `auth.users` table
 auto-creates a default `store_settings` row (same "Demo Store" defaults
@@ -95,13 +101,12 @@ etc.) is a **dashboard setting, not a SQL change**:
    won't error, and won't miss new columns, on a project that already has
    an older version applied.
 3. Enable whichever sign-in provider(s) you want, per the section above.
-4. `app.html`'s Settings → Premium ("Account & Subscription") and Settings
-   → Backup → Cloud Sync are already wired up to call this
-   (`modules/account.js`/`modules/cloud-sync.js`) - once the schema is
+4. `app.html`'s Settings → Premium ("Account & Subscription") is already
+   wired up to call this (`modules/account.js`) - once the schema is
    applied and a provider is enabled, anyone can sign in, land on the
    free tier automatically, and redeem a code (see "Adding redemption
-   codes" above) to unlock Premium features including Cloud Sync - see
-   `CLAUDE.md`'s "Account & Subscription" and "Cloud Sync" sections.
+   codes" above) to unlock Premium features - see `CLAUDE.md`'s
+   "Account & Subscription" section.
 
 ## Notes
 
@@ -138,9 +143,3 @@ etc.) is a **dashboard setting, not a SQL change**:
   retired `premium-validation/AppsScript.gs` used to - Premium now
   follows the signed-in account, not a per-browser code entry, so there's
   nothing to cap.
-- "Backup to Cloud" / "Restore from Cloud" are full-replace operations
-  (delete-then-reinsert for `products`/`cashiers`/`payment_methods`/
-  `sales` and its children, upsert for the single `store_settings` row) -
-  not incremental or bidirectional sync. Restoring overwrites everything
-  currently on that device, same as the existing file-based Restore from
-  Backup.

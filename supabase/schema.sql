@@ -386,7 +386,7 @@ begin
 
   select * into v_row
   from public.redemption_codes
-  where code = upper(trim(p_code))
+  where upper(trim(code)) = upper(trim(p_code))
   for update;
 
   if not found then
