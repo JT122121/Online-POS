@@ -57,6 +57,7 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "JSZIP", "jszip script tag");
   html = stripMarked(html, "ACCOUNT-SCRIPT", "account/cloud-sync vendor/module script tags");
   html = stripMarked(html, "CLOUD-SYNC-SECTION", "cloud sync settings section");
+  html = stripMarked(html, "ACCOUNT-WELCOME", "account welcome badge");
   html = stripMarked(html, "OFFLINE-BUILDER-SCRIPT", "offline builder module script tag");
   html = stripMarked(html, "DOWNLOAD-SECTION", "download settings section");
   html = stripMarked(html, "DOWNLOAD-MODAL", "download modal");

@@ -463,6 +463,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div>
 <h1><span id="appTitle">Online POS</span> <span class="premium-badge" id="premiumBadgeAppTitle">Premium</span></h1>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
+<!-- OFFLINE-STRIP:ACCOUNT-WELCOME:START -->
+<div class="subtitle hidden" id="accountWelcomeBadge">👋 <span id="accountWelcomeText"></span></div>
+<!-- OFFLINE-STRIP:ACCOUNT-WELCOME:END -->
 </div>
 </div>
 <div class="header-links">
@@ -3360,6 +3363,7 @@ function changeLanguage() {
   renderCashierSelect();
   renderInventoryList();
   if (typeof renderPremiumStatus === "function") renderPremiumStatus();
+  if (typeof renderWelcomeBadge === "function") renderWelcomeBadge();
   renderAppTitleBadge();}
 
 function escapeHtml(text) {
