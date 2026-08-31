@@ -156,6 +156,9 @@ img { max-width: 100%; display: block; }
 
 .gen-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 26px; margin: 22px 0; }
 
+.lang-inline { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.lang-inline select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); }
+
 .type-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
 .type-tab { flex: 1; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-soft); background: #fafaf7; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; text-align: center; }
 .type-tab:hover { border-color: #cfccbf; }
@@ -288,16 +291,28 @@ img { max-width: 100%; display: block; }
 </header>
 
 <header class="masthead">
-<div class="kicker">Free Tool</div>
-<h1>Create Barcode / QR Code</h1>
-<p>Generate a barcode or QR code in your browser, choose a standard or custom label size, then download it or save it for later. No signup, nothing leaves this browser.</p>
+<div class="kicker" id="mastheadKicker">Free Tool</div>
+<h1 id="mastheadTitle">Create Barcode / QR Code</h1>
+<p id="mastheadSubtitle">Generate a barcode or QR code in your browser, choose a standard or custom label size, then download it or save it for later. No signup, nothing leaves this browser.</p>
 </header>
 
 <div class="gen-card" id="genCard">
 
+  <div class="lang-inline">
+    <label for="bcLanguage" id="languageLabelInv">Language</label>
+    <select id="bcLanguage">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+      <option value="fil">Filipino</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+      <option value="th">ไทย</option>
+    </select>
+  </div>
+
   <div class="type-tabs">
-    <button type="button" class="type-tab active" id="tabBarcode" data-type="barcode">▮▮▮ Barcode</button>
-    <button type="button" class="type-tab" id="tabQr" data-type="qr">▦ QR Code</button>
+    <button type="button" class="type-tab active" id="tabBarcode" data-type="barcode">▮▮▮ <span id="tabBarcodeLabel">Barcode</span></button>
+    <button type="button" class="type-tab" id="tabQr" data-type="qr">▦ <span id="tabQrLabel">QR Code</span></button>
   </div>
 
   <div class="form-section">
@@ -309,72 +324,72 @@ img { max-width: 100%; display: block; }
     </div>
 
     <div class="field-row" id="barcodeTypeRow">
-      <label class="field-label" for="barcodeFormat">Barcode Type</label>
+      <label class="field-label" for="barcodeFormat" id="barcodeTypeLabel">Barcode Type</label>
       <select class="field-input" id="barcodeFormat">
-        <option value="CODE128">CODE128 (letters, numbers, symbols)</option>
-        <option value="EAN13">EAN-13 (retail products, 12-13 digits)</option>
-        <option value="UPC">UPC-A (retail products, 11-12 digits)</option>
-        <option value="CODE39">CODE39 (letters, numbers, a few symbols)</option>
-        <option value="ITF14">ITF-14 (shipping cartons, 13-14 digits)</option>
-        <option value="codabar">Codabar (numbers and -$:/.+)</option>
-        <option value="pharmacode">Pharmacode (a single number)</option>
+        <option value="CODE128" id="fmtOptCode128">CODE128 (letters, numbers, symbols)</option>
+        <option value="EAN13" id="fmtOptEan13">EAN-13 (retail products, 12-13 digits)</option>
+        <option value="UPC" id="fmtOptUpc">UPC-A (retail products, 11-12 digits)</option>
+        <option value="CODE39" id="fmtOptCode39">CODE39 (letters, numbers, a few symbols)</option>
+        <option value="ITF14" id="fmtOptItf14">ITF-14 (shipping cartons, 13-14 digits)</option>
+        <option value="codabar" id="fmtOptCodabar">Codabar (numbers and -$:/.+)</option>
+        <option value="pharmacode" id="fmtOptPharmacode">Pharmacode (a single number)</option>
       </select>
     </div>
 
     <div class="size-row">
-      <label class="field-label" for="sizePreset">Label Size</label>
+      <label class="field-label" for="sizePreset" id="labelSizeLabel">Label Size</label>
       <select class="field-input" id="sizePreset"></select>
     </div>
     <div class="custom-size-row hidden" id="customSizeBarcodeRow">
       <div>
-        <label class="field-label" for="customWidth">Width (mm)</label>
+        <label class="field-label" for="customWidth" id="customWidthLabel">Width (mm)</label>
         <input type="number" class="field-input" id="customWidth" min="15" max="300" value="60">
       </div>
       <div>
-        <label class="field-label" for="customHeight">Height (mm)</label>
+        <label class="field-label" for="customHeight" id="customHeightLabel">Height (mm)</label>
         <input type="number" class="field-input" id="customHeight" min="10" max="300" value="40">
       </div>
     </div>
     <div class="custom-size-row one-col hidden" id="customSizeQrRow">
       <div>
-        <label class="field-label" for="customQrSize">Size (mm, square)</label>
+        <label class="field-label" for="customQrSize" id="customQrSizeLabel">Size (mm, square)</label>
         <input type="number" class="field-input" id="customQrSize" min="15" max="300" value="51">
       </div>
     </div>
 
     <div class="field-row">
-      <label class="field-label" for="borderStyle">Border</label>
+      <label class="field-label" for="borderStyle" id="borderLabel">Border</label>
       <select class="field-input" id="borderStyle">
-        <option value="none">None</option>
-        <option value="solid-strong">Solid - Strong</option>
-        <option value="solid-medium">Solid - Medium</option>
-        <option value="dashed">Dashed line</option>
-        <option value="dotted">Dotted line</option>
+        <option value="none" id="borderOptNone">None</option>
+        <option value="solid-strong" id="borderOptSolidStrong">Solid - Strong</option>
+        <option value="solid-medium" id="borderOptSolidMedium">Solid - Medium</option>
+        <option value="dashed" id="borderOptDashed">Dashed line</option>
+        <option value="dotted" id="borderOptDotted">Dotted line</option>
       </select>
     </div>
 
     <hr class="divider-line">
 
     <div class="checkbox-row">
-      <label><input type="checkbox" id="showTopText"> Add text above</label>
+      <label><input type="checkbox" id="showTopText"> <span id="addTextAboveLabel">Add text above</span></label>
     </div>
     <div class="field-row hidden" id="topTextRow">
-      <label class="field-label" for="topText">Text Above</label>
+      <label class="field-label" for="topText" id="textAboveLabel">Text Above</label>
       <input type="text" class="field-input" id="topText" placeholder="e.g. Product Name" maxlength="60">
     </div>
 
     <div class="checkbox-row" id="showValueRow">
-      <label><input type="checkbox" id="showValueBelow" checked> Show the barcode value underneath</label>
+      <label><input type="checkbox" id="showValueBelow" checked> <span id="showBarcodeValueLabel">Show the barcode value underneath</span></label>
     </div>
 
     <div class="checkbox-row hidden" id="showQrValueRow">
-      <label><input type="checkbox" id="showQrValueBelow"> Show the QR value underneath</label>
+      <label><input type="checkbox" id="showQrValueBelow"> <span id="showQrValueLabel">Show the QR value underneath</span></label>
     </div>
 
   </div>
 
   <div class="preview-area">
-    <div class="preview-label">Preview</div>
+    <div class="preview-label" id="previewLabel">Preview</div>
     <div class="preview-box-outer">
       <div class="preview-box" id="previewBox">
         <div class="preview-top-text hidden" id="previewTopText"></div>
@@ -388,17 +403,17 @@ img { max-width: 100%; display: block; }
 </div>
 
 <div class="action-bar">
-  <button type="button" id="saveCodeBtn">💾 Save</button>
-  <button type="button" id="savedCodesBtn">📂 Saved Codes</button>
-  <button type="button" id="downloadCodeBtn">⬇ Download PNG</button>
-  <button type="button" id="clearCodeBtn">🗑 Clear / New</button>
+  <button type="button" id="saveCodeBtn">💾 <span id="saveCodeBtnLabel">Save</span></button>
+  <button type="button" id="savedCodesBtn">📂 <span id="savedCodesBtnLabel">Saved Codes</span></button>
+  <button type="button" id="downloadCodeBtn">⬇ <span id="downloadCodeBtnLabel">Download PNG</span></button>
+  <button type="button" id="clearCodeBtn">🗑 <span id="clearCodeBtnLabel">Clear / New</span></button>
 </div>
-<p class="autosave-note">Your current barcode or QR code is saved automatically in this browser as you type. Click "Save" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.</p>
+<p class="autosave-note" id="autosaveNote">Your current barcode or QR code is saved automatically in this browser as you type. Click "Save" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.</p>
 
 <div class="modal-overlay hidden" id="savedCodesOverlay">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>Saved Codes</h3>
+      <h3 id="savedCodesModalTitle">Saved Codes</h3>
       <button type="button" class="modal-close-btn" id="closeSavedCodesBtn" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="savedCodesList"></div>
@@ -408,31 +423,31 @@ img { max-width: 100%; display: block; }
 <div class="save-toast" id="saveToast">Saved</div>
 
 <div class="info-section">
-  <h2>How to create a barcode or QR code</h2>
+  <h2 id="howToTitle">How to create a barcode or QR code</h2>
   <ol>
-    <li>Choose Barcode or QR Code at the top.</li>
-    <li>Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
-    <li>Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're using it for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
-    <li>Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.</li>
-    <li>Click "Save" to keep it in your Saved Codes list, or "Download PNG" to save an image file you can use anywhere.</li>
+    <li id="howToStep1">Choose Barcode or QR Code at the top.</li>
+    <li id="howToStep2">Pick a label size from the list, or choose Custom and enter your own size in millimeters.</li>
+    <li id="howToStep3">Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're using it for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.</li>
+    <li id="howToStep4">Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.</li>
+    <li id="howToStep5">Click "Save" to keep it in your Saved Codes list, or "Download PNG" to save an image file you can use anywhere.</li>
   </ol>
 
-  <h2>Barcode / QR Code FAQ</h2>
+  <h2 id="faqTitle">Barcode / QR Code FAQ</h2>
   <dl>
-    <dt>Is this barcode/QR code generator free?</dt>
-    <dd>Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.</dd>
-    <dt>Is there a limit on how many codes I can generate?</dt>
-    <dd>No. Every barcode and QR code is generated locally in your browser, with no server calls and no usage cap - create and download as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Codes list.</dd>
-    <dt>Where can I see my saved codes?</dt>
-    <dd>Click "Save" to add the current one to your list, then click "Saved Codes" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
-    <dt>Will my barcode scan correctly?</dt>
-    <dd>Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid making the label too small.</dd>
-    <dt>Can I scan this with my phone?</dt>
-    <dd>Most phone camera apps can scan QR codes directly, no extra app needed. Traditional barcodes (CODE128, EAN-13, UPC-A, and similar) usually aren't recognized by a phone's built-in camera - you'll need a dedicated barcode scanner app to read those.</dd>
-    <dt>What label sizes can I use?</dt>
-    <dd>Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the downloaded PNG match exactly.</dd>
-    <dt>Can I add a border around the code?</dt>
-    <dd>Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted). It shows in the on-screen preview and in the downloaded PNG.</dd>
+    <dt id="faq1Q">Is this barcode/QR code generator free?</dt>
+    <dd id="faq1A">Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.</dd>
+    <dt id="faq2Q">Is there a limit on how many codes I can generate?</dt>
+    <dd id="faq2A">No. Every barcode and QR code is generated locally in your browser, with no server calls and no usage cap - create and download as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Codes list.</dd>
+    <dt id="faq3Q">Where can I see my saved codes?</dt>
+    <dd id="faq3A">Click "Save" to add the current one to your list, then click "Saved Codes" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.</dd>
+    <dt id="faq4Q">Will my barcode scan correctly?</dt>
+    <dd id="faq4A">Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid making the label too small.</dd>
+    <dt id="faq5Q">Can I scan this with my phone?</dt>
+    <dd id="faq5A">Most phone camera apps can scan QR codes directly, no extra app needed. Traditional barcodes (CODE128, EAN-13, UPC-A, and similar) usually aren't recognized by a phone's built-in camera - you'll need a dedicated barcode scanner app to read those.</dd>
+    <dt id="faq6Q">What label sizes can I use?</dt>
+    <dd id="faq6A">Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the downloaded PNG match exactly.</dd>
+    <dt id="faq7Q">Can I add a border around the code?</dt>
+    <dd id="faq7A">Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted). It shows in the on-screen preview and in the downloaded PNG.</dd>
   </dl>
 </div>
 
@@ -477,29 +492,390 @@ img { max-width: 100%; display: block; }
   var HISTORY_KEY = "goonlinepos-barcode-history";
 
   var BARCODE_SIZES = [
-    { key: "2x1", label: "2 x 1 in (51 x 25 mm) - Standard retail label", w: 51, h: 25 },
-    { key: "1.5x1", label: "1.5 x 1 in (38 x 25 mm) - Small item label", w: 38, h: 25 },
-    { key: "3x2", label: "3 x 2 in (76 x 51 mm) - Shipping / product label", w: 76, h: 51 },
-    { key: "4x6", label: "4 x 6 in (102 x 152 mm) - Shipping label", w: 102, h: 152 },
-    { key: "custom", label: "Custom size", w: null, h: null }
+    { key: "2x1", dims: "2 x 1 in (51 x 25 mm)", labelKey: "sizeStandardRetail", w: 51, h: 25 },
+    { key: "1.5x1", dims: "1.5 x 1 in (38 x 25 mm)", labelKey: "sizeSmallItem", w: 38, h: 25 },
+    { key: "3x2", dims: "3 x 2 in (76 x 51 mm)", labelKey: "sizeShippingProduct", w: 76, h: 51 },
+    { key: "4x6", dims: "4 x 6 in (102 x 152 mm)", labelKey: "sizeShippingLabel", w: 102, h: 152 },
+    { key: "custom", dims: "", labelKey: "customSizeOptionLabel", w: null, h: null }
   ];
   var QR_SIZES = [
-    { key: "1x1", label: "1 x 1 in (25 x 25 mm) - Small", w: 25, h: 25 },
-    { key: "2x2", label: "2 x 2 in (51 x 51 mm) - Standard", w: 51, h: 51 },
-    { key: "3x3", label: "3 x 3 in (76 x 76 mm) - Poster / table tent", w: 76, h: 76 },
-    { key: "4x4", label: "4 x 4 in (102 x 102 mm) - Large", w: 102, h: 102 },
-    { key: "custom", label: "Custom size", w: null, h: null }
+    { key: "1x1", dims: "1 x 1 in (25 x 25 mm)", labelKey: "sizeSmallQr", w: 25, h: 25 },
+    { key: "2x2", dims: "2 x 2 in (51 x 51 mm)", labelKey: "sizeStandardQr", w: 51, h: 51 },
+    { key: "3x3", dims: "3 x 3 in (76 x 76 mm)", labelKey: "sizePosterTableTent", w: 76, h: 76 },
+    { key: "4x4", dims: "4 x 4 in (102 x 102 mm)", labelKey: "sizeLargeQr", w: 102, h: 102 },
+    { key: "custom", dims: "", labelKey: "customSizeOptionLabel", w: null, h: null }
   ];
 
-  var BARCODE_FORMAT_HINTS = {
-    CODE128: "Accepts letters, numbers, and most symbols - the most flexible general-purpose format.",
-    EAN13: "Needs 12 or 13 digits (a 13th check digit is added automatically if you enter 12).",
-    UPC: "Needs 11 or 12 digits (a 12th check digit is added automatically if you enter 11).",
-    CODE39: "Accepts uppercase letters, numbers, and - . $ / + % space.",
-    ITF14: "Needs 13 or 14 digits, used for shipping cartons and pallets.",
-    codabar: "Accepts numbers and - $ : / . +",
-    pharmacode: "Accepts a single number from 3 to 131070."
+  var BARCODE_FORMAT_HINT_KEYS = {
+    CODE128: "hintCode128",
+    EAN13: "hintEan13",
+    UPC: "hintUpc",
+    CODE39: "hintCode39",
+    ITF14: "hintItf14",
+    codabar: "hintCodabar",
+    pharmacode: "hintPharmacode"
   };
+
+  var translations = {
+    en: {
+      freeToolLabel: "Free Tool", mastheadTitleLabel: "Create Barcode / QR Code",
+      mastheadSubtitle: "Generate a barcode or QR code in your browser, choose a standard or custom label size, then download it or save it for later. No signup, nothing leaves this browser.",
+      languageLabel: "Language", tabBarcodeLabel: "Barcode", tabQrLabel: "QR Code",
+      codeValueLabelBarcode: "Barcode Value", codeValueLabelQr: "QR Code Value / Data",
+      codeValuePlaceholderBarcode: "e.g. 123456789012", codeValuePlaceholderQr: "e.g. https://example.com or any text",
+      barcodeTypeLabel: "Barcode Type",
+      fmtCode128: "CODE128 (letters, numbers, symbols)", fmtEan13: "EAN-13 (retail products, 12-13 digits)",
+      fmtUpc: "UPC-A (retail products, 11-12 digits)", fmtCode39: "CODE39 (letters, numbers, a few symbols)",
+      fmtItf14: "ITF-14 (shipping cartons, 13-14 digits)", fmtCodabar: "Codabar (numbers and -$:/.+)", fmtPharmacode: "Pharmacode (a single number)",
+      labelSizeLabel: "Label Size", customWidthLabel: "Width (mm)", customHeightLabel: "Height (mm)", customQrSizeLabel: "Size (mm, square)",
+      borderLabel: "Border", borderNone: "None", borderSolidStrong: "Solid - Strong", borderSolidMedium: "Solid - Medium", borderDashed: "Dashed line", borderDotted: "Dotted line",
+      addTextAboveLabel: "Add text above", textAboveLabel: "Text Above", textAbovePlaceholder: "e.g. Product Name",
+      showBarcodeValueLabel: "Show the barcode value underneath", showQrValueLabel: "Show the QR value underneath",
+      previewLabel: "Preview", saveLabel: "Save", savedCodesLabel: "Saved Codes", downloadPngLabel: "Download PNG", clearNewLabel: "Clear / New",
+      autosaveNoteText: "Your current barcode or QR code is saved automatically in this browser as you type. Click \"Save\" to add it to your Saved Codes list so you can find it again later - nothing is uploaded anywhere.",
+      savedToast: "Saved",
+      savedCodesEmptyText: "No saved codes yet. Create a barcode or QR code and click \"Save\" to keep it here.",
+      noValueLabel: "(no value)",
+      deleteSavedConfirm: "Delete this saved code? This can't be undone.",
+      clearCodeConfirm: "Clear this code and start a new one? This can't be undone.",
+      barcodeBadgeLabel: "Barcode", qrBadgeLabel: "QR",
+      howToTitle: "How to create a barcode or QR code",
+      howToStep1: "Choose Barcode or QR Code at the top.",
+      howToStep2: "Pick a label size from the list, or choose Custom and enter your own size in millimeters.",
+      howToStep3: "Type the value you want to encode. For a barcode, also pick the barcode type that matches what you're using it for - for example EAN-13 or UPC-A for retail products, CODE128 for general use.",
+      howToStep4: "Optionally add text above the code (e.g. a product name), choose whether to show the encoded value underneath it, and pick a border style if you want one.",
+      howToStep5: "Click \"Save\" to keep it in your Saved Codes list, or \"Download PNG\" to save an image file you can use anywhere.",
+      faqTitle: "Barcode / QR Code FAQ",
+      faq1Q: "Is this barcode/QR code generator free?", faq1A: "Yes. It runs entirely in your browser - no signup, no account, and nothing is uploaded anywhere.",
+      faq2Q: "Is there a limit on how many codes I can generate?", faq2A: "No. Every barcode and QR code is generated locally in your browser, with no server calls and no usage cap - create and download as many as you need. The only practical limit is your browser's own storage space if you save a very large number to your Saved Codes list.",
+      faq3Q: "Where can I see my saved codes?", faq3A: "Click \"Save\" to add the current one to your list, then click \"Saved Codes\" any time to browse, reopen, or delete them. They're stored only in this browser - clearing your browser data removes them.",
+      faq4Q: "Will my barcode scan correctly?", faq4A: "Most scanners read CODE128, EAN-13, UPC-A, and similar standard formats reliably. Make sure your value matches the chosen format's requirements (shown as a hint if it doesn't), and avoid making the label too small.",
+      faq5Q: "Can I scan this with my phone?", faq5A: "Most phone camera apps can scan QR codes directly, no extra app needed. Traditional barcodes (CODE128, EAN-13, UPC-A, and similar) usually aren't recognized by a phone's built-in camera - you'll need a dedicated barcode scanner app to read those.",
+      faq6Q: "What label sizes can I use?", faq6A: "Pick a standard label size, or choose Custom and enter any size in millimeters - the on-screen preview and the downloaded PNG match exactly.",
+      faq7Q: "Can I add a border around the code?", faq7A: "Yes - the Border option applies to both barcodes and QR codes, with a few line styles (solid, dashed, dotted). It shows in the on-screen preview and in the downloaded PNG.",
+      hintCode128: "Accepts letters, numbers, and most symbols - the most flexible general-purpose format.",
+      hintEan13: "Needs 12 or 13 digits (a 13th check digit is added automatically if you enter 12).",
+      hintUpc: "Needs 11 or 12 digits (a 12th check digit is added automatically if you enter 11).",
+      hintCode39: "Accepts uppercase letters, numbers, and - . $ / + % space.",
+      hintItf14: "Needs 13 or 14 digits, used for shipping cartons and pallets.",
+      hintCodabar: "Accepts numbers and - $ : / . +",
+      hintPharmacode: "Accepts a single number from 3 to 131070.",
+      invalidValuePrefix: "This value isn't valid for ", tooLongQrValue: "This value is too long to encode as a QR code.",
+      enterValidValueCanvas: "Enter a valid value",
+      sizeTooDenseWarning: "This is quite dense for the selected label size - try a larger size or a shorter value for reliable scanning.",
+      labelSizePrefix: "Label size:",
+      sizeStandardRetail: "Standard retail label", sizeSmallItem: "Small item label", sizeShippingProduct: "Shipping / product label", sizeShippingLabel: "Shipping label",
+      sizeSmallQr: "Small", sizeStandardQr: "Standard", sizePosterTableTent: "Poster / table tent", sizeLargeQr: "Large",
+      customSizeOptionLabel: "Custom size"
+    },
+    ar: {
+      freeToolLabel: "أداة مجانية", mastheadTitleLabel: "إنشاء باركود / رمز QR",
+      mastheadSubtitle: "أنشئ باركود أو رمز QR في متصفحك، اختر مقاس ملصق قياسي أو مخصص، ثم نزّله أو احفظه لوقت لاحق. بدون تسجيل، لا يغادر شيء هذا المتصفح.",
+      languageLabel: "اللغة", tabBarcodeLabel: "باركود", tabQrLabel: "رمز QR",
+      codeValueLabelBarcode: "قيمة الباركود", codeValueLabelQr: "قيمة / بيانات رمز QR",
+      codeValuePlaceholderBarcode: "مثال: 123456789012", codeValuePlaceholderQr: "مثال: https://example.com أو أي نص",
+      barcodeTypeLabel: "نوع الباركود",
+      fmtCode128: "CODE128 (حروف، أرقام، رموز)", fmtEan13: "EAN-13 (منتجات تجزئة، 12-13 رقماً)",
+      fmtUpc: "UPC-A (منتجات تجزئة، 11-12 رقماً)", fmtCode39: "CODE39 (حروف، أرقام، بضعة رموز)",
+      fmtItf14: "ITF-14 (كراتين الشحن، 13-14 رقماً)", fmtCodabar: "Codabar (أرقام و -$:/.+)", fmtPharmacode: "Pharmacode (رقم واحد)",
+      labelSizeLabel: "مقاس الملصق", customWidthLabel: "العرض (مم)", customHeightLabel: "الارتفاع (مم)", customQrSizeLabel: "المقاس (مم، مربع)",
+      borderLabel: "الإطار", borderNone: "بدون", borderSolidStrong: "متصل - قوي", borderSolidMedium: "متصل - متوسط", borderDashed: "خط متقطع", borderDotted: "خط منقط",
+      addTextAboveLabel: "إضافة نص أعلى الرمز", textAboveLabel: "النص العلوي", textAbovePlaceholder: "مثال: اسم المنتج",
+      showBarcodeValueLabel: "إظهار قيمة الباركود أسفله", showQrValueLabel: "إظهار قيمة رمز QR أسفله",
+      previewLabel: "معاينة", saveLabel: "حفظ", savedCodesLabel: "الرموز المحفوظة", downloadPngLabel: "تنزيل PNG", clearNewLabel: "مسح / جديد",
+      autosaveNoteText: "يتم حفظ الباركود أو رمز QR الحالي تلقائياً في هذا المتصفح أثناء الكتابة. اضغط \"حفظ\" لإضافته إلى قائمة الرموز المحفوظة حتى تجده لاحقاً - لا يتم رفع أي شيء إلى الإنترنت.",
+      savedToast: "تم الحفظ",
+      savedCodesEmptyText: "لا توجد رموز محفوظة بعد. أنشئ باركود أو رمز QR واضغط \"حفظ\" لحفظه هنا.",
+      noValueLabel: "(بدون قيمة)",
+      deleteSavedConfirm: "هل تريد حذف هذا الرمز المحفوظ؟ لا يمكن التراجع عن هذا الإجراء.",
+      clearCodeConfirm: "هل تريد مسح هذا الرمز والبدء برمز جديد؟ لا يمكن التراجع عن هذا الإجراء.",
+      barcodeBadgeLabel: "باركود", qrBadgeLabel: "QR",
+      howToTitle: "كيفية إنشاء باركود أو رمز QR",
+      howToStep1: "اختر باركود أو رمز QR في الأعلى.",
+      howToStep2: "اختر مقاس ملصق من القائمة، أو اختر مخصص وأدخل مقاسك الخاص بالمليمتر.",
+      howToStep3: "اكتب القيمة التي تريد ترميزها. للباركود، اختر أيضاً نوع الباركود المناسب لاستخدامك - مثلاً EAN-13 أو UPC-A لمنتجات التجزئة، وCODE128 للاستخدام العام.",
+      howToStep4: "أضف نصاً فوق الرمز إن أردت (مثل اسم منتج)، اختر ما إذا كنت تريد إظهار القيمة المرمزة أسفله، واختر نمط إطار إن رغبت.",
+      howToStep5: "اضغط \"حفظ\" لحفظه في قائمة الرموز المحفوظة، أو \"تنزيل PNG\" لحفظ ملف صورة يمكنك استخدامه في أي مكان.",
+      faqTitle: "الأسئلة الشائعة حول الباركود / رمز QR",
+      faq1Q: "هل مولّد الباركود / رمز QR هذا مجاني؟", faq1A: "نعم. يعمل بالكامل داخل متصفحك - بدون تسجيل، بدون حساب، ولا يُرفع أي شيء إلى أي مكان.",
+      faq2Q: "هل هناك حد لعدد الرموز التي يمكنني إنشاؤها؟", faq2A: "لا. يتم إنشاء كل باركود ورمز QR محلياً في متصفحك، بدون أي اتصال بخادم وبدون حد للاستخدام - أنشئ ونزّل بقدر ما تحتاج. الحد العملي الوحيد هو مساحة تخزين متصفحك إذا حفظت عدداً كبيراً جداً في قائمة الرموز المحفوظة.",
+      faq3Q: "أين يمكنني رؤية رموزي المحفوظة؟", faq3A: "اضغط \"حفظ\" لإضافة الرمز الحالي إلى قائمتك، ثم اضغط \"الرموز المحفوظة\" في أي وقت لتصفحها أو إعادة فتحها أو حذفها. تُحفظ فقط في هذا المتصفح - مسح بيانات المتصفح يحذفها.",
+      faq4Q: "هل سيتم مسح الباركود الخاص بي بشكل صحيح؟", faq4A: "تقرأ معظم الماسحات الضوئية CODE128 وEAN-13 وUPC-A والصيغ القياسية المشابهة بشكل موثوق. تأكد من أن قيمتك تطابق متطلبات الصيغة المختارة (تظهر كتلميح إذا لم تتطابق)، وتجنب جعل الملصق صغيراً جداً.",
+      faq5Q: "هل يمكنني مسح هذا بهاتفي؟", faq5A: "يمكن لمعظم تطبيقات كاميرا الهاتف مسح رموز QR مباشرة دون تطبيق إضافي. عادةً لا تتعرف كاميرا الهاتف المدمجة على الباركود التقليدي (CODE128، EAN-13، UPC-A وما شابه) - ستحتاج إلى تطبيق ماسح باركود مخصص لقراءتها.",
+      faq6Q: "ما مقاسات الملصقات التي يمكنني استخدامها؟", faq6A: "اختر مقاس ملصق قياسي، أو اختر مخصص وأدخل أي مقاس بالمليمتر - تتطابق المعاينة على الشاشة وملف PNG المُنزّل تماماً.",
+      faq7Q: "هل يمكنني إضافة إطار حول الرمز؟", faq7A: "نعم - ينطبق خيار الإطار على كل من الباركود ورموز QR، مع بضعة أنماط خطوط (متصل، متقطع، منقط). يظهر في المعاينة على الشاشة وفي ملف PNG المُنزّل.",
+      hintCode128: "يقبل الحروف والأرقام ومعظم الرموز - الصيغة الأكثر مرونة للاستخدام العام.",
+      hintEan13: "يحتاج 12 أو 13 رقماً (يُضاف رقم التحقق الثالث عشر تلقائياً إذا أدخلت 12).",
+      hintUpc: "يحتاج 11 أو 12 رقماً (يُضاف رقم التحقق الثاني عشر تلقائياً إذا أدخلت 11).",
+      hintCode39: "يقبل الحروف الكبيرة والأرقام و- . $ / + % ومسافة.",
+      hintItf14: "يحتاج 13 أو 14 رقماً، يُستخدم لكراتين وطبليات الشحن.",
+      hintCodabar: "يقبل الأرقام و- $ : / . +",
+      hintPharmacode: "يقبل رقماً واحداً من 3 إلى 131070.",
+      invalidValuePrefix: "هذه القيمة غير صالحة لـ ", tooLongQrValue: "هذه القيمة طويلة جداً لترميزها كرمز QR.",
+      enterValidValueCanvas: "أدخل قيمة صالحة",
+      sizeTooDenseWarning: "هذا كثيف جداً بالنسبة لمقاس الملصق المختار - جرّب مقاساً أكبر أو قيمة أقصر لضمان مسح موثوق.",
+      labelSizePrefix: "مقاس الملصق:",
+      sizeStandardRetail: "ملصق تجزئة قياسي", sizeSmallItem: "ملصق سلعة صغيرة", sizeShippingProduct: "ملصق شحن / منتج", sizeShippingLabel: "ملصق شحن",
+      sizeSmallQr: "صغير", sizeStandardQr: "قياسي", sizePosterTableTent: "ملصق / بطاقة طاولة", sizeLargeQr: "كبير",
+      customSizeOptionLabel: "مقاس مخصص"
+    },
+    fil: {
+      freeToolLabel: "Libreng Tool", mastheadTitleLabel: "Gumawa ng Barcode / QR Code",
+      mastheadSubtitle: "Gumawa ng barcode o QR code sa iyong browser, pumili ng standard o custom na label size, pagkatapos i-download o i-save para sa susunod. Walang signup, walang aalis sa browser na ito.",
+      languageLabel: "Wika", tabBarcodeLabel: "Barcode", tabQrLabel: "QR Code",
+      codeValueLabelBarcode: "Barcode Value", codeValueLabelQr: "QR Code Value / Data",
+      codeValuePlaceholderBarcode: "hal. 123456789012", codeValuePlaceholderQr: "hal. https://example.com o kahit anong text",
+      barcodeTypeLabel: "Uri ng Barcode",
+      fmtCode128: "CODE128 (letra, numero, simbolo)", fmtEan13: "EAN-13 (retail na produkto, 12-13 digit)",
+      fmtUpc: "UPC-A (retail na produkto, 11-12 digit)", fmtCode39: "CODE39 (letra, numero, ilang simbolo)",
+      fmtItf14: "ITF-14 (shipping carton, 13-14 digit)", fmtCodabar: "Codabar (numero at -$:/.+)", fmtPharmacode: "Pharmacode (iisang numero)",
+      labelSizeLabel: "Label Size", customWidthLabel: "Lapad (mm)", customHeightLabel: "Taas (mm)", customQrSizeLabel: "Size (mm, parisukat)",
+      borderLabel: "Border", borderNone: "Wala", borderSolidStrong: "Solid - Malakas", borderSolidMedium: "Solid - Katamtaman", borderDashed: "Guhit na patuldok-tuldok", borderDotted: "Guhit na tuldok-tuldok",
+      addTextAboveLabel: "Magdagdag ng text sa itaas", textAboveLabel: "Text sa Itaas", textAbovePlaceholder: "hal. Pangalan ng Produkto",
+      showBarcodeValueLabel: "Ipakita ang barcode value sa ibaba", showQrValueLabel: "Ipakita ang QR value sa ibaba",
+      previewLabel: "Preview", saveLabel: "I-save", savedCodesLabel: "Mga Naka-save na Code", downloadPngLabel: "I-download bilang PNG", clearNewLabel: "I-clear / Bago",
+      autosaveNoteText: "Awtomatikong na-save ang kasalukuyang barcode o QR code mo sa browser na ito habang nagta-type ka. I-click ang \"I-save\" para idagdag ito sa listahan ng Mga Naka-save na Code para mahanap mo ulit ito - walang ina-upload kahit saan.",
+      savedToast: "Na-save",
+      savedCodesEmptyText: "Wala pang naka-save na code. Gumawa ng barcode o QR code at i-click ang \"I-save\" para itago dito.",
+      noValueLabel: "(walang value)",
+      deleteSavedConfirm: "Tanggalin ang naka-save na code na ito? Hindi na ito mababawi.",
+      clearCodeConfirm: "I-clear ang code na ito at magsimula ng bago? Hindi na ito mababawi.",
+      barcodeBadgeLabel: "Barcode", qrBadgeLabel: "QR",
+      howToTitle: "Paano gumawa ng barcode o QR code",
+      howToStep1: "Piliin ang Barcode o QR Code sa itaas.",
+      howToStep2: "Pumili ng label size sa listahan, o piliin ang Custom at ilagay ang sarili mong size sa millimeters.",
+      howToStep3: "I-type ang value na gusto mong i-encode. Para sa barcode, pumili rin ng barcode type na tugma sa gagamitin mo - halimbawa EAN-13 o UPC-A para sa retail na produkto, CODE128 para sa pangkalahatang gamit.",
+      howToStep4: "Opsyonal na magdagdag ng text sa itaas ng code (hal. pangalan ng produkto), piliin kung ipapakita ang naka-encode na value sa ibaba nito, at pumili ng border style kung gusto mo.",
+      howToStep5: "I-click ang \"I-save\" para itago ito sa listahan ng Mga Naka-save na Code, o \"I-download bilang PNG\" para i-save bilang image file na magagamit mo kahit saan.",
+      faqTitle: "Mga Tanong Tungkol sa Barcode / QR Code",
+      faq1Q: "Libre ba itong barcode/QR code generator?", faq1A: "Oo. Gumagana ito nang buo sa iyong browser - walang signup, walang account, at walang ina-upload kahit saan.",
+      faq2Q: "May limitasyon ba sa bilang ng code na pwede kong gawin?", faq2A: "Wala. Ginagawa ang bawat barcode at QR code nang lokal sa iyong browser, walang server call at walang usage cap - gumawa at mag-download nang kahit gaano karami ang kailangan mo. Ang tanging praktikal na limitasyon ay ang storage space ng browser mo kung maraming beses kang nag-save sa listahan ng Mga Naka-save na Code.",
+      faq3Q: "Saan ko makikita ang mga naka-save kong code?", faq3A: "I-click ang \"I-save\" para idagdag ang kasalukuyan sa listahan mo, pagkatapos i-click ang \"Mga Naka-save na Code\" kahit kailan para tingnan, buksan ulit, o burahin ang mga ito. Naka-save lang ito sa browser na ito - mawawala ang mga ito kapag na-clear mo ang data ng browser.",
+      faq4Q: "Mababasa ba nang tama ang barcode ko?", faq4A: "Karamihan ng scanner ay mapagkakatiwalaang nakakabasa ng CODE128, EAN-13, UPC-A, at katulad na standard na format. Siguraduhing tugma ang value mo sa requirements ng napiling format (ipinapakita bilang hint kung hindi tugma), at iwasang gawing masyadong maliit ang label.",
+      faq5Q: "Pwede ko ba itong i-scan gamit ang phone ko?", faq5A: "Karamihan ng camera app ng phone ay direktang nakakabasa ng QR code, walang kailangang extra app. Ang tradisyunal na barcode (CODE128, EAN-13, UPC-A, at katulad) ay kadalasang hindi nakikilala ng built-in camera ng phone - kakailanganin mo ng dedikadong barcode scanner app para mabasa ang mga iyon.",
+      faq6Q: "Anong mga label size ang pwede kong gamitin?", faq6A: "Pumili ng standard na label size, o piliin ang Custom at ilagay ang kahit anong size sa millimeters - eksaktong tugma ang preview sa screen at ang na-download na PNG.",
+      faq7Q: "Pwede ba akong magdagdag ng border sa paligid ng code?", faq7A: "Oo - ang Border option ay applicable sa parehong barcode at QR code, may ilang line style (solid, patuldok-tuldok, tuldok-tuldok). Makikita ito sa preview sa screen at sa na-download na PNG.",
+      hintCode128: "Tumatanggap ng letra, numero, at karamihan ng simbolo - ang pinaka-flexible na general-purpose na format.",
+      hintEan13: "Kailangan ng 12 o 13 digit (awtomatikong idadagdag ang ika-13 check digit kung 12 ang ilalagay mo).",
+      hintUpc: "Kailangan ng 11 o 12 digit (awtomatikong idadagdag ang ika-12 check digit kung 11 ang ilalagay mo).",
+      hintCode39: "Tumatanggap ng malaking letra, numero, at - . $ / + % space.",
+      hintItf14: "Kailangan ng 13 o 14 digit, ginagamit para sa shipping carton at pallet.",
+      hintCodabar: "Tumatanggap ng numero at - $ : / . +",
+      hintPharmacode: "Tumatanggap ng iisang numero mula 3 hanggang 131070.",
+      invalidValuePrefix: "Hindi valid ang value na ito para sa ", tooLongQrValue: "Masyadong mahaba ang value na ito para i-encode bilang QR code.",
+      enterValidValueCanvas: "Maglagay ng valid na value",
+      sizeTooDenseWarning: "Medyo siksik ito para sa napiling label size - subukan ang mas malaking size o mas maikling value para sa maaasahang pag-scan.",
+      labelSizePrefix: "Label size:",
+      sizeStandardRetail: "Standard retail label", sizeSmallItem: "Maliit na item label", sizeShippingProduct: "Shipping / product label", sizeShippingLabel: "Shipping label",
+      sizeSmallQr: "Maliit", sizeStandardQr: "Standard", sizePosterTableTent: "Poster / table tent", sizeLargeQr: "Malaki",
+      customSizeOptionLabel: "Custom na size"
+    },
+    hi: {
+      freeToolLabel: "मुफ़्त टूल", mastheadTitleLabel: "बारकोड / QR कोड बनाएं",
+      mastheadSubtitle: "अपने ब्राउज़र में एक बारकोड या QR कोड बनाएं, मानक या कस्टम लेबल आकार चुनें, फिर उसे डाउनलोड करें या बाद के लिए सेव करें। कोई साइनअप नहीं, इस ब्राउज़र से कुछ भी बाहर नहीं जाता।",
+      languageLabel: "भाषा", tabBarcodeLabel: "बारकोड", tabQrLabel: "QR कोड",
+      codeValueLabelBarcode: "बारकोड वैल्यू", codeValueLabelQr: "QR कोड वैल्यू / डेटा",
+      codeValuePlaceholderBarcode: "जैसे 123456789012", codeValuePlaceholderQr: "जैसे https://example.com या कोई भी टेक्स्ट",
+      barcodeTypeLabel: "बारकोड प्रकार",
+      fmtCode128: "CODE128 (अक्षर, अंक, प्रतीक)", fmtEan13: "EAN-13 (खुदरा उत्पाद, 12-13 अंक)",
+      fmtUpc: "UPC-A (खुदरा उत्पाद, 11-12 अंक)", fmtCode39: "CODE39 (अक्षर, अंक, कुछ प्रतीक)",
+      fmtItf14: "ITF-14 (शिपिंग कार्टन, 13-14 अंक)", fmtCodabar: "Codabar (अंक और -$:/.+)", fmtPharmacode: "Pharmacode (एक अकेला अंक)",
+      labelSizeLabel: "लेबल आकार", customWidthLabel: "चौड़ाई (मिमी)", customHeightLabel: "ऊंचाई (मिमी)", customQrSizeLabel: "आकार (मिमी, वर्गाकार)",
+      borderLabel: "बॉर्डर", borderNone: "कोई नहीं", borderSolidStrong: "ठोस - मजबूत", borderSolidMedium: "ठोस - मध्यम", borderDashed: "डैश लाइन", borderDotted: "डॉट लाइन",
+      addTextAboveLabel: "ऊपर टेक्स्ट जोड़ें", textAboveLabel: "ऊपर का टेक्स्ट", textAbovePlaceholder: "जैसे उत्पाद का नाम",
+      showBarcodeValueLabel: "नीचे बारकोड वैल्यू दिखाएं", showQrValueLabel: "नीचे QR वैल्यू दिखाएं",
+      previewLabel: "पूर्वावलोकन", saveLabel: "सेव करें", savedCodesLabel: "सेव किए गए कोड", downloadPngLabel: "PNG डाउनलोड करें", clearNewLabel: "साफ़ करें / नया",
+      autosaveNoteText: "आपका मौजूदा बारकोड या QR कोड टाइप करते समय इस ब्राउज़र में अपने आप सेव हो जाता है। इसे बाद में फिर से खोजने के लिए अपनी सेव किए गए कोड की सूची में जोड़ने के लिए \"सेव करें\" पर क्लिक करें - कहीं भी कुछ भी अपलोड नहीं होता।",
+      savedToast: "सेव हो गया",
+      savedCodesEmptyText: "अभी तक कोई सेव किया गया कोड नहीं है। एक बारकोड या QR कोड बनाएं और इसे यहाँ रखने के लिए \"सेव करें\" पर क्लिक करें।",
+      noValueLabel: "(कोई वैल्यू नहीं)",
+      deleteSavedConfirm: "इस सेव किए गए कोड को हटाएं? इसे वापस नहीं लाया जा सकता।",
+      clearCodeConfirm: "इस कोड को साफ़ करके नया शुरू करें? इसे वापस नहीं लाया जा सकता।",
+      barcodeBadgeLabel: "बारकोड", qrBadgeLabel: "QR",
+      howToTitle: "बारकोड या QR कोड कैसे बनाएं",
+      howToStep1: "ऊपर बारकोड या QR कोड चुनें।",
+      howToStep2: "सूची में से एक लेबल आकार चुनें, या कस्टम चुनें और मिलीमीटर में अपना खुद का आकार दर्ज करें।",
+      howToStep3: "जिस वैल्यू को आप एन्कोड करना चाहते हैं उसे टाइप करें। बारकोड के लिए, वह बारकोड प्रकार भी चुनें जो आपके उपयोग से मेल खाता हो - उदाहरण के लिए खुदरा उत्पादों के लिए EAN-13 या UPC-A, सामान्य उपयोग के लिए CODE128।",
+      howToStep4: "वैकल्पिक रूप से कोड के ऊपर टेक्स्ट जोड़ें (जैसे उत्पाद का नाम), चुनें कि इसके नीचे एन्कोड की गई वैल्यू दिखानी है या नहीं, और यदि चाहें तो एक बॉर्डर शैली चुनें।",
+      howToStep5: "इसे अपनी सेव किए गए कोड की सूची में रखने के लिए \"सेव करें\" पर क्लिक करें, या कहीं भी उपयोग करने योग्य इमेज फ़ाइल सेव करने के लिए \"PNG डाउनलोड करें\" पर क्लिक करें।",
+      faqTitle: "बारकोड / QR कोड से जुड़े सवाल",
+      faq1Q: "क्या यह बारकोड/QR कोड जनरेटर मुफ़्त है?", faq1A: "हां। यह पूरी तरह से आपके ब्राउज़र में चलता है - कोई साइनअप नहीं, कोई खाता नहीं, और कहीं भी कुछ भी अपलोड नहीं होता।",
+      faq2Q: "क्या मैं कितने भी कोड बना सकता हूं, इसकी कोई सीमा है?", faq2A: "नहीं। हर बारकोड और QR कोड आपके ब्राउज़र में स्थानीय रूप से बनाया जाता है, बिना किसी सर्वर कॉल और बिना किसी उपयोग सीमा के - जितने चाहें उतने बनाएं और डाउनलोड करें। एकमात्र व्यावहारिक सीमा आपके ब्राउज़र की अपनी स्टोरेज स्पेस है, अगर आप सेव किए गए कोड की सूची में बहुत बड़ी संख्या सेव करते हैं।",
+      faq3Q: "मैं अपने सेव किए गए कोड कहां देख सकता हूं?", faq3A: "वर्तमान कोड को अपनी सूची में जोड़ने के लिए \"सेव करें\" पर क्लिक करें, फिर उन्हें ब्राउज़ करने, फिर से खोलने या हटाने के लिए किसी भी समय \"सेव किए गए कोड\" पर क्लिक करें। ये केवल इस ब्राउज़र में सेव होते हैं - अपने ब्राउज़र का डेटा साफ़ करने से ये हट जाते हैं।",
+      faq4Q: "क्या मेरा बारकोड सही तरीके से स्कैन होगा?", faq4A: "अधिकांश स्कैनर CODE128, EAN-13, UPC-A, और समान मानक फॉर्मेट को विश्वसनीय रूप से पढ़ते हैं। सुनिश्चित करें कि आपकी वैल्यू चुने गए फॉर्मेट की आवश्यकताओं से मेल खाती है (यदि नहीं तो एक संकेत के रूप में दिखाया जाता है), और लेबल को बहुत छोटा बनाने से बचें।",
+      faq5Q: "क्या मैं इसे अपने फ़ोन से स्कैन कर सकता हूं?", faq5A: "अधिकांश फ़ोन कैमरा ऐप सीधे QR कोड स्कैन कर सकते हैं, किसी अतिरिक्त ऐप की आवश्यकता नहीं। पारंपरिक बारकोड (CODE128, EAN-13, UPC-A, और समान) आमतौर पर फ़ोन के बिल्ट-इन कैमरे द्वारा पहचाने नहीं जाते - उन्हें पढ़ने के लिए आपको एक समर्पित बारकोड स्कैनर ऐप की आवश्यकता होगी।",
+      faq6Q: "मैं किन लेबल आकारों का उपयोग कर सकता हूं?", faq6A: "एक मानक लेबल आकार चुनें, या कस्टम चुनें और मिलीमीटर में कोई भी आकार दर्ज करें - ऑन-स्क्रीन पूर्वावलोकन और डाउनलोड किया गया PNG बिल्कुल मेल खाते हैं।",
+      faq7Q: "क्या मैं कोड के चारों ओर एक बॉर्डर जोड़ सकता हूं?", faq7A: "हां - बॉर्डर विकल्प बारकोड और QR कोड दोनों पर लागू होता है, कुछ लाइन शैलियों के साथ (ठोस, डैश, डॉट)। यह ऑन-स्क्रीन पूर्वावलोकन और डाउनलोड किए गए PNG में दिखता है।",
+      hintCode128: "अक्षर, अंक, और अधिकांश प्रतीकों को स्वीकार करता है - सबसे लचीला सामान्य-उद्देश्य फॉर्मेट।",
+      hintEan13: "12 या 13 अंकों की आवश्यकता है (यदि आप 12 दर्ज करते हैं तो 13वां चेक अंक अपने आप जुड़ जाता है)।",
+      hintUpc: "11 या 12 अंकों की आवश्यकता है (यदि आप 11 दर्ज करते हैं तो 12वां चेक अंक अपने आप जुड़ जाता है)।",
+      hintCode39: "बड़े अक्षर, अंक, और - . $ / + % स्पेस स्वीकार करता है।",
+      hintItf14: "13 या 14 अंकों की आवश्यकता है, शिपिंग कार्टन और पैलेट के लिए उपयोग किया जाता है।",
+      hintCodabar: "अंक और - $ : / . + स्वीकार करता है।",
+      hintPharmacode: "3 से 131070 तक का एक अकेला अंक स्वीकार करता है।",
+      invalidValuePrefix: "यह वैल्यू इसके लिए मान्य नहीं है: ", tooLongQrValue: "यह वैल्यू QR कोड के रूप में एन्कोड करने के लिए बहुत लंबी है।",
+      enterValidValueCanvas: "एक मान्य वैल्यू दर्ज करें",
+      sizeTooDenseWarning: "यह चुने गए लेबल आकार के लिए काफी घना है - विश्वसनीय स्कैनिंग के लिए बड़ा आकार या छोटी वैल्यू आज़माएं।",
+      labelSizePrefix: "लेबल आकार:",
+      sizeStandardRetail: "मानक खुदरा लेबल", sizeSmallItem: "छोटी वस्तु लेबल", sizeShippingProduct: "शिपिंग / उत्पाद लेबल", sizeShippingLabel: "शिपिंग लेबल",
+      sizeSmallQr: "छोटा", sizeStandardQr: "मानक", sizePosterTableTent: "पोस्टर / टेबल टेंट", sizeLargeQr: "बड़ा",
+      customSizeOptionLabel: "कस्टम आकार"
+    },
+    es: {
+      freeToolLabel: "Herramienta Gratuita", mastheadTitleLabel: "Crear Código de Barras / QR",
+      mastheadSubtitle: "Genera un código de barras o QR en tu navegador, elige un tamaño de etiqueta estándar o personalizado, luego descárgalo o guárdalo para más tarde. Sin registro, nada sale de este navegador.",
+      languageLabel: "Idioma", tabBarcodeLabel: "Código de Barras", tabQrLabel: "Código QR",
+      codeValueLabelBarcode: "Valor del Código de Barras", codeValueLabelQr: "Valor / Datos del Código QR",
+      codeValuePlaceholderBarcode: "ej. 123456789012", codeValuePlaceholderQr: "ej. https://example.com o cualquier texto",
+      barcodeTypeLabel: "Tipo de Código de Barras",
+      fmtCode128: "CODE128 (letras, números, símbolos)", fmtEan13: "EAN-13 (productos minoristas, 12-13 dígitos)",
+      fmtUpc: "UPC-A (productos minoristas, 11-12 dígitos)", fmtCode39: "CODE39 (letras, números, algunos símbolos)",
+      fmtItf14: "ITF-14 (cajas de envío, 13-14 dígitos)", fmtCodabar: "Codabar (números y -$:/.+)", fmtPharmacode: "Pharmacode (un solo número)",
+      labelSizeLabel: "Tamaño de Etiqueta", customWidthLabel: "Ancho (mm)", customHeightLabel: "Alto (mm)", customQrSizeLabel: "Tamaño (mm, cuadrado)",
+      borderLabel: "Borde", borderNone: "Ninguno", borderSolidStrong: "Sólido - Fuerte", borderSolidMedium: "Sólido - Medio", borderDashed: "Línea discontinua", borderDotted: "Línea punteada",
+      addTextAboveLabel: "Agregar texto arriba", textAboveLabel: "Texto Superior", textAbovePlaceholder: "ej. Nombre del Producto",
+      showBarcodeValueLabel: "Mostrar el valor del código de barras debajo", showQrValueLabel: "Mostrar el valor del QR debajo",
+      previewLabel: "Vista Previa", saveLabel: "Guardar", savedCodesLabel: "Códigos Guardados", downloadPngLabel: "Descargar PNG", clearNewLabel: "Limpiar / Nuevo",
+      autosaveNoteText: "Tu código de barras o QR actual se guarda automáticamente en este navegador mientras escribes. Haz clic en \"Guardar\" para agregarlo a tu lista de Códigos Guardados y encontrarlo más tarde - no se sube nada a ningún lado.",
+      savedToast: "Guardado",
+      savedCodesEmptyText: "Aún no hay códigos guardados. Crea un código de barras o QR y haz clic en \"Guardar\" para guardarlo aquí.",
+      noValueLabel: "(sin valor)",
+      deleteSavedConfirm: "¿Eliminar este código guardado? Esto no se puede deshacer.",
+      clearCodeConfirm: "¿Limpiar este código y comenzar uno nuevo? Esto no se puede deshacer.",
+      barcodeBadgeLabel: "Código de Barras", qrBadgeLabel: "QR",
+      howToTitle: "Cómo crear un código de barras o QR",
+      howToStep1: "Elige Código de Barras o QR arriba.",
+      howToStep2: "Elige un tamaño de etiqueta de la lista, o elige Personalizado e ingresa tu propio tamaño en milímetros.",
+      howToStep3: "Escribe el valor que quieres codificar. Para un código de barras, elige también el tipo que coincida con tu uso - por ejemplo EAN-13 o UPC-A para productos minoristas, CODE128 para uso general.",
+      howToStep4: "Opcionalmente agrega texto arriba del código (ej. un nombre de producto), elige si mostrar el valor codificado debajo, y elige un estilo de borde si quieres uno.",
+      howToStep5: "Haz clic en \"Guardar\" para guardarlo en tu lista de Códigos Guardados, o \"Descargar PNG\" para guardar un archivo de imagen que puedas usar donde sea.",
+      faqTitle: "Preguntas Frecuentes sobre Código de Barras / QR",
+      faq1Q: "¿Este generador de códigos de barras/QR es gratuito?", faq1A: "Sí. Funciona completamente en tu navegador - sin registro, sin cuenta, y no se sube nada a ningún lado.",
+      faq2Q: "¿Hay un límite de cuántos códigos puedo generar?", faq2A: "No. Cada código de barras y QR se genera localmente en tu navegador, sin llamadas al servidor y sin límite de uso - crea y descarga tantos como necesites. El único límite práctico es el espacio de almacenamiento de tu propio navegador si guardas una cantidad muy grande en tu lista de Códigos Guardados.",
+      faq3Q: "¿Dónde puedo ver mis códigos guardados?", faq3A: "Haz clic en \"Guardar\" para agregar el actual a tu lista, luego haz clic en \"Códigos Guardados\" en cualquier momento para verlos, reabrirlos o eliminarlos. Se almacenan solo en este navegador - al borrar los datos de tu navegador se eliminan.",
+      faq4Q: "¿Se escaneará correctamente mi código de barras?", faq4A: "La mayoría de los escáneres leen CODE128, EAN-13, UPC-A, y formatos estándar similares de forma confiable. Asegúrate de que tu valor cumpla los requisitos del formato elegido (se muestra como sugerencia si no lo hace), y evita hacer la etiqueta demasiado pequeña.",
+      faq5Q: "¿Puedo escanear esto con mi teléfono?", faq5A: "La mayoría de las apps de cámara de teléfono pueden escanear códigos QR directamente, sin necesidad de una app extra. Los códigos de barras tradicionales (CODE128, EAN-13, UPC-A, y similares) usualmente no son reconocidos por la cámara integrada del teléfono - necesitarás una app dedicada de escáner de códigos de barras para leerlos.",
+      faq6Q: "¿Qué tamaños de etiqueta puedo usar?", faq6A: "Elige un tamaño de etiqueta estándar, o elige Personalizado e ingresa cualquier tamaño en milímetros - la vista previa en pantalla y el PNG descargado coinciden exactamente.",
+      faq7Q: "¿Puedo agregar un borde alrededor del código?", faq7A: "Sí - la opción de Borde aplica tanto a códigos de barras como a códigos QR, con algunos estilos de línea (sólido, discontinuo, punteado). Se muestra en la vista previa en pantalla y en el PNG descargado.",
+      hintCode128: "Acepta letras, números, y la mayoría de símbolos - el formato de propósito general más flexible.",
+      hintEan13: "Necesita 12 o 13 dígitos (se agrega automáticamente un 13º dígito de verificación si ingresas 12).",
+      hintUpc: "Necesita 11 o 12 dígitos (se agrega automáticamente un 12º dígito de verificación si ingresas 11).",
+      hintCode39: "Acepta letras mayúsculas, números, y - . $ / + % espacio.",
+      hintItf14: "Necesita 13 o 14 dígitos, usado para cajas y tarimas de envío.",
+      hintCodabar: "Acepta números y - $ : / . +",
+      hintPharmacode: "Acepta un solo número del 3 al 131070.",
+      invalidValuePrefix: "Este valor no es válido para ", tooLongQrValue: "Este valor es demasiado largo para codificarlo como código QR.",
+      enterValidValueCanvas: "Ingresa un valor válido",
+      sizeTooDenseWarning: "Esto es bastante denso para el tamaño de etiqueta seleccionado - prueba un tamaño más grande o un valor más corto para un escaneo confiable.",
+      labelSizePrefix: "Tamaño de etiqueta:",
+      sizeStandardRetail: "Etiqueta minorista estándar", sizeSmallItem: "Etiqueta de artículo pequeño", sizeShippingProduct: "Etiqueta de envío / producto", sizeShippingLabel: "Etiqueta de envío",
+      sizeSmallQr: "Pequeño", sizeStandardQr: "Estándar", sizePosterTableTent: "Póster / letrero de mesa", sizeLargeQr: "Grande",
+      customSizeOptionLabel: "Tamaño personalizado"
+    },
+    th: {
+      freeToolLabel: "เครื่องมือฟรี", mastheadTitleLabel: "สร้างบาร์โค้ด / คิวอาร์โค้ด",
+      mastheadSubtitle: "สร้างบาร์โค้ดหรือคิวอาร์โค้ดในเบราว์เซอร์ของคุณ เลือกขนาดฉลากมาตรฐานหรือกำหนดเอง จากนั้นดาวน์โหลดหรือบันทึกไว้ใช้ภายหลัง ไม่ต้องสมัครสมาชิก ไม่มีข้อมูลออกจากเบราว์เซอร์นี้",
+      languageLabel: "ภาษา", tabBarcodeLabel: "บาร์โค้ด", tabQrLabel: "คิวอาร์โค้ด",
+      codeValueLabelBarcode: "ค่าบาร์โค้ด", codeValueLabelQr: "ค่า / ข้อมูลคิวอาร์โค้ด",
+      codeValuePlaceholderBarcode: "เช่น 123456789012", codeValuePlaceholderQr: "เช่น https://example.com หรือข้อความใด ๆ",
+      barcodeTypeLabel: "ประเภทบาร์โค้ด",
+      fmtCode128: "CODE128 (ตัวอักษร ตัวเลข สัญลักษณ์)", fmtEan13: "EAN-13 (สินค้าปลีก 12-13 หลัก)",
+      fmtUpc: "UPC-A (สินค้าปลีก 11-12 หลัก)", fmtCode39: "CODE39 (ตัวอักษร ตัวเลข สัญลักษณ์บางส่วน)",
+      fmtItf14: "ITF-14 (กล่องขนส่ง 13-14 หลัก)", fmtCodabar: "Codabar (ตัวเลขและ -$:/.+)", fmtPharmacode: "Pharmacode (ตัวเลขเดี่ยว)",
+      labelSizeLabel: "ขนาดฉลาก", customWidthLabel: "ความกว้าง (มม.)", customHeightLabel: "ความสูง (มม.)", customQrSizeLabel: "ขนาด (มม. สี่เหลี่ยมจัตุรัส)",
+      borderLabel: "ขอบ", borderNone: "ไม่มี", borderSolidStrong: "ทึบ - หนา", borderSolidMedium: "ทึบ - ปานกลาง", borderDashed: "เส้นประ", borderDotted: "เส้นจุด",
+      addTextAboveLabel: "เพิ่มข้อความด้านบน", textAboveLabel: "ข้อความด้านบน", textAbovePlaceholder: "เช่น ชื่อสินค้า",
+      showBarcodeValueLabel: "แสดงค่าบาร์โค้ดด้านล่าง", showQrValueLabel: "แสดงค่าคิวอาร์โค้ดด้านล่าง",
+      previewLabel: "ตัวอย่าง", saveLabel: "บันทึก", savedCodesLabel: "โค้ดที่บันทึกไว้", downloadPngLabel: "ดาวน์โหลด PNG", clearNewLabel: "ล้าง / ใหม่",
+      autosaveNoteText: "บาร์โค้ดหรือคิวอาร์โค้ดปัจจุบันของคุณจะถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ขณะที่คุณพิมพ์ คลิก \"บันทึก\" เพื่อเพิ่มลงในรายการโค้ดที่บันทึกไว้ เพื่อให้คุณค้นหาได้อีกครั้งในภายหลัง - ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
+      savedToast: "บันทึกแล้ว",
+      savedCodesEmptyText: "ยังไม่มีโค้ดที่บันทึกไว้ สร้างบาร์โค้ดหรือคิวอาร์โค้ดแล้วคลิก \"บันทึก\" เพื่อเก็บไว้ที่นี่",
+      noValueLabel: "(ไม่มีค่า)",
+      deleteSavedConfirm: "ลบโค้ดที่บันทึกไว้นี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      clearCodeConfirm: "ล้างโค้ดนี้แล้วเริ่มใหม่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+      barcodeBadgeLabel: "บาร์โค้ด", qrBadgeLabel: "QR",
+      howToTitle: "วิธีสร้างบาร์โค้ดหรือคิวอาร์โค้ด",
+      howToStep1: "เลือกบาร์โค้ดหรือคิวอาร์โค้ดที่ด้านบน",
+      howToStep2: "เลือกขนาดฉลากจากรายการ หรือเลือกกำหนดเองแล้วป้อนขนาดของคุณเองเป็นมิลลิเมตร",
+      howToStep3: "พิมพ์ค่าที่คุณต้องการเข้ารหัส สำหรับบาร์โค้ด ให้เลือกประเภทบาร์โค้ดที่ตรงกับการใช้งานของคุณด้วย - เช่น EAN-13 หรือ UPC-A สำหรับสินค้าปลีก CODE128 สำหรับการใช้งานทั่วไป",
+      howToStep4: "เพิ่มข้อความด้านบนโค้ดได้ตามต้องการ (เช่น ชื่อสินค้า) เลือกว่าจะแสดงค่าที่เข้ารหัสไว้ด้านล่างหรือไม่ และเลือกรูปแบบขอบหากต้องการ",
+      howToStep5: "คลิก \"บันทึก\" เพื่อเก็บไว้ในรายการโค้ดที่บันทึกไว้ หรือ \"ดาวน์โหลด PNG\" เพื่อบันทึกไฟล์รูปภาพที่คุณสามารถใช้ได้ทุกที่",
+      faqTitle: "คำถามที่พบบ่อยเกี่ยวกับบาร์โค้ด / คิวอาร์โค้ด",
+      faq1Q: "เครื่องมือสร้างบาร์โค้ด/คิวอาร์โค้ดนี้ฟรีหรือไม่?", faq1A: "ใช่ ทำงานทั้งหมดในเบราว์เซอร์ของคุณ - ไม่ต้องสมัครสมาชิก ไม่ต้องมีบัญชี และไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
+      faq2Q: "มีการจำกัดจำนวนโค้ดที่ฉันสามารถสร้างได้หรือไม่?", faq2A: "ไม่มี บาร์โค้ดและคิวอาร์โค้ดทุกอันถูกสร้างขึ้นในเบราว์เซอร์ของคุณเอง โดยไม่มีการเรียกเซิร์ฟเวอร์และไม่มีการจำกัดการใช้งาน - สร้างและดาวน์โหลดได้มากเท่าที่คุณต้องการ ข้อจำกัดในทางปฏิบัติเพียงอย่างเดียวคือพื้นที่จัดเก็บของเบราว์เซอร์คุณเองหากคุณบันทึกจำนวนมากในรายการโค้ดที่บันทึกไว้",
+      faq3Q: "ฉันจะดูโค้ดที่บันทึกไว้ได้ที่ไหน?", faq3A: "คลิก \"บันทึก\" เพื่อเพิ่มโค้ดปัจจุบันลงในรายการของคุณ จากนั้นคลิก \"โค้ดที่บันทึกไว้\" เมื่อใดก็ได้เพื่อเรียกดู เปิดใหม่ หรือลบ โค้ดเหล่านี้จะถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น - การล้างข้อมูลเบราว์เซอร์จะลบออก",
+      faq4Q: "บาร์โค้ดของฉันจะสแกนได้อย่างถูกต้องหรือไม่?", faq4A: "เครื่องสแกนส่วนใหญ่อ่าน CODE128, EAN-13, UPC-A และรูปแบบมาตรฐานที่คล้ายกันได้อย่างน่าเชื่อถือ ตรวจสอบให้แน่ใจว่าค่าของคุณตรงตามข้อกำหนดของรูปแบบที่เลือก (จะแสดงเป็นคำแนะนำหากไม่ตรง) และหลีกเลี่ยงการทำฉลากให้เล็กเกินไป",
+      faq5Q: "ฉันสามารถสแกนสิ่งนี้ด้วยโทรศัพท์ของฉันได้หรือไม่?", faq5A: "แอปกล้องโทรศัพท์ส่วนใหญ่สามารถสแกนคิวอาร์โค้ดได้โดยตรง ไม่ต้องใช้แอปเพิ่มเติม บาร์โค้ดแบบดั้งเดิม (CODE128, EAN-13, UPC-A และคล้ายกัน) มักไม่สามารถจดจำได้โดยกล้องในตัวของโทรศัพท์ - คุณจะต้องใช้แอปสแกนบาร์โค้ดโดยเฉพาะเพื่ออ่านสิ่งเหล่านั้น",
+      faq6Q: "ฉันสามารถใช้ขนาดฉลากใดได้บ้าง?", faq6A: "เลือกขนาดฉลากมาตรฐาน หรือเลือกกำหนดเองแล้วป้อนขนาดใด ๆ เป็นมิลลิเมตร - ตัวอย่างบนหน้าจอและ PNG ที่ดาวน์โหลดจะตรงกันทุกประการ",
+      faq7Q: "ฉันสามารถเพิ่มขอบรอบโค้ดได้หรือไม่?", faq7A: "ได้ - ตัวเลือกขอบใช้ได้กับทั้งบาร์โค้ดและคิวอาร์โค้ด มีรูปแบบเส้นให้เลือกหลายแบบ (ทึบ ประ จุด) จะแสดงในตัวอย่างบนหน้าจอและใน PNG ที่ดาวน์โหลด",
+      hintCode128: "รองรับตัวอักษร ตัวเลข และสัญลักษณ์ส่วนใหญ่ - รูปแบบอเนกประสงค์ที่ยืดหยุ่นที่สุด",
+      hintEan13: "ต้องการ 12 หรือ 13 หลัก (หลักตรวจสอบที่ 13 จะถูกเพิ่มโดยอัตโนมัติหากคุณป้อน 12 หลัก)",
+      hintUpc: "ต้องการ 11 หรือ 12 หลัก (หลักตรวจสอบที่ 12 จะถูกเพิ่มโดยอัตโนมัติหากคุณป้อน 11 หลัก)",
+      hintCode39: "รองรับตัวอักษรพิมพ์ใหญ่ ตัวเลข และ - . $ / + % ช่องว่าง",
+      hintItf14: "ต้องการ 13 หรือ 14 หลัก ใช้สำหรับกล่องและพาเลทขนส่ง",
+      hintCodabar: "รองรับตัวเลขและ - $ : / . +",
+      hintPharmacode: "รองรับตัวเลขเดี่ยวตั้งแต่ 3 ถึง 131070",
+      invalidValuePrefix: "ค่านี้ไม่ถูกต้องสำหรับ ", tooLongQrValue: "ค่านี้ยาวเกินไปที่จะเข้ารหัสเป็นคิวอาร์โค้ด",
+      enterValidValueCanvas: "ป้อนค่าที่ถูกต้อง",
+      sizeTooDenseWarning: "ค่านี้หนาแน่นเกินไปสำหรับขนาดฉลากที่เลือก - ลองใช้ขนาดที่ใหญ่ขึ้นหรือค่าที่สั้นลงเพื่อการสแกนที่เชื่อถือได้",
+      labelSizePrefix: "ขนาดฉลาก:",
+      sizeStandardRetail: "ฉลากค้าปลีกมาตรฐาน", sizeSmallItem: "ฉลากสินค้าขนาดเล็ก", sizeShippingProduct: "ฉลากขนส่ง / สินค้า", sizeShippingLabel: "ฉลากขนส่ง",
+      sizeSmallQr: "เล็ก", sizeStandardQr: "มาตรฐาน", sizePosterTableTent: "โปสเตอร์ / ป้ายตั้งโต๊ะ", sizeLargeQr: "ใหญ่",
+      customSizeOptionLabel: "ขนาดกำหนดเอง"
+    }
+  };
+  var langSelect = document.getElementById("bcLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      mastheadKicker: "freeToolLabel", mastheadTitle: "mastheadTitleLabel", mastheadSubtitle: "mastheadSubtitle",
+      languageLabelInv: "languageLabel", tabBarcodeLabel: "tabBarcodeLabel", tabQrLabel: "tabQrLabel",
+      barcodeTypeLabel: "barcodeTypeLabel",
+      fmtOptCode128: "fmtCode128", fmtOptEan13: "fmtEan13", fmtOptUpc: "fmtUpc", fmtOptCode39: "fmtCode39",
+      fmtOptItf14: "fmtItf14", fmtOptCodabar: "fmtCodabar", fmtOptPharmacode: "fmtPharmacode",
+      labelSizeLabel: "labelSizeLabel", customWidthLabel: "customWidthLabel", customHeightLabel: "customHeightLabel", customQrSizeLabel: "customQrSizeLabel",
+      borderLabel: "borderLabel", borderOptNone: "borderNone", borderOptSolidStrong: "borderSolidStrong", borderOptSolidMedium: "borderSolidMedium",
+      borderOptDashed: "borderDashed", borderOptDotted: "borderDotted",
+      addTextAboveLabel: "addTextAboveLabel", textAboveLabel: "textAboveLabel",
+      showBarcodeValueLabel: "showBarcodeValueLabel", showQrValueLabel: "showQrValueLabel",
+      previewLabel: "previewLabel", saveCodeBtnLabel: "saveLabel", savedCodesBtnLabel: "savedCodesLabel",
+      downloadCodeBtnLabel: "downloadPngLabel", clearCodeBtnLabel: "clearNewLabel", savedCodesModalTitle: "savedCodesLabel",
+      howToTitle: "howToTitle", howToStep1: "howToStep1", howToStep2: "howToStep2", howToStep3: "howToStep3", howToStep4: "howToStep4", howToStep5: "howToStep5",
+      faqTitle: "faqTitle", faq1Q: "faq1Q", faq1A: "faq1A", faq2Q: "faq2Q", faq2A: "faq2A", faq3Q: "faq3Q", faq3A: "faq3A",
+      faq4Q: "faq4Q", faq4A: "faq4A", faq5Q: "faq5Q", faq5A: "faq5A", faq6Q: "faq6Q", faq6A: "faq6A", faq7Q: "faq7Q", faq7A: "faq7A"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+    var autosaveEl = document.getElementById("autosaveNote");
+    if (autosaveEl) autosaveEl.textContent = translate("autosaveNoteText");
+    var topTextEl = document.getElementById("topText");
+    if (topTextEl) topTextEl.placeholder = translate("textAbovePlaceholder");
+
+    if (typeof updateTypeUI === "function") updateTypeUI();
+    if (typeof populateSizePreset === "function") populateSizePreset(sizePresetSelect.value);
+    if (typeof updateSizeRowsVisibility === "function") updateSizeRowsVisibility();
+    if (typeof renderPreview === "function") renderPreview();
+  }
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-barcode-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-barcode-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
 
   // Source raster resolution, in pixels per physical millimeter (~300 DPI).
   // Both renderers target this so the canvas is generated close to its
@@ -575,7 +951,7 @@ img { max-width: 100%; display: block; }
     list.forEach(function(s) {
       var opt = document.createElement("option");
       opt.value = s.key;
-      opt.textContent = s.label;
+      opt.textContent = s.dims ? (s.dims + " - " + translate(s.labelKey)) : translate(s.labelKey);
       sizePresetSelect.appendChild(opt);
     });
     var valid = list.some(function(s) { return s.key === selectedKey; });
@@ -611,8 +987,8 @@ img { max-width: 100%; display: block; }
     barcodeTypeRow.classList.toggle("hidden", !isBarcode);
     showValueRow.classList.toggle("hidden", !isBarcode);
     showQrValueRow.classList.toggle("hidden", isBarcode);
-    codeValueLabel.textContent = isBarcode ? "Barcode Value" : "QR Code Value / Data";
-    codeValueInput.placeholder = isBarcode ? "e.g. 123456789012" : "e.g. https://example.com or any text";
+    codeValueLabel.textContent = isBarcode ? translate("codeValueLabelBarcode") : translate("codeValueLabelQr");
+    codeValueInput.placeholder = isBarcode ? translate("codeValuePlaceholderBarcode") : translate("codeValuePlaceholderQr");
   }
 
   function applyBorderStyle() {
@@ -671,6 +1047,15 @@ img { max-width: 100%; display: block; }
     el.addEventListener("change", function() { renderPreview(); scheduleSave(); });
   });
 
+  function formatHint() {
+    return translate(BARCODE_FORMAT_HINT_KEYS[barcodeFormatSelect.value]) || "";
+  }
+
+  function invalidValueMessage() {
+    var formatName = barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0];
+    return translate("invalidValuePrefix") + formatName + ". " + formatHint();
+  }
+
   function renderBarcodeToCanvas(value) {
     var size = currentSizeMm();
     var barHeightPx = Math.max(120, Math.round(size.h * RENDER_PX_PER_MM * 0.6));
@@ -689,23 +1074,23 @@ img { max-width: 100%; display: block; }
             codeValueHint.textContent = "";
             codeValueHint.className = "field-hint";
           } else if (!valid) {
-            codeValueHint.textContent = "This value isn't valid for " + barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0] + ". " + (BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "");
+            codeValueHint.textContent = invalidValueMessage();
             codeValueHint.className = "field-hint error";
           } else {
-            codeValueHint.textContent = BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "";
+            codeValueHint.textContent = formatHint();
             codeValueHint.className = "field-hint";
           }
         }
       });
       lastFinalModuleMm = moduleWidthPx * (size.w / codeCanvas.width);
     } catch (e) {
-      codeValueHint.textContent = "This value isn't valid for " + barcodeFormatSelect.options[barcodeFormatSelect.selectedIndex].text.split(" (")[0] + ". " + (BARCODE_FORMAT_HINTS[barcodeFormatSelect.value] || "");
+      codeValueHint.textContent = invalidValueMessage();
       codeValueHint.className = "field-hint error";
       var ctx = codeCanvas.getContext("2d");
       codeCanvas.width = 300; codeCanvas.height = 100;
       ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 300, 100);
       ctx.fillStyle = "#b3261e"; ctx.font = "13px Arial"; ctx.textAlign = "center";
-      ctx.fillText("Enter a valid value", 150, 54);
+      ctx.fillText(translate("enterValidValueCanvas"), 150, 54);
       lastFinalModuleMm = null;
     }
   }
@@ -726,7 +1111,7 @@ img { max-width: 100%; display: block; }
         qr.addData(text);
         qr.make();
       } catch (e2) {
-        codeValueHint.textContent = "This value is too long to encode as a QR code.";
+        codeValueHint.textContent = translate("tooLongQrValue");
         codeValueHint.className = "field-hint error";
         var ctx0 = codeCanvas.getContext("2d");
         codeCanvas.width = 200; codeCanvas.height = 200;
@@ -779,13 +1164,17 @@ img { max-width: 100%; display: block; }
   // module width in millimeters (moduleWidthPx scaled down to the chosen
   // label's physical width) and warns only when that's genuinely too fine
   // to scan reliably.
+  function sizeLabelText(size) {
+    return translate("labelSizePrefix") + " " + size.w + " x " + size.h + " mm";
+  }
+
   function updateSizeHint(finalModuleMm) {
     var size = currentSizeMm();
     if (finalModuleMm != null && finalModuleMm < 0.25) {
-      sizeHint.textContent = "⚠ This is quite dense for the selected label size - try a larger size or a shorter value for reliable scanning.";
+      sizeHint.textContent = "⚠ " + translate("sizeTooDenseWarning");
       sizeHint.className = "preview-hint warn";
     } else {
-      sizeHint.textContent = "Label size: " + size.w + " x " + size.h + " mm";
+      sizeHint.textContent = sizeLabelText(size);
       sizeHint.className = "preview-hint";
     }
   }
@@ -935,7 +1324,7 @@ img { max-width: 100%; display: block; }
       id: currentCodeId,
       type: state.type,
       value: state.value || "",
-      sizeLabel: sizeHint.textContent.replace("Label size: ", "").replace(/^⚠.*/, ""),
+      sizeLabel: currentSizeMm().w + " x " + currentSizeMm().h + " mm",
       savedAt: Date.now(),
       state: state
     };
@@ -944,7 +1333,7 @@ img { max-width: 100%; display: block; }
     if (idx >= 0) list[idx] = entry; else list.unshift(entry);
     saveHistory(list);
     saveDraft();
-    showToast("Saved");
+    showToast(translate("savedToast"));
   }
 
   function renderSavedList() {
@@ -952,7 +1341,7 @@ img { max-width: 100%; display: block; }
     var container = document.getElementById("savedCodesList");
     container.innerHTML = "";
     if (!list.length) {
-      container.innerHTML = '<div class="saved-codes-empty">No saved codes yet. Create a barcode or QR code and click "Save" to keep it here.</div>';
+      container.innerHTML = '<div class="saved-codes-empty">' + escapeHtml(translate("savedCodesEmptyText")) + '</div>';
       return;
     }
     list.forEach(function(entry) {
@@ -961,16 +1350,16 @@ img { max-width: 100%; display: block; }
       var d = new Date(entry.savedAt);
       var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       row.innerHTML =
-        '<span class="saved-code-badge">' + (entry.type === "qr" ? "QR" : "Barcode") + '</span>' +
+        '<span class="saved-code-badge">' + (entry.type === "qr" ? translate("qrBadgeLabel") : translate("barcodeBadgeLabel")) + '</span>' +
         '<div class="saved-code-main">' +
-          '<div class="saved-code-title">' + escapeHtml(entry.value || "(no value)") + '</div>' +
+          '<div class="saved-code-title">' + escapeHtml(entry.value || translate("noValueLabel")) + '</div>' +
           '<div class="saved-code-meta">' + escapeHtml(entry.sizeLabel || "") + ' · ' + escapeHtml(dateStr) + '</div>' +
         '</div>' +
         '<button type="button" class="saved-code-delete" aria-label="Delete saved code">✕</button>';
       row.querySelector(".saved-code-main").addEventListener("click", function() { openSavedCode(entry.id); });
       row.querySelector(".saved-code-delete").addEventListener("click", function(e) {
         e.stopPropagation();
-        if (!confirm("Delete this saved code? This can't be undone.")) return;
+        if (!confirm(translate("deleteSavedConfirm"))) return;
         deleteSavedCode(entry.id);
       });
       container.appendChild(row);
@@ -1046,7 +1435,7 @@ img { max-width: 100%; display: block; }
   });
   document.getElementById("downloadCodeBtn").addEventListener("click", downloadPng);
   document.getElementById("clearCodeBtn").addEventListener("click", function() {
-    if (!confirm("Clear this code and start a new one? This can't be undone.")) return;
+    if (!confirm(translate("clearCodeConfirm"))) return;
     try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
     currentCodeId = null;
     applyState({});
@@ -1054,6 +1443,7 @@ img { max-width: 100%; display: block; }
 
   window.addEventListener("resize", function() { fitCanvasInBox(); });
 
+  loadLanguagePref();
   loadDraft();
 })();
 </script>

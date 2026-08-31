@@ -3226,6 +3226,97 @@ just no longer via an unlinked page.
   browser file - which doesn't fit a repo with no build step, so
   `qrcode-generator` (a single ready-to-use classic script, no bundler
   needed) was used instead.
+- **Now translated into the same six languages as `app.html`,
+  `invoice-generator.html`, and `receipt-generator.html`** (en/ar/fil/
+  hi/es/th) - its own self-contained `translations` object and
+  `translate()`/`currentLang()`/`changeLanguage()` functions, no
+  dependency on any other page. Since this page has no Currency field
+  (unlike the other three tools) there was no existing `.currency-inline`
+  pattern to reuse for a **Language** picker - a new `.lang-inline`
+  class (identical styling, just its own name so it doesn't imply a
+  currency concept that doesn't exist here) places it at the top of
+  `.gen-card`, right-aligned above the Barcode/QR Code tabs.
+  Covers every static UI string - masthead, both tabs, the Barcode/QR
+  Code Value label and placeholder (swapped live by `updateTypeUI()`),
+  the 7 barcode-format `<option>`s, Label Size, the custom width/
+  height/size fields, Border and its 5 options, both "add text"/"show
+  value" checkboxes, Preview, all four action-bar buttons, the autosave
+  note, the Saved Codes modal (title, empty-state text, the "(no
+  value)" fallback, the Barcode/QR badge pill), both `confirm()`
+  dialogs, the save toast, and the full How-To + 7-question FAQ.
+  - **The 7 barcode-format `<option>`s and the size-preset labels both
+    keep their format name / dimensions as a fixed, untranslated
+    prefix, with only the description translated** - e.g. `"CODE128
+    (letters, numbers, symbols)"` becomes `"CODE128 (حروف، أرقام،
+    رموز)"`, and `"2 x 1 in (51 x 25 mm) - Standard retail label"`
+    becomes `"2 x 1 in (51 x 25 mm) - ملصق تجزئة قياسي"`. This isn't
+    just a style choice - `invalidValueMessage()` (see below)
+    extracts the format name back out of the currently-selected
+    option's own text via `.split(" (")[0]` to build the "isn't valid
+    for X" hint, so every language's translated string has to keep
+    that exact `"<name> ("` shape or the extraction breaks. `BARCODE_SIZES`/
+    `QR_SIZES` were restructured from a single hardcoded `label` string
+    per entry into `{dims, labelKey}` (dims fixed, labelKey translated
+    and looked up by `populateSizePreset()`) to make this possible
+    without duplicating the numbers into all six languages.
+  - **`BARCODE_FORMAT_HINTS` became `BARCODE_FORMAT_HINT_KEYS`** (format
+    code to translation key, not format code to English string
+    directly), with two new small helpers - `formatHint()` and
+    `invalidValueMessage()` - replacing three separate inline copies of
+    the same "isn't valid for / hint" string-building logic that used
+    to exist across `renderBarcodeToCanvas()`'s valid callback and its
+    catch block.
+  - **A real, pre-existing bug in `saveCodeExplicit()` was caught and
+    fixed in the same pass, not just worked around** - it built a saved
+    code's `sizeLabel` by scraping `sizeHint.textContent` and stripping
+    the literal English prefix `"Label size: "` back off with
+    `.replace()`. Once that prefix became translatable
+    (`labelSizePrefix`), the same `.replace("Label size: ", "")` would
+    have silently left the translated prefix stuck in every non-English
+    saved code's stored `sizeLabel` from then on. Fixed by computing the
+    label directly from `currentSizeMm()`'s own numbers
+    (`currentSizeMm().w + " x " + currentSizeMm().h + " mm"`) instead of
+    parsing translated DOM text at all - more correct regardless of
+    language, not just a translation-compatibility patch.
+  - **The canvas fallback text drawn directly with `ctx.fillText()`**
+    (`"Enter a valid value"`, shown when JsBarcode throws entirely) is
+    also translated (`enterValidValueCanvas`) - easy to miss since it's
+    baked into a raster image via Canvas 2D, not a DOM text node, so it
+    doesn't show up in a search for `textContent`/`innerHTML`.
+  - **`"QR"` stays untranslated in every language** (the saved-codes
+    badge and the tab label's own internal type, `qrBadgeLabel: "QR"`
+    everywhere) - it's a universal technical initialism, the same
+    treatment "PDF" already gets elsewhere in this codebase; only
+    `"Barcode"` itself (`barcodeBadgeLabel`) is a real translated word.
+  - **`DEFAULT_PAYMENT_METHODS`-style "don't translate stored technical
+    values" reasoning doesn't apply here** - unlike `receipt-generator.html`'s
+    payment methods, every string this page translates is either pure
+    UI chrome or a translation-key lookup already keyed by a stable
+    English/technical identifier (`CODE128`, `dashed`, `2x1`, ...), so
+    nothing about a saved code's own stored `type`/`barcodeFormat`/
+    `sizeKey`/`borderStyle` values changed - only their on-screen
+    display text did.
+  - **RTL for Arabic** is the same minimal `document.body.dir` toggle
+    every other translated page on this site uses - no extra CSS.
+  - **Language choice persists independently of any saved code**, via
+    its own `goonlinepos-barcode-lang` key, same "device preference,
+    not document content" reasoning as the other two tools.
+    `loadLanguagePref()` runs before `loadDraft()` so the first paint
+    already reflects the stored language.
+  - Verified with Playwright: switching to Arabic translates the
+    masthead/tabs/labels/buttons, flips `dir` to `rtl`, and both the
+    format-option and size-preset dropdowns show the untranslated
+    format name/dimensions with a correctly translated description;
+    triggering the EAN-13 "isn't valid" hint and the valid-format hint
+    both read correctly in Arabic with the format name still intact;
+    the size hint's "Label size:" prefix translates while the numbers
+    stay correct; switching tabs swaps the Barcode/QR Code Value label
+    correctly; saving shows a translated toast and a translated badge
+    (`باركود` for a barcode, `QR` for a QR code) in the Saved Codes
+    list; the custom-size and border options translate correctly;
+    reloading after picking Arabic keeps it selected without needing to
+    reselect it; and a 390px mobile check shows zero horizontal
+    overflow and zero console errors throughout.
 
 ## `vat-calculator.html` — standalone VAT calculator
 
