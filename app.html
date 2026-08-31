@@ -143,6 +143,8 @@ button:active { transform: translateY(1px); }
 #settingsButton:hover { background: #0d1613; }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: 1px; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0; }
+#premiumToolbarButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0; }
+#premiumToolbarButton:hover { background: #f5e6c2; }
 #backupShortcutButton:hover { background: #f5e7c4; }
 .active-cashier-select { padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; background: var(--panel); color: var(--ink); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
@@ -508,6 +510,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
 <div class="header-actions-group" id="headerActionsGroup">
 <select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
+<button id="premiumToolbarButton" onclick="openAccountSettings()" title="View your subscription and redeem a Premium code">🔓 <span id="premiumToolbarLabel">Premium</span></button>
 <button id="howToUseButton" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
 <button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
@@ -1085,7 +1088,8 @@ Website: Goonlinepos.com</textarea>
             </svg>
             <span id="accountSignInButton">Sign in with Google</span>
           </button>
-          <div class="info" id="accountSecurityNote" style="display:block; margin-top:8px;">🔒 <span id="accountSecurityNoteText">We only use your name and email from Google to create your free account - we never see or store your Google password. Signing in just lets your Premium subscription follow you to any device you sign in on.</span></div>
+          <label style="margin-top:8px; margin-bottom:2px;">🔒 <span id="accountSecurityLabel">Account Security</span></label>
+          <div class="info" id="accountSecurityNote" style="display:block; margin-top:0;"><span id="accountSecurityNoteText">We only use your name and email from Google to create your free account - we never see or store your Google password. Signing in just lets your Premium subscription follow you to any device you sign in on.</span></div>
           <div id="accountError" class="error-text hidden" style="margin-top:8px;"></div>
         </div>
 
@@ -3264,7 +3268,7 @@ function changeLanguage() {
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
-    endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
+    endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel", premiumToolbarLabel: "premiumToolbarLabel",
     homepageShortcutLabel: "homepageShortcutLabel", blogShortcutLabel: "blogShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel",
@@ -3309,7 +3313,7 @@ function changeLanguage() {
     accountPanelTitle: "accountPanelTitle", accountPanelInfo: "accountPanelInfo", accountSignInButton: "accountSignInButton",
     accountSignedInAs: "accountSignedInAs", accountStatusFreeText: "accountStatusFreeText", accountStatusPremiumText: "accountStatusPremiumText",
     redeemCodeLabel: "redeemCodeLabel", redeemCodeButtonLabel: "redeemCodeButton", accountSignOutButton: "accountSignOutButton",
-    accountSecurityNoteText: "accountSecurityNoteText", accountHeaderSignOutLabel: "accountSignOutButton", accountQuickSignInLabel: "accountQuickSignInLabel",
+    accountSecurityLabel: "accountSecurityLabel", accountSecurityNoteText: "accountSecurityNoteText", accountHeaderSignOutLabel: "accountSignOutButton", accountQuickSignInLabel: "accountQuickSignInLabel",
     premiumPromoText: "premiumPromoText", premiumPromoButton: "premiumPromoButton",
     logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
