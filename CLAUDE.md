@@ -1675,10 +1675,13 @@ live code calls it anymore.
   at all, and has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers.
 - **Monthly pricing + a free-trial path, added once the account model was
   live.** `$3.99 USD / month` / "Billed monthly" replaced the old
-  one-time `$9.99 USD` in the Buy Premium modal (`#buyPremiumPrice`/
-  `#buyPremiumPriceNote`, all 6 languages) - a code's `duration_days`
-  always meant "not lifetime," this just made the price line say so.
-  "Get Your Free Trial" (`#freeTrialBtn` → `openFreeTrial()`) sits above
+  one-time `$9.99 USD` in the Buy Premium modal - a code's `duration_days`
+  always meant "not lifetime," this just made the price line say so. That
+  single price line was itself later replaced by the three-tier
+  `.pricing-tiers` list described further down this section - see
+  "Three-tier pricing + a more visible free trial" below for the current
+  `#buyPremiumPrice`/`#buyPremiumPriceNote`-less shape. "Get Your Free
+  Trial" (`#freeTrialBtn` → `openFreeTrial()`) sits above
   "Buy Premium Code" in the same panel, `window.open("contact", "_blank")`
   - a visitor can ask for a trial code before paying, same contact-form
   mechanism the purchase flow already used, just a lower-commitment first
@@ -1693,6 +1696,46 @@ live code calls it anymore.
   a new `.feature-grid` card - the grid was already a clean 15 (5 rows of 3);
   adding a 16th would have reopened the stranded-last-row problem
   documented above, so the mention was folded into existing copy instead.
+- **Three-tier pricing + a more visible free trial**, replacing the old
+  single `$3.99 USD / month` line. The Buy Premium modal's old
+  `#buyPremiumPrice`/`#buyPremiumPriceNote` pair (one price, one "Billed
+  monthly" caption) is now a `.pricing-tiers` list of three
+  `.pricing-tier` cards - **1 Month - $3.99** (`buyPremiumPlan1Name`/
+  `Sub`, "Billed once"), **3 Months - $9.99** (`buyPremiumPlan2Name`/
+  `Sub`, "$3.33 / month"), and **1 Year - $19.99** (`buyPremiumPlan3Name`/
+  `Sub`/`Badge`, "$1.67 / month" plus a gold "Best Value" `.pt-badge` and
+  its own `.pt-best` gold-tinted highlight border) - each card just shows
+  its own total price and effective per-month rate side by side rather
+  than a claimed discount percentage, so the number is never in dispute.
+  These are informational only, same as the price line they replaced -
+  the actual code is still hand-created by the site owner in the
+  Supabase dashboard with whatever `duration_days` matches the plan the
+  customer paid for (30/90/365), see the `redemption_codes` bullet
+  below. **The Free Trial section got the same visibility treatment as
+  the rest of this "make Premium easy to spot" series** - it used to be
+  a single plain dark `.small-btn` with no supporting copy; now it's its
+  own green `--accent-tint`-bordered box (deliberately **not** gold, to
+  read as a distinct, lower-commitment action from the gold
+  Redeem/Buy-Premium treatment elsewhere in this panel) with a bold "🎁
+  Try Premium Free for 7 Days" heading (`freeTrialHeading`), a one-line
+  explanation that no credit card is needed (`freeTrialInfo`), and the
+  button itself reworded from "Get Your Free Trial" to "Request Your
+  Free Trial" (`freeTrialButtonLabel`) since it opens a contact-us flow,
+  not an instant self-serve activation. All ten new translation keys
+  (`freeTrialHeading`/`freeTrialInfo`, `buyPremiumPlan1-3Name`/`Sub`,
+  `buyPremiumPlan3Badge`) exist in all six languages and are wired into
+  `changeLanguage()`'s `ids` map the same way as everything else in this
+  panel - `buyPremiumPlan3Name`'s translated text and its `Badge` sibling
+  are two separate spans (not one element with a nested badge) so
+  translating the plan name never wipes out the badge, the same lesson
+  already documented for icon-plus-text buttons elsewhere in this file.
+  Verified with Playwright: all three tiers render with the correct
+  price/sub-copy, the 1-Year card carries the gold highlight and badge,
+  the old `#buyPremiumPrice`/`#buyPremiumPriceNote` elements are gone,
+  a language switch re-translates every plan card and the free-trial
+  copy correctly (checked against Spanish), and the offline package
+  build has zero leftover markers with both sections correctly absent
+  there (neither has anything to sell/trial once a copy is offline).
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
