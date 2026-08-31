@@ -2905,10 +2905,74 @@ pattern as `invoice-generator.html`).
   their own `OFFLINE-STRIP:CREATE-RECEIPT-BUTTON`/`CREATE-RECEIPT-JS`
   marker blocks (mirroring Create Invoice's exact markers) so they
   don't appear in the offline copy either.
-- Six-language UI strings are **not** part of this page, same as
-  `invoice-generator.html` - `app.html`'s `translations` dictionary only supplies
-  the `createReceiptShortcutLabel` header-links text; the receipt tool
-  itself is English-only.
+- **Now translated into the same six languages as `app.html` and
+  `invoice-generator.html`** (en/ar/fil/hi/es/th) - its own
+  self-contained `translations` object and `translate()`/`currentLang()`/
+  `changeLanguage()` functions, mirroring `invoice-generator.html`'s
+  implementation exactly (own copy, not shared code - this page has no
+  dependency on either `app.html` or `invoice-generator.html`). A
+  **Language** picker (`#rcLanguage`) sits above the existing Currency
+  picker, same options/labels as `invoice-generator.html`'s own
+  `#invLanguage`. Covers every static UI string: masthead, From/
+  Received From labels and placeholders, the Date field, the items-table
+  headers and their `data-label` attributes (kept in sync on existing
+  rows via `relabelItemRows()` and set correctly on any new row by
+  `makeLineRow()` itself), Total/Payment Received/Total Received/Total
+  Due/Amount in Words labels, Show Remarks/Remarks, all four action-bar
+  buttons, the autosave note, the Saved Receipts modal, the delete/clear
+  `confirm()` dialogs, the save toast, and the full How-To + Receipt FAQ
+  info-section (the FAQ's POS-app link translated via `innerHTML`, same
+  as `invoice-generator.html`). The Payment Received row's "+ Add New..."
+  option and its `prompt()` text are translated too, re-applied to
+  already-rendered payment rows on a language switch by a new
+  `relabelPaymentRows()` (calls the existing `populateMethodSelect()`
+  again for each row, which already rebuilds that option from scratch).
+  **Deliberately NOT translated, matching real precedent elsewhere in
+  the codebase rather than a gap**: `DEFAULT_PAYMENT_METHODS` itself
+  ("Cash", "Card", "Bank Transfer", "Cheque", "Other") stays in English
+  in every language, because `app.html` doesn't translate its own
+  identical default payment method list either (confirmed against
+  `modules/translations.js`, which has no such keys) - these are stored,
+  user-extensible values, not fixed UI chrome, and a shop owner's own
+  custom-typed methods ("GCash", "PayMaya") obviously can't be
+  translated either way. Also not translated: the `amountToWords()`
+  output itself (e.g. "Three Dollars Only") - its `ONES`/`TENS`/`SCALES`
+  number-to-words engine is entirely English, and building an accurate
+  number-to-words converter for five more languages (especially Arabic
+  and Hindi, which have real grammatical agreement rules for this) is a
+  distinct, much larger undertaking than localizing the surrounding UI;
+  the "Amount in Words" **label** above it is translated, only the
+  generated phrase stays English. Same exclusions as
+  `invoice-generator.html` otherwise: the shared site header/nav/
+  footer, the cookie banner, and `#rcTitle`/`#rcNumber`'s free-text
+  content stay untouched.
+  - **The same `tr`-variable naming collision from `invoice-generator.html`
+    existed here too** (`wireRow(tr)`, `makeLineRow()`'s local `tr`, and
+    two `forEach` callbacks) and was fixed the same way - renamed every
+    local row-element variable to `row`, keeping the translator function
+    named `translate()` rather than `tr()`.
+  - **Language choice persists independently of any saved receipt**,
+    via its own `goonlinepos-receipt-lang` key - the same "device
+    preference, not part of one document's content" reasoning as
+    `invoice-generator.html`'s `goonlinepos-invoice-lang`.
+    `loadLanguagePref()` runs before `loadDraft()` so the first paint
+    already reflects the stored language.
+  - **RTL for Arabic** is the same minimal `document.body.dir` toggle,
+    no extra CSS.
+  - Verified with Playwright: switching to Arabic translates the
+    masthead/labels/buttons/table headers, flips `dir` to `rtl`, and a
+    newly added line-item row's `data-label` attributes come out
+    already translated; the payment method select's "+ Add New..."
+    option is translated both on a freshly-added row and on an
+    already-existing one after a language switch; a real `page.pdf()`
+    render of an Arabic receipt (not just a screenshot) shows the whole
+    layout correctly mirrored, with "Cash" and "Three Dollars Only"
+    correctly left in English by design; switching to Spanish keeps the
+    FAQ's `<a href="app">` link intact; reloading after picking Arabic
+    keeps it selected without needing to reselect it; and the existing
+    box/line print styling, matching-width From/Received-From boxes,
+    390px mobile layout, and zero-console-error baseline from earlier
+    passes on this file all still hold unchanged.
 
 ## `barcode-generator.html` — standalone barcode / QR code generator
 
