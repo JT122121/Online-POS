@@ -7,12 +7,18 @@
   var CONSENT_KEY = "goonlinepos-cookie-consent";
   var SEEN_KEY = "goonlinepos-cookie-notice-seen";
 
+  function isPremiumCached() {
+    try { return localStorage.getItem("onlinepos_account-premium-cached") === "1"; } catch (e) { return false; }
+  }
+
   function loadAnalyticsAndAds() {
-    var adsScript = document.createElement("script");
-    adsScript.async = true;
-    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
-    adsScript.crossOrigin = "anonymous";
-    document.head.appendChild(adsScript);
+    if (!isPremiumCached()) {
+      var adsScript = document.createElement("script");
+      adsScript.async = true;
+      adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+      adsScript.crossOrigin = "anonymous";
+      document.head.appendChild(adsScript);
+    }
 
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){ window.dataLayer.push(arguments); };
@@ -536,7 +542,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 
 <!-- OFFLINE-STRIP:PREMIUM-PROMO-NOTICE:START -->
 <div id="premiumPromoNotice" class="backup-notice hidden">
-<div class="bn-text">🔓 <span id="premiumPromoText">You're on the Basic plan. Sign in and redeem a Premium code to unlock Company Logo, Customer Screen, Inventory editing, and more.</span></div>
+<div class="bn-text">🔓 <span id="premiumPromoText">You're on the Basic plan. Sign in and redeem a Premium code to unlock Company Logo, Customer Screen, Inventory editing, an ad-free experience, and more.</span></div>
 <div class="bn-actions">
 <button type="button" class="bn-backup-btn" onclick="openAccountSettings()" id="premiumPromoButton">Go Premium</button>
 <button type="button" class="bn-dismiss-btn" onclick="dismissPremiumPromoNotice()" aria-label="Dismiss">×</button>
@@ -1083,7 +1089,7 @@ Website: Goonlinepos.com</textarea>
       <div class="settings-panel-content" id="panel-premium">
         <!-- OFFLINE-SWAP:PREMIUM-PANEL:START -->
         <h3 id="accountPanelTitle">Account &amp; Subscription</h3>
-        <div class="info" id="accountPanelInfo" style="display:block;">Sign in with Google to get a free account, then redeem a code to unlock Premium features - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, and Inventory.</div>
+        <div class="info" id="accountPanelInfo" style="display:block;">Sign in with Google to get a free account, then redeem a code to unlock Premium features - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, Inventory, and an ad-free experience.</div>
 
         <div id="accountSignedOut">
           <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
@@ -1187,6 +1193,7 @@ Website: Goonlinepos.com</textarea>
       <li id="buyPremiumBenefit3">Customer-facing screen</li>
       <li id="buyPremiumBenefit4">Inventory tracking with export</li>
       <li id="buyPremiumBenefit5">Downloadable offline version</li>
+      <li id="buyPremiumBenefit6">Ad-free - no ads while using the app</li>
     </ul>
     <div class="pricing-tiers" id="buyPremiumTiers">
       <div class="pricing-tier">
@@ -3363,7 +3370,7 @@ function changeLanguage() {
     buyPremiumPlan3Name: "buyPremiumPlan3Name", buyPremiumPlan3Sub: "buyPremiumPlan3Sub", buyPremiumPlan3Badge: "buyPremiumPlan3Badge",
     buyPremiumFeature1: "buyPremiumFeature1", buyPremiumFeature2: "buyPremiumFeature2", buyPremiumFeature3: "buyPremiumFeature3",
     buyPremiumBenefitsTitle: "buyPremiumBenefitsTitle", buyPremiumBenefit1: "buyPremiumBenefit1", buyPremiumBenefit2: "buyPremiumBenefit2",
-    buyPremiumBenefit3: "buyPremiumBenefit3", buyPremiumBenefit4: "buyPremiumBenefit4", buyPremiumBenefit5: "buyPremiumBenefit5",
+    buyPremiumBenefit3: "buyPremiumBenefit3", buyPremiumBenefit4: "buyPremiumBenefit4", buyPremiumBenefit5: "buyPremiumBenefit5", buyPremiumBenefit6: "buyPremiumBenefit6",
     premiumBadgeOffline: "premiumBadgeLabel",
     offlineModalTitle: "offlineModalTitle", offlineModalHowTitle: "offlineModalHowTitle", offlineModalUpdateTitle: "offlineModalUpdateTitle", offlineModalUpdateText: "offlineModalUpdateText",
     offlineCancelBtnLabel: "offlineCancelBtnLabel", offlineConfirmDownloadBtnLabel: "offlineConfirmDownloadBtnLabel",

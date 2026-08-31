@@ -1166,6 +1166,59 @@ has zero network calls.
   stored cookie-consent choice (`onlinepos` cookie-banner flow at the
   bottom of the file, separate from the app's own `onlinepos_*` storage
   keys).
+  - **Premium is ad-free.** `loadAnalyticsAndAds()` skips creating the
+    `adsbygoogle.js` `<script>` tag entirely when `isPremiumCached()`
+    (a small helper right above it, in the same top-of-`<head>`
+    cookie-consent IIFE) reads `"1"` from `localStorage`
+    (`onlinepos_account-premium-cached`, the same `onlinepos_` key
+    prefix `storageGet`/`storageSet`'s `localStorage` fallback already
+    uses) - Google Analytics (`gtag`) still loads either way, since
+    ad-removal is the actual Premium perk being sold here, not analytics
+    opt-out. This is a real, deliberate exception to "always go through
+    `storageGet`/`storageSet`, never call `localStorage` directly" above
+    - this code runs in the very first inline `<script>` in `<head>`,
+    before the main script (which defines `storageGet`/`storageSet`) has
+    even been parsed, the same reason the pre-existing cookie-consent
+    keys (`CONSENT_KEY`/`SEEN_KEY`) already use raw `localStorage`
+    directly a few lines above it - it has no choice but to read
+    synchronously, and only the plain-`localStorage` fallback path is
+    reachable from here regardless (an embedded-host `window.storage`
+    session degrades to "ads load as normal," an acceptable edge case
+    for that niche path). **The cache is written from
+    `modules/account.js`**, not read there - `refreshAccountState()`
+    (both the signed-out and signed-in branches) and `signOutAccount()`
+    all call `storageSet("account-premium-cached", ...)` right alongside
+    setting `premiumUnlocked` itself, so the flag always mirrors the
+    live Supabase-derived Premium status by the time any of those
+    functions return. **This is a cache, not a live check, and that has
+    one real, unavoidable consequence**: on a visitor's very first
+    pageview ever (before the flag has ever been written), or the first
+    load after redeeming a code that just made them Premium, there's no
+    way to know Premium status before the ad script has already been
+    requested - `loadAnalyticsAndAds()` runs synchronously off a stored
+    cookie-consent choice, long before the async Supabase session check
+    even starts. Every load *after* that first one is correct, since the
+    cache from the previous session is already on disk before this
+    script runs - which covers the overwhelming majority of a Premium
+    subscriber's actual sessions (reopening the tab, a new day, a
+    different visit), just not that one unavoidable first load. Ads
+    being sold as a Premium benefit is documented alongside the other
+    gated features - see `buyPremiumBenefit6` ("Ad-free - no ads while
+    using the app") in the Buy Premium modal, and the same "an ad-free
+    experience" phrase folded into `accountPanelInfo` and
+    `premiumPromoText`'s copy - see "Account & Subscription" below.
+    Verified with Playwright (blocking real network access the same way
+    this sandbox already does, but tracking which URLs the page actually
+    *requests*): a fresh session with no cached flag requests both
+    `adsbygoogle.js` and `gtag.js`; a session with
+    `onlinepos_account-premium-cached` pre-set to `"1"` requests only
+    `gtag.js`, never `adsbygoogle.js`; a session with it explicitly set
+    to `"0"` requests both, same as no cache at all; and directly
+    exercising `refreshAccountState()`/`signOutAccount()` against a
+    mocked Supabase client confirms the flag is written `"1"` the moment
+    a profile resolves as Premium and back to `"0"` immediately on sign
+    out (so a shared/public computer doesn't keep serving a previous
+    user's ad-free session to whoever uses it next).
 - **"How To Use" panel** (`#howToUseOverlay`, `openHowToUse()`/
   `closeHowToUse()`) — an in-app walkthrough covering every setting,
   reachable via the header toolbar's **`#howToUseButton`**. Briefly moved
