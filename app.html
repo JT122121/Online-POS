@@ -1198,14 +1198,6 @@ Website: Goonlinepos.com</textarea>
         </div>
         <!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->
 
-        <!-- OFFLINE-STRIP:FREE-TRIAL-BUTTON:START -->
-        <div style="margin-top:16px; padding:12px; background:var(--accent-tint); border:1px solid #bfe0cf; border-radius:8px;">
-          <div style="font-weight:700; font-size:13px; color:var(--accent-dark); margin-bottom:4px;" id="freeTrialHeading">🎁 Try Premium Free for 7 Days</div>
-          <div class="info" id="freeTrialInfo" style="display:block; margin:0 0 10px;">No credit card needed - just request a trial and we'll set you up with a 7-day Premium code.</div>
-          <button type="button" class="small-btn" onclick="openFreeTrial()" id="freeTrialBtn" style="width:100%; background:var(--accent);"><span id="freeTrialButtonLabel">Request Your Free Trial</span></button>
-        </div>
-        <!-- OFFLINE-STRIP:FREE-TRIAL-BUTTON:END -->
-
         <!-- OFFLINE-STRIP:BUY-PREMIUM-BUTTON:START -->
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
           <button type="button" class="small-btn" onclick="openBuyPremiumModal()" id="buyPremiumBtn" style="width:100%;">💳 <span id="buyPremiumButtonLabel">Buy Premium Code</span></button>
@@ -2763,12 +2755,6 @@ function exportSalesToExcel() {
   downloadTextFile("sales-report-items-" + suffix + ".csv", rowsToCsv(childRows));
 }
 
-/* OFFLINE-STRIP:FREE-TRIAL-JS:START */
-function openFreeTrial() {
-  window.open("contact", "_blank");
-}
-/* OFFLINE-STRIP:FREE-TRIAL-JS:END */
-
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:START */
 function openBuyPremiumModal() {
   document.getElementById("buyPremiumOverlay").classList.remove("hidden");
@@ -3585,7 +3571,6 @@ function changeLanguage() {
     premiumPromoText: "premiumPromoText", premiumPromoButton: "premiumPromoButton",
     logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
     offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
-    freeTrialButtonLabel: "freeTrialButtonLabel", freeTrialHeading: "freeTrialHeading", freeTrialInfo: "freeTrialInfo",
     buyPremiumButtonLabel: "buyPremiumButtonLabel", buyPremiumModalTitle: "buyPremiumModalTitle",
     buyPremiumPlanTrialName: "buyPremiumPlanTrialName", buyPremiumPlanTrialSub: "buyPremiumPlanTrialSub",
     buyPremiumPlan1Name: "buyPremiumPlan1Name", buyPremiumPlan1Sub: "buyPremiumPlan1Sub",
