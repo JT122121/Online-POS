@@ -37,16 +37,19 @@ function doPost(e) {
 
   var orderId = String(params.orderID || "").trim();
   var userId = String(params.userId || "").trim();
+  Logger.log("doPost: orderId=" + orderId + " userId=" + userId);
   if (!orderId || !userId) return jsonOut({ success: false, reason: "bad_request" });
 
   try {
     var order = fetchPaypalOrder(orderId);
     if (!order) return jsonOut({ success: false, reason: "order_not_found" });
+    Logger.log("PayPal order status: " + order.status);
     if (order.status !== "COMPLETED") return jsonOut({ success: false, reason: "not_completed" });
 
     var unit = (order.purchase_units || [])[0] || {};
     var capture = ((unit.payments || {}).captures || [])[0] || {};
     var orderUserId = capture.custom_id || unit.custom_id || "";
+    Logger.log("orderUserId (PayPal custom_id): " + orderUserId + " | claimed userId: " + userId);
 
     // The order's custom_id was set to the buyer's Supabase user id when
     // the order was created client-side (see app.html) - if it doesn't
@@ -55,12 +58,15 @@ function doPost(e) {
     if (orderUserId !== userId) return jsonOut({ success: false, reason: "user_mismatch" });
 
     var amount = (capture.amount && capture.amount.value) || (unit.amount && unit.amount.value) || "";
+    Logger.log("Captured amount: " + amount);
     var days = PLAN_DAYS_BY_AMOUNT[amount];
     if (!days) return jsonOut({ success: false, reason: "unrecognized_amount", amount: amount });
 
     var result = grantPremiumInSupabase(orderId, userId, amount, days);
+    Logger.log("grantPremiumInSupabase result: " + JSON.stringify(result));
     return jsonOut(result);
   } catch (err) {
+    Logger.log("doPost caught error: " + String(err));
     return jsonOut({ success: false, reason: "server_error", message: String(err) });
   }
 }
@@ -72,7 +78,11 @@ function fetchPaypalOrder(orderId) {
     headers: { Authorization: "Bearer " + token },
     muteHttpExceptions: true
   });
-  if (res.getResponseCode() !== 200) return null;
+  Logger.log("PayPal order fetch: HTTP " + res.getResponseCode());
+  if (res.getResponseCode() !== 200) {
+    Logger.log("PayPal order fetch body: " + res.getContentText());
+    return null;
+  }
   return JSON.parse(res.getContentText());
 }
 
@@ -86,7 +96,10 @@ function getPaypalAccessToken() {
     muteHttpExceptions: true
   });
   var data = JSON.parse(res.getContentText());
-  if (!data.access_token) throw new Error("Could not get a PayPal access token - check PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET");
+  if (!data.access_token) {
+    Logger.log("PayPal token request failed: HTTP " + res.getResponseCode() + " body: " + res.getContentText());
+    throw new Error("Could not get a PayPal access token - check PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET");
+  }
   return data.access_token;
 }
 
@@ -101,7 +114,9 @@ function grantPremiumInSupabase(orderId, userId, amount, days) {
     payload: JSON.stringify({ p_order_id: orderId, p_user_id: userId, p_amount_usd: Number(amount), p_days: days }),
     muteHttpExceptions: true
   });
+  var code = res.getResponseCode();
   var body = res.getContentText();
+  Logger.log("Supabase grant_premium_from_paypal: HTTP " + code + " body: " + body);
   try { return JSON.parse(body); } catch (err) { return { success: false, reason: "supabase_error", raw: body }; }
 }
 
