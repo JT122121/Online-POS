@@ -361,17 +361,26 @@ all of them under one pattern:
     were both added in the same pass as the button itself, per the
     lesson two paragraphs up, rather than being discovered missing
     afterward.
-  - **`.header-actions` (the toolbar) now shows exactly six things:**
-    Hide Toolbar, the Cashier select, How To Use, Settings, End of Day,
-    Customer Screen, Backup - deliberately trimmed down from a longer
-    list. **Premium, Print, and Inventory lost their dedicated toolbar
-    buttons entirely** - Premium and Inventory were always just thin
-    wrappers around `selectSettingsTab(...)` (their own
+  - **`.header-actions` (the toolbar) originally shrank to exactly six
+    things:** Hide Toolbar, the Cashier select, How To Use, Settings, End
+    of Day, Customer Screen, Backup - deliberately trimmed down from a
+    longer list. **Premium, Print, and Inventory lost their dedicated
+    toolbar buttons entirely at that point** - Premium and Inventory were
+    always just thin wrappers around `selectSettingsTab(...)` (their own
     `openPremiumSettings()`/`openInventoryPanel()` functions were deleted
-    as dead code once nothing called them), so both remain exactly as
+    as dead code once nothing called them), so both remained exactly as
     reachable as before via Settings → Premium / Settings → Inventory,
     just by clicking that tab in `#settingsTabRail` directly instead of
-    a shortcut. Removing `openInventoryPanel()` also removed its
+    a shortcut. **A seventh button, `#premiumToolbarButton` → the same
+    `openAccountSettings()` used elsewhere in this section, was added
+    back later** (🔓, gold-tinted like `#backupShortcutButton`, right
+    after the Cashier select and before How To Use, so it's the first
+    real action button in the row) - per an explicit "make Premium easy
+    to spot" follow-up request, superseding the "exactly six" framing
+    above; the toolbar is unchanged in every other respect. Its own
+    `premiumToolbarLabel` translation key exists in all six languages
+    and is in `changeLanguage()`'s `ids` map, same as every other toolbar
+    label. Removing `openInventoryPanel()` also removed its
     `renderInventoryList()` call, so the Inventory tab's own
     `data-tab="inventory"` button in the rail now calls
     `renderInventoryList()` itself on click, preserving that behavior.
@@ -1534,6 +1543,39 @@ live code calls it anymore.
     markers and, since the whole Account panel lives inside
     `OFFLINE-SWAP:PREMIUM-PANEL`, keeps its own unrelated local-code
     activation UI untouched by any of this.
+  - **Follow-up polish pass**, per feedback that the wording read oddly
+    and that Premium still wasn't prominent enough. Three changes:
+    (1) the free-tier badge/label text (`basicBadgeLabel`, shown by the
+    header's `#premiumBadgeAppTitle` pill, the main-screen welcome line,
+    and `#premiumPromoNotice`'s "You're on the ... plan" copy) changed
+    from **"Basic"** to **"Free"** in all six languages - it was
+    inconsistent with the Account panel's own status line
+    (`accountStatusFreeText`, "Your subscription: Free") using a
+    different word for the same tier, and "Free" also matches this
+    site's own "free POS" brand voice better than "Basic" did. The
+    `.basic-badge` CSS class name itself is unchanged (an internal
+    identifier, not user-facing text) - only the translated label value
+    moved. (2) A seventh toolbar button, `#premiumToolbarButton` (🔓
+    `premiumToolbarLabel`, gold-tinted like `#backupShortcutButton`),
+    was added to `.header-actions` as the very first real action button
+    - right after the Cashier select, before How To Use - calling the
+    same `openAccountSettings()` as everywhere else in this section, so
+    Premium has a permanent, always-visible entry point in the toolbar
+    itself, not just the clickable badge/banner from the first pass. See
+    the toolbar bullet earlier in this section for the full history.
+    (3) The Google sign-in button's security explanation got its own
+    small heading, `<label>🔒 <span id="accountSecurityLabel">Account
+    Security</span></label>`, directly above the existing
+    `#accountSecurityNote` paragraph (which lost its own inline 🔒 - the
+    heading carries it now) - the explanation used to be unlabeled body
+    text with no visual cue for what it was about before a reader got to
+    the first sentence. Verified with Playwright: the header/welcome/
+    banner text all read "Free" (not "Basic") while unlocked, in every
+    language checked, with zero leftover `\bBasic\b` en-US string in the
+    live UI; the new toolbar button is present, gold-tinted, sits before
+    How To Use, and `openAccountSettings()` still opens Settings on the
+    Premium tab on both builds; and the Account Security label renders
+    with its own visible heading with zero console errors.
 - **`redemption_codes` is where the site owner creates codes** - open the
   Supabase dashboard, Table Editor → `redemption_codes` → Insert row,
   fill in `code` (redemption is case/whitespace-insensitive on **both**
