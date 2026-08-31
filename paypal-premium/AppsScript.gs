@@ -26,10 +26,10 @@ var PAYPAL_API_BASE = "https://api-m.sandbox.paypal.com";
 var SUPABASE_URL = "https://kimaefdizuvkxzvttzhh.supabase.co";
 var SUPABASE_SERVICE_ROLE_KEY = "REPLACE_WITH_YOUR_SUPABASE_SERVICE_ROLE_KEY";
 
-// Must match the three prices shown in app.html's Buy Premium modal
-// exactly (as strings, since that's how PayPal echoes the amount back).
-// Update both places together if pricing ever changes.
-var PLAN_DAYS_BY_AMOUNT = { "3.99": 30, "9.99": 90, "19.99": 365 };
+// Must match the prices shown in app.html's Buy Premium modal exactly
+// (as strings, since that's how PayPal echoes the amount back). Update
+// both places together if pricing ever changes.
+var PLAN_DAYS_BY_AMOUNT = { "0.50": 3, "3.99": 30, "9.99": 90, "19.99": 365 };
 
 function doPost(e) {
   var params = {};
