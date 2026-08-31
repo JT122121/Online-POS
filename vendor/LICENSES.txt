@@ -41,9 +41,10 @@ supabase.min.js
   Version : 2.112.4
   License : MIT
   Source  : https://www.npmjs.com/package/@supabase/supabase-js
-  Used by : app.html only (optional Cloud Sync feature, Settings → Backup).
+  Used by : app.html only (Account & Subscription, Settings → Premium —
+            sign in with Google and redeem a code to unlock Premium).
             The prebuilt dist/umd/supabase.js from the published package,
             unmodified. Wrapped in its own OFFLINE-STRIP marker in app.html
             and never fetched into the "Download Offline POS" package —
-            cloud sync needs a network connection, which the offline copy
+            sign-in needs a network connection, which the offline copy
             deliberately has none of.
