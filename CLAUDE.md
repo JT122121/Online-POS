@@ -1399,6 +1399,21 @@ has zero network calls.
   `modules/translations.js` (the button label, all six languages); the
   panel's own content is English-only, same as `invoice-generator.html`/
   `receipt-generator.html`/`end-of-day.html`.
+  - **The "SETTINGS → PREMIUM" section's paragraph was stale**, still
+    describing the old local-code-entry system ("Enter a code here to
+    unlock them on your device") from before Account & Subscription
+    existed - wrong on both counts now, since the live site requires
+    signing in with Google first and Premium follows the signed-in
+    *account*, not the device. Fixed to describe both flows explicitly,
+    since this panel's content is **not** `OFFLINE-STRIP`-wrapped and
+    therefore has to read correctly in both builds at once: on the live
+    site, sign in with Google and redeem a code here, and Premium then
+    follows the account to any device signed into; the offline version
+    uses its own separate code entered directly in the same panel, no
+    sign-in involved. Verified the corrected paragraph renders on the
+    live site and is present unmodified in the built offline package
+    (confirming it reads correctly there too, since it's shared verbatim
+    rather than swapped), zero console errors.
 
 ## `modules/` — split-out app.html pieces
 
