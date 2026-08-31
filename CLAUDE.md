@@ -2640,6 +2640,31 @@ the on-page heading stays the more natural "Create Invoice").
   confirming zero horizontal overflow and zero console errors - the box
   styling is on-screen and print, not print-only, so both needed
   checking.
+- **`.bill-to-block`'s max-width was a real bug, not just cosmetic** -
+  it was a flat `380px`, unrelated to `.doc-header-left`'s own width
+  (half of `.doc-header`'s `1fr 1fr` grid, minus the 24px gap), so the
+  "From" box and the "Bill To"/"Received From" box below it landed at
+  two different widths on any page/card size where those two numbers
+  didn't happen to coincide - reported directly from a real Android
+  print-preview screenshot after the box treatment above shipped, where
+  the mismatch was plainly visible on both `invoice-generator.html` and
+  `receipt-generator.html`. Fixed by replacing the fixed `380px` with
+  `calc((100% - 24px) / 2)` - the exact same formula the grid column
+  itself resolves to for the same containing block (`.invoice-card`/
+  `.receipt-card`), so the two boxes are pixel-identical in width at any
+  card size, on screen and in print, instead of coincidentally close.
+  `.doc-addr-box` itself needed no width rule at all - it's a plain
+  block already stretching to fill whichever parent it's in (a flex
+  child of `.doc-header-left`, or `.bill-to-block` directly), so once
+  `.bill-to-block`'s own max-width tracked the grid column correctly
+  both boxes just followed. The existing `.bill-to-block { max-width:
+  none; }` mobile override (see the responsive breakpoint above) needed
+  no change - it already un-caps both boxes to full width once
+  `.doc-header` itself collapses to a single column there. Verified by
+  measuring `getBoundingClientRect().width` on both boxes directly
+  (not just eyeballing a screenshot) at two different desktop widths,
+  on screen and in print, on both files - all eight checks came back
+  with identical from/to widths.
 - **Autosaves as you type** to plain `localStorage` (`goonlinepos-invoice-draft`,
   debounced) so a refresh doesn't lose an in-progress invoice - this is a
   fully standalone page like `customer.html`, outside `app.html`'s
