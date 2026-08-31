@@ -273,6 +273,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .pt-name { font-weight: 700; font-size: 13.5px; }
 .pt-sub { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 .pt-badge { display: inline-block; margin-left: 4px; font-size: 9px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: #fff; border: 1px solid #f0dfb0; padding: 1px 6px; border-radius: 999px; vertical-align: middle; }
+.paypal-btn-box { width: 118px; min-height: 35px; flex-shrink: 0; }
 .usb-scan-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; box-shadow: var(--shadow-lg); z-index: 200; }
 .usb-scan-toast.success { background: var(--accent-tint); color: var(--accent-dark); }
 .usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
@@ -1274,26 +1275,31 @@ Website: Goonlinepos.com</textarea>
           <div class="pt-name" id="buyPremiumPlan1Name">1 Month - $3.99</div>
           <div class="pt-sub" id="buyPremiumPlan1Sub">Billed once</div>
         </div>
+        <div class="paypal-btn-box" id="paypalButtonBox1"></div>
       </div>
       <div class="pricing-tier">
         <div>
           <div class="pt-name" id="buyPremiumPlan2Name">3 Months - $9.99</div>
           <div class="pt-sub" id="buyPremiumPlan2Sub">$3.33 / month</div>
         </div>
+        <div class="paypal-btn-box" id="paypalButtonBox2"></div>
       </div>
       <div class="pricing-tier pt-best">
         <div>
           <div class="pt-name"><span id="buyPremiumPlan3Name">1 Year - $19.99</span><span class="pt-badge" id="buyPremiumPlan3Badge">Best Value</span></div>
           <div class="pt-sub" id="buyPremiumPlan3Sub">$1.67 / month</div>
         </div>
+        <div class="paypal-btn-box" id="paypalButtonBox3"></div>
       </div>
     </div>
+    <div id="paypalSignInPrompt" class="info hidden" style="display:block; margin-bottom:14px;">🔑 <span id="paypalSignInPromptText">Sign in with Google above to pay with PayPal.</span></div>
+    <div id="paypalStatusBox" class="hidden" style="margin-bottom:14px;"></div>
     <ul style="margin:0 0 18px; padding-left:20px; font-size:13.5px; line-height:1.9;">
       <li id="buyPremiumFeature1">Redeem to extend your subscription</li>
       <li id="buyPremiumFeature2">Works on any device you sign in on</li>
       <li id="buyPremiumFeature3">Non-refundable</li>
     </ul>
-    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0;" id="buyPremiumContactText">To purchase a code, <a href="contact" target="_blank" rel="noopener">contact us</a> and we'll get you set up.</p>
+    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0;" id="buyPremiumContactText">Prefer another way to pay, or PayPal not working for you? <a href="contact" target="_blank" rel="noopener">Contact us</a> and we'll get you set up with a code instead.</p>
   </div>
 </div>
 </div>
@@ -2759,9 +2765,84 @@ function openFreeTrial() {
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:START */
 function openBuyPremiumModal() {
   document.getElementById("buyPremiumOverlay").classList.remove("hidden");
+  renderPaypalArea();
 }
 function closeBuyPremiumModal() {
   document.getElementById("buyPremiumOverlay").classList.add("hidden");
+}
+
+const PAYPAL_CLIENT_ID = "REPLACE_WITH_YOUR_PAYPAL_CLIENT_ID";
+const PAYPAL_VERIFY_URL = "REPLACE_WITH_YOUR_PAYPAL_PREMIUM_APPS_SCRIPT_URL";
+const PAYPAL_PLANS = [
+  { boxId: "paypalButtonBox1", amount: "3.99", label: "1 Month" },
+  { boxId: "paypalButtonBox2", amount: "9.99", label: "3 Months" },
+  { boxId: "paypalButtonBox3", amount: "19.99", label: "1 Year" }
+];
+let paypalSdkLoading = false;
+let paypalButtonsRendered = false;
+
+function renderPaypalArea() {
+  const signInPrompt = document.getElementById("paypalSignInPrompt");
+  if (!currentUser) {
+    if (signInPrompt) signInPrompt.classList.remove("hidden");
+    return;
+  }
+  if (signInPrompt) signInPrompt.classList.add("hidden");
+  if (paypalButtonsRendered) return;
+  if (window.paypal) { renderPaypalButtons(); return; }
+  if (paypalSdkLoading) return;
+  paypalSdkLoading = true;
+  const script = document.createElement("script");
+  script.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(PAYPAL_CLIENT_ID) + "&currency=USD&intent=capture";
+  script.onload = function() { renderPaypalButtons(); };
+  script.onerror = function() { paypalSdkLoading = false; showPaypalStatus(tr("paypalLoadError"), true); };
+  document.head.appendChild(script);
+}
+
+function renderPaypalButtons() {
+  if (paypalButtonsRendered || !window.paypal || !currentUser) return;
+  paypalButtonsRendered = true;
+  PAYPAL_PLANS.forEach(function(plan) {
+    paypal.Buttons({
+      style: { layout: "horizontal", tagline: false, height: 35, label: "pay" },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: { value: plan.amount, currency_code: "USD" },
+            custom_id: currentUser.id,
+            description: "GoOnlinePOS Premium - " + plan.label
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        showPaypalStatus(tr("paypalProcessing"), false);
+        return actions.order.capture().then(function() {
+          return fetch(PAYPAL_VERIFY_URL, {
+            method: "POST",
+            body: JSON.stringify({ orderID: data.orderID, userId: currentUser.id })
+          }).then(function(res) { return res.json(); }).then(function(result) {
+            if (result && result.success) {
+              showPaypalStatus(tr("paypalSuccess"), false);
+              refreshAccountState();
+            } else {
+              showPaypalStatus(tr("paypalVerifyFailed"), true);
+            }
+          });
+        });
+      },
+      onError: function() {
+        showPaypalStatus(tr("paypalError"), true);
+      }
+    }).render("#" + plan.boxId);
+  });
+}
+
+function showPaypalStatus(text, isError) {
+  const box = document.getElementById("paypalStatusBox");
+  if (!box) return;
+  box.className = isError ? "error-text" : "success-text";
+  box.textContent = text;
+  box.classList.remove("hidden");
 }
 /* OFFLINE-STRIP:BUY-PREMIUM-JS:END */
 
@@ -3504,6 +3585,7 @@ function changeLanguage() {
     buyPremiumFeature1: "buyPremiumFeature1", buyPremiumFeature2: "buyPremiumFeature2", buyPremiumFeature3: "buyPremiumFeature3",
     buyPremiumBenefitsTitle: "buyPremiumBenefitsTitle", buyPremiumBenefit1: "buyPremiumBenefit1", buyPremiumBenefit2: "buyPremiumBenefit2",
     buyPremiumBenefit3: "buyPremiumBenefit3", buyPremiumBenefit4: "buyPremiumBenefit4", buyPremiumBenefit5: "buyPremiumBenefit5", buyPremiumBenefit6: "buyPremiumBenefit6",
+    paypalSignInPromptText: "paypalSignInPromptText",
     premiumBadgeOffline: "premiumBadgeLabel",
     offlineModalTitle: "offlineModalTitle", offlineModalHowTitle: "offlineModalHowTitle", offlineModalUpdateTitle: "offlineModalUpdateTitle", offlineModalUpdateText: "offlineModalUpdateText",
     offlineCancelBtnLabel: "offlineCancelBtnLabel", offlineConfirmDownloadBtnLabel: "offlineConfirmDownloadBtnLabel",

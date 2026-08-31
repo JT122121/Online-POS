@@ -415,6 +415,101 @@ revoke all on function public.redeem_code(text) from public;
 grant execute on function public.redeem_code(text) to authenticated;
 
 -- ============================================================================
+-- 10. paypal_purchases - automated PayPal purchases, one row per order
+-- ============================================================================
+-- Populated only by grant_premium_from_paypal() below, called from
+-- paypal-premium/AppsScript.gs after it independently confirms a PayPal
+-- order is COMPLETED by calling PayPal's own API directly - never trusts
+-- anything the buyer's browser claims. Deliberately has NO Row Level
+-- Security policies (RLS enabled, zero policies below = default deny),
+-- same pattern as redemption_codes - nobody can browse, enumerate, or
+-- insert into this table through the public API, only through the
+-- SECURITY DEFINER function below or the Supabase dashboard. Doubles as
+-- both an audit trail (what was actually paid, when, by whom) and the
+-- idempotency guard against a retried/replayed verification call - see
+-- order_id's unique constraint below.
+
+create table if not exists public.paypal_purchases (
+  id bigint generated always as identity primary key,
+  order_id text not null unique,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  amount_usd numeric(10,2) not null,
+  days_granted integer not null,
+  premium_until timestamptz not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists paypal_purchases_user_id_idx on public.paypal_purchases(user_id);
+
+comment on table public.paypal_purchases is
+  'One row per successfully verified PayPal order - written only by grant_premium_from_paypal(). order_id''s unique constraint makes that function idempotent against a retried or replayed verification call.';
+
+-- ============================================================================
+-- grant_premium_from_paypal() - the only way paypal_purchases is ever written
+-- ============================================================================
+-- Unlike redeem_code(), this is NOT meant to be callable by a signed-in user
+-- with the anon/authenticated key - there is no "possession of a real code"
+-- check gating this one, so anyone who could call it directly could grant
+-- themselves free Premium just by making up an order id and their own user
+-- id. It must only ever be called with the service role key, which bypasses
+-- grants/RLS entirely - see the revoke below (deliberately no
+-- "grant ... to authenticated"). The service role key lives only in
+-- paypal-premium/AppsScript.gs's Script Properties in the Apps Script
+-- project, never in this repo or in any client-side code.
+--
+-- Extension is additive, same as redeem_code() - stacks on top of any
+-- remaining Premium time rather than overwriting it.
+--
+-- Idempotent: if order_id has already been recorded (a retried call, a
+-- replayed request), the insert below hits paypal_purchases' unique
+-- constraint and the function returns already_processed without granting
+-- a second time - safe to call more than once for the same order.
+
+create or replace function public.grant_premium_from_paypal(
+  p_order_id text,
+  p_user_id uuid,
+  p_amount_usd numeric,
+  p_days integer
+)
+returns jsonb
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  v_current_until timestamptz;
+  v_new_until timestamptz;
+begin
+  if p_order_id is null or trim(p_order_id) = '' or p_user_id is null then
+    return jsonb_build_object('success', false, 'reason', 'bad_request');
+  end if;
+  if p_days is null or p_days <= 0 then
+    return jsonb_build_object('success', false, 'reason', 'invalid_days');
+  end if;
+
+  select premium_until into v_current_until from public.profiles where user_id = p_user_id;
+  v_new_until := greatest(now(), coalesce(v_current_until, now())) + make_interval(days => p_days);
+
+  begin
+    insert into public.paypal_purchases (order_id, user_id, amount_usd, days_granted, premium_until)
+    values (trim(p_order_id), p_user_id, p_amount_usd, p_days, v_new_until);
+  exception when unique_violation then
+    return jsonb_build_object('success', false, 'reason', 'already_processed');
+  end;
+
+  update public.profiles
+  set subscription_status = 'premium', premium_until = v_new_until, updated_at = now()
+  where user_id = p_user_id;
+
+  return jsonb_build_object('success', true, 'premium_until', v_new_until);
+end;
+$$;
+
+revoke all on function public.grant_premium_from_paypal(text, uuid, numeric, integer) from public;
+-- Deliberately NOT granted to authenticated or anon - see the function's
+-- own comment above for why. Only the service role (used exclusively from
+-- paypal-premium/AppsScript.gs) may call this.
+
+-- ============================================================================
 -- Row Level Security - every table, every user only ever sees their own rows
 -- ============================================================================
 
@@ -431,6 +526,10 @@ alter table public.redemption_codes enable row level security;
 -- for anon/authenticated. Only redeem_code() (SECURITY DEFINER, bypasses
 -- RLS) and the Supabase dashboard (service role, also bypasses RLS) can
 -- touch this table - see the table's own comment above.
+alter table public.paypal_purchases enable row level security;
+-- Same zero-policies default-deny pattern as redemption_codes - only
+-- grant_premium_from_paypal() (SECURITY DEFINER) and the Supabase
+-- dashboard can touch this table.
 
 drop policy if exists "store_settings: owner full access" on public.store_settings;
 create policy "store_settings: owner full access" on public.store_settings
