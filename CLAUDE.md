@@ -2062,7 +2062,7 @@ billing anywhere in this system).
   button boxes - PayPal needs to know *whose* account to credit
   (`custom_id`), so payment isn't offered until that's known.
   `paypal.Buttons({...}).render(...)` is called once per tier
-  (`PAYPAL_PLANS`, `{boxId, amount, label}` for 3-Day Trial/$0.50, 1
+  (`PAYPAL_PLANS`, `{boxId, amount, label}` for 3-Day Trial/$0.39, 1
   Month/$3.99, 3 Months/$9.99, 1 Year/$19.99 - matching the pricing
   tiers shown in the modal exactly), each button's `createOrder` sets
   `custom_id: currentUser.id`
@@ -2161,7 +2161,7 @@ billing anywhere in this system).
   from the confirmed payment amount.** `AppsScript.gs`'s `doPost(e)`
   reads the actual `amount` PayPal itself reports for the captured order
   (never anything the browser sends), then maps it through a fixed
-  `PLAN_DAYS_BY_AMOUNT` table (`{"0.50": 3, "3.99": 30, "9.99": 90,
+  `PLAN_DAYS_BY_AMOUNT` table (`{"0.39": 3, "3.99": 30, "9.99": 90,
   "19.99": 365}`) to get `days` before calling
   `grant_premium_from_paypal()` - an unrecognized amount (a price that
   doesn't match any tier) is refused outright (`unrecognized_amount`)
@@ -2169,7 +2169,7 @@ billing anywhere in this system).
   in exact sync with `PAYPAL_PLANS`' `amount` values in `app.html` (as
   strings, since that's how PayPal echoes the amount back) - **update
   both together** any time a tier's price changes or a tier is
-  added/removed. **Follow-up: added a $0.50/3-day trial tier**, a fourth
+  added/removed. **Follow-up: added a $0.39/3-day trial tier**, a fourth
   `.pricing-tier` (`#paypalButtonBoxTrial`, `buyPremiumPlanTrialName`/
   `Sub`, all six `modules/translations.js` languages, wired into
   `changeLanguage()`'s `ids` map like the other three) placed first in
@@ -2178,10 +2178,10 @@ billing anywhere in this system).
   This is distinct from the existing free "🎁 Try Premium Free for 7
   Days" section further down the same modal (see below) - that one is
   free and requires contacting the site owner for a manually-issued
-  code; this one is a genuine $0.50 PayPal purchase that grants Premium
+  code; this one is a genuine $0.39 PayPal purchase that grants Premium
   automatically like the other three tiers, just for 3 days instead of
   30/90/365. `PLAN_DAYS_BY_AMOUNT` in `paypal-premium/AppsScript.gs`
-  picked up the matching `"0.50": 3` entry in the same pass - a tier
+  picked up the matching `"0.39": 3` entry in the same pass - a tier
   added to `app.html` without its `AppsScript.gs` counterpart would
   silently fail every purchase at that price with `unrecognized_amount`,
   so the two were edited together deliberately, not as an
