@@ -4304,6 +4304,29 @@ POST responses).
   persisted language choice survives a reload and the header stays
   English on that reload too; and zero horizontal overflow and zero
   console errors at 390px on both pages.
+- **`privacy.html`/`terms.html`'s shared-header gold "NEW" badge on the
+  Blog nav pill was invisible on both pages** - their own `:root` CSS
+  variable block was missing `--gold` and `--radius-sm` entirely (both
+  variables `.nav-highlight::after` and `.cta-btn` depend on), even
+  though the shared `.site-header` markup/CSS copied onto these two
+  pages references them same as every other page - an oversight from
+  whenever the shared header was first pasted onto these two files
+  without carrying its two newer custom-property dependencies along
+  with it. A `var(--gold)` with no `--gold` defined resolves to the
+  property's initial value (transparent for `background`), so the
+  badge's pill shape existed with the literal "NEW" text on it but with
+  no gold fill behind it - easy to miss since nothing errors, the badge
+  is just blank. Fixed by adding `--gold: #d9a441;` and `--radius-sm:
+  8px;` to both pages' `:root` blocks, matching `index.html`'s exact
+  values. Confirmed via `grep`, before and after, that every `var(--x)`
+  used anywhere in either file now has a matching `:root` definition -
+  a check worth re-running any time the shared header is pasted onto a
+  page that didn't have it before, since a missing custom property
+  fails silently like this rather than raising a console error.
+  Verified with Playwright: `getComputedStyle` on `.nav-highlight::after`
+  now resolves `background-color` to `rgb(217, 164, 65)` (`#d9a441`) on
+  both pages, and a screenshot of the header confirms the gold pill
+  renders correctly behind "NEW".
 - **`about.html`'s cookie-consent `<script>` had stray literal
   `` ``` `` markdown code-fence lines** embedded directly in the JS (4
   of them, likely pasted in from an AI response or markdown source via
