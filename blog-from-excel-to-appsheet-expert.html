@@ -247,6 +247,10 @@ a {
   .site-header { margin-top: 12px; }
 }
 
+.lang-picker-bar { max-width: 720px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 6px 0 0; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .article-header {
   text-align: center;
   padding: 10px 0 30px;
@@ -593,286 +597,299 @@ a {
     </div>
   </header>
 
+  <div class="lang-picker-bar">
+    <label for="articleLanguage"><span id="langPickerLabel">Language</span>
+      <select id="articleLanguage">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fil">Filipino</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+        <option value="th">ไทย</option>
+      </select>
+    </label>
+  </div>
+
   <div class="back-link-row">
-    <a class="back-link" href="blog">← Back to Blog</a>
+    <a class="back-link" href="blog" id="backLinkText">← Back to Blog</a>
   </div>
 
   <header class="article-header">
-    <span class="article-tag">Founder Story</span>
+    <span class="article-tag" id="articleTag">Founder Story</span>
 
-    <h1>
+    <h1 id="articleH1">
       From Excel to AppSheet Expert: How I Started Building Real Apps
       and Created GoOnlinePOS
     </h1>
 
-    <div class="article-meta">Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ</div>
+    <div class="article-meta"><span id="articleUpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 7 <span id="articleMinRead">MIN READ</span></div>
   </header>
 
   <div class="article-body">
 
-    <p>I didn't start as a traditional programmer.</p>
+    <p id="p1">I didn't start as a traditional programmer.</p>
 
-    <p>
+    <p id="p2">
       My journey into building business applications started with
       something much simpler: <strong>Excel</strong>.
     </p>
 
-    <p>
+    <p id="p3">
       During COVID, the company I was working with relied heavily on
       Excel to manage information and daily operations. Excel was
       useful, but as the processes became more complicated, I started
       thinking there had to be a better way.
     </p>
 
-    <p>I began asking myself:</p>
+    <p id="p4">I began asking myself:</p>
 
-    <p><strong>What if we could turn these spreadsheets into an actual application?</strong></p>
+    <p id="p5"><strong>What if we could turn these spreadsheets into an actual application?</strong></p>
 
-    <p>That question eventually led me to AppSheet.</p>
+    <p id="p6">That question eventually led me to AppSheet.</p>
 
-    <h2>How I Discovered AppSheet</h2>
+    <h2 id="h2a">How I Discovered AppSheet</h2>
 
-    <p>
+    <p id="p7">
       When I started exploring <a href="https://about.appsheet.com/" target="_blank" rel="noopener">AppSheet</a>,
       I wasn't coming from a traditional programming background.
     </p>
 
-    <p>I learned by building.</p>
+    <p id="p8">I learned by building.</p>
 
-    <p>
+    <p id="p9">
       I would create an app, test it, find something that needed
       improvement, fix it, and then build the next feature. Over time, I
       became much more comfortable with AppSheet and learned how to turn
       business processes into practical applications.
     </p>
 
-    <p>
+    <p id="p10">
       What started as a way to improve an Excel-based workflow
       eventually became a career in building business applications.
     </p>
 
-    <p>I've now been working with AppSheet for <strong>more than five years</strong>.</p>
+    <p id="p11">I've now been working with AppSheet for <strong>more than five years</strong>.</p>
 
-    <h2>From Learning to Building Real Apps</h2>
+    <h2 id="h2b">From Learning to Building Real Apps</h2>
 
-    <p>Eventually, AppSheet became more than something I was learning for myself.</p>
+    <p id="p12">Eventually, AppSheet became more than something I was learning for myself.</p>
 
-    <p>I started building <strong>real applications for clients</strong>.</p>
+    <p id="p13">I started building <strong>real applications for clients</strong>.</p>
 
-    <p>
+    <p id="p14">
       I've built multiple applications for different business needs, and
       every project has taught me something new.
     </p>
 
-    <p>
+    <p id="p15">
       Some businesses need inventory management. Others need sales
       tracking, technician tracking, approvals, reporting, customer
       management, or completely customized workflows.
     </p>
 
-    <p>That's one of the things I enjoy about AppSheet.</p>
+    <p id="p16">That's one of the things I enjoy about AppSheet.</p>
 
-    <p>You can build an application around the way a business actually works.</p>
+    <p id="p17">You can build an application around the way a business actually works.</p>
 
-    <p>
+    <p id="p18">
       Working on real client projects also taught me that building an
       application isn't just about making screens and buttons.
     </p>
 
-    <p>You have to understand the workflow.</p>
+    <p id="p19">You have to understand the workflow.</p>
 
-    <p>You have to understand what users actually need.</p>
+    <p id="p20">You have to understand what users actually need.</p>
 
-    <p>And you have to keep improving the application when real people start using it.</p>
+    <p id="p21">And you have to keep improving the application when real people start using it.</p>
 
-    <h2>Becoming an AppSheet Expert</h2>
+    <h2 id="h2c">Becoming an AppSheet Expert</h2>
 
-    <p>
+    <p id="p22">
       After more than five years of building applications, working
       through different business requirements, and solving real-world
       problems, AppSheet has become one of my main areas of expertise.
     </p>
 
-    <p>I wouldn't describe myself as a traditional programmer.</p>
+    <p id="p23">I wouldn't describe myself as a traditional programmer.</p>
 
-    <p><strong>I'm an AppSheet expert who learned by building real solutions.</strong></p>
+    <p id="p24"><strong>I'm an AppSheet expert who learned by building real solutions.</strong></p>
 
-    <p>That distinction is important to me.</p>
+    <p id="p25">That distinction is important to me.</p>
 
-    <p>
+    <p id="p26">
       My experience comes from actually creating applications,
       troubleshooting them, improving them, and adapting them to the
       needs of real businesses.
     </p>
 
-    <h2>Sharing What I Learn on YouTube</h2>
+    <h2 id="h2d">Sharing What I Learn on YouTube</h2>
 
-    <p>
+    <p id="p27">
       As I continued building applications, I also started sharing what
       I was learning on YouTube.
     </p>
 
-    <p>
+    <p id="p28">
       My YouTube channel, <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"><strong>Joe Tayactac</strong></a>,
       focuses on practical AppSheet development.
     </p>
 
-    <p>
+    <p id="p29">
       I create tutorials, demonstrate how applications are built,
       explain solutions, and share ideas that can help other people
       create their own business applications.
     </p>
 
-    <p>The goal is simple:</p>
+    <p id="p30">The goal is simple:</p>
 
-    <p><strong>If something I learned can help someone else solve a problem, I want to share it.</strong></p>
+    <p id="p31"><strong>If something I learned can help someone else solve a problem, I want to share it.</strong></p>
 
-    <p>Over time, I've also noticed that certain questions come up again and again.</p>
+    <p id="p32">Over time, I've also noticed that certain questions come up again and again.</p>
 
-    <p>And one of the biggest ones is about POS systems.</p>
+    <p id="p33">And one of the biggest ones is about POS systems.</p>
 
-    <h2>Why Everyone Keeps Asking About POS</h2>
+    <h2 id="h2e">Why Everyone Keeps Asking About POS</h2>
 
-    <p>
+    <p id="p34">
       When people talk about business applications, POS and inventory
       are two of the most common requirements I come across.
     </p>
 
-    <p>People ask:</p>
+    <p id="p35">People ask:</p>
 
     <ul>
-      <li>Can AppSheet build a POS?</li>
-      <li>Can it manage inventory?</li>
-      <li>Can it scan barcodes?</li>
-      <li>Can it print receipts?</li>
-      <li>Can multiple cashiers use it?</li>
-      <li>Can it work offline?</li>
-      <li>Can it handle cash and card payments?</li>
-      <li>Can it track sales?</li>
-      <li>Can it work on a phone or computer?</li>
+      <li id="li1">Can AppSheet build a POS?</li>
+      <li id="li2">Can it manage inventory?</li>
+      <li id="li3">Can it scan barcodes?</li>
+      <li id="li4">Can it print receipts?</li>
+      <li id="li5">Can multiple cashiers use it?</li>
+      <li id="li6">Can it work offline?</li>
+      <li id="li7">Can it handle cash and card payments?</li>
+      <li id="li8">Can it track sales?</li>
+      <li id="li9">Can it work on a phone or computer?</li>
     </ul>
 
-    <p>The answer is that AppSheet can be used to build many of these solutions.</p>
+    <p id="p36">The answer is that AppSheet can be used to build many of these solutions.</p>
 
-    <p>
+    <p id="p37">
       I've built POS-related applications and understand how much work
       goes into making them useful in a real business environment.
     </p>
 
-    <p>
+    <p id="p38">
       A POS might look simple from the outside, but once you start
       building one, there are many details to consider.
     </p>
 
-    <p>
+    <p id="p39">
       Inventory, sales, payments, receipts, barcode scanning, users,
       reports, and daily workflows all need to work together.
     </p>
 
-    <h2>Why I Created GoOnlinePOS</h2>
+    <h2 id="h2f">Why I Created GoOnlinePOS</h2>
 
-    <p>
+    <p id="p40">
       After seeing how often people were looking for a simple POS, I
       started thinking about another approach.
     </p>
 
-    <p>Not everyone wants to build their own application.</p>
+    <p id="p41">Not everyone wants to build their own application.</p>
 
-    <p>
+    <p id="p42">
       A business owner might not want to spend weeks creating tables,
       configuring workflows, building automations, testing expressions,
       and maintaining an app.
     </p>
 
-    <p>Sometimes they simply want to <strong>open a POS and start selling</strong>.</p>
+    <p id="p43">Sometimes they simply want to <strong>open a POS and start selling</strong>.</p>
 
-    <p>That's where GoOnlinePOS came from.</p>
+    <p id="p44">That's where GoOnlinePOS came from.</p>
 
-    <p>
+    <p id="p45">
       I wanted to create a practical POS that could be used without
       requiring the business owner to become an AppSheet developer.
     </p>
 
-    <p>The idea is simple:</p>
+    <p id="p46">The idea is simple:</p>
 
-    <p><strong>Open it. Add your products. Start selling.</strong></p>
+    <p id="p47"><strong>Open it. Add your products. Start selling.</strong></p>
 
-    <p>
+    <p id="p48">
       GoOnlinePOS includes features such as inventory management,
       barcode scanning, sales tracking, payment handling, receipt
       printing, multiple cashier support, sales history, and offline
       functionality.
     </p>
 
-    <p>The goal is to make POS software straightforward and accessible for small businesses.</p>
+    <p id="p49">The goal is to make POS software straightforward and accessible for small businesses.</p>
 
-    <h2>From One Excel File to GoOnlinePOS</h2>
+    <h2 id="h2g">From One Excel File to GoOnlinePOS</h2>
 
-    <p>When I look back at the journey, it's interesting how everything connected.</p>
+    <p id="p50">When I look back at the journey, it's interesting how everything connected.</p>
 
-    <p>It started with Excel during COVID.</p>
+    <p id="p51">It started with Excel during COVID.</p>
 
-    <p>Then I started looking for a better way to manage business processes.</p>
+    <p id="p52">Then I started looking for a better way to manage business processes.</p>
 
-    <p>That led me to AppSheet.</p>
+    <p id="p53">That led me to AppSheet.</p>
 
-    <p>I learned by building.</p>
+    <p id="p54">I learned by building.</p>
 
-    <p>Then I started building multiple real applications for clients.</p>
+    <p id="p55">Then I started building multiple real applications for clients.</p>
 
-    <p>I shared what I learned through my YouTube channel.</p>
+    <p id="p56">I shared what I learned through my YouTube channel.</p>
 
-    <p>People kept asking about POS, inventory, and other business systems.</p>
+    <p id="p57">People kept asking about POS, inventory, and other business systems.</p>
 
-    <p>And eventually, those experiences led to GoOnlinePOS.</p>
+    <p id="p58">And eventually, those experiences led to GoOnlinePOS.</p>
 
-    <p>It wasn't something I planned from the beginning.</p>
+    <p id="p59">It wasn't something I planned from the beginning.</p>
 
-    <p>It grew naturally from years of solving business problems and building applications.</p>
+    <p id="p60">It grew naturally from years of solving business problems and building applications.</p>
 
-    <h2>I'm Still Building</h2>
+    <h2 id="h2h">I'm Still Building</h2>
 
-    <p>More than five years after discovering AppSheet, I'm still building and learning.</p>
+    <p id="p61">More than five years after discovering AppSheet, I'm still building and learning.</p>
 
-    <p>
+    <p id="p62">
       I've built multiple applications for clients, continue to create
       AppSheet tutorials through <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"><strong>Joe Tayactac</strong></a>
       on YouTube, and continue developing GoOnlinePOS.
     </p>
 
-    <p>Every project brings a different challenge.</p>
+    <p id="p63">Every project brings a different challenge.</p>
 
-    <p>That's what keeps it interesting.</p>
+    <p id="p64">That's what keeps it interesting.</p>
 
-    <p>
+    <p id="p65">
       I may not have started as a traditional programmer, but I became
       an AppSheet expert by doing something I believe is more important:
     </p>
 
-    <p><strong>building real solutions for real problems.</strong></p>
+    <p id="p66"><strong>building real solutions for real problems.</strong></p>
 
-    <p>And that's ultimately what GoOnlinePOS represents.</p>
+    <p id="p67">And that's ultimately what GoOnlinePOS represents.</p>
 
-    <p>
+    <p id="p68">
       It comes from years of working with business processes, building
       applications, listening to what people actually need, and trying
       to make things simpler.
     </p>
 
-    <h2>From My Experience to a POS You Can Use</h2>
+    <h2 id="h2i">From My Experience to a POS You Can Use</h2>
 
-    <p>
+    <p id="p69">
       If you're interested in learning AppSheet and building your own
       business applications, you can follow my tutorials on
       <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener">YouTube</a>.
     </p>
 
-    <p>
+    <p id="p70">
       If you simply need a POS without having to build one yourself, you
       can try <a href="/">GoOnlinePOS</a>.
     </p>
 
-    <p>
+    <p id="p71">
       <strong>The journey started with Excel. AppSheet changed the
       direction of my career. Real client projects built my experience.
       And GoOnlinePOS is the next step in that journey.</strong>
@@ -881,9 +898,9 @@ a {
   </div>
 
   <div class="cta-band">
-    <h2>Open it. Add your products. Start selling.</h2>
-    <p>No signup, no login. Just open GoOnlinePOS and start selling.</p>
-    <a class="btn-primary" href="app">Open GoOnlinePOS</a>
+    <h2 id="ctaH2">Open it. Add your products. Start selling.</h2>
+    <p id="ctaP">No signup, no login. Just open GoOnlinePOS and start selling.</p>
+    <a class="btn-primary" href="app" id="ctaBtn">Open GoOnlinePOS</a>
   </div>
 
 </div>
@@ -972,6 +989,665 @@ a {
   </div>
 
 </div>
+
+<script>
+(function() {
+  var langSelect = document.getElementById("articleLanguage");
+
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      backLinkText: "← Back to Blog",
+      articleTag: "Founder Story",
+      articleH1: "From Excel to AppSheet Expert: How I Started Building Real Apps and Created GoOnlinePOS",
+      articleUpdatedLabel: "Last updated:",
+      articleMinRead: "MIN READ",
+      p1: "I didn't start as a traditional programmer.",
+      p2: "My journey into building business applications started with something much simpler: <strong>Excel</strong>.",
+      p3: "During COVID, the company I was working with relied heavily on Excel to manage information and daily operations. Excel was useful, but as the processes became more complicated, I started thinking there had to be a better way.",
+      p4: "I began asking myself:",
+      p5: "<strong>What if we could turn these spreadsheets into an actual application?</strong>",
+      p6: "That question eventually led me to AppSheet.",
+      h2a: "How I Discovered AppSheet",
+      p7: "When I started exploring <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a>, I wasn't coming from a traditional programming background.",
+      p8: "I learned by building.",
+      p9: "I would create an app, test it, find something that needed improvement, fix it, and then build the next feature. Over time, I became much more comfortable with AppSheet and learned how to turn business processes into practical applications.",
+      p10: "What started as a way to improve an Excel-based workflow eventually became a career in building business applications.",
+      p11: "I've now been working with AppSheet for <strong>more than five years</strong>.",
+      h2b: "From Learning to Building Real Apps",
+      p12: "Eventually, AppSheet became more than something I was learning for myself.",
+      p13: "I started building <strong>real applications for clients</strong>.",
+      p14: "I've built multiple applications for different business needs, and every project has taught me something new.",
+      p15: "Some businesses need inventory management. Others need sales tracking, technician tracking, approvals, reporting, customer management, or completely customized workflows.",
+      p16: "That's one of the things I enjoy about AppSheet.",
+      p17: "You can build an application around the way a business actually works.",
+      p18: "Working on real client projects also taught me that building an application isn't just about making screens and buttons.",
+      p19: "You have to understand the workflow.",
+      p20: "You have to understand what users actually need.",
+      p21: "And you have to keep improving the application when real people start using it.",
+      h2c: "Becoming an AppSheet Expert",
+      p22: "After more than five years of building applications, working through different business requirements, and solving real-world problems, AppSheet has become one of my main areas of expertise.",
+      p23: "I wouldn't describe myself as a traditional programmer.",
+      p24: "<strong>I'm an AppSheet expert who learned by building real solutions.</strong>",
+      p25: "That distinction is important to me.",
+      p26: "My experience comes from actually creating applications, troubleshooting them, improving them, and adapting them to the needs of real businesses.",
+      h2d: "Sharing What I Learn on YouTube",
+      p27: "As I continued building applications, I also started sharing what I was learning on YouTube.",
+      p28: "My YouTube channel, <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a>, focuses on practical AppSheet development.",
+      p29: "I create tutorials, demonstrate how applications are built, explain solutions, and share ideas that can help other people create their own business applications.",
+      p30: "The goal is simple:",
+      p31: "<strong>If something I learned can help someone else solve a problem, I want to share it.</strong>",
+      p32: "Over time, I've also noticed that certain questions come up again and again.",
+      p33: "And one of the biggest ones is about POS systems.",
+      h2e: "Why Everyone Keeps Asking About POS",
+      p34: "When people talk about business applications, POS and inventory are two of the most common requirements I come across.",
+      p35: "People ask:",
+      li1: "Can AppSheet build a POS?",
+      li2: "Can it manage inventory?",
+      li3: "Can it scan barcodes?",
+      li4: "Can it print receipts?",
+      li5: "Can multiple cashiers use it?",
+      li6: "Can it work offline?",
+      li7: "Can it handle cash and card payments?",
+      li8: "Can it track sales?",
+      li9: "Can it work on a phone or computer?",
+      p36: "The answer is that AppSheet can be used to build many of these solutions.",
+      p37: "I've built POS-related applications and understand how much work goes into making them useful in a real business environment.",
+      p38: "A POS might look simple from the outside, but once you start building one, there are many details to consider.",
+      p39: "Inventory, sales, payments, receipts, barcode scanning, users, reports, and daily workflows all need to work together.",
+      h2f: "Why I Created GoOnlinePOS",
+      p40: "After seeing how often people were looking for a simple POS, I started thinking about another approach.",
+      p41: "Not everyone wants to build their own application.",
+      p42: "A business owner might not want to spend weeks creating tables, configuring workflows, building automations, testing expressions, and maintaining an app.",
+      p43: "Sometimes they simply want to <strong>open a POS and start selling</strong>.",
+      p44: "That's where GoOnlinePOS came from.",
+      p45: "I wanted to create a practical POS that could be used without requiring the business owner to become an AppSheet developer.",
+      p46: "The idea is simple:",
+      p47: "<strong>Open it. Add your products. Start selling.</strong>",
+      p48: "GoOnlinePOS includes features such as inventory management, barcode scanning, sales tracking, payment handling, receipt printing, multiple cashier support, sales history, and offline functionality.",
+      p49: "The goal is to make POS software straightforward and accessible for small businesses.",
+      h2g: "From One Excel File to GoOnlinePOS",
+      p50: "When I look back at the journey, it's interesting how everything connected.",
+      p51: "It started with Excel during COVID.",
+      p52: "Then I started looking for a better way to manage business processes.",
+      p53: "That led me to AppSheet.",
+      p54: "I learned by building.",
+      p55: "Then I started building multiple real applications for clients.",
+      p56: "I shared what I learned through my YouTube channel.",
+      p57: "People kept asking about POS, inventory, and other business systems.",
+      p58: "And eventually, those experiences led to GoOnlinePOS.",
+      p59: "It wasn't something I planned from the beginning.",
+      p60: "It grew naturally from years of solving business problems and building applications.",
+      h2h: "I'm Still Building",
+      p61: "More than five years after discovering AppSheet, I'm still building and learning.",
+      p62: "I've built multiple applications for clients, continue to create AppSheet tutorials through <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> on YouTube, and continue developing GoOnlinePOS.",
+      p63: "Every project brings a different challenge.",
+      p64: "That's what keeps it interesting.",
+      p65: "I may not have started as a traditional programmer, but I became an AppSheet expert by doing something I believe is more important:",
+      p66: "<strong>building real solutions for real problems.</strong>",
+      p67: "And that's ultimately what GoOnlinePOS represents.",
+      p68: "It comes from years of working with business processes, building applications, listening to what people actually need, and trying to make things simpler.",
+      h2i: "From My Experience to a POS You Can Use",
+      p69: "If you're interested in learning AppSheet and building your own business applications, you can follow my tutorials on <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
+      p70: "If you simply need a POS without having to build one yourself, you can try <a href=\"/\">GoOnlinePOS</a>.",
+      p71: "<strong>The journey started with Excel. AppSheet changed the direction of my career. Real client projects built my experience. And GoOnlinePOS is the next step in that journey.</strong>",
+      ctaH2: "Open it. Add your products. Start selling.",
+      ctaP: "No signup, no login. Just open GoOnlinePOS and start selling.",
+      ctaBtn: "Open GoOnlinePOS"
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      backLinkText: "← العودة إلى المدونة",
+      articleTag: "قصة المؤسس",
+      articleH1: "من إكسل إلى خبير AppSheet: كيف بدأت في بناء تطبيقات حقيقية وأنشأت GoOnlinePOS",
+      articleUpdatedLabel: "آخر تحديث:",
+      articleMinRead: "دقائق قراءة",
+      p1: "لم أبدأ كمبرمج تقليدي.",
+      p2: "بدأت رحلتي في بناء تطبيقات الأعمال بشيء أبسط بكثير: <strong>إكسل</strong>.",
+      p3: "خلال كوفيد، كانت الشركة التي أعمل معها تعتمد بشكل كبير على إكسل لإدارة المعلومات والعمليات اليومية. كان إكسل مفيدا، لكن مع تعقد العمليات، بدأت أفكر أنه لا بد أن هناك طريقة أفضل.",
+      p4: "بدأت أسأل نفسي:",
+      p5: "<strong>ماذا لو استطعنا تحويل جداول البيانات هذه إلى تطبيق حقيقي؟</strong>",
+      p6: "قادني هذا السؤال في النهاية إلى AppSheet.",
+      h2a: "كيف اكتشفت AppSheet",
+      p7: "عندما بدأت استكشاف <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a>، لم أكن قادما من خلفية برمجية تقليدية.",
+      p8: "تعلمت من خلال البناء.",
+      p9: "كنت أنشئ تطبيقا، أختبره، أجد شيئا يحتاج إلى تحسين، أصلحه، ثم أبني الميزة التالية. مع مرور الوقت، أصبحت أكثر ارتياحا مع AppSheet وتعلمت كيفية تحويل عمليات الأعمال إلى تطبيقات عملية.",
+      p10: "ما بدأ كطريقة لتحسين سير عمل قائم على إكسل أصبح في النهاية مسارا مهنيا في بناء تطبيقات الأعمال.",
+      p11: "أعمل الآن مع AppSheet منذ <strong>أكثر من خمس سنوات</strong>.",
+      h2b: "من التعلم إلى بناء تطبيقات حقيقية",
+      p12: "في النهاية، أصبح AppSheet أكثر من مجرد شيء أتعلمه لنفسي.",
+      p13: "بدأت في بناء <strong>تطبيقات حقيقية للعملاء</strong>.",
+      p14: "لقد بنيت تطبيقات متعددة لاحتياجات أعمال مختلفة، وكل مشروع علمني شيئا جديدا.",
+      p15: "بعض الأعمال تحتاج إلى إدارة المخزون. أخرى تحتاج إلى تتبع المبيعات، وتتبع الفنيين، والموافقات، والتقارير، وإدارة العملاء، أو سير عمل مخصص بالكامل.",
+      p16: "هذا أحد الأشياء التي أستمتع بها في AppSheet.",
+      p17: "يمكنك بناء تطبيق حول الطريقة التي يعمل بها العمل فعليا.",
+      p18: "علمني العمل على مشاريع عملاء حقيقية أيضا أن بناء التطبيق ليس مجرد إنشاء شاشات وأزرار.",
+      p19: "عليك أن تفهم سير العمل.",
+      p20: "عليك أن تفهم ما يحتاجه المستخدمون فعليا.",
+      p21: "وعليك أن تستمر في تحسين التطبيق عندما يبدأ أشخاص حقيقيون في استخدامه.",
+      h2c: "أصبحت خبيرا في AppSheet",
+      p22: "بعد أكثر من خمس سنوات من بناء التطبيقات، والعمل عبر متطلبات أعمال مختلفة، وحل مشاكل واقعية، أصبح AppSheet أحد مجالات خبرتي الرئيسية.",
+      p23: "لن أصف نفسي بأنني مبرمج تقليدي.",
+      p24: "<strong>أنا خبير في AppSheet تعلم من خلال بناء حلول حقيقية.</strong>",
+      p25: "هذا التمييز مهم بالنسبة لي.",
+      p26: "تأتي خبرتي من إنشاء التطبيقات فعليا، واستكشاف أخطائها وإصلاحها، وتحسينها، وتكييفها مع احتياجات الأعمال الحقيقية.",
+      h2d: "مشاركة ما أتعلمه على YouTube",
+      p27: "بينما كنت أواصل بناء التطبيقات، بدأت أيضا بمشاركة ما كنت أتعلمه على YouTube.",
+      p28: "قناتي على YouTube، <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a>، تركز على تطوير AppSheet العملي.",
+      p29: "أنشئ دروسا تعليمية، وأوضح كيفية بناء التطبيقات، وأشرح الحلول، وأشارك أفكارا يمكن أن تساعد الآخرين على إنشاء تطبيقات أعمالهم الخاصة.",
+      p30: "الهدف بسيط:",
+      p31: "<strong>إذا كان شيء تعلمته يمكن أن يساعد شخصا آخر على حل مشكلة، أريد أن أشاركه.</strong>",
+      p32: "مع مرور الوقت، لاحظت أيضا أن بعض الأسئلة تتكرر مرارا وتكرارا.",
+      p33: "وأحد أكبرها يتعلق بأنظمة نقاط البيع.",
+      h2e: "لماذا يستمر الجميع في السؤال عن نقاط البيع",
+      p34: "عندما يتحدث الناس عن تطبيقات الأعمال، تكون نقاط البيع والمخزون من أكثر المتطلبات شيوعا التي أواجهها.",
+      p35: "يسأل الناس:",
+      li1: "هل يمكن لـ AppSheet بناء نظام نقاط بيع؟",
+      li2: "هل يمكنه إدارة المخزون؟",
+      li3: "هل يمكنه مسح الباركود؟",
+      li4: "هل يمكنه طباعة الإيصالات؟",
+      li5: "هل يمكن لعدة كاشيرات استخدامه؟",
+      li6: "هل يمكنه العمل دون اتصال؟",
+      li7: "هل يمكنه التعامل مع الدفع النقدي والبطاقات؟",
+      li8: "هل يمكنه تتبع المبيعات؟",
+      li9: "هل يمكنه العمل على الهاتف أو الكمبيوتر؟",
+      p36: "الإجابة هي أن AppSheet يمكن استخدامه لبناء الكثير من هذه الحلول.",
+      p37: "لقد بنيت تطبيقات متعلقة بنقاط البيع وأفهم مقدار العمل اللازم لجعلها مفيدة في بيئة عمل حقيقية.",
+      p38: "قد يبدو نظام نقاط البيع بسيطا من الخارج، لكن بمجرد أن تبدأ في بناء واحد، هناك تفاصيل كثيرة يجب مراعاتها.",
+      p39: "المخزون، المبيعات، المدفوعات، الإيصالات، مسح الباركود، المستخدمون، التقارير، وسير العمل اليومي كلها تحتاج إلى العمل معا.",
+      h2f: "لماذا أنشأت GoOnlinePOS",
+      p40: "بعد أن رأيت كم كان الناس يبحثون كثيرا عن نظام نقاط بيع بسيط، بدأت أفكر في نهج آخر.",
+      p41: "ليس كل شخص يريد بناء تطبيقه الخاص.",
+      p42: "قد لا يرغب صاحب العمل في قضاء أسابيع في إنشاء الجداول، وضبط سير العمل، وبناء الأتمتة، واختبار التعبيرات، وصيانة التطبيق.",
+      p43: "أحيانا يريدون ببساطة <strong>فتح نظام نقاط بيع والبدء في البيع</strong>.",
+      p44: "من هنا جاء GoOnlinePOS.",
+      p45: "أردت إنشاء نظام نقاط بيع عملي يمكن استخدامه دون الحاجة لأن يصبح صاحب العمل مطور AppSheet.",
+      p46: "الفكرة بسيطة:",
+      p47: "<strong>افتحه. أضف منتجاتك. ابدأ البيع.</strong>",
+      p48: "يتضمن GoOnlinePOS ميزات مثل إدارة المخزون، ومسح الباركود، وتتبع المبيعات، والتعامل مع المدفوعات، وطباعة الإيصالات، ودعم عدة كاشيرات، وسجل المبيعات، ووظيفة عدم الاتصال.",
+      p49: "الهدف هو جعل برنامج نقاط البيع بسيطا وسهل الوصول للأعمال الصغيرة.",
+      h2g: "من ملف إكسل واحد إلى GoOnlinePOS",
+      p50: "عندما أنظر إلى الوراء في هذه الرحلة، من المثير للاهتمام كيف ارتبط كل شيء.",
+      p51: "بدأت مع إكسل خلال كوفيد.",
+      p52: "ثم بدأت أبحث عن طريقة أفضل لإدارة عمليات الأعمال.",
+      p53: "قادني ذلك إلى AppSheet.",
+      p54: "تعلمت من خلال البناء.",
+      p55: "ثم بدأت في بناء تطبيقات حقيقية متعددة للعملاء.",
+      p56: "شاركت ما تعلمته من خلال قناتي على YouTube.",
+      p57: "استمر الناس في السؤال عن نقاط البيع والمخزون وأنظمة الأعمال الأخرى.",
+      p58: "وفي النهاية، أدت تلك التجارب إلى GoOnlinePOS.",
+      p59: "لم يكن شيئا خططت له منذ البداية.",
+      p60: "نما بشكل طبيعي من سنوات حل مشاكل الأعمال وبناء التطبيقات.",
+      h2h: "ما زلت أبني",
+      p61: "بعد أكثر من خمس سنوات من اكتشاف AppSheet، ما زلت أبني وأتعلم.",
+      p62: "لقد بنيت تطبيقات متعددة للعملاء، وأواصل إنشاء دروس AppSheet من خلال <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> على YouTube، وأواصل تطوير GoOnlinePOS.",
+      p63: "كل مشروع يجلب تحديا مختلفا.",
+      p64: "هذا ما يبقيه مثيرا للاهتمام.",
+      p65: "ربما لم أبدأ كمبرمج تقليدي، لكنني أصبحت خبيرا في AppSheet من خلال فعل شيء أعتقد أنه أكثر أهمية:",
+      p66: "<strong>بناء حلول حقيقية لمشاكل حقيقية.</strong>",
+      p67: "وهذا في النهاية ما يمثله GoOnlinePOS.",
+      p68: "إنه يأتي من سنوات من العمل مع عمليات الأعمال، وبناء التطبيقات، والاستماع لما يحتاجه الناس فعليا، ومحاولة جعل الأمور أبسط.",
+      h2i: "من تجربتي إلى نظام نقاط بيع يمكنك استخدامه",
+      p69: "إذا كنت مهتما بتعلم AppSheet وبناء تطبيقات أعمالك الخاصة، يمكنك متابعة دروسي على <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
+      p70: "إذا كنت تحتاج ببساطة إلى نظام نقاط بيع دون الحاجة لبناء واحد بنفسك، يمكنك تجربة <a href=\"/\">GoOnlinePOS</a>.",
+      p71: "<strong>بدأت الرحلة مع إكسل. غيّر AppSheet مسار مسيرتي المهنية. بنت مشاريع العملاء الحقيقية خبرتي. و GoOnlinePOS هو الخطوة التالية في تلك الرحلة.</strong>",
+      ctaH2: "افتحه. أضف منتجاتك. ابدأ البيع.",
+      ctaP: "بدون تسجيل، بدون تسجيل دخول. فقط افتح GoOnlinePOS وابدأ البيع.",
+      ctaBtn: "افتح GoOnlinePOS"
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      backLinkText: "← Bumalik sa Blog",
+      articleTag: "Kwento ng Founder",
+      articleH1: "Mula Excel Hanggang AppSheet Expert: Kung Paano Ako Nagsimulang Bumuo ng Tunay na mga App at Gumawa ng GoOnlinePOS",
+      articleUpdatedLabel: "Huling na-update:",
+      articleMinRead: "MIN BASAHIN",
+      p1: "Hindi ako nagsimula bilang tradisyonal na programmer.",
+      p2: "Nagsimula ang paglalakbay ko sa paggawa ng business applications sa mas simpleng bagay: <strong>Excel</strong>.",
+      p3: "Noong COVID, ang kumpanyang kinaroroonan ko ay lubos na umasa sa Excel para pamahalaan ang impormasyon at pang-araw-araw na operasyon. Kapaki-pakinabang ang Excel, pero habang lumalala ang mga proseso, nagsimula akong mag-isip na dapat may mas magandang paraan.",
+      p4: "Nagsimula akong magtanong sa sarili ko:",
+      p5: "<strong>Paano kung magagawa nating gawing tunay na application ang mga spreadsheet na ito?</strong>",
+      p6: "Ang tanong na iyon ang humantong sa akin sa AppSheet.",
+      h2a: "Kung Paano Ko Natuklasan ang AppSheet",
+      p7: "Nang magsimula akong tuklasin ang <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a>, hindi ako galing sa tradisyonal na background sa programming.",
+      p8: "Natuto ako sa pamamagitan ng paggawa.",
+      p9: "Gumagawa ako ng app, sinusubukan ito, hinahanap kung ano ang kailangang pagbutihin, inaayos ito, at pagkatapos ay bumubuo ng susunod na feature. Sa paglipas ng panahon, naging mas komportable ako sa AppSheet at natutunan kung paano gawing praktikal na mga application ang mga proseso ng negosyo.",
+      p10: "Ang nagsimula bilang paraan para mapabuti ang isang Excel-based na workflow ay naging isang karera sa paggawa ng business applications.",
+      p11: "Sa ngayon, gumagamit na ako ng AppSheet nang <strong>higit limang taon</strong>.",
+      h2b: "Mula sa Pag-aaral Hanggang sa Paggawa ng Tunay na mga App",
+      p12: "Sa kalaunan, naging higit pa sa isang bagay na natututunan ko para sa sarili ko ang AppSheet.",
+      p13: "Nagsimula akong bumuo ng <strong>tunay na mga application para sa mga kliyente</strong>.",
+      p14: "Nakabuo na ako ng maraming application para sa iba't ibang pangangailangan ng negosyo, at bawat proyekto ay nagturo sa akin ng bago.",
+      p15: "May mga negosyong nangangailangan ng inventory management. May iba naman na nangangailangan ng sales tracking, technician tracking, approvals, reporting, customer management, o ganap na custom na workflow.",
+      p16: "Iyan ang isa sa mga bagay na natutuwa ako tungkol sa AppSheet.",
+      p17: "Maaari kang bumuo ng application na naaayon sa tunay na paraan ng pagpapatakbo ng isang negosyo.",
+      p18: "Ang pagtatrabaho sa mga tunay na proyekto ng kliyente ay nagturo rin sa akin na ang paggawa ng application ay hindi lang tungkol sa paggawa ng mga screen at button.",
+      p19: "Kailangan mong intindihin ang workflow.",
+      p20: "Kailangan mong intindihin kung ano ang talagang kailangan ng mga user.",
+      p21: "At kailangan mong patuloy na pinapabuti ang application kapag nagsimula nang gamitin ito ng mga totoong tao.",
+      h2c: "Naging Isang AppSheet Expert",
+      p22: "Pagkatapos ng higit limang taon ng paggawa ng mga application, pagtatrabaho sa iba't ibang pangangailangan ng negosyo, at paglutas ng mga tunay na problema, naging isa sa aking mga pangunahing larangan ng kadalubhasaan ang AppSheet.",
+      p23: "Hindi ko ituturing ang aking sarili na tradisyonal na programmer.",
+      p24: "<strong>Ako ay isang AppSheet expert na natuto sa pamamagitan ng paggawa ng tunay na mga solusyon.</strong>",
+      p25: "Mahalaga sa akin ang pagkakaibang iyon.",
+      p26: "Ang aking karanasan ay nagmumula sa aktwal na paggawa ng mga application, pag-troubleshoot, pagpapabuti, at pagbagay sa mga pangangailangan ng tunay na mga negosyo.",
+      h2d: "Pagbabahagi ng Natututunan Ko sa YouTube",
+      p27: "Habang patuloy akong bumubuo ng mga application, nagsimula rin akong magbahagi ng natututunan ko sa YouTube.",
+      p28: "Ang YouTube channel ko, <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a>, ay nakatuon sa praktikal na AppSheet development.",
+      p29: "Gumagawa ako ng mga tutorial, ipinapakita kung paano ginagawa ang mga application, ipinaliliwanag ang mga solusyon, at nagbabahagi ng mga ideya na makakatulong sa iba na gumawa ng kanilang sariling business applications.",
+      p30: "Simple ang layunin:",
+      p31: "<strong>Kung may natutunan ako na makakatulong sa iba para lutasin ang isang problema, gusto ko itong ibahagi.</strong>",
+      p32: "Sa paglipas ng panahon, napansin ko rin na paulit-ulit na lumalabas ang ilang tanong.",
+      p33: "At ang isa sa pinakamalaki ay tungkol sa POS systems.",
+      h2e: "Bakit Patuloy na Tinatanong ng Lahat ang Tungkol sa POS",
+      p34: "Kapag pinag-uusapan ng mga tao ang business applications, ang POS at inventory ay dalawa sa pinakakaraniwang hinihinging kailangan na nakakasalubong ko.",
+      p35: "Nagtatanong ang mga tao:",
+      li1: "Kaya bang gumawa ng POS ng AppSheet?",
+      li2: "Kaya ba nitong pamahalaan ang imbentaryo?",
+      li3: "Kaya ba nitong mag-scan ng barcode?",
+      li4: "Kaya ba nitong mag-print ng resibo?",
+      li5: "Kaya ba itong gamitin ng maraming cashier?",
+      li6: "Kaya ba nitong gumana offline?",
+      li7: "Kaya ba nitong tanggapin ang cash at card payments?",
+      li8: "Kaya ba nitong subaybayan ang benta?",
+      li9: "Kaya ba nitong gumana sa telepono o computer?",
+      p36: "Ang sagot ay maaaring gamitin ang AppSheet para bumuo ng marami sa mga solusyong ito.",
+      p37: "Nakabuo na ako ng mga application na may kinalaman sa POS at naiintindihan ko kung gaano karaming trabaho ang kailangan para maging kapaki-pakinabang ang mga ito sa isang tunay na kapaligiran ng negosyo.",
+      p38: "Maaaring mukhang simple ang isang POS mula sa labas, pero kapag sinimulan mo nang bumuo ng isa, maraming detalyeng dapat isaalang-alang.",
+      p39: "Ang imbentaryo, benta, bayad, resibo, pag-scan ng barcode, mga user, ulat, at pang-araw-araw na workflow ay kailangang magtulungan lahat.",
+      h2f: "Bakit Ko Ginawa ang GoOnlinePOS",
+      p40: "Pagkatapos makita kung gaano kadalas naghahanap ang mga tao ng simpleng POS, nagsimula akong mag-isip ng ibang paraan.",
+      p41: "Hindi lahat gustong bumuo ng sarili nilang application.",
+      p42: "Maaaring ayaw ng may-ari ng negosyo na gumugol ng mga linggo sa paggawa ng mga table, pag-configure ng workflow, paggawa ng automation, pagsubok sa mga expression, at pagpapanatili ng isang app.",
+      p43: "Minsan gusto lang nilang <strong>buksan ang isang POS at magsimulang magbenta</strong>.",
+      p44: "Doon nagmula ang GoOnlinePOS.",
+      p45: "Gusto kong gumawa ng praktikal na POS na magagamit nang hindi kinakailangang maging AppSheet developer ang may-ari ng negosyo.",
+      p46: "Simple ang ideya:",
+      p47: "<strong>Buksan ito. Idagdag ang iyong mga produkto. Magsimulang magbenta.</strong>",
+      p48: "Kasama sa GoOnlinePOS ang mga feature tulad ng inventory management, barcode scanning, sales tracking, payment handling, receipt printing, suporta para sa maraming cashier, sales history, at offline functionality.",
+      p49: "Ang layunin ay gawing simple at accessible ang POS software para sa maliliit na negosyo.",
+      h2g: "Mula sa Isang Excel File Hanggang sa GoOnlinePOS",
+      p50: "Kapag tinitingnan ko ulit ang paglalakbay na ito, kahanga-hanga kung paano nag-ugnay ang lahat.",
+      p51: "Nagsimula ito sa Excel noong COVID.",
+      p52: "Pagkatapos ay nagsimula akong maghanap ng mas magandang paraan para pamahalaan ang mga proseso ng negosyo.",
+      p53: "Iyon ang humantong sa akin sa AppSheet.",
+      p54: "Natuto ako sa pamamagitan ng paggawa.",
+      p55: "Pagkatapos ay nagsimula akong bumuo ng maraming tunay na application para sa mga kliyente.",
+      p56: "Ibinahagi ko ang natutunan ko sa pamamagitan ng aking YouTube channel.",
+      p57: "Patuloy na nagtatanong ang mga tao tungkol sa POS, imbentaryo, at iba pang sistema ng negosyo.",
+      p58: "At sa kalaunan, humantong ang mga karanasang iyon sa GoOnlinePOS.",
+      p59: "Hindi ito isang bagay na plinano ko mula sa simula.",
+      p60: "Lumago ito nang natural mula sa mga taon ng paglutas ng mga problema sa negosyo at paggawa ng mga application.",
+      h2h: "Patuloy pa rin Akong Bumubuo",
+      p61: "Higit limang taon matapos matuklasan ang AppSheet, patuloy pa rin akong bumubuo at natututo.",
+      p62: "Nakabuo na ako ng maraming application para sa mga kliyente, patuloy na gumagawa ng mga AppSheet tutorial sa pamamagitan ng <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> sa YouTube, at patuloy na nagpapaunlad ng GoOnlinePOS.",
+      p63: "Bawat proyekto ay may dalang ibang hamon.",
+      p64: "Iyan ang nagpapanatiling kawili-wili.",
+      p65: "Maaaring hindi ako nagsimula bilang tradisyonal na programmer, pero naging AppSheet expert ako sa pamamagitan ng paggawa ng bagay na sa palagay ko ay mas mahalaga:",
+      p66: "<strong>paggawa ng tunay na solusyon para sa tunay na problema.</strong>",
+      p67: "At iyan sa huli ang kinakatawan ng GoOnlinePOS.",
+      p68: "Nagmumula ito sa mga taon ng pagtatrabaho sa mga proseso ng negosyo, paggawa ng mga application, pakikinig sa talagang kailangan ng mga tao, at pagsisikap na gawing mas simple ang mga bagay-bagay.",
+      h2i: "Mula sa Aking Karanasan Hanggang sa isang POS na Magagamit Mo",
+      p69: "Kung interesado kang matuto ng AppSheet at bumuo ng sarili mong business applications, maaari mong sundan ang aking mga tutorial sa <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
+      p70: "Kung kailangan mo lang ng isang POS nang hindi kinakailangang bumuo ka ng sarili mo, maaari mong subukan ang <a href=\"/\">GoOnlinePOS</a>.",
+      p71: "<strong>Nagsimula ang paglalakbay sa Excel. Binago ng AppSheet ang direksyon ng aking karera. Ang totoong mga proyekto ng kliyente ang bumuo ng aking karanasan. At ang GoOnlinePOS ang susunod na hakbang sa paglalakbay na iyon.</strong>",
+      ctaH2: "Buksan ito. Idagdag ang iyong mga produkto. Magsimulang magbenta.",
+      ctaP: "Walang pagpaparehistro, walang login. Buksan lang ang GoOnlinePOS at magsimulang magbenta.",
+      ctaBtn: "Buksan ang GoOnlinePOS"
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      backLinkText: "← ब्लॉग पर वापस जाएं",
+      articleTag: "संस्थापक की कहानी",
+      articleH1: "एक्सेल से AppSheet विशेषज्ञ तक: मैंने वास्तविक ऐप्स बनाना कैसे शुरू किया और GoOnlinePOS कैसे बनाया",
+      articleUpdatedLabel: "अंतिम अपडेट:",
+      articleMinRead: "मिनट पढ़ें",
+      p1: "मैंने एक पारंपरिक प्रोग्रामर के रूप में शुरुआत नहीं की।",
+      p2: "व्यावसायिक एप्लिकेशन बनाने की मेरी यात्रा एक बहुत ही सरल चीज़ से शुरू हुई: <strong>एक्सेल</strong>।",
+      p3: "कोविड के दौरान, जिस कंपनी के साथ मैं काम कर रहा था वह जानकारी और दैनिक संचालन को प्रबंधित करने के लिए एक्सेल पर बहुत अधिक निर्भर थी। एक्सेल उपयोगी था, लेकिन जैसे-जैसे प्रक्रियाएं जटिल होती गईं, मैंने सोचना शुरू किया कि एक बेहतर तरीका होना चाहिए।",
+      p4: "मैंने खुद से पूछना शुरू किया:",
+      p5: "<strong>अगर हम इन स्प्रेडशीट को एक वास्तविक एप्लिकेशन में बदल सकें तो क्या होगा?</strong>",
+      p6: "उस सवाल ने अंततः मुझे AppSheet तक पहुंचाया।",
+      h2a: "मैंने AppSheet की खोज कैसे की",
+      p7: "जब मैंने <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> को खंगालना शुरू किया, तो मैं एक पारंपरिक प्रोग्रामिंग पृष्ठभूमि से नहीं आ रहा था।",
+      p8: "मैंने बनाकर सीखा।",
+      p9: "मैं एक ऐप बनाता, उसका परीक्षण करता, कुछ ऐसा ढूंढता जिसमें सुधार की जरूरत हो, उसे ठीक करता, और फिर अगली सुविधा बनाता। समय के साथ, मैं AppSheet के साथ बहुत अधिक सहज हो गया और सीखा कि व्यावसायिक प्रक्रियाओं को व्यावहारिक एप्लिकेशन में कैसे बदला जाए।",
+      p10: "जो एक्सेल-आधारित वर्कफ्लो को बेहतर बनाने के तरीके के रूप में शुरू हुआ था, वह अंततः व्यावसायिक एप्लिकेशन बनाने के करियर में बदल गया।",
+      p11: "मैं अब <strong>पांच साल से अधिक समय से</strong> AppSheet के साथ काम कर रहा हूं।",
+      h2b: "सीखने से वास्तविक ऐप्स बनाने तक",
+      p12: "अंततः, AppSheet मेरे लिए खुद के लिए सीखी जाने वाली किसी चीज़ से कहीं अधिक बन गया।",
+      p13: "मैंने ग्राहकों के लिए <strong>वास्तविक एप्लिकेशन</strong> बनाना शुरू किया।",
+      p14: "मैंने विभिन्न व्यावसायिक जरूरतों के लिए कई एप्लिकेशन बनाए हैं, और हर परियोजना ने मुझे कुछ नया सिखाया।",
+      p15: "कुछ व्यवसायों को इन्वेंटरी प्रबंधन की आवश्यकता है। अन्य को बिक्री ट्रैकिंग, तकनीशियन ट्रैकिंग, अनुमोदन, रिपोर्टिंग, ग्राहक प्रबंधन, या पूरी तरह से अनुकूलित वर्कफ़्लो की आवश्यकता है।",
+      p16: "यह उन चीजों में से एक है जिनका मैं AppSheet के बारे में आनंद लेता हूं।",
+      p17: "आप एक व्यवसाय के वास्तव में काम करने के तरीके के आसपास एक एप्लिकेशन बना सकते हैं।",
+      p18: "वास्तविक क्लाइंट परियोजनाओं पर काम करने से मुझे यह भी सिखाया कि एक एप्लिकेशन बनाना केवल स्क्रीन और बटन बनाने के बारे में नहीं है।",
+      p19: "आपको वर्कफ़्लो को समझना होगा।",
+      p20: "आपको यह समझना होगा कि उपयोगकर्ताओं को वास्तव में क्या चाहिए।",
+      p21: "और जब वास्तविक लोग इसका उपयोग करना शुरू करते हैं तो आपको एप्लिकेशन में सुधार जारी रखना होगा।",
+      h2c: "AppSheet विशेषज्ञ बनना",
+      p22: "पांच साल से अधिक समय तक एप्लिकेशन बनाने, विभिन्न व्यावसायिक आवश्यकताओं के साथ काम करने, और वास्तविक दुनिया की समस्याओं को हल करने के बाद, AppSheet मेरी विशेषज्ञता के मुख्य क्षेत्रों में से एक बन गया है।",
+      p23: "मैं खुद को एक पारंपरिक प्रोग्रामर के रूप में वर्णित नहीं करूंगा।",
+      p24: "<strong>मैं एक AppSheet विशेषज्ञ हूं जिसने वास्तविक समाधान बनाकर सीखा।</strong>",
+      p25: "वह अंतर मेरे लिए महत्वपूर्ण है।",
+      p26: "मेरा अनुभव वास्तव में एप्लिकेशन बनाने, उनकी समस्याओं का निवारण करने, उन्हें बेहतर बनाने, और उन्हें वास्तविक व्यवसायों की जरूरतों के अनुसार ढालने से आता है।",
+      h2d: "YouTube पर जो मैं सीखता हूं उसे साझा करना",
+      p27: "जैसे-जैसे मैं एप्लिकेशन बनाना जारी रखता गया, मैंने YouTube पर भी जो सीख रहा था उसे साझा करना शुरू किया।",
+      p28: "मेरा YouTube चैनल, <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a>, व्यावहारिक AppSheet विकास पर केंद्रित है।",
+      p29: "मैं ट्यूटोरियल बनाता हूं, दिखाता हूं कि एप्लिकेशन कैसे बनाए जाते हैं, समाधान समझाता हूं, और ऐसे विचार साझा करता हूं जो दूसरों को अपने खुद के व्यावसायिक एप्लिकेशन बनाने में मदद कर सकते हैं।",
+      p30: "लक्ष्य सरल है:",
+      p31: "<strong>अगर मैंने जो सीखा वह किसी और को समस्या हल करने में मदद कर सकता है, तो मैं इसे साझा करना चाहता हूं।</strong>",
+      p32: "समय के साथ, मैंने यह भी देखा है कि कुछ सवाल बार-बार सामने आते हैं।",
+      p33: "और उनमें से सबसे बड़ा सवाल पीओएस सिस्टम के बारे में है।",
+      h2e: "हर कोई पीओएस के बारे में क्यों पूछता रहता है",
+      p34: "जब लोग व्यावसायिक एप्लिकेशन के बारे में बात करते हैं, तो पीओएस और इन्वेंटरी उन दो सबसे आम आवश्यकताओं में से हैं जिनका मैं सामना करता हूं।",
+      p35: "लोग पूछते हैं:",
+      li1: "क्या AppSheet पीओएस बना सकता है?",
+      li2: "क्या यह इन्वेंटरी प्रबंधित कर सकता है?",
+      li3: "क्या यह बारकोड स्कैन कर सकता है?",
+      li4: "क्या यह रसीदें प्रिंट कर सकता है?",
+      li5: "क्या कई कैशियर इसका उपयोग कर सकते हैं?",
+      li6: "क्या यह ऑफलाइन काम कर सकता है?",
+      li7: "क्या यह नकद और कार्ड भुगतान संभाल सकता है?",
+      li8: "क्या यह बिक्री ट्रैक कर सकता है?",
+      li9: "क्या यह फोन या कंप्यूटर पर काम कर सकता है?",
+      p36: "जवाब यह है कि AppSheet का उपयोग इनमें से कई समाधान बनाने के लिए किया जा सकता है।",
+      p37: "मैंने पीओएस से संबंधित एप्लिकेशन बनाए हैं और समझता हूं कि वास्तविक व्यावसायिक वातावरण में उन्हें उपयोगी बनाने में कितना काम लगता है।",
+      p38: "एक पीओएस बाहर से सरल लग सकता है, लेकिन एक बार जब आप एक बनाना शुरू करते हैं, तो विचार करने के लिए कई विवरण होते हैं।",
+      p39: "इन्वेंटरी, बिक्री, भुगतान, रसीदें, बारकोड स्कैनिंग, उपयोगकर्ता, रिपोर्ट, और दैनिक वर्कफ़्लो सभी को एक साथ काम करना होता है।",
+      h2f: "मैंने GoOnlinePOS क्यों बनाया",
+      p40: "यह देखने के बाद कि कितनी बार लोग एक सरल पीओएस की तलाश में थे, मैंने एक और दृष्टिकोण के बारे में सोचना शुरू किया।",
+      p41: "हर कोई अपना खुद का एप्लिकेशन बनाना नहीं चाहता।",
+      p42: "एक व्यवसाय स्वामी टेबल बनाने, वर्कफ़्लो कॉन्फ़िगर करने, ऑटोमेशन बनाने, एक्सप्रेशन का परीक्षण करने, और एक ऐप बनाए रखने में हफ्तों बिताना नहीं चाहता होगा।",
+      p43: "कभी-कभी वे बस <strong>एक पीओएस खोलना और बेचना शुरू करना</strong> चाहते हैं।",
+      p44: "यहीं से GoOnlinePOS आया।",
+      p45: "मैं एक व्यावहारिक पीओएस बनाना चाहता था जिसका उपयोग व्यवसाय स्वामी को AppSheet डेवलपर बनने की आवश्यकता के बिना किया जा सके।",
+      p46: "विचार सरल है:",
+      p47: "<strong>इसे खोलें। अपने उत्पाद जोड़ें। बेचना शुरू करें।</strong>",
+      p48: "GoOnlinePOS में इन्वेंटरी प्रबंधन, बारकोड स्कैनिंग, बिक्री ट्रैकिंग, भुगतान हैंडलिंग, रसीद प्रिंटिंग, कई कैशियर समर्थन, बिक्री इतिहास, और ऑफलाइन कार्यक्षमता जैसी सुविधाएं शामिल हैं।",
+      p49: "लक्ष्य छोटे व्यवसायों के लिए पीओएस सॉफ्टवेयर को सीधा और सुलभ बनाना है।",
+      h2g: "एक एक्सेल फाइल से GoOnlinePOS तक",
+      p50: "जब मैं इस यात्रा पर पीछे मुड़कर देखता हूं, तो यह दिलचस्प है कि सब कुछ कैसे जुड़ा।",
+      p51: "यह कोविड के दौरान एक्सेल से शुरू हुआ।",
+      p52: "फिर मैंने व्यावसायिक प्रक्रियाओं को प्रबंधित करने का बेहतर तरीका खोजना शुरू किया।",
+      p53: "उसने मुझे AppSheet तक पहुंचाया।",
+      p54: "मैंने बनाकर सीखा।",
+      p55: "फिर मैंने ग्राहकों के लिए कई वास्तविक एप्लिकेशन बनाना शुरू किया।",
+      p56: "मैंने अपने YouTube चैनल के माध्यम से जो सीखा उसे साझा किया।",
+      p57: "लोग पीओएस, इन्वेंटरी, और अन्य व्यावसायिक प्रणालियों के बारे में पूछते रहे।",
+      p58: "और अंततः, उन अनुभवों ने GoOnlinePOS को जन्म दिया।",
+      p59: "यह शुरुआत से ही मेरी योजना का हिस्सा नहीं था।",
+      p60: "यह व्यावसायिक समस्याओं को हल करने और एप्लिकेशन बनाने के वर्षों से स्वाभाविक रूप से विकसित हुआ।",
+      h2h: "मैं अभी भी बना रहा हूं",
+      p61: "AppSheet की खोज के पांच साल से अधिक बाद, मैं अभी भी बना रहा हूं और सीख रहा हूं।",
+      p62: "मैंने ग्राहकों के लिए कई एप्लिकेशन बनाए हैं, YouTube पर <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> के माध्यम से AppSheet ट्यूटोरियल बनाना जारी रखता हूं, और GoOnlinePOS विकसित करना जारी रखता हूं।",
+      p63: "हर परियोजना एक अलग चुनौती लाती है।",
+      p64: "यही इसे दिलचस्प बनाए रखता है।",
+      p65: "हो सकता है मैंने एक पारंपरिक प्रोग्रामर के रूप में शुरुआत न की हो, लेकिन मैं एक ऐसी चीज़ करके AppSheet विशेषज्ञ बना जिसे मैं अधिक महत्वपूर्ण मानता हूं:",
+      p66: "<strong>वास्तविक समस्याओं के लिए वास्तविक समाधान बनाना।</strong>",
+      p67: "और अंततः यही GoOnlinePOS का प्रतिनिधित्व करता है।",
+      p68: "यह व्यावसायिक प्रक्रियाओं के साथ काम करने, एप्लिकेशन बनाने, लोगों को वास्तव में क्या चाहिए यह सुनने, और चीजों को सरल बनाने की कोशिश करने के वर्षों से आता है।",
+      h2i: "मेरे अनुभव से एक पीओएस तक जिसे आप उपयोग कर सकते हैं",
+      p69: "यदि आप AppSheet सीखने और अपने खुद के व्यावसायिक एप्लिकेशन बनाने में रुचि रखते हैं, तो आप <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a> पर मेरे ट्यूटोरियल का पालन कर सकते हैं।",
+      p70: "यदि आपको बस एक पीओएस की आवश्यकता है बिना खुद एक बनाए, तो आप <a href=\"/\">GoOnlinePOS</a> आज़मा सकते हैं।",
+      p71: "<strong>यात्रा एक्सेल से शुरू हुई। AppSheet ने मेरे करियर की दिशा बदल दी। वास्तविक क्लाइंट परियोजनाओं ने मेरा अनुभव बनाया। और GoOnlinePOS उस यात्रा में अगला कदम है।</strong>",
+      ctaH2: "इसे खोलें। अपने उत्पाद जोड़ें। बेचना शुरू करें।",
+      ctaP: "कोई साइनअप नहीं, कोई लॉगिन नहीं। बस GoOnlinePOS खोलें और बिक्री शुरू करें।",
+      ctaBtn: "GoOnlinePOS खोलें"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      backLinkText: "← Volver al Blog",
+      articleTag: "Historia del Fundador",
+      articleH1: "De Excel a Experto en AppSheet: Cómo Empecé a Construir Aplicaciones Reales y Creé GoOnlinePOS",
+      articleUpdatedLabel: "Última actualización:",
+      articleMinRead: "MIN DE LECTURA",
+      p1: "No empecé como programador tradicional.",
+      p2: "Mi camino hacia la construcción de aplicaciones empresariales comenzó con algo mucho más simple: <strong>Excel</strong>.",
+      p3: "Durante el COVID, la empresa con la que trabajaba dependía en gran medida de Excel para gestionar información y operaciones diarias. Excel era útil, pero a medida que los procesos se volvían más complicados, empecé a pensar que tenía que haber una mejor manera.",
+      p4: "Comencé a preguntarme:",
+      p5: "<strong>¿Y si pudiéramos convertir estas hojas de cálculo en una aplicación real?</strong>",
+      p6: "Esa pregunta eventualmente me llevó a AppSheet.",
+      h2a: "Cómo Descubrí AppSheet",
+      p7: "Cuando comencé a explorar <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a>, no venía de un trasfondo tradicional en programación.",
+      p8: "Aprendí construyendo.",
+      p9: "Creaba una aplicación, la probaba, encontraba algo que necesitaba mejorar, lo arreglaba, y luego construía la siguiente función. Con el tiempo, me sentí mucho más cómodo con AppSheet y aprendí a convertir procesos empresariales en aplicaciones prácticas.",
+      p10: "Lo que comenzó como una forma de mejorar un flujo de trabajo basado en Excel eventualmente se convirtió en una carrera construyendo aplicaciones empresariales.",
+      p11: "Ahora llevo trabajando con AppSheet <strong>más de cinco años</strong>.",
+      h2b: "De Aprender a Construir Aplicaciones Reales",
+      p12: "Eventualmente, AppSheet se convirtió en algo más que algo que estaba aprendiendo por mí mismo.",
+      p13: "Comencé a construir <strong>aplicaciones reales para clientes</strong>.",
+      p14: "He construido múltiples aplicaciones para diferentes necesidades de negocio, y cada proyecto me ha enseñado algo nuevo.",
+      p15: "Algunos negocios necesitan gestión de inventario. Otros necesitan seguimiento de ventas, seguimiento de técnicos, aprobaciones, informes, gestión de clientes, o flujos de trabajo completamente personalizados.",
+      p16: "Esa es una de las cosas que disfruto de AppSheet.",
+      p17: "Puedes construir una aplicación en torno a la forma en que realmente funciona un negocio.",
+      p18: "Trabajar en proyectos reales de clientes también me enseñó que construir una aplicación no se trata solo de hacer pantallas y botones.",
+      p19: "Tienes que entender el flujo de trabajo.",
+      p20: "Tienes que entender lo que los usuarios realmente necesitan.",
+      p21: "Y tienes que seguir mejorando la aplicación cuando personas reales empiezan a usarla.",
+      h2c: "Convertirme en Experto en AppSheet",
+      p22: "Después de más de cinco años construyendo aplicaciones, trabajando con diferentes requisitos de negocio, y resolviendo problemas del mundo real, AppSheet se ha convertido en una de mis principales áreas de experiencia.",
+      p23: "No me describiría como un programador tradicional.",
+      p24: "<strong>Soy un experto en AppSheet que aprendió construyendo soluciones reales.</strong>",
+      p25: "Esa distinción es importante para mí.",
+      p26: "Mi experiencia viene de crear aplicaciones de verdad, solucionar sus problemas, mejorarlas, y adaptarlas a las necesidades de negocios reales.",
+      h2d: "Compartiendo Lo Que Aprendo en YouTube",
+      p27: "Mientras continuaba construyendo aplicaciones, también comencé a compartir lo que estaba aprendiendo en YouTube.",
+      p28: "Mi canal de YouTube, <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a>, se centra en el desarrollo práctico de AppSheet.",
+      p29: "Creo tutoriales, demuestro cómo se construyen las aplicaciones, explico soluciones, y comparto ideas que pueden ayudar a otras personas a crear sus propias aplicaciones empresariales.",
+      p30: "El objetivo es simple:",
+      p31: "<strong>Si algo que aprendí puede ayudar a alguien más a resolver un problema, quiero compartirlo.</strong>",
+      p32: "Con el tiempo, también he notado que ciertas preguntas surgen una y otra vez.",
+      p33: "Y una de las más grandes es sobre los sistemas POS.",
+      h2e: "Por Qué Todos Siguen Preguntando Sobre POS",
+      p34: "Cuando la gente habla de aplicaciones empresariales, POS e inventario son dos de los requisitos más comunes con los que me encuentro.",
+      p35: "La gente pregunta:",
+      li1: "¿Puede AppSheet construir un POS?",
+      li2: "¿Puede gestionar inventario?",
+      li3: "¿Puede escanear códigos de barras?",
+      li4: "¿Puede imprimir recibos?",
+      li5: "¿Pueden usarlo varios cajeros?",
+      li6: "¿Puede funcionar sin conexión?",
+      li7: "¿Puede manejar pagos en efectivo y con tarjeta?",
+      li8: "¿Puede rastrear ventas?",
+      li9: "¿Puede funcionar en un teléfono o computadora?",
+      p36: "La respuesta es que AppSheet se puede usar para construir muchas de estas soluciones.",
+      p37: "He construido aplicaciones relacionadas con POS y entiendo cuánto trabajo se necesita para hacerlas útiles en un entorno empresarial real.",
+      p38: "Un POS puede parecer simple desde afuera, pero una vez que empiezas a construir uno, hay muchos detalles a considerar.",
+      p39: "Inventario, ventas, pagos, recibos, escaneo de códigos de barras, usuarios, informes, y flujos de trabajo diarios todos necesitan funcionar juntos.",
+      h2f: "Por Qué Creé GoOnlinePOS",
+      p40: "Después de ver con qué frecuencia la gente buscaba un POS simple, comencé a pensar en otro enfoque.",
+      p41: "No todos quieren construir su propia aplicación.",
+      p42: "Un dueño de negocio podría no querer pasar semanas creando tablas, configurando flujos de trabajo, construyendo automatizaciones, probando expresiones, y manteniendo una aplicación.",
+      p43: "A veces simplemente quieren <strong>abrir un POS y comenzar a vender</strong>.",
+      p44: "Ahí es de donde vino GoOnlinePOS.",
+      p45: "Quería crear un POS práctico que se pudiera usar sin requerir que el dueño del negocio se convirtiera en desarrollador de AppSheet.",
+      p46: "La idea es simple:",
+      p47: "<strong>Ábrelo. Añade tus productos. Comienza a vender.</strong>",
+      p48: "GoOnlinePOS incluye funciones como gestión de inventario, escaneo de códigos de barras, seguimiento de ventas, manejo de pagos, impresión de recibos, soporte para múltiples cajeros, historial de ventas, y funcionalidad sin conexión.",
+      p49: "El objetivo es hacer que el software POS sea sencillo y accesible para pequeños negocios.",
+      h2g: "De Un Archivo de Excel a GoOnlinePOS",
+      p50: "Cuando miro hacia atrás en el camino recorrido, es interesante cómo todo se conectó.",
+      p51: "Comenzó con Excel durante el COVID.",
+      p52: "Luego comencé a buscar una mejor manera de gestionar los procesos de negocio.",
+      p53: "Eso me llevó a AppSheet.",
+      p54: "Aprendí construyendo.",
+      p55: "Luego comencé a construir múltiples aplicaciones reales para clientes.",
+      p56: "Compartí lo que aprendí a través de mi canal de YouTube.",
+      p57: "La gente seguía preguntando sobre POS, inventario, y otros sistemas de negocio.",
+      p58: "Y eventualmente, esas experiencias llevaron a GoOnlinePOS.",
+      p59: "No fue algo que planeé desde el principio.",
+      p60: "Creció de forma natural a partir de años de resolver problemas empresariales y construir aplicaciones.",
+      h2h: "Sigo Construyendo",
+      p61: "Más de cinco años después de descubrir AppSheet, sigo construyendo y aprendiendo.",
+      p62: "He construido múltiples aplicaciones para clientes, sigo creando tutoriales de AppSheet a través de <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> en YouTube, y sigo desarrollando GoOnlinePOS.",
+      p63: "Cada proyecto trae un desafío diferente.",
+      p64: "Eso es lo que lo mantiene interesante.",
+      p65: "Puede que no haya empezado como programador tradicional, pero me convertí en experto en AppSheet haciendo algo que creo que es más importante:",
+      p66: "<strong>construir soluciones reales para problemas reales.</strong>",
+      p67: "Y eso es en última instancia lo que representa GoOnlinePOS.",
+      p68: "Viene de años de trabajar con procesos de negocio, construir aplicaciones, escuchar lo que la gente realmente necesita, y tratar de hacer las cosas más simples.",
+      h2i: "De Mi Experiencia a un POS Que Puedes Usar",
+      p69: "Si te interesa aprender AppSheet y construir tus propias aplicaciones empresariales, puedes seguir mis tutoriales en <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a>.",
+      p70: "Si simplemente necesitas un POS sin tener que construir uno tú mismo, puedes probar <a href=\"/\">GoOnlinePOS</a>.",
+      p71: "<strong>El camino comenzó con Excel. AppSheet cambió la dirección de mi carrera. Los proyectos reales de clientes construyeron mi experiencia. Y GoOnlinePOS es el siguiente paso en ese camino.</strong>",
+      ctaH2: "Ábrelo. Añade tus productos. Comienza a vender.",
+      ctaP: "Sin registro, sin inicio de sesión. Solo abre GoOnlinePOS y comienza a vender.",
+      ctaBtn: "Abrir GoOnlinePOS"
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      backLinkText: "← กลับไปที่บล็อก",
+      articleTag: "เรื่องราวผู้ก่อตั้ง",
+      articleH1: "จาก Excel สู่ผู้เชี่ยวชาญ AppSheet: ผมเริ่มสร้างแอปจริงและสร้าง GoOnlinePOS ได้อย่างไร",
+      articleUpdatedLabel: "อัปเดตล่าสุด:",
+      articleMinRead: "นาทีในการอ่าน",
+      p1: "ผมไม่ได้เริ่มต้นในฐานะโปรแกรมเมอร์แบบดั้งเดิม",
+      p2: "การเดินทางของผมในการสร้างแอปพลิเคชันธุรกิจเริ่มต้นจากสิ่งที่เรียบง่ายกว่ามาก นั่นคือ <strong>Excel</strong>",
+      p3: "ในช่วงโควิด บริษัทที่ผมทำงานด้วยพึ่งพา Excel อย่างมากในการจัดการข้อมูลและการดำเนินงานประจำวัน Excel มีประโยชน์ แต่เมื่อกระบวนการต่าง ๆ ซับซ้อนขึ้น ผมก็เริ่มคิดว่าน่าจะมีวิธีที่ดีกว่า",
+      p4: "ผมเริ่มถามตัวเองว่า:",
+      p5: "<strong>จะเป็นอย่างไรถ้าเราสามารถเปลี่ยนสเปรดชีตเหล่านี้ให้กลายเป็นแอปพลิเคชันจริง ๆ ได้?</strong>",
+      p6: "คำถามนั้นในที่สุดก็นำผมไปสู่ AppSheet",
+      h2a: "ผมค้นพบ AppSheet ได้อย่างไร",
+      p7: "ตอนที่ผมเริ่มสำรวจ <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> ผมไม่ได้มาจากพื้นฐานการเขียนโปรแกรมแบบดั้งเดิม",
+      p8: "ผมเรียนรู้ผ่านการลงมือสร้าง",
+      p9: "ผมจะสร้างแอป ทดสอบมัน หาสิ่งที่ต้องปรับปรุง แก้ไขมัน แล้วก็สร้างฟีเจอร์ถัดไป เมื่อเวลาผ่านไป ผมก็สบายใจกับ AppSheet มากขึ้นเรื่อย ๆ และเรียนรู้วิธีเปลี่ยนกระบวนการทางธุรกิจให้กลายเป็นแอปพลิเคชันที่ใช้งานได้จริง",
+      p10: "สิ่งที่เริ่มต้นจากการพยายามปรับปรุงเวิร์กโฟลว์ที่ใช้ Excel ในที่สุดก็กลายเป็นอาชีพในการสร้างแอปพลิเคชันธุรกิจ",
+      p11: "ตอนนี้ผมทำงานกับ AppSheet มาแล้ว <strong>มากกว่าห้าปี</strong>",
+      h2b: "จากการเรียนรู้สู่การสร้างแอปจริง",
+      p12: "ในที่สุด AppSheet ก็กลายเป็นมากกว่าสิ่งที่ผมกำลังเรียนรู้เพื่อตัวเอง",
+      p13: "ผมเริ่มสร้าง <strong>แอปพลิเคชันจริงสำหรับลูกค้า</strong>",
+      p14: "ผมได้สร้างแอปพลิเคชันหลายตัวสำหรับความต้องการทางธุรกิจที่แตกต่างกัน และทุกโปรเจกต์ก็สอนสิ่งใหม่ให้ผมเสมอ",
+      p15: "บางธุรกิจต้องการการจัดการสินค้าคงคลัง บางธุรกิจต้องการการติดตามยอดขาย การติดตามช่าง การอนุมัติ การรายงาน การจัดการลูกค้า หรือเวิร์กโฟลว์ที่ปรับแต่งเองทั้งหมด",
+      p16: "นั่นคือหนึ่งในสิ่งที่ผมชอบเกี่ยวกับ AppSheet",
+      p17: "คุณสามารถสร้างแอปพลิเคชันที่สอดคล้องกับวิธีการทำงานจริงของธุรกิจได้",
+      p18: "การทำงานในโปรเจกต์ลูกค้าจริงยังสอนผมด้วยว่าการสร้างแอปพลิเคชันไม่ได้เป็นแค่การทำหน้าจอและปุ่มเท่านั้น",
+      p19: "คุณต้องเข้าใจเวิร์กโฟลว์",
+      p20: "คุณต้องเข้าใจว่าผู้ใช้ต้องการอะไรจริง ๆ",
+      p21: "และคุณต้องปรับปรุงแอปพลิเคชันอย่างต่อเนื่องเมื่อคนจริง ๆ เริ่มใช้งานมัน",
+      h2c: "การเป็นผู้เชี่ยวชาญ AppSheet",
+      p22: "หลังจากสร้างแอปพลิเคชันมามากกว่าห้าปี ทำงานผ่านความต้องการทางธุรกิจที่หลากหลาย และแก้ปัญหาในโลกจริง AppSheet ก็กลายเป็นหนึ่งในความเชี่ยวชาญหลักของผม",
+      p23: "ผมคงไม่เรียกตัวเองว่าเป็นโปรแกรมเมอร์แบบดั้งเดิม",
+      p24: "<strong>ผมคือผู้เชี่ยวชาญ AppSheet ที่เรียนรู้จากการสร้างโซลูชันจริง</strong>",
+      p25: "ความแตกต่างนั้นสำคัญกับผม",
+      p26: "ประสบการณ์ของผมมาจากการสร้างแอปพลิเคชันจริง ๆ การแก้ปัญหา การปรับปรุง และการปรับให้เข้ากับความต้องการของธุรกิจจริง",
+      h2d: "การแบ่งปันสิ่งที่ผมเรียนรู้บน YouTube",
+      p27: "ขณะที่ผมยังคงสร้างแอปพลิเคชันต่อไป ผมก็เริ่มแบ่งปันสิ่งที่กำลังเรียนรู้บน YouTube ด้วย",
+      p28: "ช่อง YouTube ของผม <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> เน้นไปที่การพัฒนา AppSheet เชิงปฏิบัติ",
+      p29: "ผมสร้างวิดีโอสอน สาธิตวิธีการสร้างแอปพลิเคชัน อธิบายโซลูชัน และแบ่งปันไอเดียที่สามารถช่วยให้คนอื่นสร้างแอปพลิเคชันธุรกิจของตัวเองได้",
+      p30: "เป้าหมายนั้นเรียบง่าย:",
+      p31: "<strong>ถ้าสิ่งที่ผมเรียนรู้สามารถช่วยให้คนอื่นแก้ปัญหาได้ ผมอยากแบ่งปันมัน</strong>",
+      p32: "เมื่อเวลาผ่านไป ผมยังสังเกตเห็นว่ามีคำถามบางอย่างเกิดขึ้นซ้ำ ๆ",
+      p33: "และหนึ่งในคำถามที่ใหญ่ที่สุดก็คือเรื่องระบบ POS",
+      h2e: "ทำไมทุกคนถึงถามเรื่อง POS อยู่เสมอ",
+      p34: "เมื่อผู้คนพูดถึงแอปพลิเคชันธุรกิจ POS และสินค้าคงคลังเป็นสองในความต้องการที่พบบ่อยที่สุดที่ผมเจอ",
+      p35: "ผู้คนถามว่า:",
+      li1: "AppSheet สร้าง POS ได้ไหม?",
+      li2: "มันจัดการสินค้าคงคลังได้ไหม?",
+      li3: "มันสแกนบาร์โค้ดได้ไหม?",
+      li4: "มันพิมพ์ใบเสร็จได้ไหม?",
+      li5: "พนักงานแคชเชียร์หลายคนใช้มันได้ไหม?",
+      li6: "มันทำงานแบบออฟไลน์ได้ไหม?",
+      li7: "มันรับชำระเงินสดและบัตรได้ไหม?",
+      li8: "มันติดตามยอดขายได้ไหม?",
+      li9: "มันทำงานบนโทรศัพท์หรือคอมพิวเตอร์ได้ไหม?",
+      p36: "คำตอบคือ AppSheet สามารถใช้สร้างโซลูชันเหล่านี้ได้หลายอย่าง",
+      p37: "ผมได้สร้างแอปพลิเคชันที่เกี่ยวข้องกับ POS และเข้าใจว่าต้องใช้ความพยายามมากแค่ไหนเพื่อทำให้มันมีประโยชน์ในสภาพแวดล้อมธุรกิจจริง",
+      p38: "POS อาจดูเรียบง่ายจากภายนอก แต่เมื่อคุณเริ่มสร้างมันขึ้นมา มีรายละเอียดมากมายที่ต้องพิจารณา",
+      p39: "สินค้าคงคลัง ยอดขาย การชำระเงิน ใบเสร็จ การสแกนบาร์โค้ด ผู้ใช้ รายงาน และเวิร์กโฟลว์ประจำวันทั้งหมดต้องทำงานร่วมกัน",
+      h2f: "ทำไมผมถึงสร้าง GoOnlinePOS",
+      p40: "หลังจากเห็นว่าคนมองหา POS ที่เรียบง่ายบ่อยแค่ไหน ผมก็เริ่มคิดถึงแนวทางอื่น",
+      p41: "ไม่ใช่ทุกคนที่อยากสร้างแอปพลิเคชันของตัวเอง",
+      p42: "เจ้าของธุรกิจอาจไม่อยากใช้เวลาหลายสัปดาห์ในการสร้างตาราง ตั้งค่าเวิร์กโฟลว์ สร้างระบบอัตโนมัติ ทดสอบนิพจน์ และดูแลรักษาแอป",
+      p43: "บางครั้งพวกเขาแค่ต้องการ <strong>เปิด POS แล้วเริ่มขายเลย</strong>",
+      p44: "นั่นคือที่มาของ GoOnlinePOS",
+      p45: "ผมต้องการสร้าง POS ที่ใช้งานได้จริงโดยไม่ต้องให้เจ้าของธุรกิจกลายเป็นนักพัฒนา AppSheet",
+      p46: "แนวคิดนั้นเรียบง่าย:",
+      p47: "<strong>เปิดมันขึ้นมา เพิ่มสินค้าของคุณ เริ่มขายได้เลย</strong>",
+      p48: "GoOnlinePOS มีฟีเจอร์ต่าง ๆ เช่น การจัดการสินค้าคงคลัง การสแกนบาร์โค้ด การติดตามยอดขาย การจัดการการชำระเงิน การพิมพ์ใบเสร็จ การรองรับพนักงานแคชเชียร์หลายคน ประวัติการขาย และการทำงานแบบออฟไลน์",
+      p49: "เป้าหมายคือทำให้ซอฟต์แวร์ POS เรียบง่ายและเข้าถึงได้สำหรับธุรกิจขนาดเล็ก",
+      h2g: "จากไฟล์ Excel หนึ่งไฟล์สู่ GoOnlinePOS",
+      p50: "เมื่อผมมองย้อนกลับไปในการเดินทางนี้ มันน่าสนใจว่าทุกอย่างเชื่อมโยงกันอย่างไร",
+      p51: "มันเริ่มต้นด้วย Excel ในช่วงโควิด",
+      p52: "จากนั้นผมก็เริ่มมองหาวิธีที่ดีกว่าในการจัดการกระบวนการทางธุรกิจ",
+      p53: "นั่นนำผมไปสู่ AppSheet",
+      p54: "ผมเรียนรู้ผ่านการลงมือสร้าง",
+      p55: "จากนั้นผมก็เริ่มสร้างแอปพลิเคชันจริงหลายตัวให้กับลูกค้า",
+      p56: "ผมแบ่งปันสิ่งที่เรียนรู้ผ่านช่อง YouTube ของผม",
+      p57: "ผู้คนยังคงถามเกี่ยวกับ POS สินค้าคงคลัง และระบบธุรกิจอื่น ๆ",
+      p58: "และในที่สุด ประสบการณ์เหล่านั้นก็นำไปสู่ GoOnlinePOS",
+      p59: "มันไม่ใช่สิ่งที่ผมวางแผนไว้ตั้งแต่แรก",
+      p60: "มันเติบโตขึ้นตามธรรมชาติจากปีแห่งการแก้ปัญหาทางธุรกิจและการสร้างแอปพลิเคชัน",
+      h2h: "ผมยังคงสร้างอยู่",
+      p61: "มากกว่าห้าปีหลังจากค้นพบ AppSheet ผมก็ยังคงสร้างและเรียนรู้อยู่",
+      p62: "ผมได้สร้างแอปพลิเคชันหลายตัวให้กับลูกค้า ยังคงสร้างวิดีโอสอน AppSheet ผ่าน <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\"><strong>Joe Tayactac</strong></a> บน YouTube และยังคงพัฒนา GoOnlinePOS ต่อไป",
+      p63: "ทุกโปรเจกต์นำความท้าทายที่แตกต่างกันมาให้",
+      p64: "นั่นคือสิ่งที่ทำให้มันยังคงน่าสนใจ",
+      p65: "ผมอาจไม่ได้เริ่มต้นในฐานะโปรแกรมเมอร์แบบดั้งเดิม แต่ผมกลายเป็นผู้เชี่ยวชาญ AppSheet ด้วยการทำสิ่งที่ผมเชื่อว่าสำคัญกว่า:",
+      p66: "<strong>การสร้างโซลูชันจริงสำหรับปัญหาจริง</strong>",
+      p67: "และนั่นคือสิ่งที่ GoOnlinePOS เป็นตัวแทนในที่สุด",
+      p68: "มันมาจากปีแห่งการทำงานกับกระบวนการทางธุรกิจ การสร้างแอปพลิเคชัน การรับฟังสิ่งที่ผู้คนต้องการจริง ๆ และการพยายามทำให้ทุกอย่างเรียบง่ายขึ้น",
+      h2i: "จากประสบการณ์ของผมสู่ POS ที่คุณใช้งานได้",
+      p69: "หากคุณสนใจเรียนรู้ AppSheet และสร้างแอปพลิเคชันธุรกิจของคุณเอง คุณสามารถติดตามวิดีโอสอนของผมได้ที่ <a href=\"https://www.youtube.com/@JoeTayactac\" target=\"_blank\" rel=\"noopener\">YouTube</a>",
+      p70: "หากคุณแค่ต้องการ POS โดยไม่ต้องสร้างมันขึ้นมาเอง คุณสามารถลองใช้ <a href=\"/\">GoOnlinePOS</a>",
+      p71: "<strong>การเดินทางเริ่มต้นด้วย Excel AppSheet เปลี่ยนทิศทางอาชีพของผม โปรเจกต์ลูกค้าจริงสร้างประสบการณ์ของผม และ GoOnlinePOS คือก้าวต่อไปในการเดินทางนั้น</strong>",
+      ctaH2: "เปิดมันขึ้นมา เพิ่มสินค้าของคุณ เริ่มขายได้เลย",
+      ctaP: "ไม่ต้องสมัคร ไม่ต้องเข้าสู่ระบบ แค่เปิด GoOnlinePOS แล้วเริ่มขายได้เลย",
+      ctaBtn: "เปิด GoOnlinePOS"
+    }
+  };
+
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var plainIds = [
+      "langPickerLabel", "backLinkText", "articleTag", "articleH1", "articleUpdatedLabel", "articleMinRead",
+      "p1", "p3", "p4", "p6",
+      "h2a", "p8", "p9", "p10",
+      "h2b", "p12", "p14", "p15", "p16", "p17", "p18", "p19", "p20", "p21",
+      "h2c", "p22", "p23", "p25", "p26",
+      "h2d", "p27", "p29", "p30", "p32", "p33",
+      "h2e", "p34", "p35",
+      "li1", "li2", "li3", "li4", "li5", "li6", "li7", "li8", "li9",
+      "p36", "p37", "p38", "p39",
+      "h2f", "p40", "p41", "p42", "p44", "p45", "p46", "p48", "p49",
+      "h2g", "p50", "p51", "p52", "p53", "p54", "p55", "p56", "p57", "p58", "p59", "p60",
+      "h2h", "p61", "p63", "p64", "p65", "p67", "p68",
+      "h2i",
+      "ctaH2", "ctaP", "ctaBtn"
+    ];
+    plainIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(id);
+    });
+    var htmlIds = ["p2", "p5", "p7", "p11", "p13", "p24", "p28", "p31", "p43", "p47", "p62", "p66", "p69", "p70", "p71"];
+    htmlIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-article-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-article-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

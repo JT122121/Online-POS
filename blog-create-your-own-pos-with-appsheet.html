@@ -247,6 +247,10 @@ a {
   .site-header { margin-top: 12px; }
 }
 
+.lang-picker-bar { max-width: 720px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 6px 0 0; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .article-header {
   text-align: center;
   padding: 10px 0 30px;
@@ -593,8 +597,21 @@ a {
     </div>
   </header>
 
+  <div class="lang-picker-bar">
+    <label for="articleLanguage"><span id="langPickerLabel">Language</span>
+      <select id="articleLanguage">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fil">Filipino</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+        <option value="th">ไทย</option>
+      </select>
+    </label>
+  </div>
+
   <div class="back-link-row">
-    <a class="back-link" href="blog">← Back to Blog</a>
+    <a class="back-link" href="blog" id="backLinkText">← Back to Blog</a>
   </div>
 
   <header class="article-header">
@@ -607,17 +624,17 @@ a {
       AppSheet
     </span>
 
-    <h1>
+    <h1 id="articleH1">
       Create Your Own POS Using No-Code AppSheet
       (And What It Actually Takes to Pull It Off)
     </h1>
 
-    <div class="article-meta">Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ</div>
+    <div class="article-meta"><span id="articleUpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 7 <span id="articleMinRead">MIN READ</span></div>
   </header>
 
   <div class="article-body">
 
-    <p>
+    <p id="introP">
       If you've spent any time looking at no-code tools, you've probably
       run into <a href="https://about.appsheet.com/" target="_blank" rel="noopener">Google AppSheet</a> -
       the platform that lets you turn a spreadsheet into a working app
@@ -627,9 +644,9 @@ a {
       return, and where it can trip you up.
     </p>
 
-    <h2>What AppSheet actually is</h2>
+    <h2 id="h2WhatIs">What AppSheet actually is</h2>
 
-    <p>
+    <p id="pWhatIs1">
       <a href="https://about.appsheet.com/" target="_blank" rel="noopener">AppSheet</a>
       is a no-code app builder from Google. You connect it to a data
       source - usually a Google Sheet, sometimes Excel or a database -
@@ -639,20 +656,20 @@ a {
       and inventory would live.
     </p>
 
-    <p>
+    <p id="pWhatIs2">
       If you want to explore the platform directly, you can visit the
       <a href="https://about.appsheet.com/" target="_blank" rel="noopener"><strong>official Google AppSheet website</strong></a>
       for its current features, documentation, and ways to get started.
     </p>
 
-    <h2>The basic blueprint for a POS in AppSheet</h2>
+    <h2 id="h2Blueprint">The basic blueprint for a POS in AppSheet</h2>
 
-    <p>
+    <p id="pBlueprintIntro">
       Most DIY AppSheet POS builds follow roughly the same structure:
     </p>
 
     <ol>
-      <li>
+      <li id="oli1">
         <strong>Build the spreadsheet first.</strong> A Products sheet
         (name, price, category, stock, barcode), a Sales sheet (each
         transaction), a Sale Items sheet (line items per sale), and
@@ -660,39 +677,39 @@ a {
         get the structure wrong and everything built on top of it
         inherits the problem.
       </li>
-      <li>
+      <li id="oli2">
         <strong>Import it into AppSheet.</strong> AppSheet reads the
         sheet structure and auto-generates a starter app with basic
         views.
       </li>
-      <li>
+      <li id="oli3">
         <strong>Build the "ring up a sale" flow.</strong> This is the
         part that takes real work: a form or view where you tap
         products, have AppSheet write rows into Sale Items, sum them
         into a Sales total, and ideally show a running cart total
         before the sale is saved.
       </li>
-      <li>
+      <li id="oli4">
         <strong>Add stock deduction.</strong> Not automatic - you write
         an AppSheet "bot" (their automation/workflow feature) that
         triggers when a sale is saved and subtracts quantities from the
         Products sheet.
       </li>
-      <li>
+      <li id="oli5">
         <strong>Add receipts.</strong> AppSheet doesn't have a native
         till-style receipt printer flow. Typically this means
         generating a PDF from a template and printing that, or emailing
         it - workable, but not the instant thermal-printer receipt
         you'd get from purpose-built POS software.
       </li>
-      <li>
+      <li id="oli6">
         <strong>Set up user roles.</strong> If more than one cashier
         will use it, you'll configure AppSheet's security filters so
         each person only sees what they should.
       </li>
     </ol>
 
-    <p>
+    <p id="pTutorial">
       If you want to build an AppSheet POS yourself, don't start from a
       blank canvas. <strong>Joe Tayactac's YouTube channel</strong>
       focuses on practical AppSheet development, including building,
@@ -712,44 +729,44 @@ a {
       </iframe>
 
       <div style="margin-top:14px;">
-        <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener"
+        <a href="https://www.youtube.com/@JoeTayactac" target="_blank" rel="noopener" id="moreTutorialsLink"
           style="display:inline-block; font-size:13px; font-weight:700; color:#fff; background:#FF0000; padding:9px 18px; border-radius:8px; text-decoration:none;">
           ▶ More AppSheet tutorials on the channel
         </a>
       </div>
     </div>
 
-    <h2>Where AppSheet genuinely shines for this</h2>
+    <h2 id="h2Shines">Where AppSheet genuinely shines for this</h2>
 
     <ul>
-      <li>
+      <li id="shineLi1">
         <strong>Total control over the data model.</strong> Since it's
         your spreadsheet, you can add any custom field or business
         logic you want - loyalty points, custom order statuses,
         whatever's specific to your operation.
       </li>
-      <li>
+      <li id="shineLi2">
         <strong>It plugs into the rest of Google Workspace.</strong>
         Sales data lands directly in Sheets, so reporting, pivot
         tables, and integrations with other Google tools are
         straightforward.
       </li>
-      <li>
+      <li id="shineLi3">
         <strong>Genuinely no-code.</strong> You're configuring, not
         programming - approachable if you're comfortable with
         spreadsheets and have some patience for trial and error.
       </li>
-      <li>
+      <li id="shineLi4">
         <strong>Built-in automation ("bots").</strong> Useful for
         things like low-stock email alerts or daily sales summaries
         once you've learned the automation editor.
       </li>
     </ul>
 
-    <h2>Where it tends to fall short as a real checkout tool</h2>
+    <h2 id="h2FallsShort">Where it tends to fall short as a real checkout tool</h2>
 
     <ul>
-      <li>
+      <li id="shortLi1">
         <strong>It's not built primarily for speed at the counter.</strong>
         AppSheet's sync-based architecture can introduce noticeable
         delays, particularly when the app has a large dataset or
@@ -758,7 +775,7 @@ a {
         can add up.
       </li>
 
-      <li>
+      <li id="shortLi2">
         <strong>No native barcode-to-cart flow.</strong> You can add
         barcode scanning via the camera, but wiring it into a smooth
         "scan and it's instantly in the cart" experience takes real
@@ -766,7 +783,7 @@ a {
         the code and hit enter) need extra handling to behave properly.
       </li>
 
-      <li>
+      <li id="shortLi3">
         <strong>Costs can increase as your business grows.</strong>
         AppSheet offers different pricing options, but business use
         with multiple users can require paid plans, making the ongoing
@@ -774,20 +791,20 @@ a {
         <a href="https://about.appsheet.com/pricing/" target="_blank" rel="noopener">See current AppSheet pricing</a>.
       </li>
 
-      <li>
+      <li id="shortLi4">
         <strong>Google Sheets as a database has real limits.</strong>
         As your Sales sheet grows into the thousands of rows, both
         Sheets and the app built on it can start to slow down
         noticeably.
       </li>
 
-      <li>
+      <li id="shortLi5">
         <strong>You're the support team.</strong> There's no vendor to
         call when a bot misfires or a formula breaks at checkout - it's
         on you to debug it, ideally not while a customer is waiting.
       </li>
 
-      <li>
+      <li id="shortLi6">
         <strong>Offline use requires careful configuration.</strong>
         AppSheet supports offline use, but designing a reliable offline
         POS requires careful handling of synchronization, inventory
@@ -797,9 +814,9 @@ a {
       </li>
     </ul>
 
-    <h2>Who this route actually makes sense for</h2>
+    <h2 id="h2WhoFits">Who this route actually makes sense for</h2>
 
-    <p>
+    <p id="pWhoFits1">
       Building a POS in AppSheet is a great fit if you enjoy building
       things and want an app tailored exactly to a specific, unusual
       workflow - a POS that also needs to do something ordinary POS
@@ -808,7 +825,7 @@ a {
       genuine app-building exercise, not a five-minute setup.
     </p>
 
-    <p>
+    <p id="pWhoFits2">
       If what you actually need is a straightforward, reliable checkout
       system - ring up items, take payments, print receipts, and track
       stock - and you'd rather not spend the time building and
@@ -816,9 +833,9 @@ a {
       that's already built.
     </p>
 
-    <h2>The shortcut: a POS that's already built</h2>
+    <h2 id="h2Shortcut">The shortcut: a POS that's already built</h2>
 
-    <p>
+    <p id="pShortcut1">
       <a href="/">GoOnlinePOS.com</a> is a free point-of-sale
       that runs entirely in your browser - no spreadsheet to design, no
       bots to configure, no per-user subscription. Open the page and
@@ -826,43 +843,43 @@ a {
     </p>
 
     <ul>
-      <li>
+      <li id="shortcutLi1">
         <strong>Barcode scanning</strong> that works with any USB barcode
         scanner out of the box
       </li>
 
-      <li>
+      <li id="shortcutLi2">
         <strong>Automatic stock deduction</strong> with every sale, no
         automation to build
       </li>
 
-      <li>
+      <li id="shortcutLi3">
         <strong>Split payments</strong> - part cash, part card, tracked
         accurately
       </li>
 
-      <li>
+      <li id="shortcutLi4">
         <strong>Multiple cashiers</strong>, with sales tracked separately
         for each
       </li>
 
-      <li>
+      <li id="shortcutLi5">
         <strong>Instant receipt printing</strong>, with your own logo
         and store details
       </li>
 
-      <li>
+      <li id="shortcutLi6">
         <strong>Offline Mode</strong>, so you can keep selling without
         an internet connection
       </li>
 
-      <li>
+      <li id="shortcutLi7">
         <strong>Full sales history</strong>, exportable to Excel whenever
         you need it
       </li>
     </ul>
 
-    <p>
+    <p id="pClosing">
       No signup, no login, no server to configure, and no database to
       maintain - it's ready to use the moment you open it. If building
       a customized no-code POS is the project you want, AppSheet is a
@@ -873,9 +890,9 @@ a {
   </div>
 
   <div class="cta-band">
-    <h2>Skip the build - try it free</h2>
-    <p>No signup, no login. Just open GoOnlinePOS and start selling.</p>
-    <a class="btn-primary" href="app">Open GoOnlinePOS</a>
+    <h2 id="ctaH2">Skip the build - try it free</h2>
+    <p id="ctaP">No signup, no login. Just open GoOnlinePOS and start selling.</p>
+    <a class="btn-primary" href="app" id="ctaBtn">Open GoOnlinePOS</a>
   </div>
 
 </div>
@@ -964,6 +981,371 @@ a {
   </div>
 
 </div>
+
+<script>
+(function() {
+  var langSelect = document.getElementById("articleLanguage");
+
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      backLinkText: "← Back to Blog",
+      articleH1: "Create Your Own POS Using No-Code AppSheet (And What It Actually Takes to Pull It Off)",
+      articleUpdatedLabel: "Last updated:",
+      articleMinRead: "MIN READ",
+      introP: "If you've spent any time looking at no-code tools, you've probably run into <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> - the platform that lets you turn a spreadsheet into a working app without writing code. It's a genuinely powerful idea, and \"build my own POS\" is one of the most common projects people try with it. Here's what that actually involves, what you get in return, and where it can trip you up.",
+      h2WhatIs: "What AppSheet actually is",
+      pWhatIs1: "<a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> is a no-code app builder from Google. You connect it to a data source - usually a Google Sheet, sometimes Excel or a database - and it generates an app around that data: forms, buttons, views, and workflows, all configured through a visual editor instead of code. For a POS, the \"data source\" is where your products, sales, and inventory would live.",
+      pWhatIs2: "If you want to explore the platform directly, you can visit the <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>official Google AppSheet website</strong></a> for its current features, documentation, and ways to get started.",
+      h2Blueprint: "The basic blueprint for a POS in AppSheet",
+      pBlueprintIntro: "Most DIY AppSheet POS builds follow roughly the same structure:",
+      oli1: "<strong>Build the spreadsheet first.</strong> A Products sheet (name, price, category, stock, barcode), a Sales sheet (each transaction), a Sale Items sheet (line items per sale), and often a Cashiers sheet. This is the real backbone of the app - get the structure wrong and everything built on top of it inherits the problem.",
+      oli2: "<strong>Import it into AppSheet.</strong> AppSheet reads the sheet structure and auto-generates a starter app with basic views.",
+      oli3: "<strong>Build the \"ring up a sale\" flow.</strong> This is the part that takes real work: a form or view where you tap products, have AppSheet write rows into Sale Items, sum them into a Sales total, and ideally show a running cart total before the sale is saved.",
+      oli4: "<strong>Add stock deduction.</strong> Not automatic - you write an AppSheet \"bot\" (their automation/workflow feature) that triggers when a sale is saved and subtracts quantities from the Products sheet.",
+      oli5: "<strong>Add receipts.</strong> AppSheet doesn't have a native till-style receipt printer flow. Typically this means generating a PDF from a template and printing that, or emailing it - workable, but not the instant thermal-printer receipt you'd get from purpose-built POS software.",
+      oli6: "<strong>Set up user roles.</strong> If more than one cashier will use it, you'll configure AppSheet's security filters so each person only sees what they should.",
+      pTutorial: "If you want to build an AppSheet POS yourself, don't start from a blank canvas. <strong>Joe Tayactac's YouTube channel</strong> focuses on practical AppSheet development, including building, troubleshooting, and improving real-world apps. The tutorial below walks through building an AppSheet POS and printing receipts from start to finish.",
+      moreTutorialsLink: "▶ More AppSheet tutorials on the channel",
+      h2Shines: "Where AppSheet genuinely shines for this",
+      shineLi1: "<strong>Total control over the data model.</strong> Since it's your spreadsheet, you can add any custom field or business logic you want - loyalty points, custom order statuses, whatever's specific to your operation.",
+      shineLi2: "<strong>It plugs into the rest of Google Workspace.</strong> Sales data lands directly in Sheets, so reporting, pivot tables, and integrations with other Google tools are straightforward.",
+      shineLi3: "<strong>Genuinely no-code.</strong> You're configuring, not programming - approachable if you're comfortable with spreadsheets and have some patience for trial and error.",
+      shineLi4: "<strong>Built-in automation (\"bots\").</strong> Useful for things like low-stock email alerts or daily sales summaries once you've learned the automation editor.",
+      h2FallsShort: "Where it tends to fall short as a real checkout tool",
+      shortLi1: "<strong>It's not built primarily for speed at the counter.</strong> AppSheet's sync-based architecture can introduce noticeable delays, particularly when the app has a large dataset or complex expressions and workflows. For a slow trickle of sales that's often fine, but during busy periods even small delays can add up.",
+      shortLi2: "<strong>No native barcode-to-cart flow.</strong> You can add barcode scanning via the camera, but wiring it into a smooth \"scan and it's instantly in the cart\" experience takes real configuration work, and USB barcode scanners (which just type the code and hit enter) need extra handling to behave properly.",
+      shortLi3: "<strong>Costs can increase as your business grows.</strong> AppSheet offers different pricing options, but business use with multiple users can require paid plans, making the ongoing cost an important consideration. <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">See current AppSheet pricing</a>.",
+      shortLi4: "<strong>Google Sheets as a database has real limits.</strong> As your Sales sheet grows into the thousands of rows, both Sheets and the app built on it can start to slow down noticeably.",
+      shortLi5: "<strong>You're the support team.</strong> There's no vendor to call when a bot misfires or a formula breaks at checkout - it's on you to debug it, ideally not while a customer is waiting.",
+      shortLi6: "<strong>Offline use requires careful configuration.</strong> AppSheet supports offline use, but designing a reliable offline POS requires careful handling of synchronization, inventory changes, and conflicts when multiple devices reconnect. For a serious POS, these details need to be tested thoroughly before relying on offline operation.",
+      h2WhoFits: "Who this route actually makes sense for",
+      pWhoFits1: "Building a POS in AppSheet is a great fit if you enjoy building things and want an app tailored exactly to a specific, unusual workflow - a POS that also needs to do something ordinary POS software doesn't, like triggering a custom approval step, or feeding a very particular internal reporting format. It's a genuine app-building exercise, not a five-minute setup.",
+      pWhoFits2: "If what you actually need is a straightforward, reliable checkout system - ring up items, take payments, print receipts, and track stock - and you'd rather not spend the time building and maintaining it yourself, there's a much faster option: use a POS that's already built.",
+      h2Shortcut: "The shortcut: a POS that's already built",
+      pShortcut1: "<a href=\"/\">GoOnlinePOS.com</a> is a free point-of-sale that runs entirely in your browser - no spreadsheet to design, no bots to configure, no per-user subscription. Open the page and you already have the parts a DIY build spends the most time on:",
+      shortcutLi1: "<strong>Barcode scanning</strong> that works with any USB barcode scanner out of the box",
+      shortcutLi2: "<strong>Automatic stock deduction</strong> with every sale, no automation to build",
+      shortcutLi3: "<strong>Split payments</strong> - part cash, part card, tracked accurately",
+      shortcutLi4: "<strong>Multiple cashiers</strong>, with sales tracked separately for each",
+      shortcutLi5: "<strong>Instant receipt printing</strong>, with your own logo and store details",
+      shortcutLi6: "<strong>Offline Mode</strong>, so you can keep selling without an internet connection",
+      shortcutLi7: "<strong>Full sales history</strong>, exportable to Excel whenever you need it",
+      pClosing: "No signup, no login, no server to configure, and no database to maintain - it's ready to use the moment you open it. If building a customized no-code POS is the project you want, AppSheet is a solid tool for it. But if you simply want to start ringing up sales today, <strong>GoOnlinePOS is already built and ready to use.</strong>",
+      ctaH2: "Skip the build - try it free",
+      ctaP: "No signup, no login. Just open GoOnlinePOS and start selling.",
+      ctaBtn: "Open GoOnlinePOS"
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      backLinkText: "← العودة إلى المدونة",
+      articleH1: "أنشئ نظام نقاط البيع الخاص بك باستخدام AppSheet بدون برمجة (وما يتطلبه ذلك فعليا)",
+      articleUpdatedLabel: "آخر تحديث:",
+      articleMinRead: "دقائق قراءة",
+      introP: "إذا قضيت أي وقت في البحث عن أدوات بدون برمجة، فمن المحتمل أنك صادفت <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> - المنصة التي تتيح لك تحويل جدول بيانات إلى تطبيق يعمل بدون كتابة أي كود. إنها فكرة قوية بالفعل، و\"بناء نظام نقاط البيع الخاص بي\" هو أحد أكثر المشاريع شيوعا التي يجربها الناس بها. إليك ما يتطلبه ذلك فعليا، وما تحصل عليه مقابل ذلك، وأين يمكن أن يعثرك.",
+      h2WhatIs: "ما هو AppSheet فعليا",
+      pWhatIs1: "<a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> هو أداة بناء تطبيقات بدون برمجة من Google. تقوم بربطه بمصدر بيانات - عادة جدول بيانات Google، وأحيانا Excel أو قاعدة بيانات - وهو يولد تطبيقا حول تلك البيانات: نماذج، أزرار، عروض، وسير عمل، كلها مضبوطة عبر محرر مرئي بدلا من الكود. بالنسبة لنظام نقاط بيع، \"مصدر البيانات\" هو المكان الذي ستعيش فيه منتجاتك ومبيعاتك ومخزونك.",
+      pWhatIs2: "إذا كنت تريد استكشاف المنصة مباشرة، يمكنك زيارة <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>الموقع الرسمي لـ Google AppSheet</strong></a> للاطلاع على ميزاته الحالية ووثائقه وطرق البدء.",
+      h2Blueprint: "المخطط الأساسي لنظام نقاط بيع في AppSheet",
+      pBlueprintIntro: "معظم عمليات بناء نظام نقاط بيع الذاتية في AppSheet تتبع تقريبا نفس البنية:",
+      oli1: "<strong>ابن جدول البيانات أولا.</strong> جدول للمنتجات (الاسم، السعر، الفئة، المخزون، الباركود)، جدول للمبيعات (كل معاملة)، جدول لعناصر البيع (بنود كل عملية بيع)، وغالبا جدول للكاشيرات. هذا هو العمود الفقري الحقيقي للتطبيق - إذا أخطأت في البنية فإن كل ما يُبنى فوقها يرث المشكلة.",
+      oli2: "<strong>استوردها إلى AppSheet.</strong> يقرأ AppSheet بنية الجدول وينشئ تلقائيا تطبيقا أوليا بعروض أساسية.",
+      oli3: "<strong>ابن مسار \"تسجيل عملية بيع\".</strong> هذا هو الجزء الذي يتطلب عملا حقيقيا: نموذج أو عرض تنقر فيه على المنتجات، يجعل AppSheet يكتب صفوفا في عناصر البيع، يجمعها في إجمالي مبيعات، ويفضل أن يعرض إجمالي سلة جارٍ قبل حفظ عملية البيع.",
+      oli4: "<strong>أضف خصم المخزون.</strong> ليس تلقائيا - تكتب \"بوتا\" في AppSheet (ميزة الأتمتة/سير العمل الخاصة بهم) يُفعّل عند حفظ عملية بيع ويخصم الكميات من جدول المنتجات.",
+      oli5: "<strong>أضف الإيصالات.</strong> لا يمتلك AppSheet مسار طابعة إيصالات أصلي على طريقة الصندوق. عادة يعني هذا إنشاء ملف PDF من قالب وطباعته، أو إرساله بالبريد الإلكتروني - قابل للتنفيذ، لكنه ليس الإيصال الفوري بطابعة حرارية الذي تحصل عليه من برنامج نقاط بيع مصمم خصيصا لذلك.",
+      oli6: "<strong>أعد إعداد أدوار المستخدمين.</strong> إذا كان أكثر من كاشير واحد سيستخدمه، فستقوم بضبط مرشحات الأمان في AppSheet بحيث يرى كل شخص فقط ما يجب أن يراه.",
+      pTutorial: "إذا كنت تريد بناء نظام نقاط بيع بـ AppSheet بنفسك، لا تبدأ من صفحة فارغة. <strong>قناة Joe Tayactac على YouTube</strong> تركز على تطوير AppSheet العملي، بما في ذلك بناء التطبيقات الحقيقية واستكشاف أخطائها وإصلاحها وتحسينها. الدرس أدناه يشرح كيفية بناء نظام نقاط بيع بـ AppSheet وطباعة الإيصالات من البداية إلى النهاية.",
+      moreTutorialsLink: "▶ المزيد من دروس AppSheet على القناة",
+      h2Shines: "أين يتألق AppSheet فعليا لهذا الغرض",
+      shineLi1: "<strong>سيطرة كاملة على نموذج البيانات.</strong> بما أنه جدول بياناتك الخاص، يمكنك إضافة أي حقل مخصص أو منطق عمل تريده - نقاط ولاء، حالات طلب مخصصة، أي شيء خاص بعملياتك.",
+      shineLi2: "<strong>يتكامل مع بقية Google Workspace.</strong> تصل بيانات المبيعات مباشرة إلى Sheets، لذا تصبح التقارير والجداول المحورية والتكاملات مع أدوات Google الأخرى بسيطة.",
+      shineLi3: "<strong>بدون برمجة فعليا.</strong> أنت تقوم بالضبط، لا بالبرمجة - سهل المنال إذا كنت مرتاحا مع جداول البيانات ولديك بعض الصبر للتجربة والخطأ.",
+      shineLi4: "<strong>أتمتة مدمجة (\"بوتات\").</strong> مفيدة لأشياء مثل تنبيهات البريد الإلكتروني لنفاد المخزون أو ملخصات المبيعات اليومية بمجرد أن تتعلم محرر الأتمتة.",
+      h2FallsShort: "أين يقصر عادة كأداة دفع حقيقية",
+      shortLi1: "<strong>ليس مبنيا في الأساس للسرعة عند الكاونتر.</strong> يمكن أن تسبب بنية AppSheet القائمة على المزامنة تأخيرات ملحوظة، خاصة عندما يحتوي التطبيق على مجموعة بيانات كبيرة أو تعبيرات وسير عمل معقدة. بالنسبة لتدفق بطيء من المبيعات هذا غالبا لا بأس به، لكن خلال فترات الذروة حتى التأخيرات الصغيرة يمكن أن تتراكم.",
+      shortLi2: "<strong>لا يوجد مسار أصلي من الباركود إلى السلة.</strong> يمكنك إضافة مسح الباركود عبر الكاميرا، لكن ربطه بتجربة سلسة \"امسح ويكون فورا في السلة\" يتطلب عملا حقيقيا في الإعداد، وماسحات الباركود USB (التي تكتفي بكتابة الكود والضغط على إنتر) تحتاج إلى معالجة إضافية للعمل بشكل صحيح.",
+      shortLi3: "<strong>يمكن أن تزيد التكاليف مع نمو عملك.</strong> يقدم AppSheet خيارات تسعير مختلفة، لكن الاستخدام التجاري بعدة مستخدمين قد يتطلب خططا مدفوعة، مما يجعل التكلفة المستمرة اعتبارا مهما. <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">اطلع على أسعار AppSheet الحالية</a>.",
+      shortLi4: "<strong>Google Sheets كقاعدة بيانات لها حدود حقيقية.</strong> مع نمو جدول المبيعات إلى آلاف الصفوف، يمكن أن يبدأ كل من Sheets والتطبيق المبني عليه بالتباطؤ بشكل ملحوظ.",
+      shortLi5: "<strong>أنت فريق الدعم.</strong> لا يوجد مزود خدمة تتصل به عندما يفشل بوت أو تنكسر صيغة عند الدفع - عليك أنت تصحيح الخطأ، ويفضل ألا يكون ذلك أثناء انتظار عميل.",
+      shortLi6: "<strong>الاستخدام دون اتصال يتطلب إعدادا دقيقا.</strong> يدعم AppSheet الاستخدام دون اتصال، لكن تصميم نظام نقاط بيع موثوق دون اتصال يتطلب معالجة دقيقة للمزامنة وتغييرات المخزون والتعارضات عند إعادة اتصال عدة أجهزة. بالنسبة لنظام نقاط بيع جاد، يجب اختبار هذه التفاصيل بدقة قبل الاعتماد على التشغيل دون اتصال.",
+      h2WhoFits: "لمن يناسب هذا المسار فعليا",
+      pWhoFits1: "بناء نظام نقاط بيع بـ AppSheet خيار رائع إذا كنت تستمتع ببناء الأشياء وتريد تطبيقا مصمما خصيصا لسير عمل معين وغير اعتيادي - نظام نقاط بيع يحتاج أيضا إلى القيام بشيء لا يفعله برنامج نقاط البيع العادي، مثل تفعيل خطوة موافقة مخصصة، أو تغذية تنسيق تقارير داخلي معين جدا. إنه تمرين حقيقي لبناء التطبيقات، وليس إعدادا لخمس دقائق.",
+      pWhoFits2: "إذا كان ما تحتاجه فعليا هو نظام دفع بسيط وموثوق - تسجيل العناصر، أخذ المدفوعات، طباعة الإيصالات، وتتبع المخزون - ولا تفضل قضاء الوقت في بنائه وصيانته بنفسك، فهناك خيار أسرع بكثير: استخدام نظام نقاط بيع مبني بالفعل.",
+      h2Shortcut: "الاختصار: نظام نقاط بيع مبني بالفعل",
+      pShortcut1: "<a href=\"/\">GoOnlinePOS.com</a> هو نظام نقاط بيع مجاني يعمل بالكامل داخل متصفحك - بدون جدول بيانات لتصميمه، بدون بوتات لضبطها، بدون اشتراك لكل مستخدم. افتح الصفحة وستجد لديك بالفعل الأجزاء التي يقضي فيها البناء الذاتي معظم الوقت:",
+      shortcutLi1: "<strong>مسح الباركود</strong> الذي يعمل مع أي قارئ باركود USB من دون إعداد إضافي",
+      shortcutLi2: "<strong>خصم المخزون التلقائي</strong> مع كل عملية بيع، بدون أتمتة لبنائها",
+      shortcutLi3: "<strong>المدفوعات المقسمة</strong> - جزء نقدا، جزء بالبطاقة، متتبعة بدقة",
+      shortcutLi4: "<strong>عدة كاشيرات</strong>، مع تتبع المبيعات بشكل منفصل لكل واحد",
+      shortcutLi5: "<strong>طباعة إيصالات فورية</strong>، بشعارك وتفاصيل متجرك الخاصة",
+      shortcutLi6: "<strong>وضع عدم الاتصال</strong>، حتى تتمكن من الاستمرار بالبيع دون اتصال بالإنترنت",
+      shortcutLi7: "<strong>سجل مبيعات كامل</strong>، قابل للتصدير إلى Excel وقتما تحتاجه",
+      pClosing: "بدون تسجيل، بدون تسجيل دخول، بدون خادم لإعداده، وبدون قاعدة بيانات لصيانتها - إنه جاهز للاستخدام في اللحظة التي تفتحه فيها. إذا كان بناء نظام نقاط بيع مخصص بدون برمجة هو المشروع الذي تريده، فإن AppSheet أداة قوية لذلك. لكن إذا كنت تريد ببساطة البدء بتسجيل المبيعات اليوم، فإن <strong>GoOnlinePOS مبني بالفعل وجاهز للاستخدام.</strong>",
+      ctaH2: "تخط عملية البناء - جربه مجانا",
+      ctaP: "بدون تسجيل، بدون تسجيل دخول. فقط افتح GoOnlinePOS وابدأ البيع.",
+      ctaBtn: "افتح GoOnlinePOS"
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      backLinkText: "← Bumalik sa Blog",
+      articleH1: "Gumawa ng Sarili Mong POS Gamit ang No-Code AppSheet (At Ano Talaga ang Kailangan Para Magawa Ito)",
+      articleUpdatedLabel: "Huling na-update:",
+      articleMinRead: "MIN BASAHIN",
+      introP: "Kung gumugol ka na ng oras sa paghahanap ng no-code tools, malamang na naranasan mo na ang <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> - ang platform na nagbibigay-daan sa iyong gawing gumaganang app ang isang spreadsheet nang hindi nagsusulat ng code. Isa itong tunay na makapangyarihang ideya, at ang \"gumawa ng sarili kong POS\" ay isa sa mga pinakakaraniwang proyektong sinusubukan ng mga tao gamit ito. Narito kung ano talaga ang kasama nito, ano ang makukuha mo bilang kapalit, at kung saan ito maaaring magdulot ng problema.",
+      h2WhatIs: "Ano talaga ang AppSheet",
+      pWhatIs1: "Ang <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> ay isang no-code app builder mula sa Google. Ikinokonekta mo ito sa isang data source - karaniwang Google Sheet, minsan Excel o database - at bubuo ito ng app sa paligid ng datos na iyon: mga form, button, view, at workflow, lahat naka-configure sa pamamagitan ng visual editor sa halip na code. Para sa isang POS, ang \"data source\" ay kung saan mananahan ang iyong mga produkto, benta, at imbentaryo.",
+      pWhatIs2: "Kung gusto mong tuklasin nang direkta ang platform, maaari kang bumisita sa <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>opisyal na website ng Google AppSheet</strong></a> para sa mga kasalukuyang feature nito, dokumentasyon, at mga paraan para makapagsimula.",
+      h2Blueprint: "Ang pangunahing balangkas para sa isang POS sa AppSheet",
+      pBlueprintIntro: "Karamihan sa mga DIY AppSheet POS build ay sumusunod nang halos parehong istruktura:",
+      oli1: "<strong>Buuin muna ang spreadsheet.</strong> Isang Products sheet (pangalan, presyo, kategorya, stock, barcode), isang Sales sheet (bawat transaksyon), isang Sale Items sheet (mga line item bawat benta), at kadalasan isang Cashiers sheet. Ito ang tunay na tumutugon na bahagi ng app - kung mali ang istruktura, mamanahin ng lahat ng nakabuo dito ang problema.",
+      oli2: "<strong>I-import ito sa AppSheet.</strong> Binabasa ng AppSheet ang istruktura ng sheet at awtomatikong bumubuo ng starter app na may mga basic na view.",
+      oli3: "<strong>Buuin ang \"pag-ring up ng benta\" na flow.</strong> Ito ang bahaging nangangailangan ng tunay na trabaho: isang form o view kung saan pinipindot mo ang mga produkto, pinasusulat sa AppSheet ang mga row sa Sale Items, isinusuma ang mga ito sa Sales total, at mas mainam kung nagpapakita ito ng patuloy na cart total bago ma-save ang benta.",
+      oli4: "<strong>Idagdag ang pagbabawas ng stock.</strong> Hindi awtomatiko - susulat ka ng isang AppSheet \"bot\" (ang automation/workflow feature nila) na mag-a-trigger kapag na-save ang isang benta at magbabawas ng dami mula sa Products sheet.",
+      oli5: "<strong>Idagdag ang mga resibo.</strong> Wala ang AppSheet ng native na till-style na receipt printer flow. Karaniwan, ang ibig sabihin nito ay paggawa ng PDF mula sa isang template at pag-print nito, o pag-email nito - gumagana, pero hindi ito ang instant thermal-printer receipt na makukuha mo mula sa purpose-built na POS software.",
+      oli6: "<strong>I-set up ang mga user role.</strong> Kung higit sa isang cashier ang gagamit nito, ico-configure mo ang mga security filter ng AppSheet para makita lamang ng bawat tao ang dapat nilang makita.",
+      pTutorial: "Kung gusto mong buuin ang isang AppSheet POS mismo, huwag magsimula sa walang laman na canvas. Ang <strong>YouTube channel ni Joe Tayactac</strong> ay nakatuon sa praktikal na AppSheet development, kasama ang paggawa, pag-troubleshoot, at pagpapahusay ng mga totoong app. Ang tutorial sa ibaba ay magpapaliwanag ng buong proseso ng paggawa ng AppSheet POS at pag-print ng mga resibo mula umpisa hanggang katapusan.",
+      moreTutorialsLink: "▶ Mas maraming AppSheet tutorial sa channel",
+      h2Shines: "Kung saan talaga namumukod-tangi ang AppSheet para dito",
+      shineLi1: "<strong>Ganap na kontrol sa data model.</strong> Dahil sarili mong spreadsheet ito, maaari kang magdagdag ng anumang custom field o business logic na gusto mo - loyalty points, custom order statuses, anumang bagay na tiyak sa iyong operasyon.",
+      shineLi2: "<strong>Nakakonekta ito sa iba pang bahagi ng Google Workspace.</strong> Direktang napupunta ang data ng benta sa Sheets, kaya diretso na lang ang pag-uulat, pivot table, at mga integration sa ibang tool ng Google.",
+      shineLi3: "<strong>Talagang no-code.</strong> Nag-c-configure ka, hindi nagpo-program - madali lapitan kung komportable ka sa mga spreadsheet at may pasensya para sa trial and error.",
+      shineLi4: "<strong>May built-in na automation (\"mga bot\").</strong> Kapaki-pakinabang para sa mga bagay gaya ng low-stock email alert o pang-araw-araw na sales summary kapag natutunan mo na ang automation editor.",
+      h2FallsShort: "Kung saan ito karaniwang kulang bilang tunay na checkout tool",
+      shortLi1: "<strong>Hindi ito pangunahing ginawa para sa bilis sa counter.</strong> Ang sync-based na arkitektura ng AppSheet ay maaaring magdulot ng kapansin-pansing pagkaantala, lalo na kapag malaki ang dataset ng app o kumplikado ang mga expression at workflow. Para sa mabagal na daloy ng benta, kadalasang okay lang ito, pero sa mga abalang panahon, kahit maliit na pagkaantala ay maaaring dumami.",
+      shortLi2: "<strong>Walang native na barcode-to-cart na flow.</strong> Maaari kang magdagdag ng barcode scanning gamit ang camera, pero ang pag-wire nito sa isang maayos na \"i-scan at agad na napupunta sa cart\" na karanasan ay nangangailangan ng tunay na trabaho sa configuration, at ang mga USB barcode scanner (na nagta-type lang ng code at pumipindot ng enter) ay nangangailangan ng dagdag na pag-aayos para gumana nang maayos.",
+      shortLi3: "<strong>Maaaring tumaas ang gastos habang lumalago ang negosyo mo.</strong> Nag-aalok ang AppSheet ng iba't ibang opsyon sa presyo, pero ang paggamit sa negosyo na may maraming user ay maaaring mangailangan ng bayad na plano, kaya mahalagang konsiderasyon ang patuloy na gastos. <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">Tingnan ang kasalukuyang presyo ng AppSheet</a>.",
+      shortLi4: "<strong>May tunay na limitasyon ang Google Sheets bilang database.</strong> Habang lumalaki ang iyong Sales sheet sa libu-libong row, parehong maaaring magsimulang bumagal nang kapansin-pansin ang Sheets at ang app na nakabuo dito.",
+      shortLi5: "<strong>Ikaw ang support team.</strong> Walang vendor na tatawagan kapag nagkamali ang isang bot o nasira ang isang formula sa checkout - ikaw mismo ang dapat mag-debug nito, mas mabuti kung hindi habang naghihintay ang isang customer.",
+      shortLi6: "<strong>Ang paggamit nang offline ay nangangailangan ng maingat na configuration.</strong> Sinusuportahan ng AppSheet ang paggamit nang offline, pero ang pagdidisenyo ng mapagkakatiwalaang offline na POS ay nangangailangan ng maingat na pag-aasikaso sa synchronization, pagbabago sa imbentaryo, at mga conflict kapag muling nagkonekta ang maraming device. Para sa seryosong POS, kailangang masusing subukan ang mga detalyeng ito bago umasa sa offline operation.",
+      h2WhoFits: "Kung kanino talaga bagay ang landas na ito",
+      pWhoFits1: "Ang paggawa ng POS sa AppSheet ay isang magandang piksin kung nasisiyahan kang bumuo ng mga bagay at gusto mo ng app na eksaktong akma sa isang tiyak, hindi-karaniwang workflow - isang POS na kailangan din gumawa ng bagay na hindi ginagawa ng ordinaryong POS software, tulad ng pag-trigger ng custom na approval step, o pagpapakain sa isang tiyak na internal na format ng ulat. Isa itong tunay na ehersisyo sa paggawa ng app, hindi limang-minutong setup.",
+      pWhoFits2: "Kung ang talagang kailangan mo ay isang simple at maaasahang checkout system - mag-ring up ng mga item, tumanggap ng bayad, mag-print ng resibo, at subaybayan ang stock - at mas gusto mong hindi gumugol ng oras sa pagbuo at pagpapanatili nito mismo, mayroong mas mabilis na opsyon: gumamit ng POS na nabuo na.",
+      h2Shortcut: "Ang shortcut: isang POS na nabuo na",
+      pShortcut1: "Ang <a href=\"/\">GoOnlinePOS.com</a> ay isang libreng point-of-sale na tumatakbo nang buo sa iyong browser - walang spreadsheet na idesenyo, walang bot na i-configure, walang per-user na subscription. Buksan ang page at nasa iyo na ang mga bahaging pinaka-inuubos ng oras sa DIY build:",
+      shortcutLi1: "<strong>Pag-scan ng barcode</strong> na gumagana sa anumang USB barcode scanner nang walang dagdag na setup",
+      shortcutLi2: "<strong>Awtomatikong pagbabawas ng stock</strong> sa bawat benta, walang automation na kailangang buuin",
+      shortcutLi3: "<strong>Hating bayad</strong> - bahagi cash, bahagi card, tumpak na sinusubaybayan",
+      shortcutLi4: "<strong>Maraming cashier</strong>, na may hiwalay na pagsubaybay ng benta para sa bawat isa",
+      shortcutLi5: "<strong>Instant na pag-print ng resibo</strong>, kasama ang sarili mong logo at detalye ng tindahan",
+      shortcutLi6: "<strong>Offline Mode</strong>, para makapagbenta ka pa rin kahit walang internet connection",
+      shortcutLi7: "<strong>Kumpletong kasaysayan ng benta</strong>, mae-export sa Excel kahit kailan mo kailanganin",
+      pClosing: "Walang pagpaparehistro, walang login, walang server na ico-configure, at walang database na papanatilihin - handa na itong gamitin sa sandaling buksan mo ito. Kung ang pagbuo ng customized na no-code POS ang proyektong gusto mo, magandang tool ang AppSheet para dito. Pero kung gusto mo lang magsimulang magbenta ngayon, <strong>ang GoOnlinePOS ay nabuo na at handa nang gamitin.</strong>",
+      ctaH2: "Laktawan ang pagbuo - subukan itong libre",
+      ctaP: "Walang pagpaparehistro, walang login. Buksan lang ang GoOnlinePOS at magsimulang magbenta.",
+      ctaBtn: "Buksan ang GoOnlinePOS"
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      backLinkText: "← ब्लॉग पर वापस जाएं",
+      articleH1: "नो-कोड AppSheet का उपयोग करके अपना खुद का पीओएस बनाएं (और इसे पूरा करने के लिए वास्तव में क्या चाहिए)",
+      articleUpdatedLabel: "अंतिम अपडेट:",
+      articleMinRead: "मिनट पढ़ें",
+      introP: "यदि आपने नो-कोड टूल्स को देखने में कोई समय बिताया है, तो आप संभवतः <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> से मिल चुके होंगे - वह प्लेटफॉर्म जो आपको बिना कोड लिखे स्प्रेडशीट को एक काम करने वाले ऐप में बदलने देता है। यह वास्तव में एक शक्तिशाली विचार है, और \"अपना खुद का पीओएस बनाना\" इसके साथ लोगों द्वारा आजमाई जाने वाली सबसे आम परियोजनाओं में से एक है। यहां बताया गया है कि इसमें वास्तव में क्या शामिल है, आपको बदले में क्या मिलता है, और यह आपको कहां उलझा सकता है।",
+      h2WhatIs: "AppSheet वास्तव में क्या है",
+      pWhatIs1: "<a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> Google का एक नो-कोड ऐप बिल्डर है। आप इसे एक डेटा स्रोत से जोड़ते हैं - आमतौर पर एक Google Sheet, कभी-कभी Excel या डेटाबेस - और यह उस डेटा के आसपास एक ऐप जनरेट करता है: फॉर्म, बटन, व्यू, और वर्कफ्लो, ये सभी कोड के बजाय एक विज़ुअल एडिटर के माध्यम से कॉन्फ़िगर किए जाते हैं। पीओएस के लिए, \"डेटा स्रोत\" वह जगह है जहां आपके उत्पाद, बिक्री, और इन्वेंटरी रहेंगे।",
+      pWhatIs2: "यदि आप प्लेटफॉर्म को सीधे एक्सप्लोर करना चाहते हैं, तो आप इसकी वर्तमान सुविधाओं, दस्तावेज़ीकरण, और शुरुआत करने के तरीकों के लिए <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>आधिकारिक Google AppSheet वेबसाइट</strong></a> पर जा सकते हैं।",
+      h2Blueprint: "AppSheet में पीओएस के लिए बुनियादी खाका",
+      pBlueprintIntro: "अधिकांश DIY AppSheet पीओएस बिल्ड लगभग समान संरचना का पालन करते हैं:",
+      oli1: "<strong>पहले स्प्रेडशीट बनाएं।</strong> एक Products शीट (नाम, कीमत, श्रेणी, स्टॉक, बारकोड), एक Sales शीट (हर लेनदेन), एक Sale Items शीट (हर बिक्री के लाइन आइटम), और अक्सर एक Cashiers शीट। यह ऐप की वास्तविक रीढ़ है - संरचना गलत करें और उस पर बना हर चीज़ उस समस्या को विरासत में लेती है।",
+      oli2: "<strong>इसे AppSheet में आयात करें।</strong> AppSheet शीट संरचना पढ़ता है और बुनियादी व्यू के साथ स्वचालित रूप से एक स्टार्टर ऐप बनाता है।",
+      oli3: "<strong>\"बिक्री दर्ज करें\" फ्लो बनाएं।</strong> यह वह हिस्सा है जिसमें वास्तविक काम लगता है: एक फॉर्म या व्यू जहां आप उत्पादों को टैप करते हैं, AppSheet को Sale Items में पंक्तियां लिखवाते हैं, उन्हें Sales कुल में जोड़ते हैं, और आदर्श रूप से बिक्री सहेजे जाने से पहले एक चालू कार्ट कुल दिखाते हैं।",
+      oli4: "<strong>स्टॉक कटौती जोड़ें।</strong> स्वचालित नहीं - आप एक AppSheet \"बॉट\" (उनकी ऑटोमेशन/वर्कफ्लो सुविधा) लिखते हैं जो बिक्री सहेजे जाने पर ट्रिगर होता है और Products शीट से मात्रा घटाता है।",
+      oli5: "<strong>रसीदें जोड़ें।</strong> AppSheet के पास कोई मूल टिल-स्टाइल रसीद प्रिंटर फ्लो नहीं है। आमतौर पर इसका मतलब है एक टेम्पलेट से PDF जनरेट करना और उसे प्रिंट करना, या ईमेल करना - व्यवहार्य, लेकिन उद्देश्य-निर्मित पीओएस सॉफ्टवेयर से मिलने वाली तत्काल थर्मल-प्रिंटर रसीद नहीं।",
+      oli6: "<strong>उपयोगकर्ता भूमिकाएं सेट करें।</strong> यदि एक से अधिक कैशियर इसका उपयोग करेंगे, तो आप AppSheet के सुरक्षा फ़िल्टर कॉन्फ़िगर करेंगे ताकि प्रत्येक व्यक्ति केवल वही देखे जो उसे देखना चाहिए।",
+      pTutorial: "यदि आप खुद एक AppSheet पीओएस बनाना चाहते हैं, तो खाली कैनवास से शुरू न करें। <strong>Joe Tayactac का YouTube चैनल</strong> व्यावहारिक AppSheet विकास पर केंद्रित है, जिसमें वास्तविक ऐप्स को बनाना, समस्याओं का निवारण करना, और सुधारना शामिल है। नीचे दिया गया ट्यूटोरियल शुरू से अंत तक AppSheet पीओएस बनाने और रसीदें प्रिंट करने के बारे में बताता है।",
+      moreTutorialsLink: "▶ चैनल पर और AppSheet ट्यूटोरियल",
+      h2Shines: "AppSheet वास्तव में इसके लिए कहां चमकता है",
+      shineLi1: "<strong>डेटा मॉडल पर पूर्ण नियंत्रण।</strong> चूंकि यह आपकी स्प्रेडशीट है, आप कोई भी कस्टम फील्ड या बिजनेस लॉजिक जोड़ सकते हैं जो आप चाहते हैं - लॉयल्टी पॉइंट, कस्टम ऑर्डर स्थितियां, आपके संचालन के लिए जो भी विशिष्ट हो।",
+      shineLi2: "<strong>यह बाकी Google Workspace में एकीकृत होता है।</strong> बिक्री डेटा सीधे Sheets में जाता है, इसलिए रिपोर्टिंग, पिवट टेबल, और अन्य Google टूल्स के साथ एकीकरण सीधा है।",
+      shineLi3: "<strong>वास्तव में नो-कोड।</strong> आप कॉन्फ़िगर कर रहे हैं, प्रोग्राम नहीं कर रहे - यदि आप स्प्रेडशीट के साथ सहज हैं और परीक्षण और त्रुटि के लिए कुछ धैर्य रखते हैं तो यह सुलभ है।",
+      shineLi4: "<strong>अंतर्निहित ऑटोमेशन (\"बॉट्स\")।</strong> कम-स्टॉक ईमेल अलर्ट या दैनिक बिक्री सारांश जैसी चीज़ों के लिए उपयोगी एक बार जब आप ऑटोमेशन एडिटर सीख लेते हैं।",
+      h2FallsShort: "यह वास्तविक चेकआउट टूल के रूप में कहां कम पड़ता है",
+      shortLi1: "<strong>यह मुख्य रूप से काउंटर पर गति के लिए नहीं बनाया गया है।</strong> AppSheet का सिंक-आधारित आर्किटेक्चर ध्यान देने योग्य देरी पैदा कर सकता है, खासकर जब ऐप में बड़ा डेटासेट या जटिल एक्सप्रेशन और वर्कफ्लो हों। बिक्री की धीमी धारा के लिए यह अक्सर ठीक है, लेकिन व्यस्त अवधियों के दौरान छोटी देरी भी जुड़ सकती हैं।",
+      shortLi2: "<strong>कोई मूल बारकोड-टू-कार्ट फ्लो नहीं।</strong> आप कैमरे के जरिए बारकोड स्कैनिंग जोड़ सकते हैं, लेकिन इसे एक सहज \"स्कैन करें और यह तुरंत कार्ट में है\" अनुभव में जोड़ना वास्तविक कॉन्फ़िगरेशन काम लेता है, और USB बारकोड स्कैनर (जो बस कोड टाइप करते हैं और एंटर दबाते हैं) को सही ढंग से व्यवहार करने के लिए अतिरिक्त हैंडलिंग की आवश्यकता होती है।",
+      shortLi3: "<strong>आपके व्यवसाय के बढ़ने के साथ लागत बढ़ सकती है।</strong> AppSheet विभिन्न मूल्य निर्धारण विकल्प प्रदान करता है, लेकिन कई उपयोगकर्ताओं के साथ व्यावसायिक उपयोग के लिए भुगतान योजनाओं की आवश्यकता हो सकती है, जिससे चल रही लागत एक महत्वपूर्ण विचार बन जाती है। <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">वर्तमान AppSheet मूल्य निर्धारण देखें</a>।",
+      shortLi4: "<strong>डेटाबेस के रूप में Google Sheets की वास्तविक सीमाएं हैं।</strong> जैसे-जैसे आपकी Sales शीट हजारों पंक्तियों में बढ़ती है, Sheets और उस पर बना ऐप दोनों ध्यान देने योग्य रूप से धीमे होना शुरू हो सकते हैं।",
+      shortLi5: "<strong>आप ही सपोर्ट टीम हैं।</strong> कॉल करने के लिए कोई विक्रेता नहीं है जब कोई बॉट गड़बड़ करता है या चेकआउट पर कोई फॉर्मूला टूट जाता है - इसे डीबग करना आप पर निर्भर है, आदर्श रूप से तब नहीं जब कोई ग्राहक इंतजार कर रहा हो।",
+      shortLi6: "<strong>ऑफलाइन उपयोग के लिए सावधानीपूर्वक कॉन्फ़िगरेशन की आवश्यकता होती है।</strong> AppSheet ऑफलाइन उपयोग का समर्थन करता है, लेकिन एक विश्वसनीय ऑफलाइन पीओएस डिज़ाइन करने के लिए सिंक्रोनाइज़ेशन, इन्वेंटरी परिवर्तन, और जब कई डिवाइस फिर से कनेक्ट होते हैं तो टकरावों के सावधानीपूर्वक प्रबंधन की आवश्यकता होती है। एक गंभीर पीओएस के लिए, ऑफलाइन ऑपरेशन पर निर्भर होने से पहले इन विवरणों का अच्छी तरह से परीक्षण किया जाना चाहिए।",
+      h2WhoFits: "यह रास्ता वास्तव में किसके लिए सही है",
+      pWhoFits1: "AppSheet में पीओएस बनाना एक बेहतरीन विकल्प है यदि आप चीजें बनाने का आनंद लेते हैं और एक विशिष्ट, असामान्य वर्कफ्लो के लिए बिल्कुल अनुकूलित ऐप चाहते हैं - एक पीओएस जिसे कुछ ऐसा भी करना है जो साधारण पीओएस सॉफ्टवेयर नहीं करता, जैसे कस्टम अनुमोदन चरण को ट्रिगर करना, या एक बहुत विशेष आंतरिक रिपोर्टिंग फॉर्मेट को फीड करना। यह एक वास्तविक ऐप-निर्माण अभ्यास है, पांच मिनट का सेटअप नहीं।",
+      pWhoFits2: "यदि आपको वास्तव में जो चाहिए वह एक सीधा, विश्वसनीय चेकआउट सिस्टम है - आइटम दर्ज करना, भुगतान लेना, रसीदें प्रिंट करना, और स्टॉक ट्रैक करना - और आप इसे खुद बनाने और बनाए रखने में समय बिताना नहीं चाहते, तो एक बहुत तेज़ विकल्प है: पहले से बना हुआ पीओएस उपयोग करें।",
+      h2Shortcut: "शॉर्टकट: एक पहले से बना हुआ पीओएस",
+      pShortcut1: "<a href=\"/\">GoOnlinePOS.com</a> एक मुफ्त पॉइंट-ऑफ-सेल है जो पूरी तरह से आपके ब्राउज़र में चलता है - कोई स्प्रेडशीट डिज़ाइन करने की जरूरत नहीं, कोई बॉट कॉन्फ़िगर करने की जरूरत नहीं, कोई प्रति-उपयोगकर्ता सदस्यता नहीं। पेज खोलें और आपके पास पहले से ही वे हिस्से हैं जिन पर DIY बिल्ड सबसे अधिक समय खर्च करता है:",
+      shortcutLi1: "<strong>बारकोड स्कैनिंग</strong> जो बिना किसी अतिरिक्त सेटअप के किसी भी USB बारकोड स्कैनर के साथ काम करती है",
+      shortcutLi2: "<strong>स्वचालित स्टॉक कटौती</strong> हर बिक्री के साथ, कोई ऑटोमेशन बनाने की जरूरत नहीं",
+      shortcutLi3: "<strong>विभाजित भुगतान</strong> - कुछ नकद, कुछ कार्ड, सटीक रूप से ट्रैक किया गया",
+      shortcutLi4: "<strong>कई कैशियर</strong>, प्रत्येक के लिए अलग से ट्रैक की गई बिक्री के साथ",
+      shortcutLi5: "<strong>तत्काल रसीद प्रिंटिंग</strong>, आपके अपने लोगो और स्टोर विवरण के साथ",
+      shortcutLi6: "<strong>ऑफलाइन मोड</strong>, ताकि आप इंटरनेट कनेक्शन के बिना भी बिक्री जारी रख सकें",
+      shortcutLi7: "<strong>पूर्ण बिक्री इतिहास</strong>, जब भी आपको चाहिए Excel में निर्यात योग्य",
+      pClosing: "कोई साइनअप नहीं, कोई लॉगिन नहीं, कॉन्फ़िगर करने के लिए कोई सर्वर नहीं, और बनाए रखने के लिए कोई डेटाबेस नहीं - यह खोलते ही उपयोग के लिए तैयार है। यदि एक कस्टमाइज़्ड नो-कोड पीओएस बनाना आपकी परियोजना है, तो AppSheet इसके लिए एक ठोस उपकरण है। लेकिन यदि आप बस आज ही बिक्री शुरू करना चाहते हैं, तो <strong>GoOnlinePOS पहले से बना हुआ है और उपयोग के लिए तैयार है।</strong>",
+      ctaH2: "निर्माण छोड़ें - इसे मुफ्त में आज़माएं",
+      ctaP: "कोई साइनअप नहीं, कोई लॉगिन नहीं। बस GoOnlinePOS खोलें और बिक्री शुरू करें।",
+      ctaBtn: "GoOnlinePOS खोलें"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      backLinkText: "← Volver al Blog",
+      articleH1: "Crea Tu Propio POS Usando AppSheet Sin Código (Y Lo Que Realmente Se Necesita Para Lograrlo)",
+      articleUpdatedLabel: "Última actualización:",
+      articleMinRead: "MIN DE LECTURA",
+      introP: "Si has pasado algo de tiempo mirando herramientas sin código, probablemente te has topado con <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> - la plataforma que te permite convertir una hoja de cálculo en una aplicación funcional sin escribir código. Es una idea genuinamente poderosa, y \"construir mi propio POS\" es uno de los proyectos más comunes que la gente intenta con ella. Esto es lo que realmente implica, lo que obtienes a cambio, y dónde puede hacerte tropezar.",
+      h2WhatIs: "Qué es AppSheet realmente",
+      pWhatIs1: "<a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> es un constructor de aplicaciones sin código de Google. Lo conectas a una fuente de datos - generalmente una Google Sheet, a veces Excel o una base de datos - y genera una aplicación alrededor de esos datos: formularios, botones, vistas, y flujos de trabajo, todo configurado a través de un editor visual en lugar de código. Para un POS, la \"fuente de datos\" es donde vivirían tus productos, ventas, e inventario.",
+      pWhatIs2: "Si quieres explorar la plataforma directamente, puedes visitar el <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>sitio web oficial de Google AppSheet</strong></a> para conocer sus funciones actuales, documentación, y formas de empezar.",
+      h2Blueprint: "El plano básico para un POS en AppSheet",
+      pBlueprintIntro: "La mayoría de las construcciones de POS DIY en AppSheet siguen aproximadamente la misma estructura:",
+      oli1: "<strong>Construye primero la hoja de cálculo.</strong> Una hoja de Productos (nombre, precio, categoría, stock, código de barras), una hoja de Ventas (cada transacción), una hoja de Artículos de Venta (líneas por venta), y a menudo una hoja de Cajeros. Esta es la verdadera columna vertebral de la aplicación - si la estructura está mal, todo lo construido encima hereda el problema.",
+      oli2: "<strong>Impórtala a AppSheet.</strong> AppSheet lee la estructura de la hoja y genera automáticamente una aplicación inicial con vistas básicas.",
+      oli3: "<strong>Construye el flujo de \"registrar una venta\".</strong> Esta es la parte que requiere trabajo real: un formulario o vista donde tocas productos, haces que AppSheet escriba filas en Artículos de Venta, las sume en un total de Ventas, e idealmente muestre un total de carrito en curso antes de guardar la venta.",
+      oli4: "<strong>Añade la deducción de stock.</strong> No es automático - escribes un \"bot\" de AppSheet (su función de automatización/flujo de trabajo) que se activa cuando se guarda una venta y resta cantidades de la hoja de Productos.",
+      oli5: "<strong>Añade recibos.</strong> AppSheet no tiene un flujo de impresora de recibos nativo estilo caja. Típicamente esto significa generar un PDF a partir de una plantilla e imprimirlo, o enviarlo por correo - funcional, pero no el recibo instantáneo de impresora térmica que obtendrías de un software POS creado específicamente para eso.",
+      oli6: "<strong>Configura los roles de usuario.</strong> Si más de un cajero lo usará, configurarás los filtros de seguridad de AppSheet para que cada persona vea solo lo que debería.",
+      pTutorial: "Si quieres construir tú mismo un POS en AppSheet, no empieces desde un lienzo en blanco. El <strong>canal de YouTube de Joe Tayactac</strong> se centra en el desarrollo práctico de AppSheet, incluyendo la construcción, solución de problemas, y mejora de aplicaciones reales. El tutorial a continuación recorre la construcción de un POS en AppSheet y la impresión de recibos de principio a fin.",
+      moreTutorialsLink: "▶ Más tutoriales de AppSheet en el canal",
+      h2Shines: "Dónde AppSheet realmente brilla para esto",
+      shineLi1: "<strong>Control total sobre el modelo de datos.</strong> Como es tu propia hoja de cálculo, puedes añadir cualquier campo personalizado o lógica de negocio que quieras - puntos de lealtad, estados de pedido personalizados, lo que sea específico de tu operación.",
+      shineLi2: "<strong>Se conecta con el resto de Google Workspace.</strong> Los datos de ventas llegan directamente a Sheets, así que los informes, tablas dinámicas, e integraciones con otras herramientas de Google son sencillos.",
+      shineLi3: "<strong>Genuinamente sin código.</strong> Estás configurando, no programando - accesible si te sientes cómodo con hojas de cálculo y tienes algo de paciencia para prueba y error.",
+      shineLi4: "<strong>Automatización integrada (\"bots\").</strong> Útil para cosas como alertas por correo de stock bajo o resúmenes diarios de ventas una vez que has aprendido el editor de automatización.",
+      h2FallsShort: "Dónde tiende a quedarse corto como herramienta de checkout real",
+      shortLi1: "<strong>No está construido principalmente para la velocidad en el mostrador.</strong> La arquitectura basada en sincronización de AppSheet puede introducir retrasos notables, particularmente cuando la aplicación tiene un conjunto de datos grande o expresiones y flujos de trabajo complejos. Para un goteo lento de ventas eso a menudo está bien, pero durante períodos ocupados incluso pequeños retrasos pueden acumularse.",
+      shortLi2: "<strong>Sin flujo nativo de código de barras al carrito.</strong> Puedes añadir escaneo de código de barras vía cámara, pero conectarlo a una experiencia fluida de \"escanear y está instantáneamente en el carrito\" requiere trabajo real de configuración, y los lectores de código de barras USB (que solo escriben el código y presionan enter) necesitan manejo adicional para comportarse correctamente.",
+      shortLi3: "<strong>Los costos pueden aumentar a medida que crece tu negocio.</strong> AppSheet ofrece diferentes opciones de precios, pero el uso empresarial con múltiples usuarios puede requerir planes pagos, haciendo del costo continuo una consideración importante. <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">Ver precios actuales de AppSheet</a>.",
+      shortLi4: "<strong>Google Sheets como base de datos tiene límites reales.</strong> A medida que tu hoja de Ventas crece a miles de filas, tanto Sheets como la aplicación construida sobre ella pueden empezar a ralentizarse notablemente.",
+      shortLi5: "<strong>Tú eres el equipo de soporte.</strong> No hay proveedor al que llamar cuando un bot falla o una fórmula se rompe en el checkout - depende de ti depurarlo, idealmente no mientras un cliente espera.",
+      shortLi6: "<strong>El uso sin conexión requiere una configuración cuidadosa.</strong> AppSheet soporta el uso sin conexión, pero diseñar un POS offline confiable requiere un manejo cuidadoso de la sincronización, cambios de inventario, y conflictos cuando múltiples dispositivos se reconectan. Para un POS serio, estos detalles necesitan probarse a fondo antes de depender del funcionamiento sin conexión.",
+      h2WhoFits: "Para quién tiene sentido realmente esta ruta",
+      pWhoFits1: "Construir un POS en AppSheet es una excelente opción si disfrutas construyendo cosas y quieres una aplicación adaptada exactamente a un flujo de trabajo específico e inusual - un POS que también necesita hacer algo que el software POS ordinario no hace, como activar un paso de aprobación personalizado, o alimentar un formato de informe interno muy particular. Es un ejercicio genuino de construcción de aplicaciones, no una configuración de cinco minutos.",
+      pWhoFits2: "Si lo que realmente necesitas es un sistema de checkout sencillo y confiable - registrar artículos, tomar pagos, imprimir recibos, y rastrear stock - y prefieres no dedicar el tiempo a construirlo y mantenerlo tú mismo, hay una opción mucho más rápida: usar un POS que ya está construido.",
+      h2Shortcut: "El atajo: un POS que ya está construido",
+      pShortcut1: "<a href=\"/\">GoOnlinePOS.com</a> es un punto de venta gratuito que se ejecuta totalmente en tu navegador - sin hoja de cálculo que diseñar, sin bots que configurar, sin suscripción por usuario. Abre la página y ya tienes las partes en las que una construcción DIY gasta más tiempo:",
+      shortcutLi1: "<strong>Escaneo de códigos de barras</strong> que funciona con cualquier lector de código de barras USB sin configuración adicional",
+      shortcutLi2: "<strong>Deducción automática de stock</strong> con cada venta, sin automatización que construir",
+      shortcutLi3: "<strong>Pagos divididos</strong> - parte en efectivo, parte con tarjeta, rastreados con precisión",
+      shortcutLi4: "<strong>Múltiples cajeros</strong>, con las ventas rastreadas por separado para cada uno",
+      shortcutLi5: "<strong>Impresión instantánea de recibos</strong>, con tu propio logo y detalles de la tienda",
+      shortcutLi6: "<strong>Modo Offline</strong>, para que puedas seguir vendiendo sin conexión a internet",
+      shortcutLi7: "<strong>Historial de ventas completo</strong>, exportable a Excel cuando lo necesites",
+      pClosing: "Sin registro, sin inicio de sesión, sin servidor que configurar, y sin base de datos que mantener - está listo para usar en el momento en que lo abres. Si construir un POS sin código personalizado es el proyecto que quieres, AppSheet es una herramienta sólida para ello. Pero si simplemente quieres empezar a vender hoy, <strong>GoOnlinePOS ya está construido y listo para usar.</strong>",
+      ctaH2: "Sáltate la construcción - pruébalo gratis",
+      ctaP: "Sin registro, sin inicio de sesión. Solo abre GoOnlinePOS y comienza a vender.",
+      ctaBtn: "Abrir GoOnlinePOS"
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      backLinkText: "← กลับไปที่บล็อก",
+      articleH1: "สร้างระบบ POS ของคุณเองด้วย AppSheet แบบไม่ต้องเขียนโค้ด (และสิ่งที่ต้องใช้จริง ๆ เพื่อทำให้สำเร็จ)",
+      articleUpdatedLabel: "อัปเดตล่าสุด:",
+      articleMinRead: "นาทีในการอ่าน",
+      introP: "หากคุณเคยใช้เวลาสำรวจเครื่องมือแบบไม่ต้องเขียนโค้ด คุณอาจเคยเจอกับ <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">Google AppSheet</a> มาแล้ว - แพลตฟอร์มที่ให้คุณเปลี่ยนสเปรดชีตให้กลายเป็นแอปที่ใช้งานได้โดยไม่ต้องเขียนโค้ด มันเป็นแนวคิดที่ทรงพลังอย่างแท้จริง และ \"สร้าง POS ของตัวเอง\" ก็เป็นหนึ่งในโปรเจกต์ที่คนนิยมลองทำมากที่สุดด้วยเครื่องมือนี้ นี่คือสิ่งที่มันเกี่ยวข้องจริง ๆ สิ่งที่คุณจะได้กลับมา และจุดที่อาจทำให้คุณสะดุด",
+      h2WhatIs: "AppSheet คืออะไรกันแน่",
+      pWhatIs1: "<a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\">AppSheet</a> คือเครื่องมือสร้างแอปแบบไม่ต้องเขียนโค้ดจาก Google คุณเชื่อมต่อมันเข้ากับแหล่งข้อมูล - โดยทั่วไปคือ Google Sheet บางครั้งก็เป็น Excel หรือฐานข้อมูล - แล้วมันจะสร้างแอปขึ้นรอบข้อมูลนั้น ได้แก่ ฟอร์ม ปุ่ม มุมมอง และเวิร์กโฟลว์ ทั้งหมดตั้งค่าผ่านตัวแก้ไขแบบภาพแทนที่จะเขียนโค้ด สำหรับ POS แล้ว \"แหล่งข้อมูล\" คือที่ที่สินค้า ยอดขาย และสินค้าคงคลังของคุณจะอาศัยอยู่",
+      pWhatIs2: "หากคุณต้องการสำรวจแพลตฟอร์มนี้โดยตรง คุณสามารถเยี่ยมชม <a href=\"https://about.appsheet.com/\" target=\"_blank\" rel=\"noopener\"><strong>เว็บไซต์ทางการของ Google AppSheet</strong></a> เพื่อดูฟีเจอร์ปัจจุบัน เอกสารประกอบ และวิธีเริ่มต้นใช้งาน",
+      h2Blueprint: "พิมพ์เขียวพื้นฐานสำหรับ POS ใน AppSheet",
+      pBlueprintIntro: "การสร้าง POS ด้วย AppSheet แบบทำเองส่วนใหญ่จะมีโครงสร้างคล้าย ๆ กันดังนี้:",
+      oli1: "<strong>สร้างสเปรดชีตก่อน</strong> ชีต Products (ชื่อ ราคา หมวดหมู่ สต็อก บาร์โค้ด) ชีต Sales (แต่ละธุรกรรม) ชีต Sale Items (รายการย่อยของแต่ละการขาย) และมักจะมีชีต Cashiers ด้วย นี่คือแกนหลักที่แท้จริงของแอป - หากโครงสร้างผิดพลาด ทุกสิ่งที่สร้างต่อยอดขึ้นมาก็จะรับปัญหานั้นไปด้วย",
+      oli2: "<strong>นำเข้าสู่ AppSheet</strong> AppSheet จะอ่านโครงสร้างของชีตและสร้างแอปเริ่มต้นพร้อมมุมมองพื้นฐานให้โดยอัตโนมัติ",
+      oli3: "<strong>สร้างขั้นตอน \"บันทึกการขาย\"</strong> นี่คือส่วนที่ต้องใช้ความพยายามจริง ๆ ได้แก่ ฟอร์มหรือมุมมองที่คุณแตะเลือกสินค้า ให้ AppSheet เขียนแถวลงใน Sale Items รวมยอดเป็นยอดขายรวม และควรแสดงยอดรวมตะกร้าแบบเรียลไทม์ก่อนที่จะบันทึกการขาย",
+      oli4: "<strong>เพิ่มการหักสต็อก</strong> ไม่ได้เกิดขึ้นอัตโนมัติ - คุณต้องเขียน \"บอท\" ของ AppSheet (ฟีเจอร์อัตโนมัติ/เวิร์กโฟลว์ของพวกเขา) ที่จะทำงานเมื่อบันทึกการขายและหักจำนวนออกจากชีต Products",
+      oli5: "<strong>เพิ่มใบเสร็จ</strong> AppSheet ไม่มีระบบพิมพ์ใบเสร็จแบบเครื่องแคชเชียร์ในตัว โดยทั่วไปหมายถึงการสร้าง PDF จากเทมเพลตแล้วพิมพ์ออกมา หรือส่งทางอีเมล - ใช้งานได้ แต่ไม่ใช่ใบเสร็จเครื่องพิมพ์ความร้อนแบบทันทีที่คุณจะได้จากซอฟต์แวร์ POS ที่สร้างมาเพื่อสิ่งนี้โดยเฉพาะ",
+      oli6: "<strong>ตั้งค่าบทบาทผู้ใช้</strong> หากมีพนักงานแคชเชียร์มากกว่าหนึ่งคนที่จะใช้งาน คุณจะต้องตั้งค่าตัวกรองความปลอดภัยของ AppSheet เพื่อให้แต่ละคนเห็นเฉพาะสิ่งที่ควรเห็นเท่านั้น",
+      pTutorial: "หากคุณต้องการสร้าง AppSheet POS ด้วยตัวเอง อย่าเริ่มจากผืนผ้าใบเปล่า <strong>ช่อง YouTube ของ Joe Tayactac</strong> เน้นการพัฒนา AppSheet ในเชิงปฏิบัติ รวมถึงการสร้าง แก้ปัญหา และปรับปรุงแอปในโลกจริง วิดีโอสอนด้านล่างนี้จะพาคุณไปทีละขั้นตอนตั้งแต่การสร้าง AppSheet POS จนถึงการพิมพ์ใบเสร็จตั้งแต่ต้นจนจบ",
+      moreTutorialsLink: "▶ ดูวิดีโอสอน AppSheet เพิ่มเติมในช่อง",
+      h2Shines: "จุดที่ AppSheet โดดเด่นจริง ๆ สำหรับเรื่องนี้",
+      shineLi1: "<strong>ควบคุมโมเดลข้อมูลได้อย่างเต็มที่</strong> เนื่องจากมันคือสเปรดชีตของคุณเอง คุณสามารถเพิ่มฟิลด์ที่กำหนดเองหรือตรรกะทางธุรกิจใดก็ได้ที่ต้องการ - คะแนนสะสม สถานะคำสั่งซื้อแบบกำหนดเอง หรืออะไรก็ตามที่เฉพาะเจาะจงกับธุรกิจของคุณ",
+      shineLi2: "<strong>เชื่อมต่อกับส่วนอื่น ๆ ของ Google Workspace</strong> ข้อมูลการขายเข้าสู่ Sheets โดยตรง ทำให้การรายงาน ตารางสรุปข้อมูล และการเชื่อมต่อกับเครื่องมืออื่น ๆ ของ Google ทำได้ง่าย",
+      shineLi3: "<strong>ไม่ต้องเขียนโค้ดจริง ๆ</strong> คุณกำลังตั้งค่า ไม่ใช่เขียนโปรแกรม - เข้าถึงได้ง่ายหากคุณคุ้นเคยกับสเปรดชีตและมีความอดทนพอสำหรับการลองผิดลองถูก",
+      shineLi4: "<strong>มีระบบอัตโนมัติในตัว (\"บอท\")</strong> มีประโยชน์สำหรับสิ่งต่าง ๆ เช่น การแจ้งเตือนทางอีเมลเมื่อสินค้าใกล้หมด หรือสรุปยอดขายรายวันเมื่อคุณเรียนรู้ตัวแก้ไขระบบอัตโนมัติแล้ว",
+      h2FallsShort: "จุดที่มักจะขาดตกบกพร่องในฐานะเครื่องมือคิดเงินจริง",
+      shortLi1: "<strong>ไม่ได้ถูกสร้างมาเพื่อความรวดเร็วที่หน้าเคาน์เตอร์เป็นหลัก</strong> สถาปัตยกรรมแบบซิงค์ของ AppSheet อาจทำให้เกิดความล่าช้าที่สังเกตได้ โดยเฉพาะเมื่อแอปมีชุดข้อมูลขนาดใหญ่หรือมีนิพจน์และเวิร์กโฟลว์ที่ซับซ้อน สำหรับยอดขายที่ค่อย ๆ ทยอยมาก็มักจะไม่มีปัญหา แต่ในช่วงที่ลูกค้าเยอะ แม้แต่ความล่าช้าเล็กน้อยก็อาจสะสมได้",
+      shortLi2: "<strong>ไม่มีระบบสแกนบาร์โค้ดสู่ตะกร้าในตัว</strong> คุณสามารถเพิ่มการสแกนบาร์โค้ดผ่านกล้องได้ แต่การเชื่อมโยงให้เป็นประสบการณ์ที่ราบรื่นแบบ \"สแกนแล้วเข้าตะกร้าทันที\" ต้องใช้งานการตั้งค่าจริง ๆ และเครื่องสแกนบาร์โค้ด USB (ที่แค่พิมพ์รหัสแล้วกด Enter) ต้องมีการจัดการเพิ่มเติมเพื่อให้ทำงานได้อย่างถูกต้อง",
+      shortLi3: "<strong>ค่าใช้จ่ายอาจเพิ่มขึ้นเมื่อธุรกิจของคุณเติบโต</strong> AppSheet มีตัวเลือกราคาที่หลากหลาย แต่การใช้งานเชิงธุรกิจที่มีผู้ใช้หลายคนอาจต้องใช้แพ็กเกจแบบเสียเงิน ทำให้ค่าใช้จ่ายต่อเนื่องเป็นข้อพิจารณาที่สำคัญ <a href=\"https://about.appsheet.com/pricing/\" target=\"_blank\" rel=\"noopener\">ดูราคาปัจจุบันของ AppSheet</a>",
+      shortLi4: "<strong>Google Sheets ในฐานะฐานข้อมูลมีข้อจำกัดจริง</strong> เมื่อชีต Sales ของคุณเติบโตขึ้นเป็นหลายพันแถว ทั้ง Sheets และแอปที่สร้างขึ้นบนนั้นอาจเริ่มทำงานช้าลงอย่างสังเกตได้",
+      shortLi5: "<strong>คุณคือทีมซัพพอร์ตเอง</strong> ไม่มีผู้ให้บริการให้โทรหาเมื่อบอททำงานผิดพลาดหรือสูตรพังตอนคิดเงิน - คุณต้องแก้ปัญหาเอง และควรจะไม่ใช่ตอนที่ลูกค้ากำลังรออยู่",
+      shortLi6: "<strong>การใช้งานแบบออฟไลน์ต้องการการตั้งค่าอย่างระมัดระวัง</strong> AppSheet รองรับการใช้งานแบบออฟไลน์ แต่การออกแบบ POS ออฟไลน์ที่เชื่อถือได้ต้องมีการจัดการอย่างระมัดระวังเรื่องการซิงค์ข้อมูล การเปลี่ยนแปลงสินค้าคงคลัง และความขัดแย้งเมื่อหลายอุปกรณ์เชื่อมต่อกลับมา สำหรับ POS ที่ใช้งานจริงจัง รายละเอียดเหล่านี้ต้องได้รับการทดสอบอย่างละเอียดก่อนที่จะพึ่งพาการทำงานแบบออฟไลน์",
+      h2WhoFits: "เส้นทางนี้เหมาะกับใครจริง ๆ",
+      pWhoFits1: "การสร้าง POS ด้วย AppSheet เหมาะมากหากคุณชอบสร้างสิ่งต่าง ๆ และต้องการแอปที่ปรับให้เข้ากับเวิร์กโฟลว์ที่เฉพาะเจาะจงและไม่ธรรมดา - POS ที่ต้องทำสิ่งที่ซอฟต์แวร์ POS ทั่วไปทำไม่ได้ เช่น การกระตุ้นขั้นตอนอนุมัติแบบกำหนดเอง หรือป้อนข้อมูลเข้ารูปแบบรายงานภายในที่เฉพาะเจาะจงมาก มันเป็นการฝึกสร้างแอปที่แท้จริง ไม่ใช่การตั้งค่าห้านาที",
+      pWhoFits2: "หากสิ่งที่คุณต้องการจริง ๆ คือระบบคิดเงินที่ตรงไปตรงมาและเชื่อถือได้ - บันทึกสินค้า รับชำระเงิน พิมพ์ใบเสร็จ และติดตามสต็อก - และคุณไม่อยากเสียเวลาสร้างและดูแลมันเอง ก็มีทางเลือกที่เร็วกว่ามาก นั่นคือใช้ POS ที่สร้างไว้เรียบร้อยแล้ว",
+      h2Shortcut: "ทางลัด: POS ที่สร้างไว้เรียบร้อยแล้ว",
+      pShortcut1: "<a href=\"/\">GoOnlinePOS.com</a> คือระบบขายหน้าร้านฟรีที่ทำงานอยู่ในเบราว์เซอร์ของคุณทั้งหมด - ไม่ต้องออกแบบสเปรดชีต ไม่ต้องตั้งค่าบอท ไม่มีค่าสมาชิกต่อผู้ใช้ เปิดหน้าเว็บแล้วคุณก็มีส่วนต่าง ๆ ที่การสร้างเองต้องใช้เวลามากที่สุดอยู่แล้ว:",
+      shortcutLi1: "<strong>การสแกนบาร์โค้ด</strong> ที่ใช้งานได้กับเครื่องสแกนบาร์โค้ด USB ทุกยี่ห้อโดยไม่ต้องตั้งค่าเพิ่มเติม",
+      shortcutLi2: "<strong>การหักสต็อกอัตโนมัติ</strong> ทุกครั้งที่มีการขาย ไม่ต้องสร้างระบบอัตโนมัติเอง",
+      shortcutLi3: "<strong>การแบ่งชำระเงิน</strong> - ส่วนหนึ่งเป็นเงินสด ส่วนหนึ่งเป็นบัตร ติดตามได้อย่างแม่นยำ",
+      shortcutLi4: "<strong>พนักงานแคชเชียร์หลายคน</strong> พร้อมการติดตามยอดขายแยกกันสำหรับแต่ละคน",
+      shortcutLi5: "<strong>การพิมพ์ใบเสร็จทันที</strong> พร้อมโลโก้และรายละเอียดร้านของคุณเอง",
+      shortcutLi6: "<strong>โหมดออฟไลน์</strong> เพื่อให้คุณยังคงขายของได้แม้ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+      shortcutLi7: "<strong>ประวัติการขายที่สมบูรณ์</strong> ส่งออกเป็น Excel ได้ทุกเมื่อที่คุณต้องการ",
+      pClosing: "ไม่ต้องสมัคร ไม่ต้องเข้าสู่ระบบ ไม่ต้องตั้งค่าเซิร์ฟเวอร์ และไม่ต้องดูแลฐานข้อมูล - พร้อมใช้งานทันทีที่คุณเปิดมันขึ้นมา หากการสร้าง POS แบบไม่ต้องเขียนโค้ดที่ปรับแต่งเองคือโปรเจกต์ที่คุณต้องการ AppSheet ก็เป็นเครื่องมือที่ดีสำหรับสิ่งนั้น แต่ถ้าคุณแค่อยากเริ่มขายของวันนี้เลย <strong>GoOnlinePOS ก็สร้างไว้พร้อมใช้งานแล้ว</strong>",
+      ctaH2: "ข้ามขั้นตอนการสร้าง - ลองใช้ฟรี",
+      ctaP: "ไม่ต้องสมัคร ไม่ต้องเข้าสู่ระบบ แค่เปิด GoOnlinePOS แล้วเริ่มขายได้เลย",
+      ctaBtn: "เปิด GoOnlinePOS"
+    }
+  };
+
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      langPickerLabel: "langPickerLabel",
+      backLinkText: "backLinkText",
+      articleH1: "articleH1",
+      articleUpdatedLabel: "articleUpdatedLabel",
+      articleMinRead: "articleMinRead",
+      h2WhatIs: "h2WhatIs",
+      h2Blueprint: "h2Blueprint",
+      pBlueprintIntro: "pBlueprintIntro",
+      moreTutorialsLink: "moreTutorialsLink",
+      h2Shines: "h2Shines",
+      h2FallsShort: "h2FallsShort",
+      h2WhoFits: "h2WhoFits",
+      pWhoFits1: "pWhoFits1",
+      pWhoFits2: "pWhoFits2",
+      h2Shortcut: "h2Shortcut",
+      ctaH2: "ctaH2",
+      ctaP: "ctaP",
+      ctaBtn: "ctaBtn"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+    [
+      "introP", "pWhatIs1", "pWhatIs2",
+      "oli1", "oli2", "oli3", "oli4", "oli5", "oli6",
+      "pTutorial",
+      "shineLi1", "shineLi2", "shineLi3", "shineLi4",
+      "shortLi1", "shortLi2", "shortLi3", "shortLi4", "shortLi5", "shortLi6",
+      "pShortcut1",
+      "shortcutLi1", "shortcutLi2", "shortcutLi3", "shortcutLi4", "shortcutLi5", "shortcutLi6", "shortcutLi7",
+      "pClosing"
+    ].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-article-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-article-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

@@ -193,17 +193,31 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
     paragraph/button are translated too. The article's `<time>` element
     (`"August 2026"`) stays untouched in every language, same reasoning
     as `blog.html`'s own post-meta lines.
-  - Each article's translation script is large enough (39 keys × 6
-    languages, several long paragraphs) that it was drafted in a
-    scratch file and syntax-checked/id-cross-checked/key-set-verified
-    before being spliced into the page, rather than composed directly
-    inline - the same technique used for `index.html`'s 116-key object.
-    One real bug this caught before shipping: an early draft correctly
-    used `innerHTML` for the "GoOnlinePOS.com" link paragraph and the
-    first `<li>`, but left the other nine `<li>`s (which also carry a
-    leading `<strong>` tag) in the `textContent` id-map instead - fixed
-    by moving all ten `<li>`s into the `innerHTML` translation list, not
-    just the first one, since every one of them embeds a tag.
+  - Each article's translation script is large enough (39-98 keys × 6
+    languages depending on the article - `blog-why-your-business-needs-a-pos.html`'s
+    10-item feature list, `blog-create-your-own-pos-with-appsheet.html`'s
+    external AppSheet links and 3 separate bulleted lists, and
+    `blog-from-excel-to-appsheet-expert.html`'s ~70 short one-sentence
+    paragraphs each needing their own id and key - that each was
+    drafted in a scratch file and syntax-checked/id-cross-checked/
+    key-set-verified before being spliced into the page, rather than
+    composed directly inline - the same technique used for `index.html`'s
+    116-key object. One real bug this caught before shipping on the
+    first article: an early draft correctly used `innerHTML` for the
+    "GoOnlinePOS.com" link paragraph and the first `<li>`, but left the
+    other nine `<li>`s (which also carry a leading `<strong>` tag) in the
+    `textContent` id-map instead - fixed by moving all ten `<li>`s into
+    the `innerHTML` translation list, not just the first one, since
+    every one of them embeds a tag. Every external link inside the
+    AppSheet article (the official AppSheet site, its pricing page, the
+    Joe Tayactac YouTube channel) keeps its exact `href` untouched
+    through translation - only the visible anchor text and surrounding
+    prose translate, via the same `innerHTML` id list. Real people's
+    names ("Joe Tayactac") and product/brand names ("AppSheet", "Google
+    Workspace", "Excel", "YouTube", "Sheets") stay as literal proper
+    nouns in every language, matching the established "VAT"/"Excel"-
+    style precedent elsewhere in this file - only the surrounding
+    sentence structure translates around them.
   - Verified with Playwright on `blog.html` and on
     `blog-why-your-business-needs-a-pos.html`: switching to Arabic
     translates every listed section and flips `dir` to `rtl`, while the
