@@ -177,9 +177,14 @@ button:active { transform: translateY(1px); }
 .app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(220px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
 .app .left-panel { margin-right: 4px; }
 .app .preview-area { margin-left: 4px; }
+.app.catalog-fullscreen { grid-template-columns: 1fr; }
+.app.catalog-fullscreen .panel-resize-handle, .app.catalog-fullscreen .preview-area { display: none; }
+.app.receipt-fullscreen { grid-template-columns: 1fr; }
+.app.receipt-fullscreen .panel-resize-handle, .app.receipt-fullscreen .left-panel { display: none; }
 .panel-resize-handle { align-self: stretch; cursor: col-resize; position: relative; touch-action: none; }
 .panel-resize-handle::after { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--line); transform: translateX(-50%); transition: background .15s ease; }
 .panel-resize-handle:hover::after, .panel-resize-handle.dragging::after { background: var(--accent); }
+.pos-topbar-icon-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
 
 .site-footer { max-width: 1500px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); }
 .site-footer a { color: var(--muted); text-decoration: none; }
@@ -598,6 +603,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <span class="toggle-slider"></span>
       </label>
 </div>
+<button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products">◧</button>
+<button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt">◨</button>
 <button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language">🌐</button>
 <!-- OFFLINE-STRIP:ACCOUNT-WELCOME:START -->
 <div class="pos-topbar-account">
@@ -1585,6 +1592,28 @@ async function loadPanelSplit() {
   const saved = await storageGet("pos-catalog-width");
   const percent = saved ? parseFloat(saved) : NaN;
   document.documentElement.style.setProperty("--catalog-width", (isNaN(percent) ? 75 : percent) + "%");
+}
+function renderPanelFullscreenButtons() {
+  const appEl = document.querySelector(".app");
+  const catalogBtn = document.getElementById("toggleCatalogFullscreenBtn");
+  const receiptBtn = document.getElementById("toggleReceiptFullscreenBtn");
+  if (!appEl || !catalogBtn || !receiptBtn) return;
+  catalogBtn.classList.toggle("active", appEl.classList.contains("catalog-fullscreen"));
+  receiptBtn.classList.toggle("active", appEl.classList.contains("receipt-fullscreen"));
+}
+function toggleCatalogFullscreen() {
+  const appEl = document.querySelector(".app");
+  const turningOn = !appEl.classList.contains("catalog-fullscreen");
+  appEl.classList.toggle("catalog-fullscreen", turningOn);
+  if (turningOn) appEl.classList.remove("receipt-fullscreen");
+  renderPanelFullscreenButtons();
+}
+function toggleReceiptFullscreen() {
+  const appEl = document.querySelector(".app");
+  const turningOn = !appEl.classList.contains("receipt-fullscreen");
+  appEl.classList.toggle("receipt-fullscreen", turningOn);
+  if (turningOn) appEl.classList.remove("catalog-fullscreen");
+  renderPanelFullscreenButtons();
 }
 function initPanelResize() {
   const handle = document.getElementById("panelResizeHandle");
