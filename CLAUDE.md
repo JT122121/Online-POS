@@ -1915,6 +1915,78 @@ live code calls it anymore.
   (all six languages) were both reworded to mention the automatic
   15-day trial explicitly, replacing copy that only described signing
   in plus redeeming a code.
+- **The free 15-day trial is now actively advertised in the main app
+  screen, not just mentioned in Settings copy**, per an explicit
+  follow-up request to promote it with a real Google logo rather than
+  an emoji. Three spots, all pre-existing UI elements whose copy still
+  only talked about "sign in and redeem a code" (now misleading, since
+  signing in alone grants the trial), were reworded and given the real
+  four-color Google "G" SVG glyph (the same mark already used on
+  `.google-signin-btn`, just a smaller `.google-signin-icon-sm` (13px)
+  variant for compact inline contexts) in place of a plain emoji:
+  - **`#accountSignInPrompt`** (the main header's own signed-out
+    one-click prompt, next to the app title - the single most visible
+    "main screen" spot in the whole app) - `🔑 Sign in for Premium`
+    became a real Google "G" icon plus `accountQuickSignInLabel: "Sign
+    in - 15 Days Free"` (kept short - this is a compact pill next to
+    the title/badges, not room for a full "with Google" sentence; the
+    Google icon itself already signals the method).
+  - **`#premiumPromoNotice`** (the app-wide gold banner shown on every
+    screen while on Basic) - `premiumPromoText` reworded from "Sign in
+    and redeem a Premium code to unlock..." to "Sign in with Google to
+    get 15 days of Premium free - no code needed! Unlocks...", with the
+    same Google icon replacing the `🔓` emoji that used to open the
+    line.
+  - **`#redeemCodePrompt`** (the gold callout inside Settings → Premium's
+    signed-out panel, added in an earlier pass - see the
+    `#premiumToolbarButton` bullet above) - this one had gone from
+    merely stale to actively backwards: "Have a Premium Code? Sign in
+    with Google below to redeem it." reads as if a code is a
+    prerequisite for signing in at all, when signing in alone is what
+    grants the 15 free days. Reworded to `redeemCodePromptTitle: "Get
+    15 Days Premium Free"` / `redeemCodePromptText: "Sign in with
+    Google below - no code needed. Already have a code? Redeem it after
+    signing in."` (kept the `🎁` emoji here rather than a second Google
+    icon - the real Google mark already appears immediately below on
+    the sign-in button itself in this same compact panel, so a second
+    copy right next to it would have read as redundant rather than
+    reinforcing).
+  - **A real, separate bug caught in the same pass**: `#accountPanelInfo`'s
+    raw HTML default text (the very next line above
+    `#redeemCodePrompt`) still read the *old*, pre-trial copy ("Sign in
+    with Google to get a free account, then redeem a code to unlock
+    Premium features...") even though `modules/translations.js`'s own
+    `en` value for the same key had already been correctly updated to
+    mention the 15-day trial in the earlier pass. The two are supposed
+    to always match (same convention already documented for
+    `index.html`'s `faq1A` elsewhere in this file) - only the
+    `translations.js` half of that earlier edit had actually been
+    applied to this particular key; the raw-HTML half was missed.
+    Fixed by syncing the HTML default to the already-correct
+    `translations.js` value.
+  - **`index.html`'s "Do I need to create an account?" FAQ answer
+    (`faq2A`) had the identical staleness bug**, independently of the
+    app.html one above - "Signing in with Google is only needed if you
+    want to redeem a code and unlock Premium features" implies signing
+    in by itself does nothing, which stopped being true the moment the
+    auto-trial shipped. Reworded (raw HTML default + all six
+    `translations` values) to "Signing in with Google is only needed
+    for Premium, which starts with a free 15-day trial automatically -
+    no code required to begin."
+  - All four reworded keys (`accountQuickSignInLabel`, `premiumPromoText`,
+    `redeemCodePromptTitle`, `redeemCodePromptText`) already existed in
+    `changeLanguage()`'s `ids` map from the earlier passes that
+    introduced them, so no new wiring was needed - only the values
+    changed, across all six `modules/translations.js` language blocks.
+  - Verified with Playwright: both the header prompt and the promo
+    banner render the real four-color Google glyph (checked for the
+    `#4285F4` blue path specifically, not just an `<svg>` existing);
+    all four reworded strings read correctly in English and, checked
+    against Spanish, re-translate correctly on a language switch
+    including the previously-buggy `accountPanelInfo`; `index.html`'s
+    `faq1A`/`faq2A` no longer contradict each other on whether signing
+    in alone does anything; and zero horizontal overflow or console
+    errors at 390px.
 - **`modules/account.js`** is the live site's only Premium mechanism now
   - `getSupabaseClient()`,
   `initAccount()` (session restore + auth-state listener, called from
