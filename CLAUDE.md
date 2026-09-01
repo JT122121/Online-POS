@@ -2504,25 +2504,23 @@ billing anywhere in this system).
   Script's own copy (never committed to this repo), test end-to-end with
   PayPal Sandbox buyer accounts, then switch to Live credentials.
 
-## Automatic 7-day welcome trial on first sign-in
+## New signup email notification
 
-Every genuinely brand-new account now automatically gets a one-time,
-7-day Premium redemption code emailed to it the moment it signs in for
-the first time - no button to click, no contacting the site owner,
-nothing for the site owner to do per signup. This replaced the old
-"Request Your Free Trial" button (`#freeTrialBtn` → `openFreeTrial()`,
-a manual contact-us flow) in `app.html`'s Settings → Account &
-Subscription panel, which was removed outright once this automatic
-version existed - see "Remove the free 7-day trial request" bullet
-history via the HTML/JS/translation-key removal (the block, the
-function, its `changeLanguage()` ids-map entry, and
-`freeTrialButtonLabel`/`freeTrialHeading`/`freeTrialInfo` from all six
-`modules/translations.js` languages) and `index.html`'s "Is it really
-free?" FAQ answer dropping its "or request a free 7-day trial" clause
-to match. Manually-created codes (Supabase dashboard → Table Editor →
-`redemption_codes`) still work exactly as before, for comps/promos/
-anyone the site owner would rather handle by hand - this is purely an
-additional, automatic path for new signups.
+Every genuinely brand-new account (first time that email has ever
+signed in) now sends the site owner a short email the moment it
+happens - "New GoOnlinePOS sign-up: someone@example.com" - no code, no
+trial, nothing sent to the new user at all, purely a heads-up to the
+site owner. This is a revision of an earlier design that auto-issued a
+7-day Premium trial code to the new user instead (generating a
+`redemption_codes` row and emailing the code) - replaced with this
+simpler notify-only version per explicit follow-up request; the
+`welcome-trial/` folder was renamed to `signup-notify/` and its Apps
+Script rewritten accordingly, dropping all trial/redemption-code logic.
+Manually-created codes (Supabase dashboard → Table Editor →
+`redemption_codes`) are completely unaffected either way - this
+feature never touches that table. The "Request Your Free Trial" button
+removal (see "Remove the free 7-day trial request" above) still
+stands - nothing about this revision brings that button back.
 
 - **Where "first time" comes from - `auth.users` itself, not a new
   check.** Supabase Auth's `auth.users` table has exactly one row per
@@ -2533,100 +2531,74 @@ additional, automatic path for new signups.
   "this email has never signed in before" signal. No separate
   uniqueness lookup needed - reusing the same trigger this system
   already relied on for its other auto-provisioning.
-- **Still doesn't auto-grant Premium the way the old `PROMO1` code
-  used to** - `handle_new_user()` generates a random 10-character code
-  (`upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10))`)
-  and inserts it into `redemption_codes` with `duration_days = 7`, the
-  exact same table/column a site owner's own manually-created codes
-  use - the new account still has to actively redeem it via the
-  existing `redeem_code()` RPC (Settings → Premium → Redeem Code), it
-  just never has to ask anyone for a code first. Verified end-to-end
-  against a local PostgreSQL instance: the generated code correctly
-  redeems and extends `premium_until` by exactly 7 days through the
-  unmodified `redeem_code()` function - no new code path for the
-  actual grant, only for how the code comes to exist.
 - **Postgres can't send email, so `pg_net` bridges to a new Apps
-  Script.** A new `create extension if not exists pg_net;` near the
-  top of `supabase/schema.sql` enables Supabase's built-in async
+  Script.** `create extension if not exists pg_net;` near the top of
+  `supabase/schema.sql` enables Supabase's built-in async
   outbound-HTTP extension (the same one Supabase's own Database
   Webhooks feature is built on) - `handle_new_user()` calls
-  `net.http_post()` with `{email, code, secret}` to a new
-  `welcome-trial/AppsScript.gs` (new file, matching
-  `contact-form/AppsScript.gs`'s `MailApp.sendEmail()` convention
-  exactly), which is the piece that actually emails the code with
-  plain redeem instructions. **Fire-and-forget by design** - `pg_net`
+  `net.http_post()` with `{email, secret}` to `signup-notify/
+  AppsScript.gs` (matching `contact-form/AppsScript.gs`'s
+  `MailApp.sendEmail()` convention exactly), which is the piece that
+  actually emails the site owner (`OWNER_EMAIL`) with the new user's
+  address and sign-up time. **Fire-and-forget by design** - `pg_net`
   queues the request asynchronously and returns immediately, so a
   visitor's sign-in never waits on this call or on the Apps Script's
-  own response time.
-- **Two separate exception blocks, not one - a real bug caught by
-  local testing, not a hypothetical.** The first version wrapped both
-  the `redemption_codes` insert and the `net.http_post()` call in one
-  `begin...exception when others then null; end;` block - but a
-  PL/pgSQL exception handler acts as an implicit savepoint, so when a
-  simulated `net.http_post()` failure was tested locally, it silently
-  rolled back the *already-successful* code insert too, not just the
-  failed webhook call. Fixed by splitting them into two independent
-  blocks (code insert first, its own exception handler; then, only if
-  that succeeded, the webhook call in its own separate block) so a
-  webhook/email failure can never erase a code that was already
-  created - the code then survives as a findable fallback in
-  `redemption_codes` (matching `welcome-trial/README.md`'s own
-  troubleshooting section, which specifically tells the site owner to
-  check for exactly this). The whole feature is still wrapped so a
-  failure at any point - code generation, insert, or webhook - can
-  never block the sign-in itself; verified by forcing `net.http_post`
-  to throw locally and confirming `store_settings`/`profiles` (and,
-  after the fix, the redemption code) are still created regardless.
+  own response time. The whole call is wrapped in its own
+  `begin...exception when others then null; end;` block so a webhook
+  hiccup can never break someone's actual sign-in - simpler than the
+  auto-trial design's two-block split (see below), since there's now
+  only one side effect (the webhook itself) to protect, not a database
+  insert that also needed to survive a webhook failure independently.
 - **`WEBHOOK_SECRET` gates the Apps Script endpoint** - unlike
   `paypal-premium/AppsScript.gs` (which independently re-verifies
   everything against PayPal's own API before doing anything
   consequential), this endpoint has no other check of its own; without
-  a shared secret, anyone who discovered the `/exec` URL could turn it
-  into an anonymous mail-spam relay by POSTing arbitrary
-  `{email, code}` pairs. The secret is a plain random string the site
-  owner picks (not a credential from anywhere else) and must be pasted
-  identically into both `handle_new_user()`'s `net.http_post()` call in
-  `supabase/schema.sql` and the Apps Script's own `WEBHOOK_SECRET`
-  constant - `doPost()` rejects any request whose `secret` doesn't
-  match with `bad_secret` before touching `MailApp`.
-- **Verified two ways, matching this repo's established convention for
-  Account & Subscription changes.** (1) Against a throwaway local
-  PostgreSQL 16 instance, with a stubbed `net` schema (a fake
-  `net.http_post()` logging its calls into a table instead of making a
-  real HTTP request, since the real `pg_net` extension isn't
-  installable outside Supabase itself): a brand-new `auth.users` insert
-  correctly creates a `redemption_codes` row (`duration_days = 7`,
-  correct note) and fires exactly one webhook call with the right
-  payload; the generated code correctly redeems through the unmodified
-  `redeem_code()` and extends `premium_until` by 7 days; re-running the
-  full schema is idempotent and doesn't double-fire the trigger or
-  duplicate webhook calls on a subsequent signup; a signup with no
-  email on the account still succeeds and still gets a code (just no
-  webhook attempt, since there's nowhere to send it); and forcing
-  `net.http_post()` to throw confirms sign-in and code creation both
-  survive regardless (see the two-exception-blocks bullet above for
-  what that test caught). (2) `node --check` on `welcome-trial/
-  AppsScript.gs` (copied to a `.js` path for the syntax checker, same
-  as every other `.gs` file in this repo) confirms it parses cleanly.
-  End-to-end email delivery itself (the actual `MailApp.sendEmail()`
-  call, and the real Supabase `pg_net` extension) couldn't be verified
-  from this sandbox, which can reach neither `*.supabase.co` nor
-  Google's Apps Script mail-sending infrastructure - same category of
-  limitation already documented for every other Account & Subscription
-  feature in this file; `welcome-trial/README.md` has the site owner
-  run `testSendWelcomeTrial()` manually from the Apps Script editor as
-  the first real-world check before wiring it into the trigger.
+  a shared secret, anyone who discovered the `/exec` URL could spam
+  `OWNER_EMAIL` with fake "new signup" emails. The secret is a plain
+  random string the site owner picks (not a credential from anywhere
+  else) and must be pasted identically into both `handle_new_user()`'s
+  `net.http_post()` call in `supabase/schema.sql` and the Apps
+  Script's own `WEBHOOK_SECRET` constant - `doPost()` rejects any
+  request whose `secret` doesn't match with `bad_secret` before
+  touching `MailApp`.
+- **Verified against a throwaway local PostgreSQL 16 instance**, with
+  a stubbed `net` schema (a fake `net.http_post()` logging its calls
+  into a table instead of making a real HTTP request, since the real
+  `pg_net` extension isn't installable outside Supabase itself) - the
+  same harness used for the earlier auto-trial design, re-run against
+  this simplified version: a brand-new `auth.users` insert fires
+  exactly one webhook call with the correct `{email, secret}` payload;
+  re-running the full schema is idempotent and doesn't double-fire the
+  trigger or duplicate webhook calls on a subsequent signup; a signup
+  with no email on the account still succeeds with no webhook attempt
+  (nowhere to send it); and forcing `net.http_post()` to throw confirms
+  `store_settings`/`profiles` are still created regardless - sign-in
+  itself never depends on the notification succeeding. `node --check`
+  on `signup-notify/AppsScript.gs` (copied to a `.js` path for the
+  syntax checker, same as every other `.gs` file in this repo) confirms
+  it parses cleanly. End-to-end email delivery itself (the actual
+  `MailApp.sendEmail()` call, and the real Supabase `pg_net` extension)
+  couldn't be verified from this sandbox, which can reach neither
+  `*.supabase.co` nor Google's Apps Script mail-sending infrastructure -
+  same category of limitation already documented for every other
+  Account & Subscription feature in this file;
+  `signup-notify/README.md` has the site owner run
+  `testSendSignupNotify()` manually from the Apps Script editor as the
+  first real-world check before wiring it into the trigger.
 - **What the site owner still needs to do before this is actually
-  live** - fully documented in `welcome-trial/README.md`: deploy
-  `welcome-trial/AppsScript.gs` as a Web App (Execute as Me, Anyone),
-  pick a `WEBHOOK_SECRET` and paste the same value into both the
-  script and `handle_new_user()` in `supabase/schema.sql`, paste the
-  deployed `/exec` URL into the same function, run
-  `testSendWelcomeTrial()` once to confirm delivery, re-run the
-  updated `supabase/schema.sql` in the Supabase SQL Editor, then test
-  with a genuinely fresh Google account (or delete a test account from
-  Authentication → Users first) and confirm both a new
-  `redemption_codes` row and the actual email arrive.
+  live** - fully documented in `signup-notify/README.md`: deploy
+  `signup-notify/AppsScript.gs` as a Web App (Execute as Me, Anyone),
+  set `OWNER_EMAIL` to a real address, pick a `WEBHOOK_SECRET` and
+  paste the same value into both the script and `handle_new_user()` in
+  `supabase/schema.sql`, paste the deployed `/exec` URL into the same
+  function, run `testSendSignupNotify()` once to confirm delivery,
+  re-run the **entire** updated `supabase/schema.sql` file (not a
+  snippet - a partial paste of just the changed lines is invalid SQL
+  on its own, since it relies on syntax that only parses inside the
+  full function definition) in the Supabase SQL Editor, then test with
+  a genuinely fresh Google account (or delete a test account from
+  Authentication → Users first) and confirm the notification email
+  arrives at `OWNER_EMAIL`.
 
 ## "Download Offline POS" (Premium) — dynamic offline package
 
