@@ -143,12 +143,12 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .pos-sidebar-footer { display: flex; flex-direction: column; gap: 2px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
 .pos-sidebar-item { display: flex; align-items: center; gap: 9px; width: 100%; border: 1px solid transparent; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; padding: 10px 10px; text-align: left; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#premiumToolbarButton { align-items: flex-start; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.3; }
 .pos-sidebar-item:hover { background: #efeee5; }
 .pos-sidebar-item-primary { margin-bottom: 6px; font-weight: 700; }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
 .pos-sidebar-item-ext:hover { background: #efeee5 !important; color: var(--ink-soft); }
 .pos-sidebar-select.active-cashier-select { margin: 0 0 4px; }
-.header-actions-group { display: contents; }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
 #premiumToolbarButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
@@ -546,16 +546,13 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
-<div class="header-actions-group" id="headerActionsGroup">
 <select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
 <button type="button" id="premiumToolbarButton" class="pos-sidebar-item" onclick="openAccountSettings()" title="View your subscription and redeem a Premium code">🔓 <span id="premiumToolbarLabel">Redeem Your Premium Code</span></button>
 <button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
-</div>
 <button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()">⚙ <span id="settingsButtonLabel">More Settings</span></button>
 </div>
 
 <div class="pos-sidebar-footer">
-<button type="button" id="toolbarToggleBtn" class="pos-sidebar-item pos-sidebar-item-ext" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
 <button type="button" id="homepageShortcutButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage">🏠 <span id="homepageShortcutLabel">Homepage</span></button>
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
@@ -1565,19 +1562,6 @@ function openSettingsTab(name) {
   document.getElementById("settingsTabRail").classList.add("hidden");
   selectSettingsTab(name);
   if (name === "inventory") renderInventoryList();
-}
-function toggleToolbar() {
-  document.getElementById("headerActionsGroup").classList.toggle("hidden");
-  renderToolbarToggle();
-}
-function renderToolbarToggle() {
-  const group = document.getElementById("headerActionsGroup");
-  const label = document.getElementById("toolbarToggleLabel");
-  const btn = document.getElementById("toolbarToggleBtn");
-  if (!group || !label || !btn) return;
-  const collapsed = group.classList.contains("hidden");
-  label.textContent = tr(collapsed ? "toolbarShowLabel" : "toolbarHideLabel");
-  btn.title = label.textContent;
 }
 async function toggleSidebar() {
   const sidebar = document.getElementById("posSidebar");
@@ -3691,7 +3675,6 @@ function changeLanguage() {
     if (!element) return;
     element.textContent = tr(ids[id]);
   });
-  renderToolbarToggle();
   renderSidebarToggle();
 
   const searchEl = document.getElementById("productSearch");
