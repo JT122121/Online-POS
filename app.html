@@ -531,7 +531,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="toolbarToggleBtn" class="toolbar-toggle-btn" onclick="toggleToolbar()">☰ <span id="toolbarToggleLabel">Hide Toolbar</span></button>
 <div class="header-actions-group" id="headerActionsGroup">
 <select id="activeCashierSelect" class="active-cashier-select hidden" onchange="setActiveCashier()"></select>
-<button id="premiumToolbarButton" onclick="openAccountSettings()" title="View your subscription and redeem a Premium code">🔓 <span id="premiumToolbarLabel">Premium</span></button>
+<button id="premiumToolbarButton" onclick="openAccountSettings()" title="View your subscription and redeem a Premium code">🔓 <span id="premiumToolbarLabel">Redeem Your Premium Code</span></button>
 <button id="howToUseButton" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <button id="settingsButton" onclick="openSettings()">⚙ <span id="settingsButtonLabel">Settings</span></button>
 <button id="endOfDayButton" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
@@ -1166,6 +1166,10 @@ Website: Goonlinepos.com</textarea>
         <div class="info" id="accountPanelInfo" style="display:block;">Sign in with Google to get a free account, then redeem a code to unlock Premium features - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, Inventory, and an ad-free experience.</div>
 
         <div id="accountSignedOut">
+          <div id="redeemCodePrompt" style="margin-bottom:12px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px; text-align:center;">
+            <div style="font-family:var(--font-display); font-weight:700; font-size:14.5px; color:var(--ink);">🔑 <span id="redeemCodePromptTitle">Have a Premium Code?</span></div>
+            <div style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;"><span id="redeemCodePromptText">Sign in with Google below to redeem it.</span></div>
+          </div>
           <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
             <svg class="google-signin-icon" viewBox="0 0 18 18" aria-hidden="true">
               <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
@@ -3577,6 +3581,7 @@ function changeLanguage() {
     salesExportFromLabel: "salesExportFromLabel", salesExportToLabel: "salesExportToLabel",
     premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
     premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
+    redeemCodePromptTitle: "redeemCodePromptTitle", redeemCodePromptText: "redeemCodePromptText",
     accountPanelTitle: "accountPanelTitle", accountPanelInfo: "accountPanelInfo", accountSignInButton: "accountSignInButton",
     accountSignedInAs: "accountSignedInAs", accountStatusFreeText: "accountStatusFreeText", accountStatusPremiumText: "accountStatusPremiumText",
     redeemCodeLabel: "redeemCodeLabel", redeemCodeButtonLabel: "redeemCodeButton", accountSignOutButton: "accountSignOutButton",

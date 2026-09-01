@@ -505,7 +505,35 @@ all of them under one pattern:
     above; the toolbar is unchanged in every other respect. Its own
     `premiumToolbarLabel` translation key exists in all six languages
     and is in `changeLanguage()`'s `ids` map, same as every other toolbar
-    label. Removing `openInventoryPanel()` also removed its
+    label. **Relabeled from "Premium" to "Redeem Your Premium Code"** in
+    a later pass, per explicit "make it very visible" feedback that the
+    plain "Premium" label didn't communicate what clicking it actually
+    does - the button's `onclick="openAccountSettings()"` and gold
+    styling are unchanged, only the `premiumToolbarLabel` text (all six
+    languages) was reworded to describe the action, not just the
+    destination tier name. The signed-out state of Settings → Premium
+    (`#accountSignedOut`) also gained a new `#redeemCodePrompt` callout
+    - a gold-tinted box (reusing the same `--gold-tint`/`#f0dfb0`
+    treatment as the Redeem Code box further down the same panel and the
+    offline-download modal's Terms checkbox) with a bold "🔑 Have a
+    Premium Code?" heading and "Sign in with Google below to redeem it."
+    subtext, placed directly above the Google sign-in button so it's the
+    first thing a visitor reads on that tab - not just a relabeled
+    button, but a second, unmissable prompt inside the panel itself. Two
+    new translation keys (`redeemCodePromptTitle`/`redeemCodePromptText`)
+    exist in all six languages and are wired into `changeLanguage()`'s
+    `ids` map like everything else on this tab. Not `OFFLINE-STRIP`- or
+    `OFFLINE-SWAP`-wrapped on its own - it sits inside the existing
+    `OFFLINE-SWAP:PREMIUM-PANEL` marker range, so it's naturally replaced
+    along with the rest of `#accountSignedOut` by the offline build's own
+    local-code-entry panel, which needs no such prompt since it's already
+    just a single code field with nothing to explain. Verified with
+    Playwright: the toolbar button reads "Redeem Your Premium Code" and
+    still opens Settings on the Premium tab; the new callout renders
+    above the Google button with the correct text; both re-translate
+    correctly on a language switch (checked against Spanish); and the
+    toolbar row wraps cleanly with zero horizontal overflow at 390px.
+    Removing `openInventoryPanel()` also removed its
     `renderInventoryList()` call, so the Inventory tab's own
     `data-tab="inventory"` button in the rail now calls
     `renderInventoryList()` itself on click, preserving that behavior.
