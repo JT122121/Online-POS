@@ -265,6 +265,10 @@ a {
   .site-header { margin-top: 12px; }
 }
 
+.lang-picker-bar { max-width: 1040px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 10px 20px 0; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .featured-post {
   max-width: 780px;
   margin: 0 auto 30px;
@@ -655,26 +659,39 @@ a {
     </div>
   </header>
 
+  <div class="lang-picker-bar">
+    <label for="blogLanguage"><span id="langPickerLabel">Language</span>
+      <select id="blogLanguage">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fil">Filipino</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+        <option value="th">ไทย</option>
+      </select>
+    </label>
+  </div>
+
   <header class="masthead">
 
-    <div class="kicker">
+    <div class="kicker" id="kickerText">
       The GoOnlinePOS Journal
     </div>
 
-    <h1>
+    <h1 id="mastheadH1">
       Small Business, Big Ledger
     </h1>
 
-    <p>
+    <p id="mastheadPara">
       Practical articles on running a shop, getting paid, and keeping the books straight - from the team behind GoOnlinePOS.com.
     </p>
 
     <div class="masthead-meta">
-      <span>No fluff</span>
+      <span id="metaNoFluff">No fluff</span>
       <span>·</span>
-      <span>No paywall</span>
+      <span id="metaNoPaywall">No paywall</span>
       <span>·</span>
-      <span>Updated regularly</span>
+      <span id="metaUpdated">Updated regularly</span>
     </div>
 
   </header>
@@ -691,22 +708,22 @@ a {
       <span class="photo-disclaimer">Photo for illustration purposes only</span>
     </div>
 
-    <span class="fp-tag">
+    <span class="fp-tag" id="fpTag">
       Getting Started
     </span>
 
     <h2>
-      <a href="blog-why-your-business-needs-a-pos">
+      <a href="blog-why-your-business-needs-a-pos" id="fpTitle">
         Why Every Business Needs a POS System (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)
       </a>
     </h2>
 
-    <p>
+    <p id="fpDesc">
       If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you - and why a proper point-of-sale system stopped being a luxury a long time ago.
     </p>
 
     <div class="post-meta">
-      FEATURED · Last updated: <time datetime="2026-08">August 2026</time> · 5 MIN READ
+      <span id="fpFeaturedLabel">FEATURED</span> · <span id="fpUpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 5 <span id="fpMinRead">MIN READ</span>
     </div>
 
   </article>
@@ -755,22 +772,22 @@ a {
 
           </svg>
 
-          No-Code
+          <span id="pc1Tag">No-Code</span>
 
         </span>
 
         <h3>
-          <a href="blog-create-your-own-pos-with-appsheet">
+          <a href="blog-create-your-own-pos-with-appsheet" id="pc1Title">
             Create Your Own POS Using No-Code AppSheet
           </a>
         </h3>
 
-        <p>
+        <p id="pc1Desc">
           Thinking about building your own point-of-sale app with Google AppSheet? Here's what a DIY build actually involves, where it shines, where it falls short - and a much faster path if you'd rather skip straight to selling.
         </p>
 
         <div class="post-meta">
-          Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ
+          <span id="pc1UpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 7 <span id="pc1MinRead">MIN READ</span>
         </div>
 
       </div>
@@ -790,22 +807,22 @@ a {
 
       <div class="pc-body">
 
-        <span class="pc-tag">
+        <span class="pc-tag" id="pc2Tag">
           Founder Story
         </span>
 
         <h3>
-          <a href="blog-from-excel-to-appsheet-expert">
+          <a href="blog-from-excel-to-appsheet-expert" id="pc2Title">
             From Excel to AppSheet Expert
           </a>
         </h3>
 
-        <p>
+        <p id="pc2Desc">
           How managing spreadsheets during COVID led to five years of building real AppSheet apps for clients, a YouTube channel, and eventually GoOnlinePOS.
         </p>
 
         <div class="post-meta">
-          Last updated: <time datetime="2026-08">August 2026</time> · 7 MIN READ
+          <span id="pc2UpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 7 <span id="pc2MinRead">MIN READ</span>
         </div>
 
       </div>
@@ -816,11 +833,11 @@ a {
 
   <div class="coming-soon">
 
-    <strong>
+    <strong id="comingSoonTitle">
       More articles on the way
     </strong>
 
-    New posts get added here regularly - check back soon, or follow the Facebook page for updates when a new one goes live.
+    <span id="comingSoonText">New posts get added here regularly - check back soon, or follow the Facebook page for updates when a new one goes live.</span>
 
   </div>
 
@@ -944,6 +961,209 @@ a {
   </div>
 
 </div>
+
+<script>
+(function() {
+  var langSelect = document.getElementById("blogLanguage");
+
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      kickerText: "The GoOnlinePOS Journal",
+      mastheadH1: "Small Business, Big Ledger",
+      mastheadPara: "Practical articles on running a shop, getting paid, and keeping the books straight - from the team behind GoOnlinePOS.com.",
+      metaNoFluff: "No fluff",
+      metaNoPaywall: "No paywall",
+      metaUpdated: "Updated regularly",
+      fpTag: "Getting Started",
+      fpTitle: "Why Every Business Needs a POS System (And Why \"I'll Just Use a Notebook\" Doesn't Cut It Anymore)",
+      fpDesc: "If you're still tracking sales with a notebook and a calculator, here's what it's actually costing you - and why a proper point-of-sale system stopped being a luxury a long time ago.",
+      fpFeaturedLabel: "FEATURED",
+      updatedLabel: "Last updated:",
+      minReadLabel: "MIN READ",
+      pc1Tag: "No-Code",
+      pc1Title: "Create Your Own POS Using No-Code AppSheet",
+      pc1Desc: "Thinking about building your own point-of-sale app with Google AppSheet? Here's what a DIY build actually involves, where it shines, where it falls short - and a much faster path if you'd rather skip straight to selling.",
+      pc2Tag: "Founder Story",
+      pc2Title: "From Excel to AppSheet Expert",
+      pc2Desc: "How managing spreadsheets during COVID led to five years of building real AppSheet apps for clients, a YouTube channel, and eventually GoOnlinePOS.",
+      comingSoonTitle: "More articles on the way",
+      comingSoonText: "New posts get added here regularly - check back soon, or follow the Facebook page for updates when a new one goes live."
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      kickerText: "مجلة GoOnlinePOS",
+      mastheadH1: "أعمال صغيرة، دفاتر كبيرة",
+      mastheadPara: "مقالات عملية عن إدارة متجر، وتحصيل المدفوعات، وتنظيم الحسابات - من فريق GoOnlinePOS.com.",
+      metaNoFluff: "بدون حشو",
+      metaNoPaywall: "بدون اشتراك مدفوع",
+      metaUpdated: "يتم التحديث بانتظام",
+      fpTag: "البداية",
+      fpTitle: "لماذا تحتاج كل الأعمال إلى نظام نقاط بيع (ولماذا \"سأستخدم فقط دفترا\" لم يعد كافيا)",
+      fpDesc: "إذا كنت لا تزال تتابع المبيعات بدفتر وآلة حاسبة، إليك ما يكلفك ذلك فعليا - ولماذا توقف نظام نقاط البيع المناسب عن كونه رفاهية منذ زمن طويل.",
+      fpFeaturedLabel: "مميز",
+      updatedLabel: "آخر تحديث:",
+      minReadLabel: "دقائق قراءة",
+      pc1Tag: "بدون برمجة",
+      pc1Title: "أنشئ نظام نقاط البيع الخاص بك باستخدام AppSheet بدون برمجة",
+      pc1Desc: "تفكر في بناء تطبيق نقاط بيع خاص بك باستخدام Google AppSheet؟ إليك ما يتطلبه البناء الذاتي فعليا، وأين يتفوق، وأين يقصر - وطريق أسرع بكثير إذا كنت تفضل الانتقال مباشرة إلى البيع.",
+      pc2Tag: "قصة المؤسس",
+      pc2Title: "من إكسل إلى خبير AppSheet",
+      pc2Desc: "كيف أدت إدارة جداول البيانات أثناء كوفيد إلى خمس سنوات من بناء تطبيقات AppSheet حقيقية للعملاء، وقناة على يوتيوب، وفي النهاية GoOnlinePOS.",
+      comingSoonTitle: "المزيد من المقالات قريبا",
+      comingSoonText: "تتم إضافة مقالات جديدة هنا بانتظام - تحقق مرة أخرى قريبا، أو تابع صفحة فيسبوك للحصول على التحديثات عند نشر مقال جديد."
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      kickerText: "Ang GoOnlinePOS Journal",
+      mastheadH1: "Maliit na Negosyo, Malaking Ledger",
+      mastheadPara: "Mga praktikal na artikulo tungkol sa pagpapatakbo ng tindahan, pagsingil, at pagpapanatili ng mga tala - mula sa team sa likod ng GoOnlinePOS.com.",
+      metaNoFluff: "Walang paligoy-ligoy",
+      metaNoPaywall: "Walang paywall",
+      metaUpdated: "Regular na ina-update",
+      fpTag: "Pagsisimula",
+      fpTitle: "Bakit Kailangan ng Bawat Negosyo ang Isang POS System (At Bakit Hindi na Sapat ang \"Gagamit na Lang Ako ng Notebook\")",
+      fpDesc: "Kung sumusubaybay ka pa rin ng benta gamit ang notebook at kalkulator, ito ang aktwal na nakokolekta nitong gastos sa iyo - at kung bakit hindi na luho ang tamang point-of-sale system mula pa noon.",
+      fpFeaturedLabel: "FEATURED",
+      updatedLabel: "Huling na-update:",
+      minReadLabel: "MIN BASAHIN",
+      pc1Tag: "No-Code",
+      pc1Title: "Gumawa ng Sarili Mong POS Gamit ang No-Code AppSheet",
+      pc1Desc: "Iniisip bang bumuo ng sarili mong point-of-sale app gamit ang Google AppSheet? Narito kung ano talaga ang kasama sa isang DIY build, kung saan ito namumukod-tangi, kung saan ito kulang - at isang mas mabilis na paraan kung mas gusto mong direktang magbenta na lang.",
+      pc2Tag: "Kwento ng Founder",
+      pc2Title: "Mula Excel Hanggang AppSheet Expert",
+      pc2Desc: "Kung paano ang pamamahala ng mga spreadsheet noong COVID ay humantong sa limang taon ng paggawa ng tunay na AppSheet apps para sa mga kliyente, isang YouTube channel, at sa huli ay GoOnlinePOS.",
+      comingSoonTitle: "Paparating pa ang mas maraming artikulo",
+      comingSoonText: "Regular na may idinadagdag na bagong post dito - bumalik ulit sa lalong madaling panahon, o sundan ang Facebook page para sa mga update kapag may bagong post na naka-live."
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      kickerText: "द गोऑनलाइनपीओएस जर्नल",
+      mastheadH1: "छोटा व्यवसाय, बड़ा हिसाब",
+      mastheadPara: "दुकान चलाने, भुगतान प्राप्त करने, और हिसाब-किताब सही रखने पर व्यावहारिक लेख - GoOnlinePOS.com की टीम की ओर से।",
+      metaNoFluff: "बिना बकवास",
+      metaNoPaywall: "बिना पेवॉल",
+      metaUpdated: "नियमित रूप से अपडेट",
+      fpTag: "शुरुआत",
+      fpTitle: "हर व्यवसाय को पीओएस सिस्टम की आवश्यकता क्यों है (और \"मैं सिर्फ एक नोटबुक का उपयोग करूंगा\" अब पर्याप्त क्यों नहीं है)",
+      fpDesc: "यदि आप अभी भी नोटबुक और कैलकुलेटर से बिक्री ट्रैक कर रहे हैं, तो यहां जानें कि इससे आपको वास्तव में कितना नुकसान हो रहा है - और एक उचित पॉइंट-ऑफ-सेल सिस्टम बहुत समय पहले ही विलासिता बनना क्यों बंद हो गया।",
+      fpFeaturedLabel: "विशेष",
+      updatedLabel: "अंतिम अपडेट:",
+      minReadLabel: "मिनट पढ़ें",
+      pc1Tag: "नो-कोड",
+      pc1Title: "नो-कोड AppSheet का उपयोग करके अपना खुद का पीओएस बनाएं",
+      pc1Desc: "Google AppSheet के साथ अपना खुद का पॉइंट-ऑफ-सेल ऐप बनाने के बारे में सोच रहे हैं? यहां जानें कि एक DIY बिल्ड में वास्तव में क्या शामिल है, यह कहां चमकता है, कहां कम पड़ता है - और यदि आप सीधे बेचना शुरू करना चाहते हैं तो एक बहुत तेज़ रास्ता।",
+      pc2Tag: "संस्थापक की कहानी",
+      pc2Title: "एक्सेल से AppSheet विशेषज्ञ तक",
+      pc2Desc: "कोविड के दौरान स्प्रेडशीट प्रबंधित करने से कैसे ग्राहकों के लिए वास्तविक AppSheet ऐप्स बनाने, एक यूट्यूब चैनल, और अंततः GoOnlinePOS बनाने के पांच साल हुए।",
+      comingSoonTitle: "और लेख जल्द ही आ रहे हैं",
+      comingSoonText: "यहां नियमित रूप से नई पोस्ट जोड़ी जाती हैं - जल्द ही फिर से देखें, या नई पोस्ट लाइव होने पर अपडेट के लिए फेसबुक पेज को फॉलो करें।"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      kickerText: "El Diario de GoOnlinePOS",
+      mastheadH1: "Pequeño Negocio, Gran Libro Contable",
+      mastheadPara: "Artículos prácticos sobre cómo dirigir una tienda, cobrar, y mantener las cuentas en orden - del equipo detrás de GoOnlinePOS.com.",
+      metaNoFluff: "Sin relleno",
+      metaNoPaywall: "Sin muro de pago",
+      metaUpdated: "Actualizado regularmente",
+      fpTag: "Primeros Pasos",
+      fpTitle: "Por Qué Todo Negocio Necesita un Sistema POS (Y Por Qué \"Solo Usaré un Cuaderno\" Ya No Es Suficiente)",
+      fpDesc: "Si todavía llevas tus ventas en un cuaderno y una calculadora, aquí está lo que realmente te está costando - y por qué un sistema de punto de venta adecuado dejó de ser un lujo hace mucho tiempo.",
+      fpFeaturedLabel: "DESTACADO",
+      updatedLabel: "Última actualización:",
+      minReadLabel: "MIN DE LECTURA",
+      pc1Tag: "Sin Código",
+      pc1Title: "Crea Tu Propio POS Usando AppSheet Sin Código",
+      pc1Desc: "¿Estás pensando en crear tu propia aplicación de punto de venta con Google AppSheet? Aquí está lo que realmente implica una construcción DIY, dónde brilla, dónde se queda corta - y un camino mucho más rápido si prefieres pasar directamente a vender.",
+      pc2Tag: "Historia del Fundador",
+      pc2Title: "De Excel a Experto en AppSheet",
+      pc2Desc: "Cómo la gestión de hojas de cálculo durante el COVID llevó a cinco años construyendo aplicaciones AppSheet reales para clientes, un canal de YouTube, y finalmente GoOnlinePOS.",
+      comingSoonTitle: "Más artículos en camino",
+      comingSoonText: "Se agregan nuevas publicaciones aquí regularmente - vuelve pronto, o sigue la página de Facebook para recibir actualizaciones cuando se publique una nueva."
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      kickerText: "GoOnlinePOS Journal",
+      mastheadH1: "ธุรกิจขนาดเล็ก บัญชีที่ใหญ่",
+      mastheadPara: "บทความที่เป็นประโยชน์เกี่ยวกับการบริหารร้านค้า การรับชำระเงิน และการทำบัญชีให้ถูกต้อง - จากทีมงานเบื้องหลัง GoOnlinePOS.com",
+      metaNoFluff: "ไม่มีเนื้อหาฟุ่มเฟือย",
+      metaNoPaywall: "ไม่มีค่าสมาชิก",
+      metaUpdated: "อัปเดตอย่างสม่ำเสมอ",
+      fpTag: "เริ่มต้นใช้งาน",
+      fpTitle: "ทำไมทุกธุรกิจถึงต้องการระบบ POS (และทำไม \"แค่ใช้สมุดบันทึก\" ถึงไม่เพียงพออีกต่อไป)",
+      fpDesc: "หากคุณยังคงติดตามยอดขายด้วยสมุดบันทึกและเครื่องคิดเลข นี่คือสิ่งที่มันกำลังทำให้คุณเสียค่าใช้จ่ายจริง ๆ - และทำไมระบบขายหน้าร้านที่เหมาะสมจึงเลิกเป็นสิ่งฟุ่มเฟือยไปนานแล้ว",
+      fpFeaturedLabel: "แนะนำ",
+      updatedLabel: "อัปเดตล่าสุด:",
+      minReadLabel: "นาทีในการอ่าน",
+      pc1Tag: "ไม่ต้องเขียนโค้ด",
+      pc1Title: "สร้างระบบ POS ของคุณเองด้วย AppSheet แบบไม่ต้องเขียนโค้ด",
+      pc1Desc: "กำลังคิดจะสร้างแอปขายหน้าร้านของคุณเองด้วย Google AppSheet อยู่หรือเปล่า? นี่คือสิ่งที่การสร้างเองต้องเจอจริง ๆ จุดที่มันโดดเด่น จุดที่มันยังขาด - และเส้นทางที่เร็วกว่ามากหากคุณอยากข้ามไปเริ่มขายของเลย",
+      pc2Tag: "เรื่องราวผู้ก่อตั้ง",
+      pc2Title: "จาก Excel สู่ผู้เชี่ยวชาญ AppSheet",
+      pc2Desc: "การจัดการสเปรดชีตในช่วงโควิดนำไปสู่ห้าปีแห่งการสร้างแอป AppSheet จริงให้กับลูกค้า ช่องยูทูป และในที่สุดก็คือ GoOnlinePOS",
+      comingSoonTitle: "บทความเพิ่มเติมกำลังจะมา",
+      comingSoonText: "โพสต์ใหม่จะถูกเพิ่มที่นี่อย่างสม่ำเสมอ - กลับมาดูอีกครั้งเร็ว ๆ นี้ หรือติดตามเพจ Facebook เพื่อรับการอัปเดตเมื่อมีโพสต์ใหม่"
+    }
+  };
+
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      langPickerLabel: "langPickerLabel",
+      kickerText: "kickerText",
+      mastheadH1: "mastheadH1",
+      mastheadPara: "mastheadPara",
+      metaNoFluff: "metaNoFluff",
+      metaNoPaywall: "metaNoPaywall",
+      metaUpdated: "metaUpdated",
+      fpTag: "fpTag",
+      fpTitle: "fpTitle",
+      fpDesc: "fpDesc",
+      fpFeaturedLabel: "fpFeaturedLabel",
+      fpUpdatedLabel: "updatedLabel",
+      fpMinRead: "minReadLabel",
+      pc1Tag: "pc1Tag",
+      pc1Title: "pc1Title",
+      pc1Desc: "pc1Desc",
+      pc1UpdatedLabel: "updatedLabel",
+      pc1MinRead: "minReadLabel",
+      pc2Tag: "pc2Tag",
+      pc2Title: "pc2Title",
+      pc2Desc: "pc2Desc",
+      pc2UpdatedLabel: "updatedLabel",
+      pc2MinRead: "minReadLabel",
+      comingSoonTitle: "comingSoonTitle",
+      comingSoonText: "comingSoonText"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-blog-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-blog-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

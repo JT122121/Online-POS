@@ -247,6 +247,10 @@ a {
   .site-header { margin-top: 12px; }
 }
 
+.lang-picker-bar { max-width: 720px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 6px 0 0; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .article-header {
   text-align: center;
   padding: 10px 0 30px;
@@ -576,39 +580,52 @@ a {
     </div>
   </header>
 
+  <div class="lang-picker-bar">
+    <label for="articleLanguage"><span id="langPickerLabel">Language</span>
+      <select id="articleLanguage">
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fil">Filipino</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+        <option value="th">ไทย</option>
+      </select>
+    </label>
+  </div>
+
   <div class="back-link-row">
-    <a class="back-link" href="blog">← Back to Blog</a>
+    <a class="back-link" href="blog" id="backLinkText">← Back to Blog</a>
   </div>
 
   <header class="article-header">
-    <span class="article-tag">Getting Started</span>
+    <span class="article-tag" id="articleTag">Getting Started</span>
 
-    <h1>
+    <h1 id="articleH1">
       Why Every Business Needs a POS System
       (And Why "I'll Just Use a Notebook" Doesn't Cut It Anymore)
     </h1>
 
-    <div class="article-meta">Last updated: <time datetime="2026-08">August 2026</time> · 5 MIN READ</div>
+    <div class="article-meta"><span id="articleUpdatedLabel">Last updated:</span> <time datetime="2026-08">August 2026</time> · 5 <span id="articleMinRead">MIN READ</span></div>
   </header>
 
   <div class="article-body">
 
-    <p>
+    <p id="introP1">
       If you're running a small shop, a stall, a home bakery, or a food cart,
       there's a good chance you started out tracking sales the simplest way
       possible - a notebook, a calculator, maybe a spreadsheet you update at
       the end of the day if you remember to. It works, until it doesn't.
     </p>
 
-    <p>
+    <p id="introP2">
       Here's why a point-of-sale system isn't a luxury for big retailers
       anymore - it's genuinely one of the first tools any business should
       have, no matter how small.
     </p>
 
-    <h2>The math errors add up faster than you think</h2>
+    <h2 id="h2MathErrors">The math errors add up faster than you think</h2>
 
-    <p>
+    <p id="pMathErrors">
       Manual calculations mean manual mistakes. A missed item, a wrong total,
       a discount applied incorrectly - each one seems small in the moment,
       but multiply that across dozens of sales a day, every day, and it
@@ -616,9 +633,9 @@ a {
       does the math for you, every single time, the same way.
     </p>
 
-    <h2>You can't manage what you can't see</h2>
+    <h2 id="h2CantManage">You can't manage what you can't see</h2>
 
-    <p>
+    <p id="pCantManage">
       Ask yourself: do you actually know which products sold the most last
       week? Which ones barely moved? Whether you're about to run out of your
       best-seller? Without a system tracking this automatically, you're
@@ -626,27 +643,27 @@ a {
       every item, so the answers are just a click away instead of a mystery.
     </p>
 
-    <h2>Running out of stock costs you sales you'll never get back</h2>
+    <h2 id="h2RunningOut">Running out of stock costs you sales you'll never get back</h2>
 
-    <p>
+    <p id="pRunningOut">
       Nothing's worse than a customer wanting to buy something you don't have -
       and not realizing you were out until they told you. Inventory tracking
       that deducts stock automatically with every sale means you catch low
       stock before it becomes a lost sale, not after.
     </p>
 
-    <h2>Customers expect more than cash-only, calculator-math checkout</h2>
+    <h2 id="h2CashOnly">Customers expect more than cash-only, calculator-math checkout</h2>
 
-    <p>
+    <p id="pCashOnly">
       Card payments, digital wallets, split payments between cash and card -
       customers increasingly expect flexibility at checkout. A business that
       can only handle exact cash amounts is quietly turning away sales without
       realizing it.
     </p>
 
-    <h2>If more than one person handles sales, you need accountability</h2>
+    <h2 id="h2Accountability">If more than one person handles sales, you need accountability</h2>
 
-    <p>
+    <p id="pAccountability">
       The moment you have employees or family members ringing up sales
       alongside you, "who sold what" stops being obvious. A POS that tracks
       sales by cashier means you always know who handled a transaction - not
@@ -654,9 +671,9 @@ a {
       everyone, including you.
     </p>
 
-    <h2>A real receipt builds real trust</h2>
+    <h2 id="h2RealReceipt">A real receipt builds real trust</h2>
 
-    <p>
+    <p id="pRealReceipt">
       A handwritten total on a scrap of paper doesn't feel like a real
       business, even if your product is great. A printed receipt with your
       store name, your logo, and a clear breakdown of what was purchased makes
@@ -664,25 +681,25 @@ a {
       them something to reference if there's ever a question about a purchase.
     </p>
 
-    <h2>Tax time gets a lot less painful</h2>
+    <h2 id="h2TaxTime">Tax time gets a lot less painful</h2>
 
-    <p>
+    <p id="pTaxTime">
       When every sale is automatically logged with the date, the amount, the
       tax collected, and the payment method, you're not scrambling to
       reconstruct months of records from memory when tax season arrives.
       It's already there, ready to export.
     </p>
 
-    <h2>"But POS systems are expensive and complicated" - not anymore</h2>
+    <h2 id="h2Expensive">"But POS systems are expensive and complicated" - not anymore</h2>
 
-    <p>
+    <p id="pExpensive">
       This used to be the real barrier. Traditional POS systems meant monthly
       subscriptions, special hardware, and a sales call before you could even
       try it out. That's exactly the gap
       <a href="/">GoOnlinePOS.com</a> was built to close.
     </p>
 
-    <p>
+    <p id="pNotStripped">
       It's a complete point-of-sale system that runs entirely in your browser -
       no signup, no login, no monthly fee, nothing to install. Open the page
       and you're ringing up your first sale in minutes. And it's not a
@@ -691,19 +708,19 @@ a {
     </p>
 
     <ul>
-      <li><strong>Barcode scanning</strong> with a USB barcode scanner</li>
-      <li><strong>Split payments</strong> - part cash, part card, tracked accurately</li>
-      <li><strong>Inventory tracking</strong> that deducts stock automatically with every sale</li>
-      <li><strong>Multiple cashiers</strong>, with sales tracked separately for each</li>
-      <li><strong>A live customer-facing screen</strong> so customers see their order and total as you ring it up</li>
-      <li><strong>Your own logo and branding</strong> on every printed receipt</li>
-      <li><strong>Full sales history</strong> - searchable, editable, exportable to Excel, reprintable anytime</li>
-      <li><strong>Six languages</strong> built in, so it works for you and your customers</li>
-      <li><strong>Complete backup and restore</strong>, so your data is never at risk</li>
-      <li><strong>Offline Mode POS</strong> - Use your POS even without an internet connection.</li>
+      <li id="li1"><strong>Barcode scanning</strong> with a USB barcode scanner</li>
+      <li id="li2"><strong>Split payments</strong> - part cash, part card, tracked accurately</li>
+      <li id="li3"><strong>Inventory tracking</strong> that deducts stock automatically with every sale</li>
+      <li id="li4"><strong>Multiple cashiers</strong>, with sales tracked separately for each</li>
+      <li id="li5"><strong>A live customer-facing screen</strong> so customers see their order and total as you ring it up</li>
+      <li id="li6"><strong>Your own logo and branding</strong> on every printed receipt</li>
+      <li id="li7"><strong>Full sales history</strong> - searchable, editable, exportable to Excel, reprintable anytime</li>
+      <li id="li8"><strong>Six languages</strong> built in, so it works for you and your customers</li>
+      <li id="li9"><strong>Complete backup and restore</strong>, so your data is never at risk</li>
+      <li id="li10"><strong>Offline Mode POS</strong> - Use your POS even without an internet connection.</li>
     </ul>
 
-    <p>
+    <p id="pClosing">
       If you've been putting off getting a proper point-of-sale system because
       of the cost or the hassle, that excuse doesn't really apply anymore.
     </p>
@@ -711,9 +728,9 @@ a {
   </div>
 
   <div class="cta-band">
-    <h2>Try it free - no signup, no catch</h2>
-    <p>Open the app and start ringing up sales in minutes.</p>
-    <a class="btn-primary" href="app">Open GoOnlinePOS</a>
+    <h2 id="ctaH2">Try it free - no signup, no catch</h2>
+    <p id="ctaP">Open the app and start ringing up sales in minutes.</p>
+    <a class="btn-primary" href="app" id="ctaBtn">Open GoOnlinePOS</a>
   </div>
 
 </div>
@@ -802,6 +819,324 @@ a {
   </div>
 
 </div>
+
+<script>
+(function() {
+  var langSelect = document.getElementById("articleLanguage");
+
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      backLinkText: "← Back to Blog",
+      articleTag: "Getting Started",
+      articleH1: "Why Every Business Needs a POS System (And Why \"I'll Just Use a Notebook\" Doesn't Cut It Anymore)",
+      articleUpdatedLabel: "Last updated:",
+      articleMinRead: "MIN READ",
+      introP1: "If you're running a small shop, a stall, a home bakery, or a food cart, there's a good chance you started out tracking sales the simplest way possible - a notebook, a calculator, maybe a spreadsheet you update at the end of the day if you remember to. It works, until it doesn't.",
+      introP2: "Here's why a point-of-sale system isn't a luxury for big retailers anymore - it's genuinely one of the first tools any business should have, no matter how small.",
+      h2MathErrors: "The math errors add up faster than you think",
+      pMathErrors: "Manual calculations mean manual mistakes. A missed item, a wrong total, a discount applied incorrectly - each one seems small in the moment, but multiply that across dozens of sales a day, every day, and it becomes real money quietly leaking out of your business. A POS system does the math for you, every single time, the same way.",
+      h2CantManage: "You can't manage what you can't see",
+      pCantManage: "Ask yourself: do you actually know which products sold the most last week? Which ones barely moved? Whether you're about to run out of your best-seller? Without a system tracking this automatically, you're running your business on guesswork. A proper POS logs every sale and every item, so the answers are just a click away instead of a mystery.",
+      h2RunningOut: "Running out of stock costs you sales you'll never get back",
+      pRunningOut: "Nothing's worse than a customer wanting to buy something you don't have - and not realizing you were out until they told you. Inventory tracking that deducts stock automatically with every sale means you catch low stock before it becomes a lost sale, not after.",
+      h2CashOnly: "Customers expect more than cash-only, calculator-math checkout",
+      pCashOnly: "Card payments, digital wallets, split payments between cash and card - customers increasingly expect flexibility at checkout. A business that can only handle exact cash amounts is quietly turning away sales without realizing it.",
+      h2Accountability: "If more than one person handles sales, you need accountability",
+      pAccountability: "The moment you have employees or family members ringing up sales alongside you, \"who sold what\" stops being obvious. A POS that tracks sales by cashier means you always know who handled a transaction - not because you don't trust your team, but because clear records protect everyone, including you.",
+      h2RealReceipt: "A real receipt builds real trust",
+      pRealReceipt: "A handwritten total on a scrap of paper doesn't feel like a real business, even if your product is great. A printed receipt with your store name, your logo, and a clear breakdown of what was purchased makes customers trust that they're dealing with someone legitimate - and gives them something to reference if there's ever a question about a purchase.",
+      h2TaxTime: "Tax time gets a lot less painful",
+      pTaxTime: "When every sale is automatically logged with the date, the amount, the tax collected, and the payment method, you're not scrambling to reconstruct months of records from memory when tax season arrives. It's already there, ready to export.",
+      h2Expensive: "\"But POS systems are expensive and complicated\" - not anymore",
+      pExpensive: "This used to be the real barrier. Traditional POS systems meant monthly subscriptions, special hardware, and a sales call before you could even try it out. That's exactly the gap <a href=\"/\">GoOnlinePOS.com</a> was built to close.",
+      pNotStripped: "It's a complete point-of-sale system that runs entirely in your browser - no signup, no login, no monthly fee, nothing to install. Open the page and you're ringing up your first sale in minutes. And it's not a stripped-down \"free trial\" version missing the features that actually matter:",
+      li1: "<strong>Barcode scanning</strong> with a USB barcode scanner",
+      li2: "<strong>Split payments</strong> - part cash, part card, tracked accurately",
+      li3: "<strong>Inventory tracking</strong> that deducts stock automatically with every sale",
+      li4: "<strong>Multiple cashiers</strong>, with sales tracked separately for each",
+      li5: "<strong>A live customer-facing screen</strong> so customers see their order and total as you ring it up",
+      li6: "<strong>Your own logo and branding</strong> on every printed receipt",
+      li7: "<strong>Full sales history</strong> - searchable, editable, exportable to Excel, reprintable anytime",
+      li8: "<strong>Six languages</strong> built in, so it works for you and your customers",
+      li9: "<strong>Complete backup and restore</strong>, so your data is never at risk",
+      li10: "<strong>Offline Mode POS</strong> - Use your POS even without an internet connection.",
+      pClosing: "If you've been putting off getting a proper point-of-sale system because of the cost or the hassle, that excuse doesn't really apply anymore.",
+      ctaH2: "Try it free - no signup, no catch",
+      ctaP: "Open the app and start ringing up sales in minutes.",
+      ctaBtn: "Open GoOnlinePOS"
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      backLinkText: "← العودة إلى المدونة",
+      articleTag: "البداية",
+      articleH1: "لماذا تحتاج كل الأعمال إلى نظام نقاط بيع (ولماذا \"سأستخدم فقط دفترا\" لم يعد كافيا)",
+      articleUpdatedLabel: "آخر تحديث:",
+      articleMinRead: "دقائق قراءة",
+      introP1: "إذا كنت تدير متجرا صغيرا، أو كشكا، أو مخبزا منزليا، أو عربة طعام، فمن المحتمل أنك بدأت بتتبع المبيعات بأبسط طريقة ممكنة - دفتر، آلة حاسبة، وربما جدول بيانات تحدثه في نهاية اليوم إذا تذكرت. هذا ينجح، إلى أن يتوقف عن النجاح.",
+      introP2: "إليك لماذا لم يعد نظام نقاط البيع رفاهية لكبار تجار التجزئة فقط - إنه بالفعل من أوائل الأدوات التي يجب أن يمتلكها أي عمل، مهما كان صغيرا.",
+      h2MathErrors: "أخطاء الحساب تتراكم أسرع مما تعتقد",
+      pMathErrors: "الحسابات اليدوية تعني أخطاء يدوية. عنصر مفقود، مجموع خاطئ، خصم مطبق بشكل غير صحيح - كل واحد يبدو صغيرا في اللحظة، لكن اضربه في عشرات المبيعات يوميا، كل يوم، ويصبح أموالا حقيقية تتسرب بهدوء من عملك. نظام نقاط البيع يقوم بالحساب نيابة عنك، في كل مرة، بنفس الطريقة.",
+      h2CantManage: "لا يمكنك إدارة ما لا يمكنك رؤيته",
+      pCantManage: "اسأل نفسك: هل تعرف فعلا أي المنتجات باعت الأكثر الأسبوع الماضي؟ أيها بالكاد تحرك؟ هل أنت على وشك نفاد أفضل منتج لديك؟ بدون نظام يتتبع هذا تلقائيا، أنت تدير عملك بالتخمين. نظام نقاط بيع مناسب يسجل كل عملية بيع وكل عنصر، فتصبح الإجابات على بعد نقرة واحدة بدلا من كونها لغزا.",
+      h2RunningOut: "نفاد المخزون يكلفك مبيعات لن تستعيدها أبدا",
+      pRunningOut: "لا شيء أسوأ من عميل يريد شراء شيء لا تملكه - ولا تدرك أنك نفدت منه إلا بعد أن يخبرك. تتبع المخزون الذي يخصم الكمية تلقائيا مع كل عملية بيع يعني أنك تكتشف نقص المخزون قبل أن يصبح عملية بيع مفقودة، لا بعدها.",
+      h2CashOnly: "العملاء يتوقعون أكثر من الدفع النقدي فقط والحساب اليدوي",
+      pCashOnly: "المدفوعات بالبطاقة، المحافظ الرقمية، الدفع المقسم بين النقد والبطاقة - يتوقع العملاء بشكل متزايد المرونة عند الدفع. العمل الذي يتعامل فقط مع مبالغ نقدية دقيقة يرفض مبيعات دون أن يدرك ذلك.",
+      h2Accountability: "إذا كان أكثر من شخص يتعامل مع المبيعات، فأنت بحاجة إلى المساءلة",
+      pAccountability: "في اللحظة التي يبدأ فيها موظفون أو أفراد من العائلة بتسجيل المبيعات إلى جانبك، يتوقف \"من باع ماذا\" عن كونه واضحا. نظام نقاط بيع يتتبع المبيعات حسب الكاشير يعني أنك تعرف دائما من تعامل مع عملية معينة - ليس لأنك لا تثق بفريقك، بل لأن السجلات الواضحة تحمي الجميع، بما في ذلك أنت.",
+      h2RealReceipt: "إيصال حقيقي يبني ثقة حقيقية",
+      pRealReceipt: "مجموع مكتوب بخط اليد على قصاصة ورق لا يبدو وكأنه عمل حقيقي، حتى لو كان منتجك رائعا. إيصال مطبوع يحمل اسم متجرك وشعارك وتفصيلا واضحا لما تم شراؤه يجعل العملاء يثقون بأنهم يتعاملون مع جهة شرعية - ويمنحهم مرجعا إذا كان هناك سؤال حول عملية شراء في أي وقت.",
+      h2TaxTime: "موسم الضرائب يصبح أقل إيلاما بكثير",
+      pTaxTime: "عندما يتم تسجيل كل عملية بيع تلقائيا بالتاريخ والمبلغ والضريبة المحصلة وطريقة الدفع، فأنت لست مضطرا للسعي لإعادة بناء أشهر من السجلات من الذاكرة عند حلول موسم الضرائب. كل شيء موجود بالفعل، جاهز للتصدير.",
+      h2Expensive: "\"لكن أنظمة نقاط البيع مكلفة ومعقدة\" - لم يعد الأمر كذلك",
+      pExpensive: "كان هذا هو العائق الحقيقي سابقا. أنظمة نقاط البيع التقليدية كانت تعني اشتراكات شهرية وأجهزة خاصة ومكالمة مبيعات قبل أن تتمكن حتى من تجربتها. هذه بالضبط هي الفجوة التي بني <a href=\"/\">GoOnlinePOS.com</a> لسدها.",
+      pNotStripped: "إنه نظام نقاط بيع كامل يعمل بالكامل داخل متصفحك - بدون تسجيل، بدون تسجيل دخول، بدون رسوم شهرية، لا شيء يحتاج إلى تثبيت. افتح الصفحة وستكون جاهزا لتسجيل أول عملية بيع لك خلال دقائق. وهو ليس نسخة \"تجريبية مجانية\" مخفضة تفتقد الميزات المهمة فعليا:",
+      li1: "<strong>مسح الباركود</strong> باستخدام قارئ باركود USB",
+      li2: "<strong>المدفوعات المقسمة</strong> - جزء نقدا، جزء بالبطاقة، متتبعة بدقة",
+      li3: "<strong>تتبع المخزون</strong> الذي يخصم الكمية تلقائيا مع كل عملية بيع",
+      li4: "<strong>عدة كاشيرات</strong>، مع تتبع المبيعات بشكل منفصل لكل واحد",
+      li5: "<strong>شاشة حية تواجه العميل</strong> ليرى العملاء طلبهم والمجموع أثناء تسجيله",
+      li6: "<strong>شعارك وهويتك الخاصة</strong> على كل إيصال مطبوع",
+      li7: "<strong>سجل مبيعات كامل</strong> - قابل للبحث والتعديل والتصدير إلى إكسل وإعادة الطباعة في أي وقت",
+      li8: "<strong>ست لغات</strong> مدمجة، بحيث يعمل لك ولعملائك",
+      li9: "<strong>نسخ احتياطي واستعادة كاملة</strong>، بحيث لا تتعرض بياناتك للخطر أبدا",
+      li10: "<strong>وضع نقاط البيع دون اتصال</strong> - استخدم نظام نقاط البيع الخاص بك حتى بدون اتصال بالإنترنت.",
+      pClosing: "إذا كنت قد أجلت الحصول على نظام نقاط بيع مناسب بسبب التكلفة أو المتاعب، فهذا العذر لم يعد ينطبق فعليا.",
+      ctaH2: "جربه مجانا - بدون تسجيل، بدون شروط خفية",
+      ctaP: "افتح التطبيق وابدأ بتسجيل المبيعات خلال دقائق.",
+      ctaBtn: "افتح GoOnlinePOS"
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      backLinkText: "← Bumalik sa Blog",
+      articleTag: "Pagsisimula",
+      articleH1: "Bakit Kailangan ng Bawat Negosyo ang Isang POS System (At Bakit Hindi na Sapat ang \"Gagamit na Lang Ako ng Notebook\")",
+      articleUpdatedLabel: "Huling na-update:",
+      articleMinRead: "MIN BASAHIN",
+      introP1: "Kung nagpapatakbo ka ng maliit na tindahan, isang puwesto, isang home bakery, o isang food cart, malaki ang posibilidad na nagsimula ka sa pinakasimpleng paraan ng pagsubaybay sa benta - isang notebook, kalkulator, o baka isang spreadsheet na ina-update mo sa katapusan ng araw kung natatandaan mo. Gumagana ito, hanggang sa hindi na.",
+      introP2: "Narito kung bakit hindi na luho ang point-of-sale system para lang sa malalaking retailer - talagang isa ito sa mga unang kasangkapang dapat mayroon ang anumang negosyo, gaano man ito kaliit.",
+      h2MathErrors: "Mas mabilis kumalat ang mga pagkakamali sa pagkukwenta kaysa sa iniisip mo",
+      pMathErrors: "Ang manual na pagkukwenta ay nangangahulugan ng manual na pagkakamali. Isang nakaligtaang item, maling kabuuan, maling diskwento - bawat isa ay parang maliit sa sandaling iyon, pero i-multiply mo iyon sa dose-dosenang benta bawat araw, araw-araw, at ito ay nagiging tunay na perang tahimik na tumatagas mula sa iyong negosyo. Ginagawa ng POS system ang pagkukwenta para sa iyo, sa bawat pagkakataon, sa parehong paraan.",
+      h2CantManage: "Hindi mo mapapamahalaan ang hindi mo nakikita",
+      pCantManage: "Tanungin mo ang sarili mo: alam mo ba talaga kung anong mga produkto ang pinakamabenta noong nakaraang linggo? Alin ang halos hindi gumalaw? Malapit ka na bang maubusan ng pinakamabenta mong produkto? Kung walang sistemang awtomatikong sumusubaybay dito, pinapatakbo mo ang negosyo mo batay sa hula. Ang tamang POS ay nagtatala ng bawat benta at bawat item, kaya ang mga sagot ay isang click na lang ang layo sa halip na isang misteryo.",
+      h2RunningOut: "Ang pagkaubos ng stock ay nagkakahalaga sa iyo ng mga bentang hindi mo na mababawi",
+      pRunningOut: "Walang mas masama pa sa isang customer na gustong bumili ng bagay na wala ka na - at hindi mo alam na naubos na ito hanggang sabihin nila sa iyo. Ang pagsubaybay sa imbentaryo na awtomatikong bumabawas ng stock sa bawat benta ay nangangahulugang naaagapan mo na ang kaunting stock bago pa ito maging nawawalang benta, hindi pagkatapos.",
+      h2CashOnly: "Umaasa ang mga customer sa higit pa sa cash-only, kalkulador-based na checkout",
+      pCashOnly: "Mga bayad sa card, digital wallet, hating bayad sa pagitan ng cash at card - lalong inaasahan ng mga customer ang flexibility sa checkout. Ang negosyong tumatanggap lang ng eksaktong halaga ng cash ay tahimik na nagtatanggi ng mga benta nang hindi ito napapansin.",
+      h2Accountability: "Kung higit sa isang tao ang humahawak ng mga benta, kailangan mo ng accountability",
+      pAccountability: "Sa sandaling magkaroon ka ng mga empleyado o miyembro ng pamilya na nagbebenta kasama mo, hindi na malinaw kung \"sino ang nagbenta ng ano.\" Ang POS na sumusubaybay ng benta ayon sa cashier ay nangangahulugang alam mo palagi kung sino ang humawak ng isang transaksyon - hindi dahil hindi mo pinagkakatiwalaan ang iyong team, kundi dahil pinoprotektahan ng malinaw na mga tala ang lahat, kasama ka.",
+      h2RealReceipt: "Nagbubuo ng tunay na tiwala ang tunay na resibo",
+      pRealReceipt: "Ang isinulat-kamay na kabuuan sa piraso ng papel ay hindi parang isang tunay na negosyo, kahit magaling ang iyong produkto. Ang naka-print na resibo na may pangalan ng iyong tindahan, logo, at malinaw na breakdown ng binili ay nagpapatibay sa tiwala ng mga customer na kausap nila ang isang lehitimong negosyo - at nagbibigay sa kanila ng magiging reperensya kung magkaroon man ng tanong tungkol sa isang pagbili.",
+      h2TaxTime: "Mas hindi na masakit ang panahon ng buwis",
+      pTaxTime: "Kapag awtomatikong naitatala ang bawat benta kasama ang petsa, halaga, buwis na nakolekta, at paraan ng pagbabayad, hindi ka na kailangang magsikap na muling buuin ang buwan-buwang mga tala mula sa alaala kapag dumating ang panahon ng buwis. Naroon na ito, handa nang i-export.",
+      h2Expensive: "\"Pero mahal at komplikado ang mga POS system\" - hindi na ngayon",
+      pExpensive: "Ito noon ang tunay na hadlang. Ang tradisyunal na mga POS system ay nangangahulugan ng buwanang subscription, espesyal na hardware, at isang tawag sa sales bago mo pa ito masubukan. Iyan mismo ang puwang na ginawa ng <a href=\"/\">GoOnlinePOS.com</a> para punan.",
+      pNotStripped: "Isa itong kompletong point-of-sale system na tumatakbo nang buo sa iyong browser - walang pagpaparehistro, walang login, walang buwanang bayad, walang kailangang i-install. Buksan ang page at nagbebenta ka na ng iyong unang item sa loob ng ilang minuto. At hindi ito isang pinaikling \"free trial\" na bersyon na kulang sa mga features na talagang mahalaga:",
+      li1: "<strong>Pag-scan ng barcode</strong> gamit ang USB barcode scanner",
+      li2: "<strong>Hating bayad</strong> - bahagi cash, bahagi card, tumpak na sinusubaybayan",
+      li3: "<strong>Pagsubaybay sa imbentaryo</strong> na awtomatikong bumabawas ng stock sa bawat benta",
+      li4: "<strong>Maraming cashier</strong>, na may hiwalay na pagsubaybay ng benta para sa bawat isa",
+      li5: "<strong>Live na customer-facing screen</strong> para makita ng mga customer ang kanilang order at kabuuan habang binibenta ito",
+      li6: "<strong>Ang sarili mong logo at branding</strong> sa bawat naka-print na resibo",
+      li7: "<strong>Kumpletong kasaysayan ng benta</strong> - mahahanap, maeedit, mae-export sa Excel, maaaring i-print ulit anumang oras",
+      li8: "<strong>Anim na wika</strong> na nakapaloob na, para gumana ito para sa iyo at sa iyong mga customer",
+      li9: "<strong>Kumpletong backup at restore</strong>, para hindi kailanman nanganganib ang iyong data",
+      li10: "<strong>Offline Mode POS</strong> - Gamitin ang iyong POS kahit walang internet connection.",
+      pClosing: "Kung ipinagpaliban mo ang pagkuha ng tamang point-of-sale system dahil sa gastos o abala, hindi na talaga umaangkop ang dahilang iyon ngayon.",
+      ctaH2: "Subukan itong libre - walang rehistro, walang catch",
+      ctaP: "Buksan ang app at magsimulang magbenta sa loob ng ilang minuto.",
+      ctaBtn: "Buksan ang GoOnlinePOS"
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      backLinkText: "← ब्लॉग पर वापस जाएं",
+      articleTag: "शुरुआत",
+      articleH1: "हर व्यवसाय को पीओएस सिस्टम की आवश्यकता क्यों है (और \"मैं सिर्फ एक नोटबुक का उपयोग करूंगा\" अब पर्याप्त क्यों नहीं है)",
+      articleUpdatedLabel: "अंतिम अपडेट:",
+      articleMinRead: "मिनट पढ़ें",
+      introP1: "यदि आप एक छोटी दुकान, एक स्टॉल, एक होम बेकरी, या एक फूड कार्ट चलाते हैं, तो संभावना है कि आपने सबसे सरल तरीके से बिक्री ट्रैक करना शुरू किया - एक नोटबुक, एक कैलकुलेटर, शायद एक स्प्रेडशीट जिसे आप दिन के अंत में अपडेट करते हैं यदि याद रहे। यह काम करता है, जब तक नहीं करता।",
+      introP2: "यहां बताया गया है कि पॉइंट-ऑफ-सेल सिस्टम अब बड़े रिटेलरों के लिए विलासिता क्यों नहीं है - यह वास्तव में उन पहले उपकरणों में से एक है जो किसी भी व्यवसाय के पास होना चाहिए, चाहे वह कितना भी छोटा क्यों न हो।",
+      h2MathErrors: "गणना की गलतियां आपकी सोच से कहीं तेजी से बढ़ती हैं",
+      pMathErrors: "मैनुअल गणना का मतलब है मैनुअल गलतियां। एक छूटा हुआ आइटम, गलत कुल, गलत तरीके से लागू किया गया छूट - हर एक उस पल में छोटा लगता है, लेकिन उसे हर दिन दर्जनों बिक्री में गुणा करें, हर दिन, और यह आपके व्यवसाय से चुपचाप बहता हुआ असली पैसा बन जाता है। एक पीओएस सिस्टम हर बार, उसी तरीके से, आपके लिए गणना करता है।",
+      h2CantManage: "आप उसे प्रबंधित नहीं कर सकते जो आप देख नहीं सकते",
+      pCantManage: "खुद से पूछें: क्या आप वास्तव में जानते हैं कि पिछले सप्ताह कौन से उत्पाद सबसे अधिक बिके? कौन से मुश्किल से बिके? क्या आपका सबसे अधिक बिकने वाला उत्पाद खत्म होने वाला है? इसे स्वचालित रूप से ट्रैक करने वाले सिस्टम के बिना, आप अपना व्यवसाय अनुमान के आधार पर चला रहे हैं। एक उचित पीओएस हर बिक्री और हर आइटम को लॉग करता है, ताकि उत्तर एक रहस्य के बजाय बस एक क्लिक दूर हों।",
+      h2RunningOut: "स्टॉक खत्म होने से आपको ऐसी बिक्री का नुकसान होता है जो आपको फिर कभी नहीं मिलेगी",
+      pRunningOut: "किसी ग्राहक के कुछ खरीदना चाहने से बुरा कुछ नहीं है जो आपके पास नहीं है - और यह एहसास न होना कि आप उससे बाहर हो गए थे जब तक उन्होंने आपको नहीं बताया। इन्वेंटरी ट्रैकिंग जो हर बिक्री के साथ स्वचालित रूप से स्टॉक घटाती है, इसका मतलब है कि आप कम स्टॉक को खोई हुई बिक्री बनने से पहले पकड़ लेते हैं, बाद में नहीं।",
+      h2CashOnly: "ग्राहक कैश-ओनली, कैलकुलेटर-गणित चेकआउट से अधिक की उम्मीद करते हैं",
+      pCashOnly: "कार्ड भुगतान, डिजिटल वॉलेट, नकद और कार्ड के बीच विभाजित भुगतान - ग्राहक चेकआउट पर तेजी से लचीलेपन की उम्मीद करते हैं। एक व्यवसाय जो केवल सटीक नकद राशि संभाल सकता है, बिना एहसास किए चुपचाप बिक्री खो रहा है।",
+      h2Accountability: "यदि एक से अधिक व्यक्ति बिक्री संभालते हैं, तो आपको जवाबदेही की आवश्यकता है",
+      pAccountability: "जिस क्षण आपके साथ कर्मचारी या परिवार के सदस्य बिक्री करने लगते हैं, \"किसने क्या बेचा\" स्पष्ट होना बंद हो जाता है। एक पीओएस जो कैशियर द्वारा बिक्री ट्रैक करता है, इसका मतलब है कि आप हमेशा जानते हैं कि किसने लेनदेन संभाला - इसलिए नहीं कि आप अपनी टीम पर भरोसा नहीं करते, बल्कि इसलिए कि स्पष्ट रिकॉर्ड सभी की, आपकी सहित, रक्षा करते हैं।",
+      h2RealReceipt: "एक असली रसीद असली भरोसा बनाती है",
+      pRealReceipt: "कागज के टुकड़े पर हाथ से लिखा हुआ कुल एक असली व्यवसाय जैसा महसूस नहीं होता, भले ही आपका उत्पाद बहुत अच्छा हो। आपके स्टोर के नाम, आपके लोगो, और खरीदी गई चीज़ों का स्पष्ट विवरण वाली एक मुद्रित रसीद ग्राहकों को यह भरोसा दिलाती है कि वे किसी वैध व्यक्ति से डील कर रहे हैं - और यदि कभी किसी खरीद के बारे में सवाल हो तो उन्हें संदर्भित करने के लिए कुछ देती है।",
+      h2TaxTime: "टैक्स का समय बहुत कम दर्दनाक हो जाता है",
+      pTaxTime: "जब हर बिक्री को तारीख, राशि, एकत्रित कर, और भुगतान विधि के साथ स्वचालित रूप से लॉग किया जाता है, तो टैक्स सीजन आने पर आपको यादों से महीनों के रिकॉर्ड फिर से बनाने के लिए संघर्ष नहीं करना पड़ता। यह पहले से ही वहां है, निर्यात के लिए तैयार।",
+      h2Expensive: "\"लेकिन पीओएस सिस्टम महंगे और जटिल हैं\" - अब नहीं",
+      pExpensive: "यह पहले एक वास्तविक बाधा हुआ करती थी। पारंपरिक पीओएस सिस्टम का मतलब मासिक सदस्यता, विशेष हार्डवेयर, और इसे आज़माने से पहले एक बिक्री कॉल होता था। यही वह अंतर है जिसे बंद करने के लिए <a href=\"/\">GoOnlinePOS.com</a> बनाया गया था।",
+      pNotStripped: "यह एक संपूर्ण पॉइंट-ऑफ-सेल सिस्टम है जो पूरी तरह से आपके ब्राउज़र में चलता है - कोई साइनअप नहीं, कोई लॉगिन नहीं, कोई मासिक शुल्क नहीं, इंस्टॉल करने के लिए कुछ भी नहीं। पेज खोलें और आप कुछ ही मिनटों में अपनी पहली बिक्री कर रहे होंगे। और यह एक घटिया \"फ्री ट्रायल\" संस्करण नहीं है जिसमें वास्तव में महत्वपूर्ण सुविधाओं की कमी हो:",
+      li1: "<strong>बारकोड स्कैनिंग</strong> USB बारकोड स्कैनर के साथ",
+      li2: "<strong>विभाजित भुगतान</strong> - कुछ नकद, कुछ कार्ड, सटीक रूप से ट्रैक किया गया",
+      li3: "<strong>इन्वेंटरी ट्रैकिंग</strong> जो हर बिक्री के साथ स्वचालित रूप से स्टॉक घटाती है",
+      li4: "<strong>कई कैशियर</strong>, प्रत्येक के लिए अलग से ट्रैक की गई बिक्री के साथ",
+      li5: "<strong>एक लाइव कस्टमर-फेसिंग स्क्रीन</strong> ताकि ग्राहक बिक्री करते समय अपना ऑर्डर और कुल देख सकें",
+      li6: "<strong>आपका अपना लोगो और ब्रांडिंग</strong> हर मुद्रित रसीद पर",
+      li7: "<strong>पूर्ण बिक्री इतिहास</strong> - खोजा जा सकने वाला, संपादन योग्य, Excel में निर्यात योग्य, कभी भी पुनर्मुद्रण योग्य",
+      li8: "<strong>छह भाषाएं</strong> अंतर्निर्मित, ताकि यह आपके और आपके ग्राहकों के लिए काम करे",
+      li9: "<strong>पूर्ण बैकअप और पुनर्स्थापना</strong>, ताकि आपका डेटा कभी जोखिम में न हो",
+      li10: "<strong>ऑफलाइन मोड पीओएस</strong> - इंटरनेट कनेक्शन के बिना भी अपने पीओएस का उपयोग करें।",
+      pClosing: "यदि आप लागत या परेशानी के कारण एक उचित पॉइंट-ऑफ-सेल सिस्टम प्राप्त करना टाल रहे थे, तो वह बहाना अब वास्तव में लागू नहीं होता।",
+      ctaH2: "इसे मुफ्त में आज़माएं - कोई साइनअप नहीं, कोई छिपी शर्त नहीं",
+      ctaP: "ऐप खोलें और कुछ ही मिनटों में बिक्री शुरू करें।",
+      ctaBtn: "GoOnlinePOS खोलें"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      backLinkText: "← Volver al Blog",
+      articleTag: "Primeros Pasos",
+      articleH1: "Por Qué Todo Negocio Necesita un Sistema POS (Y Por Qué \"Solo Usaré un Cuaderno\" Ya No Es Suficiente)",
+      articleUpdatedLabel: "Última actualización:",
+      articleMinRead: "MIN DE LECTURA",
+      introP1: "Si diriges una pequeña tienda, un puesto, una panadería casera, o un food cart, es muy probable que hayas empezado a rastrear las ventas de la forma más simple posible - un cuaderno, una calculadora, quizás una hoja de cálculo que actualizas al final del día si te acuerdas. Funciona, hasta que deja de funcionar.",
+      introP2: "Esto es por qué un sistema de punto de venta ya no es un lujo solo para grandes minoristas - genuinamente es una de las primeras herramientas que cualquier negocio debería tener, sin importar cuán pequeño sea.",
+      h2MathErrors: "Los errores de cálculo se acumulan más rápido de lo que crees",
+      pMathErrors: "Los cálculos manuales significan errores manuales. Un artículo olvidado, un total incorrecto, un descuento aplicado incorrectamente - cada uno parece pequeño en el momento, pero multiplica eso por docenas de ventas al día, todos los días, y se convierte en dinero real que se filtra silenciosamente de tu negocio. Un sistema POS hace el cálculo por ti, cada vez, de la misma manera.",
+      h2CantManage: "No puedes gestionar lo que no puedes ver",
+      pCantManage: "Pregúntate: ¿realmente sabes qué productos se vendieron más la semana pasada? ¿Cuáles apenas se movieron? ¿Estás a punto de quedarte sin tu producto más vendido? Sin un sistema que rastree esto automáticamente, estás dirigiendo tu negocio a base de suposiciones. Un POS adecuado registra cada venta y cada artículo, así que las respuestas están a un clic de distancia en lugar de ser un misterio.",
+      h2RunningOut: "Quedarte sin stock te cuesta ventas que nunca recuperarás",
+      pRunningOut: "Nada es peor que un cliente que quiere comprar algo que no tienes - y no darte cuenta de que se acabó hasta que te lo dicen. El seguimiento de inventario que descuenta el stock automáticamente con cada venta significa que detectas el stock bajo antes de que se convierta en una venta perdida, no después.",
+      h2CashOnly: "Los clientes esperan más que un checkout solo en efectivo con cálculo manual",
+      pCashOnly: "Pagos con tarjeta, billeteras digitales, pagos divididos entre efectivo y tarjeta - los clientes esperan cada vez más flexibilidad en el checkout. Un negocio que solo puede manejar montos exactos en efectivo está rechazando ventas silenciosamente sin darse cuenta.",
+      h2Accountability: "Si más de una persona maneja las ventas, necesitas responsabilidad",
+      pAccountability: "En el momento en que tienes empleados o familiares registrando ventas junto a ti, \"quién vendió qué\" deja de ser obvio. Un POS que rastrea las ventas por cajero significa que siempre sabes quién manejó una transacción - no porque no confíes en tu equipo, sino porque los registros claros protegen a todos, incluyéndote a ti.",
+      h2RealReceipt: "Un recibo real genera confianza real",
+      pRealReceipt: "Un total escrito a mano en un pedazo de papel no se siente como un negocio real, incluso si tu producto es excelente. Un recibo impreso con el nombre de tu tienda, tu logo, y un desglose claro de lo que se compró hace que los clientes confíen en que están tratando con alguien legítimo - y les da algo a lo que referirse si alguna vez hay una pregunta sobre una compra.",
+      h2TaxTime: "La temporada de impuestos se vuelve mucho menos dolorosa",
+      pTaxTime: "Cuando cada venta se registra automáticamente con la fecha, el monto, el impuesto cobrado, y el método de pago, no tienes que luchar por reconstruir meses de registros de memoria cuando llega la temporada de impuestos. Ya está ahí, listo para exportar.",
+      h2Expensive: "\"Pero los sistemas POS son caros y complicados\" - ya no",
+      pExpensive: "Esta solía ser la verdadera barrera. Los sistemas POS tradicionales significaban suscripciones mensuales, hardware especial, y una llamada de ventas antes de siquiera poder probarlo. Esa es exactamente la brecha que <a href=\"/\">GoOnlinePOS.com</a> fue construido para cerrar.",
+      pNotStripped: "Es un sistema de punto de venta completo que se ejecuta totalmente en tu navegador - sin registro, sin inicio de sesión, sin cuota mensual, nada que instalar. Abre la página y estarás registrando tu primera venta en minutos. Y no es una versión \"prueba gratuita\" recortada que carece de las funciones que realmente importan:",
+      li1: "<strong>Escaneo de códigos de barras</strong> con un lector de código de barras USB",
+      li2: "<strong>Pagos divididos</strong> - parte en efectivo, parte con tarjeta, rastreados con precisión",
+      li3: "<strong>Seguimiento de inventario</strong> que descuenta el stock automáticamente con cada venta",
+      li4: "<strong>Múltiples cajeros</strong>, con las ventas rastreadas por separado para cada uno",
+      li5: "<strong>Una pantalla en vivo orientada al cliente</strong> para que los clientes vean su pedido y total mientras se registra",
+      li6: "<strong>Tu propio logo y marca</strong> en cada recibo impreso",
+      li7: "<strong>Historial de ventas completo</strong> - buscable, editable, exportable a Excel, reimprimible en cualquier momento",
+      li8: "<strong>Seis idiomas</strong> integrados, para que funcione para ti y tus clientes",
+      li9: "<strong>Copia de seguridad y restauración completa</strong>, para que tus datos nunca estén en riesgo",
+      li10: "<strong>Modo Offline POS</strong> - Usa tu POS incluso sin conexión a internet.",
+      pClosing: "Si has estado posponiendo obtener un sistema de punto de venta adecuado por el costo o la molestia, esa excusa ya no aplica realmente.",
+      ctaH2: "Pruébalo gratis - sin registro, sin trampa",
+      ctaP: "Abre la aplicación y comienza a registrar ventas en minutos.",
+      ctaBtn: "Abrir GoOnlinePOS"
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      backLinkText: "← กลับไปที่บล็อก",
+      articleTag: "เริ่มต้นใช้งาน",
+      articleH1: "ทำไมทุกธุรกิจถึงต้องการระบบ POS (และทำไม \"แค่ใช้สมุดบันทึก\" ถึงไม่เพียงพออีกต่อไป)",
+      articleUpdatedLabel: "อัปเดตล่าสุด:",
+      articleMinRead: "นาทีในการอ่าน",
+      introP1: "หากคุณกำลังบริหารร้านค้าเล็ก ๆ แผงลอย ร้านเบเกอรี่ที่บ้าน หรือรถเข็นขายอาหาร มีโอกาสสูงที่คุณเริ่มติดตามยอดขายด้วยวิธีที่ง่ายที่สุด - สมุดบันทึก เครื่องคิดเลข หรืออาจจะเป็นสเปรดชีตที่คุณอัปเดตตอนสิ้นวันหากจำได้ มันได้ผล จนกระทั่งมันไม่ได้ผลอีกต่อไป",
+      introP2: "นี่คือเหตุผลที่ระบบขายหน้าร้านไม่ใช่สิ่งฟุ่มเฟือยสำหรับผู้ค้าปลีกรายใหญ่เท่านั้นอีกต่อไป - มันเป็นหนึ่งในเครื่องมือแรก ๆ ที่ธุรกิจใดก็ตามควรมี ไม่ว่าจะเล็กแค่ไหนก็ตาม",
+      h2MathErrors: "ข้อผิดพลาดทางคณิตศาสตร์สะสมเร็วกว่าที่คุณคิด",
+      pMathErrors: "การคำนวณด้วยมือหมายถึงความผิดพลาดที่เกิดจากมือ รายการที่พลาดไป ยอดรวมที่ผิด ส่วนลดที่ใช้ผิด - แต่ละอย่างดูเหมือนเล็กน้อยในตอนนั้น แต่คูณสิ่งนั้นด้วยยอดขายหลายสิบครั้งต่อวัน ทุกวัน มันก็กลายเป็นเงินจริงที่รั่วไหลออกจากธุรกิจของคุณอย่างเงียบ ๆ ระบบ POS คำนวณให้คุณทุกครั้งด้วยวิธีเดียวกัน",
+      h2CantManage: "คุณจัดการสิ่งที่คุณมองไม่เห็นไม่ได้",
+      pCantManage: "ลองถามตัวเอง คุณรู้จริง ๆ ไหมว่าสินค้าใดขายดีที่สุดเมื่อสัปดาห์ที่แล้ว? สินค้าใดแทบไม่ขยับเลย? คุณกำลังจะสินค้าขายดีหมดสต็อกหรือเปล่า? หากไม่มีระบบติดตามสิ่งเหล่านี้โดยอัตโนมัติ คุณกำลังบริหารธุรกิจด้วยการเดา ระบบ POS ที่เหมาะสมจะบันทึกทุกการขายและทุกรายการ ทำให้คำตอบอยู่แค่คลิกเดียวแทนที่จะเป็นปริศนา",
+      h2RunningOut: "สินค้าหมดสต็อกทำให้คุณเสียยอดขายที่จะไม่มีวันได้กลับคืนมา",
+      pRunningOut: "ไม่มีอะไรแย่ไปกว่าลูกค้าที่อยากซื้อสิ่งที่คุณไม่มี - และคุณไม่รู้ว่าสินค้าหมดจนกว่าพวกเขาจะบอกคุณ การติดตามสินค้าคงคลังที่หักสต็อกโดยอัตโนมัติทุกครั้งที่มีการขาย หมายความว่าคุณจะจับสัญญาณสต็อกต่ำได้ก่อนที่มันจะกลายเป็นยอดขายที่เสียไป ไม่ใช่หลังจากนั้น",
+      h2CashOnly: "ลูกค้าคาดหวังมากกว่าการชำระเงินสดอย่างเดียวและการคำนวณด้วยเครื่องคิดเลข",
+      pCashOnly: "การชำระด้วยบัตร กระเป๋าเงินดิจิทัล การแบ่งชำระระหว่างเงินสดและบัตร - ลูกค้าคาดหวังความยืดหยุ่นในการชำระเงินมากขึ้นเรื่อย ๆ ธุรกิจที่รับได้เฉพาะจำนวนเงินสดที่พอดีกำลังปฏิเสธยอดขายอย่างเงียบ ๆ โดยไม่รู้ตัว",
+      h2Accountability: "หากมีมากกว่าหนึ่งคนดูแลการขาย คุณต้องการความรับผิดชอบที่ตรวจสอบได้",
+      pAccountability: "ทันทีที่คุณมีพนักงานหรือสมาชิกในครอบครัวช่วยขายของร่วมกับคุณ \"ใครขายอะไร\" จะไม่ชัดเจนอีกต่อไป ระบบ POS ที่ติดตามยอดขายตามพนักงานแคชเชียร์หมายความว่าคุณจะรู้เสมอว่าใครเป็นผู้ทำรายการนั้น - ไม่ใช่เพราะคุณไม่ไว้ใจทีมของคุณ แต่เพราะบันทึกที่ชัดเจนปกป้องทุกคน รวมถึงคุณด้วย",
+      h2RealReceipt: "ใบเสร็จจริงสร้างความไว้วางใจที่แท้จริง",
+      pRealReceipt: "ยอดรวมที่เขียนด้วยลายมือบนเศษกระดาษไม่รู้สึกเหมือนธุรกิจจริง แม้ว่าสินค้าของคุณจะดีเยี่ยมก็ตาม ใบเสร็จที่พิมพ์ออกมาพร้อมชื่อร้าน โลโก้ และรายละเอียดที่ชัดเจนของสิ่งที่ซื้อ ทำให้ลูกค้าเชื่อมั่นว่ากำลังติดต่อกับธุรกิจที่ถูกต้องตามกฎหมาย - และยังให้สิ่งที่พวกเขาสามารถอ้างอิงได้หากมีคำถามเกี่ยวกับการซื้อในภายหลัง",
+      h2TaxTime: "ช่วงเวลาภาษีจะเจ็บปวดน้อยลงมาก",
+      pTaxTime: "เมื่อทุกการขายถูกบันทึกโดยอัตโนมัติพร้อมวันที่ จำนวนเงิน ภาษีที่เก็บ และวิธีการชำระเงิน คุณไม่ต้องรีบสร้างบันทึกย้อนหลังหลายเดือนจากความจำเมื่อถึงฤดูภาษี ข้อมูลทุกอย่างพร้อมอยู่แล้ว พร้อมส่งออกได้ทันที",
+      h2Expensive: "\"แต่ระบบ POS แพงและซับซ้อน\" - ไม่ใช่อีกต่อไป",
+      pExpensive: "นี่เคยเป็นอุปสรรคที่แท้จริง ระบบ POS แบบดั้งเดิมหมายถึงค่าสมัครสมาชิกรายเดือน ฮาร์ดแวร์พิเศษ และการโทรขายก่อนที่คุณจะได้ลองใช้งานด้วยซ้ำ นั่นคือช่องว่างที่ <a href=\"/\">GoOnlinePOS.com</a> ถูกสร้างขึ้นมาเพื่อปิดช่องว่างนั้น",
+      pNotStripped: "มันคือระบบขายหน้าร้านที่สมบูรณ์ซึ่งทำงานอยู่ในเบราว์เซอร์ของคุณทั้งหมด - ไม่ต้องสมัคร ไม่ต้องเข้าสู่ระบบ ไม่มีค่าธรรมเนียมรายเดือน ไม่ต้องติดตั้งอะไรเลย เปิดหน้าเว็บแล้วคุณก็จะเริ่มขายรายการแรกได้ภายในไม่กี่นาที และมันไม่ใช่เวอร์ชัน \"ทดลองใช้ฟรี\" แบบตัดฟีเจอร์สำคัญออกไป:",
+      li1: "<strong>การสแกนบาร์โค้ด</strong> ด้วยเครื่องสแกนบาร์โค้ด USB",
+      li2: "<strong>การแบ่งชำระเงิน</strong> - ส่วนหนึ่งเป็นเงินสด ส่วนหนึ่งเป็นบัตร ติดตามได้อย่างแม่นยำ",
+      li3: "<strong>การติดตามสินค้าคงคลัง</strong> ที่หักสต็อกโดยอัตโนมัติทุกครั้งที่มีการขาย",
+      li4: "<strong>พนักงานแคชเชียร์หลายคน</strong> พร้อมการติดตามยอดขายแยกกันสำหรับแต่ละคน",
+      li5: "<strong>หน้าจอแสดงผลสดสำหรับลูกค้า</strong> เพื่อให้ลูกค้าเห็นคำสั่งซื้อและยอดรวมขณะที่คุณคิดเงิน",
+      li6: "<strong>โลโก้และแบรนด์ของคุณเอง</strong> บนใบเสร็จที่พิมพ์ทุกใบ",
+      li7: "<strong>ประวัติการขายที่สมบูรณ์</strong> - ค้นหาได้ แก้ไขได้ ส่งออกเป็น Excel ได้ พิมพ์ซ้ำได้ทุกเมื่อ",
+      li8: "<strong>หกภาษา</strong> ในตัว เพื่อให้ใช้งานได้ทั้งกับคุณและลูกค้าของคุณ",
+      li9: "<strong>การสำรองข้อมูลและกู้คืนแบบสมบูรณ์</strong> เพื่อให้ข้อมูลของคุณไม่มีวันตกอยู่ในความเสี่ยง",
+      li10: "<strong>โหมด POS ออฟไลน์</strong> - ใช้ POS ของคุณได้แม้ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+      pClosing: "หากคุณเลื่อนการหาระบบขายหน้าร้านที่เหมาะสมมาตลอดเพราะค่าใช้จ่ายหรือความยุ่งยาก ข้ออ้างนั้นก็ใช้ไม่ได้จริง ๆ อีกต่อไปแล้ว",
+      ctaH2: "ลองใช้ฟรี - ไม่ต้องสมัคร ไม่มีเงื่อนไขแอบแฝง",
+      ctaP: "เปิดแอปและเริ่มขายสินค้าได้ภายในไม่กี่นาที",
+      ctaBtn: "เปิด GoOnlinePOS"
+    }
+  };
+
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      langPickerLabel: "langPickerLabel",
+      backLinkText: "backLinkText",
+      articleTag: "articleTag",
+      articleH1: "articleH1",
+      articleUpdatedLabel: "articleUpdatedLabel",
+      articleMinRead: "articleMinRead",
+      introP1: "introP1",
+      introP2: "introP2",
+      h2MathErrors: "h2MathErrors",
+      pMathErrors: "pMathErrors",
+      h2CantManage: "h2CantManage",
+      pCantManage: "pCantManage",
+      h2RunningOut: "h2RunningOut",
+      pRunningOut: "pRunningOut",
+      h2CashOnly: "h2CashOnly",
+      pCashOnly: "pCashOnly",
+      h2Accountability: "h2Accountability",
+      pAccountability: "pAccountability",
+      h2RealReceipt: "h2RealReceipt",
+      pRealReceipt: "pRealReceipt",
+      h2TaxTime: "h2TaxTime",
+      pTaxTime: "pTaxTime",
+      h2Expensive: "h2Expensive",
+      pNotStripped: "pNotStripped",
+      pClosing: "pClosing",
+      ctaH2: "ctaH2",
+      ctaP: "ctaP",
+      ctaBtn: "ctaBtn"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+    ["pExpensive", "li1", "li2", "li3", "li4", "li5", "li6", "li7", "li8", "li9", "li10"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-article-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-article-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

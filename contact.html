@@ -135,6 +135,10 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
   .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
 }
 
+.lang-picker-bar { max-width: 520px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 0 0 14px; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .card { max-width: 520px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 32px; text-align: center; }
 .card .icon { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
 .card h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; letter-spacing: -.01em; margin: 0 0 10px; }
@@ -213,26 +217,39 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 </div>
 </header>
 
+<div class="lang-picker-bar">
+<label for="contactLanguage"><span id="langPickerLabel">Language</span>
+<select id="contactLanguage">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</label>
+</div>
+
 <div class="card">
 
 <div class="step active" id="step1">
 <div class="icon">✉</div>
-<h2>Get in touch</h2>
-<p>Have a question, found a bug, or just want to say hi? Send us a message below - we'll email you a quick verification code first, just to keep spam out of our inbox.</p>
+<h2 id="step1Title">Get in touch</h2>
+<p id="step1Text">Have a question, found a bug, or just want to say hi? Send us a message below - we'll email you a quick verification code first, just to keep spam out of our inbox.</p>
 
 <div class="form-error hidden" id="formError1"></div>
 
 <form id="contactForm" novalidate>
 <div class="form-row">
-<label for="cfName">Name</label>
+<label for="cfName" id="nameLabel">Name</label>
 <input type="text" id="cfName" required maxlength="200" placeholder="Your name">
 </div>
 <div class="form-row">
-<label for="cfEmail">Email</label>
+<label for="cfEmail" id="emailLabel">Email</label>
 <input type="email" id="cfEmail" required maxlength="200" placeholder="you@example.com">
 </div>
 <div class="form-row">
-<label for="cfMessage">Message</label>
+<label for="cfMessage" id="messageLabelText">Message</label>
 <textarea id="cfMessage" required maxlength="1000" placeholder="How can we help?"></textarea>
 <div class="char-count"><span id="cfMessageCount">0</span>/1000</div>
 </div>
@@ -242,14 +259,14 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 
 <div class="step" id="step2">
 <div class="icon">🔒</div>
-<h2>Verify it's really you</h2>
-<p>We've sent a 6-digit code to <strong id="otpEmailDisplay"></strong>. This helps us keep spam out of our inbox - enter it below to send your message.</p>
+<h2 id="step2Title">Verify it's really you</h2>
+<p><span id="step2TextBefore">We've sent a 6-digit code to</span> <strong id="otpEmailDisplay"></strong><span id="step2TextAfter">. This helps us keep spam out of our inbox - enter it below to send your message.</span></p>
 
 <div class="form-error hidden" id="formError2"></div>
 
 <form id="otpForm" novalidate>
 <div class="form-row">
-<label for="cfOtp">Verification Code</label>
+<label for="cfOtp" id="otpLabel">Verification Code</label>
 <input type="text" id="cfOtp" class="otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" required placeholder="000000" autocomplete="one-time-code">
 </div>
 <button type="submit" class="submit-btn" id="verifyBtn">Verify &amp; Send</button>
@@ -263,8 +280,8 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
 
 <div class="step" id="step3">
 <div class="icon">✓</div>
-<h2>Message sent!</h2>
-<p>Thanks for reaching out - we've received your inquiry and will get back to you soon. A confirmation email is on its way to your inbox.</p>
+<h2 id="step3Title">Message sent!</h2>
+<p id="step3Text">Thanks for reaching out - we've received your inquiry and will get back to you soon. A confirmation email is on its way to your inbox.</p>
 <button type="button" class="link-btn" id="newMessageBtn">Send another message</button>
 </div>
 
@@ -295,19 +312,238 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
   var backBtn = document.getElementById("backBtn");
   var resendBtn = document.getElementById("resendBtn");
   var newMessageBtn = document.getElementById("newMessageBtn");
+  var langSelect = document.getElementById("contactLanguage");
 
   var resendTimer = null;
+  var resendActive = false;
+  var resendRemaining = 0;
 
-  var ERROR_MESSAGES = {
-    bad_request: "Please fill in your name, email, and message.",
-    invalid_email: "That doesn't look like a valid email address.",
-    cooldown: "Please wait a bit before requesting another code.",
-    server_error: "Something went wrong on our end. Please try again in a moment.",
-    expired: "That code has expired. Request a new one below.",
-    invalid_code: "That code doesn't match. Double check and try again.",
-    too_many_attempts: "Too many incorrect attempts. Request a new code below.",
-    network: "Couldn't reach the server. Check your connection and try again."
+  var ERROR_MESSAGE_KEYS = {
+    bad_request: "errorBadRequest",
+    invalid_email: "errorInvalidEmail",
+    cooldown: "errorCooldown",
+    server_error: "errorServerError",
+    expired: "errorExpired",
+    invalid_code: "errorInvalidCode",
+    too_many_attempts: "errorTooManyAttempts",
+    network: "errorNetwork"
   };
+
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      step1Title: "Get in touch",
+      step1Text: "Have a question, found a bug, or just want to say hi? Send us a message below - we'll email you a quick verification code first, just to keep spam out of our inbox.",
+      nameLabel: "Name",
+      namePlaceholder: "Your name",
+      emailLabel: "Email",
+      messageLabelText: "Message",
+      messagePlaceholder: "How can we help?",
+      sendMessageLabel: "Send Message",
+      sendingCodeLabel: "Sending code...",
+      step2Title: "Verify it's really you",
+      step2TextBefore: "We've sent a 6-digit code to",
+      step2TextAfter: ". This helps us keep spam out of our inbox - enter it below to send your message.",
+      otpLabel: "Verification Code",
+      verifyLabel: "Verify & Send",
+      verifyingLabel: "Verifying...",
+      backBtnLabel: "← Edit your message",
+      resendCodeLabel: "Resend code",
+      resendingLabel: "Sending...",
+      step3Title: "Message sent!",
+      step3Text: "Thanks for reaching out - we've received your inquiry and will get back to you soon. A confirmation email is on its way to your inbox.",
+      newMessageLabel: "Send another message",
+      errorBadRequest: "Please fill in your name, email, and message.",
+      errorInvalidEmail: "That doesn't look like a valid email address.",
+      errorCooldown: "Please wait a bit before requesting another code.",
+      errorServerError: "Something went wrong on our end. Please try again in a moment.",
+      errorExpired: "That code has expired. Request a new one below.",
+      errorInvalidCode: "That code doesn't match. Double check and try again.",
+      errorTooManyAttempts: "Too many incorrect attempts. Request a new code below.",
+      errorNetwork: "Couldn't reach the server. Check your connection and try again.",
+      otpLengthError: "Enter the 6-digit code we emailed you.",
+      attemptsLeftLabel: "({n} attempts left)"
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      step1Title: "تواصل معنا",
+      step1Text: "لديك سؤال، وجدت خطأ، أو تريد فقط أن تقول مرحبا؟ أرسل لنا رسالة أدناه - سنرسل لك أولا رمز تحقق سريع عبر البريد الإلكتروني، فقط لإبقاء البريد المزعج بعيدا عن صندوق الوارد لدينا.",
+      nameLabel: "الاسم",
+      namePlaceholder: "اسمك",
+      emailLabel: "البريد الإلكتروني",
+      messageLabelText: "الرسالة",
+      messagePlaceholder: "كيف يمكننا المساعدة؟",
+      sendMessageLabel: "إرسال الرسالة",
+      sendingCodeLabel: "جارٍ إرسال الرمز...",
+      step2Title: "تحقق من أنك أنت فعلا",
+      step2TextBefore: "لقد أرسلنا رمزا مكونا من 6 أرقام إلى",
+      step2TextAfter: ". يساعدنا هذا في إبقاء البريد المزعج بعيدا عن صندوق الوارد - أدخله أدناه لإرسال رسالتك.",
+      otpLabel: "رمز التحقق",
+      verifyLabel: "تحقق وأرسل",
+      verifyingLabel: "جارٍ التحقق...",
+      backBtnLabel: "← تعديل رسالتك",
+      resendCodeLabel: "إعادة إرسال الرمز",
+      resendingLabel: "جارٍ الإرسال...",
+      step3Title: "تم إرسال الرسالة!",
+      step3Text: "شكرا لتواصلك معنا - لقد استلمنا استفسارك وسنتواصل معك قريبا. رسالة تأكيد في طريقها إلى صندوق بريدك.",
+      newMessageLabel: "إرسال رسالة أخرى",
+      errorBadRequest: "يرجى تعبئة اسمك وبريدك الإلكتروني ورسالتك.",
+      errorInvalidEmail: "هذا لا يبدو عنوان بريد إلكتروني صحيحا.",
+      errorCooldown: "يرجى الانتظار قليلا قبل طلب رمز آخر.",
+      errorServerError: "حدث خطأ ما من جانبنا. يرجى المحاولة مرة أخرى بعد لحظة.",
+      errorExpired: "انتهت صلاحية هذا الرمز. اطلب رمزا جديدا أدناه.",
+      errorInvalidCode: "هذا الرمز غير مطابق. تحقق منه وحاول مرة أخرى.",
+      errorTooManyAttempts: "عدد كبير جدا من المحاولات غير الصحيحة. اطلب رمزا جديدا أدناه.",
+      errorNetwork: "تعذر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.",
+      otpLengthError: "أدخل الرمز المكون من 6 أرقام الذي أرسلناه إلى بريدك الإلكتروني.",
+      attemptsLeftLabel: "(تبقى {n} محاولات)"
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      step1Title: "Makipag-ugnayan sa amin",
+      step1Text: "May tanong ka, nakakita ka ng bug, o gusto mo lang bumati? Magpadala ng mensahe sa ibaba - magpapadala muna kami ng mabilis na verification code sa email mo, para lang mapanatiling malayo ang spam sa aming inbox.",
+      nameLabel: "Pangalan",
+      namePlaceholder: "Ang iyong pangalan",
+      emailLabel: "Email",
+      messageLabelText: "Mensahe",
+      messagePlaceholder: "Paano ka namin matutulungan?",
+      sendMessageLabel: "Ipadala ang Mensahe",
+      sendingCodeLabel: "Ipinapadala ang code...",
+      step2Title: "I-verify na ikaw talaga ito",
+      step2TextBefore: "Nagpadala kami ng 6-digit na code sa",
+      step2TextAfter: ". Tumutulong ito na mapanatiling malayo ang spam sa aming inbox - ilagay ito sa ibaba para ipadala ang iyong mensahe.",
+      otpLabel: "Verification Code",
+      verifyLabel: "I-verify at Ipadala",
+      verifyingLabel: "Ini-verify...",
+      backBtnLabel: "← I-edit ang iyong mensahe",
+      resendCodeLabel: "Ipadala ulit ang code",
+      resendingLabel: "Ipinapadala...",
+      step3Title: "Naipadala na ang mensahe!",
+      step3Text: "Salamat sa pakikipag-ugnayan - natanggap na namin ang iyong tanong at makikipag-ugnayan kami sa iyo sa lalong madaling panahon. Paparating na ang isang confirmation email sa iyong inbox.",
+      newMessageLabel: "Magpadala ng isa pang mensahe",
+      errorBadRequest: "Pakikumpleto ang iyong pangalan, email, at mensahe.",
+      errorInvalidEmail: "Mukhang hindi valid ang email address na iyan.",
+      errorCooldown: "Mangyaring maghintay muna bago humiling ng isa pang code.",
+      errorServerError: "May nagkamali sa aming panig. Pakisubukan ulit sa ilang sandali.",
+      errorExpired: "Nag-expire na ang code na iyon. Humiling ng bago sa ibaba.",
+      errorInvalidCode: "Hindi tumugma ang code na iyon. Suriin ulit at subukan muli.",
+      errorTooManyAttempts: "Sobra na ang maling pagsubok. Humiling ng bagong code sa ibaba.",
+      errorNetwork: "Hindi maabot ang server. Suriin ang iyong koneksyon at subukan muli.",
+      otpLengthError: "Ilagay ang 6-digit na code na ipinadala namin sa iyong email.",
+      attemptsLeftLabel: "({n} pagsubok na lang ang natitira)"
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      step1Title: "हमसे संपर्क करें",
+      step1Text: "कोई सवाल है, कोई बग मिला, या बस हाय कहना चाहते हैं? नीचे हमें संदेश भेजें - हम पहले आपको एक त्वरित सत्यापन कोड ईमेल करेंगे, बस अपने इनबॉक्स से स्पैम दूर रखने के लिए।",
+      nameLabel: "नाम",
+      namePlaceholder: "आपका नाम",
+      emailLabel: "ईमेल",
+      messageLabelText: "संदेश",
+      messagePlaceholder: "हम आपकी कैसे मदद कर सकते हैं?",
+      sendMessageLabel: "संदेश भेजें",
+      sendingCodeLabel: "कोड भेजा जा रहा है...",
+      step2Title: "सत्यापित करें कि यह वाकई आप हैं",
+      step2TextBefore: "हमने 6 अंकों का कोड इस पते पर भेजा है:",
+      step2TextAfter: "। यह हमारे इनबॉक्स से स्पैम दूर रखने में मदद करता है - अपना संदेश भेजने के लिए इसे नीचे दर्ज करें।",
+      otpLabel: "सत्यापन कोड",
+      verifyLabel: "सत्यापित करें और भेजें",
+      verifyingLabel: "सत्यापित हो रहा है...",
+      backBtnLabel: "← अपना संदेश संपादित करें",
+      resendCodeLabel: "कोड फिर से भेजें",
+      resendingLabel: "भेजा जा रहा है...",
+      step3Title: "संदेश भेज दिया गया!",
+      step3Text: "संपर्क करने के लिए धन्यवाद - हमें आपकी पूछताछ मिल गई है और हम जल्द ही आपसे संपर्क करेंगे। एक पुष्टिकरण ईमेल आपके इनबॉक्स की ओर आ रहा है।",
+      newMessageLabel: "एक और संदेश भेजें",
+      errorBadRequest: "कृपया अपना नाम, ईमेल और संदेश भरें।",
+      errorInvalidEmail: "वह मान्य ईमेल पता नहीं लगता।",
+      errorCooldown: "कृपया एक और कोड का अनुरोध करने से पहले थोड़ा इंतजार करें।",
+      errorServerError: "हमारी तरफ से कुछ गलत हो गया। कृपया थोड़ी देर में फिर से प्रयास करें।",
+      errorExpired: "उस कोड की समय सीमा समाप्त हो गई है। नीचे एक नया अनुरोध करें।",
+      errorInvalidCode: "वह कोड मेल नहीं खाता। दोबारा जांचें और फिर से प्रयास करें।",
+      errorTooManyAttempts: "बहुत सारे गलत प्रयास। नीचे एक नया कोड मांगें।",
+      errorNetwork: "सर्वर तक नहीं पहुंच सके। अपना कनेक्शन जांचें और फिर से प्रयास करें।",
+      otpLengthError: "हमने आपको ईमेल किया 6 अंकों का कोड दर्ज करें।",
+      attemptsLeftLabel: "({n} प्रयास शेष)"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      step1Title: "Ponte en contacto",
+      step1Text: "¿Tienes una pregunta, encontraste un error, o solo quieres saludar? Envíanos un mensaje a continuación - primero te enviaremos un código de verificación rápido por correo, solo para mantener el spam fuera de nuestra bandeja de entrada.",
+      nameLabel: "Nombre",
+      namePlaceholder: "Tu nombre",
+      emailLabel: "Correo electrónico",
+      messageLabelText: "Mensaje",
+      messagePlaceholder: "¿Cómo podemos ayudarte?",
+      sendMessageLabel: "Enviar Mensaje",
+      sendingCodeLabel: "Enviando código...",
+      step2Title: "Verifica que realmente eres tú",
+      step2TextBefore: "Hemos enviado un código de 6 dígitos a",
+      step2TextAfter: ". Esto nos ayuda a mantener el spam fuera de nuestra bandeja de entrada - ingrésalo abajo para enviar tu mensaje.",
+      otpLabel: "Código de Verificación",
+      verifyLabel: "Verificar y Enviar",
+      verifyingLabel: "Verificando...",
+      backBtnLabel: "← Editar tu mensaje",
+      resendCodeLabel: "Reenviar código",
+      resendingLabel: "Enviando...",
+      step3Title: "¡Mensaje enviado!",
+      step3Text: "Gracias por contactarnos - hemos recibido tu consulta y te responderemos pronto. Un correo de confirmación está en camino a tu bandeja de entrada.",
+      newMessageLabel: "Enviar otro mensaje",
+      errorBadRequest: "Por favor completa tu nombre, correo electrónico y mensaje.",
+      errorInvalidEmail: "Eso no parece una dirección de correo electrónico válida.",
+      errorCooldown: "Por favor espera un poco antes de solicitar otro código.",
+      errorServerError: "Algo salió mal de nuestro lado. Por favor intenta de nuevo en un momento.",
+      errorExpired: "Ese código ha caducado. Solicita uno nuevo abajo.",
+      errorInvalidCode: "Ese código no coincide. Verifícalo e intenta de nuevo.",
+      errorTooManyAttempts: "Demasiados intentos incorrectos. Solicita un nuevo código abajo.",
+      errorNetwork: "No se pudo conectar con el servidor. Verifica tu conexión e intenta de nuevo.",
+      otpLengthError: "Ingresa el código de 6 dígitos que te enviamos por correo.",
+      attemptsLeftLabel: "({n} intentos restantes)"
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      step1Title: "ติดต่อเรา",
+      step1Text: "มีคำถาม พบข้อผิดพลาด หรือแค่อยากทักทาย? ส่งข้อความถึงเราด้านล่าง - เราจะส่งรหัสยืนยันแบบรวดเร็วไปทางอีเมลของคุณก่อน เพื่อป้องกันสแปมในกล่องขาเข้าของเรา",
+      nameLabel: "ชื่อ",
+      namePlaceholder: "ชื่อของคุณ",
+      emailLabel: "อีเมล",
+      messageLabelText: "ข้อความ",
+      messagePlaceholder: "เราจะช่วยคุณได้อย่างไร?",
+      sendMessageLabel: "ส่งข้อความ",
+      sendingCodeLabel: "กำลังส่งรหัส...",
+      step2Title: "ยืนยันว่าเป็นคุณจริง ๆ",
+      step2TextBefore: "เราได้ส่งรหัส 6 หลักไปที่",
+      step2TextAfter: " สิ่งนี้ช่วยป้องกันสแปมในกล่องขาเข้าของเรา - กรอกด้านล่างเพื่อส่งข้อความของคุณ",
+      otpLabel: "รหัสยืนยัน",
+      verifyLabel: "ยืนยันและส่ง",
+      verifyingLabel: "กำลังยืนยัน...",
+      backBtnLabel: "← แก้ไขข้อความของคุณ",
+      resendCodeLabel: "ส่งรหัสอีกครั้ง",
+      resendingLabel: "กำลังส่ง...",
+      step3Title: "ส่งข้อความแล้ว!",
+      step3Text: "ขอบคุณที่ติดต่อเรา - เราได้รับคำถามของคุณแล้วและจะติดต่อกลับในเร็ว ๆ นี้ อีเมลยืนยันกำลังส่งไปยังกล่องขาเข้าของคุณ",
+      newMessageLabel: "ส่งข้อความอีกฉบับ",
+      errorBadRequest: "กรุณากรอกชื่อ อีเมล และข้อความของคุณ",
+      errorInvalidEmail: "ที่อยู่อีเมลนั้นดูเหมือนจะไม่ถูกต้อง",
+      errorCooldown: "กรุณารอสักครู่ก่อนขอรหัสใหม่อีกครั้ง",
+      errorServerError: "เกิดข้อผิดพลาดในระบบของเรา กรุณาลองใหม่อีกครั้งในอีกสักครู่",
+      errorExpired: "รหัสนั้นหมดอายุแล้ว กรุณาขอรหัสใหม่ด้านล่าง",
+      errorInvalidCode: "รหัสนั้นไม่ตรงกัน กรุณาตรวจสอบและลองใหม่อีกครั้ง",
+      errorTooManyAttempts: "พยายามผิดหลายครั้งเกินไป กรุณาขอรหัสใหม่ด้านล่าง",
+      errorNetwork: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อและลองใหม่อีกครั้ง",
+      otpLengthError: "กรอกรหัส 6 หลักที่เราส่งไปยังอีเมลของคุณ",
+      attemptsLeftLabel: "(เหลืออีก {n} ครั้ง)"
+    }
+  };
+
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+  function errorMessage(reason) {
+    return translate(ERROR_MESSAGE_KEYS[reason] || "errorServerError");
+  }
 
   messageInput.addEventListener("input", function() {
     messageCount.textContent = messageInput.value.length;
@@ -341,9 +577,17 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
     return fetch(CONTACT_FORM_URL + "?" + query).then(function(res) { return res.json(); });
   }
 
-  function setLoading(btn, loading, loadingText, normalText) {
+  function setLoading(btn, loading, loadingKey, normalKey) {
     btn.disabled = loading;
-    btn.textContent = loading ? loadingText : normalText;
+    btn.textContent = translate(loading ? loadingKey : normalKey);
+  }
+
+  function updateResendButtonText() {
+    if (resendActive) {
+      resendBtn.textContent = translate("resendCodeLabel") + " (" + resendRemaining + "s)";
+    } else {
+      resendBtn.textContent = translate("resendCodeLabel");
+    }
   }
 
   contactForm.addEventListener("submit", function(e) {
@@ -355,20 +599,20 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
     var message = messageInput.value.trim();
 
     if (!name || !email || !message) {
-      showError(formError1, ERROR_MESSAGES.bad_request);
+      showError(formError1, translate("errorBadRequest"));
       return;
     }
     if (!isValidEmail(email)) {
-      showError(formError1, ERROR_MESSAGES.invalid_email);
+      showError(formError1, translate("errorInvalidEmail"));
       return;
     }
 
-    setLoading(sendCodeBtn, true, "Sending code...", "Send Message");
+    setLoading(sendCodeBtn, true, "sendingCodeLabel", "sendMessageLabel");
     callApi({ action: "requestOtp", name: name, email: email, message: message })
       .then(function(data) {
-        setLoading(sendCodeBtn, false, "Sending code...", "Send Message");
+        setLoading(sendCodeBtn, false, "sendingCodeLabel", "sendMessageLabel");
         if (!data.ok) {
-          showError(formError1, ERROR_MESSAGES[data.reason] || ERROR_MESSAGES.server_error);
+          showError(formError1, errorMessage(data.reason));
           return;
         }
         otpEmailDisplay.textContent = email;
@@ -378,8 +622,8 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
         startResendCooldown();
       })
       .catch(function() {
-        setLoading(sendCodeBtn, false, "Sending code...", "Send Message");
-        showError(formError1, ERROR_MESSAGES.network);
+        setLoading(sendCodeBtn, false, "sendingCodeLabel", "sendMessageLabel");
+        showError(formError1, translate("errorNetwork"));
       });
   });
 
@@ -390,34 +634,36 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
     var code = otpInput.value.trim();
     var email = emailInput.value.trim();
     if (code.length !== 6) {
-      showError(formError2, "Enter the 6-digit code we emailed you.");
+      showError(formError2, translate("otpLengthError"));
       return;
     }
 
-    setLoading(verifyBtn, true, "Verifying...", "Verify & Send");
+    setLoading(verifyBtn, true, "verifyingLabel", "verifyLabel");
     callApi({ action: "verifyOtp", email: email, otp: code })
       .then(function(data) {
-        setLoading(verifyBtn, false, "Verifying...", "Verify & Send");
+        setLoading(verifyBtn, false, "verifyingLabel", "verifyLabel");
         if (!data.ok) {
-          var msg = ERROR_MESSAGES[data.reason] || ERROR_MESSAGES.server_error;
+          var msg = errorMessage(data.reason);
           if (data.reason === "invalid_code" && typeof data.attemptsLeft === "number") {
-            msg += " (" + data.attemptsLeft + " attempt" + (data.attemptsLeft === 1 ? "" : "s") + " left)";
+            msg += " " + translate("attemptsLeftLabel").replace("{n}", data.attemptsLeft);
           }
           showError(formError2, msg);
           return;
         }
         clearInterval(resendTimer);
+        resendActive = false;
         showStep(step3);
       })
       .catch(function() {
-        setLoading(verifyBtn, false, "Verifying...", "Verify & Send");
-        showError(formError2, ERROR_MESSAGES.network);
+        setLoading(verifyBtn, false, "verifyingLabel", "verifyLabel");
+        showError(formError2, translate("errorNetwork"));
       });
   });
 
   backBtn.addEventListener("click", function() {
     hideError(formError2);
     clearInterval(resendTimer);
+    resendActive = false;
     showStep(step1);
   });
 
@@ -429,38 +675,39 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
     var message = messageInput.value.trim();
 
     resendBtn.disabled = true;
-    resendBtn.textContent = "Sending...";
+    resendActive = false;
+    resendBtn.textContent = translate("resendingLabel");
     callApi({ action: "requestOtp", name: name, email: email, message: message })
       .then(function(data) {
         if (!data.ok) {
-          showError(formError2, ERROR_MESSAGES[data.reason] || ERROR_MESSAGES.server_error);
+          showError(formError2, errorMessage(data.reason));
           resendBtn.disabled = false;
-          resendBtn.textContent = "Resend code";
+          updateResendButtonText();
           return;
         }
         startResendCooldown();
       })
       .catch(function() {
-        showError(formError2, ERROR_MESSAGES.network);
+        showError(formError2, translate("errorNetwork"));
         resendBtn.disabled = false;
-        resendBtn.textContent = "Resend code";
+        updateResendButtonText();
       });
   });
 
   function startResendCooldown() {
-    var remaining = RESEND_COOLDOWN_SECONDS;
+    resendRemaining = RESEND_COOLDOWN_SECONDS;
+    resendActive = true;
     resendBtn.disabled = true;
-    resendBtn.textContent = "Resend code (" + remaining + "s)";
+    updateResendButtonText();
     clearInterval(resendTimer);
     resendTimer = setInterval(function() {
-      remaining--;
-      if (remaining <= 0) {
+      resendRemaining--;
+      if (resendRemaining <= 0) {
         clearInterval(resendTimer);
+        resendActive = false;
         resendBtn.disabled = false;
-        resendBtn.textContent = "Resend code";
-      } else {
-        resendBtn.textContent = "Resend code (" + remaining + "s)";
       }
+      updateResendButtonText();
     }, 1000);
   }
 
@@ -470,8 +717,53 @@ button { cursor: pointer; font-family: var(--font-body); transition: background 
     hideError(formError1);
     hideError(formError2);
     clearInterval(resendTimer);
+    resendActive = false;
     showStep(step1);
   });
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+    var ids = {
+      langPickerLabel: "langPickerLabel",
+      step1Title: "step1Title",
+      step1Text: "step1Text",
+      nameLabel: "nameLabel",
+      emailLabel: "emailLabel",
+      messageLabelText: "messageLabelText",
+      step2Title: "step2Title",
+      step2TextBefore: "step2TextBefore",
+      step2TextAfter: "step2TextAfter",
+      otpLabel: "otpLabel",
+      backBtn: "backBtnLabel",
+      step3Title: "step3Title",
+      step3Text: "step3Text",
+      newMessageBtn: "newMessageLabel"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+    if (!sendCodeBtn.disabled) sendCodeBtn.textContent = translate("sendMessageLabel");
+    if (!verifyBtn.disabled) verifyBtn.textContent = translate("verifyLabel");
+    updateResendButtonText();
+    nameInput.setAttribute("placeholder", translate("namePlaceholder"));
+    messageInput.setAttribute("placeholder", translate("messagePlaceholder"));
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-contact-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-contact-lang", currentLang()); } catch (e) {}
+  }
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+  loadLanguagePref();
 })();
 </script>
 

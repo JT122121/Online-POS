@@ -133,6 +133,89 @@ with inline `<style>`/`<script>`; there is no framework and no backend.
   logo, not a stand-in photo, so it's deliberately excluded. Add the
   same badge to any future blog photo that isn't a genuine, literal
   photo of the thing it's illustrating.
+- **`blog.html` and its 3 article pages are now translated into the
+  same six languages as the rest of the site** (en/ar/fil/hi/es/th) -
+  each page has its own self-contained `translations` object plus
+  `translate()`/`currentLang()`/`changeLanguage()`/`loadLanguagePref()`/
+  `saveLanguagePref()`, no dependency on `app.html` or any other page,
+  matching the pattern already established on `index.html`/
+  `privacy.html`/`terms.html`/the five free tools. Same header/footer/
+  cookie-banner exclusion as every other translated page - a
+  `.lang-picker-bar` picker sits directly below the shared header
+  (`#blogLanguage` on `blog.html`, `#articleLanguage` on each article,
+  separate ids since they're independent pages) and only the page's own
+  content translates.
+  - **`blog.html`**: masthead (kicker, `<h1>`, intro paragraph, the
+    "No fluff / No paywall / Updated regularly" meta row), the featured
+    post's tag/title/description, both `.post-card`s' tag/title/
+    description, and the "More articles on the way" coming-soon box.
+    Each `.post-meta` line (`"FEATURED · Last updated: <time>August
+    2026</time> · 5 MIN READ"`) has its "FEATURED"/"Last updated:"/
+    "MIN READ" chrome translated while the `<time>` element's actual
+    date text stays untouched in every language, matching the existing
+    "Last updated:" precedent from `privacy.html`/`terms.html` - a real
+    date is never itself translated, only the label next to it. Since
+    an HTML `id` can only be used once per document, the three
+    `.post-meta` blocks (featured post, and each of the 2 post cards)
+    each got their own `fpUpdatedLabel`/`pc1UpdatedLabel`/
+    `pc2UpdatedLabel` and `fpMinRead`/`pc1MinRead`/`pc2MinRead` ids, all
+    mapped to the same two shared translation keys
+    (`updatedLabel`/`minReadLabel`) in `changeLanguage()`'s `ids` map -
+    one key can back multiple element ids, so the translated text stays
+    in sync across all three without duplicating the string per card.
+  - **Each article page** (`blog-why-your-business-needs-a-pos.html`
+    shipped first; `blog-create-your-own-pos-with-appsheet.html` and
+    `blog-from-excel-to-appsheet-expert.html` followed the identical
+    pattern) shares one `goonlinepos-article-lang` `localStorage` key
+    across all three articles, rather than each getting its own -
+    deliberately different from the five free tools' own convention of
+    a separate key per page. The free tools are unrelated to each other
+    (a visitor picking Spanish for the invoice generator has no reason
+    to expect the barcode generator to also be Spanish), but the three
+    articles are the same reading session under the same blog - picking
+    a language on one and clicking through to another should keep that
+    choice, not reset it. `blog.html` itself still gets its own separate
+    `goonlinepos-blog-lang` key, since the blog index and an individual
+    article are different enough pages that sharing wasn't obviously
+    correct either way, and keeping them separate costs nothing. The
+    article's own pre-existing `.back-link-row` ("← Back
+    to Blog", kept unchanged per the "Site-wide header, nav & footer"
+    section above) is itself translated, since it's page-specific
+    content rather than part of the shared site-header - only the
+    shared `.site-header` itself (brand mark, Homepage/Blog nav, the six
+    `.cta-btn`s) stays untouched. Every heading, paragraph, and list
+    item in `.article-body` gets its own `id` and a matching translation
+    key; a handful of paragraphs and list items needed `innerHTML`
+    instead of `textContent` to keep an embedded `<a>` or `<strong>` tag
+    intact after translating (e.g. the "GoOnlinePOS.com was built to
+    close" paragraph's inline link, and every feature-list `<li>`'s
+    leading `<strong>` term). The closing `.cta-band`'s heading/
+    paragraph/button are translated too. The article's `<time>` element
+    (`"August 2026"`) stays untouched in every language, same reasoning
+    as `blog.html`'s own post-meta lines.
+  - Each article's translation script is large enough (39 keys × 6
+    languages, several long paragraphs) that it was drafted in a
+    scratch file and syntax-checked/id-cross-checked/key-set-verified
+    before being spliced into the page, rather than composed directly
+    inline - the same technique used for `index.html`'s 116-key object.
+    One real bug this caught before shipping: an early draft correctly
+    used `innerHTML` for the "GoOnlinePOS.com" link paragraph and the
+    first `<li>`, but left the other nine `<li>`s (which also carry a
+    leading `<strong>` tag) in the `textContent` id-map instead - fixed
+    by moving all ten `<li>`s into the `innerHTML` translation list, not
+    just the first one, since every one of them embeds a tag.
+  - Verified with Playwright on `blog.html` and on
+    `blog-why-your-business-needs-a-pos.html`: switching to Arabic
+    translates every listed section and flips `dir` to `rtl`, while the
+    shared header/footer read byte-identical English text before and
+    after the switch; `.post-meta`/`.article-meta` lines translate their
+    label text while the `<time>` element's date stays literal; every
+    `innerHTML` element (the post-meta wrapper spans, the linked
+    paragraph, every feature-list `<li>`) keeps its embedded tags intact
+    after translating; the persisted language choice survives a reload
+    with the header still English on that reload too; and zero
+    horizontal overflow and zero console errors at 390px in both English
+    and Arabic on both pages.
 - **SEO/infra:** `CNAME` (`goonlinepos.com`), `robots.txt`, `sitemap.xml`
   (lists `/`, `app.html`, `invoice-generator.html`, `receipt-generator.html`, `barcode-generator.html`,
   `blog.html`, `blog-why-your-business-needs-a-pos.html`,
@@ -4045,6 +4128,60 @@ POST responses).
   countdown actually ticks down; the correct code moves to Step 3; and
   "Send another message" fully resets back to Step 1 with the name
   field genuinely empty. Zero console errors throughout.
+- **Now translated into the same six languages as the rest of the site**
+  (en/ar/fil/hi/es/th) - its own self-contained `translations` object
+  plus `translate()`/`currentLang()`/`changeLanguage()`/
+  `loadLanguagePref()`/`saveLanguagePref()`, no dependency on any other
+  page. Same header/footer/cookie-banner exclusion as every other
+  translated page. Unlike the purely-static `privacy.html`/`terms.html`,
+  this page already had a functional inline `<script>` (the OTP flow
+  itself) - the translation logic was merged **into that same IIFE**
+  rather than added as a second, separate script block, since several
+  dynamic strings (`ERROR_MESSAGES`, the loading-state text on Send/
+  Verify/Resend, the live resend-cooldown countdown, the "attempts left"
+  suffix) are built from inside the existing form-handling closures and
+  need `translate()` available there, not just from a page-load-time
+  `changeLanguage()` walker.
+  - `ERROR_MESSAGES` became `ERROR_MESSAGE_KEYS` (API `reason` string to
+    translation key, not to an English string directly), read through a
+    new `errorMessage(reason)` helper. `setLoading(btn, loading,
+    loadingKey, normalKey)` now takes translation keys instead of raw
+    text. The "attempts left" message dropped English's singular/plural
+    distinction (`"1 attempt"` vs `"2 attempts"`) in favor of one
+    invariant phrasing per language (`"({n} attempts left)"`) - a
+    deliberate simplification to avoid hand-rolling pluralization rules
+    for six languages over one secondary message.
+  - **The resend-cooldown countdown re-translates live, including
+    mid-countdown.** The countdown used to hardcode `"Resend code (" +
+    remaining + "s)"` inside its own `setInterval` tick - switching
+    language while a cooldown was running would have left the button
+    frozen in whatever language was active when the timer started, since
+    nothing re-ran that string. Fixed with a `resendActive`/
+    `resendRemaining` pair of module-scoped variables plus a shared
+    `updateResendButtonText()` helper, called from every tick **and**
+    from `changeLanguage()` itself - a language switch mid-cooldown
+    immediately re-renders the button in the new language with the
+    correct remaining seconds, not just on the next tick.
+  - `#cfName`/`#cfMessage` placeholders are translated
+    (`setAttribute("placeholder", translate(...))`); `#cfEmail`'s
+    `you@example.com` placeholder is deliberately left untranslated in
+    every language, matching this repo's existing "format example, not
+    real language content" precedent for `invoice-generator.html`'s
+    `INV-0001`/`#cfOtp`'s own `000000` placeholder.
+  - Verified with Playwright: switching to Arabic translates the form
+    labels, both steps' headings/paragraphs, and flips `dir` to `rtl`,
+    while the header nav reads byte-identical English text before and
+    after; client-side validation errors (empty form, invalid email, an
+    under-length OTP) render in the active language; with `fetch` mocked
+    to simulate the Apps Script backend, starting the OTP flow in
+    Spanish shows a translated "Reenviar código (60s)" cooldown button
+    that keeps ticking correctly in Spanish, a mocked `invalid_code` +
+    `attemptsLeft: 2` response renders "(2 intentos restantes)", and
+    switching language to Thai mid-cooldown immediately re-translates
+    the button while preserving the correct remaining seconds; the
+    persisted language choice (`goonlinepos-contact-lang`) survives a
+    reload with the header still English; and zero horizontal overflow
+    and zero console errors at 390px in both English and Arabic.
 
 ## SEO
 
