@@ -141,6 +141,10 @@ img { max-width: 100%; display: block; }
   .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
 }
 
+.lang-picker-bar { display: flex; justify-content: flex-end; margin: 14px 0 0; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .hero { text-align: center; padding: 56px 12px 40px; }
 .hero .eyebrow { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
 .hero h2 { font-family: var(--font-display); font-weight: 700; font-size: 42px; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 16px; }
@@ -357,16 +361,29 @@ img { max-width: 100%; display: block; }
 </div>
 </header>
 
+<div class="lang-picker-bar">
+<label for="indexLanguage"><span id="langPickerLabel">Language</span>
+<select id="indexLanguage">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</label>
+</div>
+
 <section class="hero">
-<span class="eyebrow">Free · No signup · No login</span>
-<h2>Free POS for Small Businesses</h2>
-<p>Open your browser and start selling with a simple POS built for small businesses.
+<span class="eyebrow" id="heroEyebrow">Free · No signup · No login</span>
+<h2 id="heroTitle">Free POS for Small Businesses</h2>
+<p id="heroSubtitle">Open your browser and start selling with a simple POS built for small businesses.
 </p>
 <div class="actions">
-<a class="btn-primary" href="app">Open POS - Free</a>
-<a class="btn-secondary" href="#free-tools">Explore Free Tools</a>
+<a class="btn-primary" href="app" id="heroPrimaryBtn">Open POS - Free</a>
+<a class="btn-secondary" href="#free-tools" id="heroSecondaryBtn">Explore Free Tools</a>
 </div>
-<p class="trust-bar">Free · No Signup · No Installation · Browser-Based · Offline Capable</p>
+<p class="trust-bar" id="trustBar">Free · No Signup · No Installation · Browser-Based · Offline Capable</p>
 </section>
 
 <div class="preview-wrap">
@@ -440,173 +457,173 @@ img { max-width: 100%; display: block; }
 
 <div class="wrap">
 <section class="section" id="how-it-works">
-<h2 class="section-title">How it works</h2>
-<p class="section-sub">Four steps, no account required. Everything is saved right in your browser as you go.</p>
+<h2 class="section-title" id="howItWorksTitle">How it works</h2>
+<p class="section-sub" id="howItWorksSub">Four steps, no account required. Everything is saved right in your browser as you go.</p>
 <div class="steps">
 <div class="step-card">
 <div class="num">01</div>
-<h3>Add your products</h3>
-<p>Type items in one by one, or upload a CSV or Excel file with names, prices, and categories to load your whole catalog at once.</p>
+<h3 id="step1Title">Add your products</h3>
+<p id="step1Text">Type items in one by one, or upload a CSV or Excel file with names, prices, and categories to load your whole catalog at once.</p>
 </div>
 <div class="step-card">
 <div class="num">02</div>
-<h3>Ring up a sale</h3>
-<p>Tap products to build the cart, or add a custom item on the spot. The total updates live on the receipt preview.</p>
+<h3 id="step2Title">Ring up a sale</h3>
+<p id="step2Text">Tap products to build the cart, or add a custom item on the spot. The total updates live on the receipt preview.</p>
 </div>
 <div class="step-card">
 <div class="num">03</div>
-<h3>Take payment & print</h3>
-<p>Pick a payment method, enter the amount received, and print. A new sale starts automatically right after.</p>
+<h3 id="step3Title">Take payment & print</h3>
+<p id="step3Text">Pick a payment method, enter the amount received, and print. A new sale starts automatically right after.</p>
 </div>
 <div class="step-card">
 <div class="num">04</div>
-<h3>Track your sales</h3>
-<p>Every completed sale is saved automatically. Download a full Excel report from Settings whenever you need it.</p>
+<h3 id="step4Title">Track your sales</h3>
+<p id="step4Text">Every completed sale is saved automatically. Download a full Excel report from Settings whenever you need it.</p>
 </div>
 </div>
 </section>
 
 <section class="section">
-<h2 class="section-title">Set it up your way</h2>
-<p class="section-sub">Everything lives in Settings - tap the gear icon in the top right.</p>
+<h2 class="section-title" id="featuresTitle">Set it up your way</h2>
+<p class="section-sub" id="featuresSub">Everything lives in Settings - tap the gear icon in the top right.</p>
 <div class="feature-grid">
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></div>
-<h3>Upload your products</h3>
-<p>Add items one by one, or upload a CSV or Excel file with names, prices, categories, and stock levels in Settings → Products to load your whole catalog at once.</p>
+<h3 id="feature1Title">Upload your products</h3>
+<p id="feature1Text">Add items one by one, or upload a CSV or Excel file with names, prices, categories, and stock levels in Settings → Products to load your whole catalog at once.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
-<h3>Search & filter products</h3>
-<p>Find items instantly with live search, or tap a category chip to filter your catalog down to what you need.</p>
+<h3 id="feature2Title">Search & filter products</h3>
+<p id="feature2Text">Find items instantly with live search, or tap a category chip to filter your catalog down to what you need.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 21V12h6v9"></path></svg></div>
-<h3>Your logo & store details</h3>
-<p>Upload your own logo and store info in Settings → Store - it prints at the top of every receipt.</p>
+<h3 id="feature3Title">Your logo & store details</h3>
+<p id="feature3Text">Upload your own logo and store info in Settings → Store - it prints at the top of every receipt.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="7" y2="16"></line><line x1="10" y1="8" x2="10" y2="16"></line><line x1="14" y1="8" x2="14" y2="16"></line><line x1="17" y1="8" x2="17" y2="16"></line></svg></div>
-<h3>Scan barcodes</h3>
-<p>Turn on the barcode scanner and add items instantly by scanning with any USB barcode scanner - no camera, no setup, it just works.</p>
+<h3 id="feature4Title">Scan barcodes</h3>
+<p id="feature4Text">Turn on the barcode scanner and add items instantly by scanning with any USB barcode scanner - no camera, no setup, it just works.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></div>
-<h3>Split payment</h3>
-<p>Part cash, part card? Add multiple payment rows on one sale and the app tracks each amount separately.</p>
+<h3 id="feature5Title">Split payment</h3>
+<p id="feature5Text">Part cash, part card? Add multiple payment rows on one sale and the app tracks each amount separately.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-<h3>Multiple cashiers</h3>
-<p>Add your team in Settings → Cashiers, switch who's active from the header, and see sales broken down by cashier in the Summary panel.</p>
+<h3 id="feature6Title">Multiple cashiers</h3>
+<p id="feature6Text">Add your team in Settings → Cashiers, switch who's active from the header, and see sales broken down by cashier in the Summary panel.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13 21l-8-8 7.59-7.59A2 2 0 0 1 14 5h5a2 2 0 0 1 2 2v5a2 2 0 0 1-.59 1.41z"></path><circle cx="16.5" cy="8.5" r="1"></circle></svg></div>
-<h3>Stock & inventory</h3>
-<p>Track stock levels per product - they deduct automatically with every sale, and you can correct or restock any number anytime from the Inventory tab.</p>
+<h3 id="feature7Title">Stock & inventory</h3>
+<p id="feature7Text">Track stock levels per product - they deduct automatically with every sale, and you can correct or restock any number anytime from the Inventory tab.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-<h3>Customer-facing screen</h3>
-<p>Show customers a live view of their order and total on a second monitor or tablet - updates in real time as you ring things up.</p>
+<h3 id="feature8Title">Customer-facing screen</h3>
+<p id="feature8Text">Show customers a live view of their order and total on a second monitor or tablet - updates in real time as you ring things up.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
-<h3>Tax & discount</h3>
-<p>Set a tax name and rate in Settings → Tax. Discounts are applied per sale at checkout, as a percent or a flat amount - totals recalculate automatically either way.</p>
+<h3 id="feature9Title">Tax & discount</h3>
+<p id="feature9Text">Set a tax name and rate in Settings → Tax. Discounts are applied per sale at checkout, as a percent or a flat amount - totals recalculate automatically either way.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v2m0 8v2M9.5 9a2.5 2.5 0 0 1 2.5-1.5 2.5 2.5 0 0 1 0 5h-1a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 2.5-1.5"></path></svg></div>
-<h3>Multiple currencies</h3>
-<p>Set your currency code and symbol in Settings → Currency, and choose how many decimal places to show.</p>
+<h3 id="feature10Title">Multiple currencies</h3>
+<p id="feature10Text">Set your currency code and symbol in Settings → Currency, and choose how many decimal places to show.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"></path></svg></div>
-<h3>Six languages</h3>
-<p>Switch the whole interface - English, Arabic, Filipino, Hindi, Spanish, or Thai - from Settings → Language.</p>
+<h3 id="feature11Title">Six languages</h3>
+<p id="feature11Text">Switch the whole interface - English, Arabic, Filipino, Hindi, Spanish, or Thai - from Settings → Language.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-<h3>Sales history, editable</h3>
-<p>Click any past sale to view full details, fix a mistake, or reprint the receipt. Export a two-tab Excel report whenever you need your own records.</p>
+<h3 id="feature12Title">Sales history, editable</h3>
+<p id="feature12Text">Click any past sale to view full details, fix a mistake, or reprint the receipt. Export a two-tab Excel report whenever you need your own records.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
-<h3>End of Day report</h3>
-<p>Print or save a closing report from the header's End of Day button - total sales, items sold, payment breakdown, and collections per cashier for the day.</p>
+<h3 id="feature13Title">End of Day report</h3>
+<p id="feature13Text">Print or save a closing report from the header's End of Day button - total sales, items sold, payment breakdown, and collections per cashier for the day.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"></path><polyline points="8 11 12 15 16 11"></polyline><path d="M20 21H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h2.5"></path><path d="M17.5 13H20a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"></path></svg></div>
-<h3>Full backup & restore</h3>
-<p>Since everything lives in your browser, download a complete backup anytime from Settings → Backup - products, sales, logo, and all - and restore it instantly if you ever need to.</p>
+<h3 id="feature14Title">Full backup & restore</h3>
+<p id="feature14Text">Since everything lives in your browser, download a complete backup anytime from Settings → Backup - products, sales, logo, and all - and restore it instantly if you ever need to.</p>
 </div>
 <div class="feature-card">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg></div>
-<h3>Offline Mode POS</h3>
-<p>Use your POS even without an internet connection. Keep recording sales and managing your products anytime, anywhere.</p>
+<h3 id="feature15Title">Offline Mode POS</h3>
+<p id="feature15Text">Use your POS even without an internet connection. Keep recording sales and managing your products anytime, anywhere.</p>
 </div>
 </div>
 </section>
 
 <section class="section" id="free-tools">
-<h2 class="section-title">More Free Tools for Your Business</h2>
-<p class="section-sub">Useful tools that work alongside your everyday selling tasks.</p>
+<h2 class="section-title" id="freeToolsTitle">More Free Tools for Your Business</h2>
+<p class="section-sub" id="freeToolsSub">Useful tools that work alongside your everyday selling tasks.</p>
 <div class="tools-grid">
 <a class="tool-card" href="receipt-generator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h16v20l-3-2-3 2-3-2-3 2-3-2-1 1z"></path><line x1="8" y1="7" x2="16" y2="7"></line><line x1="8" y1="11" x2="16" y2="11"></line></svg></div>
-<h3>Receipt Generator</h3>
-<p>Create and print professional receipts, no cart required.</p>
+<h3 id="tool1Title">Receipt Generator</h3>
+<p id="tool1Text">Create and print professional receipts, no cart required.</p>
 </a>
 <a class="tool-card" href="invoice-generator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>
-<h3>Invoice Generator</h3>
-<p>Create invoices quickly, without complicated software.</p>
+<h3 id="tool2Title">Invoice Generator</h3>
+<p id="tool2Text">Create invoices quickly, without complicated software.</p>
 </a>
 <a class="tool-card" href="pricing-calculator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-<h3>Pricing Calculator</h3>
-<p>Work out costs, markup, margin, and the right selling price.</p>
+<h3 id="tool3Title">Pricing Calculator</h3>
+<p id="tool3Text">Work out costs, markup, margin, and the right selling price.</p>
 </a>
 <a class="tool-card" href="vat-calculator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
-<h3>VAT Calculator</h3>
-<p>Calculate VAT quickly and accurately, either direction.</p>
+<h3 id="tool4Title">VAT Calculator</h3>
+<p id="tool4Text">Calculate VAT quickly and accurately, either direction.</p>
 </a>
 <a class="tool-card" href="barcode-generator">
 <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="7" y2="16"></line><line x1="10" y1="8" x2="10" y2="16"></line><line x1="14" y1="8" x2="14" y2="16"></line><line x1="17" y1="8" x2="17" y2="16"></line></svg></div>
-<h3>Barcode &amp; QR Generator</h3>
-<p>Create barcodes and QR codes for your products and labels.</p>
+<h3 id="tool5Title">Barcode &amp; QR Generator</h3>
+<p id="tool5Text">Create barcodes and QR codes for your products and labels.</p>
 </a>
 </div>
 </section>
 
 <section class="section" id="about-goonlinepos">
-<h2 class="section-title">About GoOnlinePOS</h2>
+<h2 class="section-title" id="aboutTitle">About GoOnlinePOS</h2>
 
 <div class="doc">
 
-<p><strong>GoOnlinePOS is an independently developed free online POS system built for small businesses.</strong></p>
+<p id="aboutPara1"><strong>GoOnlinePOS is an independently developed free online POS system built for small businesses.</strong></p>
 
-<p>
+<p id="aboutPara2">
 We built it around a simple idea: running a POS shouldn't require a monthly subscription, expensive hardware, a complicated setup, or a sales call.
 </p>
 
-<p>
+<p id="aboutPara3">
 If you run a market stall, home bakery, food cart, pop-up shop, or small independent store, you need a reliable way to manage products, record sales, accept payments, and print receipts - nothing more.
 </p>
 
-<p>
+<p id="aboutPara4">
 <strong>GoOnlinePOS.com was created to fill that gap.</strong>
 It's a browser-based POS you can use on a phone, tablet, or laptop - no traditional POS software to install, no dedicated checkout hardware to buy.
 </p>
 
-<p>
+<p id="aboutPara5">
 Beyond the POS itself, GoOnlinePOS has grown into a small suite of free business tools - invoicing, receipts, pricing, VAT, and barcodes - each usable on its own, right in your browser, with nothing to sign up for. See <a href="#free-tools">More Free Tools for Your Business</a> above.
 </p>
 
-<h2>Who is GoOnlinePOS for?</h2>
+<h2 id="audienceTitle">Who is GoOnlinePOS for?</h2>
 
-<p>
+<p id="audienceSub">
 GoOnlinePOS is designed for small businesses that need a simple point-of-sale system without the cost and complexity of traditional POS software.
 </p>
 
@@ -614,38 +631,38 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
 
 <div>
 <span>🧺</span>
-<strong>Market Stalls &amp; Pop-Ups</strong>
-<p>A simple POS for markets, events, fairs and temporary selling locations.</p>
+<strong id="audience1Title">Market Stalls &amp; Pop-Ups</strong>
+<p id="audience1Text">A simple POS for markets, events, fairs and temporary selling locations.</p>
 </div>
 
 <div>
 <span>🧁</span>
-<strong>Home Bakers &amp; Makers</strong>
-<p>Keep products, prices and sales organized without investing in a traditional POS system.</p>
+<strong id="audience2Title">Home Bakers &amp; Makers</strong>
+<p id="audience2Text">Keep products, prices and sales organized without investing in a traditional POS system.</p>
 </div>
 
 <div>
 <span>🚚</span>
-<strong>Food Carts &amp; Food Businesses</strong>
-<p>Record sales, payments and receipts directly from a web browser.</p>
+<strong id="audience3Title">Food Carts &amp; Food Businesses</strong>
+<p id="audience3Text">Record sales, payments and receipts directly from a web browser.</p>
 </div>
 
 <div>
 <span>🌱</span>
-<strong>New Businesses</strong>
-<p>Start selling without committing to expensive POS software or dedicated hardware.</p>
+<strong id="audience4Title">New Businesses</strong>
+<p id="audience4Text">Start selling without committing to expensive POS software or dedicated hardware.</p>
 </div>
 
 <div>
 <span>🛍️</span>
-<strong>Small Independent Shops</strong>
-<p>Handle everyday transactions with a straightforward online point-of-sale system.</p>
+<strong id="audience5Title">Small Independent Shops</strong>
+<p id="audience5Text">Handle everyday transactions with a straightforward online point-of-sale system.</p>
 </div>
 
 <div>
 <span>🧾</span>
-<strong>Businesses Tired of Complex POS Systems</strong>
-<p>If you just want to add products and start selling, GoOnlinePOS keeps the process simple.</p>
+<strong id="audience6Title">Businesses Tired of Complex POS Systems</strong>
+<p id="audience6Text">If you just want to add products and start selling, GoOnlinePOS keeps the process simple.</p>
 </div>
 
 </div>
@@ -656,95 +673,95 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
 
 <section class="section">
 <div class="privacy-note">
-<h3>Your Data, Your Device</h3>
-<p>Your POS data is stored locally in your browser. No account or cloud database is required for basic use.</p>
-<p class="privacy-note-reminder">Back up your data regularly - clearing your browser or site data may remove locally stored information.</p>
+<h3 id="privacyNoteTitle">Your Data, Your Device</h3>
+<p id="privacyNoteText">Your POS data is stored locally in your browser. No account or cloud database is required for basic use.</p>
+<p class="privacy-note-reminder" id="privacyNoteReminder">Back up your data regularly - clearing your browser or site data may remove locally stored information.</p>
 </div>
 </section>
 
 <section class="section">
-  <h2 class="section-title">Common questions</h2>
+  <h2 class="section-title" id="faqSectionTitle">Common questions</h2>
 
   <div class="faq">
 
     <details>
-      <summary>Is it really free?</summary>
-      <p>Yes. The basic GoOnlinePOS plan is free forever, with no subscription, signup, or login required. Premium is a paid add-on (starting at $3.99/month, with discounted 3-month and annual plans) that unlocks extras like Company Logo, Customer Screen, and Inventory editing - sign in with Google and redeem a code to activate it.</p>
+      <summary id="faq1Q">Is it really free?</summary>
+      <p id="faq1A">Yes. The basic GoOnlinePOS plan is free forever, with no subscription, signup, or login required. Premium is a paid add-on (starting at $3.99/month, with discounted 3-month and annual plans) that unlocks extras like Company Logo, Customer Screen, and Inventory editing - sign in with Google and redeem a code to activate it.</p>
     </details>
 
     <details>
-      <summary>Do I need to create an account?</summary>
-      <p>Not for the free Basic plan - just open the app in your browser and start selling. Signing in with Google is only needed if you want to redeem a code and unlock Premium features.</p>
+      <summary id="faq2Q">Do I need to create an account?</summary>
+      <p id="faq2A">Not for the free Basic plan - just open the app in your browser and start selling. Signing in with Google is only needed if you want to redeem a code and unlock Premium features.</p>
     </details>
 
     <details>
-      <summary>Can I use the POS without internet?</summary>
-      <p>Yes. GoOnlinePOS can be used without an internet connection. The Offline POS lets you continue selling, manage products, and use your POS even when there is no internet.</p>
+      <summary id="faq3Q">Can I use the POS without internet?</summary>
+      <p id="faq3A">Yes. GoOnlinePOS can be used without an internet connection. The Offline POS lets you continue selling, manage products, and use your POS even when there is no internet.</p>
     </details>
 
     <details>
-      <summary>Where is my data stored?</summary>
-      <p>Your products, sales history, logo, and settings are stored locally in your browser. Your POS data is not uploaded to a GoOnlinePOS server. Because your data is stored locally, clearing your browser's site data can erase it, so regular backups are recommended.</p>
+      <summary id="faq4Q">Where is my data stored?</summary>
+      <p id="faq4A">Your products, sales history, logo, and settings are stored locally in your browser. Your POS data is not uploaded to a GoOnlinePOS server. Because your data is stored locally, clearing your browser's site data can erase it, so regular backups are recommended.</p>
     </details>
 
     <details>
-      <summary>Can I backup and restore my data?</summary>
-      <p>Yes. Go to <strong>Settings → Backup</strong> to download a complete backup of your POS data. You can restore the backup later to recover the data contained in that backup.</p>
+      <summary id="faq5Q">Can I backup and restore my data?</summary>
+      <p id="faq5A">Yes. Go to <strong>Settings → Backup</strong> to download a complete backup of your POS data. You can restore the backup later to recover the data contained in that backup.</p>
     </details>
 
     <details>
-      <summary>Can I export my sales?</summary>
-      <p>Yes. Export a two-tab Excel report of your sales and inventory anytime from <strong>Settings → Sales History</strong>.</p>
+      <summary id="faq6Q">Can I export my sales?</summary>
+      <p id="faq6A">Yes. Export a two-tab Excel report of your sales and inventory anytime from <strong>Settings → Sales History</strong>.</p>
     </details>
 
     <details>
-      <summary>Can I use it on my phone, tablet, or computer?</summary>
-      <p>Yes. GoOnlinePOS works in modern web browsers on phones, tablets, laptops, and desktop computers. The interface automatically adjusts to different screen sizes.</p>
+      <summary id="faq7Q">Can I use it on my phone, tablet, or computer?</summary>
+      <p id="faq7A">Yes. GoOnlinePOS works in modern web browsers on phones, tablets, laptops, and desktop computers. The interface automatically adjusts to different screen sizes.</p>
     </details>
 
     <details>
-      <summary>Can I print receipts?</summary>
-      <p>Yes. GoOnlinePOS supports receipt printing from any printer connected to your device. Leave the paper size on Auto and it will fit the available print area, or choose your exact paper size in <strong>Settings → Paper & Zoom</strong> for more precise results.</p>
+      <summary id="faq8Q">Can I print receipts?</summary>
+      <p id="faq8A">Yes. GoOnlinePOS supports receipt printing from any printer connected to your device. Leave the paper size on Auto and it will fit the available print area, or choose your exact paper size in <strong>Settings → Paper & Zoom</strong> for more precise results.</p>
     </details>
 
     <details>
-      <summary>What payment methods can I use?</summary>
-      <p>You can accept Cash, Card, Bank Transfer, and other payment methods that you can add and customize for your business.</p>
+      <summary id="faq9Q">What payment methods can I use?</summary>
+      <p id="faq9A">You can accept Cash, Card, Bank Transfer, and other payment methods that you can add and customize for your business.</p>
     </details>
 
     <details>
-      <summary>Can I set my own tax or VAT?</summary>
-      <p>Yes. You can customize the tax name and tax rate to match your business requirements.</p>
+      <summary id="faq10Q">Can I set my own tax or VAT?</summary>
+      <p id="faq10A">Yes. You can customize the tax name and tax rate to match your business requirements.</p>
     </details>
 
     <details>
-      <summary>Can I change the currency?</summary>
-      <p>Yes. You can change the currency used by the POS and customize the number of decimal places.</p>
+      <summary id="faq11Q">Can I change the currency?</summary>
+      <p id="faq11A">Yes. You can change the currency used by the POS and customize the number of decimal places.</p>
     </details>
 
     <details>
-      <summary>Is Premium a subscription?</summary>
-      <p>Yes. Premium follows your signed-in account rather than being a one-time unlock on a single device - redeem a code to extend it for 30, 90, or 365 days depending on the plan (1 Month, 3 Months, or 1 Year), and it works on any device you sign in on. Redeeming another code while you're already Premium stacks the extra time on top of what you have left, so redeeming early never costs you anything.</p>
+      <summary id="faq12Q">Is Premium a subscription?</summary>
+      <p id="faq12A">Yes. Premium follows your signed-in account rather than being a one-time unlock on a single device - redeem a code to extend it for 30, 90, or 365 days depending on the plan (1 Month, 3 Months, or 1 Year), and it works on any device you sign in on. Redeeming another code while you're already Premium stacks the extra time on top of what you have left, so redeeming early never costs you anything.</p>
     </details>
 
     <details>
-      <summary>What do I get with Premium?</summary>
-      <p>Premium unlocks additional features such as the customer screen, logo customization, advanced inventory features, editable receipt numbering, an ad-free experience, and access to the Offline POS version.</p>
+      <summary id="faq13Q">What do I get with Premium?</summary>
+      <p id="faq13A">Premium unlocks additional features such as the customer screen, logo customization, advanced inventory features, editable receipt numbering, an ad-free experience, and access to the Offline POS version.</p>
     </details>
 
   </div>
 </section>
 <section class="section">
 <div class="cta-band">
-<h2>Ready to Start Selling?</h2>
-<p>Open GoOnlinePOS and try it without creating an account.</p>
-<a class="btn-primary" href="app">Open POS - Free</a>
-<p class="cta-band-note">No signup. No login. No installation.</p>
+<h2 id="ctaBandTitle">Ready to Start Selling?</h2>
+<p id="ctaBandText">Open GoOnlinePOS and try it without creating an account.</p>
+<a class="btn-primary" href="app" id="ctaBandBtn">Open POS - Free</a>
+<p class="cta-band-note" id="ctaBandNote">No signup. No login. No installation.</p>
 </div>
 </section>
 
 <section class="social-section">
-<h3 class="social-heading">Social</h3>
+<h3 class="social-heading" id="socialHeading">Social</h3>
 <div class="social-links">
 <a class="social-icon" href="https://www.facebook.com/share/1F18wrqU3F/" target="_blank" rel="noopener" aria-label="GoOnlinePOS on Facebook" title="Facebook">
 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.523 1.492-3.917 3.777-3.917 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94"/></svg>
@@ -784,6 +801,810 @@ GoOnlinePOS is designed for small businesses that need a simple point-of-sale sy
 <button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
 </div>
 </div>
+
+
+<script>
+(function() {
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      heroEyebrow: "Free · No signup · No login",
+      heroTitle: "Free POS for Small Businesses",
+      heroSubtitle: "Open your browser and start selling with a simple POS built for small businesses.",
+      heroPrimaryBtn: "Open POS - Free",
+      heroSecondaryBtn: "Explore Free Tools",
+      trustBar: "Free · No Signup · No Installation · Browser-Based · Offline Capable",
+      howItWorksTitle: "How it works",
+      howItWorksSub: "Four steps, no account required. Everything is saved right in your browser as you go.",
+      step1Title: "Add your products",
+      step1Text: "Type items in one by one, or upload a CSV or Excel file with names, prices, and categories to load your whole catalog at once.",
+      step2Title: "Ring up a sale",
+      step2Text: "Tap products to build the cart, or add a custom item on the spot. The total updates live on the receipt preview.",
+      step3Title: "Take payment & print",
+      step3Text: "Pick a payment method, enter the amount received, and print. A new sale starts automatically right after.",
+      step4Title: "Track your sales",
+      step4Text: "Every completed sale is saved automatically. Download a full Excel report from Settings whenever you need it.",
+      featuresTitle: "Set it up your way",
+      featuresSub: "Everything lives in Settings - tap the gear icon in the top right.",
+      feature1Title: "Upload your products",
+      feature1Text: "Add items one by one, or upload a CSV or Excel file with names, prices, categories, and stock levels in Settings → Products to load your whole catalog at once.",
+      feature2Title: "Search & filter products",
+      feature2Text: "Find items instantly with live search, or tap a category chip to filter your catalog down to what you need.",
+      feature3Title: "Your logo & store details",
+      feature3Text: "Upload your own logo and store info in Settings → Store - it prints at the top of every receipt.",
+      feature4Title: "Scan barcodes",
+      feature4Text: "Turn on the barcode scanner and add items instantly by scanning with any USB barcode scanner - no camera, no setup, it just works.",
+      feature5Title: "Split payment",
+      feature5Text: "Part cash, part card? Add multiple payment rows on one sale and the app tracks each amount separately.",
+      feature6Title: "Multiple cashiers",
+      feature6Text: "Add your team in Settings → Cashiers, switch who's active from the header, and see sales broken down by cashier in the Summary panel.",
+      feature7Title: "Stock & inventory",
+      feature7Text: "Track stock levels per product - they deduct automatically with every sale, and you can correct or restock any number anytime from the Inventory tab.",
+      feature8Title: "Customer-facing screen",
+      feature8Text: "Show customers a live view of their order and total on a second monitor or tablet - updates in real time as you ring things up.",
+      feature9Title: "Tax & discount",
+      feature9Text: "Set a tax name and rate in Settings → Tax. Discounts are applied per sale at checkout, as a percent or a flat amount - totals recalculate automatically either way.",
+      feature10Title: "Multiple currencies",
+      feature10Text: "Set your currency code and symbol in Settings → Currency, and choose how many decimal places to show.",
+      feature11Title: "Six languages",
+      feature11Text: "Switch the whole interface - English, Arabic, Filipino, Hindi, Spanish, or Thai - from Settings → Language.",
+      feature12Title: "Sales history, editable",
+      feature12Text: "Click any past sale to view full details, fix a mistake, or reprint the receipt. Export a two-tab Excel report whenever you need your own records.",
+      feature13Title: "End of Day report",
+      feature13Text: "Print or save a closing report from the header's End of Day button - total sales, items sold, payment breakdown, and collections per cashier for the day.",
+      feature14Title: "Full backup & restore",
+      feature14Text: "Since everything lives in your browser, download a complete backup anytime from Settings → Backup - products, sales, logo, and all - and restore it instantly if you ever need to.",
+      feature15Title: "Offline Mode POS",
+      feature15Text: "Use your POS even without an internet connection. Keep recording sales and managing your products anytime, anywhere.",
+      freeToolsTitle: "More Free Tools for Your Business",
+      freeToolsSub: "Useful tools that work alongside your everyday selling tasks.",
+      tool1Title: "Receipt Generator",
+      tool1Text: "Create and print professional receipts, no cart required.",
+      tool2Title: "Invoice Generator",
+      tool2Text: "Create invoices quickly, without complicated software.",
+      tool3Title: "Pricing Calculator",
+      tool3Text: "Work out costs, markup, margin, and the right selling price.",
+      tool4Title: "VAT Calculator",
+      tool4Text: "Calculate VAT quickly and accurately, either direction.",
+      tool5Title: "Barcode & QR Generator",
+      tool5Text: "Create barcodes and QR codes for your products and labels.",
+      aboutTitle: "About GoOnlinePOS",
+      aboutPara1: "<strong>GoOnlinePOS is an independently developed free online POS system built for small businesses.</strong>",
+      aboutPara2: "We built it around a simple idea: running a POS shouldn't require a monthly subscription, expensive hardware, a complicated setup, or a sales call.",
+      aboutPara3: "If you run a market stall, home bakery, food cart, pop-up shop, or small independent store, you need a reliable way to manage products, record sales, accept payments, and print receipts - nothing more.",
+      aboutPara4: "<strong>GoOnlinePOS.com was created to fill that gap.</strong> It's a browser-based POS you can use on a phone, tablet, or laptop - no traditional POS software to install, no dedicated checkout hardware to buy.",
+      aboutPara5: "Beyond the POS itself, GoOnlinePOS has grown into a small suite of free business tools - invoicing, receipts, pricing, VAT, and barcodes - each usable on its own, right in your browser, with nothing to sign up for. See <a href=\"#free-tools\">More Free Tools for Your Business</a> above.",
+      audienceTitle: "Who is GoOnlinePOS for?",
+      audienceSub: "GoOnlinePOS is designed for small businesses that need a simple point-of-sale system without the cost and complexity of traditional POS software.",
+      audience1Title: "Market Stalls &amp; Pop-Ups",
+      audience1Text: "A simple POS for markets, events, fairs and temporary selling locations.",
+      audience2Title: "Home Bakers &amp; Makers",
+      audience2Text: "Keep products, prices and sales organized without investing in a traditional POS system.",
+      audience3Title: "Food Carts &amp; Food Businesses",
+      audience3Text: "Record sales, payments and receipts directly from a web browser.",
+      audience4Title: "New Businesses",
+      audience4Text: "Start selling without committing to expensive POS software or dedicated hardware.",
+      audience5Title: "Small Independent Shops",
+      audience5Text: "Handle everyday transactions with a straightforward online point-of-sale system.",
+      audience6Title: "Businesses Tired of Complex POS Systems",
+      audience6Text: "If you just want to add products and start selling, GoOnlinePOS keeps the process simple.",
+      privacyNoteTitle: "Your Data, Your Device",
+      privacyNoteText: "Your POS data is stored locally in your browser. No account or cloud database is required for basic use.",
+      privacyNoteReminder: "Back up your data regularly - clearing your browser or site data may remove locally stored information.",
+      faqSectionTitle: "Common questions",
+      faq1Q: "Is it really free?",
+      faq1A: "Yes. The basic GoOnlinePOS plan is free forever, with no subscription, signup, or login required. Premium is a paid add-on (starting at $3.99/month, with discounted 3-month and annual plans) that unlocks extras like Company Logo, Customer Screen, and Inventory editing - sign in with Google and redeem a code to activate it.",
+      faq2Q: "Do I need to create an account?",
+      faq2A: "Not for the free Basic plan - just open the app in your browser and start selling. Signing in with Google is only needed if you want to redeem a code and unlock Premium features.",
+      faq3Q: "Can I use the POS without internet?",
+      faq3A: "Yes. GoOnlinePOS can be used without an internet connection. The Offline POS lets you continue selling, manage products, and use your POS even when there is no internet.",
+      faq4Q: "Where is my data stored?",
+      faq4A: "Your products, sales history, logo, and settings are stored locally in your browser. Your POS data is not uploaded to a GoOnlinePOS server. Because your data is stored locally, clearing your browser's site data can erase it, so regular backups are recommended.",
+      faq5Q: "Can I backup and restore my data?",
+      faq5A: "Yes. Go to <strong>Settings → Backup</strong> to download a complete backup of your POS data. You can restore the backup later to recover the data contained in that backup.",
+      faq6Q: "Can I export my sales?",
+      faq6A: "Yes. Export a two-tab Excel report of your sales and inventory anytime from <strong>Settings → Sales History</strong>.",
+      faq7Q: "Can I use it on my phone, tablet, or computer?",
+      faq7A: "Yes. GoOnlinePOS works in modern web browsers on phones, tablets, laptops, and desktop computers. The interface automatically adjusts to different screen sizes.",
+      faq8Q: "Can I print receipts?",
+      faq8A: "Yes. GoOnlinePOS supports receipt printing from any printer connected to your device. Leave the paper size on Auto and it will fit the available print area, or choose your exact paper size in <strong>Settings → Paper & Zoom</strong> for more precise results.",
+      faq9Q: "What payment methods can I use?",
+      faq9A: "You can accept Cash, Card, Bank Transfer, and other payment methods that you can add and customize for your business.",
+      faq10Q: "Can I set my own tax or VAT?",
+      faq10A: "Yes. You can customize the tax name and tax rate to match your business requirements.",
+      faq11Q: "Can I change the currency?",
+      faq11A: "Yes. You can change the currency used by the POS and customize the number of decimal places.",
+      faq12Q: "Is Premium a subscription?",
+      faq12A: "Yes. Premium follows your signed-in account rather than being a one-time unlock on a single device - redeem a code to extend it for 30, 90, or 365 days depending on the plan (1 Month, 3 Months, or 1 Year), and it works on any device you sign in on. Redeeming another code while you're already Premium stacks the extra time on top of what you have left, so redeeming early never costs you anything.",
+      faq13Q: "What do I get with Premium?",
+      faq13A: "Premium unlocks additional features such as the customer screen, logo customization, advanced inventory features, editable receipt numbering, an ad-free experience, and access to the Offline POS version.",
+      ctaBandTitle: "Ready to Start Selling?",
+      ctaBandText: "Open GoOnlinePOS and try it without creating an account.",
+      ctaBandBtn: "Open POS - Free",
+      ctaBandNote: "No signup. No login. No installation.",
+      socialHeading: "Social"
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      heroEyebrow: "مجاني · بدون تسجيل · بدون تسجيل دخول",
+      heroTitle: "نظام نقاط بيع مجاني للشركات الصغيرة",
+      heroSubtitle: "افتح متصفحك وابدأ البيع بنظام نقاط بيع بسيط مصمم للشركات الصغيرة.",
+      heroPrimaryBtn: "افتح نظام نقاط البيع - مجانًا",
+      heroSecondaryBtn: "استكشف الأدوات المجانية",
+      trustBar: "مجاني · بدون تسجيل · بدون تثبيت · يعمل عبر المتصفح · يعمل دون اتصال",
+      howItWorksTitle: "كيف يعمل",
+      howItWorksSub: "أربع خطوات، بدون حساب مطلوب. يتم حفظ كل شيء في متصفحك أثناء العمل.",
+      step1Title: "أضف منتجاتك",
+      step1Text: "أدخل الأصناف واحدًا تلو الآخر، أو ارفع ملف CSV أو Excel يحتوي على الأسماء والأسعار والفئات لتحميل كامل الكتالوج دفعة واحدة.",
+      step2Title: "سجّل عملية بيع",
+      step2Text: "اضغط على المنتجات لإضافتها إلى السلة، أو أضف صنفًا مخصصًا في الحال. يتم تحديث الإجمالي مباشرة في معاينة الإيصال.",
+      step3Title: "استلم الدفع واطبع",
+      step3Text: "اختر طريقة الدفع، أدخل المبلغ المستلم، ثم اطبع. تبدأ عملية بيع جديدة تلقائيًا بعد ذلك مباشرة.",
+      step4Title: "تابع مبيعاتك",
+      step4Text: "يتم حفظ كل عملية بيع مكتملة تلقائيًا. نزّل تقرير Excel كاملًا من الإعدادات وقتما تحتاج إليه.",
+      featuresTitle: "اضبطه بالطريقة التي تناسبك",
+      featuresSub: "كل شيء موجود في الإعدادات - اضغط على أيقونة الترس أعلى اليمين.",
+      feature1Title: "ارفع منتجاتك",
+      feature1Text: "أضف الأصناف واحدًا تلو الآخر، أو ارفع ملف CSV أو Excel يحتوي على الأسماء والأسعار والفئات ومستويات المخزون من الإعدادات ← المنتجات لتحميل كامل الكتالوج دفعة واحدة.",
+      feature2Title: "ابحث وصفّي المنتجات",
+      feature2Text: "اعثر على الأصناف فورًا بالبحث المباشر، أو اضغط على شريحة فئة لتصفية الكتالوج حسب ما تحتاجه.",
+      feature3Title: "شعارك وتفاصيل متجرك",
+      feature3Text: "ارفع شعارك الخاص ومعلومات متجرك من الإعدادات ← المتجر - تُطبع أعلى كل إيصال.",
+      feature4Title: "امسح الباركود",
+      feature4Text: "فعّل ماسح الباركود وأضف الأصناف فورًا بالمسح باستخدام أي ماسح باركود USB - بدون كاميرا، بدون إعداد، يعمل مباشرة.",
+      feature5Title: "تقسيم الدفع",
+      feature5Text: "جزء نقدًا وجزء بالبطاقة؟ أضف عدة صفوف دفع في عملية بيع واحدة، ويتتبع التطبيق كل مبلغ على حدة.",
+      feature6Title: "عدة كاشيرين",
+      feature6Text: "أضف فريقك من الإعدادات ← الكاشيرون، بدّل من هو النشط من الرأس، وشاهد المبيعات مقسّمة حسب الكاشير في لوحة الملخص.",
+      feature7Title: "المخزون والمخزون المتاح",
+      feature7Text: "تتبع مستويات المخزون لكل منتج - تُخصم تلقائيًا مع كل عملية بيع، ويمكنك تصحيح أو إعادة تعبئة أي رقم في أي وقت من تبويب المخزون.",
+      feature8Title: "شاشة مواجهة للعميل",
+      feature8Text: "أظهر للعملاء عرضًا مباشرًا لطلبهم والإجمالي على شاشة ثانية أو جهاز لوحي - تتحدث في الوقت الفعلي أثناء تسجيلك للمبيعات.",
+      feature9Title: "الضريبة والخصم",
+      feature9Text: "حدد اسم الضريبة ونسبتها من الإعدادات ← الضريبة. تُطبق الخصومات لكل عملية بيع عند الدفع، كنسبة مئوية أو مبلغ ثابت - وتُعاد حساب الإجماليات تلقائيًا في الحالتين.",
+      feature10Title: "عملات متعددة",
+      feature10Text: "حدد رمز عملتك ورمزها من الإعدادات ← العملة، واختر عدد المنازل العشرية المعروضة.",
+      feature11Title: "ست لغات",
+      feature11Text: "بدّل الواجهة بالكامل - الإنجليزية، العربية، الفلبينية، الهندية، الإسبانية، أو التايلاندية - من الإعدادات ← اللغة.",
+      feature12Title: "سجل مبيعات قابل للتعديل",
+      feature12Text: "اضغط على أي عملية بيع سابقة لعرض التفاصيل الكاملة، أو تصحيح خطأ، أو إعادة طباعة الإيصال. صدّر تقرير Excel بتبويبين وقتما تحتاج إلى سجلاتك الخاصة.",
+      feature13Title: "تقرير نهاية اليوم",
+      feature13Text: "اطبع أو احفظ تقرير إغلاق من زر نهاية اليوم في الرأس - إجمالي المبيعات، الأصناف المباعة، توزيع الدفعات، وتحصيلات كل كاشير لليوم.",
+      feature14Title: "نسخ احتياطي واستعادة كاملة",
+      feature14Text: "بما أن كل شيء موجود في متصفحك، نزّل نسخة احتياطية كاملة في أي وقت من الإعدادات ← النسخ الاحتياطي - المنتجات والمبيعات والشعار وكل شيء - واستعدها فورًا متى احتجت.",
+      feature15Title: "وضع نقاط البيع دون اتصال",
+      feature15Text: "استخدم نظام نقاط البيع حتى بدون اتصال بالإنترنت. استمر في تسجيل المبيعات وإدارة منتجاتك في أي وقت وأي مكان.",
+      freeToolsTitle: "المزيد من الأدوات المجانية لعملك",
+      freeToolsSub: "أدوات مفيدة تعمل جنبًا إلى جنب مع مهام البيع اليومية.",
+      tool1Title: "منشئ الإيصالات",
+      tool1Text: "أنشئ واطبع إيصالات احترافية، بدون الحاجة إلى سلة.",
+      tool2Title: "منشئ الفواتير",
+      tool2Text: "أنشئ الفواتير بسرعة، بدون برامج معقدة.",
+      tool3Title: "حاسبة التسعير",
+      tool3Text: "احسب التكاليف ونسبة الربح على التكلفة وهامش الربح وسعر البيع المناسب.",
+      tool4Title: "حاسبة ضريبة القيمة المضافة",
+      tool4Text: "احسب ضريبة القيمة المضافة بسرعة ودقة، في أي اتجاه.",
+      tool5Title: "منشئ الباركود ورمز QR",
+      tool5Text: "أنشئ الباركود ورموز QR لمنتجاتك وملصقاتك.",
+      aboutTitle: "عن GoOnlinePOS",
+      aboutPara1: "<strong>GoOnlinePOS نظام نقاط بيع مجاني مطوَّر بشكل مستقل، مصمم للشركات الصغيرة.</strong>",
+      aboutPara2: "لقد بنيناه حول فكرة بسيطة: تشغيل نظام نقاط بيع لا ينبغي أن يتطلب اشتراكًا شهريًا، أو أجهزة باهظة الثمن، أو إعدادًا معقدًا، أو مكالمة مبيعات.",
+      aboutPara3: "إذا كنت تدير كشك سوق، أو مخبزًا منزليًا، أو عربة طعام، أو متجرًا منبثقًا، أو متجرًا مستقلًا صغيرًا، فأنت بحاجة إلى طريقة موثوقة لإدارة المنتجات وتسجيل المبيعات وقبول المدفوعات وطباعة الإيصالات - لا أكثر.",
+      aboutPara4: "<strong>تم إنشاء GoOnlinePOS.com لسد هذه الفجوة.</strong> إنه نظام نقاط بيع يعمل عبر المتصفح يمكنك استخدامه على الهاتف أو الجهاز اللوحي أو الحاسوب المحمول - بدون تثبيت برنامج نقاط بيع تقليدي، وبدون شراء أجهزة دفع مخصصة.",
+      aboutPara5: "بالإضافة إلى نظام نقاط البيع نفسه، نمت GoOnlinePOS لتصبح مجموعة صغيرة من أدوات الأعمال المجانية - الفوترة، والإيصالات، والتسعير، وضريبة القيمة المضافة، والباركود - كل منها قابل للاستخدام بمفرده، مباشرة في متصفحك، بدون الحاجة إلى التسجيل. راجع <a href=\"#free-tools\">المزيد من الأدوات المجانية لعملك</a> أعلاه.",
+      audienceTitle: "لمن يناسب GoOnlinePOS؟",
+      audienceSub: "صُمم GoOnlinePOS للشركات الصغيرة التي تحتاج إلى نظام نقاط بيع بسيط بدون تكلفة وتعقيد برامج نقاط البيع التقليدية.",
+      audience1Title: "أكشاك الأسواق والمتاجر المؤقتة",
+      audience1Text: "نظام نقاط بيع بسيط للأسواق والفعاليات والمعارض ومواقع البيع المؤقتة.",
+      audience2Title: "الخبازون المنزليون والحرفيون",
+      audience2Text: "حافظ على تنظيم المنتجات والأسعار والمبيعات دون الاستثمار في نظام نقاط بيع تقليدي.",
+      audience3Title: "عربات وأعمال الطعام",
+      audience3Text: "سجّل المبيعات والمدفوعات والإيصالات مباشرة من متصفح الويب.",
+      audience4Title: "الشركات الناشئة",
+      audience4Text: "ابدأ البيع دون الالتزام ببرامج نقاط بيع باهظة الثمن أو أجهزة مخصصة.",
+      audience5Title: "المتاجر المستقلة الصغيرة",
+      audience5Text: "تعامل مع المعاملات اليومية بنظام نقاط بيع بسيط عبر الإنترنت.",
+      audience6Title: "الشركات التي سئمت أنظمة نقاط البيع المعقدة",
+      audience6Text: "إذا كنت تريد فقط إضافة المنتجات والبدء بالبيع، فإن GoOnlinePOS يبقي العملية بسيطة.",
+      privacyNoteTitle: "بياناتك، جهازك",
+      privacyNoteText: "تُخزَّن بيانات نقاط البيع الخاصة بك محليًا في متصفحك. لا حاجة إلى حساب أو قاعدة بيانات سحابية للاستخدام الأساسي.",
+      privacyNoteReminder: "احتفظ بنسخة احتياطية من بياناتك بانتظام - قد يؤدي مسح بيانات متصفحك أو الموقع إلى إزالة المعلومات المخزنة محليًا.",
+      faqSectionTitle: "أسئلة شائعة",
+      faq1Q: "هل هو مجاني حقًا؟",
+      faq1A: "نعم. خطة GoOnlinePOS الأساسية مجانية إلى الأبد، بدون اشتراك أو تسجيل أو تسجيل دخول مطلوب. بريميوم هو إضافة مدفوعة (تبدأ من 3.99$ شهريًا، مع خطط مخفضة لثلاثة أشهر وسنوية) تفتح مزايا إضافية مثل شعار الشركة، شاشة العميل، وتعديل المخزون - سجّل الدخول بحساب Google واستبدل رمزًا لتفعيلها.",
+      faq2Q: "هل أحتاج إلى إنشاء حساب؟",
+      faq2A: "ليس للخطة الأساسية المجانية - فقط افتح التطبيق في متصفحك وابدأ البيع. تسجيل الدخول بحساب Google مطلوب فقط إذا أردت استبدال رمز وفتح ميزات بريميوم.",
+      faq3Q: "هل يمكنني استخدام نظام نقاط البيع بدون إنترنت؟",
+      faq3A: "نعم. يمكن استخدام GoOnlinePOS بدون اتصال بالإنترنت. يتيح لك وضع نقاط البيع دون اتصال الاستمرار في البيع وإدارة المنتجات واستخدام نظامك حتى عند عدم وجود إنترنت.",
+      faq4Q: "أين تُخزَّن بياناتي؟",
+      faq4A: "تُخزَّن منتجاتك وسجل مبيعاتك وشعارك وإعداداتك محليًا في متصفحك. لا تُرفع بيانات نقاط البيع الخاصة بك إلى خادم GoOnlinePOS. ولأن بياناتك مخزنة محليًا، فإن مسح بيانات موقع متصفحك قد يمحوها، لذا يُنصح بعمل نسخ احتياطية منتظمة.",
+      faq5Q: "هل يمكنني عمل نسخة احتياطية من بياناتي واستعادتها؟",
+      faq5A: "نعم. اذهب إلى <strong>الإعدادات ← النسخ الاحتياطي</strong> لتنزيل نسخة احتياطية كاملة من بيانات نقاط البيع الخاصة بك. يمكنك استعادة النسخة الاحتياطية لاحقًا لاسترجاع البيانات الموجودة فيها.",
+      faq6Q: "هل يمكنني تصدير مبيعاتي؟",
+      faq6A: "نعم. صدّر تقرير Excel بتبويبين لمبيعاتك ومخزونك في أي وقت من <strong>الإعدادات ← سجل المبيعات</strong>.",
+      faq7Q: "هل يمكنني استخدامه على هاتفي أو جهازي اللوحي أو حاسوبي؟",
+      faq7A: "نعم. يعمل GoOnlinePOS في متصفحات الويب الحديثة على الهواتف والأجهزة اللوحية وأجهزة الحاسوب المحمولة والمكتبية. تتكيف الواجهة تلقائيًا مع أحجام الشاشات المختلفة.",
+      faq8Q: "هل يمكنني طباعة الإيصالات؟",
+      faq8A: "نعم. يدعم GoOnlinePOS طباعة الإيصالات من أي طابعة متصلة بجهازك. اترك حجم الورق على تلقائي وسيتكيف مع مساحة الطباعة المتاحة، أو اختر حجم الورق الدقيق من <strong>الإعدادات ← حجم الورق والتكبير</strong> لنتائج أكثر دقة.",
+      faq9Q: "ما طرق الدفع التي يمكنني استخدامها؟",
+      faq9A: "يمكنك قبول النقد والبطاقات والتحويل البنكي وطرق دفع أخرى يمكنك إضافتها وتخصيصها لعملك.",
+      faq10Q: "هل يمكنني تحديد ضريبتي أو ضريبة القيمة المضافة الخاصة بي؟",
+      faq10A: "نعم. يمكنك تخصيص اسم الضريبة ونسبتها لتتناسب مع متطلبات عملك.",
+      faq11Q: "هل يمكنني تغيير العملة؟",
+      faq11A: "نعم. يمكنك تغيير العملة التي يستخدمها نظام نقاط البيع وتخصيص عدد المنازل العشرية.",
+      faq12Q: "هل بريميوم اشتراك؟",
+      faq12A: "نعم. يتبع بريميوم حسابك الذي سجلت الدخول به بدلاً من أن يكون فتحًا لمرة واحدة على جهاز واحد - استبدل رمزًا لتمديده 30 أو 90 أو 365 يومًا حسب الخطة (شهر واحد، ثلاثة أشهر، أو سنة واحدة)، ويعمل على أي جهاز تسجل الدخول به. استبدال رمز آخر أثناء كونك بالفعل بريميوم يضيف الوقت الإضافي فوق ما تبقى لديك، لذا فإن الاستبدال المبكر لا يكلفك شيئًا أبدًا.",
+      faq13Q: "ماذا أحصل عليه مع بريميوم؟",
+      faq13A: "يفتح بريميوم ميزات إضافية مثل شاشة العميل، وتخصيص الشعار، وميزات المخزون المتقدمة، وترقيم الإيصالات القابل للتعديل، وتجربة خالية من الإعلانات، والوصول إلى نسخة نقاط البيع دون اتصال.",
+      ctaBandTitle: "هل أنت مستعد لبدء البيع؟",
+      ctaBandText: "افتح GoOnlinePOS وجرّبه دون إنشاء حساب.",
+      ctaBandBtn: "افتح نظام نقاط البيع - مجانًا",
+      ctaBandNote: "بدون تسجيل. بدون تسجيل دخول. بدون تثبيت.",
+      socialHeading: "تواصل معنا"
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      heroEyebrow: "Libre · Walang Sign Up · Walang Login",
+      heroTitle: "Libreng POS Para sa Maliliit na Negosyo",
+      heroSubtitle: "Buksan ang iyong browser at magsimulang magbenta gamit ang simpleng POS na ginawa para sa maliliit na negosyo.",
+      heroPrimaryBtn: "Buksan ang POS - Libre",
+      heroSecondaryBtn: "Tuklasin ang Mga Libreng Tool",
+      trustBar: "Libre · Walang Sign Up · Walang Installation · Batay sa Browser · May Offline Mode",
+      howItWorksTitle: "Paano ito gumagana",
+      howItWorksSub: "Apat na hakbang, walang kailangang account. Awtomatikong na-save ang lahat sa browser mo habang ginagawa mo ito.",
+      step1Title: "Idagdag ang iyong mga produkto",
+      step1Text: "I-type ang mga item nang isa-isa, o mag-upload ng CSV o Excel file na may mga pangalan, presyo, at kategorya para i-load ang buong catalog nang sabay-sabay.",
+      step2Title: "Magbenta",
+      step2Text: "I-tap ang mga produkto para punuin ang cart, o magdagdag ng custom na item agad. Awtomatikong nag-a-update ang total sa preview ng resibo.",
+      step3Title: "Tumanggap ng bayad at i-print",
+      step3Text: "Pumili ng paraan ng pagbabayad, ilagay ang natanggap na halaga, at i-print. Awtomatikong magsisimula ang bagong benta pagkatapos noon.",
+      step4Title: "Subaybayan ang iyong benta",
+      step4Text: "Awtomatikong na-save ang bawat kumpletong benta. Mag-download ng buong Excel report mula sa Settings kailanman kailangan mo ito.",
+      featuresTitle: "I-set up ito sa paraang gusto mo",
+      featuresSub: "Nasa Settings ang lahat - i-tap ang gear icon sa kanang itaas.",
+      feature1Title: "I-upload ang iyong mga produkto",
+      feature1Text: "Magdagdag ng item nang isa-isa, o mag-upload ng CSV o Excel file na may mga pangalan, presyo, kategorya, at stock level sa Settings → Products para i-load ang buong catalog nang sabay-sabay.",
+      feature2Title: "Maghanap at mag-filter ng produkto",
+      feature2Text: "Agad na mahanap ang mga item gamit ang live search, o i-tap ang isang category chip para i-filter ang catalog mo sa kailangan mo.",
+      feature3Title: "Logo at detalye ng tindahan",
+      feature3Text: "I-upload ang sarili mong logo at impormasyon ng tindahan sa Settings → Store - nakalimbag ito sa itaas ng bawat resibo.",
+      feature4Title: "I-scan ang barcode",
+      feature4Text: "I-on ang barcode scanner at agad na magdagdag ng item sa pamamagitan ng pag-scan gamit ang anumang USB barcode scanner - walang camera, walang setup, gumagana lang agad.",
+      feature5Title: "Hatiin ang bayad",
+      feature5Text: "Kalahati cash, kalahati card? Magdagdag ng maraming payment row sa isang benta at sinusubaybayan ng app ang bawat halaga nang hiwalay.",
+      feature6Title: "Maraming kahero",
+      feature6Text: "Idagdag ang iyong team sa Settings → Cashiers, palitan kung sino ang aktibo mula sa header, at tingnan ang benta ayon sa kahero sa Summary panel.",
+      feature7Title: "Stock at imbentaryo",
+      feature7Text: "Subaybayan ang stock level bawat produkto - awtomatiko itong babawasan sa bawat benta, at maaari mong itama o magdagdag ng stock anumang oras mula sa Inventory tab.",
+      feature8Title: "Screen para sa customer",
+      feature8Text: "Ipakita sa mga customer ang live na order at total nila sa pangalawang monitor o tablet - real-time na nag-a-update habang nagbebenta ka.",
+      feature9Title: "Buwis at discount",
+      feature9Text: "Magtakda ng pangalan at rate ng buwis sa Settings → Tax. Ang discount ay ina-apply kada benta sa checkout, bilang porsyento o flat na halaga - awtomatikong nag-re-recalculate ang total sa alinmang paraan.",
+      feature10Title: "Maraming currency",
+      feature10Text: "Itakda ang currency code at symbol mo sa Settings → Currency, at piliin kung ilang decimal place ang ipapakita.",
+      feature11Title: "Anim na wika",
+      feature11Text: "Palitan ang buong interface - English, Arabic, Filipino, Hindi, Spanish, o Thai - mula sa Settings → Language.",
+      feature12Title: "Nae-edit na kasaysayan ng benta",
+      feature12Text: "I-click ang alinmang nakaraang benta para makita ang buong detalye, itama ang mali, o i-reprint ang resibo. Mag-export ng two-tab na Excel report anumang oras kailangan mo ang sarili mong record.",
+      feature13Title: "End of Day report",
+      feature13Text: "I-print o i-save ang closing report mula sa End of Day button sa header - kabuuang benta, naibentang item, breakdown ng bayad, at koleksyon bawat kahero para sa araw na iyon.",
+      feature14Title: "Buong backup at pagbawi",
+      feature14Text: "Dahil nasa browser mo lahat, mag-download ng kumpletong backup anumang oras mula sa Settings → Backup - produkto, benta, logo, at lahat - at ibalik ito agad kapag kinailangan.",
+      feature15Title: "Offline Mode POS",
+      feature15Text: "Gamitin ang iyong POS kahit walang internet connection. Patuloy na magtala ng benta at pamahalaan ang iyong mga produkto kahit kailan, kahit saan.",
+      freeToolsTitle: "Higit Pang Libreng Tool Para sa Iyong Negosyo",
+      freeToolsSub: "Mga kapaki-pakinabang na tool na gumagana kasabay ng pang-araw-araw mong pagbebenta.",
+      tool1Title: "Receipt Generator",
+      tool1Text: "Gumawa at mag-print ng propesyonal na resibo, hindi kailangan ng cart.",
+      tool2Title: "Invoice Generator",
+      tool2Text: "Gumawa ng invoice nang mabilis, walang komplikadong software.",
+      tool3Title: "Pricing Calculator",
+      tool3Text: "Kalkulahin ang halaga, markup, margin, at ang tamang presyo ng pagbebenta.",
+      tool4Title: "VAT Calculator",
+      tool4Text: "Kalkulahin ang VAT nang mabilis at tumpak, sa alinmang direksyon.",
+      tool5Title: "Barcode at QR Generator",
+      tool5Text: "Gumawa ng barcode at QR code para sa iyong mga produkto at label.",
+      aboutTitle: "Tungkol sa GoOnlinePOS",
+      aboutPara1: "<strong>Ang GoOnlinePOS ay isang independiyenteng ginawang libreng online POS system para sa maliliit na negosyo.</strong>",
+      aboutPara2: "Ginawa namin ito batay sa simpleng ideya: ang pagpapatakbo ng POS ay hindi dapat mangailangan ng buwanang subscription, mamahaling hardware, komplikadong setup, o sales call.",
+      aboutPara3: "Kung nagpapatakbo ka ng puwesto sa palengke, home bakery, food cart, pop-up shop, o maliit na independiyenteng tindahan, kailangan mo ng maaasahang paraan para pamahalaan ang produkto, magtala ng benta, tumanggap ng bayad, at mag-print ng resibo - wala nang iba pa.",
+      aboutPara4: "<strong>Ginawa ang GoOnlinePOS.com para punan ang agwat na iyan.</strong> Ito ay isang browser-based na POS na magagamit mo sa telepono, tablet, o laptop - walang traditional na POS software na i-install, walang dedikadong checkout hardware na bibilhin.",
+      aboutPara5: "Bukod sa POS mismo, lumago ang GoOnlinePOS sa isang maliit na set ng libreng business tool - invoicing, resibo, presyo, VAT, at barcode - bawat isa ay magagamit nang mag-isa, mismo sa iyong browser, na walang kailangang i-sign up. Tingnan ang <a href=\"#free-tools\">Higit Pang Libreng Tool Para sa Iyong Negosyo</a> sa itaas.",
+      audienceTitle: "Para kanino ang GoOnlinePOS?",
+      audienceSub: "Ang GoOnlinePOS ay ginawa para sa maliliit na negosyo na nangangailangan ng simpleng point-of-sale system nang walang gastos at komplikasyon ng tradisyunal na POS software.",
+      audience1Title: "Mga Puwesto sa Palengke at Pop-Up",
+      audience1Text: "Simpleng POS para sa palengke, event, pista, at pansamantalang lugar ng pagbebenta.",
+      audience2Title: "Home Bakers at Gumagawa ng Produkto",
+      audience2Text: "Panatilihing maayos ang produkto, presyo, at benta nang hindi namumuhunan sa tradisyunal na POS system.",
+      audience3Title: "Food Cart at Negosyong Pagkain",
+      audience3Text: "Magtala ng benta, bayad, at resibo direkta mula sa web browser.",
+      audience4Title: "Mga Bagong Negosyo",
+      audience4Text: "Magsimulang magbenta nang hindi kumokomit sa mamahaling POS software o dedikadong hardware.",
+      audience5Title: "Maliliit na Independiyenteng Tindahan",
+      audience5Text: "Hawakan ang pang-araw-araw na transaksyon gamit ang simpleng online point-of-sale system.",
+      audience6Title: "Mga Negosyong Sawa na sa Komplikadong POS System",
+      audience6Text: "Kung gusto mo lang magdagdag ng produkto at magsimulang magbenta, pinapanatili ng GoOnlinePOS na simple ang proseso.",
+      privacyNoteTitle: "Ang Data Mo, Ang Device Mo",
+      privacyNoteText: "Naka-store nang lokal sa iyong browser ang data ng iyong POS. Walang kailangang account o cloud database para sa basic na paggamit.",
+      privacyNoteReminder: "Mag-backup ng iyong data nang regular - ang pag-clear ng browser o site data mo ay maaaring mag-alis ng lokal na naka-store na impormasyon.",
+      faqSectionTitle: "Mga Karaniwang Tanong",
+      faq1Q: "Talaga bang libre ito?",
+      faq1A: "Oo. Ang basic na plano ng GoOnlinePOS ay libre magpakailanman, walang subscription, sign up, o login na kailangan. Ang Premium ay bayad na add-on (nagsisimula sa $3.99/buwan, may discounted na 3-buwan at taunang plano) na nag-a-unlock ng mga extra tulad ng Company Logo, Customer Screen, at Inventory editing - mag-sign in gamit ang Google at mag-redeem ng code para i-activate ito.",
+      faq2Q: "Kailangan ko bang gumawa ng account?",
+      faq2A: "Hindi para sa libreng Basic na plano - buksan lang ang app sa iyong browser at magsimulang magbenta. Kailangan lang ang pag-sign in gamit ang Google kung gusto mong mag-redeem ng code at i-unlock ang mga Premium na feature.",
+      faq3Q: "Pwede ko bang gamitin ang POS nang walang internet?",
+      faq3A: "Oo. Magagamit ang GoOnlinePOS kahit walang koneksyon sa internet. Sa pamamagitan ng Offline POS, magpapatuloy kang magbenta, pamahalaan ang mga produkto, at gamitin ang iyong POS kahit walang internet.",
+      faq4Q: "Saan naka-store ang aking data?",
+      faq4A: "Ang iyong mga produkto, kasaysayan ng benta, logo, at settings ay naka-store nang lokal sa iyong browser. Hindi ina-upload ang data ng iyong POS sa server ng GoOnlinePOS. Dahil naka-store nang lokal ang iyong data, maaari itong mabura kapag na-clear ang site data ng browser mo, kaya inirerekomenda ang regular na backup.",
+      faq5Q: "Pwede ba akong mag-backup at magbawi ng aking data?",
+      faq5A: "Oo. Pumunta sa <strong>Settings → Backup</strong> para mag-download ng kumpletong backup ng data ng iyong POS. Maaari mong ibalik ang backup mamaya para mabawi ang data na nilalaman nito.",
+      faq6Q: "Pwede ko bang i-export ang aking mga benta?",
+      faq6A: "Oo. Mag-export ng two-tab na Excel report ng iyong benta at imbentaryo kailanman mula sa <strong>Settings → Sales History</strong>.",
+      faq7Q: "Pwede ko ba itong gamitin sa telepono, tablet, o kompyuter ko?",
+      faq7A: "Oo. Gumagana ang GoOnlinePOS sa mga modernong web browser sa telepono, tablet, laptop, at desktop computer. Awtomatikong nag-aadjust ang interface sa iba't ibang laki ng screen.",
+      faq8Q: "Pwede ba akong mag-print ng resibo?",
+      faq8A: "Oo. Sinusuportahan ng GoOnlinePOS ang pag-print ng resibo mula sa anumang printer na nakakonekta sa device mo. Iwanan ang laki ng papel sa Auto at aangkop ito sa available na print area, o piliin ang eksaktong laki ng papel sa <strong>Settings → Paper & Zoom</strong> para sa mas tumpak na resulta.",
+      faq9Q: "Anong mga paraan ng pagbabayad ang pwede kong gamitin?",
+      faq9A: "Pwede kang tumanggap ng Cash, Card, Bank Transfer, at iba pang paraan ng pagbabayad na maaari mong idagdag at i-customize para sa iyong negosyo.",
+      faq10Q: "Pwede ko bang itakda ang sarili kong buwis o VAT?",
+      faq10A: "Oo. Maaari mong i-customize ang pangalan at rate ng buwis para umangkop sa pangangailangan ng iyong negosyo.",
+      faq11Q: "Pwede ko bang palitan ang currency?",
+      faq11A: "Oo. Maaari mong palitan ang currency na ginagamit ng POS at i-customize ang bilang ng decimal place.",
+      faq12Q: "Subscription ba ang Premium?",
+      faq12A: "Oo. Sinusunod ng Premium ang naka-sign-in mong account sa halip na isang beses lang na unlock sa isang device - mag-redeem ng code para palawigin ito ng 30, 90, o 365 araw depende sa plano (1 Buwan, 3 Buwan, o 1 Taon), at gumagana ito sa anumang device na iyong si-sign-in-an. Ang pag-redeem ng isa pang code habang Premium ka na ay idinaragdag lang sa natitira mong oras, kaya walang mawawala sa iyo kung mag-redeem ka nang maaga.",
+      faq13Q: "Ano ang makukuha ko sa Premium?",
+      faq13A: "Ang Premium ay nag-a-unlock ng karagdagang feature tulad ng customer screen, pag-customize ng logo, advanced na feature ng imbentaryo, nae-edit na receipt numbering, walang-ad na karanasan, at access sa Offline POS version.",
+      ctaBandTitle: "Handa Ka Na Bang Magbenta?",
+      ctaBandText: "Buksan ang GoOnlinePOS at subukan ito nang hindi gumagawa ng account.",
+      ctaBandBtn: "Buksan ang POS - Libre",
+      ctaBandNote: "Walang sign up. Walang login. Walang installation.",
+      socialHeading: "Social"
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      heroEyebrow: "मुफ़्त · कोई साइनअप नहीं · कोई लॉगिन नहीं",
+      heroTitle: "छोटे व्यवसायों के लिए मुफ़्त पीओएस",
+      heroSubtitle: "अपना ब्राउज़र खोलें और छोटे व्यवसायों के लिए बनाए गए एक सरल पीओएस के साथ बिक्री शुरू करें।",
+      heroPrimaryBtn: "पीओएस खोलें - मुफ़्त",
+      heroSecondaryBtn: "मुफ़्त टूल देखें",
+      trustBar: "मुफ़्त · कोई साइनअप नहीं · कोई इंस्टॉलेशन नहीं · ब्राउज़र-आधारित · ऑफ़लाइन उपलब्ध",
+      howItWorksTitle: "यह कैसे काम करता है",
+      howItWorksSub: "चार चरण, किसी खाते की ज़रूरत नहीं। काम करते समय सब कुछ आपके ब्राउज़र में सेव होता रहता है।",
+      step1Title: "अपने उत्पाद जोड़ें",
+      step1Text: "आइटम एक-एक करके टाइप करें, या नाम, कीमत और श्रेणी वाली CSV या Excel फ़ाइल अपलोड करें ताकि पूरा कैटलॉग एक साथ लोड हो सके।",
+      step2Title: "बिक्री दर्ज करें",
+      step2Text: "कार्ट बनाने के लिए उत्पादों पर टैप करें, या तुरंत कोई कस्टम आइटम जोड़ें। कुल राशि रसीद प्रीव्यू में तुरंत अपडेट होती है।",
+      step3Title: "भुगतान लें और प्रिंट करें",
+      step3Text: "भुगतान का तरीका चुनें, प्राप्त राशि दर्ज करें, और प्रिंट करें। इसके तुरंत बाद एक नई बिक्री अपने आप शुरू हो जाती है।",
+      step4Title: "अपनी बिक्री ट्रैक करें",
+      step4Text: "हर पूरी हुई बिक्री अपने आप सेव हो जाती है। जब भी ज़रूरत हो, सेटिंग्स से पूरी Excel रिपोर्ट डाउनलोड करें।",
+      featuresTitle: "इसे अपने तरीके से सेट करें",
+      featuresSub: "सब कुछ सेटिंग्स में है - ऊपर दाईं ओर गियर आइकन पर टैप करें।",
+      feature1Title: "अपने उत्पाद अपलोड करें",
+      feature1Text: "आइटम एक-एक करके जोड़ें, या पूरा कैटलॉग एक साथ लोड करने के लिए सेटिंग्स ← उत्पाद में नाम, कीमत, श्रेणी और स्टॉक स्तर वाली CSV या Excel फ़ाइल अपलोड करें।",
+      feature2Title: "उत्पाद खोजें और फ़िल्टर करें",
+      feature2Text: "लाइव सर्च से आइटम तुरंत खोजें, या अपने कैटलॉग को ज़रूरत के अनुसार फ़िल्टर करने के लिए किसी श्रेणी चिप पर टैप करें।",
+      feature3Title: "आपका लोगो और स्टोर विवरण",
+      feature3Text: "सेटिंग्स ← स्टोर में अपना लोगो और स्टोर जानकारी अपलोड करें - यह हर रसीद के शीर्ष पर छपता है।",
+      feature4Title: "बारकोड स्कैन करें",
+      feature4Text: "बारकोड स्कैनर चालू करें और किसी भी USB बारकोड स्कैनर से स्कैन करके आइटम तुरंत जोड़ें - कोई कैमरा नहीं, कोई सेटअप नहीं, यह बस काम करता है।",
+      feature5Title: "भुगतान विभाजित करें",
+      feature5Text: "आधा नकद, आधा कार्ड? एक बिक्री में कई भुगतान पंक्तियाँ जोड़ें और ऐप हर राशि को अलग-अलग ट्रैक करता है।",
+      feature6Title: "कई कैशियर",
+      feature6Text: "सेटिंग्स ← कैशियर में अपनी टीम जोड़ें, हेडर से बदलें कौन सक्रिय है, और सारांश पैनल में कैशियर के अनुसार बिक्री देखें।",
+      feature7Title: "स्टॉक और इन्वेंट्री",
+      feature7Text: "प्रति उत्पाद स्टॉक स्तर ट्रैक करें - हर बिक्री के साथ ये अपने आप घटते हैं, और आप इन्वेंट्री टैब से कभी भी किसी भी संख्या को ठीक या फिर से स्टॉक कर सकते हैं।",
+      feature8Title: "ग्राहक के सामने वाली स्क्रीन",
+      feature8Text: "दूसरी स्क्रीन या टैबलेट पर ग्राहकों को उनके ऑर्डर और कुल राशि का लाइव दृश्य दिखाएं - बिक्री दर्ज करते समय यह वास्तविक समय में अपडेट होता है।",
+      feature9Title: "कर और छूट",
+      feature9Text: "सेटिंग्स ← कर में कर का नाम और दर सेट करें। छूट चेकआउट पर प्रति बिक्री लागू होती है, प्रतिशत या एक निश्चित राशि के रूप में - दोनों ही स्थितियों में कुल राशि अपने आप फिर से गणना होती है।",
+      feature10Title: "कई मुद्राएँ",
+      feature10Text: "सेटिंग्स ← मुद्रा में अपना मुद्रा कोड और चिह्न सेट करें, और कितने दशमलव स्थान दिखाने हैं यह चुनें।",
+      feature11Title: "छह भाषाएं",
+      feature11Text: "सेटिंग्स ← भाषा से पूरा इंटरफ़ेस बदलें - अंग्रेज़ी, अरबी, फ़िलिपिनो, हिन्दी, स्पेनिश, या थाई।",
+      feature12Title: "संपादन योग्य बिक्री इतिहास",
+      feature12Text: "पूरा विवरण देखने, गलती ठीक करने, या रसीद फिर से प्रिंट करने के लिए किसी भी पिछली बिक्री पर क्लिक करें। जब भी अपने रिकॉर्ड की ज़रूरत हो, दो-टैब वाली Excel रिपोर्ट निर्यात करें।",
+      feature13Title: "दिन के अंत की रिपोर्ट",
+      feature13Text: "हेडर के End of Day बटन से क्लोज़िंग रिपोर्ट प्रिंट या सेव करें - कुल बिक्री, बेचे गए आइटम, भुगतान विवरण, और दिन के लिए प्रति कैशियर संग्रह।",
+      feature14Title: "पूरा बैकअप और पुनर्स्थापना",
+      feature14Text: "चूंकि सब कुछ आपके ब्राउज़र में है, कभी भी सेटिंग्स ← बैकअप से पूरा बैकअप डाउनलोड करें - उत्पाद, बिक्री, लोगो, सब कुछ - और ज़रूरत पड़ने पर इसे तुरंत पुनर्स्थापित करें।",
+      feature15Title: "ऑफ़लाइन मोड पीओएस",
+      feature15Text: "इंटरनेट कनेक्शन के बिना भी अपने पीओएस का उपयोग करें। कभी भी, कहीं भी बिक्री दर्ज करना और अपने उत्पादों को प्रबंधित करना जारी रखें।",
+      freeToolsTitle: "आपके व्यवसाय के लिए और मुफ़्त टूल",
+      freeToolsSub: "उपयोगी टूल जो आपके रोज़मर्रा के बिक्री कार्यों के साथ काम करते हैं।",
+      tool1Title: "रसीद जेनरेटर",
+      tool1Text: "पेशेवर रसीदें बनाएं और प्रिंट करें, कार्ट की ज़रूरत नहीं।",
+      tool2Title: "इनवॉइस जेनरेटर",
+      tool2Text: "बिना जटिल सॉफ़्टवेयर के तुरंत इनवॉइस बनाएं।",
+      tool3Title: "प्राइसिंग कैलकुलेटर",
+      tool3Text: "लागत, मार्कअप, मार्जिन और सही विक्रय मूल्य निकालें।",
+      tool4Title: "वैट कैलकुलेटर",
+      tool4Text: "किसी भी दिशा में वैट की गणना जल्दी और सटीक रूप से करें।",
+      tool5Title: "बारकोड और क्यूआर जेनरेटर",
+      tool5Text: "अपने उत्पादों और लेबल के लिए बारकोड और क्यूआर कोड बनाएं।",
+      aboutTitle: "GoOnlinePOS के बारे में",
+      aboutPara1: "<strong>GoOnlinePOS एक स्वतंत्र रूप से विकसित मुफ़्त ऑनलाइन पीओएस सिस्टम है, जो छोटे व्यवसायों के लिए बनाया गया है।</strong>",
+      aboutPara2: "हमने इसे एक सरल विचार के आसपास बनाया: पीओएस चलाने के लिए मासिक सदस्यता, महंगे हार्डवेयर, जटिल सेटअप, या सेल्स कॉल की ज़रूरत नहीं होनी चाहिए।",
+      aboutPara3: "यदि आप कोई मार्केट स्टॉल, होम बेकरी, फ़ूड कार्ट, पॉप-अप शॉप, या छोटी स्वतंत्र दुकान चलाते हैं, तो आपको उत्पाद प्रबंधित करने, बिक्री दर्ज करने, भुगतान स्वीकार करने और रसीदें प्रिंट करने का एक भरोसेमंद तरीका चाहिए - बस इतना ही।",
+      aboutPara4: "<strong>GoOnlinePOS.com को इसी कमी को पूरा करने के लिए बनाया गया था।</strong> यह एक ब्राउज़र-आधारित पीओएस है जिसे आप फ़ोन, टैबलेट या लैपटॉप पर उपयोग कर सकते हैं - कोई पारंपरिक पीओएस सॉफ़्टवेयर इंस्टॉल नहीं करना, कोई समर्पित चेकआउट हार्डवेयर नहीं खरीदना।",
+      aboutPara5: "पीओएस के अलावा, GoOnlinePOS मुफ़्त व्यावसायिक टूल के एक छोटे समूह में विकसित हो गया है - इनवॉइसिंग, रसीदें, प्राइसिंग, वैट, और बारकोड - हर एक अपने आप में उपयोग करने योग्य, सीधे आपके ब्राउज़र में, बिना किसी साइनअप के। ऊपर <a href=\"#free-tools\">आपके व्यवसाय के लिए और मुफ़्त टूल</a> देखें।",
+      audienceTitle: "GoOnlinePOS किसके लिए है?",
+      audienceSub: "GoOnlinePOS उन छोटे व्यवसायों के लिए बनाया गया है जिन्हें पारंपरिक पीओएस सॉफ़्टवेयर की लागत और जटिलता के बिना एक सरल पॉइंट-ऑफ़-सेल सिस्टम चाहिए।",
+      audience1Title: "मार्केट स्टॉल और पॉप-अप",
+      audience1Text: "बाज़ारों, कार्यक्रमों, मेलों और अस्थायी बिक्री स्थानों के लिए एक सरल पीओएस।",
+      audience2Title: "होम बेकर और निर्माता",
+      audience2Text: "पारंपरिक पीओएस सिस्टम में निवेश किए बिना उत्पाद, कीमतें और बिक्री व्यवस्थित रखें।",
+      audience3Title: "फ़ूड कार्ट और खाद्य व्यवसाय",
+      audience3Text: "सीधे वेब ब्राउज़र से बिक्री, भुगतान और रसीदें दर्ज करें।",
+      audience4Title: "नए व्यवसाय",
+      audience4Text: "महंगे पीओएस सॉफ़्टवेयर या समर्पित हार्डवेयर के लिए प्रतिबद्ध हुए बिना बिक्री शुरू करें।",
+      audience5Title: "छोटी स्वतंत्र दुकानें",
+      audience5Text: "एक सीधी ऑनलाइन पॉइंट-ऑफ़-सेल प्रणाली से रोज़मर्रा के लेन-देन संभालें।",
+      audience6Title: "जटिल पीओएस सिस्टम से थके व्यवसाय",
+      audience6Text: "यदि आप बस उत्पाद जोड़कर बिक्री शुरू करना चाहते हैं, तो GoOnlinePOS प्रक्रिया को सरल रखता है।",
+      privacyNoteTitle: "आपका डेटा, आपका डिवाइस",
+      privacyNoteText: "आपका पीओएस डेटा आपके ब्राउज़र में स्थानीय रूप से संग्रहीत होता है। सामान्य उपयोग के लिए किसी खाते या क्लाउड डेटाबेस की आवश्यकता नहीं है।",
+      privacyNoteReminder: "अपने डेटा का नियमित रूप से बैकअप लें - अपना ब्राउज़र या साइट डेटा साफ़ करने से स्थानीय रूप से संग्रहीत जानकारी हट सकती है।",
+      faqSectionTitle: "सामान्य प्रश्न",
+      faq1Q: "क्या यह वाकई मुफ़्त है?",
+      faq1A: "हाँ। बेसिक GoOnlinePOS योजना हमेशा के लिए मुफ़्त है, बिना किसी सदस्यता, साइनअप, या लॉगिन की आवश्यकता के। प्रीमियम एक भुगतान वाला ऐड-ऑन है (जो $3.99/माह से शुरू होता है, साथ में छूट वाली 3-महीने और वार्षिक योजनाएं भी हैं) जो कंपनी लोगो, ग्राहक स्क्रीन, और इन्वेंट्री संपादन जैसी अतिरिक्त सुविधाएं अनलॉक करता है - इसे सक्रिय करने के लिए Google से साइन इन करें और एक कोड रिडीम करें।",
+      faq2Q: "क्या मुझे खाता बनाने की ज़रूरत है?",
+      faq2A: "मुफ़्त बेसिक योजना के लिए नहीं - बस अपने ब्राउज़र में ऐप खोलें और बिक्री शुरू करें। Google से साइन इन तभी ज़रूरी है जब आप कोड रिडीम करके प्रीमियम सुविधाएं अनलॉक करना चाहें।",
+      faq3Q: "क्या मैं बिना इंटरनेट के पीओएस का उपयोग कर सकता हूँ?",
+      faq3A: "हाँ। GoOnlinePOS का उपयोग बिना इंटरनेट कनेक्शन के किया जा सकता है। ऑफ़लाइन पीओएस आपको बिना इंटरनेट के भी बिक्री जारी रखने, उत्पाद प्रबंधित करने, और अपने पीओएस का उपयोग करने देता है।",
+      faq4Q: "मेरा डेटा कहाँ संग्रहीत होता है?",
+      faq4A: "आपके उत्पाद, बिक्री इतिहास, लोगो, और सेटिंग्स आपके ब्राउज़र में स्थानीय रूप से संग्रहीत होते हैं। आपका पीओएस डेटा GoOnlinePOS सर्वर पर अपलोड नहीं होता। चूंकि आपका डेटा स्थानीय रूप से संग्रहीत होता है, आपके ब्राउज़र का साइट डेटा साफ़ करने से यह मिट सकता है, इसलिए नियमित बैकअप की सिफारिश की जाती है।",
+      faq5Q: "क्या मैं अपने डेटा का बैकअप ले सकता हूँ और उसे पुनर्स्थापित कर सकता हूँ?",
+      faq5A: "हाँ। अपने पीओएस डेटा का पूरा बैकअप डाउनलोड करने के लिए <strong>सेटिंग्स ← बैकअप</strong> पर जाएं। उसमें मौजूद डेटा को पुनर्प्राप्त करने के लिए आप बाद में बैकअप को पुनर्स्थापित कर सकते हैं।",
+      faq6Q: "क्या मैं अपनी बिक्री निर्यात कर सकता हूँ?",
+      faq6A: "हाँ। <strong>सेटिंग्स ← बिक्री इतिहास</strong> से कभी भी अपनी बिक्री और इन्वेंट्री की दो-टैब वाली Excel रिपोर्ट निर्यात करें।",
+      faq7Q: "क्या मैं इसे अपने फ़ोन, टैबलेट, या कंप्यूटर पर उपयोग कर सकता हूँ?",
+      faq7A: "हाँ। GoOnlinePOS फ़ोन, टैबलेट, लैपटॉप, और डेस्कटॉप कंप्यूटर पर आधुनिक वेब ब्राउज़र में काम करता है। इंटरफ़ेस अपने आप अलग-अलग स्क्रीन आकारों के अनुसार समायोजित हो जाता है।",
+      faq8Q: "क्या मैं रसीदें प्रिंट कर सकता हूँ?",
+      faq8A: "हाँ। GoOnlinePOS आपके डिवाइस से जुड़े किसी भी प्रिंटर से रसीद प्रिंटिंग का समर्थन करता है। पेपर साइज़ को ऑटो पर छोड़ दें और यह उपलब्ध प्रिंट क्षेत्र में फ़िट हो जाएगा, या अधिक सटीक परिणामों के लिए <strong>सेटिंग्स ← पेपर साइज़ और ज़ूम</strong> में अपना सटीक पेपर साइज़ चुनें।",
+      faq9Q: "मैं किन भुगतान विधियों का उपयोग कर सकता हूँ?",
+      faq9A: "आप नकद, कार्ड, बैंक ट्रांसफ़र, और अन्य भुगतान विधियां स्वीकार कर सकते हैं जिन्हें आप अपने व्यवसाय के लिए जोड़ और अनुकूलित कर सकते हैं।",
+      faq10Q: "क्या मैं अपना खुद का कर या वैट सेट कर सकता हूँ?",
+      faq10A: "हाँ। आप अपनी व्यावसायिक आवश्यकताओं के अनुसार कर का नाम और कर दर को अनुकूलित कर सकते हैं।",
+      faq11Q: "क्या मैं मुद्रा बदल सकता हूँ?",
+      faq11A: "हाँ। आप पीओएस द्वारा उपयोग की जाने वाली मुद्रा बदल सकते हैं और दशमलव स्थानों की संख्या को अनुकूलित कर सकते हैं।",
+      faq12Q: "क्या प्रीमियम एक सदस्यता है?",
+      faq12A: "हाँ। प्रीमियम किसी एक डिवाइस पर एक बार के अनलॉक के बजाय आपके साइन-इन किए गए खाते के साथ चलता है - योजना के अनुसार (1 माह, 3 माह, या 1 वर्ष) इसे 30, 90, या 365 दिनों के लिए बढ़ाने के लिए एक कोड रिडीम करें, और यह उस किसी भी डिवाइस पर काम करता है जिस पर आप साइन इन करते हैं। पहले से प्रीमियम होते हुए दूसरा कोड रिडीम करना बचे हुए समय के ऊपर अतिरिक्त समय जोड़ देता है, इसलिए जल्दी रिडीम करने से आपको कभी कोई नुकसान नहीं होता।",
+      faq13Q: "मुझे प्रीमियम के साथ क्या मिलता है?",
+      faq13A: "प्रीमियम अतिरिक्त सुविधाएं अनलॉक करता है जैसे ग्राहक स्क्रीन, लोगो अनुकूलन, उन्नत इन्वेंट्री सुविधाएं, संपादन योग्य रसीद नंबरिंग, विज्ञापन-मुक्त अनुभव, और ऑफ़लाइन पीओएस संस्करण तक पहुंच।",
+      ctaBandTitle: "बिक्री शुरू करने के लिए तैयार हैं?",
+      ctaBandText: "GoOnlinePOS खोलें और बिना खाता बनाए इसे आज़माएं।",
+      ctaBandBtn: "पीओएस खोलें - मुफ़्त",
+      ctaBandNote: "कोई साइनअप नहीं। कोई लॉगिन नहीं। कोई इंस्टॉलेशन नहीं।",
+      socialHeading: "सोशल"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      heroEyebrow: "Gratis · Sin registro · Sin inicio de sesión",
+      heroTitle: "POS Gratis para Pequeños Negocios",
+      heroSubtitle: "Abre tu navegador y empieza a vender con un POS simple hecho para pequeños negocios.",
+      heroPrimaryBtn: "Abrir POS - Gratis",
+      heroSecondaryBtn: "Explorar Herramientas Gratis",
+      trustBar: "Gratis · Sin Registro · Sin Instalación · Basado en el Navegador · Funciona Sin Conexión",
+      howItWorksTitle: "Cómo funciona",
+      howItWorksSub: "Cuatro pasos, sin necesidad de cuenta. Todo se guarda en tu navegador mientras trabajas.",
+      step1Title: "Agrega tus productos",
+      step1Text: "Escribe los artículos uno por uno, o sube un archivo CSV o Excel con nombres, precios y categorías para cargar todo tu catálogo a la vez.",
+      step2Title: "Registra una venta",
+      step2Text: "Toca los productos para armar el carrito, o agrega un artículo personalizado al instante. El total se actualiza en vivo en la vista previa del recibo.",
+      step3Title: "Recibe el pago e imprime",
+      step3Text: "Elige un método de pago, ingresa el monto recibido, e imprime. Una nueva venta comienza automáticamente justo después.",
+      step4Title: "Registra tus ventas",
+      step4Text: "Cada venta completada se guarda automáticamente. Descarga un informe completo de Excel desde Configuración cuando lo necesites.",
+      featuresTitle: "Configúralo a tu manera",
+      featuresSub: "Todo está en Configuración - toca el ícono de engranaje en la esquina superior derecha.",
+      feature1Title: "Sube tus productos",
+      feature1Text: "Agrega artículos uno por uno, o sube un archivo CSV o Excel con nombres, precios, categorías y niveles de stock en Configuración → Productos para cargar todo tu catálogo a la vez.",
+      feature2Title: "Busca y filtra productos",
+      feature2Text: "Encuentra artículos al instante con la búsqueda en vivo, o toca una etiqueta de categoría para filtrar tu catálogo según lo que necesites.",
+      feature3Title: "Tu logo y datos de la tienda",
+      feature3Text: "Sube tu propio logo e información de la tienda en Configuración → Tienda - se imprime en la parte superior de cada recibo.",
+      feature4Title: "Escanea códigos de barras",
+      feature4Text: "Activa el escáner de códigos de barras y agrega artículos al instante escaneando con cualquier escáner USB - sin cámara, sin configuración, simplemente funciona.",
+      feature5Title: "Pago dividido",
+      feature5Text: "¿Parte en efectivo, parte con tarjeta? Agrega varias filas de pago en una venta y la app registra cada monto por separado.",
+      feature6Title: "Múltiples cajeros",
+      feature6Text: "Agrega a tu equipo en Configuración → Cajeros, cambia quién está activo desde el encabezado, y ve las ventas desglosadas por cajero en el panel de Resumen.",
+      feature7Title: "Stock e inventario",
+      feature7Text: "Controla los niveles de stock por producto - se descuentan automáticamente con cada venta, y puedes corregir o reabastecer cualquier cantidad en cualquier momento desde la pestaña de Inventario.",
+      feature8Title: "Pantalla para el cliente",
+      feature8Text: "Muéstrale al cliente una vista en vivo de su pedido y total en un segundo monitor o tablet - se actualiza en tiempo real mientras registras la venta.",
+      feature9Title: "Impuesto y descuento",
+      feature9Text: "Define un nombre y una tasa de impuesto en Configuración → Impuesto. Los descuentos se aplican por venta al momento de pagar, como porcentaje o monto fijo - los totales se recalculan automáticamente en ambos casos.",
+      feature10Title: "Múltiples monedas",
+      feature10Text: "Define tu código y símbolo de moneda en Configuración → Moneda, y elige cuántos decimales mostrar.",
+      feature11Title: "Seis idiomas",
+      feature11Text: "Cambia toda la interfaz - inglés, árabe, filipino, hindi, español o tailandés - desde Configuración → Idioma.",
+      feature12Title: "Historial de ventas editable",
+      feature12Text: "Haz clic en cualquier venta pasada para ver todos los detalles, corregir un error o reimprimir el recibo. Exporta un informe de Excel de dos pestañas cuando necesites tus propios registros.",
+      feature13Title: "Informe de fin de día",
+      feature13Text: "Imprime o guarda un informe de cierre desde el botón de Fin de Día del encabezado - ventas totales, artículos vendidos, desglose de pagos, y recaudación por cajero del día.",
+      feature14Title: "Copia de seguridad y restauración completa",
+      feature14Text: "Como todo vive en tu navegador, descarga una copia de seguridad completa en cualquier momento desde Configuración → Copia de Seguridad - productos, ventas, logo y todo - y restáurala al instante cuando lo necesites.",
+      feature15Title: "Modo POS Sin Conexión",
+      feature15Text: "Usa tu POS incluso sin conexión a internet. Sigue registrando ventas y gestionando tus productos en cualquier momento y lugar.",
+      freeToolsTitle: "Más Herramientas Gratis para tu Negocio",
+      freeToolsSub: "Herramientas útiles que funcionan junto a tus tareas diarias de venta.",
+      tool1Title: "Generador de Recibos",
+      tool1Text: "Crea e imprime recibos profesionales, sin necesidad de carrito.",
+      tool2Title: "Generador de Facturas",
+      tool2Text: "Crea facturas rápidamente, sin software complicado.",
+      tool3Title: "Calculadora de Precios",
+      tool3Text: "Calcula costos, recargo, margen y el precio de venta correcto.",
+      tool4Title: "Calculadora de IVA",
+      tool4Text: "Calcula el IVA rápida y correctamente, en cualquier dirección.",
+      tool5Title: "Generador de Códigos de Barras y QR",
+      tool5Text: "Crea códigos de barras y códigos QR para tus productos y etiquetas.",
+      aboutTitle: "Acerca de GoOnlinePOS",
+      aboutPara1: "<strong>GoOnlinePOS es un sistema POS en línea gratuito desarrollado de forma independiente, creado para pequeños negocios.</strong>",
+      aboutPara2: "Lo construimos alrededor de una idea simple: usar un POS no debería requerir una suscripción mensual, hardware costoso, una configuración complicada o una llamada de ventas.",
+      aboutPara3: "Si tienes un puesto de mercado, una panadería casera, un food truck, una tienda emergente o un pequeño negocio independiente, necesitas una forma confiable de gestionar productos, registrar ventas, aceptar pagos e imprimir recibos - nada más.",
+      aboutPara4: "<strong>GoOnlinePOS.com se creó para llenar ese vacío.</strong> Es un POS basado en navegador que puedes usar en un teléfono, tablet o laptop - sin software POS tradicional que instalar, sin hardware de caja dedicado que comprar.",
+      aboutPara5: "Más allá del POS en sí, GoOnlinePOS se ha convertido en un pequeño conjunto de herramientas de negocio gratuitas - facturación, recibos, precios, IVA y códigos de barras - cada una utilizable por su cuenta, directamente en tu navegador, sin nada que registrar. Consulta <a href=\"#free-tools\">Más Herramientas Gratis para tu Negocio</a> arriba.",
+      audienceTitle: "¿Para quién es GoOnlinePOS?",
+      audienceSub: "GoOnlinePOS está diseñado para pequeños negocios que necesitan un sistema de punto de venta simple sin el costo y la complejidad del software POS tradicional.",
+      audience1Title: "Puestos de Mercado y Tiendas Emergentes",
+      audience1Text: "Un POS simple para mercados, eventos, ferias y ubicaciones de venta temporales.",
+      audience2Title: "Panaderos Caseros y Artesanos",
+      audience2Text: "Mantén productos, precios y ventas organizados sin invertir en un sistema POS tradicional.",
+      audience3Title: "Food Trucks y Negocios de Comida",
+      audience3Text: "Registra ventas, pagos y recibos directamente desde un navegador web.",
+      audience4Title: "Negocios Nuevos",
+      audience4Text: "Empieza a vender sin comprometerte con software POS costoso o hardware dedicado.",
+      audience5Title: "Pequeñas Tiendas Independientes",
+      audience5Text: "Maneja las transacciones diarias con un sistema de punto de venta en línea sencillo.",
+      audience6Title: "Negocios Cansados de Sistemas POS Complejos",
+      audience6Text: "Si solo quieres agregar productos y empezar a vender, GoOnlinePOS mantiene el proceso simple.",
+      privacyNoteTitle: "Tus Datos, Tu Dispositivo",
+      privacyNoteText: "Tus datos del POS se almacenan localmente en tu navegador. No se requiere cuenta ni base de datos en la nube para el uso básico.",
+      privacyNoteReminder: "Haz copias de seguridad de tus datos con regularidad - borrar los datos de tu navegador o sitio puede eliminar la información almacenada localmente.",
+      faqSectionTitle: "Preguntas frecuentes",
+      faq1Q: "¿Es realmente gratis?",
+      faq1A: "Sí. El plan básico de GoOnlinePOS es gratis para siempre, sin suscripción, registro ni inicio de sesión requeridos. Premium es un complemento pagado (desde $3.99/mes, con planes trimestrales y anuales con descuento) que desbloquea extras como Logo de la Empresa, Pantalla del Cliente, y edición de Inventario - inicia sesión con Google y canjea un código para activarlo.",
+      faq2Q: "¿Necesito crear una cuenta?",
+      faq2A: "No para el plan Básico gratuito - solo abre la app en tu navegador y empieza a vender. Iniciar sesión con Google solo es necesario si quieres canjear un código y desbloquear funciones Premium.",
+      faq3Q: "¿Puedo usar el POS sin internet?",
+      faq3A: "Sí. GoOnlinePOS se puede usar sin conexión a internet. El POS Sin Conexión te permite seguir vendiendo, gestionar productos, y usar tu POS incluso cuando no hay internet.",
+      faq4Q: "¿Dónde se almacenan mis datos?",
+      faq4A: "Tus productos, historial de ventas, logo y configuración se almacenan localmente en tu navegador. Tus datos del POS no se suben a un servidor de GoOnlinePOS. Como tus datos se almacenan localmente, borrar los datos del sitio de tu navegador puede eliminarlos, por lo que se recomienda hacer copias de seguridad regulares.",
+      faq5Q: "¿Puedo hacer copia de seguridad y restaurar mis datos?",
+      faq5A: "Sí. Ve a <strong>Configuración → Copia de Seguridad</strong> para descargar una copia de seguridad completa de tus datos del POS. Puedes restaurar la copia de seguridad más tarde para recuperar los datos que contiene.",
+      faq6Q: "¿Puedo exportar mis ventas?",
+      faq6A: "Sí. Exporta un informe de Excel de dos pestañas de tus ventas e inventario en cualquier momento desde <strong>Configuración → Historial de Ventas</strong>.",
+      faq7Q: "¿Puedo usarlo en mi teléfono, tablet o computadora?",
+      faq7A: "Sí. GoOnlinePOS funciona en navegadores web modernos en teléfonos, tablets, laptops y computadoras de escritorio. La interfaz se ajusta automáticamente a diferentes tamaños de pantalla.",
+      faq8Q: "¿Puedo imprimir recibos?",
+      faq8A: "Sí. GoOnlinePOS admite la impresión de recibos desde cualquier impresora conectada a tu dispositivo. Deja el tamaño de papel en Automático y se ajustará al área de impresión disponible, o elige tu tamaño de papel exacto en <strong>Configuración → Tamaño de Papel y Zoom</strong> para resultados más precisos.",
+      faq9Q: "¿Qué métodos de pago puedo usar?",
+      faq9A: "Puedes aceptar Efectivo, Tarjeta, Transferencia Bancaria, y otros métodos de pago que puedes agregar y personalizar para tu negocio.",
+      faq10Q: "¿Puedo configurar mi propio impuesto o IVA?",
+      faq10A: "Sí. Puedes personalizar el nombre y la tasa del impuesto para que coincidan con los requisitos de tu negocio.",
+      faq11Q: "¿Puedo cambiar la moneda?",
+      faq11A: "Sí. Puedes cambiar la moneda que usa el POS y personalizar el número de decimales.",
+      faq12Q: "¿Premium es una suscripción?",
+      faq12A: "Sí. Premium sigue tu cuenta con sesión iniciada en lugar de ser un desbloqueo único en un solo dispositivo - canjea un código para extenderlo por 30, 90 o 365 días según el plan (1 Mes, 3 Meses, o 1 Año), y funciona en cualquier dispositivo en el que inicies sesión. Canjear otro código mientras ya eres Premium suma el tiempo extra al que te queda, así que canjear temprano nunca te cuesta nada.",
+      faq13Q: "¿Qué obtengo con Premium?",
+      faq13A: "Premium desbloquea funciones adicionales como la pantalla del cliente, personalización de logo, funciones avanzadas de inventario, numeración de recibos editable, una experiencia sin anuncios, y acceso a la versión POS Sin Conexión.",
+      ctaBandTitle: "¿Listo para Empezar a Vender?",
+      ctaBandText: "Abre GoOnlinePOS y pruébalo sin crear una cuenta.",
+      ctaBandBtn: "Abrir POS - Gratis",
+      ctaBandNote: "Sin registro. Sin inicio de sesión. Sin instalación.",
+      socialHeading: "Social"
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      heroEyebrow: "ฟรี · ไม่ต้องสมัคร · ไม่ต้องเข้าสู่ระบบ",
+      heroTitle: "POS ฟรีสำหรับธุรกิจขนาดเล็ก",
+      heroSubtitle: "เปิดเบราว์เซอร์ของคุณแล้วเริ่มขายด้วย POS ที่เรียบง่าย ออกแบบมาสำหรับธุรกิจขนาดเล็ก",
+      heroPrimaryBtn: "เปิด POS - ฟรี",
+      heroSecondaryBtn: "สำรวจเครื่องมือฟรี",
+      trustBar: "ฟรี · ไม่ต้องสมัคร · ไม่ต้องติดตั้ง · ใช้งานผ่านเบราว์เซอร์ · ใช้งานออฟไลน์ได้",
+      howItWorksTitle: "วิธีการทำงาน",
+      howItWorksSub: "สี่ขั้นตอน ไม่ต้องมีบัญชี ทุกอย่างจะถูกบันทึกในเบราว์เซอร์ของคุณระหว่างที่คุณทำงาน",
+      step1Title: "เพิ่มสินค้าของคุณ",
+      step1Text: "พิมพ์รายการสินค้าทีละรายการ หรืออัปโหลดไฟล์ CSV หรือ Excel ที่มีชื่อ ราคา และหมวดหมู่ เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว",
+      step2Title: "บันทึกการขาย",
+      step2Text: "แตะสินค้าเพื่อเพิ่มลงตะกร้า หรือเพิ่มรายการที่กำหนดเองได้ทันที ยอดรวมจะอัปเดตทันทีบนตัวอย่างใบเสร็จ",
+      step3Title: "รับชำระเงินและพิมพ์",
+      step3Text: "เลือกวิธีการชำระเงิน กรอกจำนวนเงินที่ได้รับ แล้วพิมพ์ การขายใหม่จะเริ่มขึ้นโดยอัตโนมัติหลังจากนั้นทันที",
+      step4Title: "ติดตามยอดขายของคุณ",
+      step4Text: "การขายที่เสร็จสมบูรณ์ทุกครั้งจะถูกบันทึกโดยอัตโนมัติ ดาวน์โหลดรายงาน Excel ฉบับเต็มจากการตั้งค่าได้ทุกเมื่อที่ต้องการ",
+      featuresTitle: "ตั้งค่าได้ตามที่คุณต้องการ",
+      featuresSub: "ทุกอย่างอยู่ในการตั้งค่า - แตะไอคอนเฟืองที่มุมขวาบน",
+      feature1Title: "อัปโหลดสินค้าของคุณ",
+      feature1Text: "เพิ่มรายการทีละรายการ หรืออัปโหลดไฟล์ CSV หรือ Excel ที่มีชื่อ ราคา หมวดหมู่ และระดับสต็อกในการตั้งค่า → สินค้า เพื่อโหลดสินค้าทั้งหมดในครั้งเดียว",
+      feature2Title: "ค้นหาและกรองสินค้า",
+      feature2Text: "ค้นหารายการได้ทันทีด้วยการค้นหาแบบเรียลไทม์ หรือแตะป้ายหมวดหมู่เพื่อกรองสินค้าตามที่คุณต้องการ",
+      feature3Title: "โลโก้และรายละเอียดร้านค้าของคุณ",
+      feature3Text: "อัปโหลดโลโก้และข้อมูลร้านค้าของคุณเองในการตั้งค่า → ร้านค้า จะพิมพ์อยู่ด้านบนของใบเสร็จทุกใบ",
+      feature4Title: "สแกนบาร์โค้ด",
+      feature4Text: "เปิดเครื่องสแกนบาร์โค้ดและเพิ่มสินค้าได้ทันทีด้วยการสแกนด้วยเครื่องสแกนบาร์โค้ด USB ใดก็ได้ - ไม่ต้องใช้กล้อง ไม่ต้องตั้งค่า ใช้งานได้เลย",
+      feature5Title: "แบ่งชำระเงิน",
+      feature5Text: "ชำระบางส่วนเป็นเงินสด บางส่วนเป็นบัตร? เพิ่มแถวการชำระเงินได้หลายแถวในการขายครั้งเดียว และแอปจะติดตามแต่ละจำนวนเงินแยกกัน",
+      feature6Title: "แคชเชียร์หลายคน",
+      feature6Text: "เพิ่มทีมของคุณในการตั้งค่า → แคชเชียร์ สลับผู้ที่กำลังทำงานจากส่วนหัว และดูยอดขายแยกตามแคชเชียร์ในแผงสรุป",
+      feature7Title: "สต็อกและคลังสินค้า",
+      feature7Text: "ติดตามระดับสต็อกต่อสินค้า - จะถูกหักโดยอัตโนมัติทุกครั้งที่มีการขาย และคุณสามารถแก้ไขหรือเติมสต็อกจำนวนใดก็ได้ทุกเมื่อจากแท็บคลังสินค้า",
+      feature8Title: "หน้าจอสำหรับลูกค้า",
+      feature8Text: "แสดงคำสั่งซื้อและยอดรวมแบบเรียลไทม์ให้ลูกค้าเห็นบนจอที่สองหรือแท็บเล็ต - อัปเดตแบบเรียลไทม์ขณะที่คุณคิดเงิน",
+      feature9Title: "ภาษีและส่วนลด",
+      feature9Text: "ตั้งชื่อและอัตราภาษีในการตั้งค่า → ภาษี ส่วนลดจะถูกใช้ต่อการขายที่หน้าชำระเงิน เป็นเปอร์เซ็นต์หรือจำนวนคงที่ - ยอดรวมจะคำนวณใหม่โดยอัตโนมัติทั้งสองแบบ",
+      feature10Title: "หลายสกุลเงิน",
+      feature10Text: "ตั้งรหัสและสัญลักษณ์สกุลเงินของคุณในการตั้งค่า → สกุลเงิน และเลือกจำนวนทศนิยมที่จะแสดง",
+      feature11Title: "หกภาษา",
+      feature11Text: "เปลี่ยนอินเทอร์เฟซทั้งหมด - อังกฤษ อาหรับ ฟิลิปิโน ฮินดี สเปน หรือไทย - จากการตั้งค่า → ภาษา",
+      feature12Title: "ประวัติการขายที่แก้ไขได้",
+      feature12Text: "คลิกการขายที่ผ่านมาเพื่อดูรายละเอียดทั้งหมด แก้ไขข้อผิดพลาด หรือพิมพ์ใบเสร็จซ้ำ ส่งออกรายงาน Excel สองแท็บได้ทุกเมื่อที่คุณต้องการบันทึกของคุณเอง",
+      feature13Title: "รายงานสรุปสิ้นวัน",
+      feature13Text: "พิมพ์หรือบันทึกรายงานปิดยอดจากปุ่มสรุปสิ้นวันที่ส่วนหัว - ยอดขายรวม สินค้าที่ขายได้ สรุปการชำระเงิน และยอดเก็บเงินต่อแคชเชียร์ของวันนั้น",
+      feature14Title: "สำรองข้อมูลและกู้คืนแบบเต็มรูปแบบ",
+      feature14Text: "เนื่องจากทุกอย่างอยู่ในเบราว์เซอร์ของคุณ ดาวน์โหลดข้อมูลสำรองแบบเต็มได้ทุกเมื่อจากการตั้งค่า → สำรองข้อมูล - สินค้า ยอดขาย โลโก้ และทั้งหมด - และกู้คืนได้ทันทีเมื่อคุณต้องการ",
+      feature15Title: "โหมด POS ออฟไลน์",
+      feature15Text: "ใช้ POS ของคุณได้แม้ไม่มีการเชื่อมต่ออินเทอร์เน็ต บันทึกการขายและจัดการสินค้าของคุณต่อไปได้ทุกที่ทุกเวลา",
+      freeToolsTitle: "เครื่องมือฟรีเพิ่มเติมสำหรับธุรกิจของคุณ",
+      freeToolsSub: "เครื่องมือที่มีประโยชน์ซึ่งใช้งานคู่กับงานขายประจำวันของคุณ",
+      tool1Title: "เครื่องสร้างใบเสร็จ",
+      tool1Text: "สร้างและพิมพ์ใบเสร็จมืออาชีพ ไม่ต้องมีตะกร้าสินค้า",
+      tool2Title: "เครื่องสร้างใบแจ้งหนี้",
+      tool2Text: "สร้างใบแจ้งหนี้ได้อย่างรวดเร็ว โดยไม่ต้องใช้ซอฟต์แวร์ที่ซับซ้อน",
+      tool3Title: "เครื่องคำนวณราคา",
+      tool3Text: "คำนวณต้นทุน มาร์กอัพ อัตรากำไร และราคาขายที่เหมาะสม",
+      tool4Title: "เครื่องคำนวณภาษีมูลค่าเพิ่ม",
+      tool4Text: "คำนวณภาษีมูลค่าเพิ่มได้อย่างรวดเร็วและแม่นยำ ทั้งสองทิศทาง",
+      tool5Title: "เครื่องสร้างบาร์โค้ดและ QR",
+      tool5Text: "สร้างบาร์โค้ดและ QR โค้ดสำหรับสินค้าและป้ายของคุณ",
+      aboutTitle: "เกี่ยวกับ GoOnlinePOS",
+      aboutPara1: "<strong>GoOnlinePOS คือระบบ POS ออนไลน์ฟรีที่พัฒนาขึ้นอย่างอิสระ สร้างขึ้นสำหรับธุรกิจขนาดเล็ก</strong>",
+      aboutPara2: "เราสร้างมันขึ้นจากแนวคิดง่าย ๆ ว่า การใช้งาน POS ไม่ควรต้องมีค่าสมัครสมาชิกรายเดือน ฮาร์ดแวร์ราคาแพง การตั้งค่าที่ซับซ้อน หรือการโทรติดต่อฝ่ายขาย",
+      aboutPara3: "หากคุณมีแผงขายของในตลาด ร้านเบเกอรี่ที่บ้าน รถเข็นขายอาหาร ร้านป๊อปอัพ หรือร้านค้าอิสระขนาดเล็ก คุณต้องการวิธีที่เชื่อถือได้ในการจัดการสินค้า บันทึกการขาย รับชำระเงิน และพิมพ์ใบเสร็จ - แค่นั้นเอง",
+      aboutPara4: "<strong>GoOnlinePOS.com ถูกสร้างขึ้นเพื่อเติมเต็มช่องว่างนั้น</strong> เป็น POS ที่ทำงานผ่านเบราว์เซอร์ซึ่งคุณสามารถใช้บนโทรศัพท์ แท็บเล็ต หรือแล็ปท็อป - ไม่ต้องติดตั้งซอฟต์แวร์ POS แบบดั้งเดิม ไม่ต้องซื้อฮาร์ดแวร์แคชเชียร์เฉพาะ",
+      aboutPara5: "นอกเหนือจากตัว POS เองแล้ว GoOnlinePOS ยังเติบโตขึ้นเป็นชุดเครื่องมือธุรกิจฟรีขนาดเล็ก ได้แก่ การออกใบแจ้งหนี้ ใบเสร็จ การตั้งราคา ภาษีมูลค่าเพิ่ม และบาร์โค้ด - แต่ละอย่างใช้งานได้ด้วยตัวเอง ในเบราว์เซอร์ของคุณโดยตรง โดยไม่ต้องสมัครสมาชิกใด ๆ ดู <a href=\"#free-tools\">เครื่องมือฟรีเพิ่มเติมสำหรับธุรกิจของคุณ</a> ด้านบน",
+      audienceTitle: "GoOnlinePOS เหมาะสำหรับใคร?",
+      audienceSub: "GoOnlinePOS ออกแบบมาสำหรับธุรกิจขนาดเล็กที่ต้องการระบบขายหน้าร้านที่เรียบง่าย โดยไม่มีค่าใช้จ่ายและความซับซ้อนของซอฟต์แวร์ POS แบบดั้งเดิม",
+      audience1Title: "แผงขายของในตลาดและร้านป๊อปอัพ",
+      audience1Text: "POS ที่เรียบง่ายสำหรับตลาด งานอีเวนต์ งานแฟร์ และสถานที่ขายชั่วคราว",
+      audience2Title: "ผู้ทำเบเกอรี่ที่บ้านและผู้ผลิตสินค้า",
+      audience2Text: "จัดการสินค้า ราคา และยอดขายให้เป็นระเบียบ โดยไม่ต้องลงทุนกับระบบ POS แบบดั้งเดิม",
+      audience3Title: "รถเข็นขายอาหารและธุรกิจอาหาร",
+      audience3Text: "บันทึกการขาย การชำระเงิน และใบเสร็จได้โดยตรงจากเว็บเบราว์เซอร์",
+      audience4Title: "ธุรกิจเปิดใหม่",
+      audience4Text: "เริ่มขายได้โดยไม่ต้องผูกมัดกับซอฟต์แวร์ POS ราคาแพงหรือฮาร์ดแวร์เฉพาะ",
+      audience5Title: "ร้านค้าอิสระขนาดเล็ก",
+      audience5Text: "จัดการธุรกรรมประจำวันด้วยระบบขายหน้าร้านออนไลน์ที่ตรงไปตรงมา",
+      audience6Title: "ธุรกิจที่เบื่อระบบ POS ที่ซับซ้อน",
+      audience6Text: "หากคุณแค่ต้องการเพิ่มสินค้าและเริ่มขาย GoOnlinePOS ทำให้กระบวนการนี้เรียบง่าย",
+      privacyNoteTitle: "ข้อมูลของคุณ อุปกรณ์ของคุณ",
+      privacyNoteText: "ข้อมูล POS ของคุณถูกเก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น ไม่จำเป็นต้องมีบัญชีหรือฐานข้อมูลบนคลาวด์สำหรับการใช้งานพื้นฐาน",
+      privacyNoteReminder: "สำรองข้อมูลของคุณเป็นประจำ - การล้างข้อมูลเบราว์เซอร์หรือไซต์อาจลบข้อมูลที่เก็บไว้ในเครื่อง",
+      faqSectionTitle: "คำถามที่พบบ่อย",
+      faq1Q: "ฟรีจริงหรือไม่?",
+      faq1A: "ใช่ แผน GoOnlinePOS พื้นฐานฟรีตลอดไป ไม่ต้องสมัครสมาชิก ไม่ต้องลงทะเบียน หรือเข้าสู่ระบบ Premium เป็นส่วนเสริมแบบชำระเงิน (เริ่มต้นที่ $3.99/เดือน พร้อมแผน 3 เดือนและรายปีที่มีส่วนลด) ที่ปลดล็อกฟีเจอร์เพิ่มเติม เช่น โลโก้บริษัท หน้าจอลูกค้า และการแก้ไขคลังสินค้า - เข้าสู่ระบบด้วย Google และแลกโค้ดเพื่อเปิดใช้งาน",
+      faq2Q: "ฉันต้องสร้างบัญชีหรือไม่?",
+      faq2A: "ไม่ต้องสำหรับแผนพื้นฐานที่ฟรี - แค่เปิดแอปในเบราว์เซอร์แล้วเริ่มขายได้เลย การเข้าสู่ระบบด้วย Google จำเป็นเฉพาะเมื่อคุณต้องการแลกโค้ดและปลดล็อกฟีเจอร์ Premium",
+      faq3Q: "ฉันสามารถใช้ POS โดยไม่มีอินเทอร์เน็ตได้หรือไม่?",
+      faq3A: "ได้ GoOnlinePOS สามารถใช้งานได้โดยไม่ต้องเชื่อมต่ออินเทอร์เน็ต โหมด POS ออฟไลน์ช่วยให้คุณขายต่อไป จัดการสินค้า และใช้ POS ของคุณได้แม้ไม่มีอินเทอร์เน็ต",
+      faq4Q: "ข้อมูลของฉันถูกเก็บไว้ที่ไหน?",
+      faq4A: "สินค้า ประวัติการขาย โลโก้ และการตั้งค่าของคุณถูกเก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น ข้อมูล POS ของคุณจะไม่ถูกอัปโหลดไปยังเซิร์ฟเวอร์ของ GoOnlinePOS เนื่องจากข้อมูลของคุณถูกเก็บไว้ในเครื่อง การล้างข้อมูลไซต์ของเบราว์เซอร์อาจลบข้อมูลได้ จึงแนะนำให้สำรองข้อมูลเป็นประจำ",
+      faq5Q: "ฉันสามารถสำรองและกู้คืนข้อมูลของฉันได้หรือไม่?",
+      faq5A: "ได้ ไปที่ <strong>การตั้งค่า → สำรองข้อมูล</strong> เพื่อดาวน์โหลดข้อมูลสำรองทั้งหมดของ POS ของคุณ คุณสามารถกู้คืนข้อมูลสำรองภายหลังเพื่อนำข้อมูลในนั้นกลับมาได้",
+      faq6Q: "ฉันสามารถส่งออกยอดขายของฉันได้หรือไม่?",
+      faq6A: "ได้ ส่งออกรายงาน Excel สองแท็บของยอดขายและคลังสินค้าได้ทุกเมื่อจาก <strong>การตั้งค่า → ประวัติการขาย</strong>",
+      faq7Q: "ฉันสามารถใช้งานบนโทรศัพท์ แท็บเล็ต หรือคอมพิวเตอร์ของฉันได้หรือไม่?",
+      faq7A: "ได้ GoOnlinePOS ทำงานบนเว็บเบราว์เซอร์สมัยใหม่บนโทรศัพท์ แท็บเล็ต แล็ปท็อป และคอมพิวเตอร์เดสก์ท็อป อินเทอร์เฟซจะปรับขนาดหน้าจอโดยอัตโนมัติ",
+      faq8Q: "ฉันสามารถพิมพ์ใบเสร็จได้หรือไม่?",
+      faq8A: "ได้ GoOnlinePOS รองรับการพิมพ์ใบเสร็จจากเครื่องพิมพ์ใดก็ได้ที่เชื่อมต่อกับอุปกรณ์ของคุณ ปล่อยขนาดกระดาษไว้ที่อัตโนมัติแล้วมันจะพอดีกับพื้นที่พิมพ์ที่มี หรือเลือกขนาดกระดาษที่แน่นอนใน <strong>การตั้งค่า → ขนาดกระดาษและซูม</strong> เพื่อผลลัพธ์ที่แม่นยำยิ่งขึ้น",
+      faq9Q: "ฉันสามารถใช้วิธีการชำระเงินแบบใดได้บ้าง?",
+      faq9A: "คุณสามารถรับเงินสด บัตร โอนเงินผ่านธนาคาร และวิธีการชำระเงินอื่น ๆ ที่คุณสามารถเพิ่มและปรับแต่งได้ตามธุรกิจของคุณ",
+      faq10Q: "ฉันสามารถกำหนดภาษีหรือภาษีมูลค่าเพิ่มของตัวเองได้หรือไม่?",
+      faq10A: "ได้ คุณสามารถปรับแต่งชื่อภาษีและอัตราภาษีให้ตรงกับความต้องการของธุรกิจคุณ",
+      faq11Q: "ฉันสามารถเปลี่ยนสกุลเงินได้หรือไม่?",
+      faq11A: "ได้ คุณสามารถเปลี่ยนสกุลเงินที่ POS ใช้และปรับแต่งจำนวนทศนิยมได้",
+      faq12Q: "Premium เป็นการสมัครสมาชิกหรือไม่?",
+      faq12A: "ใช่ Premium จะผูกกับบัญชีที่คุณเข้าสู่ระบบ แทนที่จะเป็นการปลดล็อกครั้งเดียวบนอุปกรณ์เดียว - แลกโค้ดเพื่อขยายเวลา 30, 90 หรือ 365 วัน ขึ้นอยู่กับแผน (1 เดือน 3 เดือน หรือ 1 ปี) และใช้งานได้บนทุกอุปกรณ์ที่คุณเข้าสู่ระบบ การแลกโค้ดอีกใบขณะที่คุณเป็น Premium อยู่แล้วจะเพิ่มเวลาทับกับเวลาที่เหลืออยู่ ดังนั้นการแลกโค้ดล่วงหน้าจะไม่ทำให้คุณเสียอะไรเลย",
+      faq13Q: "ฉันจะได้อะไรบ้างกับ Premium?",
+      faq13A: "Premium ปลดล็อกฟีเจอร์เพิ่มเติม เช่น หน้าจอลูกค้า การปรับแต่งโลโก้ ฟีเจอร์คลังสินค้าขั้นสูง การกำหนดหมายเลขใบเสร็จที่แก้ไขได้ ประสบการณ์ที่ไม่มีโฆษณา และการเข้าถึงเวอร์ชัน POS ออฟไลน์",
+      ctaBandTitle: "พร้อมเริ่มขายหรือยัง?",
+      ctaBandText: "เปิด GoOnlinePOS แล้วลองใช้โดยไม่ต้องสร้างบัญชี",
+      ctaBandBtn: "เปิด POS - ฟรี",
+      ctaBandNote: "ไม่ต้องสมัคร ไม่ต้องเข้าสู่ระบบ ไม่ต้องติดตั้ง",
+      socialHeading: "โซเชียล"
+    }
+  };
+
+  var langSelect = document.getElementById("indexLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+
+    var ids = {
+      langPickerLabel: "langPickerLabel",
+      heroEyebrow: "heroEyebrow", heroTitle: "heroTitle", heroSubtitle: "heroSubtitle",
+      heroPrimaryBtn: "heroPrimaryBtn", heroSecondaryBtn: "heroSecondaryBtn", trustBar: "trustBar",
+      howItWorksTitle: "howItWorksTitle", howItWorksSub: "howItWorksSub",
+      step1Title: "step1Title", step1Text: "step1Text", step2Title: "step2Title", step2Text: "step2Text",
+      step3Title: "step3Title", step3Text: "step3Text", step4Title: "step4Title", step4Text: "step4Text",
+      featuresTitle: "featuresTitle", featuresSub: "featuresSub",
+      feature1Title: "feature1Title", feature1Text: "feature1Text",
+      feature2Title: "feature2Title", feature2Text: "feature2Text",
+      feature3Title: "feature3Title", feature3Text: "feature3Text",
+      feature4Title: "feature4Title", feature4Text: "feature4Text",
+      feature5Title: "feature5Title", feature5Text: "feature5Text",
+      feature6Title: "feature6Title", feature6Text: "feature6Text",
+      feature7Title: "feature7Title", feature7Text: "feature7Text",
+      feature8Title: "feature8Title", feature8Text: "feature8Text",
+      feature9Title: "feature9Title", feature9Text: "feature9Text",
+      feature10Title: "feature10Title", feature10Text: "feature10Text",
+      feature11Title: "feature11Title", feature11Text: "feature11Text",
+      feature12Title: "feature12Title", feature12Text: "feature12Text",
+      feature13Title: "feature13Title", feature13Text: "feature13Text",
+      feature14Title: "feature14Title", feature14Text: "feature14Text",
+      feature15Title: "feature15Title", feature15Text: "feature15Text",
+      freeToolsTitle: "freeToolsTitle", freeToolsSub: "freeToolsSub",
+      tool1Title: "tool1Title", tool1Text: "tool1Text",
+      tool2Title: "tool2Title", tool2Text: "tool2Text",
+      tool3Title: "tool3Title", tool3Text: "tool3Text",
+      tool4Title: "tool4Title", tool4Text: "tool4Text",
+      tool5Title: "tool5Title", tool5Text: "tool5Text",
+      aboutTitle: "aboutTitle", aboutPara2: "aboutPara2", aboutPara3: "aboutPara3",
+      audienceTitle: "audienceTitle", audienceSub: "audienceSub",
+      audience1Title: "audience1Title", audience1Text: "audience1Text",
+      audience2Title: "audience2Title", audience2Text: "audience2Text",
+      audience3Title: "audience3Title", audience3Text: "audience3Text",
+      audience4Title: "audience4Title", audience4Text: "audience4Text",
+      audience5Title: "audience5Title", audience5Text: "audience5Text",
+      audience6Title: "audience6Title", audience6Text: "audience6Text",
+      privacyNoteTitle: "privacyNoteTitle", privacyNoteText: "privacyNoteText", privacyNoteReminder: "privacyNoteReminder",
+      faqSectionTitle: "faqSectionTitle",
+      faq1Q: "faq1Q", faq1A: "faq1A", faq2Q: "faq2Q", faq2A: "faq2A",
+      faq3Q: "faq3Q", faq3A: "faq3A", faq4Q: "faq4Q", faq4A: "faq4A",
+      faq5Q: "faq5Q", faq6Q: "faq6Q",
+      faq7Q: "faq7Q", faq7A: "faq7A", faq8Q: "faq8Q",
+      faq9Q: "faq9Q", faq9A: "faq9A", faq10Q: "faq10Q", faq10A: "faq10A",
+      faq11Q: "faq11Q", faq11A: "faq11A", faq12Q: "faq12Q", faq12A: "faq12A",
+      faq13Q: "faq13Q", faq13A: "faq13A",
+      ctaBandTitle: "ctaBandTitle", ctaBandText: "ctaBandText", ctaBandBtn: "ctaBandBtn", ctaBandNote: "ctaBandNote",
+      socialHeading: "socialHeading"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+
+    ["aboutPara1", "aboutPara4", "aboutPara5", "faq5A", "faq6A", "faq8A"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-index-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-index-lang", currentLang()); } catch (e) {}
+  }
+
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

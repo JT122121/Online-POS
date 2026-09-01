@@ -824,6 +824,86 @@ all of them under one pattern:
   "Default store name/details are obviously-fake placeholder data"
   under "`app.html` — architecture" below) rather than showing the
   site's real brand name/domain as if it were an actual store.
+- **`index.html` now translates into the same six languages as `app.html`
+  and the five free tools** (en/ar/fil/hi/es/th) - its own self-contained
+  `translations` object and `translate()`/`currentLang()`/
+  `changeLanguage()`/`loadLanguagePref()`/`saveLanguagePref()` functions
+  at the bottom of the file, no dependency on `app.html` or any other
+  page. **Deliberately scoped to the page's own content only, per an
+  explicit "not the header" instruction** - the shared `.site-header`
+  (brand mark, Homepage/Blog `.site-nav`, and all six `.cta-btn`
+  shortcuts) is never touched by `changeLanguage()`, matching the same
+  decision just made for `app.html`'s own `.header-links` row (see
+  above) and the pre-existing precedent that `invoice-generator.html`/
+  `receipt-generator.html`/`barcode-generator.html`/`vat-calculator.html`/
+  `pricing-calculator.html` never translate their own copies of this
+  same shared header either. The footer and cookie-consent banner are
+  excluded too, for the identical reason already established on every
+  one of those five tool pages. A new `#indexLanguage` picker
+  (`.lang-picker-bar`, small right-aligned pill, same visual language as
+  the tool pages' own `.lang-inline`/`.currency-inline` controls) sits
+  in its own bar directly below `</header>` and above `.hero` - outside
+  the header markup itself, so it's visually adjacent without being
+  part of the untranslated block.
+  - **What's covered**: the Hero (eyebrow, title, subtitle, both
+    buttons, trust bar), "How it works" (title/sub plus all 4 step
+    cards), "Set it up your way" (title/sub plus all 15 feature cards),
+    "More Free Tools for Your Business" (title/sub plus all 5 tool
+    cards - the cards' own `href`s are untouched, only their visible
+    text), the full "About GoOnlinePOS" section (all 5 intro
+    paragraphs, "Who is GoOnlinePOS for?" plus all 6 audience cards),
+    the "Your Data, Your Device" privacy note, the entire 13-question
+    FAQ, the closing CTA band, and the "Social" heading.
+  - **Deliberately NOT translated, beyond the header/footer/cookie
+    banner**: the Hero's `.app-preview` mock (the fake browser-frame
+    screenshot of the POS, including its toolbar labels, product names,
+    and receipt line items) - it's a static illustration meant to read
+    as a literal screenshot, not real page prose, so translating tiny
+    mock-UI text for one static image was judged not worth the effort
+    for a decorative element the real translated `app.html` already
+    supersedes once a visitor actually opens the app; the two
+    `application/ld+json` JSON-LD blocks (`SoftwareApplication`/
+    `SiteNavigationElement`) - structured data for search engines, not
+    visible content a viewer's language choice should affect; and
+    `<title>`/meta description/OG/Twitter tags - consistent with every
+    other page on this site, none of which update document-level meta
+    on a client-side language switch either.
+  - **Three paragraphs and three FAQ answers needed `innerHTML` instead
+    of `textContent`** to preserve embedded markup after translating:
+    `#aboutPara1`/`#aboutPara4` (`<strong>` around part of the
+    sentence), `#aboutPara5` (an inline `<a href="#free-tools">` link
+    back up to the tools section, its own anchor text translated
+    per-language too), and `#faq5A`/`#faq6A`/`#faq8A` (each has a
+    `<strong>Settings → X</strong>` menu-path reference) - each
+    language's translated string carries its own equivalent tags
+    baked in, verified by checking the rendered `innerHTML` after a
+    language switch actually contains them rather than plain escaped
+    text.
+  - **Menu-path terminology inside the FAQ/feature copy ("Settings →
+    Backup", "Settings → Products", etc.) reuses the exact same
+    translated words `app.html`'s own `modules/translations.js` already
+    uses** for those menu names (`storeTitle`, `taxTitle`,
+    `currencyTitle`, `cashiersTitle`, `paperTitle`/`zoomLabel`,
+    `languageTitle`, `backupTitle`, and the Filipino/loanword pattern
+    for `currencyTitle`) - checked against that file before writing
+    these translations, so a visitor switching `index.html` to a given
+    language sees the same menu names they'd later find inside the real
+    app in that language, not a second, differently-worded translation
+    of the same concept. "Premium"/"Basic" in the FAQ answers use the
+    identical translated words as `app.html`'s own
+    `premiumBadgeLabel`/`basicBadgeLabel` for the same reason.
+  - Verified with Playwright: switching to Arabic translates every
+    listed content section and flips `dir` to `rtl`, while the
+    `.site-header`'s nav links and all six `.cta-btn`s (and the footer)
+    read byte-identical English text before and after the switch; the
+    three `innerHTML` paragraphs and three FAQ answers keep their
+    `<strong>`/`<a>` tags intact after translating; the persisted
+    language choice (`goonlinepos-index-lang`, the same "device
+    preference, not page content" `localStorage` key convention the
+    other five translated pages use) survives a reload and keeps the
+    header still English on that reload too; and zero horizontal
+    overflow and zero console errors at 390px in both English and
+    Arabic.
 
 ## `app.html` — architecture
 
