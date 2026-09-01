@@ -587,6 +587,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </header>
 
 <div class="pos-topbar">
+<button type="button" class="pos-topbar-icon-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Hide Sidebar">☰</button>
 <div class="pos-topbar-search">
 <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
 </div>
@@ -974,16 +975,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item" data-tab="document" onclick="selectSettingsTab('document')">📄 <span>Document</span></button>
       <button class="settings-tab-item" data-tab="tax" onclick="selectSettingsTab('tax')">🧮 <span>Tax</span></button>
       <button class="settings-tab-item" data-tab="paymentMethods" onclick="selectSettingsTab('paymentMethods')">💳 <span>Payment Methods</span></button>
-      <button class="settings-tab-item" data-tab="cashiers" onclick="selectSettingsTab('cashiers')">🧑‍💼 <span>Cashiers</span></button>
-      <button class="settings-tab-item" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
-      <button class="settings-tab-item" data-tab="salesHistory" onclick="selectSettingsTab('salesHistory')">📊 <span>Sales History</span></button>
+      <button class="settings-tab-item hidden" data-tab="cashiers" onclick="selectSettingsTab('cashiers')">🧑‍💼 <span>Cashiers</span></button>
+      <button class="settings-tab-item hidden" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
+      <button class="settings-tab-item hidden" data-tab="salesHistory" onclick="selectSettingsTab('salesHistory')">📊 <span>Sales History</span></button>
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
-      <button class="settings-tab-item" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
-      <button class="settings-tab-item" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
-      <button class="settings-tab-item" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
-      <button class="settings-tab-item" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
+      <button class="settings-tab-item hidden" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
+      <button class="settings-tab-item hidden" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
+      <button class="settings-tab-item hidden" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
+      <button class="settings-tab-item hidden" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
     </div>
     <div class="settings-tab-panel">
 
@@ -1550,18 +1551,18 @@ async function storageSet(key, value) {
 
 function openSettings() {
   document.getElementById("settingsOverlay").classList.remove("hidden");
+  document.getElementById("settingsTabRail").classList.remove("hidden");
   selectSettingsTab(settingsActiveTab);
 }
 function openBackupSettings() {
-  document.getElementById("settingsOverlay").classList.remove("hidden");
-  selectSettingsTab("backup");
+  openSettingsTab("backup");
 }
 function openAccountSettings() {
-  document.getElementById("settingsOverlay").classList.remove("hidden");
-  selectSettingsTab("premium");
+  openSettingsTab("premium");
 }
 function openSettingsTab(name) {
   document.getElementById("settingsOverlay").classList.remove("hidden");
+  document.getElementById("settingsTabRail").classList.add("hidden");
   selectSettingsTab(name);
   if (name === "inventory") renderInventoryList();
 }
@@ -1577,6 +1578,24 @@ function renderToolbarToggle() {
   const collapsed = group.classList.contains("hidden");
   label.textContent = tr(collapsed ? "toolbarShowLabel" : "toolbarHideLabel");
   btn.title = label.textContent;
+}
+async function toggleSidebar() {
+  const sidebar = document.getElementById("posSidebar");
+  sidebar.classList.toggle("hidden");
+  renderSidebarToggle();
+  await storageSet("pos-sidebar-collapsed", sidebar.classList.contains("hidden") ? "1" : "0");
+}
+function renderSidebarToggle() {
+  const sidebar = document.getElementById("posSidebar");
+  const btn = document.getElementById("sidebarToggleBtn");
+  if (!sidebar || !btn) return;
+  const collapsed = sidebar.classList.contains("hidden");
+  btn.title = tr(collapsed ? "sidebarShowLabel" : "sidebarHideLabel");
+  btn.setAttribute("aria-label", btn.title);
+}
+async function loadSidebarState() {
+  const collapsed = (await storageGet("pos-sidebar-collapsed")) === "1";
+  if (collapsed) document.getElementById("posSidebar").classList.add("hidden");
 }
 async function loadPanelSplit() {
   const saved = await storageGet("pos-catalog-width");
@@ -3673,6 +3692,7 @@ function changeLanguage() {
     element.textContent = tr(ids[id]);
   });
   renderToolbarToggle();
+  renderSidebarToggle();
 
   const searchEl = document.getElementById("productSearch");
   if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
@@ -3755,6 +3775,7 @@ async function init() {
   await loadQuickReceiptSettingsState();
   await loadReceiptPrefix();
   await loadPanelSplit();
+  await loadSidebarState();
   await initPremiumSystem();
   await startFirstSale();
   changePaperSize();
