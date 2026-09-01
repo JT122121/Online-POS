@@ -247,8 +247,10 @@ create table if not exists public.profiles (
   -- computes "is this user Premium right now" from premium_until directly
   -- (premium_until is in the future), not from this text column alone,
   -- since a subscription can lapse between visits without anything writing
-  -- to this row in the meantime. redeem_code() keeps both in sync at the
-  -- moment of redemption; the app lazily corrects a stale 'premium' label
+  -- to this row in the meantime. handle_new_user() sets both at signup to
+  -- grant the automatic 15-day trial (see below); redeem_code() and
+  -- grant_premium_from_paypal() keep both in sync at the moment of
+  -- redemption/purchase; the app lazily corrects a stale 'premium' label
   -- back to 'free' the next time that user's profile loads after expiry.
   subscription_status text not null default 'free',
   premium_until timestamptz,
@@ -258,7 +260,7 @@ create table if not exists public.profiles (
 );
 
 comment on table public.profiles is
-  'One row per signed-in user - subscription status shown in Settings -> Account, extended by redeem_code().';
+  'One row per signed-in user - subscription status shown in Settings -> Account. Starts with a 15-day Premium trial granted by handle_new_user(), extended further by redeem_code() or grant_premium_from_paypal().';
 
 -- ============================================================================
 -- 9. redemption_codes - codes the project owner creates, redeemed once each
@@ -329,18 +331,30 @@ create trigger touch_profiles_updated_at
 -- user would have no store_settings/profiles row at all until the app
 -- explicitly created one. store_settings mirrors app.html's own
 -- "first-ever visit" defaults (Demo Store / etc. - see CLAUDE.md's "Default
--- store name/details" note); profiles starts every new account at the
--- 'free' subscription tier - Premium is opt-in via redeem_code() below, not
--- auto-granted the way the old PROMO1 code used to be.
+-- store name/details" note).
+--
+-- profiles is granted an automatic 15-day Premium trial at the moment this
+-- row is first created - subscription_status = 'premium', premium_until =
+-- now() + 15 days - so every genuinely new visitor gets to use the full
+-- app before ever redeeming a code. This replaced the earlier "starts free,
+-- Premium is opt-in only" behavior (itself a replacement for the old
+-- PROMO1 auto-grant). The trigger firing at all is what makes this
+-- "first sign-in only" - auth.users has exactly one row per unique email
+-- under normal Supabase Auth operation, so a returning user signing back
+-- in never re-inserts a row here and never re-triggers this function; the
+-- `on conflict (user_id) do nothing` below is the same defense a second
+-- time over, in case this ever somehow fires twice for one user. After the
+-- trial lapses, the profile reverts to Basic exactly the same way an
+-- expired redeemed/purchased subscription does - see the "lazily corrects
+-- a stale 'premium' label" note on the profiles table above.
 --
 -- Also notifies the site owner by email for every genuinely new account
--- (auth.users has exactly one row per unique email, so this trigger firing
--- IS the "first time this email has ever signed in" signal - no extra
--- uniqueness check needed). Postgres itself can't send email, so the
--- actual delivery happens in signup-notify/AppsScript.gs, notified here
--- via pg_net's async net.http_post() - fire-and-forget, and wrapped in its
--- own exception handler so a webhook failure never blocks the sign-in
--- itself. See "New signup email notification" in CLAUDE.md.
+-- (the same auth.users-insert signal used for the trial grant above).
+-- Postgres itself can't send email, so the actual delivery happens in
+-- signup-notify/AppsScript.gs, notified here via pg_net's async
+-- net.http_post() - fire-and-forget, and wrapped in its own exception
+-- handler so a webhook failure never blocks the sign-in itself. See "New
+-- signup email notification" in CLAUDE.md.
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -352,8 +366,8 @@ begin
   values (new.id)
   on conflict (user_id) do nothing;
 
-  insert into public.profiles (user_id, email)
-  values (new.id, coalesce(new.email, ''))
+  insert into public.profiles (user_id, email, subscription_status, premium_until)
+  values (new.id, coalesce(new.email, ''), 'premium', now() + make_interval(days => 15))
   on conflict (user_id) do nothing;
 
   if new.email is not null and new.email <> '' then

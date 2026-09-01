@@ -4,10 +4,11 @@ Before this, the only way to get Premium was a code the site owner typed into
 Supabase's Table Editor by hand after being contacted directly (see "Buy
 Premium Code" in `app.html`). This folder adds a second, automatic path
 alongside that one - a real PayPal payment on any of the pricing tiers already
-shown in the Buy Premium modal (3-Day Trial/1 Month/3 Months/1 Year) grants
-Premium immediately, with nothing for the site owner to do per sale.
-Manually-created codes still work exactly as before, for trials, giveaways,
-or anyone you'd rather handle by hand.
+shown in the Buy Premium modal (1 Month/3 Months/1 Year) grants Premium
+immediately, with nothing for the site owner to do per sale. Manually-created
+codes still work exactly as before, for trials, giveaways, or anyone you'd
+rather handle by hand - every new sign-in also gets its own automatic 15-day
+Premium trial for free, see `handle_new_user()` in `supabase/schema.sql`.
 
 ## How it works
 

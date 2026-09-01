@@ -1874,19 +1874,47 @@ Apps Script deployed and wants to decommission it at their own pace; no
 live code calls it anymore.
 
 - **Sign-in is open to everyone, unlike the old code-entry flow which was
-  itself the "free" tier.** A new `profiles` row (`subscription_status:
-  'free'`, `premium_until: null`) is auto-created for every new
-  `auth.users` row by `handle_new_user()` in `supabase/schema.sql` -
-  extended from the trigger that already provisioned a default
-  `store_settings` row (a leftover of the now-retired Cloud Sync feature -
-  see above). There is **no more
-  auto-grant** - unlike the old `PROMO1`/`autoGrantDefaultPremium()`
-  behavior, a brand-new signed-in account starts genuinely free and stays
-  that way until a code is redeemed. `PROMO1`/`DEFAULT_PREMIUM_CODE`/
-  `CODE_SEAT_LIMITS`/per-device seat limiting are all gone from the live
-  system - Premium now follows the signed-in **account**, not a
-  per-browser code entry, so there's no device cap to enforce; sign in
-  anywhere, Premium comes with you.
+  itself the "free" tier.** A new `profiles` row is auto-created for
+  every new `auth.users` row by `handle_new_user()` in
+  `supabase/schema.sql` - extended from the trigger that already
+  provisioned a default `store_settings` row (a leftover of the
+  now-retired Cloud Sync feature - see above). `PROMO1`/
+  `DEFAULT_PREMIUM_CODE`/`CODE_SEAT_LIMITS`/per-device seat limiting are
+  all gone from the live system - Premium now follows the signed-in
+  **account**, not a per-browser code entry, so there's no device cap to
+  enforce; sign in anywhere, Premium comes with you.
+- **Every genuinely new account gets an automatic 15-day Premium trial**,
+  per an explicit "since the website is new" launch-strategy request -
+  a deliberate change from the earlier "starts free, Premium is opt-in
+  only" behavior (itself already a replacement for the old PROMO1
+  auto-grant, and briefly replaced again by an even-earlier auto-issued
+  7-day trial *code* design - see "New signup email notification"
+  below for that specific history). `handle_new_user()`'s `profiles`
+  insert now sets `subscription_status = 'premium'`, `premium_until =
+  now() + make_interval(days => 15)` directly, instead of leaving both
+  at the table's plain `'free'`/`null` defaults. This is the trigger
+  firing at all that makes it "first sign-in only" - `auth.users` has
+  exactly one row per unique email under normal Supabase Auth
+  operation, so a returning user signing back in never re-inserts a row
+  here and never re-triggers this function; the pre-existing `on
+  conflict (user_id) do nothing` is the same defense a second time
+  over, in case this ever somehow fires twice for one user - it leaves
+  a duplicate insert's `subscription_status`/`premium_until` values
+  unapplied, so a duplicate fire can never re-arm or extend a trial.
+  After 15 days, the profile reverts to Basic exactly the same way an
+  expired redeemed/purchased subscription already does (the existing
+  "lazily corrects a stale 'premium' label" behavior on `profiles`,
+  unchanged). `redeem_code()`/`grant_premium_from_paypal()` both extend
+  `premium_until` **additively** from whatever it currently is, so
+  redeeming a code or buying a tier during the trial stacks on top of
+  the remaining trial days rather than overwriting them - no code
+  change was needed there, since both already computed from
+  `coalesce(v_current_until, now())` rather than assuming a fresh
+  grant. `accountPanelInfo` (Settings → Premium's own description, all
+  six languages) and `index.html`'s "Is it really free?" FAQ answer
+  (all six languages) were both reworded to mention the automatic
+  15-day trial explicitly, replacing copy that only described signing
+  in plus redeeming a code.
 - **`modules/account.js`** is the live site's only Premium mechanism now
   - `getSupabaseClient()`,
   `initAccount()` (session restore + auth-state listener, called from
@@ -2234,6 +2262,26 @@ live code calls it anymore.
   rejects a wrong code and accepts `GOOFFLINE-LIFETIME` when entered
   manually, defines none of `account.js`'s functions or `window.supabase`
   at all, and has zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers.
+- **Re-verified against the same local PostgreSQL 16 harness once the
+  automatic 15-day trial shipped** (see the trial bullet above): a
+  brand-new `auth.users` insert now correctly auto-provisions a
+  `'premium'` profile with `premium_until` ≈ 15 days out (checked to
+  within a few seconds of wall-clock drift, not just "in the future");
+  a second, genuinely different new user gets their own independent
+  15-day trial; simulating a duplicate trigger fire for an
+  *already-existing* user_id correctly leaves that user's
+  `premium_until` untouched (`on conflict (user_id) do nothing` holds);
+  `redeem_code()` still correctly **stacks** two different codes on top
+  of the trial baseline in sequence (verified the actual returned
+  `premium_until` values chain correctly - trial end, then +30 days,
+  then +10 more - not just a boolean pass/fail); redeeming an
+  already-used code still correctly fails with `already_used`; an
+  unauthenticated call still correctly returns `not_authenticated`; a
+  new user with no email still gets the trial with zero webhook
+  attempt (nowhere to send it); and forcing `net.http_post()` to throw
+  still leaves the trial grant and `store_settings` row created
+  regardless - the trial, like the rest of profile provisioning, never
+  depends on the notification webhook succeeding.
 - **Monthly pricing + a free-trial path, added once the account model was
   live.** `$3.99 USD / month` / "Billed monthly" replaced the old
   one-time `$9.99 USD` in the Buy Premium modal - a code's `duration_days`
@@ -2531,6 +2579,28 @@ billing anywhere in this system).
   `PAYPAL_CLIENT_SECRET`/`SUPABASE_SERVICE_ROLE_KEY` in the deployed Apps
   Script's own copy (never committed to this repo), test end-to-end with
   PayPal Sandbox buyer accounts, then switch to Live credentials.
+- **Retired: the $0.39/3-Day Trial tier**, once every new sign-in started
+  granting its own genuinely free 15-day trial automatically (see
+  "Account & Subscription" above) - a $0.39 *paid* 3-day trial no longer
+  made sense sitting right next to a free 15-day one. Removed outright,
+  not just hidden: the `.pricing-tier`/`#paypalButtonBoxTrial` markup in
+  the Buy Premium modal, the `{ boxId: "paypalButtonBoxTrial", amount:
+  "0.39", label: "3-Day Trial" }` entry from `app.html`'s `PAYPAL_PLANS`
+  array (now 1 Month/3 Months/1 Year only), the `"0.39": 3` entry from
+  `paypal-premium/AppsScript.gs`'s `PLAN_DAYS_BY_AMOUNT` table (kept in
+  sync with `PAYPAL_PLANS` per the existing "update both together"
+  rule), and the mention of it in `paypal-premium/README.md`. Only
+  `buyPremiumPlanTrialName`/`buyPremiumPlanTrialSub`'s entries in
+  `changeLanguage()`'s `ids` map were removed - the translation keys
+  themselves are left defined in `modules/translations.js` across all
+  six languages, unused now, matching this repo's established dead-key
+  tolerance elsewhere (e.g. the offline-only Premium-panel keys). The
+  1 Year tier keeps its `pt-best`/"Best Value" gold highlight unchanged.
+  Manually-created codes and the two remaining paid PayPal tiers are
+  otherwise unaffected. Verified with Playwright: the Buy Premium modal
+  now renders exactly 3 `.pricing-tier` cards (1 Month/3 Months/1 Year),
+  `#paypalButtonBoxTrial` no longer exists in the DOM, and zero
+  horizontal overflow/console errors at 390px.
 
 ## New signup email notification
 
@@ -2548,7 +2618,17 @@ Manually-created codes (Supabase dashboard → Table Editor →
 `redemption_codes`) are completely unaffected either way - this
 feature never touches that table. The "Request Your Free Trial" button
 removal (see "Remove the free 7-day trial request" above) still
-stands - nothing about this revision brings that button back.
+stands - nothing about this revision brings that button back. **"No
+code, no trial" describes only what this notification itself sends the
+new user** - it stays accurate even after the later "Every genuinely
+new account gets an automatic 15-day Premium trial" change (see
+"Account & Subscription" above): that trial is granted silently by
+`handle_new_user()`'s own `profiles` insert in the same trigger firing
+that sends this email, not by anything this notification does or
+contains. The two happen at the same moment for the same reason (the
+same `auth.users` insert), but remain two separate, independent pieces
+of this trigger - the email never mentions the trial, and the trial
+grant never depends on the email sending successfully.
 
 - **Where "first time" comes from - `auth.users` itself, not a new
   check.** Supabase Auth's `auth.users` table has exactly one row per
