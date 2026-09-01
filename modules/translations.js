@@ -2,7 +2,7 @@ const translations = {
 
 en: {
   appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
-  settingsButtonLabel: "Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
+  settingsButtonLabel: "More Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
   scannerFound: "Added:", scannerNotFound: "No product found for barcode:",
@@ -109,7 +109,7 @@ en: {
 
 ar: {
   appTitle: "نظام نقاط البيع", appSubtitle: "بدون تسجيل، بدون حساب. افتح الصفحة وابدأ البيع فورًا.",
-  settingsButtonLabel: "الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
+  settingsButtonLabel: "المزيد من الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
   scannerFound: "تمت الإضافة:", scannerNotFound: "لم يتم العثور على منتج لهذا الباركود:",
@@ -215,6 +215,7 @@ ar: {
 
 fil: {
   appTitle: "Online POS", appSubtitle: "Walang sign up, walang login. Buksan lang ang tab at magbenta na.",
+  settingsButtonLabel: "Higit Pang Setting", settingsModalTitle: "Setting",
   catalogHeading: "Mga Produkto", allCategory: "Lahat",
   checkoutHeading: "Bayad", totalDueLabel: "Kabuuang Babayaran", noPaymentAlert: "Maglagay ng halaga ng bayad bago tapusin ang benta.",
   paymentMethodLabel: "Paraan ng Pagbabayad", totalEnteredLabel: "Ipinasok:", changeLabelInfo: "Sukli:", addPaymentRowBtn: "+ Hatiin ang Bayad",
@@ -313,6 +314,7 @@ fil: {
 
 hi: {
   appTitle: "ऑनलाइन पीओएस", appSubtitle: "कोई साइनअप नहीं, कोई लॉगिन नहीं। टैब खोलें और बिक्री शुरू करें।",
+  settingsButtonLabel: "अधिक सेटिंग्स", settingsModalTitle: "सेटिंग्स",
   catalogHeading: "उत्पाद", allCategory: "सभी",
   checkoutHeading: "भुगतान", totalDueLabel: "कुल देय राशि", noPaymentAlert: "बिक्री पूरी करने से पहले भुगतान राशि दर्ज करें।",
   paymentMethodLabel: "भुगतान का तरीका", totalEnteredLabel: "दर्ज राशि:", changeLabelInfo: "बाकी राशि:", addPaymentRowBtn: "+ भुगतान विभाजित करें",
@@ -411,6 +413,7 @@ hi: {
 
 es: {
   appTitle: "POS en Línea", appSubtitle: "Sin registro, sin inicio de sesión. Abre la pestaña y empieza a vender.",
+  settingsButtonLabel: "Más Ajustes", settingsModalTitle: "Ajustes",
   catalogHeading: "Productos", allCategory: "Todos",
   checkoutHeading: "Pago", totalDueLabel: "Total a Pagar", noPaymentAlert: "Ingresa un monto de pago antes de completar la venta.",
   paymentMethodLabel: "Método de Pago", totalEnteredLabel: "Ingresado:", changeLabelInfo: "Cambio:", addPaymentRowBtn: "+ Dividir Pago",
@@ -509,6 +512,7 @@ es: {
 
 th: {
   appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ไม่ต้องสมัคร ไม่ต้องล็อกอิน เปิดแท็บแล้วเริ่มขายได้เลย",
+  settingsButtonLabel: "การตั้งค่าเพิ่มเติม", settingsModalTitle: "การตั้งค่า",
   catalogHeading: "สินค้า", allCategory: "ทั้งหมด",
   checkoutHeading: "การชำระเงิน", totalDueLabel: "ยอดที่ต้องชำระ", noPaymentAlert: "กรุณากรอกจำนวนเงินที่ชำระก่อนทำรายการขายให้เสร็จสมบูรณ์",
   paymentMethodLabel: "วิธีการชำระเงิน", totalEnteredLabel: "จำนวนที่กรอก:", changeLabelInfo: "เงินทอน:", addPaymentRowBtn: "+ แยกการชำระเงิน",
