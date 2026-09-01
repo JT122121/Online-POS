@@ -20,9 +20,9 @@
 -- error.
 
 -- pg_net - Supabase's built-in async outbound-HTTP extension. Used only by
--- handle_new_user() below, to fire the welcome-trial email webhook without
--- blocking sign-in on that call's response (same extension Supabase's own
--- Database Webhooks feature is built on).
+-- handle_new_user() below, to fire the new-signup notification webhook
+-- without blocking sign-in on that call's response (same extension
+-- Supabase's own Database Webhooks feature is built on).
 create extension if not exists pg_net;
 
 -- ============================================================================
@@ -333,25 +333,20 @@ create trigger touch_profiles_updated_at
 -- 'free' subscription tier - Premium is opt-in via redeem_code() below, not
 -- auto-granted the way the old PROMO1 code used to be.
 --
--- Also auto-issues a one-time 7-day Premium trial CODE for every genuinely
--- new account (auth.users has exactly one row per unique email, so this
--- trigger firing IS the "first time this email has ever signed in" signal -
--- no extra uniqueness check needed) and emails it to that address. This
--- still doesn't auto-grant Premium the way PROMO1 used to - the new account
--- still has to actively redeem the code via redeem_code() like any other
--- code, it just never has to ask anyone for one. Postgres itself can't send
--- email, so the actual delivery happens in welcome-trial/AppsScript.gs,
--- notified here via pg_net's async net.http_post() - fire-and-forget, and
--- wrapped in its own exception handler so a code-generation hiccup or a
--- webhook failure never blocks the sign-in itself.
+-- Also notifies the site owner by email for every genuinely new account
+-- (auth.users has exactly one row per unique email, so this trigger firing
+-- IS the "first time this email has ever signed in" signal - no extra
+-- uniqueness check needed). Postgres itself can't send email, so the
+-- actual delivery happens in signup-notify/AppsScript.gs, notified here
+-- via pg_net's async net.http_post() - fire-and-forget, and wrapped in its
+-- own exception handler so a webhook failure never blocks the sign-in
+-- itself. See "New signup email notification" in CLAUDE.md.
 
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
-declare
-  v_trial_code text;
 begin
   insert into public.store_settings (user_id)
   values (new.id)
@@ -361,28 +356,13 @@ begin
   values (new.id, coalesce(new.email, ''))
   on conflict (user_id) do nothing;
 
-  -- Two separate exception blocks, deliberately - a PL/pgSQL exception
-  -- handler acts as an implicit savepoint, so if both steps shared one
-  -- block, a webhook failure below would also roll back the code insert
-  -- above. Splitting them means the code always survives as a durable
-  -- fallback (findable in redemption_codes / the Supabase dashboard) even
-  -- if the email never goes out.
-  begin
-    v_trial_code := upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10));
-    insert into public.redemption_codes (code, duration_days, note)
-    values (v_trial_code, 7, 'auto welcome trial - ' || coalesce(new.email, new.id::text));
-  exception when others then
-    v_trial_code := null;
-  end;
-
-  if v_trial_code is not null and new.email is not null and new.email <> '' then
+  if new.email is not null and new.email <> '' then
     begin
       perform net.http_post(
-        url := 'REPLACE_WITH_YOUR_WELCOME_TRIAL_APPS_SCRIPT_URL',
+        url := 'REPLACE_WITH_YOUR_SIGNUP_NOTIFY_APPS_SCRIPT_URL',
         body := jsonb_build_object(
           'email', new.email,
-          'code', v_trial_code,
-          'secret', 'REPLACE_WITH_YOUR_WELCOME_TRIAL_WEBHOOK_SECRET'
+          'secret', 'REPLACE_WITH_YOUR_SIGNUP_NOTIFY_WEBHOOK_SECRET'
         ),
         headers := jsonb_build_object('Content-Type', 'application/json')
       );
