@@ -131,6 +131,10 @@ a { color: var(--accent-dark); }
   .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
 }
 
+.lang-picker-bar { max-width: 760px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 0 0 14px; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .doc { max-width: 760px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 40px 48px; }
 .doc h1.doc-title { font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -.01em; margin: 0 0 6px; }
 .doc .updated { color: var(--muted); font-size: 13px; margin: 0 0 32px; }
@@ -193,56 +197,69 @@ a { color: var(--accent-dark); }
 </div>
 </header>
 
+<div class="lang-picker-bar">
+<label for="privacyLanguage"><span id="langPickerLabel">Language</span>
+<select id="privacyLanguage">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</label>
+</div>
+
 <div class="doc">
-<h1 class="doc-title">Privacy Policy</h1>
-<p class="updated">Last updated: August 23, 2026</p>
+<h1 class="doc-title" id="docTitle">Privacy Policy</h1>
+<p class="updated"><span id="updatedLabel">Last updated:</span> August 23, 2026</p>
 
-<h2>Overview</h2>
-<p>GoOnlinePOS.com ("we," "our," "the app") is a free, browser-based point of sale tool. There is no signup and no user account. This policy explains what happens to information when you use it.</p>
+<h2 id="overviewTitle">Overview</h2>
+<p id="overviewText">GoOnlinePOS.com ("we," "our," "the app") is a free, browser-based point of sale tool. There is no signup and no user account. This policy explains what happens to information when you use it.</p>
 
-<h2>Information we do not collect</h2>
-<p>We do not operate a server that stores your business data. Everything you enter - product names and prices, cart contents, sales history, store details, your logo, and receipt settings - is saved only in your own browser's local storage, on your own device. We never receive, see, or have access to any of it.</p>
+<h2 id="noCollectTitle">Information we do not collect</h2>
+<p id="noCollectText">We do not operate a server that stores your business data. Everything you enter - product names and prices, cart contents, sales history, store details, your logo, and receipt settings - is saved only in your own browser's local storage, on your own device. We never receive, see, or have access to any of it.</p>
 
-<h2>Information collected automatically</h2>
-<p>We use Google Analytics to understand overall traffic to the site (for example, how many people visit and roughly where from). This may collect:</p>
+<h2 id="autoCollectTitle">Information collected automatically</h2>
+<p id="autoCollectIntro">We use Google Analytics to understand overall traffic to the site (for example, how many people visit and roughly where from). This may collect:</p>
 <ul>
-<li>Pages viewed and time spent on the site</li>
-<li>Approximate location, derived from IP address (typically country or city level)</li>
-<li>Browser type, device type, and referring site</li>
+<li id="autoLi1">Pages viewed and time spent on the site</li>
+<li id="autoLi2">Approximate location, derived from IP address (typically country or city level)</li>
+<li id="autoLi3">Browser type, device type, and referring site</li>
 </ul>
-<p>Google Analytics uses cookies to do this. You can find out more about how Google handles this data in <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
+<p id="autoOutro">Google Analytics uses cookies to do this. You can find out more about how Google handles this data in <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
 
-<h2>Advertising</h2>
-<p>This site uses <strong>Google AdSense</strong> and may show ads served by it. Google, as a third-party vendor, and its advertising partners use cookies (including the DoubleClick cookie) to serve ads based on a user's prior visits to this site or other sites on the internet. This allows Google and its partners to serve ads that may be more relevant to you.</p>
-<p>You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>. You can also opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener">www.aboutads.info</a>. Opting out doesn't remove ads from the site - it just makes them less tailored to you.</p>
+<h2 id="adsTitle">Advertising</h2>
+<p id="adsPara1">This site uses <strong>Google AdSense</strong> and may show ads served by it. Google, as a third-party vendor, and its advertising partners use cookies (including the DoubleClick cookie) to serve ads based on a user's prior visits to this site or other sites on the internet. This allows Google and its partners to serve ads that may be more relevant to you.</p>
+<p id="adsPara2">You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>. You can also opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener">www.aboutads.info</a>. Opting out doesn't remove ads from the site - it just makes them less tailored to you.</p>
 
-<h2>Third-party services</h2>
-<p>The app loads a small number of resources from third-party providers to function:</p>
+<h2 id="thirdPartyTitle">Third-party services</h2>
+<p id="thirdPartyIntro">The app loads a small number of resources from third-party providers to function:</p>
 <ul>
-<li><strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - for the typefaces used on the page</li>
-<li><strong>cdnjs.cloudflare.com</strong> - for the library that powers the "Download Sales Report"</li>
-<li><strong>Google Analytics</strong> - for basic traffic statistics, as described above</li>
-<li><strong>Google AdSense</strong> - may show ads, as described above</li>
+<li id="tpLi1"><strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - for the typefaces used on the page</li>
+<li id="tpLi2"><strong>cdnjs.cloudflare.com</strong> - for the library that powers the "Download Sales Report"</li>
+<li id="tpLi3"><strong>Google Analytics</strong> - for basic traffic statistics, as described above</li>
+<li id="tpLi4"><strong>Google AdSense</strong> - may show ads, as described above</li>
 </ul>
-<p>These providers may log requests (including IP address) according to their own privacy policies, independent of us.</p>
+<p id="thirdPartyOutro">These providers may log requests (including IP address) according to their own privacy policies, independent of us.</p>
 
-<h2>Your data can be lost - please back it up</h2>
-<p>Because your products, sales history, and settings are stored only in your browser, clearing your browser's site data, switching browsers or devices, or reinstalling your browser will permanently delete them. We have no way to recover this information. We recommend regularly using the <strong>"Download Full Backup"</strong> button in Settings to keep your own copy of your data.</p>
+<h2 id="dataLossTitle">Your data can be lost - please back it up</h2>
+<p id="dataLossText">Because your products, sales history, and settings are stored only in your browser, clearing your browser's site data, switching browsers or devices, or reinstalling your browser will permanently delete them. We have no way to recover this information. We recommend regularly using the <strong>"Download Full Backup"</strong> button in Settings to keep your own copy of your data.</p>
 
-<h2>Cookies</h2>
-<p>Aside from cookies set by Google Analytics and Google AdSense, the app itself does not set cookies. Your browser's local storage (used to save your products and settings) is not a cookie and is not sent to any server.</p>
+<h2 id="cookiesTitle">Cookies</h2>
+<p id="cookiesText">Aside from cookies set by Google Analytics and Google AdSense, the app itself does not set cookies. Your browser's local storage (used to save your products and settings) is not a cookie and is not sent to any server.</p>
 
-<h2>Children's privacy</h2>
-<p>This site is not directed at children and we do not knowingly collect personal information from children. We do not knowingly show personalized ads to children.</p>
+<h2 id="childrenTitle">Children's privacy</h2>
+<p id="childrenText">This site is not directed at children and we do not knowingly collect personal information from children. We do not knowingly show personalized ads to children.</p>
 
-<h2>Your choices</h2>
-<p>You can clear your browser's site data at any time to remove everything saved by the app. The cookie banner on this site (and the "Cookie Settings" link in the footer) lets you decline analytics and advertising cookies entirely - the site works exactly the same either way. You can also use browser settings, extensions, or Google's opt-out tools (see "Advertising" above) to limit tracking.</p>
+<h2 id="choicesTitle">Your choices</h2>
+<p id="choicesText">You can clear your browser's site data at any time to remove everything saved by the app. The cookie banner on this site (and the "Cookie Settings" link in the footer) lets you decline analytics and advertising cookies entirely - the site works exactly the same either way. You can also use browser settings, extensions, or Google's opt-out tools (see "Advertising" above) to limit tracking.</p>
 
-<h2>Changes to this policy</h2>
-<p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
+<h2 id="changesTitle">Changes to this policy</h2>
+<p id="changesText">We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
 
-<h2>Contact</h2>
-<p>Questions about this policy can be sent through our <a href="contact">contact form</a>.</p>
+<h2 id="contactTitle">Contact</h2>
+<p id="contactText">Questions about this policy can be sent through our <a href="contact">contact form</a>.</p>
 
 
 <footer class="site-footer">
@@ -272,6 +289,289 @@ a { color: var(--accent-dark); }
 <button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
 </div>
 </div>
+
+<script>
+(function() {
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      docTitle: "Privacy Policy",
+      updatedLabel: "Last updated:",
+      overviewTitle: "Overview",
+      overviewText: "GoOnlinePOS.com (\"we,\" \"our,\" \"the app\") is a free, browser-based point of sale tool. There is no signup and no user account. This policy explains what happens to information when you use it.",
+      noCollectTitle: "Information we do not collect",
+      noCollectText: "We do not operate a server that stores your business data. Everything you enter - product names and prices, cart contents, sales history, store details, your logo, and receipt settings - is saved only in your own browser's local storage, on your own device. We never receive, see, or have access to any of it.",
+      autoCollectTitle: "Information collected automatically",
+      autoCollectIntro: "We use Google Analytics to understand overall traffic to the site (for example, how many people visit and roughly where from). This may collect:",
+      autoLi1: "Pages viewed and time spent on the site",
+      autoLi2: "Approximate location, derived from IP address (typically country or city level)",
+      autoLi3: "Browser type, device type, and referring site",
+      autoOutro: "Google Analytics uses cookies to do this. You can find out more about how Google handles this data in <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">Google's Privacy Policy</a>.",
+      adsTitle: "Advertising",
+      adsPara1: "This site uses <strong>Google AdSense</strong> and may show ads served by it. Google, as a third-party vendor, and its advertising partners use cookies (including the DoubleClick cookie) to serve ads based on a user's prior visits to this site or other sites on the internet. This allows Google and its partners to serve ads that may be more relevant to you.",
+      adsPara2: "You can opt out of personalized advertising by visiting <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">Google Ads Settings</a>. You can also opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a>. Opting out doesn't remove ads from the site - it just makes them less tailored to you.",
+      thirdPartyTitle: "Third-party services",
+      thirdPartyIntro: "The app loads a small number of resources from third-party providers to function:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - for the typefaces used on the page",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - for the library that powers the \"Download Sales Report\"",
+      tpLi3: "<strong>Google Analytics</strong> - for basic traffic statistics, as described above",
+      tpLi4: "<strong>Google AdSense</strong> - may show ads, as described above",
+      thirdPartyOutro: "These providers may log requests (including IP address) according to their own privacy policies, independent of us.",
+      dataLossTitle: "Your data can be lost - please back it up",
+      dataLossText: "Because your products, sales history, and settings are stored only in your browser, clearing your browser's site data, switching browsers or devices, or reinstalling your browser will permanently delete them. We have no way to recover this information. We recommend regularly using the <strong>\"Download Full Backup\"</strong> button in Settings to keep your own copy of your data.",
+      cookiesTitle: "Cookies",
+      cookiesText: "Aside from cookies set by Google Analytics and Google AdSense, the app itself does not set cookies. Your browser's local storage (used to save your products and settings) is not a cookie and is not sent to any server.",
+      childrenTitle: "Children's privacy",
+      childrenText: "This site is not directed at children and we do not knowingly collect personal information from children. We do not knowingly show personalized ads to children.",
+      choicesTitle: "Your choices",
+      choicesText: "You can clear your browser's site data at any time to remove everything saved by the app. The cookie banner on this site (and the \"Cookie Settings\" link in the footer) lets you decline analytics and advertising cookies entirely - the site works exactly the same either way. You can also use browser settings, extensions, or Google's opt-out tools (see \"Advertising\" above) to limit tracking.",
+      changesTitle: "Changes to this policy",
+      changesText: "We may update this policy from time to time. Changes will be posted on this page with an updated date.",
+      contactTitle: "Contact",
+      contactText: "Questions about this policy can be sent through our <a href=\"contact\">contact form</a>."
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      docTitle: "سياسة الخصوصية",
+      updatedLabel: "آخر تحديث:",
+      overviewTitle: "نظرة عامة",
+      overviewText: "GoOnlinePOS.com (\"نحن\"، \"موقعنا\"، \"التطبيق\") هو أداة نقاط بيع مجانية تعمل عبر المتصفح. لا يوجد تسجيل ولا حساب مستخدم. توضح هذه السياسة ما يحدث للمعلومات عند استخدامك للتطبيق.",
+      noCollectTitle: "المعلومات التي لا نجمعها",
+      noCollectText: "نحن لا نشغّل خادمًا يخزّن بيانات عملك. كل ما تدخله - أسماء المنتجات وأسعارها، محتويات السلة، سجل المبيعات، تفاصيل المتجر، شعارك، وإعدادات الإيصال - يُحفظ فقط في التخزين المحلي لمتصفحك الخاص، على جهازك الخاص. نحن لا نستلم أو نرى أو نصل إلى أي منها إطلاقًا.",
+      autoCollectTitle: "المعلومات التي تُجمع تلقائيًا",
+      autoCollectIntro: "نستخدم Google Analytics لفهم حركة الزيارات العامة للموقع (على سبيل المثال، عدد الزوار ومصدرهم التقريبي). قد يشمل هذا:",
+      autoLi1: "الصفحات المُشاهَدة والوقت المُستغرَق في الموقع",
+      autoLi2: "الموقع التقريبي، المستنتج من عنوان IP (عادةً على مستوى الدولة أو المدينة)",
+      autoLi3: "نوع المتصفح، ونوع الجهاز، والموقع المُحيل",
+      autoOutro: "يستخدم Google Analytics ملفات تعريف الارتباط للقيام بذلك. يمكنك معرفة المزيد حول كيفية تعامل Google مع هذه البيانات في <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">سياسة خصوصية Google</a>.",
+      adsTitle: "الإعلانات",
+      adsPara1: "يستخدم هذا الموقع <strong>Google AdSense</strong> وقد يعرض إعلانات مقدَّمة منه. تستخدم Google، كطرف ثالث، وشركاؤها الإعلانيون ملفات تعريف الارتباط (بما في ذلك ملف تعريف الارتباط DoubleClick) لعرض إعلانات بناءً على زيارات المستخدم السابقة لهذا الموقع أو لمواقع أخرى على الإنترنت. يتيح هذا لـ Google وشركائها عرض إعلانات قد تكون أكثر ملاءمة لك.",
+      adsPara2: "يمكنك إلغاء الاشتراك في الإعلانات المخصصة من خلال زيارة <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">إعدادات إعلانات Google</a>. يمكنك أيضًا إلغاء استخدام أحد موردي الطرف الثالث لملفات تعريف الارتباط لأغراض الإعلانات المخصصة من خلال زيارة <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a>. لا يؤدي إلغاء الاشتراك إلى إزالة الإعلانات من الموقع - بل يجعلها فقط أقل تخصيصًا لك.",
+      thirdPartyTitle: "خدمات الطرف الثالث",
+      thirdPartyIntro: "يقوم التطبيق بتحميل عدد صغير من الموارد من مزودي خدمات طرف ثالث ليعمل:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com، fonts.gstatic.com) - لخطوط الصفحة",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - للمكتبة التي تشغّل ميزة \"تنزيل تقرير المبيعات\"",
+      tpLi3: "<strong>Google Analytics</strong> - لإحصاءات الزيارات الأساسية، كما هو موضح أعلاه",
+      tpLi4: "<strong>Google AdSense</strong> - قد يعرض إعلانات، كما هو موضح أعلاه",
+      thirdPartyOutro: "قد تسجّل هذه الجهات طلبات الاتصال (بما في ذلك عنوان IP) وفقًا لسياسات الخصوصية الخاصة بها، بشكل مستقل عنا.",
+      dataLossTitle: "قد تفقد بياناتك - يُرجى عمل نسخة احتياطية",
+      dataLossText: "نظرًا لأن منتجاتك وسجل مبيعاتك وإعداداتك تُخزَّن فقط في متصفحك، فإن مسح بيانات موقع متصفحك، أو تغيير المتصفح أو الجهاز، أو إعادة تثبيت متصفحك سيؤدي إلى حذفها نهائيًا. ليس لدينا أي وسيلة لاسترجاع هذه المعلومات. نوصي باستخدام زر <strong>\"تنزيل نسخة احتياطية كاملة\"</strong> بانتظام في الإعدادات للاحتفاظ بنسختك الخاصة من بياناتك.",
+      cookiesTitle: "ملفات تعريف الارتباط",
+      cookiesText: "باستثناء ملفات تعريف الارتباط التي يضعها Google Analytics وGoogle AdSense، لا يضع التطبيق نفسه أي ملفات تعريف ارتباط. التخزين المحلي لمتصفحك (المستخدم لحفظ منتجاتك وإعداداتك) ليس ملف تعريف ارتباط ولا يُرسَل إلى أي خادم.",
+      childrenTitle: "خصوصية الأطفال",
+      childrenText: "هذا الموقع غير موجَّه للأطفال، ونحن لا نجمع عن قصد معلومات شخصية من الأطفال. كما أننا لا نعرض عمدًا إعلانات مخصصة للأطفال.",
+      choicesTitle: "خياراتك",
+      choicesText: "يمكنك مسح بيانات موقع متصفحك في أي وقت لإزالة كل ما حفظه التطبيق. يتيح لك شريط ملفات تعريف الارتباط في هذا الموقع (ورابط \"إعدادات ملفات تعريف الارتباط\" في التذييل) رفض ملفات تعريف ارتباط التحليلات والإعلانات تمامًا - ويعمل الموقع بنفس الطريقة تمامًا في كلتا الحالتين. يمكنك أيضًا استخدام إعدادات المتصفح أو الإضافات أو أدوات إلغاء الاشتراك من Google (انظر \"الإعلانات\" أعلاه) للحد من التتبع.",
+      changesTitle: "التغييرات على هذه السياسة",
+      changesText: "قد نقوم بتحديث هذه السياسة من وقت لآخر. سيتم نشر التغييرات على هذه الصفحة مع تاريخ تحديث جديد.",
+      contactTitle: "التواصل معنا",
+      contactText: "يمكن إرسال الأسئلة حول هذه السياسة من خلال <a href=\"contact\">نموذج التواصل</a> الخاص بنا."
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      docTitle: "Patakaran sa Privacy",
+      updatedLabel: "Huling na-update:",
+      overviewTitle: "Pangkalahatang-ideya",
+      overviewText: "Ang GoOnlinePOS.com (\"kami,\" \"amin,\" \"ang app\") ay isang libre, browser-based na point of sale tool. Walang sign up at walang user account. Ipinapaliwanag ng patakarang ito kung ano ang nangyayari sa impormasyon kapag ginamit mo ito.",
+      noCollectTitle: "Impormasyong hindi namin kinokolekta",
+      noCollectText: "Hindi kami nagpapatakbo ng server na nag-iimbak ng data ng iyong negosyo. Lahat ng iyong inilalagay - pangalan at presyo ng produkto, laman ng cart, kasaysayan ng benta, detalye ng tindahan, iyong logo, at mga setting ng resibo - ay naka-save lang sa local storage ng sarili mong browser, sa sarili mong device. Kailanman ay hindi namin natatanggap, nakikita, o naa-access ang alinman dito.",
+      autoCollectTitle: "Impormasyong awtomatikong nakokolekta",
+      autoCollectIntro: "Gumagamit kami ng Google Analytics para maunawaan ang pangkalahatang traffic sa site (halimbawa, ilang tao ang bumibisita at saan sila humigit-kumulang galing). Maaaring makolekta nito:",
+      autoLi1: "Mga pahinang tiningnan at oras na ginugol sa site",
+      autoLi2: "Tinatayang lokasyon, hinango mula sa IP address (karaniwan sa antas ng bansa o lungsod)",
+      autoLi3: "Uri ng browser, uri ng device, at referring site",
+      autoOutro: "Gumagamit ang Google Analytics ng cookies para dito. Malalaman mo pa ang tungkol sa kung paano hinahawakan ng Google ang datos na ito sa <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">Patakaran sa Privacy ng Google</a>.",
+      adsTitle: "Advertising",
+      adsPara1: "Ginagamit ng site na ito ang <strong>Google AdSense</strong> at maaaring magpakita ng mga ad na ibinibigay nito. Ang Google, bilang isang third-party vendor, at ang mga kasosyo nito sa advertising ay gumagamit ng cookies (kasama ang DoubleClick cookie) para magpakita ng mga ad batay sa mga naunang pagbisita ng user sa site na ito o sa ibang mga site sa internet. Pinapayagan nito ang Google at ang mga kasosyo nito na magpakita ng mga ad na maaaring mas kaugnay sa iyo.",
+      adsPara2: "Puwede kang mag-opt out sa personalized advertising sa pamamagitan ng pagbisita sa <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">Google Ads Settings</a>. Puwede ka ring mag-opt out sa paggamit ng third-party vendor ng cookies para sa personalized advertising sa pamamagitan ng pagbisita sa <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a>. Ang pag-opt out ay hindi nag-aalis ng mga ad sa site - pinapababa lang nito kung gaano ito kaangkop sa iyo.",
+      thirdPartyTitle: "Mga serbisyo ng third-party",
+      thirdPartyIntro: "Nag-lo-load ang app ng kaunting bilang ng mga resource mula sa mga third-party provider para gumana:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - para sa mga typeface na ginagamit sa pahina",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - para sa library na nagpapagana sa \"Download Sales Report\"",
+      tpLi3: "<strong>Google Analytics</strong> - para sa pangunahing istatistika ng traffic, gaya ng nabanggit sa itaas",
+      tpLi4: "<strong>Google AdSense</strong> - maaaring magpakita ng mga ad, gaya ng nabanggit sa itaas",
+      thirdPartyOutro: "Maaaring i-log ng mga provider na ito ang mga request (kabilang ang IP address) ayon sa sarili nilang mga patakaran sa privacy, nang hiwalay sa amin.",
+      dataLossTitle: "Maaaring mawala ang iyong data - mangyaring mag-backup",
+      dataLossText: "Dahil ang iyong mga produkto, kasaysayan ng benta, at settings ay naka-store lang sa browser mo, ang pag-clear ng site data ng browser mo, paglipat ng browser o device, o pag-reinstall ng browser mo ay permanenteng magbubura sa mga ito. Wala kaming paraan para mabawi ang impormasyong ito. Inirerekomenda naming gamitin nang regular ang <strong>\"Download Full Backup\"</strong> na button sa Settings para mapanatili ang sarili mong kopya ng iyong data.",
+      cookiesTitle: "Cookies",
+      cookiesText: "Bukod sa mga cookies na nilalagay ng Google Analytics at Google AdSense, hindi naglalagay ang app mismo ng cookies. Ang local storage ng browser mo (ginagamit para i-save ang iyong mga produkto at settings) ay hindi cookie at hindi ipinapadala sa anumang server.",
+      childrenTitle: "Privacy ng mga bata",
+      childrenText: "Ang site na ito ay hindi nakadirekta sa mga bata at hindi kami sinasadyang nangongolekta ng personal na impormasyon mula sa mga bata. Hindi rin namin sinasadyang ipinapakita ang personalized ads sa mga bata.",
+      choicesTitle: "Ang iyong mga pagpipilian",
+      choicesText: "Puwede mong i-clear ang site data ng iyong browser anumang oras para alisin ang lahat ng na-save ng app. Ang cookie banner sa site na ito (at ang \"Cookie Settings\" na link sa footer) ay nagbibigay-daan sa iyong tanggihan nang buo ang analytics at advertising cookies - gumagana pa rin nang eksakto sa parehong paraan ang site sa alinman sa dalawa. Puwede ka ring gumamit ng mga setting ng browser, extension, o mga opt-out tool ng Google (tingnan ang \"Advertising\" sa itaas) para limitahan ang tracking.",
+      changesTitle: "Mga pagbabago sa patakarang ito",
+      changesText: "Maaari naming i-update ang patakarang ito paminsan-minsan. Ipo-post ang mga pagbabago sa pahinang ito kasama ang bagong petsa ng update.",
+      contactTitle: "Makipag-ugnayan",
+      contactText: "Maaaring ipadala ang mga tanong tungkol sa patakarang ito sa pamamagitan ng aming <a href=\"contact\">contact form</a>."
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      docTitle: "गोपनीयता नीति",
+      updatedLabel: "आखिरी अपडेट:",
+      overviewTitle: "अवलोकन",
+      overviewText: "GoOnlinePOS.com (\"हम,\" \"हमारा,\" \"ऐप\") एक मुफ़्त, ब्राउज़र-आधारित पॉइंट ऑफ़ सेल टूल है। इसमें कोई साइनअप और कोई उपयोगकर्ता खाता नहीं है। यह नीति बताती है कि आपके द्वारा इसका उपयोग करने पर जानकारी का क्या होता है।",
+      noCollectTitle: "जानकारी जो हम एकत्र नहीं करते",
+      noCollectText: "हम कोई सर्वर संचालित नहीं करते जो आपके व्यवसाय का डेटा संग्रहीत करता हो। आप जो कुछ भी दर्ज करते हैं - उत्पाद के नाम और कीमतें, कार्ट की सामग्री, बिक्री इतिहास, स्टोर विवरण, आपका लोगो, और रसीद सेटिंग्स - केवल आपके अपने ब्राउज़र के लोकल स्टोरेज में, आपके अपने डिवाइस पर सेव होता है। हमें इनमें से कुछ भी कभी प्राप्त नहीं होता, न ही हम इसे देखते हैं या इस तक हमारी पहुंच होती है।",
+      autoCollectTitle: "स्वचालित रूप से एकत्र की गई जानकारी",
+      autoCollectIntro: "हम साइट पर कुल ट्रैफ़िक को समझने के लिए Google Analytics का उपयोग करते हैं (उदाहरण के लिए, कितने लोग विज़िट करते हैं और लगभग कहाँ से)। यह निम्नलिखित एकत्र कर सकता है:",
+      autoLi1: "देखे गए पृष्ठ और साइट पर बिताया गया समय",
+      autoLi2: "आईपी पते से प्राप्त अनुमानित स्थान (आमतौर पर देश या शहर स्तर पर)",
+      autoLi3: "ब्राउज़र प्रकार, डिवाइस प्रकार, और रेफ़रिंग साइट",
+      autoOutro: "Google Analytics ऐसा करने के लिए कुकीज़ का उपयोग करता है। आप <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">Google की गोपनीयता नीति</a> में इस डेटा को Google कैसे संभालता है, इसके बारे में अधिक जान सकते हैं।",
+      adsTitle: "विज्ञापन",
+      adsPara1: "यह साइट <strong>Google AdSense</strong> का उपयोग करती है और इसके द्वारा दिखाए गए विज्ञापन दिखा सकती है। Google, एक तृतीय-पक्ष विक्रेता के रूप में, और उसके विज्ञापन भागीदार इस साइट या इंटरनेट पर अन्य साइटों पर उपयोगकर्ता की पिछली विज़िट के आधार पर विज्ञापन दिखाने के लिए कुकीज़ (DoubleClick कुकी सहित) का उपयोग करते हैं। इससे Google और उसके भागीदारों को ऐसे विज्ञापन दिखाने में मदद मिलती है जो आपके लिए अधिक प्रासंगिक हो सकते हैं।",
+      adsPara2: "आप <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">Google विज्ञापन सेटिंग्स</a> पर जाकर व्यक्तिगत विज्ञापन से बाहर निकल सकते हैं। आप <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a> पर जाकर व्यक्तिगत विज्ञापन के लिए किसी तृतीय-पक्ष विक्रेता द्वारा कुकीज़ के उपयोग से भी बाहर निकल सकते हैं। बाहर निकलने से साइट से विज्ञापन नहीं हटते - यह बस उन्हें आपके लिए कम अनुकूलित बना देता है।",
+      thirdPartyTitle: "तृतीय-पक्ष सेवाएं",
+      thirdPartyIntro: "ऐप को काम करने के लिए तृतीय-पक्ष प्रदाताओं से कुछ थोड़े संसाधन लोड करता है:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - पेज पर उपयोग किए जाने वाले फ़ॉन्ट के लिए",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - \"बिक्री रिपोर्ट डाउनलोड करें\" को शक्ति देने वाली लाइब्रेरी के लिए",
+      tpLi3: "<strong>Google Analytics</strong> - बुनियादी ट्रैफ़िक आंकड़ों के लिए, जैसा कि ऊपर बताया गया है",
+      tpLi4: "<strong>Google AdSense</strong> - विज्ञापन दिखा सकता है, जैसा कि ऊपर बताया गया है",
+      thirdPartyOutro: "ये प्रदाता हमसे स्वतंत्र रूप से, अपनी स्वयं की गोपनीयता नीतियों के अनुसार अनुरोध (आईपी पते सहित) लॉग कर सकते हैं।",
+      dataLossTitle: "आपका डेटा खो सकता है - कृपया इसका बैकअप लें",
+      dataLossText: "चूंकि आपके उत्पाद, बिक्री इतिहास, और सेटिंग्स केवल आपके ब्राउज़र में संग्रहीत होते हैं, आपके ब्राउज़र का साइट डेटा साफ़ करना, ब्राउज़र या डिवाइस बदलना, या अपने ब्राउज़र को फिर से इंस्टॉल करना उन्हें स्थायी रूप से हटा देगा। हमारे पास इस जानकारी को पुनर्प्राप्त करने का कोई तरीका नहीं है। हम अपने डेटा की अपनी प्रति रखने के लिए सेटिंग्स में नियमित रूप से <strong>\"पूरा बैकअप डाउनलोड करें\"</strong> बटन का उपयोग करने की सलाह देते हैं।",
+      cookiesTitle: "कुकीज़",
+      cookiesText: "Google Analytics और Google AdSense द्वारा सेट की गई कुकीज़ के अलावा, ऐप स्वयं कोई कुकी सेट नहीं करता। आपके ब्राउज़र का लोकल स्टोरेज (आपके उत्पादों और सेटिंग्स को सेव करने के लिए उपयोग किया जाता है) कोई कुकी नहीं है और किसी भी सर्वर पर नहीं भेजा जाता।",
+      childrenTitle: "बच्चों की गोपनीयता",
+      childrenText: "यह साइट बच्चों के लिए निर्देशित नहीं है और हम जानबूझकर बच्चों से व्यक्तिगत जानकारी एकत्र नहीं करते। हम जानबूझकर बच्चों को व्यक्तिगत विज्ञापन नहीं दिखाते।",
+      choicesTitle: "आपके विकल्प",
+      choicesText: "आप किसी भी समय अपने ब्राउज़र का साइट डेटा साफ़ करके ऐप द्वारा सेव किया गया सब कुछ हटा सकते हैं। इस साइट पर कुकी बैनर (और फ़ुटर में \"कुकी सेटिंग्स\" लिंक) आपको एनालिटिक्स और विज्ञापन कुकीज़ को पूरी तरह अस्वीकार करने देता है - साइट दोनों ही तरह से बिल्कुल एक जैसी काम करती है। आप ट्रैकिंग को सीमित करने के लिए ब्राउज़र सेटिंग्स, एक्सटेंशन, या Google के ऑप्ट-आउट टूल (ऊपर \"विज्ञापन\" देखें) का भी उपयोग कर सकते हैं।",
+      changesTitle: "इस नीति में परिवर्तन",
+      changesText: "हम समय-समय पर इस नीति को अपडेट कर सकते हैं। परिवर्तनों को अपडेटेड तारीख के साथ इस पृष्ठ पर पोस्ट किया जाएगा।",
+      contactTitle: "संपर्क करें",
+      contactText: "इस नीति के बारे में प्रश्न हमारे <a href=\"contact\">संपर्क फ़ॉर्म</a> के माध्यम से भेजे जा सकते हैं।"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      docTitle: "Política de Privacidad",
+      updatedLabel: "Última actualización:",
+      overviewTitle: "Resumen",
+      overviewText: "GoOnlinePOS.com (\"nosotros\", \"nuestro\", \"la app\") es una herramienta de punto de venta gratuita basada en navegador. No hay registro ni cuenta de usuario. Esta política explica qué sucede con la información cuando la usas.",
+      noCollectTitle: "Información que no recopilamos",
+      noCollectText: "No operamos un servidor que almacene los datos de tu negocio. Todo lo que ingresas - nombres y precios de productos, contenido del carrito, historial de ventas, datos de la tienda, tu logo y configuración de recibos - se guarda solo en el almacenamiento local de tu propio navegador, en tu propio dispositivo. Nunca recibimos, vemos ni tenemos acceso a nada de eso.",
+      autoCollectTitle: "Información recopilada automáticamente",
+      autoCollectIntro: "Usamos Google Analytics para entender el tráfico general del sitio (por ejemplo, cuántas personas lo visitan y aproximadamente desde dónde). Esto puede recopilar:",
+      autoLi1: "Páginas vistas y tiempo pasado en el sitio",
+      autoLi2: "Ubicación aproximada, derivada de la dirección IP (normalmente a nivel de país o ciudad)",
+      autoLi3: "Tipo de navegador, tipo de dispositivo, y sitio de referencia",
+      autoOutro: "Google Analytics usa cookies para hacer esto. Puedes obtener más información sobre cómo Google maneja estos datos en la <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">Política de Privacidad de Google</a>.",
+      adsTitle: "Publicidad",
+      adsPara1: "Este sitio usa <strong>Google AdSense</strong> y puede mostrar anuncios servidos por él. Google, como proveedor externo, y sus socios publicitarios usan cookies (incluida la cookie de DoubleClick) para mostrar anuncios basados en las visitas previas de un usuario a este sitio o a otros sitios en internet. Esto permite que Google y sus socios muestren anuncios que puedan ser más relevantes para ti.",
+      adsPara2: "Puedes optar por no recibir publicidad personalizada visitando <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">Configuración de Anuncios de Google</a>. También puedes optar por que un proveedor externo no use cookies para publicidad personalizada visitando <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a>. Desactivarlo no elimina los anuncios del sitio - solo hace que estén menos personalizados para ti.",
+      thirdPartyTitle: "Servicios de terceros",
+      thirdPartyIntro: "La app carga una pequeña cantidad de recursos de proveedores externos para funcionar:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - para las tipografías usadas en la página",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - para la librería que impulsa \"Descargar Informe de Ventas\"",
+      tpLi3: "<strong>Google Analytics</strong> - para estadísticas básicas de tráfico, como se describe arriba",
+      tpLi4: "<strong>Google AdSense</strong> - puede mostrar anuncios, como se describe arriba",
+      thirdPartyOutro: "Estos proveedores pueden registrar solicitudes (incluida la dirección IP) según sus propias políticas de privacidad, de forma independiente a nosotros.",
+      dataLossTitle: "Tus datos se pueden perder - por favor haz una copia de seguridad",
+      dataLossText: "Como tus productos, historial de ventas y configuración se almacenan solo en tu navegador, borrar los datos del sitio de tu navegador, cambiar de navegador o dispositivo, o reinstalar tu navegador los eliminará permanentemente. No tenemos forma de recuperar esta información. Recomendamos usar regularmente el botón <strong>\"Descargar Copia de Seguridad Completa\"</strong> en Configuración para conservar tu propia copia de tus datos.",
+      cookiesTitle: "Cookies",
+      cookiesText: "Aparte de las cookies establecidas por Google Analytics y Google AdSense, la app en sí no establece cookies. El almacenamiento local de tu navegador (usado para guardar tus productos y configuración) no es una cookie y no se envía a ningún servidor.",
+      childrenTitle: "Privacidad de los niños",
+      childrenText: "Este sitio no está dirigido a niños y no recopilamos a sabiendas información personal de niños. No mostramos a sabiendas anuncios personalizados a niños.",
+      choicesTitle: "Tus opciones",
+      choicesText: "Puedes borrar los datos del sitio de tu navegador en cualquier momento para eliminar todo lo guardado por la app. El banner de cookies en este sitio (y el enlace \"Configuración de Cookies\" en el pie de página) te permite rechazar por completo las cookies de análisis y publicidad - el sitio funciona exactamente igual en cualquier caso. También puedes usar la configuración del navegador, extensiones, o las herramientas de exclusión de Google (ver \"Publicidad\" arriba) para limitar el rastreo.",
+      changesTitle: "Cambios a esta política",
+      changesText: "Podemos actualizar esta política de vez en cuando. Los cambios se publicarán en esta página con una fecha de actualización.",
+      contactTitle: "Contacto",
+      contactText: "Las preguntas sobre esta política se pueden enviar a través de nuestro <a href=\"contact\">formulario de contacto</a>."
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      docTitle: "นโยบายความเป็นส่วนตัว",
+      updatedLabel: "อัปเดตล่าสุด:",
+      overviewTitle: "ภาพรวม",
+      overviewText: "GoOnlinePOS.com (\"เรา\" \"ของเรา\" \"แอป\") เป็นเครื่องมือขายหน้าร้านฟรีที่ทำงานผ่านเบราว์เซอร์ ไม่มีการสมัครสมาชิกและไม่มีบัญชีผู้ใช้ นโยบายนี้อธิบายว่าจะเกิดอะไรขึ้นกับข้อมูลเมื่อคุณใช้งาน",
+      noCollectTitle: "ข้อมูลที่เราไม่เก็บรวบรวม",
+      noCollectText: "เราไม่ได้เปิดเซิร์ฟเวอร์ที่เก็บข้อมูลธุรกิจของคุณ ทุกสิ่งที่คุณป้อน - ชื่อและราคาสินค้า เนื้อหาตะกร้าสินค้า ประวัติการขาย รายละเอียดร้านค้า โลโก้ของคุณ และการตั้งค่าใบเสร็จ - จะถูกบันทึกไว้ในที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์คุณเองเท่านั้น บนอุปกรณ์ของคุณเอง เราไม่เคยได้รับ เห็น หรือเข้าถึงข้อมูลเหล่านี้เลย",
+      autoCollectTitle: "ข้อมูลที่เก็บรวบรวมโดยอัตโนมัติ",
+      autoCollectIntro: "เราใช้ Google Analytics เพื่อทำความเข้าใจปริมาณการเข้าชมโดยรวมของไซต์ (เช่น มีผู้เข้าชมกี่คนและมาจากที่ใดโดยประมาณ) ซึ่งอาจเก็บรวบรวม:",
+      autoLi1: "หน้าที่ดูและเวลาที่ใช้บนไซต์",
+      autoLi2: "ตำแหน่งโดยประมาณ ที่ได้มาจากที่อยู่ IP (โดยทั่วไปในระดับประเทศหรือเมือง)",
+      autoLi3: "ประเภทเบราว์เซอร์ ประเภทอุปกรณ์ และไซต์ที่อ้างอิงมา",
+      autoOutro: "Google Analytics ใช้คุกกี้เพื่อทำสิ่งนี้ คุณสามารถดูข้อมูลเพิ่มเติมเกี่ยวกับวิธีที่ Google จัดการข้อมูลนี้ได้ที่ <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">นโยบายความเป็นส่วนตัวของ Google</a>",
+      adsTitle: "การโฆษณา",
+      adsPara1: "ไซต์นี้ใช้ <strong>Google AdSense</strong> และอาจแสดงโฆษณาที่ให้บริการโดย Google Google ในฐานะผู้ให้บริการบุคคลที่สาม และพันธมิตรโฆษณาของ Google ใช้คุกกี้ (รวมถึงคุกกี้ DoubleClick) เพื่อแสดงโฆษณาตามการเข้าชมไซต์นี้หรือไซต์อื่น ๆ บนอินเทอร์เน็ตของผู้ใช้ก่อนหน้านี้ สิ่งนี้ทำให้ Google และพันธมิตรสามารถแสดงโฆษณาที่อาจเกี่ยวข้องกับคุณมากขึ้น",
+      adsPara2: "คุณสามารถเลือกไม่รับโฆษณาที่ปรับให้เหมาะกับคุณได้โดยไปที่ <a href=\"https://adssettings.google.com\" target=\"_blank\" rel=\"noopener\">การตั้งค่าโฆษณาของ Google</a> คุณยังสามารถเลือกไม่ให้ผู้ให้บริการบุคคลที่สามใช้คุกกี้สำหรับโฆษณาที่ปรับให้เหมาะกับคุณได้โดยไปที่ <a href=\"https://www.aboutads.info/choices\" target=\"_blank\" rel=\"noopener\">www.aboutads.info</a> การเลือกไม่รับไม่ได้ลบโฆษณาออกจากไซต์ - เพียงแค่ทำให้โฆษณาเหมาะกับคุณน้อยลงเท่านั้น",
+      thirdPartyTitle: "บริการของบุคคลที่สาม",
+      thirdPartyIntro: "แอปโหลดทรัพยากรจำนวนเล็กน้อยจากผู้ให้บริการบุคคลที่สามเพื่อให้ทำงานได้:",
+      tpLi1: "<strong>Google Fonts</strong> (fonts.googleapis.com, fonts.gstatic.com) - สำหรับแบบอักษรที่ใช้บนหน้าเว็บ",
+      tpLi2: "<strong>cdnjs.cloudflare.com</strong> - สำหรับไลบรารีที่ขับเคลื่อนฟีเจอร์ \"ดาวน์โหลดรายงานการขาย\"",
+      tpLi3: "<strong>Google Analytics</strong> - สำหรับสถิติการเข้าชมพื้นฐาน ตามที่อธิบายไว้ข้างต้น",
+      tpLi4: "<strong>Google AdSense</strong> - อาจแสดงโฆษณา ตามที่อธิบายไว้ข้างต้น",
+      thirdPartyOutro: "ผู้ให้บริการเหล่านี้อาจบันทึกคำขอ (รวมถึงที่อยู่ IP) ตามนโยบายความเป็นส่วนตัวของตนเอง โดยเป็นอิสระจากเรา",
+      dataLossTitle: "ข้อมูลของคุณอาจสูญหายได้ - โปรดสำรองข้อมูล",
+      dataLossText: "เนื่องจากสินค้า ประวัติการขาย และการตั้งค่าของคุณถูกเก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น การล้างข้อมูลไซต์ของเบราว์เซอร์ การเปลี่ยนเบราว์เซอร์หรืออุปกรณ์ หรือการติดตั้งเบราว์เซอร์ใหม่จะลบข้อมูลเหล่านั้นอย่างถาวร เราไม่มีวิธีกู้คืนข้อมูลนี้ เราขอแนะนำให้ใช้ปุ่ม <strong>\"ดาวน์โหลดข้อมูลสำรองทั้งหมด\"</strong> ในการตั้งค่าเป็นประจำเพื่อเก็บสำเนาข้อมูลของคุณเอง",
+      cookiesTitle: "คุกกี้",
+      cookiesText: "นอกเหนือจากคุกกี้ที่ตั้งค่าโดย Google Analytics และ Google AdSense แล้ว ตัวแอปเองไม่ได้ตั้งค่าคุกกี้ ที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์คุณ (ใช้เพื่อบันทึกสินค้าและการตั้งค่าของคุณ) ไม่ใช่คุกกี้และไม่ถูกส่งไปยังเซิร์ฟเวอร์ใด ๆ",
+      childrenTitle: "ความเป็นส่วนตัวของเด็ก",
+      childrenText: "ไซต์นี้ไม่ได้มุ่งเป้าไปที่เด็ก และเราไม่เก็บรวบรวมข้อมูลส่วนบุคคลจากเด็กโดยเจตนา เราไม่แสดงโฆษณาที่ปรับให้เหมาะกับเด็กโดยเจตนา",
+      choicesTitle: "ตัวเลือกของคุณ",
+      choicesText: "คุณสามารถล้างข้อมูลไซต์ของเบราว์เซอร์ได้ทุกเมื่อเพื่อลบทุกสิ่งที่แอปบันทึกไว้ แบนเนอร์คุกกี้บนไซต์นี้ (และลิงก์ \"การตั้งค่าคุกกี้\" ในส่วนท้าย) ช่วยให้คุณปฏิเสธคุกกี้การวิเคราะห์และโฆษณาได้อย่างสมบูรณ์ - ไซต์ทำงานเหมือนกันทุกประการไม่ว่าจะเลือกแบบใด คุณยังสามารถใช้การตั้งค่าเบราว์เซอร์ ส่วนขยาย หรือเครื่องมือเลือกไม่รับของ Google (ดู \"การโฆษณา\" ด้านบน) เพื่อจำกัดการติดตาม",
+      changesTitle: "การเปลี่ยนแปลงนโยบายนี้",
+      changesText: "เราอาจอัปเดตนโยบายนี้เป็นครั้งคราว การเปลี่ยนแปลงจะถูกโพสต์บนหน้านี้พร้อมวันที่อัปเดต",
+      contactTitle: "ติดต่อเรา",
+      contactText: "คำถามเกี่ยวกับนโยบายนี้สามารถส่งผ่าน<a href=\"contact\">แบบฟอร์มติดต่อ</a>ของเราได้"
+    }
+  };
+
+  var langSelect = document.getElementById("privacyLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+
+    var ids = {
+      langPickerLabel: "langPickerLabel", docTitle: "docTitle", updatedLabel: "updatedLabel",
+      overviewTitle: "overviewTitle", overviewText: "overviewText",
+      noCollectTitle: "noCollectTitle", noCollectText: "noCollectText",
+      autoCollectTitle: "autoCollectTitle", autoCollectIntro: "autoCollectIntro",
+      autoLi1: "autoLi1", autoLi2: "autoLi2", autoLi3: "autoLi3",
+      adsTitle: "adsTitle",
+      thirdPartyTitle: "thirdPartyTitle", thirdPartyIntro: "thirdPartyIntro", thirdPartyOutro: "thirdPartyOutro",
+      dataLossTitle: "dataLossTitle",
+      cookiesTitle: "cookiesTitle", cookiesText: "cookiesText",
+      childrenTitle: "childrenTitle", childrenText: "childrenText",
+      choicesTitle: "choicesTitle", choicesText: "choicesText",
+      changesTitle: "changesTitle", changesText: "changesText",
+      contactTitle: "contactTitle"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+
+    ["autoOutro", "adsPara1", "adsPara2", "tpLi1", "tpLi2", "tpLi3", "tpLi4", "dataLossText", "contactText"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-privacy-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-privacy-lang", currentLang()); } catch (e) {}
+  }
+
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

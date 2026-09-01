@@ -131,6 +131,10 @@ a { color: var(--accent-dark); }
   .site-header .header-right .site-nav a, .site-header .cta-btn { text-align: center; }
 }
 
+.lang-picker-bar { max-width: 760px; margin: 0 auto; display: flex; justify-content: flex-end; padding: 0 0 14px; }
+.lang-picker-bar label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.lang-picker-bar select { font-size: 12px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-transform: none; letter-spacing: normal; font-weight: 600; color: var(--ink); background: var(--panel); }
+
 .doc { max-width: 760px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 40px 48px; }
 .doc h1.doc-title { font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -.01em; margin: 0 0 6px; }
 .doc .updated { color: var(--muted); font-size: 13px; margin: 0 0 32px; }
@@ -193,50 +197,63 @@ a { color: var(--accent-dark); }
 </div>
 </header>
 
+<div class="lang-picker-bar">
+<label for="termsLanguage"><span id="langPickerLabel">Language</span>
+<select id="termsLanguage">
+<option value="en">English</option>
+<option value="ar">العربية</option>
+<option value="fil">Filipino</option>
+<option value="hi">हिन्दी</option>
+<option value="es">Español</option>
+<option value="th">ไทย</option>
+</select>
+</label>
+</div>
+
 <div class="doc">
-<h1 class="doc-title">Terms of Service</h1>
-<p class="updated">Last updated: August 23, 2026</p>
+<h1 class="doc-title" id="docTitle">Terms of Service</h1>
+<p class="updated"><span id="updatedLabel">Last updated:</span> August 23, 2026</p>
 
-<h2>Acceptance of terms</h2>
-<p>By using GoOnlinePOS.com, you agree to these terms. If you don't agree, please don't use the app.</p>
+<h2 id="acceptanceTitle">Acceptance of terms</h2>
+<p id="acceptanceText">By using GoOnlinePOS.com, you agree to these terms. If you don't agree, please don't use the app.</p>
 
-<h2>What the service is</h2>
-<p>GoOnlinePOS.com is a free, browser-based point of sale tool. There is no signup, no account, and no charge to use it. It lets you add products, ring up sales, and print receipts, all running in your own browser.</p>
+<h2 id="whatServiceTitle">What the service is</h2>
+<p id="whatServiceText">GoOnlinePOS.com is a free, browser-based point of sale tool. There is no signup, no account, and no charge to use it. It lets you add products, ring up sales, and print receipts, all running in your own browser.</p>
 
-<h2>Provided "as is"</h2>
-<p>The app is provided free of charge, "as is" and "as available," with no warranties of any kind - including no guarantee that it will be error-free, uninterrupted, secure, or fit for any particular purpose. You use it at your own risk.</p>
+<h2 id="asIsTitle">Provided "as is"</h2>
+<p id="asIsText">The app is provided free of charge, "as is" and "as available," with no warranties of any kind - including no guarantee that it will be error-free, uninterrupted, secure, or fit for any particular purpose. You use it at your own risk.</p>
 
-<h2>Your data is your responsibility</h2>
-<p>All data you enter - products, prices, sales history, receipts, your logo, and settings - is stored only in your own browser's local storage. We do not host, back up, or have any access to it. If your browser data is cleared, or you switch devices or browsers, that information is permanently lost and cannot be recovered by us. You're responsible for backing up anything important, including by using the "Download Sales Report" feature regularly.</p>
+<h2 id="dataResponsibilityTitle">Your data is your responsibility</h2>
+<p id="dataResponsibilityText">All data you enter - products, prices, sales history, receipts, your logo, and settings - is stored only in your own browser's local storage. We do not host, back up, or have any access to it. If your browser data is cleared, or you switch devices or browsers, that information is permanently lost and cannot be recovered by us. You're responsible for backing up anything important, including by using the "Download Sales Report" feature regularly.</p>
 
-<h2>Compliance is your responsibility</h2>
-<p>GoOnlinePOS.com is a general-purpose tool. It does not verify or guarantee that the receipts, invoices, tax calculations, or business records it produces meet the legal, tax, or invoicing requirements of your city, country, or industry. You are responsible for confirming that your use of this tool complies with local law, including any tax registration numbers, receipt formatting rules, or record-keeping obligations that apply to your business.</p>
+<h2 id="complianceTitle">Compliance is your responsibility</h2>
+<p id="complianceText">GoOnlinePOS.com is a general-purpose tool. It does not verify or guarantee that the receipts, invoices, tax calculations, or business records it produces meet the legal, tax, or invoicing requirements of your city, country, or industry. You are responsible for confirming that your use of this tool complies with local law, including any tax registration numbers, receipt formatting rules, or record-keeping obligations that apply to your business.</p>
 
-<h2>Acceptable use</h2>
-<p>You agree not to use the service to:</p>
+<h2 id="acceptableUseTitle">Acceptable use</h2>
+<p id="acceptableUseIntro">You agree not to use the service to:</p>
 <ul>
-<li>Break any applicable law</li>
-<li>Attempt to disrupt, overload, or gain unauthorized access to the site or its infrastructure</li>
-<li>Misrepresent the origin of the tool or falsely claim affiliation with GoOnlinePOS.com</li>
+<li id="auLi1">Break any applicable law</li>
+<li id="auLi2">Attempt to disrupt, overload, or gain unauthorized access to the site or its infrastructure</li>
+<li id="auLi3">Misrepresent the origin of the tool or falsely claim affiliation with GoOnlinePOS.com</li>
 </ul>
 
-<h2>Third-party services</h2>
-<p>The app relies on third-party infrastructure to run, including Google Fonts, Google Analytics, Google AdSense (which may serve ads on this site - see our <a href="privacy">Privacy Policy</a> for details), and a script library served from cdnjs.cloudflare.com. We aren't responsible for the availability, performance, or policies of these third parties.</p>
+<h2 id="thirdPartyTitle">Third-party services</h2>
+<p id="thirdPartyText">The app relies on third-party infrastructure to run, including Google Fonts, Google Analytics, Google AdSense (which may serve ads on this site - see our <a href="privacy">Privacy Policy</a> for details), and a script library served from cdnjs.cloudflare.com. We aren't responsible for the availability, performance, or policies of these third parties.</p>
 
-<h2>Limitation of liability</h2>
-<p>To the fullest extent permitted by law, GoOnlinePOS.com and its operator are not liable for any indirect, incidental, or consequential damages arising from your use of the service - including lost data, lost sales, or business interruption - even if we've been advised of the possibility of such damages.</p>
+<h2 id="liabilityTitle">Limitation of liability</h2>
+<p id="liabilityText">To the fullest extent permitted by law, GoOnlinePOS.com and its operator are not liable for any indirect, incidental, or consequential damages arising from your use of the service - including lost data, lost sales, or business interruption - even if we've been advised of the possibility of such damages.</p>
 
-<h2>Changes to the service</h2>
-<p>Because this is a free tool, we may add, change, or discontinue features - or the service entirely - at any time, without notice.</p>
+<h2 id="changesServiceTitle">Changes to the service</h2>
+<p id="changesServiceText">Because this is a free tool, we may add, change, or discontinue features - or the service entirely - at any time, without notice.</p>
 
-<h2>Changes to these terms</h2>
-<p>We may update these terms from time to time. Continued use of the app after changes are posted means you accept the updated terms.</p>
+<h2 id="changesTermsTitle">Changes to these terms</h2>
+<p id="changesTermsText">We may update these terms from time to time. Continued use of the app after changes are posted means you accept the updated terms.</p>
 
-<h2>Governing law</h2>
-<p>GoOnlinePOS.com is offered globally as a free service, with no signup or region restriction, and no jurisdiction is designated in these terms. If a dispute ever arises, it will be resolved under whatever law properly applies at that time based on the circumstances, rather than a jurisdiction pre-selected here.</p>
+<h2 id="governingLawTitle">Governing law</h2>
+<p id="governingLawText">GoOnlinePOS.com is offered globally as a free service, with no signup or region restriction, and no jurisdiction is designated in these terms. If a dispute ever arises, it will be resolved under whatever law properly applies at that time based on the circumstances, rather than a jurisdiction pre-selected here.</p>
 
-<h2>Contact</h2>
-<p>Questions about these terms can be sent through our <a href="contact">contact form</a>.</p>
+<h2 id="contactTitle">Contact</h2>
+<p id="contactText">Questions about these terms can be sent through our <a href="contact">contact form</a>.</p>
 
 <footer class="site-footer">
 <a href="contact">Contact</a>
@@ -265,6 +282,260 @@ a { color: var(--accent-dark); }
 <button type="button" class="cc-close" onclick="closeCookieBanner()">Close</button>
 </div>
 </div>
+
+<script>
+(function() {
+  var translations = {
+    en: {
+      langPickerLabel: "Language",
+      docTitle: "Terms of Service",
+      updatedLabel: "Last updated:",
+      acceptanceTitle: "Acceptance of terms",
+      acceptanceText: "By using GoOnlinePOS.com, you agree to these terms. If you don't agree, please don't use the app.",
+      whatServiceTitle: "What the service is",
+      whatServiceText: "GoOnlinePOS.com is a free, browser-based point of sale tool. There is no signup, no account, and no charge to use it. It lets you add products, ring up sales, and print receipts, all running in your own browser.",
+      asIsTitle: "Provided \"as is\"",
+      asIsText: "The app is provided free of charge, \"as is\" and \"as available,\" with no warranties of any kind - including no guarantee that it will be error-free, uninterrupted, secure, or fit for any particular purpose. You use it at your own risk.",
+      dataResponsibilityTitle: "Your data is your responsibility",
+      dataResponsibilityText: "All data you enter - products, prices, sales history, receipts, your logo, and settings - is stored only in your own browser's local storage. We do not host, back up, or have any access to it. If your browser data is cleared, or you switch devices or browsers, that information is permanently lost and cannot be recovered by us. You're responsible for backing up anything important, including by using the \"Download Sales Report\" feature regularly.",
+      complianceTitle: "Compliance is your responsibility",
+      complianceText: "GoOnlinePOS.com is a general-purpose tool. It does not verify or guarantee that the receipts, invoices, tax calculations, or business records it produces meet the legal, tax, or invoicing requirements of your city, country, or industry. You are responsible for confirming that your use of this tool complies with local law, including any tax registration numbers, receipt formatting rules, or record-keeping obligations that apply to your business.",
+      acceptableUseTitle: "Acceptable use",
+      acceptableUseIntro: "You agree not to use the service to:",
+      auLi1: "Break any applicable law",
+      auLi2: "Attempt to disrupt, overload, or gain unauthorized access to the site or its infrastructure",
+      auLi3: "Misrepresent the origin of the tool or falsely claim affiliation with GoOnlinePOS.com",
+      thirdPartyTitle: "Third-party services",
+      thirdPartyText: "The app relies on third-party infrastructure to run, including Google Fonts, Google Analytics, Google AdSense (which may serve ads on this site - see our <a href=\"privacy\">Privacy Policy</a> for details), and a script library served from cdnjs.cloudflare.com. We aren't responsible for the availability, performance, or policies of these third parties.",
+      liabilityTitle: "Limitation of liability",
+      liabilityText: "To the fullest extent permitted by law, GoOnlinePOS.com and its operator are not liable for any indirect, incidental, or consequential damages arising from your use of the service - including lost data, lost sales, or business interruption - even if we've been advised of the possibility of such damages.",
+      changesServiceTitle: "Changes to the service",
+      changesServiceText: "Because this is a free tool, we may add, change, or discontinue features - or the service entirely - at any time, without notice.",
+      changesTermsTitle: "Changes to these terms",
+      changesTermsText: "We may update these terms from time to time. Continued use of the app after changes are posted means you accept the updated terms.",
+      governingLawTitle: "Governing law",
+      governingLawText: "GoOnlinePOS.com is offered globally as a free service, with no signup or region restriction, and no jurisdiction is designated in these terms. If a dispute ever arises, it will be resolved under whatever law properly applies at that time based on the circumstances, rather than a jurisdiction pre-selected here.",
+      contactTitle: "Contact",
+      contactText: "Questions about these terms can be sent through our <a href=\"contact\">contact form</a>."
+    },
+    ar: {
+      langPickerLabel: "اللغة",
+      docTitle: "شروط الخدمة",
+      updatedLabel: "آخر تحديث:",
+      acceptanceTitle: "قبول الشروط",
+      acceptanceText: "باستخدامك لموقع GoOnlinePOS.com، فإنك توافق على هذه الشروط. إذا كنت لا توافق، يُرجى عدم استخدام التطبيق.",
+      whatServiceTitle: "ماهية الخدمة",
+      whatServiceText: "GoOnlinePOS.com هو أداة نقاط بيع مجانية تعمل عبر المتصفح. لا يوجد تسجيل، ولا حساب، ولا رسوم لاستخدامه. يتيح لك إضافة المنتجات، وتسجيل المبيعات، وطباعة الإيصالات، وكل ذلك يعمل داخل متصفحك الخاص.",
+      asIsTitle: "يُقدَّم \"كما هو\"",
+      asIsText: "يُقدَّم التطبيق مجانًا، \"كما هو\" و\"كما هو متاح\"، دون أي ضمانات من أي نوع - بما في ذلك عدم وجود ضمان بأنه سيكون خاليًا من الأخطاء، أو مستمرًا دون انقطاع، أو آمنًا، أو مناسبًا لأي غرض معين. أنت تستخدمه على مسؤوليتك الخاصة.",
+      dataResponsibilityTitle: "بياناتك هي مسؤوليتك",
+      dataResponsibilityText: "كل البيانات التي تُدخلها - المنتجات، الأسعار، سجل المبيعات، الإيصالات، شعارك، والإعدادات - تُخزَّن فقط في التخزين المحلي لمتصفحك الخاص. نحن لا نستضيف هذه البيانات، ولا ننسخها احتياطيًا، ولا نملك أي وصول إليها. إذا تم مسح بيانات متصفحك، أو قمت بتغيير الجهاز أو المتصفح، فإن تلك المعلومات تُفقد بشكل نهائي ولا يمكننا استرجاعها. أنت مسؤول عن عمل نسخة احتياطية من أي شيء مهم، بما في ذلك استخدام ميزة \"تنزيل تقرير المبيعات\" بانتظام.",
+      complianceTitle: "الامتثال هو مسؤوليتك",
+      complianceText: "GoOnlinePOS.com هو أداة عامة الغرض. إنه لا يتحقق من أو يضمن أن الإيصالات أو الفواتير أو حسابات الضريبة أو السجلات التجارية التي ينتجها تلبي المتطلبات القانونية أو الضريبية أو متطلبات الفوترة في مدينتك أو بلدك أو مجال عملك. أنت مسؤول عن التأكد من أن استخدامك لهذه الأداة يمتثل للقانون المحلي، بما في ذلك أي أرقام تسجيل ضريبي، أو قواعد تنسيق الإيصالات، أو التزامات حفظ السجلات التي تنطبق على عملك.",
+      acceptableUseTitle: "الاستخدام المقبول",
+      acceptableUseIntro: "توافق على عدم استخدام الخدمة من أجل:",
+      auLi1: "مخالفة أي قانون معمول به",
+      auLi2: "محاولة تعطيل الموقع أو بنيته التحتية أو إثقالها أو الوصول غير المصرح به إليها",
+      auLi3: "تحريف مصدر الأداة أو الادعاء زورًا بالانتماء إلى GoOnlinePOS.com",
+      thirdPartyTitle: "خدمات الطرف الثالث",
+      thirdPartyText: "يعتمد التطبيق على بنية تحتية من طرف ثالث ليعمل، بما في ذلك Google Fonts وGoogle Analytics وGoogle AdSense (التي قد تعرض إعلانات على هذا الموقع - راجع <a href=\"privacy\">سياسة الخصوصية</a> الخاصة بنا للتفاصيل)، ومكتبة برمجية تُقدَّم من cdnjs.cloudflare.com. نحن لسنا مسؤولين عن توفر أو أداء أو سياسات هذه الأطراف الثالثة.",
+      liabilityTitle: "حدود المسؤولية",
+      liabilityText: "إلى أقصى حد يسمح به القانون، لا يتحمل GoOnlinePOS.com ومشغّله المسؤولية عن أي أضرار غير مباشرة أو عرضية أو تبعية ناشئة عن استخدامك للخدمة - بما في ذلك فقدان البيانات، أو فقدان المبيعات، أو انقطاع العمل - حتى لو تم إخطارنا باحتمال حدوث مثل هذه الأضرار.",
+      changesServiceTitle: "تغييرات على الخدمة",
+      changesServiceText: "نظرًا لأن هذه أداة مجانية، فقد نضيف أو نغيّر أو نوقف الميزات - أو الخدمة بأكملها - في أي وقت، دون إشعار مسبق.",
+      changesTermsTitle: "تغييرات على هذه الشروط",
+      changesTermsText: "قد نقوم بتحديث هذه الشروط من وقت لآخر. يعني استمرار استخدام التطبيق بعد نشر التغييرات أنك تقبل الشروط المُحدَّثة.",
+      governingLawTitle: "القانون الحاكم",
+      governingLawText: "يُقدَّم GoOnlinePOS.com عالميًا كخدمة مجانية، دون تسجيل أو قيود إقليمية، ولا يتم تحديد أي اختصاص قضائي في هذه الشروط. إذا نشأ أي نزاع، فسيتم حله بموجب أي قانون ينطبق بشكل صحيح في ذلك الوقت بناءً على الظروف، بدلاً من اختصاص قضائي محدد مسبقًا هنا.",
+      contactTitle: "التواصل معنا",
+      contactText: "يمكن إرسال الأسئلة حول هذه الشروط من خلال <a href=\"contact\">نموذج التواصل</a> الخاص بنا."
+    },
+    fil: {
+      langPickerLabel: "Wika",
+      docTitle: "Mga Tuntunin ng Serbisyo",
+      updatedLabel: "Huling na-update:",
+      acceptanceTitle: "Pagtanggap sa mga tuntunin",
+      acceptanceText: "Sa paggamit ng GoOnlinePOS.com, sumasang-ayon ka sa mga tuntuning ito. Kung hindi ka sumasang-ayon, mangyaring huwag gamitin ang app.",
+      whatServiceTitle: "Ano ang serbisyo",
+      whatServiceText: "Ang GoOnlinePOS.com ay isang libre, browser-based na point of sale tool. Walang sign up, walang account, at walang bayad para gamitin ito. Hinahayaan ka nitong magdagdag ng produkto, magbenta, at mag-print ng resibo, lahat ay gumagana sa sarili mong browser.",
+      asIsTitle: "Ibinibigay nang \"as is\"",
+      asIsText: "Ang app ay ibinibigay nang walang bayad, \"as is\" at \"as available,\" na walang anumang uri ng warranty - kabilang ang walang garantiya na ito ay magiging walang error, walang patid, secure, o angkop para sa anumang partikular na layunin. Ginagamit mo ito sa sarili mong pananagutan.",
+      dataResponsibilityTitle: "Ang iyong data ay pananagutan mo",
+      dataResponsibilityText: "Lahat ng data na iyong inilalagay - mga produkto, presyo, kasaysayan ng benta, resibo, iyong logo, at settings - ay naka-store lang sa local storage ng sarili mong browser. Hindi namin ito hina-host, binabackup, o inaaccess sa anumang paraan. Kung na-clear ang data ng browser mo, o lumipat ka ng device o browser, ang impormasyong iyon ay permanenteng mawawala at hindi namin ito maibabalik. Ikaw ang responsable sa pag-backup ng anumang mahalaga, kabilang ang regular na paggamit ng feature na \"Download Sales Report.\"",
+      complianceTitle: "Pagsunod sa batas ay pananagutan mo",
+      complianceText: "Ang GoOnlinePOS.com ay isang pangkalahatang layunin na tool. Hindi nito bine-verify o ginagarantiya na ang mga resibo, invoice, kalkulasyon ng buwis, o business record na nililikha nito ay sumusunod sa legal, buwis, o requirement sa invoicing ng iyong lungsod, bansa, o industriya. Ikaw ang responsable sa pagtiyak na ang paggamit mo ng tool na ito ay sumusunod sa lokal na batas, kabilang ang anumang tax registration number, mga panuntunan sa pag-format ng resibo, o obligasyon sa pagtatago ng record na naaangkop sa negosyo mo.",
+      acceptableUseTitle: "Katanggap-tanggap na paggamit",
+      acceptableUseIntro: "Sumasang-ayon kang hindi gagamitin ang serbisyo para:",
+      auLi1: "Lumabag sa anumang naaangkop na batas",
+      auLi2: "Subukang guluhin, i-overload, o makakuha ng hindi awtorisadong access sa site o sa imprastraktura nito",
+      auLi3: "Magmali-mali sa pinagmulan ng tool o magsinungaling ng koneksyon sa GoOnlinePOS.com",
+      thirdPartyTitle: "Mga serbisyo ng third-party",
+      thirdPartyText: "Umaasa ang app sa third-party na imprastraktura para gumana, kabilang ang Google Fonts, Google Analytics, Google AdSense (na maaaring maglagay ng ads sa site na ito - tingnan ang aming <a href=\"privacy\">Patakaran sa Privacy</a> para sa detalye), at isang script library na nagmumula sa cdnjs.cloudflare.com. Hindi kami responsable sa availability, performance, o mga patakaran ng mga third party na ito.",
+      liabilityTitle: "Limitasyon ng pananagutan",
+      liabilityText: "Sa pinakamalawak na saklaw na pinapahintulutan ng batas, ang GoOnlinePOS.com at ang operator nito ay hindi mananagot para sa anumang hindi direkta, insidental, o kahihinatnang pinsala na nagmumula sa paggamit mo ng serbisyo - kabilang ang nawalang data, nawalang benta, o pagkaantala ng negosyo - kahit na napayuhan na kami tungkol sa posibilidad ng ganitong mga pinsala.",
+      changesServiceTitle: "Mga pagbabago sa serbisyo",
+      changesServiceText: "Dahil libreng tool ito, maaari kaming magdagdag, magbago, o mag-alis ng mga feature - o ng buong serbisyo - anumang oras, nang walang paunang abiso.",
+      changesTermsTitle: "Mga pagbabago sa mga tuntuning ito",
+      changesTermsText: "Maaari naming i-update ang mga tuntuning ito paminsan-minsan. Ang patuloy na paggamit ng app pagkatapos maipost ang mga pagbabago ay nangangahulugang tinatanggap mo ang na-update na mga tuntunin.",
+      governingLawTitle: "Naaangkop na batas",
+      governingLawText: "Ang GoOnlinePOS.com ay inaalok nang pandaigdigan bilang libreng serbisyo, walang sign up o paghihigpit sa rehiyon, at walang tinukoy na hurisdiksyon sa mga tuntuning ito. Kung magkaroon man ng alitan, ito ay malulutas ayon sa anumang batas na naaangkop nang tama sa panahong iyon batay sa mga pangyayari, sa halip na isang paunang-piniling hurisdiksyon dito.",
+      contactTitle: "Makipag-ugnayan",
+      contactText: "Maaaring ipadala ang mga tanong tungkol sa mga tuntuning ito sa pamamagitan ng aming <a href=\"contact\">contact form</a>."
+    },
+    hi: {
+      langPickerLabel: "भाषा",
+      docTitle: "सेवा की शर्तें",
+      updatedLabel: "आखिरी अपडेट:",
+      acceptanceTitle: "शर्तों की स्वीकृति",
+      acceptanceText: "GoOnlinePOS.com का उपयोग करके, आप इन शर्तों से सहमत होते हैं। यदि आप सहमत नहीं हैं, तो कृपया ऐप का उपयोग न करें।",
+      whatServiceTitle: "सेवा क्या है",
+      whatServiceText: "GoOnlinePOS.com एक मुफ़्त, ब्राउज़र-आधारित पॉइंट ऑफ़ सेल टूल है। इसमें कोई साइनअप, कोई खाता नहीं है, और इसका उपयोग करने का कोई शुल्क नहीं है। यह आपको उत्पाद जोड़ने, बिक्री दर्ज करने, और रसीदें प्रिंट करने देता है, यह सब आपके अपने ब्राउज़र में चलता है।",
+      asIsTitle: "\"जैसा है\" के आधार पर प्रदान किया गया",
+      asIsText: "ऐप मुफ़्त में, \"जैसा है\" और \"जैसा उपलब्ध है\" के आधार पर प्रदान किया जाता है, बिना किसी प्रकार की वारंटी के - जिसमें यह गारंटी शामिल नहीं है कि यह त्रुटि-मुक्त, निर्बाध, सुरक्षित, या किसी विशेष उद्देश्य के लिए उपयुक्त होगा। आप इसका उपयोग अपने जोखिम पर करते हैं।",
+      dataResponsibilityTitle: "आपका डेटा आपकी ज़िम्मेदारी है",
+      dataResponsibilityText: "आपके द्वारा दर्ज किया गया सभी डेटा - उत्पाद, कीमतें, बिक्री इतिहास, रसीदें, आपका लोगो, और सेटिंग्स - केवल आपके अपने ब्राउज़र के लोकल स्टोरेज में संग्रहीत होता है। हम इसे होस्ट नहीं करते, इसका बैकअप नहीं लेते, और इस तक हमारी कोई पहुंच नहीं है। यदि आपका ब्राउज़र डेटा साफ़ हो जाता है, या आप डिवाइस या ब्राउज़र बदलते हैं, तो वह जानकारी स्थायी रूप से खो जाती है और हमारे द्वारा पुनर्प्राप्त नहीं की जा सकती। किसी भी महत्वपूर्ण चीज़ का बैकअप लेना आपकी ज़िम्मेदारी है, जिसमें \"बिक्री रिपोर्ट डाउनलोड करें\" सुविधा का नियमित रूप से उपयोग करना शामिल है।",
+      complianceTitle: "अनुपालन आपकी ज़िम्मेदारी है",
+      complianceText: "GoOnlinePOS.com एक सामान्य-उद्देश्य वाला टूल है। यह सत्यापित या गारंटी नहीं करता कि इसके द्वारा तैयार की गई रसीदें, इनवॉइस, कर गणना, या व्यावसायिक रिकॉर्ड आपके शहर, देश, या उद्योग की कानूनी, कर, या इनवॉइसिंग आवश्यकताओं को पूरा करते हैं। यह सुनिश्चित करना आपकी ज़िम्मेदारी है कि इस टूल का आपका उपयोग स्थानीय कानून के अनुरूप है, जिसमें आपके व्यवसाय पर लागू कोई भी कर पंजीकरण संख्या, रसीद प्रारूपण नियम, या रिकॉर्ड-रखरखाव संबंधी दायित्व शामिल हैं।",
+      acceptableUseTitle: "स्वीकार्य उपयोग",
+      acceptableUseIntro: "आप सेवा का उपयोग निम्नलिखित के लिए न करने पर सहमत होते हैं:",
+      auLi1: "किसी भी लागू कानून का उल्लंघन करना",
+      auLi2: "साइट या उसके इन्फ्रास्ट्रक्चर को बाधित करने, ओवरलोड करने, या उस तक अनधिकृत पहुंच प्राप्त करने का प्रयास करना",
+      auLi3: "टूल के मूल स्रोत को गलत तरीके से प्रस्तुत करना या GoOnlinePOS.com के साथ झूठे संबद्धता का दावा करना",
+      thirdPartyTitle: "तृतीय-पक्ष सेवाएं",
+      thirdPartyText: "ऐप चलाने के लिए तृतीय-पक्ष इन्फ्रास्ट्रक्चर पर निर्भर करता है, जिसमें Google Fonts, Google Analytics, Google AdSense (जो इस साइट पर विज्ञापन दिखा सकता है - विवरण के लिए हमारी <a href=\"privacy\">गोपनीयता नीति</a> देखें), और cdnjs.cloudflare.com से प्रदान की जाने वाली एक स्क्रिप्ट लाइब्रेरी शामिल है। हम इन तृतीय पक्षों की उपलब्धता, प्रदर्शन, या नीतियों के लिए ज़िम्मेदार नहीं हैं।",
+      liabilityTitle: "दायित्व की सीमा",
+      liabilityText: "कानून द्वारा अनुमत पूरी सीमा तक, GoOnlinePOS.com और इसका संचालक आपकी सेवा के उपयोग से उत्पन्न होने वाले किसी भी अप्रत्यक्ष, आकस्मिक, या परिणामी नुकसान के लिए उत्तरदायी नहीं है - जिसमें डेटा की हानि, बिक्री की हानि, या व्यावसायिक व्यवधान शामिल है - भले ही हमें ऐसे नुकसान की संभावना के बारे में सूचित किया गया हो।",
+      changesServiceTitle: "सेवा में परिवर्तन",
+      changesServiceText: "चूंकि यह एक मुफ़्त टूल है, हम किसी भी समय, बिना सूचना के, सुविधाएं - या पूरी सेवा - जोड़ सकते हैं, बदल सकते हैं, या बंद कर सकते हैं।",
+      changesTermsTitle: "इन शर्तों में परिवर्तन",
+      changesTermsText: "हम समय-समय पर इन शर्तों को अपडेट कर सकते हैं। परिवर्तन पोस्ट होने के बाद ऐप का निरंतर उपयोग करने का अर्थ है कि आप अपडेट की गई शर्तों को स्वीकार करते हैं।",
+      governingLawTitle: "शासी कानून",
+      governingLawText: "GoOnlinePOS.com को वैश्विक स्तर पर एक मुफ़्त सेवा के रूप में पेश किया जाता है, बिना किसी साइनअप या क्षेत्रीय प्रतिबंध के, और इन शर्तों में कोई अधिकार क्षेत्र निर्दिष्ट नहीं किया गया है। यदि कभी कोई विवाद उत्पन्न होता है, तो इसे उन परिस्थितियों के आधार पर उस समय उचित रूप से लागू होने वाले किसी भी कानून के तहत हल किया जाएगा, न कि यहां पहले से चुने गए किसी अधिकार क्षेत्र के तहत।",
+      contactTitle: "संपर्क करें",
+      contactText: "इन शर्तों के बारे में प्रश्न हमारे <a href=\"contact\">संपर्क फ़ॉर्म</a> के माध्यम से भेजे जा सकते हैं।"
+    },
+    es: {
+      langPickerLabel: "Idioma",
+      docTitle: "Términos de Servicio",
+      updatedLabel: "Última actualización:",
+      acceptanceTitle: "Aceptación de los términos",
+      acceptanceText: "Al usar GoOnlinePOS.com, aceptas estos términos. Si no estás de acuerdo, por favor no uses la app.",
+      whatServiceTitle: "Qué es el servicio",
+      whatServiceText: "GoOnlinePOS.com es una herramienta de punto de venta gratuita basada en navegador. No hay registro, ni cuenta, ni costo por usarla. Te permite agregar productos, registrar ventas e imprimir recibos, todo funcionando en tu propio navegador.",
+      asIsTitle: "Provisto \"tal cual\"",
+      asIsText: "La app se ofrece de forma gratuita, \"tal cual\" y \"según disponibilidad\", sin garantías de ningún tipo - incluyendo ninguna garantía de que estará libre de errores, ininterrumpida, segura, o adecuada para un propósito particular. La usas bajo tu propio riesgo.",
+      dataResponsibilityTitle: "Tus datos son tu responsabilidad",
+      dataResponsibilityText: "Todos los datos que ingresas - productos, precios, historial de ventas, recibos, tu logo y configuración - se almacenan solo en el almacenamiento local de tu propio navegador. No los alojamos, respaldamos, ni tenemos ningún acceso a ellos. Si se borran los datos de tu navegador, o cambias de dispositivo o navegador, esa información se pierde permanentemente y no puede ser recuperada por nosotros. Eres responsable de respaldar cualquier cosa importante, incluyendo el uso regular de la función \"Descargar Informe de Ventas\".",
+      complianceTitle: "El cumplimiento es tu responsabilidad",
+      complianceText: "GoOnlinePOS.com es una herramienta de propósito general. No verifica ni garantiza que los recibos, facturas, cálculos de impuestos, o registros comerciales que produce cumplan con los requisitos legales, fiscales, o de facturación de tu ciudad, país, o industria. Eres responsable de confirmar que tu uso de esta herramienta cumple con la ley local, incluyendo cualquier número de registro fiscal, reglas de formato de recibos, u obligaciones de mantenimiento de registros que apliquen a tu negocio.",
+      acceptableUseTitle: "Uso aceptable",
+      acceptableUseIntro: "Aceptas no usar el servicio para:",
+      auLi1: "Infringir cualquier ley aplicable",
+      auLi2: "Intentar interrumpir, sobrecargar, u obtener acceso no autorizado al sitio o a su infraestructura",
+      auLi3: "Tergiversar el origen de la herramienta o afirmar falsamente una afiliación con GoOnlinePOS.com",
+      thirdPartyTitle: "Servicios de terceros",
+      thirdPartyText: "La app depende de infraestructura de terceros para funcionar, incluyendo Google Fonts, Google Analytics, Google AdSense (que puede mostrar anuncios en este sitio - consulta nuestra <a href=\"privacy\">Política de Privacidad</a> para más detalles), y una librería de scripts servida desde cdnjs.cloudflare.com. No somos responsables de la disponibilidad, rendimiento, o políticas de estos terceros.",
+      liabilityTitle: "Limitación de responsabilidad",
+      liabilityText: "En la máxima medida permitida por la ley, GoOnlinePOS.com y su operador no son responsables de ningún daño indirecto, incidental, o consecuente que surja del uso del servicio - incluyendo pérdida de datos, pérdida de ventas, o interrupción del negocio - incluso si se nos ha advertido de la posibilidad de tales daños.",
+      changesServiceTitle: "Cambios al servicio",
+      changesServiceText: "Como esta es una herramienta gratuita, podemos agregar, cambiar, o descontinuar funciones - o el servicio por completo - en cualquier momento, sin previo aviso.",
+      changesTermsTitle: "Cambios a estos términos",
+      changesTermsText: "Podemos actualizar estos términos de vez en cuando. El uso continuado de la app después de que se publiquen los cambios significa que aceptas los términos actualizados.",
+      governingLawTitle: "Ley aplicable",
+      governingLawText: "GoOnlinePOS.com se ofrece globalmente como un servicio gratuito, sin registro ni restricción regional, y no se designa ninguna jurisdicción en estos términos. Si alguna vez surge una disputa, se resolverá según la ley que corresponda propiamente en ese momento según las circunstancias, en lugar de una jurisdicción preseleccionada aquí.",
+      contactTitle: "Contacto",
+      contactText: "Las preguntas sobre estos términos se pueden enviar a través de nuestro <a href=\"contact\">formulario de contacto</a>."
+    },
+    th: {
+      langPickerLabel: "ภาษา",
+      docTitle: "ข้อกำหนดการให้บริการ",
+      updatedLabel: "อัปเดตล่าสุด:",
+      acceptanceTitle: "การยอมรับข้อกำหนด",
+      acceptanceText: "การใช้งาน GoOnlinePOS.com ถือว่าคุณยอมรับข้อกำหนดเหล่านี้ หากคุณไม่ยอมรับ โปรดอย่าใช้แอปนี้",
+      whatServiceTitle: "บริการนี้คืออะไร",
+      whatServiceText: "GoOnlinePOS.com เป็นเครื่องมือขายหน้าร้านฟรีที่ทำงานผ่านเบราว์เซอร์ ไม่มีการสมัครสมาชิก ไม่มีบัญชี และไม่มีค่าใช้จ่ายในการใช้งาน ช่วยให้คุณเพิ่มสินค้า บันทึกการขาย และพิมพ์ใบเสร็จ โดยทำงานทั้งหมดในเบราว์เซอร์ของคุณเอง",
+      asIsTitle: "ให้บริการ \"ตามสภาพ\"",
+      asIsText: "แอปนี้ให้บริการฟรี \"ตามสภาพ\" และ \"ตามความพร้อมใช้งาน\" โดยไม่มีการรับประกันใด ๆ ทั้งสิ้น - รวมถึงไม่มีการรับประกันว่าจะปราศจากข้อผิดพลาด ทำงานต่อเนื่องไม่สะดุด ปลอดภัย หรือเหมาะสมกับวัตถุประสงค์เฉพาะใด ๆ คุณใช้งานโดยยอมรับความเสี่ยงด้วยตนเอง",
+      dataResponsibilityTitle: "ข้อมูลของคุณเป็นความรับผิดชอบของคุณ",
+      dataResponsibilityText: "ข้อมูลทั้งหมดที่คุณป้อน - สินค้า ราคา ประวัติการขาย ใบเสร็จ โลโก้ของคุณ และการตั้งค่า - จะถูกจัดเก็บไว้ในที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์คุณเองเท่านั้น เราไม่ได้โฮสต์ สำรองข้อมูล หรือเข้าถึงข้อมูลนี้แต่อย่างใด หากข้อมูลเบราว์เซอร์ของคุณถูกล้าง หรือคุณเปลี่ยนอุปกรณ์หรือเบราว์เซอร์ ข้อมูลนั้นจะสูญหายอย่างถาวรและเราไม่สามารถกู้คืนให้ได้ คุณมีหน้าที่รับผิดชอบในการสำรองข้อมูลสิ่งสำคัญใด ๆ รวมถึงการใช้ฟีเจอร์ \"ดาวน์โหลดรายงานการขาย\" เป็นประจำ",
+      complianceTitle: "การปฏิบัติตามกฎหมายเป็นความรับผิดชอบของคุณ",
+      complianceText: "GoOnlinePOS.com เป็นเครื่องมืออเนกประสงค์ ไม่ได้ตรวจสอบหรือรับประกันว่าใบเสร็จ ใบแจ้งหนี้ การคำนวณภาษี หรือบันทึกทางธุรกิจที่สร้างขึ้นจะตรงตามข้อกำหนดทางกฎหมาย ภาษี หรือการออกใบแจ้งหนี้ของเมือง ประเทศ หรืออุตสาหกรรมของคุณ คุณมีหน้าที่รับผิดชอบในการยืนยันว่าการใช้เครื่องมือนี้ของคุณเป็นไปตามกฎหมายท้องถิ่น รวมถึงหมายเลขทะเบียนภาษี กฎการจัดรูปแบบใบเสร็จ หรือข้อผูกพันในการเก็บบันทึกใด ๆ ที่เกี่ยวข้องกับธุรกิจของคุณ",
+      acceptableUseTitle: "การใช้งานที่ยอมรับได้",
+      acceptableUseIntro: "คุณตกลงที่จะไม่ใช้บริการนี้เพื่อ:",
+      auLi1: "ละเมิดกฎหมายที่บังคับใช้ใด ๆ",
+      auLi2: "พยายามรบกวน ทำให้ทำงานหนักเกินไป หรือเข้าถึงไซต์หรือโครงสร้างพื้นฐานโดยไม่ได้รับอนุญาต",
+      auLi3: "บิดเบือนแหล่งที่มาของเครื่องมือ หรืออ้างความเกี่ยวข้องเท็จกับ GoOnlinePOS.com",
+      thirdPartyTitle: "บริการของบุคคลที่สาม",
+      thirdPartyText: "แอปนี้พึ่งพาโครงสร้างพื้นฐานของบุคคลที่สามในการทำงาน รวมถึง Google Fonts, Google Analytics, Google AdSense (ซึ่งอาจแสดงโฆษณาบนไซต์นี้ - ดู<a href=\"privacy\">นโยบายความเป็นส่วนตัว</a>ของเราสำหรับรายละเอียด) และไลบรารีสคริปต์ที่ให้บริการจาก cdnjs.cloudflare.com เราไม่รับผิดชอบต่อความพร้อมใช้งาน ประสิทธิภาพ หรือนโยบายของบุคคลที่สามเหล่านี้",
+      liabilityTitle: "ข้อจำกัดความรับผิด",
+      liabilityText: "ในขอบเขตสูงสุดที่กฎหมายอนุญาต GoOnlinePOS.com และผู้ดำเนินการจะไม่รับผิดต่อความเสียหายทางอ้อม อุบัติเหตุ หรือที่เป็นผลสืบเนื่องใด ๆ ที่เกิดจากการใช้บริการของคุณ - รวมถึงข้อมูลสูญหาย ยอดขายสูญหาย หรือการหยุดชะงักทางธุรกิจ - แม้ว่าเราจะได้รับแจ้งถึงความเป็นไปได้ของความเสียหายดังกล่าวก็ตาม",
+      changesServiceTitle: "การเปลี่ยนแปลงบริการ",
+      changesServiceText: "เนื่องจากนี่เป็นเครื่องมือฟรี เราอาจเพิ่ม เปลี่ยนแปลง หรือยกเลิกฟีเจอร์ - หรือบริการทั้งหมด - ได้ทุกเมื่อโดยไม่ต้องแจ้งให้ทราบล่วงหน้า",
+      changesTermsTitle: "การเปลี่ยนแปลงข้อกำหนดเหล่านี้",
+      changesTermsText: "เราอาจอัปเดตข้อกำหนดเหล่านี้เป็นครั้งคราว การใช้งานแอปต่อไปหลังจากมีการโพสต์การเปลี่ยนแปลง หมายความว่าคุณยอมรับข้อกำหนดที่อัปเดตแล้ว",
+      governingLawTitle: "กฎหมายที่ใช้บังคับ",
+      governingLawText: "GoOnlinePOS.com นำเสนอในระดับโลกในฐานะบริการฟรี โดยไม่มีการสมัครสมาชิกหรือข้อจำกัดตามภูมิภาค และไม่มีการกำหนดเขตอำนาจศาลใด ๆ ไว้ในข้อกำหนดเหล่านี้ หากเกิดข้อพิพาทขึ้น จะได้รับการแก้ไขภายใต้กฎหมายที่ใช้บังคับอย่างเหมาะสม ณ เวลานั้นตามสถานการณ์ แทนที่จะเป็นเขตอำนาจศาลที่เลือกไว้ล่วงหน้าที่นี่",
+      contactTitle: "ติดต่อเรา",
+      contactText: "คำถามเกี่ยวกับข้อกำหนดเหล่านี้สามารถส่งผ่าน<a href=\"contact\">แบบฟอร์มติดต่อ</a>ของเราได้"
+    }
+  };
+
+  var langSelect = document.getElementById("termsLanguage");
+  function currentLang() { return (langSelect && langSelect.value) || "en"; }
+  function translate(key) {
+    var lang = translations[currentLang()] || translations.en;
+    return (lang[key] !== undefined) ? lang[key] : (translations.en[key] !== undefined ? translations.en[key] : key);
+  }
+
+  function changeLanguage() {
+    var lang = currentLang();
+    document.documentElement.lang = lang;
+    document.body.dir = lang === "ar" ? "rtl" : "ltr";
+
+    var ids = {
+      langPickerLabel: "langPickerLabel", docTitle: "docTitle", updatedLabel: "updatedLabel",
+      acceptanceTitle: "acceptanceTitle", acceptanceText: "acceptanceText",
+      whatServiceTitle: "whatServiceTitle", whatServiceText: "whatServiceText",
+      asIsTitle: "asIsTitle", asIsText: "asIsText",
+      dataResponsibilityTitle: "dataResponsibilityTitle", dataResponsibilityText: "dataResponsibilityText",
+      complianceTitle: "complianceTitle", complianceText: "complianceText",
+      acceptableUseTitle: "acceptableUseTitle", acceptableUseIntro: "acceptableUseIntro",
+      auLi1: "auLi1", auLi2: "auLi2", auLi3: "auLi3",
+      thirdPartyTitle: "thirdPartyTitle",
+      liabilityTitle: "liabilityTitle", liabilityText: "liabilityText",
+      changesServiceTitle: "changesServiceTitle", changesServiceText: "changesServiceText",
+      changesTermsTitle: "changesTermsTitle", changesTermsText: "changesTermsText",
+      governingLawTitle: "governingLawTitle", governingLawText: "governingLawText",
+      contactTitle: "contactTitle"
+    };
+    Object.keys(ids).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = translate(ids[id]);
+    });
+
+    ["thirdPartyText", "contactText"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = translate(id);
+    });
+  }
+
+  function loadLanguagePref() {
+    var lang = "en";
+    try { lang = localStorage.getItem("goonlinepos-terms-lang") || "en"; } catch (e) {}
+    if (!translations[lang]) lang = "en";
+    langSelect.value = lang;
+    changeLanguage();
+  }
+
+  function saveLanguagePref() {
+    try { localStorage.setItem("goonlinepos-terms-lang", currentLang()); } catch (e) {}
+  }
+
+  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
+
+  loadLanguagePref();
+})();
+</script>
 
 </body>
 </html>

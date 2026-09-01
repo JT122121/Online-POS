@@ -4146,6 +4146,41 @@ POST responses).
   change) so the page's actual topic is the page's only `<h1>`. Keep this
   in mind before copying `about.html`'s/`contact.html`'s header markup
   onto a page that already has its own `<h1>` elsewhere.
+- **`privacy.html`/`terms.html` now translate into the same six languages
+  as `index.html` and the five free tools** (en/ar/fil/hi/es/th) - each
+  page has its own self-contained `translations` object and
+  `translate()`/`currentLang()`/`changeLanguage()`/`loadLanguagePref()`/
+  `saveLanguagePref()` functions, no dependency on any other page. Same
+  scoping as every other translated page on this site: the shared
+  `.site-header` (brand mark, Homepage/Blog nav, all six `.cta-btn`s) and
+  the footer/cookie-consent banner are never touched by `changeLanguage()`
+  - only the actual `.doc` legal text translates. A `.lang-picker-bar`
+  (identical small right-aligned pill styling to `index.html`'s own,
+  copied verbatim) sits directly below `</header>` and above `.doc`. The
+  "Last updated:" label is its own translated span, kept separate from
+  the literal date text next to it (`<span id="updatedLabel">Last
+  updated:</span> August 23, 2026`) so the date itself never gets
+  mangled by a language switch. A handful of paragraphs and list items on
+  each page needed `innerHTML` instead of `textContent` to preserve
+  embedded `<a>`/`<strong>` tags after translating - `privacy.html`:
+  `autoOutro`, `adsPara1`, `adsPara2`, all four third-party-services list
+  items, `dataLossText`, `contactText`; `terms.html`: `thirdPartyText`,
+  `contactText`. Google's own product names (Google Analytics, Google
+  AdSense, Google Fonts, Google Ads Settings) stay as literal brand names
+  in every language, matching how proper nouns are already handled
+  elsewhere in this codebase (e.g. "VAT" staying "VAT" in Filipino) -
+  only the surrounding legal prose is translated, never a vendor's own
+  product name. Each page's own `localStorage` key
+  (`goonlinepos-privacy-lang`/`goonlinepos-terms-lang`) persists the
+  choice independently, same "device preference, not document content"
+  convention as every other translated page's own key. Verified with
+  Playwright: switching to Arabic translates every heading/paragraph/list
+  item on both pages and flips `dir` to `rtl`, while the header nav reads
+  byte-identical English text before and after the switch on both pages;
+  the `innerHTML` paragraphs keep their `<a>`/`<strong>` tags intact; the
+  persisted language choice survives a reload and the header stays
+  English on that reload too; and zero horizontal overflow and zero
+  console errors at 390px on both pages.
 - **`about.html`'s cookie-consent `<script>` had stray literal
   `` ``` `` markdown code-fence lines** embedded directly in the JS (4
   of them, likely pasted in from an AI response or markdown source via
