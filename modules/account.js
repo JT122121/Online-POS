@@ -48,7 +48,12 @@ async function lazyExpireProfileIfStale(profile) {
 
 async function refreshAccountState() {
   const client = getSupabaseClient();
-  if (!client) { premiumUnlocked = false; renderAccountPanel(); return; }
+  if (!client) {
+    premiumUnlocked = false;
+    if (typeof revertLogoToDefaultIfNotPremium === "function") revertLogoToDefaultIfNotPremium();
+    renderAccountPanel();
+    return;
+  }
   const { data } = await client.auth.getSession();
   const session = data && data.session;
   currentUser = (session && session.user) || null;
@@ -57,6 +62,7 @@ async function refreshAccountState() {
     currentProfile = null;
     premiumUnlocked = false;
     await storageSet("account-premium-cached", "0");
+    if (typeof revertLogoToDefaultIfNotPremium === "function") revertLogoToDefaultIfNotPremium();
     renderAccountPanel();
     if (typeof applyPremiumLocks === "function") applyPremiumLocks();
     return;
@@ -73,6 +79,7 @@ async function refreshAccountState() {
     premiumUnlocked = false;
   }
   await storageSet("account-premium-cached", premiumUnlocked ? "1" : "0");
+  if (typeof revertLogoToDefaultIfNotPremium === "function") revertLogoToDefaultIfNotPremium();
   lastActivityWriteTime = 0;
   await recordActivity();
   renderAccountPanel();
@@ -153,6 +160,7 @@ async function signOutAccount() {
   currentProfile = null;
   premiumUnlocked = false;
   await storageSet("account-premium-cached", "0");
+  if (typeof revertLogoToDefaultIfNotPremium === "function") revertLogoToDefaultIfNotPremium();
   renderAccountPanel();
   if (typeof applyPremiumLocks === "function") applyPremiumLocks();
 }

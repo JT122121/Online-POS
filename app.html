@@ -1812,6 +1812,20 @@ function resetRemoveLogoButton() {
     if (btn) { btn.textContent = tr("removeLogoButton"); btn.classList.remove("confirm-pending"); }
   });
 }
+// Called only from the settled Premium-status points in modules/account.js
+// (refreshAccountState()/signOutAccount()) - never from applyPremiumLocks()
+// itself, since that also fires with premiumUnlocked still at its default
+// "false" before initPremiumSystem() has actually determined real status,
+// which would otherwise wipe a Premium user's logo before their status is
+// even known. A no-op whenever premiumUnlocked is true, or the current
+// logo is already the default (never customized, or already reverted).
+function revertLogoToDefaultIfNotPremium() {
+  if (premiumUnlocked) return;
+  if (!logoDataUrl || logoDataUrl === DEFAULT_LOGO_DATA_URL) return;
+  logoDataUrl = DEFAULT_LOGO_DATA_URL;
+  storageSet("pos-logo", DEFAULT_LOGO_DATA_URL);
+  renderLogo();
+}
 async function loadSalesHistory() {
   const raw = await storageGet("pos-sales-history");
   try { salesHistory = raw ? JSON.parse(raw) : []; } catch (e) { salesHistory = []; }
@@ -3520,7 +3534,6 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel", premiumToolbarLabel: "premiumToolbarLabel",
-    homepageShortcutLabel: "homepageShortcutLabel", blogShortcutLabel: "blogShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
     quickReceiptNumberLabel: "receiptNumberLabel", quickReceiptPrefixLabel: "receiptPrefixLabel",
@@ -3548,7 +3561,7 @@ function changeLanguage() {
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
-    customerScreenButtonLabel: "customerScreenButtonLabel", createInvoiceShortcutLabel: "createInvoiceShortcutLabel", createReceiptShortcutLabel: "createReceiptShortcutLabel", createBarcodeShortcutLabel: "createBarcodeShortcutLabel", createVatShortcutLabel: "createVatShortcutLabel", createPricingShortcutLabel: "createPricingShortcutLabel", addProductStockLabel: "addProductStockLabel",
+    customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
     premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",

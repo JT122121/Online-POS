@@ -90,6 +90,11 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 
 .cs-footer { text-align: center; padding: 14px; font-size: 11.5px; color: var(--muted); }
 
+.cs-locked { text-align: center; max-width: 420px; }
+.cs-locked .icon { font-size: 52px; margin-bottom: 18px; }
+.cs-locked h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0 0 10px; }
+.cs-locked p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; margin: 0; }
+
 .hidden { display: none !important; }
 </style>
 </head>
@@ -101,6 +106,12 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 </div>
 
 <div class="cs-body">
+
+<div id="csLocked" class="cs-locked hidden">
+<div class="icon">🔒</div>
+<h2>Premium Feature</h2>
+<p>The Customer Screen is a Premium feature. Activate a Premium code in the main app's Settings &rarr; Premium to unlock it, then reopen this screen.</p>
+</div>
 
 <div id="csWaiting" class="cs-waiting">
 <div class="icon">🛒</div>
@@ -157,7 +168,37 @@ function esc(text) {
   return div.innerHTML;
 }
 
+// Customer Screen is a Premium feature (see app.html's applyPremiumLocks()/
+// Settings -> Premium). The in-app toolbar button is already gated, but
+// this page can be opened directly by URL - a visitor who bookmarks or
+// saves the link could otherwise keep using it after Premium lapses, or
+// without ever having been Premium at all. Checked against whichever
+// cached flag the current build actually writes: the live site's Supabase-
+// derived cache (modules/account.js's "account-premium-cached", kept in
+// sync with real status on every sign-in/out/redeem) or the offline
+// build's own local unlock flag ("pos-premium-unlocked", auto-granted on
+// first launch). Same "onlinepos_" localStorage prefix storageGet/
+// storageSet already use elsewhere, read directly since this standalone
+// page has no storage abstraction of its own - same reasoning as its
+// existing raw localStorage use for cookie consent and broadcast state.
+// UI-level gating only, like every other Premium check in this codebase -
+// not a real entitlement check, just enough to stop plain accidental use.
+function isPremiumUnlocked() {
+  try {
+    return localStorage.getItem("onlinepos_account-premium-cached") === "1" ||
+      localStorage.getItem("onlinepos_pos-premium-unlocked") === "1";
+  } catch (e) { return false; }
+}
+
+function showLockedScreen() {
+  document.getElementById("csLocked").classList.remove("hidden");
+  document.getElementById("csWaiting").classList.add("hidden");
+  document.getElementById("csOrder").classList.add("hidden");
+  document.getElementById("csThankYou").classList.add("hidden");
+}
+
 function render(state) {
+  if (!isPremiumUnlocked()) { showLockedScreen(); return; }
   if (!state) return;
   var now = Date.now();
 
@@ -290,6 +331,7 @@ function render(state) {
 }
 
 function loadInitialState() {
+  if (!isPremiumUnlocked()) { showLockedScreen(); return; }
   try {
     var raw = localStorage.getItem(STATE_KEY);
     if (raw) render(JSON.parse(raw));

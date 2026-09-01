@@ -361,6 +361,34 @@ all of them under one pattern:
     were both added in the same pass as the button itself, per the
     lesson two paragraphs up, rather than being discovered missing
     afterward.
+  - **All seven `.header-links` labels - Homepage, Blog, and all five
+    Free-tool buttons - stopped being translated**, per explicit
+    feedback that they shouldn't change with the app's language: they
+    each name a real page's own title/branding (matching that page's
+    own `<title>`/CTA wording, itself English-only on every one of
+    those pages - none of the five free tools' or the marketing pages'
+    own headers are translated), so translating just the shortcut
+    button while the destination page it opens stays English read as
+    inconsistent rather than helpful. Fixed by removing
+    `homepageShortcutLabel`/`blogShortcutLabel`/`createInvoiceShortcutLabel`/
+    `createReceiptShortcutLabel`/`createBarcodeShortcutLabel`/
+    `createVatShortcutLabel`/`createPricingShortcutLabel` from
+    `changeLanguage()`'s `ids` map only - every mention of one of these
+    keys "being added to the ids map" earlier in this section describes
+    history that has since been reversed. The `<span>` markup and its
+    `id` are unchanged, so the button still has a stable hook to target;
+    it just never gets re-translated, and permanently shows whatever
+    English text is already in the HTML. The keys themselves are left
+    defined in `modules/translations.js` across all six languages rather
+    than deleted - unused now, but harmless, the same "dead reference"
+    tolerance already documented elsewhere in this file (e.g. the
+    offline-only Premium-panel keys' dead `ids`-map entries on the live
+    build) - in case this decision is ever reversed. Verified with
+    Playwright: all seven labels read identical English text before and
+    after switching to Arabic, while a genuinely translated label
+    (How To Use) changes as expected in the same switch, confirming the
+    fix is scoped to just these seven and doesn't disable translation
+    more broadly.
   - **`.header-actions` (the toolbar) originally shrank to exactly six
     things:** Hide Toolbar, the Cashier select, How To Use, Settings, End
     of Day, Customer Screen, Backup - deliberately trimmed down from a
@@ -1287,6 +1315,44 @@ has zero network calls.
   a second window/extended monitor or OS-level screen mirroring on the
   *same computer* — not a genuinely separate device — and the in-app guide
   (`openCustomerScreenGuide`) says this explicitly.
+- **`customer.html` itself is Premium-gated, not just the in-app button
+  that opens it.** The toolbar's Customer Screen button/panel was always
+  locked via `applyPremiumLocks()`'s `csLockMsg`/`csContent` toggle, but
+  `customer.html` had no gate of its own - a visitor who bookmarked or
+  saved the URL (or just guessed it, since it's a fixed, documented
+  filename) could keep opening it directly and it would render live
+  order state regardless of Premium status. Fixed with a same-page
+  `isPremiumUnlocked()` check, read directly from `localStorage` since
+  this standalone page has no `storageGet`/`storageSet` abstraction of
+  its own (same reasoning as its existing raw `localStorage` use for
+  cookie consent and the broadcast state itself) - it checks whichever
+  cached flag the current build actually writes: the live site's
+  `onlinepos_account-premium-cached` (kept in sync with real status by
+  `modules/account.js` on every sign-in/out/redeem - see "Account &
+  Subscription" below) or the offline build's own
+  `onlinepos_pos-premium-unlocked` (auto-granted on first launch - see
+  "Download Offline POS" below). Neither flag present/`"1"` shows a new
+  `#csLocked` panel ("Premium Feature... Activate a Premium code in the
+  main app's Settings → Premium") instead of the waiting/order/thank-you
+  views, checked both on initial load (`loadInitialState()`) and inside
+  `render()` itself so an incoming broadcast can never slip a live order
+  past a locked screen. Same UI-level gating as every other Premium
+  check in this codebase, not a real entitlement check - just enough to
+  stop plain accidental/saved-URL use, not a hard security boundary.
+  Ships in both builds unchanged (not `OFFLINE-STRIP`-wrapped), since
+  `customer.html` itself is bundled offline and the offline flag it
+  checks is exactly what that build already writes. **Doesn't poll for
+  a Premium change while already open** - like the cached-flag
+  documented elsewhere in this file, this is a snapshot at load/render
+  time, not a live subscription check; a customer screen tab left open
+  across the exact moment Premium lapses only re-locks on the next
+  broadcast, not instantly. Verified with Playwright: no cached flag at
+  all shows the locked panel immediately with no state, and a broadcast
+  arriving while locked is silently ignored (screen stays locked, not
+  the order); setting either the live or offline cached flag and
+  reloading unlocks it and a broadcast then renders normally; flipping
+  the offline flag back to `"0"` and sending a new broadcast re-locks
+  the screen; zero console errors throughout.
 - **"Premium" gating:** `premiumUnlocked` gates the same set of features
   it always has (logo upload, receipt number/prefix editing, inventory
   stock editing/export, customer screen, downloading the offline
@@ -1305,6 +1371,42 @@ has zero network calls.
   `.basic-badge`) otherwise; it used to always read "Premium" regardless
   of status. `changeLanguage()` also calls it directly, so it re-translates
   on a language switch without needing a status change.
+- **Company Logo reverts to the default logo when Premium lapses, not
+  just future uploads being blocked.** Before this, only *uploading a
+  new* logo was gated (`logoInput.disabled = !premiumUnlocked`) - a shop
+  that uploaded a custom logo while Premium kept seeing and printing it
+  forever after downgrading, since nothing ever re-checked an
+  already-stored logo against current status. `revertLogoToDefaultIfNotPremium()`
+  (next to the other logo functions) is a no-op whenever `premiumUnlocked`
+  is true, or the current `logoDataUrl` is already `DEFAULT_LOGO_DATA_URL`
+  (never customized, or already reverted) - otherwise it sets
+  `logoDataUrl` back to `DEFAULT_LOGO_DATA_URL`, persists that via
+  `storageSet("pos-logo", DEFAULT_LOGO_DATA_URL)`, and re-renders. An
+  explicitly-*removed* logo (`logoDataUrl === null`, from clicking Remove
+  - not gated by Premium either, see below) is deliberately left alone -
+  a shop that chose "no logo" shouldn't have Premium lapsing silently
+  bring a logo back. **Called only from the settled points in
+  `modules/account.js`** (`refreshAccountState()`'s three branches -
+  no client, signed-out, and after the real profile check/catch - plus
+  `signOutAccount()`), **never from `applyPremiumLocks()` itself** - that
+  function also fires during `init()` before `initPremiumSystem()` has
+  actually determined real status (while `premiumUnlocked` still holds
+  its just-declared default `false`), which would otherwise silently
+  wipe a genuinely-Premium user's logo before their real status was even
+  known. Signing out also reverts the logo, matching the existing
+  "ad-free cache resets to `0` on sign out" precedent a few paragraphs
+  up - a shared/public computer shouldn't keep printing a previous
+  signed-in user's custom branding after they've signed out. Offline-build
+  only, always-Premium copies never trigger this (`modules/account.js`
+  isn't even loaded there). Verified with Playwright, both by calling
+  the function directly (still-Premium no-op; downgrade reverts
+  `logoDataUrl` and storage and the rendered `#receiptLogo`; a second
+  call is a harmless no-op; an explicitly-removed `null` logo is left
+  `null`, not revived) and by driving the real `refreshAccountState()`/
+  `signOutAccount()` code paths against a mocked Supabase client with an
+  expired `premium_until` profile, confirming the wiring inside
+  `modules/account.js` - not just the helper in isolation - actually
+  reverts the logo end to end.
 - **Retired: `#premiumPromoNotice`.** A dismissible "Activate Your Free
   Premium Now" banner used to sit here, nudging every visitor to
   one-click-activate the old auto-granted `PROMO1` code
