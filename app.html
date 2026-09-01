@@ -1876,8 +1876,14 @@ function applyPremiumLocks() {
   const offlineLockMsg = document.getElementById("offlineLockMsg");
   if (offlineLockMsg) offlineLockMsg.classList.toggle("hidden", premiumUnlocked);
 
+  // Signed in but on Basic (e.g. an expired trial) should not see a "sign
+  // in to get 15 days free" pitch - they've already signed in and already
+  // used it. typeof-guarded since currentUser only exists when
+  // modules/account.js is loaded (never true on the offline build, where
+  // this whole element is OFFLINE-STRIP'd anyway).
   const promoNotice = document.getElementById("premiumPromoNotice");
-  if (promoNotice) promoNotice.classList.toggle("hidden", premiumUnlocked || premiumPromoDismissed);
+  const alreadySignedIn = typeof currentUser !== "undefined" && !!currentUser;
+  if (promoNotice) promoNotice.classList.toggle("hidden", premiumUnlocked || premiumPromoDismissed || alreadySignedIn);
 
   renderAppTitleBadge();
 }

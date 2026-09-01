@@ -1987,6 +1987,37 @@ live code calls it anymore.
     `faq1A`/`faq2A` no longer contradict each other on whether signing
     in alone does anything; and zero horizontal overflow or console
     errors at 390px.
+  - **Follow-up: gated `#premiumPromoNotice` on sign-in state too, not
+    just Premium status.** `applyPremiumLocks()` previously hid the
+    banner only when `premiumUnlocked` was true - a signed-in visitor
+    on Basic (e.g. their 15-day trial already ran out) still saw "Sign
+    in with Google to get 15 days of Premium free," which is wrong
+    twice over: they're already signed in, and they already used their
+    free days. `#accountSignInPrompt` and `#redeemCodePrompt` needed no
+    change - both were already correctly gated purely on sign-in state
+    (`renderWelcomeBadge()`/`renderAccountPanel()` in
+    `modules/account.js` toggle them off `currentUser`, independent of
+    `premiumUnlocked`) - only the banner's condition had drifted from
+    that pattern. Fixed by adding an `alreadySignedIn` check (`typeof
+    currentUser !== "undefined" && !!currentUser`, `typeof`-guarded
+    since `currentUser` only exists when `modules/account.js` is
+    loaded, which is never true on the `OFFLINE-STRIP`-wrapped offline
+    build where this whole element doesn't exist anyway) alongside the
+    existing `premiumUnlocked`/`premiumPromoDismissed` conditions.
+    Also confirmed (not changed - already worked) that every ad's
+    click-through target, `openAccountSettings()`'s `#settingsOverlay`,
+    already has both a persistent `✕` in `.settings-modal-header` and
+    click-outside-to-close (`onclick="if(event.target===this)
+    closeSettings()"` on the overlay itself) - the same modal chrome
+    every other settings tab already relies on, so no new close
+    mechanism was needed there. Verified with Playwright: signed-out +
+    Basic shows all three elements; signed-in + Basic (simulating an
+    expired trial) hides all three, including the banner via the new
+    condition; signed-in + Premium still hides the banner (the
+    pre-existing path); clicking either the header prompt or the
+    banner's "Go Premium" button opens Settings on the Premium tab with
+    a visible, working `✕`; and clicking outside the modal also closes
+    it. Zero console errors.
 - **`modules/account.js`** is the live site's only Premium mechanism now
   - `getSupabaseClient()`,
   `initAccount()` (session restore + auth-state listener, called from
