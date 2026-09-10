@@ -1,0 +1,15 @@
+# GoOnlinePOS AI Marketing Agent - Python dependencies
+#
+# Phase 1 (analyze-product / refresh-features) needs NOTHING beyond the
+# Python 3 standard library (json, re, argparse, pathlib) - intentionally,
+# so the free proof-of-concept has zero install cost to try.
+#
+# Pillow is listed now because agent/video/generator.py's planned
+# LocalVideoGenerator (Phase 5) will use it for free, local image/text
+# compositing. It is not imported or required by anything in Phase 1.
+Pillow>=10.0
+
+# Phase 5's LocalVideoGenerator will also need a free, open-source ffmpeg
+# binary on PATH to encode composed frames into an MP4 - that's a system
+# tool to install (e.g. `apt install ffmpeg` / `brew install ffmpeg`), not
+# a pip package, and not a paid service.
