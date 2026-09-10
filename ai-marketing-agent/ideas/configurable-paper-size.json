@@ -1,0 +1,65 @@
+{
+  "idea_id": "configurable-paper-size",
+  "source_feature_id": "configurable-paper-size",
+  "hook": "No thermal printer? Print receipts on any regular A4 printer instead.",
+  "topic": "Configurable Receipt Paper Size",
+  "target_audience": "Shop owners using a regular A4/Letter printer instead of a dedicated thermal receipt printer.",
+  "problem": "Feeling like you need to buy a special thermal printer just to use a POS.",
+  "solution": "Printed receipts can target 58mm/80mm thermal paper, A4, A5, or a custom width, with the on-screen preview and the real printed output kept in sync.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "No thermal printer? Print receipts on any regular A4 printer instead.",
+      "voiceover": "No thermal printer? Print receipts on any regular A4 printer instead."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Feeling like you need to buy a special thermal printer just to use a POS.",
+      "voiceover": "Feeling like you need to buy a special thermal printer just to use a POS."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Configurable Receipt Paper Size",
+      "voiceover": "Here's how GoOnlinePOS handles it: Printed receipts can target 58mm/80mm thermal paper, A4, A5, or a custom width, with the on-screen preview and the real printed output kept in sync."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Print on whatever printer you already own - a thermal receipt printer or a normal A4/Letter printer - no extra hardware required.",
+      "voiceover": "Print on whatever printer you already own - a thermal receipt printer or a normal A4/Letter printer - no extra hardware required."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Paper & Zoom in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Printed receipts can target 58mm/80mm thermal paper, A4, A5, or a custom width, with the on-screen preview and the real printed output kept in sync.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "No thermal printer? Print receipts on any regular A4 printer instead. Print on whatever printer you already own - a thermal receipt printer or a normal A4/Letter printer - no extra hardware required.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#ReceiptPrinting"
+  ],
+  "suggested_title": "Configurable Receipt Paper Size in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function changePaperSize\\(\\)",
+      "found": true
+    }
+  ]
+}

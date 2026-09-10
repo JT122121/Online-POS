@@ -1,0 +1,70 @@
+{
+  "idea_id": "sales-history-and-end-of-day",
+  "source_feature_id": "sales-history-and-end-of-day",
+  "hook": "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click.",
+  "topic": "Sales History + Printable End of Day Report",
+  "target_audience": "Shop owners and managers closing out a business day.",
+  "problem": "Closing the register with a mental guess instead of a real total.",
+  "solution": "Every completed sale is saved and browsable/editable in Sales History. A separate End of Day report (end-of-day.html) totals a chosen day's sales, items sold, payment-method breakdown, and per-cashier collection, and can be printed or saved as a frozen snapshot.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click.",
+      "voiceover": "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Closing the register with a mental guess instead of a real total.",
+      "voiceover": "Closing the register with a mental guess instead of a real total."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Sales History + Printable End of Day Report",
+      "voiceover": "Here's how GoOnlinePOS handles it: Every completed sale is saved and browsable/editable in Sales History. A separate End of Day report (end-of-day.html) totals a chosen day's sales, items sold, payment-method breakdown, and per-cashier collection, and can be printed or saved as a frozen snapshot."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Close out the register with a real report - total sales, best sellers, and cash-vs-card breakdown - not a mental tally.",
+      "voiceover": "Close out the register with a real report - total sales, best sellers, and cash-vs-card breakdown - not a mental tally."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html header -> End of Day, end-of-day.html in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Every completed sale is saved and browsable/editable in Sales History. A separate End of Day report (end-of-day.html) totals a chosen day's sales, items sold, payment-method breakdown, and per-cashier collection, and can be printed or saved as a frozen snapshot.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click. Close out the register with a real report - total sales, best sellers, and cash-vs-card breakdown - not a mental tally.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#EndOfDay"
+  ],
+  "suggested_title": "Sales History + Printable End of Day Report in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function openEndOfDayReport\\(\\)",
+      "found": true
+    },
+    {
+      "file": "end-of-day.html",
+      "pattern": "saleMethodBreakdown",
+      "found": true
+    }
+  ]
+}

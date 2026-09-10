@@ -1,0 +1,70 @@
+{
+  "idea_id": "six-language-support",
+  "source_feature_id": "six-language-support",
+  "hook": "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai.",
+  "topic": "Six-Language Interface",
+  "target_audience": "Multilingual staff and customer-facing businesses, including Arabic-speaking markets needing full right-to-left layout.",
+  "problem": "Staff or customers who aren't comfortable reading the POS in English.",
+  "solution": "The entire app UI (and the marketing site, and the free tools) can be switched between English, Arabic (with full RTL layout), Filipino, Hindi, Spanish, and Thai.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai.",
+      "voiceover": "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Staff or customers who aren't comfortable reading the POS in English.",
+      "voiceover": "Staff or customers who aren't comfortable reading the POS in English."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Six-Language Interface",
+      "voiceover": "Here's how GoOnlinePOS handles it: The entire app UI (and the marketing site, and the free tools) can be switched between English, Arabic (with full RTL layout), Filipino, Hindi, Spanish, and Thai."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Staff and customers can use the POS in the language they're actually comfortable with, including full right-to-left Arabic.",
+      "voiceover": "Staff and customers can use the POS in the language they're actually comfortable with, including full right-to-left Arabic."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Language in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: The entire app UI (and the marketing site, and the free tools) can be switched between English, Arabic (with full RTL layout), Filipino, Hindi, Spanish, and Thai.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai. Staff and customers can use the POS in the language they're actually comfortable with, including full right-to-left Arabic.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#Multilingual"
+  ],
+  "suggested_title": "Six-Language Interface in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function changeLanguage\\(\\)",
+      "found": true
+    },
+    {
+      "file": "modules/translations.js",
+      "pattern": "\\bar:\\s*\\{",
+      "found": true
+    }
+  ]
+}

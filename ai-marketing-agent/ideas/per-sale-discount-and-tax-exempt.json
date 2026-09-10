@@ -1,0 +1,70 @@
+{
+  "idea_id": "per-sale-discount-and-tax-exempt",
+  "source_feature_id": "per-sale-discount-and-tax-exempt",
+  "hook": "Give one customer a discount without touching your store-wide pricing.",
+  "topic": "Per-Sale Discounts & Per-Item Tax Exemption",
+  "target_audience": "Shop owners who occasionally negotiate price or serve tax-exempt customers or organizations.",
+  "problem": "Needing to give one customer a one-off discount without touching your store-wide prices.",
+  "solution": "A percent or fixed-amount discount can be applied at checkout, and any item (catalog default or overridden per sale) can be marked tax-exempt.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Give one customer a discount without touching your store-wide pricing.",
+      "voiceover": "Give one customer a discount without touching your store-wide pricing."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Needing to give one customer a one-off discount without touching your store-wide prices.",
+      "voiceover": "Needing to give one customer a one-off discount without touching your store-wide prices."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Per-Sale Discounts & Per-Item Tax Exemption",
+      "voiceover": "Here's how GoOnlinePOS handles it: A percent or fixed-amount discount can be applied at checkout, and any item (catalog default or overridden per sale) can be marked tax-exempt."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Apply a one-off discount to a single customer, or exempt specific items from tax, without changing your store-wide settings.",
+      "voiceover": "Apply a one-off discount to a single customer, or exempt specific items from tax, without changing your store-wide settings."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - checkout screen / cart lines in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A percent or fixed-amount discount can be applied at checkout, and any item (catalog default or overridden per sale) can be marked tax-exempt.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Give one customer a discount without touching your store-wide pricing. Apply a one-off discount to a single customer, or exempt specific items from tax, without changing your store-wide settings.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#RetailDiscounts"
+  ],
+  "suggested_title": "Per-Sale Discounts & Per-Item Tax Exemption in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "id=\"discountType\"",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "cart-tax-exempt",
+      "found": true
+    }
+  ]
+}

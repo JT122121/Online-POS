@@ -1,0 +1,65 @@
+{
+  "idea_id": "multi-currency",
+  "source_feature_id": "multi-currency",
+  "hook": "Set your own currency once - every receipt, price, and report follows.",
+  "topic": "Multiple Currencies",
+  "target_audience": "Shop owners outside the US, or anyone pricing in a currency other than USD.",
+  "problem": "A POS that only prices in US dollars, when your business runs in a different currency entirely.",
+  "solution": "Store currency code/symbol is configurable, affecting every price, receipt, and total shown throughout the app.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Set your own currency once - every receipt, price, and report follows.",
+      "voiceover": "Set your own currency once - every receipt, price, and report follows."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "A POS that only prices in US dollars, when your business runs in a different currency entirely.",
+      "voiceover": "A POS that only prices in US dollars, when your business runs in a different currency entirely."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Multiple Currencies",
+      "voiceover": "Here's how GoOnlinePOS handles it: Store currency code/symbol is configurable, affecting every price, receipt, and total shown throughout the app."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Runs correctly for a business pricing in dollars, dinars, pesos, or any other currency, not just USD.",
+      "voiceover": "Runs correctly for a business pricing in dollars, dinars, pesos, or any other currency, not just USD."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Currency in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Store currency code/symbol is configurable, affecting every price, receipt, and total shown throughout the app.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Set your own currency once - every receipt, price, and report follows. Runs correctly for a business pricing in dollars, dinars, pesos, or any other currency, not just USD.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#GlobalBusiness"
+  ],
+  "suggested_title": "Multiple Currencies in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "id=\"currencyCode\"",
+      "found": true
+    }
+  ]
+}

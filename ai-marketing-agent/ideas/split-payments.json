@@ -1,0 +1,70 @@
+{
+  "idea_id": "split-payments",
+  "source_feature_id": "split-payments",
+  "hook": "Customer paying half cash, half card? One sale, one receipt, no problem.",
+  "topic": "Split Payments Across Multiple Methods",
+  "target_audience": "Cashiers handling walk-in retail or food-service customers with mixed payment habits.",
+  "problem": "A customer wants to pay part cash, part card, and the register can't handle it in one sale.",
+  "solution": "A single sale can be paid using more than one payment method (e.g. part cash, part card) by adding extra payment rows at checkout.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Customer paying half cash, half card? One sale, one receipt, no problem.",
+      "voiceover": "Customer paying half cash, half card? One sale, one receipt, no problem."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "A customer wants to pay part cash, part card, and the register can't handle it in one sale.",
+      "voiceover": "A customer wants to pay part cash, part card, and the register can't handle it in one sale."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Split Payments Across Multiple Methods",
+      "voiceover": "Here's how GoOnlinePOS handles it: A single sale can be paid using more than one payment method (e.g. part cash, part card) by adding extra payment rows at checkout."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Handle real-world customers who want to pay part cash, part card, without any workaround.",
+      "voiceover": "Handle real-world customers who want to pay part cash, part card, without any workaround."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - checkout screen in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A single sale can be paid using more than one payment method (e.g. part cash, part card) by adding extra payment rows at checkout.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Customer paying half cash, half card? One sale, one receipt, no problem. Handle real-world customers who want to pay part cash, part card, without any workaround.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#SplitPayment"
+  ],
+  "suggested_title": "Split Payments Across Multiple Methods in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function addPaymentRow\\(\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "paymentRows",
+      "found": true
+    }
+  ]
+}

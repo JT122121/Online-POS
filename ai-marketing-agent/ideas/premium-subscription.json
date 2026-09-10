@@ -1,0 +1,70 @@
+{
+  "idea_id": "premium-subscription",
+  "source_feature_id": "premium-subscription",
+  "hook": "Get 15 days of Premium free - just sign in with Google, no card needed.",
+  "topic": "Premium Subscription (sign in once, use anywhere)",
+  "target_audience": "Any GoOnlinePOS user curious about Premium features.",
+  "problem": "Wanting to try extra features without committing to a paid plan first.",
+  "solution": "Signing in with Google grants a free 15-day Premium trial automatically; Premium unlocks logo upload, receipt numbering, inventory export, the customer screen, and the offline download, and follows the signed-in account to any device rather than being tied to one browser.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Get 15 days of Premium free - just sign in with Google, no card needed.",
+      "voiceover": "Get 15 days of Premium free - just sign in with Google, no card needed."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Wanting to try extra features without committing to a paid plan first.",
+      "voiceover": "Wanting to try extra features without committing to a paid plan first."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Premium Subscription (sign in once, use anywhere)",
+      "voiceover": "Here's how GoOnlinePOS handles it: Signing in with Google grants a free 15-day Premium trial automatically; Premium unlocks logo upload, receipt numbering, inventory export, the customer screen, and the offline download, and follows the signed-in account to any device rather than being tied to one browser."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Unlock extra features on a free trial with just a Google sign-in, no card required, and it follows you to any device you sign into.",
+      "voiceover": "Unlock extra features on a free trial with just a Google sign-in, no card required, and it follows you to any device you sign into."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Premium in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Signing in with Google grants a free 15-day Premium trial automatically; Premium unlocks logo upload, receipt numbering, inventory export, the customer screen, and the offline download, and follows the signed-in account to any device rather than being tied to one browser.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Get 15 days of Premium free - just sign in with Google, no card needed. Unlock extra features on a free trial with just a Google sign-in, no card required, and it follows you to any device you sign into.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#FreeTrial"
+  ],
+  "suggested_title": "Premium Subscription (sign in once, use anywhere) in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "n/a",
+  "evidence": [
+    {
+      "file": "modules/account.js",
+      "pattern": "async function redeemCodeNow\\(\\)",
+      "found": true
+    },
+    {
+      "file": "supabase/README.md",
+      "pattern": ".",
+      "found": true
+    }
+  ]
+}

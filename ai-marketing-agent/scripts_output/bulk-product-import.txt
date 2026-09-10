@@ -1,0 +1,51 @@
+GOONLINEPOS SHORT-FORM VIDEO SCRIPT — Bulk Product Import (CSV or Excel)
+============================================================
+Idea ID:          bulk-product-import
+Suggested title:  Bulk Product Import (CSV or Excel) in GoOnlinePOS (Free POS for Small Business)
+Target audience:  New shop owners setting up their catalog for the first time, or anyone migrating from a spreadsheet.
+Premium feature:  no
+
+HOOK
+  Already have your product list in Excel? Upload it and you're ready to sell.
+
+PROBLEM
+  Typing in a hundred products one at a time before you can even open for business.
+
+SOLUTION
+  The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt).
+
+TIMED SCRIPT
+  [0-3s] HOOK
+      On screen: Already have your product list in Excel? Upload it and you're ready to sell.
+      Voiceover: Already have your product list in Excel? Upload it and you're ready to sell.
+  [3-8s] PROBLEM
+      On screen: Typing in a hundred products one at a time before you can even open for business.
+      Voiceover: Typing in a hundred products one at a time before you can even open for business.
+  [8-20s] SOLUTION (screen recording of the real feature)
+      On screen: Bulk Product Import (CSV or Excel)
+      Voiceover: Here's how GoOnlinePOS handles it: The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt).
+  [20-28s] BENEFIT
+      On screen: Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.
+      Voiceover: Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.
+  [28-35s] CTA
+      On screen: GoOnlinePOS.com
+      Voiceover: Try GoOnlinePOS free - no signup, no login needed to start.
+
+SUGGESTED VISUAL SCENES
+  1. Screen recording: open app.html - Settings -> Products in a real browser.
+  2. Close-up / zoomed capture of the actual UI described: The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt).
+  3. Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.
+  4. End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text.
+
+CALL TO ACTION
+  Try GoOnlinePOS free - no signup, no login needed to start.
+
+CAPTION (for the post itself)
+  Already have your product list in Excel? Upload it and you're ready to sell. Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.
+
+HASHTAGS
+  #SmallBusiness #POS #RetailTech #GoOnlinePOS #ExcelToStore
+
+SOURCE EVIDENCE (why every claim above is real)
+  [OK] app.html: function handleProductFileUpload\(event\)
+  [OK] app.html: vendor/xlsx\.full\.min\.js

@@ -1,0 +1,70 @@
+{
+  "idea_id": "free-barcode-qr-generator",
+  "source_feature_id": "free-barcode-qr-generator",
+  "hook": "New product with no barcode yet? Generate a scannable one free, sized for your label printer.",
+  "topic": "Free Barcode & QR Code Generator (standalone tool)",
+  "target_audience": "Shop owners adding new products that don't already have a manufacturer barcode.",
+  "problem": "A new product with no barcode yet, and no easy way to generate one.",
+  "solution": "A free-standing generator (barcode-generator.html) for common barcode symbologies (CODE128, EAN-13, UPC-A, and more) and QR codes, with print-ready label sizing and PNG export.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "New product with no barcode yet? Generate a scannable one free, sized for your label printer.",
+      "voiceover": "New product with no barcode yet? Generate a scannable one free, sized for your label printer."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "A new product with no barcode yet, and no easy way to generate one.",
+      "voiceover": "A new product with no barcode yet, and no easy way to generate one."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Free Barcode & QR Code Generator (standalone tool)",
+      "voiceover": "Here's how GoOnlinePOS handles it: A free-standing generator (barcode-generator.html) for common barcode symbologies (CODE128, EAN-13, UPC-A, and more) and QR codes, with print-ready label sizing and PNG export."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Generate real, scannable barcodes for products that don't already have one, ready to print on labels.",
+      "voiceover": "Generate real, scannable barcodes for products that don't already have one, ready to print on labels."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Use it free, right now, no signup - linked from GoOnlinePOS.com."
+    }
+  ],
+  "cta": "Use it free, right now, no signup - linked from GoOnlinePOS.com.",
+  "visual_scenes": [
+    "Screen recording: open barcode-generator.html in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A free-standing generator (barcode-generator.html) for common barcode symbologies (CODE128, EAN-13, UPC-A, and more) and QR codes, with print-ready label sizing and PNG export.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "New product with no barcode yet? Generate a scannable one free, sized for your label printer. Generate real, scannable barcodes for products that don't already have one, ready to print on labels.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#BarcodeGenerator"
+  ],
+  "suggested_title": "Free Barcode & QR Code Generator (standalone tool) in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "barcode-generator.html",
+      "pattern": "window\\.JsBarcode\\(codeCanvas",
+      "found": true
+    },
+    {
+      "file": "vendor/jsbarcode.min.js",
+      "pattern": ".",
+      "found": true
+    }
+  ]
+}

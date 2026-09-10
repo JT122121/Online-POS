@@ -1,0 +1,65 @@
+{
+  "idea_id": "sales-export-excel",
+  "source_feature_id": "sales-export-excel",
+  "hook": "Download your sales as a real Excel file for any date range - ready for your accountant.",
+  "topic": "Export Sales & Inventory to Excel",
+  "target_audience": "Shop owners who work with an accountant or bookkeeper, or file their own taxes.",
+  "problem": "Hand-copying sales numbers into a spreadsheet every time your accountant asks for them.",
+  "solution": "Sales History (optionally filtered by date range) and Inventory can both be exported to a real .xlsx workbook, or CSV as a fallback.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Download your sales as a real Excel file for any date range - ready for your accountant.",
+      "voiceover": "Download your sales as a real Excel file for any date range - ready for your accountant."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Hand-copying sales numbers into a spreadsheet every time your accountant asks for them.",
+      "voiceover": "Hand-copying sales numbers into a spreadsheet every time your accountant asks for them."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Export Sales & Inventory to Excel",
+      "voiceover": "Here's how GoOnlinePOS handles it: Sales History (optionally filtered by date range) and Inventory can both be exported to a real .xlsx workbook, or CSV as a fallback."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Hand your accountant a real spreadsheet of sales for any date range, no manual re-typing.",
+      "voiceover": "Hand your accountant a real spreadsheet of sales for any date range, no manual re-typing."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Sales History in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Sales History (optionally filtered by date range) and Inventory can both be exported to a real .xlsx workbook, or CSV as a fallback.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Download your sales as a real Excel file for any date range - ready for your accountant. Hand your accountant a real spreadsheet of sales for any date range, no manual re-typing.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#Bookkeeping"
+  ],
+  "suggested_title": "Export Sales & Inventory to Excel in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function exportSalesToExcel\\(\\)",
+      "found": true
+    }
+  ]
+}

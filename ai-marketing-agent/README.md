@@ -10,9 +10,11 @@ dry-run-then-real social posts.
 repo root (`app.html`, `modules/`, the marketing pages, etc.) as read-only
 source material - see [Safety rules](#safety-rules) below.
 
-**Status: Phase 1 complete.** Everything else in this README describing
-Phases 2, 4-9 is a *design*, not yet working code - each stub module says so
-explicitly. See [Roadmap](#roadmap--whats-not-built-yet).
+**Status: Phases 1, 4, and 5 complete.** Product analysis, idea generation,
+script generation, and free local video rendering all run end to end today.
+Phases 6-9 (publishing, analytics, the full agentic loop) are still a
+*design*, not yet working code - each stub module says so explicitly. See
+[Roadmap](#roadmap--whats-not-built-yet).
 
 ## Why Python, not Node.js/npm
 
@@ -123,24 +125,25 @@ ai-marketing-agent/
   agent/                       The modular package (Phase 2's 8 conceptual components)
     logger.py                   Shared JSON-lines decision log (Safety rule 8) - IMPLEMENTED
     product_knowledge.py        Loader for knowledge/features.json - IMPLEMENTED
-    idea_generator.py           Phase 4 - stub, not implemented
-    script_generator.py         Phase 4 - stub, not implemented
-    content_planner.py          Phase 4 - stub, not implemented
+    idea_generator.py           Phase 4 - IMPLEMENTED (template-based, no LLM API)
+    script_generator.py         Phase 4 - IMPLEMENTED
+    content_planner.py          Phase 4 - IMPLEMENTED (data/content_plan.json queue)
     analytics.py                Phase 7 - stub, not implemented
     scheduler.py                Phase 8 - stub, not implemented (the full agentic loop)
     video/
-      generator.py               Phase 5 - VideoGenerator / LocalVideoGenerator / FutureAIVideoGenerator interfaces defined, not implemented
+      generator.py               Phase 5 - IMPLEMENTED: LocalVideoGenerator (Pillow + ffmpeg, free/local). FutureAIVideoGenerator/FutureTemplateVideoGenerator remain unimplemented placeholders.
     publishing/
       youtube.py                 Phase 6 - YouTubePublisher interface defined, not implemented (dry-run only once built)
       facebook.py                Phase 6 - FacebookPublisher interface defined, not implemented (dry-run only once built)
 
   data/
+    content_plan.json          Phase 4 output - the ordered idea queue (generated)
     logs/                       agent.log.jsonl - one JSON object per line, every agent run/decision
     analytics/                  Phase 7 - will hold mock then real performance JSON
 
-  ideas/                       Phase 4 output goes here (empty for now)
-  scripts_output/              Phase 4 output goes here (empty for now)
-  videos/                      Phase 5 output (.mp4) goes here (empty for now)
+  ideas/                       Phase 4 output - one <feature_id>.json idea per verified feature
+  scripts_output/              Phase 4 output - one <idea_id>.txt (readable) + .json (structured) shooting script per idea
+  videos/                      Phase 5 output - one <idea_id>.mp4 vertical (1080x1920) video per rendered script
 ```
 
 ## Installation
@@ -166,37 +169,68 @@ and needs zero configuration.
 See ["The verified feature inventory"](#the-verified-feature-inventory)
 above - `scripts/analyze_product.py` is the whole mechanism.
 
-## How ideas will be generated (Phase 4 - not built yet)
+## How ideas are generated (Phase 4 - implemented)
 
-Planned: `agent/idea_generator.py` will read only
+`agent/idea_generator.py`'s `generate_ideas()` reads only
 `agent.product_knowledge.list_features(verified_only=True)` - features whose
-evidence currently checks out - and produce one idea object per feature (or
-per marketing angle), each with a hook/topic/audience/problem/solution/
-script/CTA/visual scenes/caption/hashtags/title, written to `ideas/*.json`.
-No idea will ever reference a feature outside that verified list, and no
-exaggerated/unsupported claim ("best POS in the world", "100% free" where
-untrue, "guaranteed to increase profits") will be generated - this is a
-hard rule, not a style preference (see Safety rule 5 below).
+evidence currently checks out - and produces one idea object per feature,
+each with a hook/topic/audience/problem/solution/script/CTA/visual
+scenes/caption/hashtags/title, written to `ideas/<feature_id>.json`. Every
+field is either copied from `knowledge/features.json` verbatim or built from
+it via a small fixed template - no LLM call, no new claims invented. The CTA
+wording is driven by each feature's own `is_premium` value, so a
+Premium-gated feature is never described as plainly "free" (see Safety rule
+5). `agent/content_planner.py`'s `plan_content()`/`select_next_idea()` then
+sequences the generated ideas into `data/content_plan.json` (free features
+first, since Phase 7's real analytics don't exist yet to rank by - the
+placeholder heuristic is documented in the module's own docstring) and logs
+the choice via `agent/logger.py`.
 
-## How videos will be generated (Phase 5 - not built yet)
+```bash
+python3 cli.py generate-ideas                  # writes ideas/*.json for every verified feature
+python3 cli.py generate-script <idea-id>        # e.g. bulk-product-import - expands one idea into a timed script
+```
 
-Planned: a free, local pipeline - `agent/video/generator.py`'s
-`LocalVideoGenerator` will compose real GoOnlinePOS screenshots (there are
-already 19 `guide-*.png` feature screenshots in the repo root that could be
-reused, plus new ones can be captured) with generated caption text and
-simple transitions using Pillow (already free, already listed in
-`requirements.txt`), then encode the frame sequence to a vertical 9:16 MP4
-via a locally installed, free/open-source `ffmpeg` binary (not bundled -
-installed once by the site owner, the same as any other free open-source
-tool - not a paid API). `FutureAIVideoGenerator`/`FutureTemplateVideoGenerator`
-are defined as empty adapter classes for optional paid tools, added later
-only if the site owner chooses to pay for one - never required.
+`generate-script` writes both `scripts_output/<idea-id>.txt` (a
+human-readable shooting script - hook/problem/solution/timed beats/visual
+scenes/CTA/caption/hashtags, plus a per-claim evidence checklist) and
+`scripts_output/<idea-id>.json` (the same content, structured, for
+`create-video` to consume).
 
-## How to preview videos (Phase 5 - not built yet)
+## How videos are generated (Phase 5 - implemented)
 
-Planned: `python3 cli.py create-video <idea-id>` will write an `.mp4` to
-`videos/` and print the local path - open it in any video player to review
-before anything is published.
+A free, local pipeline - `agent/video/generator.py`'s `LocalVideoGenerator`
+composes each script "beat" into a branded 1080x1920 (vertical 9:16) PNG
+frame with Pillow (already free, already in `requirements.txt`), using
+GoOnlinePOS's own real `:root` CSS design tokens (`--ink`/`--accent`/`--gold`)
+so the video actually looks like it belongs to the product. Where a real
+GoOnlinePOS screenshot exists for a feature (`FEATURE_SCREENSHOTS` maps 12 of
+the 18 verified features to their matching `guide-*.png` file already in the
+repo root), the SOLUTION beat composites that real screenshot in instead of
+plain text - actual product UI, not a mockup. The frame sequence is then
+encoded to an MP4 by a locally installed, free/open-source `ffmpeg` binary
+(not bundled - a one-time system install, e.g. `apt install ffmpeg`/`brew
+install ffmpeg` - not a paid API), each frame held on screen for its beat's
+own script duration via ffmpeg's concat demuxer.
+`FutureAIVideoGenerator`/`FutureTemplateVideoGenerator` remain empty adapter
+classes for optional paid tools, added later only if the site owner chooses
+to pay for one - never required.
+
+There is currently no text-to-speech engine available in this environment
+(`espeak`/`espeak-ng`/`festival`/`pico2wave` were all checked, none found),
+so the first-generation videos are silent/text-driven (on-screen captions
+carry every beat's message) rather than narrated - a reasonable future
+enhancement, not a blocker for this free proof of concept.
+
+## How to preview videos (Phase 5 - implemented)
+
+```bash
+python3 cli.py create-video <idea-id>   # e.g. bulk-product-import - requires scripts_output/<idea-id>.json to already exist
+```
+
+Writes `videos/<idea-id>.mp4` and prints the local path - open it in any
+video player to review. Nothing is published anywhere; this is purely a
+local file on disk.
 
 ## How publishing will eventually work (Phase 6 - not built yet)
 
@@ -262,14 +296,14 @@ learning loop can be exercised before any real publishing exists.
 
 ```bash
 cd ai-marketing-agent
-python3 cli.py analyze-product        # implemented (Phase 1)
-python3 cli.py refresh-features       # implemented (Phase 1) - identical alias
-python3 cli.py generate-ideas         # not yet implemented (Phase 4)
-python3 cli.py generate-script        # not yet implemented (Phase 4)
-python3 cli.py create-video           # not yet implemented (Phase 5)
-python3 cli.py preview-publish        # not yet implemented (Phase 6)
-python3 cli.py show-analytics         # not yet implemented (Phase 7)
-python3 cli.py run-agent              # not yet implemented (Phase 8 - the full loop)
+python3 cli.py analyze-product          # implemented (Phase 1)
+python3 cli.py refresh-features         # implemented (Phase 1) - identical alias
+python3 cli.py generate-ideas           # implemented (Phase 4) - writes ideas/*.json
+python3 cli.py generate-script <idea-id> # implemented (Phase 4) - writes scripts_output/<idea-id>.{txt,json}
+python3 cli.py create-video <idea-id>    # implemented (Phase 5) - writes videos/<idea-id>.mp4
+python3 cli.py preview-publish          # not yet implemented (Phase 6)
+python3 cli.py show-analytics           # not yet implemented (Phase 7)
+python3 cli.py run-agent                # not yet implemented (Phase 8 - the full loop)
 ```
 
 Every command that isn't built yet says so explicitly and exits non-zero,
@@ -280,8 +314,8 @@ rather than silently doing nothing or faking output.
 | Component | Cost right now | Future paid option |
 |---|---|---|
 | Product analysis (Phase 1) | **$0** - stdlib Python only | - |
-| Idea/script generation (Phase 4) | **$0** planned - template/rule-based from verified features, no LLM API required for the proof of concept | An LLM API could later make ideas/scripts richer - optional, not required |
-| Video generation (Phase 5) | **$0** planned - Pillow + a locally installed free `ffmpeg` binary | A paid AI video-generation API (`FutureAIVideoGenerator`) - optional, adapter only, never assumed |
+| Idea/script generation (Phase 4) | **$0** - template/rule-based from verified features, no LLM API used | An LLM API could later make ideas/scripts richer - optional, not required |
+| Video generation (Phase 5) | **$0** - Pillow + a locally installed free `ffmpeg` binary | A paid AI video-generation API (`FutureAIVideoGenerator`) - optional, adapter only, never assumed |
 | Publishing (Phase 6) | **$0** - dry-run only; real publishing via YouTube/Facebook's own free APIs once credentials are supplied | Neither platform's basic posting API costs money; no paid tier required |
 | Analytics (Phase 7) | **$0** - local JSON, no analytics SaaS | - |
 
@@ -291,9 +325,11 @@ for Phase 5, and that's a one-time, no-cost, open-source install.
 
 ## Which parts are currently free
 
-All of it - the entire system as built so far (Phase 1) runs with zero
-network calls, zero API keys, and zero dependencies beyond the Python
-standard library.
+All of it - product analysis (Phase 1), idea/script generation (Phase 4),
+and video rendering (Phase 5) all run with zero network calls and zero API
+keys. Phase 1/4 need only the Python standard library; Phase 5 additionally
+needs Pillow (`pip install -r requirements.txt`) and a locally installed
+free `ffmpeg` binary.
 
 ## Which future components may require paid APIs
 
@@ -349,16 +385,13 @@ later phases can't accidentally violate them):
 
 ## Roadmap - what's not built yet
 
-Everything past Phase 1 is a **design**, not working code, per the
-project's own "work incrementally... only then continue to Phase 2"
-instruction. In order:
+Phases 1, 4, and 5 are complete and tested (see above). Everything past that
+is still a **design**, not working code, per the project's own "work
+incrementally... only then continue to the next phase" instruction:
 
-- **Phase 4** - Content Idea Generator, Script Generator, Content Planner
-  (read `knowledge/features.json`, write `ideas/*.json` /
-  `scripts_output/*.json`)
-- **Phase 5** - free local video prototype (`LocalVideoGenerator`, Pillow +
-  ffmpeg, MP4 output to `videos/`)
-- **Phase 6** - `YouTubePublisher`/`FacebookPublisher`, dry-run mode
+- **Phase 6** - `YouTubePublisher`/`FacebookPublisher`, dry-run mode only
+  (no real credentials configured, no real publish call - see "How
+  publishing will eventually work" above)
 - **Phase 7** - analytics JSON model + mock sample data
 - **Phase 8** - the full agentic loop (`run-agent`), still
   create-then-review-then-dry-run only, no auto-publishing
@@ -366,4 +399,4 @@ instruction. In order:
 
 Each phase should be proposed, implemented, and tested on its own before
 moving to the next, with a short report (what was created, what was
-tested, what's next) - the same process this Phase 1 pass followed.
+tested, what's next) - the same process Phases 1, 4, and 5 followed.

@@ -1,0 +1,52 @@
+{
+  "idea_id": "bulk-product-import",
+  "topic": "Bulk Product Import (CSV or Excel)",
+  "suggested_title": "Bulk Product Import (CSV or Excel) in GoOnlinePOS (Free POS for Small Business)",
+  "beats": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Already have your product list in Excel? Upload it and you're ready to sell.",
+      "voiceover": "Already have your product list in Excel? Upload it and you're ready to sell."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Typing in a hundred products one at a time before you can even open for business.",
+      "voiceover": "Typing in a hundred products one at a time before you can even open for business."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Bulk Product Import (CSV or Excel)",
+      "voiceover": "Here's how GoOnlinePOS handles it: The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt)."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.",
+      "voiceover": "Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Products in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt).",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "caption": "Already have your product list in Excel? Upload it and you're ready to sell. Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#ExcelToStore"
+  ]
+}

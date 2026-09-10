@@ -80,6 +80,10 @@ FEATURE_PROBES = [
             "Stock updates itself the moment you make a sale.",
         ],
         "confidence": "high",
+        "is_premium": "partial",
+        "problem": "Still counting stock by hand or guessing what's left on the shelf?",
+        "target_audience": "Shop owners who track their own inventory - convenience stores, small retail, home-based sellers.",
+        "premium_note": "Viewing and tracking stock is free; editing stock numbers or exporting the inventory list requires Premium (see app.html's applyPremiumLocks()).",
     },
     {
         "feature_id": "product-photos",
@@ -98,6 +102,10 @@ FEATURE_PROBES = [
             "Add a real photo to every product - find items by sight, not just by name.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Cashiers wasting time squinting at a text-only product list to find the right item.",
+        "target_audience": "Cashiers and shop staff working a busy counter, especially with lookalike products like food or bakery items.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "bulk-product-import",
@@ -116,6 +124,10 @@ FEATURE_PROBES = [
             "Already have your product list in Excel? Upload it and you're ready to sell.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Typing in a hundred products one at a time before you can even open for business.",
+        "target_audience": "New shop owners setting up their catalog for the first time, or anyone migrating from a spreadsheet.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "usb-barcode-scanning",
@@ -134,6 +146,10 @@ FEATURE_PROBES = [
             "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Ringing up items by typing the name in manually, one by one, while a line builds up.",
+        "target_audience": "Retail cashiers and convenience-store staff who already own a standard USB barcode scanner.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "split-payments",
@@ -152,6 +168,10 @@ FEATURE_PROBES = [
             "Customer paying half cash, half card? One sale, one receipt, no problem.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "A customer wants to pay part cash, part card, and the register can't handle it in one sale.",
+        "target_audience": "Cashiers handling walk-in retail or food-service customers with mixed payment habits.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "per-sale-discount-and-tax-exempt",
@@ -170,6 +190,10 @@ FEATURE_PROBES = [
             "Give one customer a discount without touching your store-wide pricing.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Needing to give one customer a one-off discount without touching your store-wide prices.",
+        "target_audience": "Shop owners who occasionally negotiate price or serve tax-exempt customers or organizations.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "multi-cashier-support",
@@ -188,6 +212,10 @@ FEATURE_PROBES = [
             "Know exactly which cashier rang up which sale - no guessing at shift-close.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "No way to tell which staff member rang up which sale when the register comes up short.",
+        "target_audience": "Shop owners with more than one person working the register across shifts.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "sales-history-and-end-of-day",
@@ -208,6 +236,10 @@ FEATURE_PROBES = [
             "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Closing the register with a mental guess instead of a real total.",
+        "target_audience": "Shop owners and managers closing out a business day.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "sales-export-excel",
@@ -225,13 +257,19 @@ FEATURE_PROBES = [
             "Download your sales as a real Excel file for any date range - ready for your accountant.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Hand-copying sales numbers into a spreadsheet every time your accountant asks for them.",
+        "target_audience": "Shop owners who work with an accountant or bookkeeper, or file their own taxes.",
+        "premium_note": "Sales export is not Premium-gated (only Inventory export is - see applyPremiumLocks()).",
     },
     {
         "feature_id": "customer-facing-display",
         "feature": "Customer-Facing Order Screen",
         "description": (
             "A second, lightweight page (customer.html) mirrors the live cart/order "
-            "state in real time, meant for a second monitor or a screen facing the customer."
+            "state in real time, meant for a second monitor or a screen facing the "
+            "customer. This is a Premium feature - app.html's applyPremiumLocks() "
+            "keeps it locked until Premium is active."
         ),
         "evidence": [
             {"file": "app.html", "pattern": r"function customerScreenUrl\(\)"},
@@ -243,6 +281,10 @@ FEATURE_PROBES = [
             "Give your customer their own screen showing exactly what they're being charged.",
         ],
         "confidence": "high",
+        "is_premium": "yes",
+        "problem": "A customer at the counter has no way to see what they're actually being charged until the receipt prints.",
+        "target_audience": "Retail and food-service shop owners who want a supermarket-style checkout experience - Premium subscribers.",
+        "premium_note": "Fully Premium-gated - app.html's applyPremiumLocks() hides the unlocked customer-screen content entirely until Premium is active.",
     },
     {
         "feature_id": "full-backup-restore",
@@ -260,6 +302,10 @@ FEATURE_PROBES = [
             "Your data lives in your browser - back it up with one click so you never lose it.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "A cleared browser or a new computer wiping out your entire product list and sales history.",
+        "target_audience": "Any shop owner relying on a browser-based POS for day-to-day data.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "multi-currency",
@@ -277,6 +323,10 @@ FEATURE_PROBES = [
             "Set your own currency once - every receipt, price, and report follows.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "A POS that only prices in US dollars, when your business runs in a different currency entirely.",
+        "target_audience": "Shop owners outside the US, or anyone pricing in a currency other than USD.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "six-language-support",
@@ -296,6 +346,10 @@ FEATURE_PROBES = [
             "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Staff or customers who aren't comfortable reading the POS in English.",
+        "target_audience": "Multilingual staff and customer-facing businesses, including Arabic-speaking markets needing full right-to-left layout.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "configurable-paper-size",
@@ -313,6 +367,10 @@ FEATURE_PROBES = [
             "No thermal printer? Print receipts on any regular A4 printer instead.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Feeling like you need to buy a special thermal printer just to use a POS.",
+        "target_audience": "Shop owners using a regular A4/Letter printer instead of a dedicated thermal receipt printer.",
+        "premium_note": "Included in the free Basic plan.",
     },
     {
         "feature_id": "offline-mode",
@@ -332,6 +390,10 @@ FEATURE_PROBES = [
             "No internet at your market stall? Download the offline version and keep selling.",
         ],
         "confidence": "high",
+        "is_premium": "yes",
+        "problem": "Losing the ability to sell the moment the wifi drops.",
+        "target_audience": "Market stall vendors, pop-up shops, and any location with unreliable internet - Premium subscribers.",
+        "premium_note": "Requires an active Premium subscription to download.",
     },
     {
         "feature_id": "free-invoice-generator",
@@ -350,6 +412,10 @@ FEATURE_PROBES = [
             "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "Needing to bill a customer on net terms instead of a same-day cash sale, without dedicated invoicing software.",
+        "target_audience": "Freelancers, small service businesses, and shop owners who occasionally invoice rather than ring up a sale.",
+        "premium_note": "A separate free tool with no Premium concept at all.",
     },
     {
         "feature_id": "free-barcode-qr-generator",
@@ -369,6 +435,10 @@ FEATURE_PROBES = [
             "New product with no barcode yet? Generate a scannable one free, sized for your label printer.",
         ],
         "confidence": "high",
+        "is_premium": "no",
+        "problem": "A new product with no barcode yet, and no easy way to generate one.",
+        "target_audience": "Shop owners adding new products that don't already have a manufacturer barcode.",
+        "premium_note": "A separate free tool with no Premium concept at all.",
     },
     {
         "feature_id": "premium-subscription",
@@ -389,6 +459,10 @@ FEATURE_PROBES = [
             "Get 15 days of Premium free - just sign in with Google, no card needed.",
         ],
         "confidence": "high",
+        "is_premium": "n/a",
+        "problem": "Wanting to try extra features without committing to a paid plan first.",
+        "target_audience": "Any GoOnlinePOS user curious about Premium features.",
+        "premium_note": "This entry describes the Premium system itself, not a Premium-gated feature.",
     },
 ]
 

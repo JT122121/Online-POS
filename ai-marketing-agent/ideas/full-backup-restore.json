@@ -1,0 +1,65 @@
+{
+  "idea_id": "full-backup-restore",
+  "source_feature_id": "full-backup-restore",
+  "hook": "Your data lives in your browser - back it up with one click so you never lose it.",
+  "topic": "Full Backup & Restore",
+  "target_audience": "Any shop owner relying on a browser-based POS for day-to-day data.",
+  "problem": "A cleared browser or a new computer wiping out your entire product list and sales history.",
+  "solution": "One-click download of every piece of local data (products, sales, settings, cashiers, logo) as a JSON file, and a matching restore that loads it back in.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Your data lives in your browser - back it up with one click so you never lose it.",
+      "voiceover": "Your data lives in your browser - back it up with one click so you never lose it."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "A cleared browser or a new computer wiping out your entire product list and sales history.",
+      "voiceover": "A cleared browser or a new computer wiping out your entire product list and sales history."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Full Backup & Restore",
+      "voiceover": "Here's how GoOnlinePOS handles it: One-click download of every piece of local data (products, sales, settings, cashiers, logo) as a JSON file, and a matching restore that loads it back in."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Move to a new computer or recover from a cleared browser without losing your product list or sales history.",
+      "voiceover": "Move to a new computer or recover from a cleared browser without losing your product list or sales history."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Backup in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: One-click download of every piece of local data (products, sales, settings, cashiers, logo) as a JSON file, and a matching restore that loads it back in.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Your data lives in your browser - back it up with one click so you never lose it. Move to a new computer or recover from a cleared browser without losing your product list or sales history.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#DataBackup"
+  ],
+  "suggested_title": "Full Backup & Restore in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "async function downloadFullBackup\\(\\)",
+      "found": true
+    }
+  ]
+}

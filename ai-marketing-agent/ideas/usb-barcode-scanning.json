@@ -1,0 +1,70 @@
+{
+  "idea_id": "usb-barcode-scanning",
+  "source_feature_id": "usb-barcode-scanning",
+  "hook": "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers.",
+  "topic": "USB Barcode Scanner Support",
+  "target_audience": "Retail cashiers and convenience-store staff who already own a standard USB barcode scanner.",
+  "problem": "Ringing up items by typing the name in manually, one by one, while a line builds up.",
+  "solution": "Keyboard-wedge style USB barcode scanner support - a fast keystroke burst ending in Enter is matched against product SKU and added to the cart automatically.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers.",
+      "voiceover": "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Ringing up items by typing the name in manually, one by one, while a line builds up.",
+      "voiceover": "Ringing up items by typing the name in manually, one by one, while a line builds up."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "USB Barcode Scanner Support",
+      "voiceover": "Here's how GoOnlinePOS handles it: Keyboard-wedge style USB barcode scanner support - a fast keystroke burst ending in Enter is matched against product SKU and added to the cart automatically."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Ring up items as fast as a real checkout counter - plug in any standard USB barcode scanner, no special drivers.",
+      "voiceover": "Ring up items as fast as a real checkout counter - plug in any standard USB barcode scanner, no special drivers."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - main catalog screen, Barcode Scanner toggle in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Keyboard-wedge style USB barcode scanner support - a fast keystroke burst ending in Enter is matched against product SKU and added to the cart automatically.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers. Ring up items as fast as a real checkout counter - plug in any standard USB barcode scanner, no special drivers.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#BarcodeScanner"
+  ],
+  "suggested_title": "USB Barcode Scanner Support in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "modules/usb-scanner.js",
+      "pattern": "function handleUsbScanKeydown\\(e\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "id=\"barcodeScannerToggle\"",
+      "found": true
+    }
+  ]
+}
