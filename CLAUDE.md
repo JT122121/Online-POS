@@ -1150,14 +1150,12 @@ What actually happened, concretely:
   in `.pos-sidebar-nav`, right after Backup and before Settings, not
   tucked inside a settings tab - the single most visible spot in the
   toolbar this feature could occupy. `#supportCoffeeButton` →
-  `openBuyMeCoffee()` opens `SUPPORT_PAYPAL_URL` in a new tab, PayPal's
-  standard `cmd=_donations` Donate-button link
-  (`https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS`)
-  built from the site owner's real PayPal account email
-  (`goonlinepos@gmail.com`) rather than a `paypal.me` username - this
-  link style lets the visitor type in whatever amount they want to send
-  and needs nothing beyond a regular PayPal account tied to that email,
-  no separate `paypal.me` profile to set up first. Gold-tinted
+  `openBuyMeCoffee()` opens `SUPPORT_PAYPAL_URL` in a new tab, the site
+  owner's real `paypal.me` link (`https://paypal.me/Joemarietayactac1`)
+  - lets the visitor type in whatever amount they want to send. This
+  replaced an earlier version that used PayPal's older `cmd=_donations`
+  Donate-button link built from the site owner's PayPal email instead,
+  before the real `paypal.me` username was supplied. Gold-tinted
   (`--gold-tint`/`#f0dfb0`, same treatment as `#backupShortcutButton`),
   its own `supportCoffeeLabel` translation key across all six
   `modules/translations.js` languages, wired into `changeLanguage()`'s

@@ -2711,11 +2711,10 @@ function openCreatePricing() {
 /* OFFLINE-STRIP:CREATE-PRICING-JS:END */
 
 /* OFFLINE-STRIP:SUPPORT-COFFEE-JS:START */
-// PayPal's standard "Donate" button link - lets the visitor type in whatever
-// amount they want to send to this PayPal account, no separate paypal.me
-// username needed. This is a plain voluntary support link, not tied to any
-// feature or account status.
-const SUPPORT_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS";
+// PayPal.me link - lets the visitor type in whatever amount they want to
+// send. This is a plain voluntary support link, not tied to any feature
+// or account status.
+const SUPPORT_PAYPAL_URL = "https://paypal.me/Joemarietayactac1";
 function openBuyMeCoffee() {
   window.open(SUPPORT_PAYPAL_URL, "_blank");
 }
