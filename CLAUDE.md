@@ -2525,8 +2525,10 @@ has zero network calls.
   marketing page as the walkthrough's home — see "Retired pages" under
   SEO below for why that page was pulled out of navigation rather than
   deleted. Deliberately **text-only** (a `.htu-item` title +
-  description per section, 18 sections total including one new "End of
-  Day" section `guide.html` never had) — no screenshots, unlike
+  description per section, 16 sections as of the language/Premium
+  retirements below - originally 18, one new "End of Day" section
+  `guide.html` never had, since trimmed by the removal of the Premium
+  and Language sections) — no screenshots, unlike
   `guide.html`'s photo-heavy original. Screenshots showing "what does
   Settings → Store look like" are redundant once you're already inside
   the app and can just click over and look, and skipping them avoids
@@ -2554,6 +2556,35 @@ has zero network calls.
     live site and is present unmodified in the built offline package
     (confirming it reads correctly there too, since it's shared verbatim
     rather than swapped), zero console errors.
+  - **Follow-up: updated for the SKU-mandatory/merge-by-SKU upload,
+    Auto-Backup, and language-removal changes documented elsewhere in
+    this file** - three of the panel's `.htu-item`s had drifted stale
+    from this session's own work, per an explicit "update also the how
+    to use for all this changes" request. **SETTINGS → PRODUCTS**'
+    paragraph still described SKU as just one of several optional
+    fields and said uploading a file "load[s] your whole catalog in one
+    shot" - both wrong now (SKU is required and unique, and an upload
+    merges by SKU rather than replacing the catalog - see the Products
+    section above) - reworded to state SKU is required and explain the
+    add-vs-update-by-SKU upload behavior, matching
+    `productsUploadHint`'s own wording. **SETTINGS → LANGUAGE was
+    deleted outright**, not reworded - the entire six-language system
+    and its Settings tab were removed site-wide (see "Retired: the
+    six-language translation system" above), so there's nothing left
+    for this section to describe; it's plain static English text with
+    no `changeLanguage()`/`ids`-map wiring of its own, so deleting the
+    `<div class="htu-item">` block needed no other code change.
+    **SETTINGS → BACKUP** never mentioned Auto-Backup at all (added in
+    an earlier pass this same session, after this panel's text was last
+    touched) - reworded to lead with Auto-Backup (choose a folder once,
+    saves automatically) alongside the existing one-click manual
+    download. **SETTINGS → INVENTORY** picked up a one-clause mention
+    that its search box now also matches by SKU, not just name/category
+    (see the Inventory/cart SKU-keying refactor above). Verified with
+    Playwright: the panel now renders exactly 16 `.htu-item` sections
+    (was 17 before this pass, 18 originally - see above), zero
+    `SETTINGS → LANGUAGE` or `SETTINGS → PREMIUM` text remains, and zero
+    console errors opening the panel.
 - **Visual refresh pass on the sidebar/top-bar layout**, per a reference
   screenshot the site owner shared of a differently-styled sidebar POS
   mockup - explicitly scoped to color/spacing/icon polish using only
