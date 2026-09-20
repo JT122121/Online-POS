@@ -1053,6 +1053,30 @@ all of them under one pattern:
     header still English on that reload too; and zero horizontal
     overflow and zero console errors at 390px in both English and
     Arabic.
+  - **Follow-up bug fix: three "Who is GoOnlinePOS for?" audience-card
+    titles literally rendered `&amp;` as visible text** instead of an
+    ampersand, reported directly from a screenshot -
+    `audience1Title`/`audience2Title`/`audience3Title`'s `en`
+    translation values ("Market Stalls &amp; Pop-Ups", etc.) used the
+    HTML entity `&amp;` inside a plain JS string, but these three keys
+    are wired into `changeLanguage()`'s `ids` map and applied via
+    `.textContent` (correctly - they don't need `innerHTML`, there's no
+    embedded tag to preserve) - and `textContent` never decodes HTML
+    entities, it inserts the literal characters, so the moment
+    `changeLanguage()` ran (on every page load, not just an explicit
+    language switch) the `<strong>` tags showed the literal text
+    `&amp;` instead of `&`. Every other language's own value already
+    used a real word ("and"/"y"/"at"/"และ") instead of an ampersand at
+    all, so only the three `en` values had this bug. Fixed by replacing
+    `&amp;` with a plain `&` character in the JS string literal - the
+    correct way to represent an ampersand in a JS string that's headed
+    for `textContent` (an HTML entity is only ever appropriate inside
+    raw HTML markup, like the same three `<strong>` tags' own hardcoded
+    fallback text, which was never wrong since the browser's HTML
+    parser does decode entities there - only the JS-string copy of the
+    same text had the bug). Verified with Playwright: all three titles
+    read a real `&` character on first load and after a language
+    round-trip (Spanish back to English), zero console errors.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
