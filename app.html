@@ -127,7 +127,7 @@ button:active { transform: translateY(1px); }
 .hidden { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.pos-shell { display: flex; align-items: flex-start; max-width: 1600px; margin: 0 auto; }
+.pos-shell { display: flex; align-items: flex-start; }
 .pos-sidebar { position: sticky; top: 0; align-self: flex-start; width: 236px; flex-shrink: 0; height: 100vh; overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 14px 10px; gap: 12px; }
 .pos-sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 2px 6px 12px; border-bottom: 1px solid var(--line-soft); }
 .pos-sidebar-brand .brand-mark { width: 38px; height: 38px; border-radius: 9px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 3px; }
@@ -163,7 +163,7 @@ button:active { transform: translateY(1px); }
 #newSaleButton:hover { background: var(--accent-dark); }
 
 .pos-main { flex: 1; min-width: 0; padding: 20px; }
-.app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; }
+.app-header { margin: 0 0 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; }
 .app-header-greeting { flex-shrink: 0; }
 .pos-welcome-title { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
 .app-header .subtitle { margin: 0; color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
@@ -171,7 +171,7 @@ button:active { transform: translateY(1px); }
 .app-header-link { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-dark); color: #fff; border: 0; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .app-header-link:hover { background: var(--ink); }
 
-.pos-topbar { max-width: 1500px; margin: 0 auto 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 10px 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.pos-topbar { margin: 0 0 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 10px 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .pos-topbar-search { flex: 1; min-width: 200px; }
 .pos-topbar-search .search-box { margin-bottom: 0; }
 .pos-topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -181,7 +181,7 @@ button:active { transform: translateY(1px); }
 .pos-topbar-account { display: flex; align-items: center; }
 .pos-topbar-account .subtitle { margin: 0; }
 
-.app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(330px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
+.app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(330px, 1fr); align-items: start; }
 .app .left-panel { margin-right: 4px; }
 .app .preview-area { margin-left: 4px; }
 .app.catalog-fullscreen { grid-template-columns: 1fr; }
@@ -193,12 +193,12 @@ button:active { transform: translateY(1px); }
 .panel-resize-handle:hover::after, .panel-resize-handle.dragging::after { background: var(--accent); }
 .pos-topbar-icon-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
 
-.site-footer { max-width: 1500px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); }
+.site-footer { margin: 20px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
 .site-footer span { margin: 0 8px; }
 
-.backup-notice { max-width: 1500px; margin: 0 auto 16px; background: var(--gold-tint); border: 1px solid #f0dfb0; border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.backup-notice { margin: 0 0 16px; background: var(--gold-tint); border: 1px solid #f0dfb0; border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .bn-text { font-size: 13px; color: #6b4f12; line-height: 1.5; flex: 1; min-width: 220px; }
 .bn-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .bn-backup-btn { border: 0; background: var(--gold); color: var(--ink); font-size: 12.5px; font-weight: 700; padding: 9px 15px; border-radius: 7px; white-space: nowrap; }
@@ -300,7 +300,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
 
 .settings-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
-.settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
+.settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 1600px; max-height: 94vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
 .settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
 .settings-modal-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
 .settings-modal-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
@@ -547,7 +547,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 <symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 <symbol id="icon-maximize" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
-<symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
 </defs>
 </svg>
 
@@ -630,14 +629,13 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 <button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
 <button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
-<button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language"><svg class="icon"><use href="#icon-globe"></use></svg></button>
 </div>
 </div>
 
 <div id="backupNotice" class="backup-notice hidden">
-<div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.</span></div>
+<div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Set up Auto-Backup or download a backup so nothing is lost if your cache gets cleared.</span></div>
 <div class="bn-actions">
-<button type="button" class="bn-backup-btn" onclick="downloadFullBackup()" id="backupNoticeButton">Download Backup</button>
+<button type="button" class="bn-backup-btn" onclick="openBackupSettings()" id="backupNoticeButton">Set Up Backup</button>
 <button type="button" class="bn-dismiss-btn" onclick="dismissBackupNotice()" aria-label="Dismiss">×</button>
 </div>
 </div>
@@ -764,15 +762,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <input id="quickFooter1" oninput="syncQuickField('footer1', this.value)">
 <label id="quickFooterLine2Label">Footer Line 2</label>
 <input id="quickFooter2" oninput="syncQuickField('footer2', this.value)">
-<label id="quickLanguageLabel">Select Language</label>
-<select id="quickLanguage" onchange="syncQuickLanguage(this.value)">
-<option value="en">English</option>
-<option value="ar">العربية</option>
-<option value="fil">Filipino</option>
-<option value="hi">हिन्दी</option>
-<option value="es">Español</option>
-<option value="th">ไทย</option>
-</select>
 </div>
 </div>
 <div id="receipt" class="receipt">
@@ -996,7 +985,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
-      <button class="settings-tab-item hidden" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
       <button class="settings-tab-item hidden" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item hidden" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
     </div>
@@ -1094,7 +1082,7 @@ Website: Goonlinepos.com</textarea>
             <input id="newProductCategory" placeholder="e.g. Beverages">
           </div>
         </div>
-        <label id="addProductSkuLabel">SKU (optional)</label>
+        <label id="addProductSkuLabel">SKU</label>
         <input id="newProductSku" placeholder="e.g. 8901">
         <label id="addProductStockLabel">Stock Level (optional)</label>
         <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
@@ -1107,7 +1095,7 @@ Website: Goonlinepos.com</textarea>
         <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
         <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
 
-        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.</div>
+        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, SKU (all required), and optionally Category, Stock, and TaxExempt. Products with a SKU that already exists in your catalog are updated; products with a new SKU are added; rows with no SKU are skipped. Nothing already in your catalog is removed - use Clear Products below for that.</div>
         <input id="csvFileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleProductFileUpload(event)">
         <div id="csvErrorBox" class="error-text hidden"></div>
         <div id="csvSuccessBox" class="success-text hidden"></div>
@@ -1200,23 +1188,28 @@ Website: Goonlinepos.com</textarea>
         <div class="info" id="decimalPlacesInfo" style="display:block;">Most currencies use 2 (e.g. $0.30). Some, like Bahraini Dinar, use 3 (e.g. BD 0.300).</div>
       </div>
 
-      <div class="settings-panel-content" id="panel-language">
-        <h3 id="languageTitle">Language</h3>
-        <label id="languageLabel">Select Language</label>
-        <select id="language" onchange="changeLanguage(); saveSettings();">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
-          <option value="fil">Filipino</option>
-          <option value="hi">हिन्दी</option>
-          <option value="es">Español</option>
-          <option value="th">ไทย</option>
-        </select>
-      </div>
-
       <div class="settings-panel-content" id="panel-backup">
         <h3 id="backupTitle">Backup & Restore</h3>
-        <div class="info" id="backupInfo" style="display:block;">Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.</div>
-        <button type="button" class="small-btn" onclick="downloadFullBackup()" style="width:100%; margin-top:12px;">⬇ Download Full Backup</button>
+        <div class="info" id="backupInfo" style="display:block;">Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Set up Auto-Backup below to save a copy automatically, or download a one-time backup manually.</div>
+
+        <label style="margin-top:16px;"><span id="autoBackupTitle">Auto-Backup</span></label>
+        <div class="info" id="autoBackupInfo" style="display:block;">Choose a folder on this computer once, and every change - a completed sale, a new product, any setting - is saved there automatically. No need to remember. Available in Chrome and Edge on a desktop computer.</div>
+
+        <button type="button" class="small-btn hidden" id="autoBackupChooseBtn" onclick="chooseAutoBackupFolder()" style="width:100%; margin-top:12px;">📁 <span id="autoBackupChooseLabel">Choose Backup Folder</span></button>
+
+        <div id="autoBackupConnectedBox" class="hidden">
+          <div class="info" id="autoBackupStatusInfo" style="display:block; margin-top:12px;"></div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button type="button" class="small-btn" onclick="chooseAutoBackupFolder()" style="flex:1;"><span id="autoBackupChangeLabel">Change Folder</span></button>
+            <button type="button" class="small-btn" onclick="disconnectAutoBackupFolder()" style="flex:1; background:var(--danger);"><span id="autoBackupTurnOffLabel">Turn Off</span></button>
+          </div>
+        </div>
+
+        <button type="button" class="small-btn hidden" id="autoBackupReconnectBtn" onclick="reconnectAutoBackupFolder()" style="width:100%; margin-top:12px;">🔄 <span id="autoBackupReconnectLabel">Reconnect Backup Folder</span></button>
+
+        <div class="info hidden" id="autoBackupUnsupportedInfo">Auto-Backup isn't available in this browser. Use Chrome or Edge on a desktop computer for automatic backups, or download a backup manually below.</div>
+
+        <button type="button" class="small-btn" id="downloadBackupButton" onclick="downloadFullBackup()" style="width:100%; margin-top:20px;">⬇ Download Full Backup</button>
         <label id="restoreBackupLabel" style="margin-top:20px;">Restore from Backup</label>
         <input id="backupFileInput" type="file" accept=".json,application/json" onchange="handleBackupFileSelect(event)">
         <div class="info" id="restoreInfo" style="display:block;">This replaces everything currently saved with what's in the backup file. The page will reload after restoring.</div>
@@ -1251,7 +1244,7 @@ Website: Goonlinepos.com</textarea>
       <li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>
     </ul>
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalUpdateTitle">Getting updates later</h3>
-    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
+    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime to get the latest version. To carry your data over: on the old copy, go to Settings → Backup and get a backup (Auto-Backup's saved file, or Download Full Backup), then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
     <div style="margin:0 0 14px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px;">
       <label style="display:flex; align-items:flex-start; gap:8px; font-size:12.5px; line-height:1.55; cursor:pointer;">
         <input type="checkbox" id="offlineAgreeCheckbox" onchange="handleOfflineAgreeChange()" style="margin-top:2px;">
@@ -1422,7 +1415,7 @@ function handleDecimalPlacesChange() {
   renderPaymentRows();
   updateReceipt();
 }
-function currentLang() { return document.getElementById("language").value; }
+function currentLang() { return "en"; }
 
 function tr(key) {
   const lang = translations[currentLang()] || translations.en;
@@ -1442,9 +1435,11 @@ async function storageGet(key) {
 async function storageSet(key, value) {
   if (hasArtifactStorage()) {
     try { await window.storage.set(key, value, false); } catch (e) { console.error("Could not save " + key, e); }
+    if (key !== "pos-auto-backup-last-snapshot-date") scheduleAutoBackupWrite();
     return;
   }
   try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
+  if (key !== "pos-auto-backup-last-snapshot-date") scheduleAutoBackupWrite();
 }
 
 function openSettings() {
@@ -1586,7 +1581,7 @@ async function saveSettings() {
     storeName: val("storeName"), storeDetails: val("storeDetails"),
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"), discountType: val("discountType"),
     footer1: val("footer1"), footer2: val("footer2"),
-    language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
+    paperSize: val("paperSize"), customWidth: val("customWidth"),
     zoomRange: val("zoomRange"), documentType: val("documentType"),
     barcodeScannerEnabled: document.getElementById("barcodeScannerToggle").checked
   };
@@ -1600,11 +1595,6 @@ function syncQuickField(targetId, value) {
   if (!el) return;
   el.value = value;
   updateReceipt();
-}
-function syncQuickLanguage(value) {
-  document.getElementById("language").value = value;
-  changeLanguage();
-  saveSettings();
 }
 function syncQuickCurrencySymbol(value) {
   document.getElementById("currencySymbol").value = value;
@@ -2049,11 +2039,11 @@ async function completeOnly() {
 async function deductStockForCart() {
   let changed = false;
   cart.forEach(function(c) {
-    const idx = products.findIndex(function(p) { return p.name === c.name && Math.abs(p.price - c.price) < 0.0005; });
-    if (idx === -1) return;
-    if (products[idx].stock === null || products[idx].stock === undefined) return;
-    const remaining = Math.max(0, (Number(products[idx].stock) || 0) - (Number(c.qty) || 0));
-    products[idx].stock = remaining;
+    if (!c.sku) return;
+    const product = products.find(function(p) { return p.sku === c.sku; });
+    if (!product || product.stock === null || product.stock === undefined) return;
+    const remaining = Math.max(0, (Number(product.stock) || 0) - (Number(c.qty) || 0));
+    product.stock = remaining;
     changed = true;
   });
   if (changed) {
@@ -2574,6 +2564,176 @@ async function dismissBackupNotice() {
   await storageSet("pos-backup-notice-dismissed", "1");
 }
 
+// --- Auto-Backup: silently rewrite a full backup into a locally chosen folder on every change ---
+const AUTO_BACKUP_FILENAME = "GoOnlinePOS-Backup.json";
+const AUTO_BACKUP_DEBOUNCE_MS = 2500;
+const AUTO_BACKUP_DB_NAME = "goonlinepos-auto-backup";
+const AUTO_BACKUP_STORE_NAME = "handles";
+const AUTO_BACKUP_HANDLE_KEY = "backup-folder";
+let autoBackupDirHandle = null;
+let autoBackupPermissionState = "unset"; // "unset" | "granted" | "needs-permission" | "unsupported"
+let autoBackupWriteTimer = null;
+let autoBackupLastSavedAt = null;
+
+function isAutoBackupSupported() {
+  return typeof window !== "undefined" && typeof window.showDirectoryPicker === "function" && typeof indexedDB !== "undefined";
+}
+function openAutoBackupDb() {
+  return new Promise(function(resolve, reject) {
+    const req = indexedDB.open(AUTO_BACKUP_DB_NAME, 1);
+    req.onupgradeneeded = function() { req.result.createObjectStore(AUTO_BACKUP_STORE_NAME); };
+    req.onsuccess = function() { resolve(req.result); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+async function idbSaveAutoBackupHandle(handle) {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readwrite");
+    tx.objectStore(AUTO_BACKUP_STORE_NAME).put(handle, AUTO_BACKUP_HANDLE_KEY);
+    tx.oncomplete = function() { resolve(); };
+    tx.onerror = function() { reject(tx.error); };
+  });
+}
+async function idbLoadAutoBackupHandle() {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readonly");
+    const req = tx.objectStore(AUTO_BACKUP_STORE_NAME).get(AUTO_BACKUP_HANDLE_KEY);
+    req.onsuccess = function() { resolve(req.result || null); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+async function idbClearAutoBackupHandle() {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readwrite");
+    tx.objectStore(AUTO_BACKUP_STORE_NAME).delete(AUTO_BACKUP_HANDLE_KEY);
+    tx.oncomplete = function() { resolve(); };
+    tx.onerror = function() { reject(tx.error); };
+  });
+}
+
+async function loadAutoBackupState() {
+  if (!isAutoBackupSupported()) { autoBackupPermissionState = "unsupported"; renderAutoBackupStatus(); return; }
+  try {
+    const handle = await idbLoadAutoBackupHandle();
+    if (!handle) { autoBackupPermissionState = "unset"; renderAutoBackupStatus(); return; }
+    const perm = await handle.queryPermission({ mode: "readwrite" });
+    autoBackupDirHandle = handle;
+    autoBackupPermissionState = (perm === "granted") ? "granted" : "needs-permission";
+  } catch (e) {
+    autoBackupPermissionState = "unset";
+  }
+  renderAutoBackupStatus();
+}
+
+async function chooseAutoBackupFolder() {
+  if (!isAutoBackupSupported()) return;
+  try {
+    const handle = await window.showDirectoryPicker({ id: "goonlinepos-backup", mode: "readwrite" });
+    autoBackupDirHandle = handle;
+    autoBackupPermissionState = "granted";
+    await idbSaveAutoBackupHandle(handle);
+    await performAutoBackupWrite();
+    trackEvent("auto_backup_connected", {});
+  } catch (e) {
+    // Picker cancelled or blocked - leave state as it was.
+  }
+  renderAutoBackupStatus();
+}
+
+async function reconnectAutoBackupFolder() {
+  if (!autoBackupDirHandle) return;
+  try {
+    const perm = await autoBackupDirHandle.requestPermission({ mode: "readwrite" });
+    if (perm === "granted") {
+      autoBackupPermissionState = "granted";
+      await performAutoBackupWrite();
+    }
+  } catch (e) {}
+  renderAutoBackupStatus();
+}
+
+async function disconnectAutoBackupFolder() {
+  if (!confirm(tr("autoBackupDisconnectConfirm"))) return;
+  autoBackupDirHandle = null;
+  autoBackupPermissionState = "unset";
+  await idbClearAutoBackupHandle();
+  renderAutoBackupStatus();
+  trackEvent("auto_backup_disconnected", {});
+}
+
+function scheduleAutoBackupWrite() {
+  if (typeof autoBackupPermissionState === "undefined" || autoBackupPermissionState !== "granted" || !autoBackupDirHandle) return;
+  clearTimeout(autoBackupWriteTimer);
+  autoBackupWriteTimer = setTimeout(function() { performAutoBackupWrite(); }, AUTO_BACKUP_DEBOUNCE_MS);
+}
+
+async function performAutoBackupWrite() {
+  if (!autoBackupDirHandle || autoBackupPermissionState !== "granted") return;
+  try {
+    const payload = await buildBackupPayload();
+    const json = JSON.stringify(payload, null, 2);
+    const fileHandle = await autoBackupDirHandle.getFileHandle(AUTO_BACKUP_FILENAME, { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(json);
+    await writable.close();
+    autoBackupLastSavedAt = new Date();
+    await maybeWriteAutoBackupSnapshot(json);
+  } catch (e) {
+    autoBackupPermissionState = "needs-permission";
+  }
+  renderAutoBackupStatus();
+}
+
+async function maybeWriteAutoBackupSnapshot(json) {
+  const today = todayStamp();
+  const lastSnapshot = await storageGet("pos-auto-backup-last-snapshot-date");
+  if (lastSnapshot === today) return;
+  try {
+    const fileHandle = await autoBackupDirHandle.getFileHandle("GoOnlinePOS-Backup-" + today + ".json", { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(json);
+    await writable.close();
+    await storageSet("pos-auto-backup-last-snapshot-date", today);
+  } catch (e) {
+    // Snapshot is a best-effort safety net - the live backup file above already saved successfully.
+  }
+}
+
+function renderAutoBackupStatus() {
+  const chooseBtn = document.getElementById("autoBackupChooseBtn");
+  if (!chooseBtn) return;
+  const connectedBox = document.getElementById("autoBackupConnectedBox");
+  const reconnectBtn = document.getElementById("autoBackupReconnectBtn");
+  const unsupportedInfo = document.getElementById("autoBackupUnsupportedInfo");
+  const manualBtn = document.getElementById("downloadBackupButton");
+
+  chooseBtn.classList.add("hidden");
+  connectedBox.classList.add("hidden");
+  reconnectBtn.classList.add("hidden");
+  unsupportedInfo.classList.add("hidden");
+  if (manualBtn) manualBtn.classList.remove("hidden");
+
+  if (!isAutoBackupSupported()) {
+    unsupportedInfo.classList.remove("hidden");
+    return;
+  }
+  if (autoBackupPermissionState === "granted" && autoBackupDirHandle) {
+    connectedBox.classList.remove("hidden");
+    if (manualBtn) manualBtn.classList.add("hidden");
+    const statusInfo = document.getElementById("autoBackupStatusInfo");
+    const folderName = autoBackupDirHandle.name || "";
+    const savedText = autoBackupLastSavedAt ? autoBackupLastSavedAt.toLocaleTimeString() : tr("autoBackupNotSavedYet");
+    statusInfo.textContent = tr("autoBackupConnectedPrefix") + " " + folderName + " - " + tr("autoBackupLastSavedPrefix") + " " + savedText;
+  } else if (autoBackupPermissionState === "needs-permission") {
+    reconnectBtn.classList.remove("hidden");
+  } else {
+    chooseBtn.classList.remove("hidden");
+  }
+}
+
 function buildSalesExportRows(list) {
   const source = list || salesHistory;
   const parentRows = source.map(function(s) {
@@ -2703,8 +2863,9 @@ function updateDate() {
   document.getElementById("receiptDate").textContent = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
 
-function findCartIndexByNamePrice(name, price) {
-  return cart.findIndex(function(c) { return c.name === name && Math.abs(c.price - price) < 0.0005; });
+function findCartIndexByNamePrice(name, price, sku) {
+  if (sku) return cart.findIndex(function(c) { return c.sku === sku; });
+  return cart.findIndex(function(c) { return !c.sku && c.name === name && Math.abs(c.price - price) < 0.0005; });
 }
 let customerScreenChannel = null;
 try { customerScreenChannel = new BroadcastChannel("goonlinepos-customer-screen"); } catch (e) { customerScreenChannel = null; }
@@ -2828,9 +2989,9 @@ function trackEvent(name, params) {
   }
 }
 function addProductToCart(product) {
-  const idx = findCartIndexByNamePrice(product.name, product.price);
+  const idx = findCartIndexByNamePrice(product.name, product.price, product.sku);
   if (idx > -1) { cart[idx].qty += 1; }
-  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, taxExempt: !!product.taxExempt, description: "", showDescription: false }); }
+  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, sku: product.sku || "", taxExempt: !!product.taxExempt, description: "", showDescription: false }); }
   updateReceipt();
   trackEvent("add_to_cart", {
     currency: val("currencyCode") || "USD",
@@ -2841,7 +3002,7 @@ function addProductToCart(product) {
 
 function addCustomItem() {
   itemCounter++;
-  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false, description: "", showDescription: false });
+  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, sku: "", taxExempt: false, description: "", showDescription: false });
   updateReceipt();
   setTimeout(function() {
     const input = document.querySelector('.receipt-item[data-id="' + itemCounter + '"] .receipt-item-name-input');
@@ -2869,8 +3030,8 @@ function removeCartItem(id) {
     });
   }
 }
-function getCartQtyFor(name, price) {
-  const idx = findCartIndexByNamePrice(name, price);
+function getCartQtyFor(name, price, sku) {
+  const idx = findCartIndexByNamePrice(name, price, sku);
   return idx > -1 ? cart[idx].qty : 0;
 }
 function cartTotalCount() {
@@ -2910,15 +3071,18 @@ function productRowsFromParsed(parsed) {
   const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
   const stockIdx = header.findIndex(function(h) { return ["stock", "stock level", "qty", "quantity", "stock qty"].indexOf(h) !== -1; });
   const taxExemptIdx = header.findIndex(function(h) { return ["taxexempt", "tax exempt", "tax-exempt", "no tax"].indexOf(h) !== -1; });
-  if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
+  if (nameIdx === -1 || priceIdx === -1 || skuIdx === -1) throw new Error("missing required columns");
 
   const newProducts = [];
+  let skippedNoSku = 0;
   for (let i = 1; i < parsed.length; i++) {
     const row = parsed[i];
     if (!row || row.every(function(f) { return String(f).trim() === ""; })) continue;
     const name = String(row[nameIdx] || "").trim();
     const price = parseFloat(row[priceIdx]) || 0;
     if (!name) continue;
+    const sku = String(row[skuIdx] || "").trim();
+    if (!sku) { skippedNoSku++; continue; }
     let stock = null;
     if (stockIdx > -1) {
       const rawStock = String(row[stockIdx] || "").trim();
@@ -2933,14 +3097,40 @@ function productRowsFromParsed(parsed) {
       name: name,
       price: price,
       category: catIdx > -1 ? String(row[catIdx] || "").trim() : "",
-      sku: skuIdx > -1 ? String(row[skuIdx] || "").trim() : "",
+      sku: sku,
       stock: stock,
       photo: "",
       taxExempt: taxExempt
     });
   }
   if (!newProducts.length) throw new Error("no valid rows");
-  return newProducts;
+  return { rows: newProducts, skippedNoSku: skippedNoSku };
+}
+
+function mergeUploadedProducts(uploadedRows) {
+  const merged = products.slice();
+  let added = 0, updated = 0;
+  uploadedRows.forEach(function(row) {
+    const sku = String(row.sku || "").trim();
+    const matchIndex = sku === "" ? -1 : merged.findIndex(function(p) { return String(p.sku || "").trim() === sku; });
+    if (matchIndex > -1) {
+      const existing = merged[matchIndex];
+      merged[matchIndex] = {
+        name: row.name,
+        price: row.price,
+        category: row.category,
+        sku: row.sku,
+        stock: row.stock,
+        photo: existing.photo || "",
+        taxExempt: row.taxExempt
+      };
+      updated++;
+    } else {
+      merged.push(row);
+      added++;
+    }
+  });
+  return { merged: merged, added: added, updated: updated };
 }
 
 function handleProductFileUpload(event) {
@@ -2963,13 +3153,18 @@ function handleProductFileUpload(event) {
       } else {
         parsed = parseCSV(String(e.target.result));
       }
-      const newProducts = productRowsFromParsed(parsed);
+      const parsedRows = productRowsFromParsed(parsed);
+      const result = mergeUploadedProducts(parsedRows.rows);
 
-      products = newProducts;
+      products = result.merged;
       await saveProducts();
       activeCategory = "all";
       renderProductCatalog();
-      successBox.textContent = products.length + " " + tr("productsUploadSuccess");
+      let successText = tr("productsUploadSuccess").replace("{added}", result.added).replace("{updated}", result.updated);
+      if (parsedRows.skippedNoSku > 0) {
+        successText += " " + tr("productsUploadSkippedSuffix").replace("{skipped}", parsedRows.skippedNoSku);
+      }
+      successBox.textContent = successText;
       successBox.classList.remove("hidden");
     } catch (err) {
       errorBox.textContent = tr("productsUploadError");
@@ -3025,16 +3220,19 @@ async function addSingleProduct() {
 
   const name = nameEl.value.trim();
   const price = parseFloat(priceEl.value);
+  const sku = skuEl.value.trim();
 
   if (!name) { errorBox.textContent = tr("addProductNameError"); errorBox.classList.remove("hidden"); return; }
   if (isNaN(price) || price < 0) { errorBox.textContent = tr("addProductPriceError"); errorBox.classList.remove("hidden"); return; }
+  if (!sku) { errorBox.textContent = tr("addProductSkuError"); errorBox.classList.remove("hidden"); return; }
+  if (products.some(function(p) { return p.sku === sku; })) { errorBox.textContent = tr("addProductSkuDuplicateError"); errorBox.classList.remove("hidden"); return; }
 
   const stockRaw = stockEl.value.trim();
   products.push({
     name: name,
     price: price,
     category: categoryEl.value.trim(),
-    sku: skuEl.value.trim(),
+    sku: sku,
     stock: stockRaw === "" ? null : (parseFloat(stockRaw) || 0),
     photo: newProductPhotoDataUrl,
     taxExempt: !!(taxExemptEl && taxExemptEl.checked)
@@ -3108,7 +3306,9 @@ function renderInventoryList() {
 
   const filtered = products.filter(function(p) {
     if (!query) return true;
-    return p.name.toLowerCase().indexOf(query) !== -1 || (p.category && p.category.toLowerCase().indexOf(query) !== -1);
+    return p.name.toLowerCase().indexOf(query) !== -1 ||
+      (p.sku && p.sku.toLowerCase().indexOf(query) !== -1) ||
+      (p.category && p.category.toLowerCase().indexOf(query) !== -1);
   });
 
   const groups = {};
@@ -3127,7 +3327,6 @@ function renderInventoryList() {
     list.appendChild(groupHeader);
 
     groups[cat].forEach(function(p) {
-      const realIndex = products.indexOf(p);
       const hasStock = p.stock !== null && p.stock !== undefined;
       const isLow = hasStock && Number(p.stock) <= 5;
       const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
@@ -3147,15 +3346,17 @@ function renderInventoryList() {
           "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
           "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"-\">" +
         "</div>";
-      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(realIndex, this.value); });
+      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(p.sku, this.value); });
       list.appendChild(row);
     });
   });
 }
 
-async function handleInventoryStockEdit(index, rawValue) {
+async function handleInventoryStockEdit(sku, rawValue) {
+  const product = products.find(function(p) { return p.sku === sku; });
+  if (!product) return;
   const trimmed = String(rawValue).trim();
-  products[index].stock = trimmed === "" ? null : Math.max(0, parseFloat(trimmed) || 0);
+  product.stock = trimmed === "" ? null : Math.max(0, parseFloat(trimmed) || 0);
   await saveProducts();
   renderInventoryList();
 }
@@ -3268,7 +3469,7 @@ function renderProductCatalog() {
   });
 
   filtered.forEach(function(p) {
-    const inCart = getCartQtyFor(p.name, p.price);
+    const inCart = getCartQtyFor(p.name, p.price, p.sku);
     const hasStock = p.stock !== null && p.stock !== undefined;
     const stockClass = hasStock && Number(p.stock) <= 5 ? "product-stock low" : "product-stock";
     const row = document.createElement("div");
@@ -3346,7 +3547,7 @@ function updateZoom() {
 }
 
 function changeLanguage() {
-  const language = document.getElementById("language").value;
+  const language = currentLang();
   document.documentElement.lang = language;
   document.body.dir = language === "ar" ? "rtl" : "ltr";
 
@@ -3364,7 +3565,6 @@ function changeLanguage() {
     quickStoreNameLabel: "storeNameLabel", quickStoreDetailsLabel: "storeDetailsLabel",
     quickTaxNameLabel: "taxNameLabel", quickTaxRateLabel: "taxRateLabel",
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
-    quickLanguageLabel: "languageLabel",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     quickStoreLogoLabel: "storeLogoLabel",
     quickLogoPreviewEmptyText: "logoEmptyLabel", quickRemoveLogoButton: "removeLogoButton",
@@ -3393,9 +3593,11 @@ function changeLanguage() {
     currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
     decimalPlacesLabel: "decimalPlacesLabel", decimalPlacesInfo: "decimalPlacesInfo",
     quickCurrencyCodeLabel: "currencyCodeLabel", quickCurrencySymbolLabel: "currencySymbolLabel", quickDecimalPlacesLabel: "decimalPlacesLabel",
-    languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
+    autoBackupTitle: "autoBackupTitle", autoBackupInfo: "autoBackupInfo", autoBackupChooseLabel: "autoBackupChooseLabel",
+    autoBackupChangeLabel: "autoBackupChangeLabel", autoBackupTurnOffLabel: "autoBackupTurnOffLabel",
+    autoBackupReconnectLabel: "autoBackupReconnectLabel", autoBackupUnsupportedInfo: "autoBackupUnsupportedInfo",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo",
@@ -3424,6 +3626,7 @@ function changeLanguage() {
     element.textContent = tr(ids[id]);
   });
   renderSidebarToggle();
+  renderAutoBackupStatus();
 
   const searchEl = document.getElementById("productSearch");
   if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
@@ -3498,6 +3701,7 @@ async function init() {
   await loadLogo();
   await loadSalesHistory();
   await loadBackupNoticeState();
+  await loadAutoBackupState();
   await loadQuickReceiptSettingsState();
   await loadReceiptPrefix();
   await loadPanelSplit();

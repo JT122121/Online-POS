@@ -1077,6 +1077,23 @@ all of them under one pattern:
     same text had the bug). Verified with Playwright: all three titles
     read a real `&` character on first load and after a language
     round-trip (Spanish back to English), zero console errors.
+  - **Bug fix: a large blank gap rendered above the header on every
+    load**, reported directly from a screenshot. Root cause:
+    `index.html` never defined a bare, generic `.hidden { display: none
+    !important; }` CSS rule - only compound selectors scoped to a
+    specific element existed (e.g. `.cookie-consent.hidden`) - even
+    though the page's icon sprite markup
+    (`<svg class="icon-sprite hidden" ...>`, holding the `<symbol>`
+    defs the `.aud-badge`/homepage-mock icons reference via `<use>`)
+    relies on a plain `.hidden` class to stay invisible, the same
+    convention `app.html`'s own icon sprite already uses. With no
+    matching rule, the browser rendered that `<svg>` at its default
+    intrinsic size (300×150px) directly in the page flow, pushing
+    everything below it down and reading as a large empty band above
+    the header. Fixed by adding the missing generic `.hidden { display:
+    none !important; }` rule. Verified with Playwright: the sprite
+    `<svg>` now resolves to `display: none, width: 0, height: 0` and a
+    full-page screenshot shows no gap above the header.
   - **Follow-up: the 6 audience cards got real photos + colored icon
     badges, replacing the plain single emoji each card used to lead
     with.** Per an explicit follow-up ("can you also change this icon
@@ -1964,11 +1981,11 @@ has zero network calls.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk upload from **either CSV or Excel
-  (`.xlsx`/`.xls`)** (`handleProductFileUpload`, columns Name/Price/
-  Category/SKU, optionally Stock and TaxExempt — `Yes`/`Y`/`True`/`1`
-  all parse as exempt, anything else as taxable) that **replaces** the
-  whole catalog. The file input's `accept` covers both extensions/MIME
-  types; `handleProductFileUpload` sniffs the filename
+  (`.xlsx`/`.xls`)** (`handleProductFileUpload`, columns Name/Price/SKU
+  (all required), optionally Category/Stock/TaxExempt — `Yes`/`Y`/`True`/`1`
+  all parse as exempt, anything else as taxable). The file input's
+  `accept` covers both extensions/MIME types; `handleProductFileUpload`
+  sniffs the filename
   (`/\.xlsx?$/i`) to decide whether to `reader.readAsArrayBuffer()` +
   `XLSX.read(...)` (the same `vendor/xlsx.full.min.js`/SheetJS library
   already used for `.xlsx` exports below - it reads workbooks too, not
@@ -1982,11 +1999,120 @@ has zero network calls.
   "Download Sample CSV" and "Download Sample Excel" sit side by side
   (`downloadSampleCsv()`/`downloadSampleExcel()`, both built from the
   same `sampleProductRows()` data so the two files always stay in sync),
-  plus "Clear Products". This was a deliberate add-Excel-without-
-  breaking-CSV choice, not a replacement - Excel is the more familiar
-  format for most shop owners maintaining a product list, but nothing
-  about the existing CSV workflow (or any external tooling built around
-  it) changes.
+  plus "Clear Products" for an explicit full-catalog wipe. This was a
+  deliberate add-Excel-without-breaking-CSV choice, not a replacement -
+  Excel is the more familiar format for most shop owners maintaining a
+  product list, but nothing about the existing CSV workflow (or any
+  external tooling built around it) changes.
+  - **CSV/Excel upload merges into the existing catalog by SKU instead
+    of replacing it wholesale** - the single biggest behavior change
+    from the original design. `mergeUploadedProducts(uploadedRows)`
+    (new, sits right above `handleProductFileUpload()`) walks the
+    parsed rows in file order against a working copy of the live
+    `products[]`: a row whose SKU (trimmed) matches an existing
+    product's SKU **replaces** that product's `name`/`price`/`category`/
+    `sku`/`stock`/`taxExempt` fields outright; a row with a new SKU is
+    **appended** as a brand-new product. `handleProductFileUpload()`
+    then just does `products = result.merged;` instead of the old
+    `products = newProducts;` wholesale replace. A product already in
+    the catalog whose SKU simply doesn't appear anywhere in the uploaded
+    file is left completely untouched - re-uploading a partial or
+    updated price list no longer silently deletes everything not in that
+    file, which is what made "Clear Products" a necessary separate,
+    explicit action rather than something upload already did implicitly.
+    **The matched product's existing `photo` is preserved on update, not
+    overwritten** - `productRowsFromParsed()` always sets `photo: ""` on
+    every parsed row, since a CSV/Excel file has no practical way to
+    carry binary image data (see "Product photos" above); blindly
+    applying that blank value on an update would have silently wiped out
+    a photo the shop owner had already uploaded through the app for that
+    exact SKU, so `mergeUploadedProducts()` explicitly carries
+    `existing.photo` forward instead whenever a row updates rather than
+    inserts. Two or more rows in the same uploaded file sharing one SKU
+    are handled naturally by the same lookup - each later row in the
+    file matches the row just inserted/updated by an earlier one in that
+    same pass, so they collapse into a single final record rather than
+    creating duplicates, with no special-case code needed for it.
+  - **SKU is now mandatory and unique, a real key column, not an
+    optional field.** This reversed an earlier, shorter-lived decision
+    in this same line of work that explicitly allowed duplicate/blank
+    SKUs (real-world catalogs can have not-yet-labeled or weighed/bulk
+    items with no code) - a later, more specific instruction to make
+    SKU "mandatory and key column" and to key Inventory off it
+    superseded that. `addSingleProduct()` (the manual "+ Add Product"
+    form) now rejects a blank SKU (`addProductSkuError`) and rejects a
+    SKU that already matches another product's (`addProductSkuDuplicateError`,
+    a plain `products.some(p => p.sku === sku)` check) before pushing
+    the new product - `addProductSkuLabel` changed from "SKU (optional)"
+    to plain "SKU" to match. `productRowsFromParsed()` (the CSV/Excel
+    column detector) now requires a SKU column to exist at all
+    (`if (nameIdx === -1 || priceIdx === -1 || skuIdx === -1) throw ...`,
+    where it previously only required Name/Price), and skips - rather
+    than imports with a blank SKU - any row whose SKU cell is empty,
+    counting each skip in a new `skippedNoSku` counter returned
+    alongside the parsed rows. `handleProductFileUpload()` reports that
+    count to the user via a new `productsUploadSkippedSuffix` suffix
+    appended to the success message
+    (`" - Skipped (missing SKU): {skipped}"`) whenever it's non-zero, so
+    a shop owner uploading a file with some blank-SKU rows sees exactly
+    how many were skipped and why, rather than silently importing fewer
+    rows than the file contained. `productsUploadError`/
+    `productsUploadHint` were reworded to state SKU is required
+    (see below) - raw HTML default and the `en` value in
+    `modules/translations.js` both updated to match, per this repo's
+    "the two must always agree" convention. Uploaded rows still don't
+    validate for duplicate SKUs *within the same file* against each
+    other - two rows sharing one SKU in one file still collapse
+    naturally into a single final record via the existing merge-by-SKU
+    logic above (each later row updates the record the earlier row
+    just inserted), which already produces the correct, non-duplicated
+    result without needing a separate check.
+  - **The user is always told exactly what happened, not just that
+    "it worked."** `productsUploadHint` (the info box above the file
+    input) was reworded from "This replaces the current list" to
+    explicitly describe the add-vs-update-by-SKU behavior, that SKU is
+    now required on every row, and to point at Clear Products as the
+    separate way to wipe everything - raw HTML default and the `en`
+    value in `modules/translations.js` both updated to match.
+    `productsUploadSuccess`'s value changed from a count-prefixed
+    sentence (`"12" + " products loaded from file."`, built by
+    string-concatenating a raw number in front of the translated tail)
+    to a two-field templated string with `{added}`/`{updated}`
+    placeholders (`"Added: {added} - Updated: {updated}"`), filled in
+    via two plain `.replace()` calls in `handleProductFileUpload()` -
+    deliberately invariant regardless of count rather than attempting
+    singular/plural agreement, the same simplification this repo
+    already made for `contact.html`'s "attempts left" message.
+  - **Inventory, cart merging, and stock deduction on sale were all
+    refactored to match products by SKU instead of array index or
+    name+price**, now that SKU is guaranteed present and unique on
+    every product. `renderInventoryList()` used to wire each stock
+    input to `handleInventoryStockEdit(realIndex, ...)` via
+    `products.indexOf(p)` - fragile the moment the array is
+    re-sorted/filtered/re-rendered between render and edit; it and
+    `handleInventoryStockEdit()` itself now both key off `p.sku`
+    directly (`products.find(p => p.sku === sku)`), and the Inventory
+    search box (`renderInventoryList()`'s filter) now also matches
+    against SKU, not just name/category - a real, related gap this
+    surfaced, since SKU is now the field a shop owner is most likely to
+    search by. `findCartIndexByNamePrice(name, price, sku)` (used by
+    both `addProductToCart()` and `getCartQtyFor()`, which both now
+    pass the product's `sku` through) matches an existing cart line by
+    `sku` directly when one is present, falling back to the old
+    `!c.sku && name+price` comparison only for cart lines with no SKU
+    (custom/manual items added via `addCustomItem()`, which explicitly
+    sets `sku: ""`) - this means two different products that happen to
+    share the same name and price (e.g. two sizes priced the same) are
+    now correctly kept as separate cart lines instead of incorrectly
+    merging into one. Every `cart[]` entry now carries its own `sku`
+    field end to end. `deductStockForCart()` (called on checkout) used
+    to re-find the sold product via
+    `products.findIndex(p => p.name === c.name && price match)` on
+    every line; it now looks the product up by `c.sku` directly and
+    skips any cart line with no SKU (a custom item has no catalog stock
+    to decrement in the first place). This closes a real correctness
+    gap the old name+price matching had wherever two catalog products
+    could ever share both fields.
 - **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
   (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
   CSV/text export path (`rowsToCsv`, `downloadTextFile`). Sales History
@@ -2055,6 +2181,113 @@ has zero network calls.
   `applyBackupPayload(backup)` (originally factored out to also be shared
   with the now-retired Cloud Sync feature below - kept as-is since it's
   a clean split regardless).
+- **Auto-Backup** - a local, zero-network alternative to remembering to
+  click "Download Backup," built after a design discussion about the
+  cleanest way to guarantee nothing is ever lost without introducing a
+  server, an account, or a third-party integration (Google Sheets and a
+  Google-OAuth-based sync were both considered and explicitly rejected in
+  favor of this - see that conversation's reasoning: a local file needs
+  no backend for us to run, no per-user Apps Script deployment, and no
+  OAuth consent/token-refresh flow). Settings → Backup's "Auto-Backup"
+  section lets a shop owner choose a folder on their own computer **once**
+  (`chooseAutoBackupFolder()`, `window.showDirectoryPicker({mode:
+  "readwrite"})` - the File System Access API); from then on, `app.html`
+  silently rewrites `buildBackupPayload()`'s output into a fixed file
+  (`GoOnlinePOS-Backup.json`) inside that folder every time something
+  meaningful changes - a completed sale, a product/setting/cashier edit -
+  with zero dialog, zero download-bar, zero network call of any kind.
+  - **Hooked into `storageSet()` itself, not into dozens of individual
+    call sites.** Every meaningful state mutation in this file already
+    goes through `storageSet()` by convention (see "Always go through
+    `storageGet`/`storageSet`" above) - so `storageSet()` calls
+    `scheduleAutoBackupWrite()` on every write (skipping only its own
+    internal `pos-auto-backup-last-snapshot-date` bookkeeping key, to
+    avoid a pointless second write scheduling itself after the snapshot
+    write below saves). This means the feature never had to be wired
+    into `saveCurrentSaleToHistory()`, `saveSettings()`, product/cashier
+    add/edit/delete, or any other specific function individually - it
+    catches everything automatically, by construction, the same way the
+    storage abstraction itself already guarantees every write lands in
+    the right place.
+  - **Debounced, not instant** - `scheduleAutoBackupWrite()` clears and
+    resets a `setTimeout` (`AUTO_BACKUP_DEBOUNCE_MS`, 2.5s) on every
+    qualifying write, so a burst of changes (adding several cart items,
+    typing in a settings field) collapses into one actual disk write
+    once things settle, not one write per keystroke.
+  - **The folder handle survives a reload** via a tiny dedicated
+    IndexedDB store (`goonlinepos-auto-backup` database,
+    `idbSaveAutoBackupHandle`/`idbLoadAutoBackupHandle`/
+    `idbClearAutoBackupHandle`) - `FileSystemDirectoryHandle` objects
+    can't be stored in `localStorage` (not JSON-serializable), but
+    Chromium's IndexedDB implementation can structured-clone them
+    directly, which is the standard, documented pattern for this API.
+    `loadAutoBackupState()` (called from `init()`) re-loads the stored
+    handle and calls `handle.queryPermission({mode:"readwrite"})` to
+    check whether the browser still trusts it without needing a user
+    gesture - "granted" resumes auto-saving immediately; anything else
+    sets `autoBackupPermissionState = "needs-permission"` and shows a
+    "Reconnect Backup Folder" button, since re-requesting write
+    permission (`handle.requestPermission(...)`) requires an actual user
+    click and can't be done silently on page load.
+  - **A once-a-day dated snapshot rides along with the live overwrite**
+    (`maybeWriteAutoBackupSnapshot()`, `GoOnlinePOS-Backup-YYYY-MM-DD.json`,
+    gated on a `pos-auto-backup-last-snapshot-date` storage key so it
+    only fires once per calendar day) - the live file is always
+    overwritten in place (that's the point - no manual action, no
+    file-pileup), but a single bad write at the exact wrong moment
+    (crash, power loss mid-write) could otherwise leave zero fallback
+    copy; the daily snapshot costs at most one extra small file a day
+    and means that scenario never destroys the only backup.
+  - **Feature-detected, Chromium-desktop-only, with a mandatory manual
+    fallback - never a silent gap.** `isAutoBackupSupported()` checks for
+    `window.showDirectoryPicker`; Firefox and Safari (and all mobile
+    browsers) don't implement the writable File System Access API at
+    all. On those browsers the panel shows an explicit
+    `autoBackupUnsupportedInfo` note explaining why, and - this was a
+    deliberate decision, not an oversight - the plain "Download Full
+    Backup" button (`#downloadBackupButton`) **stays visible and
+    functional** there; it also stays visible on supported browsers
+    right up until Auto-Backup is actually connected. The moment
+    Auto-Backup is connected (`autoBackupPermissionState === "granted"`),
+    `renderAutoBackupStatus()` hides that manual button, since it's now
+    redundant - but it reappears immediately if Auto-Backup is turned
+    off or its permission lapses. No user, on any browser, is ever left
+    with zero way to get their data out.
+  - **"Restore from Backup" is completely unchanged** - it already reads
+    the exact same `buildBackupPayload()` JSON shape, whether that file
+    came from a manual "Download Backup" click or from Auto-Backup's own
+    silently-written file, so no new restore logic was needed anywhere.
+  - **Ships in the offline package unmodified, not `OFFLINE-STRIP`-wrapped**
+    - unlike Account & Subscription or analytics, this feature needs zero
+    network to begin with, so there's nothing about it that's
+    inappropriate for a zero-connectivity offline copy; it works exactly
+    the same way there.
+  - New translation keys (`autoBackupTitle`, `autoBackupInfo`,
+    `autoBackupChooseLabel`, `autoBackupChangeLabel`,
+    `autoBackupTurnOffLabel`, `autoBackupReconnectLabel`,
+    `autoBackupUnsupportedInfo`, `autoBackupConnectedPrefix`,
+    `autoBackupLastSavedPrefix`, `autoBackupNotSavedYet`,
+    `autoBackupDisconnectConfirm`) exist across all six languages and are
+    wired into `changeLanguage()`'s `ids` map; `renderAutoBackupStatus()`
+    is also called directly from `changeLanguage()` (same pattern as
+    `renderAppTitleBadge()`/`renderWelcomeBadge()`) since its "Auto-Backup
+    is on. Saving to: X - Last saved: Y" status line is composed from
+    `tr()` calls rather than static markup, so a language switch
+    re-composes it immediately instead of waiting for the next write.
+    `backupInfo`/`backupNoticeText`/`backupNoticeButton` (existing keys)
+    were reworded across all six languages to mention Auto-Backup
+    alongside the manual option; the backup-reminder banner's button
+    (`#backupNoticeButton`) now opens Settings → Backup
+    (`openBackupSettings()`) instead of immediately triggering a
+    download, since "go set this up" is the more useful action once
+    Auto-Backup exists. `index.html`'s "Full backup & restore" feature
+    card (renamed "Auto-Backup & restore"), its "Can I backup and
+    restore my data?" FAQ answer, and its privacy-note reminder;
+    `privacy.html`'s "Your data can be lost" section; and `terms.html`'s
+    "your data is your responsibility" paragraph were all updated to
+    match, across all six languages plus each page's raw HTML default,
+    per this repo's own "raw HTML default and the `en` translations
+    value must always match" convention.
 - **Retired: Cloud Sync.** An optional cloud backup/restore feature used
   to live here (Settings → Backup → Cloud Sync, `modules/cloud-sync.js`,
   `pushBackupToCloud()`/`pullBackupFromCloud()` against the `store_settings`/
@@ -2454,6 +2687,62 @@ has zero network calls.
     and the offline build simulation confirms the icon sprite ships
     there unmodified with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP`
     markers.
+- **Desktop layout widened to fill the screen, removing the fixed
+  1500-1600px content caps that left large unused side margins on any
+  monitor wider than that** - per explicit feedback that the app should
+  "feel like a real web app" rather than a narrow column floating in a
+  sea of empty background on desktop. Five `max-width` caps were
+  removed outright rather than just raised: `.pos-shell` (was `1600px`,
+  the sidebar+main-content wrapper), and `.app-header`/`.pos-topbar`/
+  `.app`/`.site-footer`/`.backup-notice` (each was `1500px`, nested
+  inside `.pos-main`, which is itself `flex: 1` and was already filling
+  whatever width `.pos-shell` allowed - so `.pos-shell`'s own cap was
+  the actual binding constraint site-wide, and the inner `1500px` caps
+  were mostly redundant with it, just a second layer of the same
+  problem). Now the sidebar (fixed `236px`) plus main content genuinely
+  fills the full browser width at any desktop size, with no artificial
+  ceiling. The product catalog benefits most directly - `.product-list`
+  already uses `grid-template-columns: repeat(auto-fill, minmax(138px,
+  1fr))`, so more available width on the catalog side (`.app`'s own
+  `minmax(320px, var(--catalog-width, 75%))` column, still governed by
+  the existing resizable-panel-split feature - see "Resizable product/
+  receipt split" below) now simply renders more product-card columns
+  per row instead of leaving them stranded in a narrow band, the same
+  "more real content, not more empty margin" outcome the
+  `auto-fill`/stranded-last-row lesson elsewhere in this file already
+  established for `index.html`'s own grids. The receipt/preview column
+  is unaffected in spirit - `.receipt` itself still has a fixed
+  `width: 80mm` regardless of container (see "Resizable product/receipt
+  split" below), so it was never the source of the wasted-space
+  complaint; it just centers with a bit more breathing room now that
+  its column isn't artificially squeezed by an outer 1500px cap either.
+- **Settings modal maximized too**, since Products, Inventory, and
+  Sales History all live as tabs inside it - `.settings-modal`'s
+  `max-width` went from `780px` to `1600px` and `max-height` from `88vh`
+  to `94vh`. At `780px` on any modern desktop monitor the modal sat as a
+  small centered box with roughly half the screen as plain dark
+  backdrop on either side, regardless of how much real content (a long
+  product/inventory table, a sales history list) was inside it -
+  exactly the "lot of unused space" complaint, and the most visible
+  instance of it since a shop owner spends real working time inside
+  these tabs, not just glancing at them. The `1600px` ceiling (rather
+  than removing the cap entirely, the way the outer shell above was
+  handled) keeps the dialog from stretching edge-to-edge on very large
+  monitors, which would read as an oddly proportioned modal rather than
+  a deliberate full-width page - `.settings-overlay`'s own `padding:
+  16px` plus the modal's `width: 100%` already means it fills up to
+  that cap smoothly on anything from a small laptop through a large
+  desktop display. `.settings-tab-rail`'s own fixed `158px` width was
+  left unchanged - it's a navigation rail, not a content area, so it
+  doesn't benefit from extra width the way the actual tab panels
+  (Products' manage-list, Inventory's stock table, Sales History's
+  grouped list, and every other settings tab) do. The smaller,
+  purpose-built dialogs that happen to reuse `.settings-modal`'s base
+  class with their own inline `max-width` override (e.g.
+  `#saleDetailOverlay`'s Sale Details editor at `640px`) were
+  deliberately left alone - those are single-record edit forms, not
+  list/table views, and stayed appropriately compact rather than being
+  swept up in the same change.
 
 ## `modules/` — split-out app.html pieces
 
@@ -5295,6 +5584,157 @@ POST responses).
   function/not defined" errors), search that file for stray `` ``` ``
   first - it's a fast, easy-to-miss mistake when copy-pasting AI output
   into the GitHub web UI without stripping the markdown fences.
+
+## Retired: the six-language translation system - the site is English-only now
+
+Every page's six-language (en/ar/fil/hi/es/th) i18n system, documented at
+length throughout this file, was removed site-wide per an explicit "strip
+off the other language keep only English this way easy to update" request -
+confirmed via `AskUserQuestion` that this meant **removing the visible
+language-picker UI entirely**, not just retiring the non-English
+dictionaries while leaving a (now Basic-and-only-choice) picker in place.
+Every mention elsewhere in this file of translating into six languages, a
+`.lang-picker-bar`/`.lang-inline`/`.currency-inline`-housed language
+`<select>`, or a `changeLanguage()`/`translate()` call re-running across
+`ar`/`fil`/`hi`/`es`/`th` describes **retired** behavior - read it as
+history, the same "describes what this codebase used to do" caveat this
+file already applies to the retired Premium/PayPal system above.
+
+- **What changed, and what deliberately didn't.** The underlying
+  `tr(key)`/`translate(key)` lookup functions, `changeLanguage()`'s
+  `{elementId: translationKey}` `ids`-map pattern, and every existing
+  `id`/translation-key pairing across all 14 pages (`app.html` + the 5 free
+  tools + `index.html`/`privacy.html`/`terms.html`/`blog.html` + its 3
+  articles + `contact.html`) were **left in place, not ripped out** -
+  reducing every page's `translations` object down to just its `en` block
+  (rather than manually inlining ~2,000 translated strings back into raw
+  HTML by hand) keeps the exact same low-risk, single-source-of-truth
+  architecture this file has documented as this repo's established i18n
+  pattern for two years of history, just permanently resolved to English.
+  This is deliberately the safer of two ways to reach "English only": every
+  `id`/key wiring, every `innerHTML`-vs-`textContent` distinction already
+  worked out for embedded tags, and every dynamic re-render call site
+  (`changeLanguage()` itself, `renderAppTitleBadge()`, `syncQuickReceiptFields()`,
+  etc.) keeps working exactly as before, just always rendering the `en`
+  strings - nothing about *how* text gets onto the page changed, only how
+  many languages exist to choose from.
+- **Each page's `translations`/`const translations` object was reduced to
+  its `en` block only** (a small Python script walked every file, matching
+  brace-balanced JS object literals while respecting string literals/escape
+  sequences, to safely cut the `ar`/`fil`/`hi`/`es`/`th` blocks out of each
+  `const`/`var` declaration without hand-editing thousands of lines) -
+  `modules/translations.js` (`app.html`'s shared dictionary, 225 `en` keys
+  survived) plus each of the 13 other pages' own self-contained inline copy.
+  Every file was `node --check`ed after stripping to confirm valid syntax.
+- **`currentLang()` now always returns `"en"`, everywhere.** Every page's
+  own `currentLang()` used the same `(langSelect && langSelect.value) ||
+  "en"` safe-fallback pattern before this, so simplifying its body to a
+  bare `return "en";` (or, for pages using a different local name for the
+  same idea, the equivalent one-line change) needed no other code to change -
+  `tr()`/`translate()` still look up `translations[currentLang()] ||
+  translations.en`, which now always resolves to the same `en` object
+  either way. `app.html` was the one exception that needed a real fix, not
+  just a simplification: its `currentLang()` read
+  `document.getElementById("language").value` directly with **no**
+  safe-fallback guard (unlike every other page), which would have thrown a
+  `TypeError` the moment `#language` was removed from the DOM (see below) -
+  fixed by hardcoding `return "en";` there too.
+- **The visible language-picker UI was deleted outright from every one of
+  the 14 pages**, not just disabled or hidden:
+  - `index.html`/`privacy.html`/`terms.html`/`blog.html` + its 3 articles/
+    `contact.html`: each page's own `<div class="lang-picker-bar">...
+    </div>` (containing that page's own `#indexLanguage`/`#privacyLanguage`/
+    `#termsLanguage`/`#blogLanguage`/`#articleLanguage`/`#contactLanguage`
+    select) plus its 3 matching `.lang-picker-bar`/`.lang-picker-bar label`/
+    `.lang-picker-bar select` CSS rules were removed entirely; each page's
+    `loadLanguagePref()` (previously wiring up a `change` listener on the
+    picker before calling `changeLanguage()`) was simplified to just call
+    `changeLanguage()` directly.
+  - `invoice-generator.html`/`receipt-generator.html`: the specific
+    `<div class="currency-inline no-print">` housing `#invLanguage`/
+    `#rcLanguage` was removed - the sibling `.currency-inline` div holding
+    the real Currency picker (same class, a separate instance) was left
+    untouched, so this had to be a scoped removal rather than a blanket
+    "delete every `.currency-inline`" sweep.
+  - `barcode-generator.html`/`vat-calculator.html`/`pricing-calculator.html`:
+    each page's own `<div class="lang-inline">...</div>` (containing
+    `#bcLanguage`/`#vatLanguage`/`#pricingLanguage`) plus its 2
+    `.lang-inline`/`.lang-inline select` CSS rules were removed - these
+    three pages had a dedicated `.lang-inline` class (unlike the
+    `.currency-inline`-sharing pair above), so a safe, unscoped regex
+    removal worked directly.
+  - `app.html`: five separate pieces removed together - the Quick Settings
+    panel's `#quickLanguageLabel`/`#quickLanguage` row (and its now-orphaned
+    `syncQuickLanguage(value)` function, confirmed via grep to have no
+    other callers before deleting it); the topbar's globe-icon
+    `#topbarLanguageButton` (→ `openSettingsTab('language')`) plus its
+    now-unused `#icon-globe` `<symbol>` sprite entry; the Settings tab
+    rail's `data-tab="language"` button; and the entire Settings → Language
+    panel (`#panel-language`, holding `#languageTitle`/`#languageLabel`/
+    `#language`) - `#language` was the one `<select>` every other page's
+    `currentLang()` and `changeLanguage()` (and `app.html`'s own
+    `saveSettings()`) actually read from, so removing it required the
+    follow-up fixes below rather than being a pure UI deletion.
+- **Two real, high-blast-radius bugs in `app.html` were caught and fixed
+  before they could ship**, both stemming from code that read
+  `document.getElementById("language")` directly with no guard, unlike
+  every other page's already-defensive pattern:
+  - `saveSettings()` (called from many places throughout the file on
+    nearly every settings change) built its persisted settings object with
+    an unguarded `language: val("language"),` line - `val(id)` is a plain
+    `document.getElementById(id).value` helper with no null-check, so this
+    would have thrown a `TypeError` and broken `saveSettings()` entirely
+    the instant `#language` was removed from the DOM. Fixed by deleting the
+    `language:` field from the settings object outright, rather than
+    guarding it - there's nothing left to persist once the picker is gone.
+  - `changeLanguage()` itself had `const language =
+    document.getElementById("language").value;` at its top - same failure
+    mode. Fixed to `const language = currentLang();`, which now always
+    resolves to `"en"`.
+  - Both were caught by tracing every reference to `#language`/
+    `getElementById("language")` across the file before removing the
+    element, not discovered later via a broken page - a lesson worth
+    repeating for any future removal of a long-lived form control other
+    code reads from directly: grep for the element's `id` across the whole
+    file first, don't assume a UI element's removal is purely cosmetic.
+  - `changeLanguage()`'s `ids` map also had two now-dead entries removed
+    (`quickLanguageLabel: "languageLabel"` and `languageTitle: "languageTitle",
+    languageLabel: "languageLabel"`) - harmless to leave (the map is just
+    `document.getElementById` lookups that silently no-op on a missing
+    element, the same dead-reference tolerance this file already documents
+    elsewhere for offline-only Premium-panel keys), but removed anyway
+    since the elements they targeted no longer exist at all, unlike those
+    other precedents which describe a key surviving for a *different
+    build* that still uses it.
+- **Two other stale translation strings were caught and fixed while
+  reviewing `modules/translations.js` before stripping it** - unrelated to
+  the language removal itself, but real, pre-existing bugs this pass
+  happened to surface: `offlineModalUpdateText` still described the
+  pre-Auto-Backup update/migration flow even though `app.html`'s own raw
+  HTML default for the same text had already been updated in an earlier
+  pass of this same line of work; and `productsUploadHint` hadn't yet been
+  updated to mention SKU is now mandatory (see the Products section above).
+  Both were synced to match their correct raw-HTML counterpart, per this
+  repo's own "the two must always agree" convention.
+- **Verified via a full 14-page Playwright pass**: every page loads with
+  zero console errors, zero horizontal overflow at the widths this session
+  already verified (see "Desktop layout widened..." above), zero remaining
+  picker elements anywhere (`select[id*="anguage" i], .lang-picker-bar,
+  .lang-inline` all return zero matches on every page), and each page's
+  body renders the expected English text. `app.html` specifically: no
+  console errors, `#language`/`#quickLanguage`/`#topbarLanguageButton`/
+  `#icon-globe`/the Language settings tab are all genuinely absent from
+  the DOM (not just hidden), and `saveSettings()`/`changeLanguage()` both
+  run without throwing.
+- **Not done as part of this pass, deliberately left as-is**: the
+  `translations` object/`tr()`/`translate()`/`changeLanguage()` machinery
+  itself was kept rather than deleted (see above); `dir="rtl"`/Arabic RTL
+  CSS logic (`document.body.dir = language === "ar" ? "rtl" : "ltr"`) was
+  left in every `changeLanguage()` as inert dead code rather than stripped,
+  since `language` can now only ever be `"en"` and this one-line check is
+  harmless to leave - same "don't bother removing genuinely harmless dead
+  code" tolerance this file already extends to other retired-feature
+  leftovers (e.g. `.basic-badge`'s CSS class name never being renamed).
 
 ## Conventions / working on this repo
 

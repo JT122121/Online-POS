@@ -125,14 +125,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 a { color: var(--accent-dark); }
 img { max-width: 100%; display: block; }
 
-.wrap { max-width: 640px; margin: 0 auto; padding: 20px; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 20px; }
 
 .masthead { text-align: center; padding: 30px 20px 18px; }
 .masthead .kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 .masthead h1 { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: -.02em; margin: 0 0 8px; }
 .masthead p { color: var(--ink-soft); font-size: 14.5px; margin: 0 auto; max-width: 480px; }
 
-.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 900px; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 20px auto 0; max-width: 1100px; }
 .site-header .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .site-header .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); padding: 4px; }
 .site-header .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
@@ -289,7 +289,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 .info-section dt { font-weight: 700; color: var(--ink); margin-top: 12px; }
 .info-section dd { color: var(--ink-soft); font-size: 14px; margin: 4px 0 0; }
 
-.site-footer { max-width: 1040px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
+.site-footer { max-width: 1100px; margin: 20px auto 0; text-align: center; font-size: 12px; color: var(--muted); padding: 20px 20px 40px; }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--ink-soft); text-decoration: underline; }
 .site-footer span { margin: 0 8px; }
@@ -430,17 +430,6 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       </div>
     </div>
     <div class="doc-header-right">
-      <div class="currency-inline no-print">
-        <label for="rcLanguage" id="languageLabelInv">Language</label>
-        <select id="rcLanguage">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
-          <option value="fil">Filipino</option>
-          <option value="hi">हिन्दी</option>
-          <option value="es">Español</option>
-          <option value="th">ไทย</option>
-        </select>
-      </div>
       <div class="currency-inline no-print">
         <label for="rcCurrency" id="currencyLabelInv">Currency</label>
         <select id="rcCurrency"></select>
@@ -737,7 +726,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   };
   var LANG_KEY = "goonlinepos-receipt-lang";
   var translations = {
-    en: {
+
+en: {
       freeToolLabel: "Free Tool", createReceiptTitle: "Create Receipt",
       mastheadSubtitle: "Build a professional payment receipt in your browser, add remarks and your logo, then print it or save it as a PDF. No signup, nothing saved anywhere but this browser.",
       languageLabel: "Language", currencyLabel: "Currency",
@@ -768,168 +758,9 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
       faq2Q: "Where can I see my saved receipts?", faq2A: "Click \"Save Receipt\" to add the current one to your list, then click \"Saved Receipts\" any time to browse, reopen, or delete them, remarks included. They're stored only in this browser - clearing your browser data removes them.",
       faq3Q: "How do I save it as a PDF?", faq3A: "Click \"Print / Save as PDF\" and pick \"Save as PDF\" (or \"Microsoft Print to PDF\") as the destination in the print dialog your browser opens. It's formatted for standard A4/Letter paper, same as the invoice tool.",
       faq4Q: "Is this the same as GoOnlinePOS's checkout receipts?", faq4A: "No. Checkout receipts are printed automatically inside <a href=\"app\">the POS app</a> when you ring up a sale. This tool is for standalone payment receipts you fill in by hand - a deposit, a partial payment, a service call - without ringing up a full sale."
-    },
-    ar: {
-      freeToolLabel: "أداة مجانية", createReceiptTitle: "إنشاء إيصال",
-      mastheadSubtitle: "أنشئ إيصال دفع احترافي في متصفحك، أضف الملاحظات وشعارك، ثم اطبعه أو احفظه كملف PDF. بدون تسجيل، ولا يُحفظ أي شيء إلا في هذا المتصفح.",
-      languageLabel: "اللغة", currencyLabel: "العملة",
-      fromLabel: "من", fromPlaceholder: "اسم شركتك، العنوان، الهاتف",
-      receivedFromLabel: "استلم من", receivedFromPlaceholder: "اسم العميل، العنوان، الهاتف",
-      dateLabel: "التاريخ", descriptionLabel: "الوصف", amountLabel: "المبلغ",
-      itemDescPlaceholder: "الغرض من هذا الدفع", addLineItemLabel: "إضافة بند",
-      totalLabel: "الإجمالي", paymentReceivedLabel: "المبلغ المستلم", addPaymentLabel: "إضافة دفعة",
-      addNewPaymentLabel: "+ إضافة جديد...", addNewPaymentPrompt: "أضف وسيلة دفع جديدة:",
-      totalReceivedLabel: "إجمالي المستلم", totalDueLabel: "الرصيد المستحق", amountInWordsLabel: "المبلغ كتابةً",
-      showRemarksLabel: "إظهار الملاحظات", remarksLabel: "ملاحظات",
-      saveReceiptLabel: "حفظ الإيصال", savedReceiptsLabel: "الإيصالات المحفوظة", printSaveLabel: "طباعة / حفظ كملف PDF", clearNewLabel: "مسح / إيصال جديد",
-      autosaveNoteText: "يتم حفظ إيصالك الحالي تلقائياً في هذا المتصفح أثناء الكتابة. اضغط \"حفظ الإيصال\" لإضافته إلى قائمة الإيصالات المحفوظة حتى تجده لاحقاً - لا يتم رفع أي شيء إلى الإنترنت.",
-      receiptSavedToast: "تم حفظ الإيصال",
-      savedReceiptsEmptyText: "لا توجد إيصالات محفوظة بعد. املأ إيصالاً واضغط \"حفظ الإيصال\" لحفظه هنا.",
-      noNumberLabel: "(بدون رقم)",
-      deleteSavedConfirm: "هل تريد حذف هذا الإيصال المحفوظ؟ لا يمكن التراجع عن هذا الإجراء.",
-      clearReceiptConfirm: "هل تريد مسح هذا الإيصال والبدء بإيصال جديد؟ لا يمكن التراجع عن هذا الإجراء.",
-      howToTitle: "كيفية إنشاء إيصال",
-      howToStep1: "أضف شعارك (اختياري) واملأ من هو الإيصال ومن قام بالدفع.",
-      howToStep2: "أضف رقم الإيصال والتاريخ.",
-      howToStep3: "أضف سطراً لكل سلعة أو خدمة مع مبلغها - يتم تحديث الإجمالي والمبلغ كتابةً والرصيد المستحق تلقائياً.",
-      howToStep4: "ضمن المبلغ المستلم، أضف صفاً لكل وسيلة دفع مستخدمة (اختر من القائمة أو اختر \"+ إضافة جديد...\" لإضافة وسيلتك الخاصة) - يمكنك تقسيم الدفعة بين نقدي وبطاقة وغيرهما، ويُجمع كل ذلك في إجمالي المستلم.",
-      howToStep5: "أضف ملاحظات إن احتجت، أو ألغِ تحديد \"إظهار الملاحظات\" لإخفائها تماماً من الإيصال.",
-      howToStep6: "اضغط \"حفظ الإيصال\" لحفظه في قائمة الإيصالات المحفوظة، ثم \"طباعة / حفظ كملف PDF\" عندما تكون جاهزاً لتسليمه.",
-      faqTitle: "الأسئلة الشائعة حول الإيصالات",
-      faq1Q: "هل مولّد الإيصالات هذا مجاني؟", faq1A: "نعم. يعمل بالكامل داخل متصفحك - بدون تسجيل، بدون حساب، ولا تغادر أي بيانات جهازك.",
-      faq2Q: "أين يمكنني رؤية إيصالاتي المحفوظة؟", faq2A: "اضغط \"حفظ الإيصال\" لإضافة الإيصال الحالي إلى قائمتك، ثم اضغط \"الإيصالات المحفوظة\" في أي وقت لتصفحها أو إعادة فتحها أو حذفها، بما في ذلك الملاحظات. تُحفظ فقط في هذا المتصفح - مسح بيانات المتصفح يحذفها.",
-      faq3Q: "كيف أحفظه كملف PDF؟", faq3A: "اضغط \"طباعة / حفظ كملف PDF\" واختر \"حفظ كملف PDF\" (أو \"Microsoft Print to PDF\") كوجهة في نافذة الطباعة التي يفتحها متصفحك. وهو منسق لورق A4/Letter القياسي، تماماً مثل أداة الفواتير.",
-      faq4Q: "هل هذا هو نفسه إيصالات الدفع في GoOnlinePOS؟", faq4A: "لا. إيصالات الدفع تُطبع تلقائياً داخل <a href=\"app\">تطبيق نقطة البيع</a> عند إتمام عملية بيع. أما هذه الأداة فهي لإيصالات دفع مستقلة تُدخلها يدوياً - عربون، دفعة جزئية، زيارة خدمة - دون تسجيل عملية بيع كاملة."
-    },
-    fil: {
-      freeToolLabel: "Libreng Tool", createReceiptTitle: "Gumawa ng Resibo",
-      mastheadSubtitle: "Gumawa ng propesyonal na resibo ng bayad sa iyong browser, magdagdag ng remarks at logo mo, pagkatapos i-print o i-save bilang PDF. Walang signup, walang na-save maliban dito sa browser na ito.",
-      languageLabel: "Wika", currencyLabel: "Currency",
-      fromLabel: "Mula Kay", fromPlaceholder: "Pangalan ng negosyo mo, address, telepono",
-      receivedFromLabel: "Natanggap Mula Kay", receivedFromPlaceholder: "Pangalan ng customer, address, telepono",
-      dateLabel: "Petsa", descriptionLabel: "Description", amountLabel: "Halaga",
-      itemDescPlaceholder: "Para saan ang bayad na ito", addLineItemLabel: "Magdagdag ng Line Item",
-      totalLabel: "Total", paymentReceivedLabel: "Natanggap na Bayad", addPaymentLabel: "Magdagdag ng Bayad",
-      addNewPaymentLabel: "+ Magdagdag ng Bago...", addNewPaymentPrompt: "Magdagdag ng bagong paraan ng bayad:",
-      totalReceivedLabel: "Kabuuang Natanggap", totalDueLabel: "Balanseng Dapat Bayaran", amountInWordsLabel: "Halaga sa Salita",
-      showRemarksLabel: "Ipakita ang Remarks", remarksLabel: "Mga Remarks",
-      saveReceiptLabel: "I-save ang Resibo", savedReceiptsLabel: "Mga Naka-save na Resibo", printSaveLabel: "I-print / I-save bilang PDF", clearNewLabel: "I-clear / Bagong Resibo",
-      autosaveNoteText: "Awtomatikong na-save ang kasalukuyang resibo mo sa browser na ito habang nagta-type ka. I-click ang \"I-save ang Resibo\" para idagdag ito sa listahan ng Mga Naka-save na Resibo para mahanap mo ulit ito - walang ina-upload kahit saan.",
-      receiptSavedToast: "Na-save ang resibo",
-      savedReceiptsEmptyText: "Wala pang naka-save na resibo. Punan ang isang resibo at i-click ang \"I-save ang Resibo\" para itago dito.",
-      noNumberLabel: "(walang numero)",
-      deleteSavedConfirm: "Tanggalin ang naka-save na resibo na ito? Hindi na ito mababawi.",
-      clearReceiptConfirm: "I-clear ang resibo na ito at magsimula ng bago? Hindi na ito mababawi.",
-      howToTitle: "Paano gumawa ng resibo",
-      howToStep1: "Idagdag ang logo mo (opsyonal) at punan kung kanino galing at sino ang nagbayad.",
-      howToStep2: "Magdagdag ng receipt number at petsa.",
-      howToStep3: "Magdagdag ng linya para sa bawat item o serbisyo kasama ang halaga - awtomatikong nag-a-update ang Total, Halaga sa Salita, at Balanseng Dapat Bayaran.",
-      howToStep4: "Sa ilalim ng Natanggap na Bayad, magdagdag ng isang row para sa bawat paraan ng bayad na ginamit (pumili sa listahan o piliin ang \"+ Add New...\" para magdagdag ng sarili mo) - hatiin ang bayad sa Cash, Card, at iba pa, at lahat ito ay idadagdag sa Kabuuang Natanggap.",
-      howToStep5: "Magdagdag ng Remarks kung kailangan, o alisin ang tsek sa \"Ipakita ang Remarks\" para hindi na ito lumabas sa resibo.",
-      howToStep6: "I-click ang \"I-save ang Resibo\" para itago ito sa listahan ng Mga Naka-save na Resibo, at I-print / I-save bilang PDF kapag handa ka na ibigay ito.",
-      faqTitle: "Mga Tanong Tungkol sa Resibo",
-      faq1Q: "Libre ba itong receipt generator?", faq1A: "Oo. Gumagana ito nang buo sa iyong browser - walang signup, walang account, at walang data na umaalis sa device mo.",
-      faq2Q: "Saan ko makikita ang mga naka-save kong resibo?", faq2A: "I-click ang \"I-save ang Resibo\" para idagdag ang kasalukuyan sa listahan mo, pagkatapos i-click ang \"Mga Naka-save na Resibo\" kahit kailan para tingnan, buksan ulit, o burahin ang mga ito, kasama ang remarks. Naka-save lang ito sa browser na ito - mawawala ang mga ito kapag na-clear mo ang data ng browser.",
-      faq3Q: "Paano ko ito i-save bilang PDF?", faq3A: "I-click ang \"I-print / I-save bilang PDF\" at piliin ang \"Save as PDF\" (o \"Microsoft Print to PDF\") bilang destination sa print dialog na bubukas sa browser mo. Naka-format ito para sa standard na A4/Letter na papel, tulad ng invoice tool.",
-      faq4Q: "Pareho ba ito ng checkout receipts ng GoOnlinePOS?", faq4A: "Hindi. Awtomatikong nagpi-print ang checkout receipts sa loob ng <a href=\"app\">POS app</a> tuwing may benta. Ang tool na ito ay para sa standalone na resibo ng bayad na pinupunan mo mismo - isang deposito, bahagyang bayad, service call - nang hindi nagre-ring up ng buong benta."
-    },
-    hi: {
-      freeToolLabel: "मुफ़्त टूल", createReceiptTitle: "रसीद बनाएं",
-      mastheadSubtitle: "अपने ब्राउज़र में एक पेशेवर भुगतान रसीद बनाएं, टिप्पणियां और अपना लोगो जोड़ें, फिर उसे प्रिंट करें या PDF के रूप में सेव करें। कोई साइनअप नहीं, इस ब्राउज़र के अलावा कहीं कुछ भी सेव नहीं होता।",
-      languageLabel: "भाषा", currencyLabel: "मुद्रा",
-      fromLabel: "से", fromPlaceholder: "आपके व्यवसाय का नाम, पता, फ़ोन",
-      receivedFromLabel: "प्राप्तकर्ता", receivedFromPlaceholder: "ग्राहक का नाम, पता, फ़ोन",
-      dateLabel: "दिनांक", descriptionLabel: "विवरण", amountLabel: "राशि",
-      itemDescPlaceholder: "यह भुगतान किस लिए है", addLineItemLabel: "लाइन आइटम जोड़ें",
-      totalLabel: "कुल", paymentReceivedLabel: "प्राप्त भुगतान", addPaymentLabel: "भुगतान जोड़ें",
-      addNewPaymentLabel: "+ नया जोड़ें...", addNewPaymentPrompt: "एक नई भुगतान विधि जोड़ें:",
-      totalReceivedLabel: "कुल प्राप्त", totalDueLabel: "बकाया राशि", amountInWordsLabel: "राशि शब्दों में",
-      showRemarksLabel: "टिप्पणियां दिखाएं", remarksLabel: "टिप्पणियां",
-      saveReceiptLabel: "रसीद सेव करें", savedReceiptsLabel: "सेव की गई रसीदें", printSaveLabel: "प्रिंट करें / PDF के रूप में सेव करें", clearNewLabel: "साफ़ करें / नई रसीद",
-      autosaveNoteText: "आपकी मौजूदा रसीद टाइप करते समय इस ब्राउज़र में अपने आप सेव हो जाती है। इसे बाद में फिर से खोजने के लिए अपनी सेव की गई रसीदों की सूची में जोड़ने के लिए \"रसीद सेव करें\" पर क्लिक करें - कहीं भी कुछ भी अपलोड नहीं होता।",
-      receiptSavedToast: "रसीद सेव हो गई",
-      savedReceiptsEmptyText: "अभी तक कोई सेव की गई रसीद नहीं है। एक रसीद भरें और इसे यहाँ रखने के लिए \"रसीद सेव करें\" पर क्लिक करें।",
-      noNumberLabel: "(कोई नंबर नहीं)",
-      deleteSavedConfirm: "इस सेव की गई रसीद को हटाएं? इसे वापस नहीं लाया जा सकता।",
-      clearReceiptConfirm: "इस रसीद को साफ़ करके नई शुरू करें? इसे वापस नहीं लाया जा सकता।",
-      howToTitle: "रसीद कैसे बनाएं",
-      howToStep1: "अपना लोगो जोड़ें (वैकल्पिक) और भरें कि रसीद किसकी ओर से है और भुगतान किसने किया।",
-      howToStep2: "रसीद नंबर और दिनांक जोड़ें।",
-      howToStep3: "प्रत्येक वस्तु या सेवा के लिए उसकी राशि के साथ एक पंक्ति जोड़ें - कुल, राशि शब्दों में, और बकाया राशि अपने आप अपडेट हो जाते हैं।",
-      howToStep4: "प्राप्त भुगतान के तहत, उपयोग की गई प्रत्येक भुगतान विधि के लिए एक पंक्ति जोड़ें (सूची में से चुनें या अपनी खुद की जोड़ने के लिए \"+ नया जोड़ें...\" चुनें) - भुगतान को नकद, कार्ड और अन्य में विभाजित करें, और यह सब कुल प्राप्त में जुड़ जाता है।",
-      howToStep5: "यदि आवश्यक हो तो टिप्पणियां जोड़ें, या इसे रसीद से पूरी तरह हटाने के लिए \"टिप्पणियां दिखाएं\" को अनचेक करें।",
-      howToStep6: "इसे अपनी सेव की गई रसीदों की सूची में रखने के लिए \"रसीद सेव करें\" पर क्लिक करें, और सौंपने के लिए तैयार होने पर प्रिंट करें / PDF के रूप में सेव करें।",
-      faqTitle: "रसीद से जुड़े सवाल",
-      faq1Q: "क्या यह रसीद जनरेटर मुफ़्त है?", faq1A: "हां। यह पूरी तरह से आपके ब्राउज़र में चलता है - कोई साइनअप नहीं, कोई खाता नहीं, और आपके डिवाइस से कोई डेटा बाहर नहीं जाता।",
-      faq2Q: "मैं अपनी सेव की गई रसीदें कहां देख सकता हूं?", faq2A: "वर्तमान रसीद को अपनी सूची में जोड़ने के लिए \"रसीद सेव करें\" पर क्लिक करें, फिर उन्हें ब्राउज़ करने, फिर से खोलने या हटाने के लिए किसी भी समय \"सेव की गई रसीदें\" पर क्लिक करें, टिप्पणियों सहित। ये केवल इस ब्राउज़र में सेव होती हैं - अपने ब्राउज़र का डेटा साफ़ करने से ये हट जाती हैं।",
-      faq3Q: "मैं इसे PDF के रूप में कैसे सेव करूं?", faq3A: "\"प्रिंट करें / PDF के रूप में सेव करें\" पर क्लिक करें और अपने ब्राउज़र द्वारा खोले गए प्रिंट डायलॉग में गंतव्य के रूप में \"Save as PDF\" (या \"Microsoft Print to PDF\") चुनें। यह इनवॉइस टूल की तरह ही मानक A4/Letter पेपर के लिए फ़ॉर्मेट किया गया है।",
-      faq4Q: "क्या यह GoOnlinePOS की चेकआउट रसीदों जैसा ही है?", faq4A: "नहीं। जब आप बिक्री करते हैं तो चेकआउट रसीदें <a href=\"app\">POS ऐप</a> के अंदर अपने आप प्रिंट होती हैं। यह टूल स्टैंडअलोन भुगतान रसीदों के लिए है जिन्हें आप हाथ से भरते हैं - एक जमा राशि, आंशिक भुगतान, सर्विस कॉल - बिना पूरी बिक्री दर्ज किए।"
-    },
-    es: {
-      freeToolLabel: "Herramienta Gratuita", createReceiptTitle: "Crear Recibo",
-      mastheadSubtitle: "Crea un recibo de pago profesional en tu navegador, agrega notas y tu logo, luego imprímelo o guárdalo como PDF. Sin registro, no se guarda nada excepto en este navegador.",
-      languageLabel: "Idioma", currencyLabel: "Moneda",
-      fromLabel: "De", fromPlaceholder: "Nombre de tu negocio, dirección, teléfono",
-      receivedFromLabel: "Recibido De", receivedFromPlaceholder: "Nombre del cliente, dirección, teléfono",
-      dateLabel: "Fecha", descriptionLabel: "Descripción", amountLabel: "Monto",
-      itemDescPlaceholder: "Para qué es este pago", addLineItemLabel: "Agregar Línea",
-      totalLabel: "Total", paymentReceivedLabel: "Pago Recibido", addPaymentLabel: "Agregar Pago",
-      addNewPaymentLabel: "+ Agregar Nuevo...", addNewPaymentPrompt: "Agrega un nuevo método de pago:",
-      totalReceivedLabel: "Total Recibido", totalDueLabel: "Saldo Pendiente", amountInWordsLabel: "Monto en Palabras",
-      showRemarksLabel: "Mostrar Notas", remarksLabel: "Notas",
-      saveReceiptLabel: "Guardar Recibo", savedReceiptsLabel: "Recibos Guardados", printSaveLabel: "Imprimir / Guardar como PDF", clearNewLabel: "Limpiar / Nuevo Recibo",
-      autosaveNoteText: "Tu recibo actual se guarda automáticamente en este navegador mientras escribes. Haz clic en \"Guardar Recibo\" para agregarlo a tu lista de Recibos Guardados y encontrarlo más tarde - no se sube nada a ningún lado.",
-      receiptSavedToast: "Recibo guardado",
-      savedReceiptsEmptyText: "Aún no hay recibos guardados. Completa un recibo y haz clic en \"Guardar Recibo\" para guardarlo aquí.",
-      noNumberLabel: "(sin número)",
-      deleteSavedConfirm: "¿Eliminar este recibo guardado? Esto no se puede deshacer.",
-      clearReceiptConfirm: "¿Limpiar este recibo y comenzar uno nuevo? Esto no se puede deshacer.",
-      howToTitle: "Cómo hacer un recibo",
-      howToStep1: "Agrega tu logo (opcional) e indica de parte de quién es el recibo y quién pagó.",
-      howToStep2: "Agrega un número de recibo y fecha.",
-      howToStep3: "Agrega una línea por cada artículo o servicio con su monto - el Total, el Monto en Palabras y el Saldo Pendiente se actualizan automáticamente.",
-      howToStep4: "En Pago Recibido, agrega una fila por cada método de pago usado (elige de la lista o selecciona \"+ Agregar Nuevo...\" para añadir el tuyo) - divide un pago entre Efectivo, Tarjeta y más, y todo se suma al Total Recibido.",
-      howToStep5: "Agrega Notas si lo necesitas, o desmarca \"Mostrar Notas\" para dejarlas fuera del recibo por completo.",
-      howToStep6: "Haz clic en \"Guardar Recibo\" para guardarlo en tu lista de Recibos Guardados, e Imprimir / Guardar como PDF cuando estés listo para entregarlo.",
-      faqTitle: "Preguntas Frecuentes sobre Recibos",
-      faq1Q: "¿Este generador de recibos es gratuito?", faq1A: "Sí. Funciona completamente en tu navegador - sin registro, sin cuenta, y ningún dato sale de tu dispositivo.",
-      faq2Q: "¿Dónde puedo ver mis recibos guardados?", faq2A: "Haz clic en \"Guardar Recibo\" para agregar el actual a tu lista, luego haz clic en \"Recibos Guardados\" en cualquier momento para verlos, reabrirlos o eliminarlos, notas incluidas. Se almacenan solo en este navegador - al borrar los datos de tu navegador se eliminan.",
-      faq3Q: "¿Cómo lo guardo como PDF?", faq3A: "Haz clic en \"Imprimir / Guardar como PDF\" y elige \"Guardar como PDF\" (o \"Microsoft Print to PDF\") como destino en el diálogo de impresión que abre tu navegador. Está formateado para papel A4/Carta estándar, igual que la herramienta de facturas.",
-      faq4Q: "¿Es lo mismo que los recibos de venta de GoOnlinePOS?", faq4A: "No. Los recibos de venta se imprimen automáticamente dentro de <a href=\"app\">la app del POS</a> al registrar una venta. Esta herramienta es para recibos de pago independientes que completas a mano - un depósito, un pago parcial, una visita de servicio - sin registrar una venta completa."
-    },
-    th: {
-      freeToolLabel: "เครื่องมือฟรี", createReceiptTitle: "สร้างใบเสร็จ",
-      mastheadSubtitle: "สร้างใบเสร็จรับเงินระดับมืออาชีพในเบราว์เซอร์ของคุณ เพิ่มหมายเหตุและโลโก้ของคุณ จากนั้นพิมพ์หรือบันทึกเป็น PDF ไม่ต้องสมัครสมาชิก และไม่มีการบันทึกข้อมูลไว้ที่ใดนอกจากเบราว์เซอร์นี้",
-      languageLabel: "ภาษา", currencyLabel: "สกุลเงิน",
-      fromLabel: "จาก", fromPlaceholder: "ชื่อธุรกิจ ที่อยู่ เบอร์โทรของคุณ",
-      receivedFromLabel: "รับเงินจาก", receivedFromPlaceholder: "ชื่อลูกค้า ที่อยู่ เบอร์โทร",
-      dateLabel: "วันที่", descriptionLabel: "รายละเอียด", amountLabel: "จำนวนเงิน",
-      itemDescPlaceholder: "การชำระเงินนี้เพื่ออะไร", addLineItemLabel: "เพิ่มรายการ",
-      totalLabel: "รวม", paymentReceivedLabel: "เงินที่ได้รับ", addPaymentLabel: "เพิ่มการชำระเงิน",
-      addNewPaymentLabel: "+ เพิ่มใหม่...", addNewPaymentPrompt: "เพิ่มวิธีการชำระเงินใหม่:",
-      totalReceivedLabel: "ยอดรับรวม", totalDueLabel: "ยอดคงเหลือที่ต้องชำระ", amountInWordsLabel: "จำนวนเงินเป็นตัวอักษร",
-      showRemarksLabel: "แสดงหมายเหตุ", remarksLabel: "หมายเหตุ",
-      saveReceiptLabel: "บันทึกใบเสร็จ", savedReceiptsLabel: "ใบเสร็จที่บันทึกไว้", printSaveLabel: "พิมพ์ / บันทึกเป็น PDF", clearNewLabel: "ล้าง / ใบเสร็จใหม่",
-      autosaveNoteText: "ใบเสร็จปัจจุบันของคุณจะถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ขณะที่คุณพิมพ์ คลิก \"บันทึกใบเสร็จ\" เพื่อเพิ่มลงในรายการใบเสร็จที่บันทึกไว้ เพื่อให้คุณค้นหาได้อีกครั้งในภายหลัง - ไม่มีการอัปโหลดข้อมูลใด ๆ ไปที่ไหน",
-      receiptSavedToast: "บันทึกใบเสร็จแล้ว",
-      savedReceiptsEmptyText: "ยังไม่มีใบเสร็จที่บันทึกไว้ กรอกใบเสร็จแล้วคลิก \"บันทึกใบเสร็จ\" เพื่อเก็บไว้ที่นี่",
-      noNumberLabel: "(ไม่มีหมายเลข)",
-      deleteSavedConfirm: "ลบใบเสร็จที่บันทึกไว้นี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
-      clearReceiptConfirm: "ล้างใบเสร็จนี้แล้วเริ่มใบใหม่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
-      howToTitle: "วิธีสร้างใบเสร็จ",
-      howToStep1: "เพิ่มโลโก้ของคุณ (ไม่บังคับ) และกรอกว่าใบเสร็จมาจากใครและใครเป็นผู้ชำระเงิน",
-      howToStep2: "เพิ่มหมายเลขใบเสร็จและวันที่",
-      howToStep3: "เพิ่มรายการสำหรับสินค้าหรือบริการแต่ละรายการพร้อมจำนวนเงิน - รวม จำนวนเงินเป็นตัวอักษร และยอดคงเหลือที่ต้องชำระจะอัปเดตโดยอัตโนมัติ",
-      howToStep4: "ภายใต้เงินที่ได้รับ เพิ่มแถวสำหรับวิธีการชำระเงินแต่ละวิธีที่ใช้ (เลือกจากรายการหรือเลือก \"+ เพิ่มใหม่...\" เพื่อเพิ่มวิธีของคุณเอง) - แบ่งการชำระเงินระหว่างเงินสด บัตร และอื่น ๆ และทั้งหมดจะรวมเป็นยอดรับรวม",
-      howToStep5: "เพิ่มหมายเหตุหากจำเป็น หรือยกเลิกการทำเครื่องหมาย \"แสดงหมายเหตุ\" เพื่อไม่ให้แสดงในใบเสร็จเลย",
-      howToStep6: "คลิก \"บันทึกใบเสร็จ\" เพื่อเก็บไว้ในรายการใบเสร็จที่บันทึกไว้ และพิมพ์ / บันทึกเป็น PDF เมื่อคุณพร้อมที่จะส่งมอบ",
-      faqTitle: "คำถามที่พบบ่อยเกี่ยวกับใบเสร็จ",
-      faq1Q: "เครื่องมือสร้างใบเสร็จนี้ฟรีหรือไม่?", faq1A: "ใช่ ทำงานทั้งหมดในเบราว์เซอร์ของคุณ - ไม่ต้องสมัครสมาชิก ไม่ต้องมีบัญชี และไม่มีข้อมูลใดออกจากอุปกรณ์ของคุณ",
-      faq2Q: "ฉันจะดูใบเสร็จที่บันทึกไว้ได้ที่ไหน?", faq2A: "คลิก \"บันทึกใบเสร็จ\" เพื่อเพิ่มใบปัจจุบันลงในรายการของคุณ จากนั้นคลิก \"ใบเสร็จที่บันทึกไว้\" เมื่อใดก็ได้เพื่อเรียกดู เปิดใหม่ หรือลบ รวมถึงหมายเหตุด้วย ใบเสร็จเหล่านี้จะถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น - การล้างข้อมูลเบราว์เซอร์จะลบออก",
-      faq3Q: "ฉันจะบันทึกเป็น PDF ได้อย่างไร?", faq3A: "คลิก \"พิมพ์ / บันทึกเป็น PDF\" แล้วเลือก \"Save as PDF\" (หรือ \"Microsoft Print to PDF\") เป็นปลายทางในกล่องโต้ตอบการพิมพ์ที่เบราว์เซอร์ของคุณเปิดขึ้น จัดรูปแบบสำหรับกระดาษ A4/Letter มาตรฐาน เช่นเดียวกับเครื่องมือใบแจ้งหนี้",
-      faq4Q: "นี่เหมือนกับใบเสร็จการชำระเงินของ GoOnlinePOS หรือไม่?", faq4A: "ไม่ใช่ ใบเสร็จการชำระเงินจะพิมพ์อัตโนมัติภายใน <a href=\"app\">แอป POS</a> เมื่อคุณทำรายการขาย เครื่องมือนี้มีไว้สำหรับใบเสร็จรับเงินแบบเดี่ยวที่คุณกรอกเอง - เงินมัดจำ การชำระบางส่วน การเรียกใช้บริการ - โดยไม่ต้องทำรายการขายแบบเต็ม"
     }
-  };
+
+};
   var langSelect = document.getElementById("rcLanguage");
   function currentLang() { return (langSelect && langSelect.value) || "en"; }
   function translate(key) {
@@ -973,16 +804,11 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     if (typeof relabelPaymentRows === "function") relabelPaymentRows();
   }
   function loadLanguagePref() {
-    var lang = "en";
-    try { lang = localStorage.getItem(LANG_KEY) || "en"; } catch (e) {}
-    if (!translations[lang]) lang = "en";
-    langSelect.value = lang;
     changeLanguage();
   }
   function saveLanguagePref() {
     try { localStorage.setItem(LANG_KEY, currentLang()); } catch (e) {}
   }
-  langSelect.addEventListener("change", function() { changeLanguage(); saveLanguagePref(); });
 
   var PAYMENT_METHODS_KEY = "goonlinepos-receipt-payment-methods";
   var DEFAULT_PAYMENT_METHODS = ["Cash", "Card", "Bank Transfer", "Cheque", "Other"];
