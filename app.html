@@ -547,7 +547,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 <symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 <symbol id="icon-maximize" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
-<symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
 </defs>
 </svg>
 
@@ -630,7 +629,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 <button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
 <button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
-<button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language"><svg class="icon"><use href="#icon-globe"></use></svg></button>
 </div>
 </div>
 
@@ -764,15 +762,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <input id="quickFooter1" oninput="syncQuickField('footer1', this.value)">
 <label id="quickFooterLine2Label">Footer Line 2</label>
 <input id="quickFooter2" oninput="syncQuickField('footer2', this.value)">
-<label id="quickLanguageLabel">Select Language</label>
-<select id="quickLanguage" onchange="syncQuickLanguage(this.value)">
-<option value="en">English</option>
-<option value="ar">العربية</option>
-<option value="fil">Filipino</option>
-<option value="hi">हिन्दी</option>
-<option value="es">Español</option>
-<option value="th">ไทย</option>
-</select>
 </div>
 </div>
 <div id="receipt" class="receipt">
@@ -996,7 +985,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
       <button class="settings-tab-item" data-tab="paper" onclick="selectSettingsTab('paper')">📏 <span>Paper &amp; Zoom</span></button>
       <button class="settings-tab-item" data-tab="currency" onclick="selectSettingsTab('currency')">💱 <span>Currency</span></button>
-      <button class="settings-tab-item hidden" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
       <button class="settings-tab-item hidden" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item hidden" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
     </div>
@@ -1094,7 +1082,7 @@ Website: Goonlinepos.com</textarea>
             <input id="newProductCategory" placeholder="e.g. Beverages">
           </div>
         </div>
-        <label id="addProductSkuLabel">SKU (optional)</label>
+        <label id="addProductSkuLabel">SKU</label>
         <input id="newProductSku" placeholder="e.g. 8901">
         <label id="addProductStockLabel">Stock Level (optional)</label>
         <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
@@ -1107,7 +1095,7 @@ Website: Goonlinepos.com</textarea>
         <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
         <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
 
-        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, and optionally Category, SKU, Stock, and TaxExempt, to load your whole catalog at once. This replaces the current list.</div>
+        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, SKU (all required), and optionally Category, Stock, and TaxExempt. Products with a SKU that already exists in your catalog are updated; products with a new SKU are added; rows with no SKU are skipped. Nothing already in your catalog is removed - use Clear Products below for that.</div>
         <input id="csvFileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleProductFileUpload(event)">
         <div id="csvErrorBox" class="error-text hidden"></div>
         <div id="csvSuccessBox" class="success-text hidden"></div>
@@ -1198,19 +1186,6 @@ Website: Goonlinepos.com</textarea>
         <label id="decimalPlacesLabel">Decimal Places</label>
         <input id="decimalPlaces" type="number" min="0" max="4" step="1" value="2" oninput="handleDecimalPlacesChange()">
         <div class="info" id="decimalPlacesInfo" style="display:block;">Most currencies use 2 (e.g. $0.30). Some, like Bahraini Dinar, use 3 (e.g. BD 0.300).</div>
-      </div>
-
-      <div class="settings-panel-content" id="panel-language">
-        <h3 id="languageTitle">Language</h3>
-        <label id="languageLabel">Select Language</label>
-        <select id="language" onchange="changeLanguage(); saveSettings();">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
-          <option value="fil">Filipino</option>
-          <option value="hi">हिन्दी</option>
-          <option value="es">Español</option>
-          <option value="th">ไทย</option>
-        </select>
       </div>
 
       <div class="settings-panel-content" id="panel-backup">
@@ -1440,7 +1415,7 @@ function handleDecimalPlacesChange() {
   renderPaymentRows();
   updateReceipt();
 }
-function currentLang() { return document.getElementById("language").value; }
+function currentLang() { return "en"; }
 
 function tr(key) {
   const lang = translations[currentLang()] || translations.en;
@@ -1606,7 +1581,7 @@ async function saveSettings() {
     storeName: val("storeName"), storeDetails: val("storeDetails"),
     taxName: val("taxName"), taxRate: val("taxRate"), discountRate: val("discountRate"), discountType: val("discountType"),
     footer1: val("footer1"), footer2: val("footer2"),
-    language: val("language"), paperSize: val("paperSize"), customWidth: val("customWidth"),
+    paperSize: val("paperSize"), customWidth: val("customWidth"),
     zoomRange: val("zoomRange"), documentType: val("documentType"),
     barcodeScannerEnabled: document.getElementById("barcodeScannerToggle").checked
   };
@@ -1620,11 +1595,6 @@ function syncQuickField(targetId, value) {
   if (!el) return;
   el.value = value;
   updateReceipt();
-}
-function syncQuickLanguage(value) {
-  document.getElementById("language").value = value;
-  changeLanguage();
-  saveSettings();
 }
 function syncQuickCurrencySymbol(value) {
   document.getElementById("currencySymbol").value = value;
@@ -2069,11 +2039,11 @@ async function completeOnly() {
 async function deductStockForCart() {
   let changed = false;
   cart.forEach(function(c) {
-    const idx = products.findIndex(function(p) { return p.name === c.name && Math.abs(p.price - c.price) < 0.0005; });
-    if (idx === -1) return;
-    if (products[idx].stock === null || products[idx].stock === undefined) return;
-    const remaining = Math.max(0, (Number(products[idx].stock) || 0) - (Number(c.qty) || 0));
-    products[idx].stock = remaining;
+    if (!c.sku) return;
+    const product = products.find(function(p) { return p.sku === c.sku; });
+    if (!product || product.stock === null || product.stock === undefined) return;
+    const remaining = Math.max(0, (Number(product.stock) || 0) - (Number(c.qty) || 0));
+    product.stock = remaining;
     changed = true;
   });
   if (changed) {
@@ -2893,8 +2863,9 @@ function updateDate() {
   document.getElementById("receiptDate").textContent = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 }
 
-function findCartIndexByNamePrice(name, price) {
-  return cart.findIndex(function(c) { return c.name === name && Math.abs(c.price - price) < 0.0005; });
+function findCartIndexByNamePrice(name, price, sku) {
+  if (sku) return cart.findIndex(function(c) { return c.sku === sku; });
+  return cart.findIndex(function(c) { return !c.sku && c.name === name && Math.abs(c.price - price) < 0.0005; });
 }
 let customerScreenChannel = null;
 try { customerScreenChannel = new BroadcastChannel("goonlinepos-customer-screen"); } catch (e) { customerScreenChannel = null; }
@@ -3018,9 +2989,9 @@ function trackEvent(name, params) {
   }
 }
 function addProductToCart(product) {
-  const idx = findCartIndexByNamePrice(product.name, product.price);
+  const idx = findCartIndexByNamePrice(product.name, product.price, product.sku);
   if (idx > -1) { cart[idx].qty += 1; }
-  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, taxExempt: !!product.taxExempt, description: "", showDescription: false }); }
+  else { itemCounter++; cart.push({ id: itemCounter, name: product.name, price: product.price, qty: 1, sku: product.sku || "", taxExempt: !!product.taxExempt, description: "", showDescription: false }); }
   updateReceipt();
   trackEvent("add_to_cart", {
     currency: val("currencyCode") || "USD",
@@ -3031,7 +3002,7 @@ function addProductToCart(product) {
 
 function addCustomItem() {
   itemCounter++;
-  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, taxExempt: false, description: "", showDescription: false });
+  cart.push({ id: itemCounter, name: "", price: 0, qty: 1, sku: "", taxExempt: false, description: "", showDescription: false });
   updateReceipt();
   setTimeout(function() {
     const input = document.querySelector('.receipt-item[data-id="' + itemCounter + '"] .receipt-item-name-input');
@@ -3059,8 +3030,8 @@ function removeCartItem(id) {
     });
   }
 }
-function getCartQtyFor(name, price) {
-  const idx = findCartIndexByNamePrice(name, price);
+function getCartQtyFor(name, price, sku) {
+  const idx = findCartIndexByNamePrice(name, price, sku);
   return idx > -1 ? cart[idx].qty : 0;
 }
 function cartTotalCount() {
@@ -3100,15 +3071,18 @@ function productRowsFromParsed(parsed) {
   const skuIdx = header.findIndex(function(h) { return ["sku", "barcode", "code", "id"].indexOf(h) !== -1; });
   const stockIdx = header.findIndex(function(h) { return ["stock", "stock level", "qty", "quantity", "stock qty"].indexOf(h) !== -1; });
   const taxExemptIdx = header.findIndex(function(h) { return ["taxexempt", "tax exempt", "tax-exempt", "no tax"].indexOf(h) !== -1; });
-  if (nameIdx === -1 || priceIdx === -1) throw new Error("missing required columns");
+  if (nameIdx === -1 || priceIdx === -1 || skuIdx === -1) throw new Error("missing required columns");
 
   const newProducts = [];
+  let skippedNoSku = 0;
   for (let i = 1; i < parsed.length; i++) {
     const row = parsed[i];
     if (!row || row.every(function(f) { return String(f).trim() === ""; })) continue;
     const name = String(row[nameIdx] || "").trim();
     const price = parseFloat(row[priceIdx]) || 0;
     if (!name) continue;
+    const sku = String(row[skuIdx] || "").trim();
+    if (!sku) { skippedNoSku++; continue; }
     let stock = null;
     if (stockIdx > -1) {
       const rawStock = String(row[stockIdx] || "").trim();
@@ -3123,14 +3097,40 @@ function productRowsFromParsed(parsed) {
       name: name,
       price: price,
       category: catIdx > -1 ? String(row[catIdx] || "").trim() : "",
-      sku: skuIdx > -1 ? String(row[skuIdx] || "").trim() : "",
+      sku: sku,
       stock: stock,
       photo: "",
       taxExempt: taxExempt
     });
   }
   if (!newProducts.length) throw new Error("no valid rows");
-  return newProducts;
+  return { rows: newProducts, skippedNoSku: skippedNoSku };
+}
+
+function mergeUploadedProducts(uploadedRows) {
+  const merged = products.slice();
+  let added = 0, updated = 0;
+  uploadedRows.forEach(function(row) {
+    const sku = String(row.sku || "").trim();
+    const matchIndex = sku === "" ? -1 : merged.findIndex(function(p) { return String(p.sku || "").trim() === sku; });
+    if (matchIndex > -1) {
+      const existing = merged[matchIndex];
+      merged[matchIndex] = {
+        name: row.name,
+        price: row.price,
+        category: row.category,
+        sku: row.sku,
+        stock: row.stock,
+        photo: existing.photo || "",
+        taxExempt: row.taxExempt
+      };
+      updated++;
+    } else {
+      merged.push(row);
+      added++;
+    }
+  });
+  return { merged: merged, added: added, updated: updated };
 }
 
 function handleProductFileUpload(event) {
@@ -3153,13 +3153,18 @@ function handleProductFileUpload(event) {
       } else {
         parsed = parseCSV(String(e.target.result));
       }
-      const newProducts = productRowsFromParsed(parsed);
+      const parsedRows = productRowsFromParsed(parsed);
+      const result = mergeUploadedProducts(parsedRows.rows);
 
-      products = newProducts;
+      products = result.merged;
       await saveProducts();
       activeCategory = "all";
       renderProductCatalog();
-      successBox.textContent = products.length + " " + tr("productsUploadSuccess");
+      let successText = tr("productsUploadSuccess").replace("{added}", result.added).replace("{updated}", result.updated);
+      if (parsedRows.skippedNoSku > 0) {
+        successText += " " + tr("productsUploadSkippedSuffix").replace("{skipped}", parsedRows.skippedNoSku);
+      }
+      successBox.textContent = successText;
       successBox.classList.remove("hidden");
     } catch (err) {
       errorBox.textContent = tr("productsUploadError");
@@ -3215,16 +3220,19 @@ async function addSingleProduct() {
 
   const name = nameEl.value.trim();
   const price = parseFloat(priceEl.value);
+  const sku = skuEl.value.trim();
 
   if (!name) { errorBox.textContent = tr("addProductNameError"); errorBox.classList.remove("hidden"); return; }
   if (isNaN(price) || price < 0) { errorBox.textContent = tr("addProductPriceError"); errorBox.classList.remove("hidden"); return; }
+  if (!sku) { errorBox.textContent = tr("addProductSkuError"); errorBox.classList.remove("hidden"); return; }
+  if (products.some(function(p) { return p.sku === sku; })) { errorBox.textContent = tr("addProductSkuDuplicateError"); errorBox.classList.remove("hidden"); return; }
 
   const stockRaw = stockEl.value.trim();
   products.push({
     name: name,
     price: price,
     category: categoryEl.value.trim(),
-    sku: skuEl.value.trim(),
+    sku: sku,
     stock: stockRaw === "" ? null : (parseFloat(stockRaw) || 0),
     photo: newProductPhotoDataUrl,
     taxExempt: !!(taxExemptEl && taxExemptEl.checked)
@@ -3298,7 +3306,9 @@ function renderInventoryList() {
 
   const filtered = products.filter(function(p) {
     if (!query) return true;
-    return p.name.toLowerCase().indexOf(query) !== -1 || (p.category && p.category.toLowerCase().indexOf(query) !== -1);
+    return p.name.toLowerCase().indexOf(query) !== -1 ||
+      (p.sku && p.sku.toLowerCase().indexOf(query) !== -1) ||
+      (p.category && p.category.toLowerCase().indexOf(query) !== -1);
   });
 
   const groups = {};
@@ -3317,7 +3327,6 @@ function renderInventoryList() {
     list.appendChild(groupHeader);
 
     groups[cat].forEach(function(p) {
-      const realIndex = products.indexOf(p);
       const hasStock = p.stock !== null && p.stock !== undefined;
       const isLow = hasStock && Number(p.stock) <= 5;
       const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
@@ -3337,15 +3346,17 @@ function renderInventoryList() {
           "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
           "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"-\">" +
         "</div>";
-      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(realIndex, this.value); });
+      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(p.sku, this.value); });
       list.appendChild(row);
     });
   });
 }
 
-async function handleInventoryStockEdit(index, rawValue) {
+async function handleInventoryStockEdit(sku, rawValue) {
+  const product = products.find(function(p) { return p.sku === sku; });
+  if (!product) return;
   const trimmed = String(rawValue).trim();
-  products[index].stock = trimmed === "" ? null : Math.max(0, parseFloat(trimmed) || 0);
+  product.stock = trimmed === "" ? null : Math.max(0, parseFloat(trimmed) || 0);
   await saveProducts();
   renderInventoryList();
 }
@@ -3458,7 +3469,7 @@ function renderProductCatalog() {
   });
 
   filtered.forEach(function(p) {
-    const inCart = getCartQtyFor(p.name, p.price);
+    const inCart = getCartQtyFor(p.name, p.price, p.sku);
     const hasStock = p.stock !== null && p.stock !== undefined;
     const stockClass = hasStock && Number(p.stock) <= 5 ? "product-stock low" : "product-stock";
     const row = document.createElement("div");
@@ -3536,7 +3547,7 @@ function updateZoom() {
 }
 
 function changeLanguage() {
-  const language = document.getElementById("language").value;
+  const language = currentLang();
   document.documentElement.lang = language;
   document.body.dir = language === "ar" ? "rtl" : "ltr";
 
@@ -3554,7 +3565,6 @@ function changeLanguage() {
     quickStoreNameLabel: "storeNameLabel", quickStoreDetailsLabel: "storeDetailsLabel",
     quickTaxNameLabel: "taxNameLabel", quickTaxRateLabel: "taxRateLabel",
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
-    quickLanguageLabel: "languageLabel",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
     quickStoreLogoLabel: "storeLogoLabel",
     quickLogoPreviewEmptyText: "logoEmptyLabel", quickRemoveLogoButton: "removeLogoButton",
@@ -3583,7 +3593,6 @@ function changeLanguage() {
     currencyTitle: "currencyTitle", currencyCodeLabel: "currencyCodeLabel", currencySymbolLabel: "currencySymbolLabel",
     decimalPlacesLabel: "decimalPlacesLabel", decimalPlacesInfo: "decimalPlacesInfo",
     quickCurrencyCodeLabel: "currencyCodeLabel", quickCurrencySymbolLabel: "currencySymbolLabel", quickDecimalPlacesLabel: "decimalPlacesLabel",
-    languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     autoBackupTitle: "autoBackupTitle", autoBackupInfo: "autoBackupInfo", autoBackupChooseLabel: "autoBackupChooseLabel",
