@@ -2781,6 +2781,59 @@ has zero network calls.
   deliberately left alone - those are single-record edit forms, not
   list/table views, and stayed appropriately compact rather than being
   swept up in the same change.
+- **Follow-up: every marketing/tool page widened to match, for real
+  cross-page consistency.** Reported directly from a screenshot of
+  `vat-calculator.html` on a wide desktop monitor: the page's own
+  `.wrap`/`.site-header`/`.site-footer` capped out at 900-1100px while
+  the browser window was much wider, leaving a large empty band of
+  plain background on both sides - and every page in this family had
+  drifted to its *own* different cap from an earlier pass (`index.html`
+  at 1400px, `privacy.html`/`terms.html` at 980px, the 5 free tools at
+  900-1100px, `contact.html` at 680px - see each page's own history
+  above), so even where a page wasn't glaringly narrow, the caps were
+  inconsistent page to page. Confirmed via `AskUserQuestion` that the
+  fix should be **one single, large, consistent `max-width`** across
+  every one of these 13 pages - not fully edge-to-edge like `app.html`
+  (which would stretch a single-column prose page like `privacy.html`'s
+  `.doc` or a plain calculator form like `vat-calculator.html`'s
+  `.gen-card` uncomfortably wide with no benefit) - landing on the same
+  `1600px` this session had already established as this codebase's
+  "wide but capped" number for `app.html`'s own `.settings-modal`.
+  Every page's `.wrap` (or, on `privacy.html`/`terms.html`/
+  `contact.html`, which have no `.wrap`, their `.site-header`/`.doc`
+  or `.card`/`.site-footer` directly) and `.site-header`/`.site-footer`
+  were raised to exactly `1600px`, replacing whatever narrower/
+  inconsistent number each page had before: `index.html` 1400→1600,
+  `privacy.html`/`terms.html` 980→1600 (`.site-header`/`.doc`/
+  `.site-footer` all three), `blog.html` and its 3 article pages
+  1400/900→1600 (`.wrap`/`.site-header`/`.site-footer`),
+  `invoice-generator.html` 1100→1600, `receipt-generator.html`
+  820/1100→1600 (its `.wrap` and `.site-header`/`.site-footer` had
+  drifted to two different numbers even on the same page),
+  `barcode-generator.html`/`vat-calculator.html`/`pricing-calculator.html`
+  900/1100→1600, and `contact.html` 680→1600 (`.site-header`/`.card`/
+  `.site-footer`). **Every other, narrower `max-width` on these pages
+  was deliberately left untouched** - things like `.hero p`'s 560px,
+  `.faq`'s 720px, `.info-section`'s 640-720px, `.masthead p`'s
+  480-520px, `.logo-preview`'s 150-160px, and the shared
+  `.cookie-consent` banner's 640px are all intentional narrower
+  reading/sizing choices nested *inside* the now-wider 1600px shell,
+  not page-level containers - widening those too would have hurt
+  readability or visually broken a fixed-size element for no reason,
+  which is exactly the tradeoff the `AskUserQuestion` answer was meant
+  to avoid. `invoice-generator.html`/`receipt-generator.html`'s own
+  `.invoice-card`/`.receipt-card` and the five free tools' `.gen-card`
+  have no `max-width` of their own - they simply fill whatever width
+  `.wrap` gives them, so raising `.wrap` to 1600px is what actually
+  makes those cards (and the calculator/generator forms inside them)
+  visibly wider too, matching the reported screenshot's ask directly.
+  Verified with Playwright across all 13 pages at a 1920px desktop
+  viewport: every page's outer shell now measures exactly `1600px`
+  (not more, not less - confirmed capped, not edge-to-edge), zero
+  horizontal overflow, and zero console errors; re-checked at 390px
+  mobile on a sample of pages (`vat-calculator.html`/`index.html`/
+  `privacy.html`) to confirm the existing `@media (max-width: 640px)`
+  rules are completely unaffected by a desktop-only `max-width` change.
 
 ## `modules/` — split-out app.html pieces
 
