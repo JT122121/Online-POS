@@ -1963,6 +1963,85 @@ has zero network calls.
     the offline build produces zero leftover `OFFLINE-STRIP`/
     `OFFLINE-SWAP` markers with the seven relocated buttons correctly
     absent from the stripped output.
+- **Follow-up: emoji icons replaced with a self-hosted inline SVG icon
+  set, and a real receipt-panel truncation bug fixed**, per explicit
+  follow-up feedback ("use modern icon" plus "make sure the receipt
+  isn't truncated on 100% screen view").
+  - **Icon sprite** - a single `<svg class="hidden" aria-hidden="true">`
+    with a `<defs>` block of ~20 `<symbol id="icon-...">` line-icon
+    glyphs (Feather/Lucide-style: cart, package, bar-chart, users,
+    calendar, monitor, help-circle, save, coffee, settings, home, list,
+    file-text, barcode, tag, plus-circle, menu, maximize, globe) sits
+    right after `<body>`, referenced everywhere via
+    `<svg class="icon"><use href="#icon-x"></use></svg>` - matching this
+    repo's existing "self-hosted, zero third-party CDN" convention
+    (the same reasoning `vendor/` follows) rather than pulling in an
+    icon font/library from a CDN, and shipping identically in the
+    offline package since it's inline markup with no network
+    dependency (confirmed via the offline-build simulation - the sprite
+    and every `<use>` reference survive `buildOfflineAppHtml()`
+    unchanged, since none of it sits inside an `OFFLINE-STRIP` marker).
+    `.icon` is the shared base class (16px, `stroke: currentColor`,
+    `fill: none`) so every icon automatically follows its button's own
+    text color (white on the green New Sale button and the dark-green
+    `.app-header-link` pills, gold-brown on Backup/Buy Me a Coffee,
+    the sidebar badge's own tint color, etc.) with zero per-icon color
+    rules needed; `.icon-fill` overrides that for the one glyph drawn
+    as solid bars instead of strokes (the barcode icon).
+  - **Every sidebar nav item, the seven relocated header-links buttons,
+    the three topbar icon buttons (hamburger/both fullscreen toggles/
+    globe), and the Receipt Preview tab + Quick Settings toggle's own
+    icons** were swapped from emoji to this sprite - VAT Calculator's
+    plain `%` character was deliberately left as-is (it was never an
+    emoji, and a percent sign is already about as minimal/modern as an
+    icon gets). The sidebar's per-item colored badge (blue/orange/
+    purple/teal/red/gray, see the icon-badge bullet above) now holds
+    the `<svg class="icon">` instead of an emoji character, sized down
+    to 14px via `.pos-sidebar-icon .icon`, with each badge's own
+    `color` property (added alongside its existing `background`) now
+    doing double duty as both the emoji-era text color and the new
+    icon's `currentColor` stroke.
+  - **A real, reported truncation bug**: at common laptop widths
+    (1366px and narrower), `.app`'s 3-column grid
+    (`minmax(320px, var(--catalog-width, 75%)) 14px minmax(220px,
+    1fr)`) let the catalog column's 75% preference squeeze the receipt
+    column down below the receipt's own actual rendered width (`.receipt`
+    is a fixed `width: 80mm` ≈ 302px, border-box, so ~302px minimum
+    regardless of container) - CSS Grid honors an explicit `minmax()`
+    floor over a sibling track's percentage preference only when the
+    floor is large enough to matter, and the old `220px` floor on the
+    receipt column was smaller than the receipt's own true minimum, so
+    the column shrank the receipt's grid cell below its content's
+    intrinsic width, which visibly clipped the right edge of the
+    receipt (its `ITEM`/`QTY`/`TOTAL` header row, in the reported
+    screenshot) with no way to see the rest without scrolling. Fixed by
+    raising the receipt column's floor to `minmax(330px, 1fr)` (302px
+    receipt + `.preview-area`'s own 5px×2 padding + a little headroom),
+    which CSS Grid now guarantees as an absolute floor before applying
+    either track's growth preference - the catalog column's 75%
+    preference still holds on wide screens, it just no longer gets to
+    eat into the receipt's minimum on narrower ones. `.preview-area`
+    also picked up `min-width: 0` (grid items default to `min-width:
+    auto`, which lets a item's own content refuse to shrink below its
+    intrinsic size and can blow out the whole grid/page rather than
+    triggering the item's own `overflow: auto` scrollbar) as a second,
+    defensive layer for viewports even narrower than the new 330px
+    floor accounts for. Verified by measuring the receipt's actual
+    `getBoundingClientRect()` against the viewport width at five real
+    desktop sizes (1280/1366/1440/1600/1920px) - the receipt's right
+    edge stays inside the viewport with zero horizontal page overflow
+    at every one, not just the wide 1680px width this feature was
+    originally verified at.
+  - Verified with Playwright: every new icon renders (checked via
+    `document.querySelector` for the `<use>` reference, not just that
+    the button exists); a live functional check that
+    `#sidebarToggleBtn`/`#topbarLanguageButton` (now icon-only, no
+    emoji) still actually toggle the sidebar and open Settings on the
+    Language tab respectively; zero console errors and zero horizontal
+    overflow at both 390px mobile and all five desktop widths above;
+    and the offline build simulation confirms the icon sprite ships
+    there unmodified with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP`
+    markers.
 
 ## `modules/` — split-out app.html pieces
 
