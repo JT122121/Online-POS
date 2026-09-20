@@ -99,10 +99,10 @@
   --ink: #16211d;
   --ink-soft: #4b5750;
   --muted: #7a8580;
-  --bg: #eeede6;
+  --bg: #f4f5f7;
   --panel: #ffffff;
-  --line: #e3e0d6;
-  --line-soft: #ecebe3;
+  --line: #e5e7eb;
+  --line-soft: #eef1f4;
   --accent: #1b6e4c;
   --accent-dark: #124f36;
   --accent-tint: #e7f2ec;
@@ -137,11 +137,18 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .pos-sidebar-footer { display: flex; flex-direction: column; gap: 2px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
 .pos-sidebar-item { display: flex; align-items: center; gap: 9px; width: 100%; border: 1px solid transparent; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; padding: 10px 10px; text-align: left; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pos-sidebar-item:hover { background: #efeee5; }
+.pos-sidebar-item:hover { background: #eef1f4; }
 .pos-sidebar-item-primary { margin-bottom: 6px; font-weight: 700; }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
-.pos-sidebar-item-ext:hover { background: #efeee5 !important; color: var(--ink-soft); }
+.pos-sidebar-item-ext:hover { background: #eef1f4 !important; color: var(--ink-soft); }
 .pos-sidebar-select.active-cashier-select { margin: 0 0 4px; }
+.pos-sidebar-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 8px; font-size: 13px; flex-shrink: 0; }
+.pos-sidebar-icon-blue { background: #e5edfb; }
+.pos-sidebar-icon-orange { background: #fdecdc; }
+.pos-sidebar-icon-purple { background: #efe6fb; }
+.pos-sidebar-icon-teal { background: #dff5f0; }
+.pos-sidebar-icon-red { background: #fbe6e5; }
+.pos-sidebar-icon-gray { background: #eef1f4; }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
 #backupShortcutButton:hover { background: #f5e7c4; }
@@ -149,20 +156,24 @@ button:active { transform: translateY(1px); }
 #supportCoffeeButton:hover { background: #f5e7c4; }
 .active-cashier-select { padding: 9px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; background: var(--panel); color: var(--ink); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
-#homepageShortcutButton, #blogShortcutButton, #createInvoiceButton, #createReceiptButton, #createBarcodeButton, #createVatButton, #createPricingButton { color: var(--accent-dark); }
 #newSaleButton { background: var(--accent); color: #fff; }
 #newSaleButton:hover { background: var(--accent-dark); }
 
 .pos-main { flex: 1; min-width: 0; padding: 20px; }
-.app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; flex-direction: column; gap: 10px; }
-.app-header .subtitle { margin: 0; color: var(--muted); font-size: 12.5px; }
+.app-header { max-width: 1500px; margin: 0 auto 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; }
+.app-header-greeting { flex-shrink: 0; }
+.pos-welcome-title { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
+.app-header .subtitle { margin: 0; color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
+.app-header-links { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.app-header-link { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-dark); color: #fff; border: 0; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.app-header-link:hover { background: var(--ink); }
 
 .pos-topbar { max-width: 1500px; margin: 0 auto 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 10px 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .pos-topbar-search { flex: 1; min-width: 200px; }
 .pos-topbar-search .search-box { margin-bottom: 0; }
 .pos-topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .toggle-row.compact.pos-topbar-scanner { margin-bottom: 0; }
-.pos-topbar-icon-btn { border: 1px solid var(--line); background: #fbfbf8; border-radius: var(--radius-sm); width: 38px; height: 38px; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pos-topbar-icon-btn { border: 1px solid var(--line); background: #fafbfc; border-radius: var(--radius-sm); width: 38px; height: 38px; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .pos-topbar-icon-btn:hover { border-color: var(--accent); background: var(--accent-tint); }
 .pos-topbar-account { display: flex; align-items: center; }
 .pos-topbar-account .subtitle { margin: 0; }
@@ -198,19 +209,19 @@ button:active { transform: translateY(1px); }
 .panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
 .cart-count-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
-.search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fbfbf8; }
+.search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fafbfc; }
 .search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 
 .category-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .category-chip { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 11.5px; font-weight: 600; color: var(--ink-soft); }
-.category-chip:hover { border-color: #c9c6ba; }
-.category-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.category-chip:hover { border-color: #c7ccd3; }
+.category-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 .product-list { flex: 1; overflow-y: auto; margin-bottom: 4px; display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 10px; align-content: start; }
-.product-item { display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 0; background: #fbfbf8; }
-.product-item:hover { border-color: #d7d4c8; background: #f7f6f0; }
+.product-item { display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 0; background: #fafbfc; }
+.product-item:hover { border-color: #d5d9de; background: #f5f7f9; }
 .product-item .product-thumb { width: 100%; height: 88px; border-radius: 8px; }
-.product-item .product-thumb-placeholder { width: 100%; height: 88px; font-size: 30px; border-radius: 8px; background: #eceae0; border: 1px solid var(--line-soft); }
+.product-item .product-thumb-placeholder { width: 100%; height: 88px; font-size: 30px; border-radius: 8px; background: #eef1f4; border: 1px solid var(--line-soft); }
 .product-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
 .product-name { font-weight: 600; font-size: 13px; overflow-wrap: break-word; }
 .product-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
@@ -220,20 +231,21 @@ button:active { transform: translateY(1px); }
 .product-stock { font-size: 10.5px; color: var(--muted); font-weight: 600; }
 .product-stock.low { color: var(--danger); }
 .product-item button { flex-shrink: 0; width: 100%; margin-top: auto; background: var(--ink); color: #fff; border: 0; border-radius: var(--radius-sm); height: 32px; font-size: 15px; line-height: 1; font-weight: 700; }
-.product-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eceae0; border: 1px solid var(--line-soft); }
+.product-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eef1f4; border: 1px solid var(--line-soft); }
 .product-thumb-placeholder { display: flex; align-items: center; justify-content: center; font-size: 18px; }
 .product-thumb.small { width: 30px; height: 30px; border-radius: 6px; font-size: 13px; }
 .mp-photo-label { cursor: pointer; display: inline-flex; flex-shrink: 0; }
 .new-product-photo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .product-item button:hover { background: var(--accent); }
-.products-empty { margin-top: 8px; padding: 20px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
-.custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 10px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; margin-top: 4px; }
-.custom-item-link:hover { border-color: var(--accent); color: var(--accent-dark); }
+.products-empty { margin-top: 8px; padding: 28px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px solid var(--line-soft); border-radius: var(--radius); background: #fafbfc; }
+.products-empty::before { content: "🛒"; display: block; font-size: 24px; width: 56px; height: 56px; line-height: 56px; margin: 0 auto 12px; background: var(--accent-tint); border-radius: 50%; }
+.custom-item-link { display: block; width: 100%; text-align: center; background: transparent; border: 1.5px solid var(--accent); color: var(--accent-dark); padding: 10px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; margin-top: 10px; }
+.custom-item-link:hover { background: var(--accent-tint); }
 
 .proceed-btn { width: 100%; margin-top: 12px; padding: 14px 16px; border: 0; border-radius: var(--radius-sm); background: var(--accent); color: white; font-size: 14.5px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
 .proceed-btn:hover:not(:disabled) { background: var(--accent-dark); }
 .proceed-btn .amt { opacity: .9; font-family: var(--font-mono); }
-.proceed-btn:disabled { background: #e3e1d8; color: #a19d8f; }
+.proceed-btn:disabled { background: #e2e5e9; color: #9aa1ab; }
 
 .checkout-total-box { background: linear-gradient(155deg, var(--ink) 0%, #1e2f28 100%); color: #fff; border-radius: var(--radius); padding: 18px; text-align: center; margin-bottom: 16px; }
 .checkout-total-box .label { font-size: 11px; opacity: .7; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
@@ -254,7 +266,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sdi-item-wrapper { margin-top: 8px; }
 .sdi-item-wrapper .payment-row { margin-top: 0; }
 .sdi-description { margin-top: 4px; font-size: 12.5px; padding: 7px 9px; }
-.split-payment-btn { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c6c3b7; color: var(--ink-soft); padding: 9px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-top: 8px; }
+.split-payment-btn { display: block; width: 100%; text-align: center; background: transparent; border: 1px dashed #c7ccd3; color: var(--ink-soft); padding: 9px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; margin-top: 8px; }
 .split-payment-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
 
 .checkout-actions { display: flex; gap: 8px; margin-top: 18px; }
@@ -263,7 +275,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .back-btn:hover { background: #e6e4d9; }
 .complete-btn { background: var(--accent); color: #fff; font-weight: 700; }
 .complete-btn:hover:not(:disabled) { background: var(--accent-dark); }
-.complete-btn:disabled { background: #e3e1d8; color: #a19d8f; }
+.complete-btn:disabled { background: #e2e5e9; color: #9aa1ab; }
 
 .scanner-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 420px; overflow: hidden; box-shadow: var(--shadow-lg); }
 .scanner-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
@@ -288,7 +300,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .settings-modal-body { display: flex; flex: 1; overflow: hidden; }
 .settings-tab-rail { display: flex; flex-direction: column; gap: 2px; width: 158px; flex-shrink: 0; background: #f8f7f2; border-right: 1px solid var(--line-soft); padding: 8px; overflow-y: auto; }
 .settings-tab-item { border: 0; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 500; padding: 10px 10px; text-align: left; display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
-.settings-tab-item:hover { background: #efeee5; }
+.settings-tab-item:hover { background: #eef1f4; }
 .settings-tab-item.active { background: var(--ink); color: #fff; font-weight: 600; }
 .settings-tab-panel { flex: 1; overflow-y: auto; padding: 18px 20px; }
 .settings-panel-content { display: none; }
@@ -296,7 +308,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .settings-panel-content h3 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
 
 .logo-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-.logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fafbfc; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
 .logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .logo-preview-box.empty { color: var(--muted); font-size: 9.5px; text-align: center; line-height: 1.3; padding: 4px; }
 .logo-upload-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
@@ -309,7 +321,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 
 .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
-.toggle-row.compact { padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); background: #fbfbf8; }
+.toggle-row.compact { padding: 8px 10px; margin-bottom: 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); background: #fafbfc; }
 .toggle-row.compact .toggle-label { font-size: 12.5px; }
 .toggle-label { font-size: 13px; font-weight: 600; color: var(--ink); }
 .info-btn { background: transparent; border: 0; padding: 0 0 0 2px; font-size: 12px; line-height: 1; cursor: pointer; vertical-align: -1px; opacity: .7; }
@@ -318,14 +330,14 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .toggle-sublabel { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
 .toggle-switch { position: relative; width: 44px; height: 25px; flex-shrink: 0; }
 .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-.toggle-slider { position: absolute; inset: 0; background: #d8d5c9; border-radius: 999px; cursor: pointer; transition: background .2s ease; }
+.toggle-slider { position: absolute; inset: 0; background: #d7dbe0; border-radius: 999px; cursor: pointer; transition: background .2s ease; }
 .toggle-slider::before { content: ""; position: absolute; width: 19px; height: 19px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s ease; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
 .toggle-switch input:checked + .toggle-slider::before { transform: translateX(19px); }
 .toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--accent); outline-offset: 2px; }
 .error-text { margin-top: 8px; padding: 9px 10px; background: var(--danger-tint); border: 1px solid #f0c2bd; border-radius: var(--radius-sm); color: var(--danger); font-size: 11.5px; line-height: 1.45; }
 .success-text { margin-top: 8px; padding: 9px 10px; background: var(--accent-tint); border: 1px solid #bfe0cf; border-radius: var(--radius-sm); color: var(--accent-dark); font-size: 11.5px; line-height: 1.45; }
-.inv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; }
+.inv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; }
 .inv-group-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; margin: 12px 0 6px; font-family: var(--font-display); font-weight: 600; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
 .inv-group-header:first-child { margin-top: 0; }
 .inv-group-count { background: var(--line-soft); color: var(--ink-soft); font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: none; letter-spacing: 0; }
@@ -343,8 +355,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .payment-editor { display: flex; gap: 6px; margin-top: 8px; }
 .payment-editor input { flex: 1; }
 .payment-list { margin-top: 9px; }
-.payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; font-size: 12px; font-weight: 500; }
-.payment-item button { background: #eceae0; border: 0; padding: 4px 8px; border-radius: 5px; color: var(--ink-soft); }
+.payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; font-size: 12px; font-weight: 500; }
+.payment-item button { background: #eef1f4; border: 0; padding: 4px 8px; border-radius: 5px; color: var(--ink-soft); }
 .mp-name-input { flex-shrink: 0; width: auto; max-width: 130px; border: 1px solid transparent; background: transparent; padding: 3px 5px; font-size: 12px; font-weight: 600; color: var(--ink); border-radius: 5px; }
 .mp-name-input:hover { border-color: var(--line); background: #fff; }
 .mp-name-input:focus { border-color: var(--accent); background: #fff; box-shadow: none; }
@@ -355,7 +367,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .small-btn { border: 0; border-radius: var(--radius-sm); background: var(--ink); color: white; padding: 9px 13px; font-weight: 600; }
 .small-btn:hover { background: var(--accent); }
 .sales-history-list { margin-top: 9px; max-height: 260px; overflow-y: auto; }
-.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fbfbf8; font-size: 11.5px; }
+.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; font-size: 11.5px; }
 .sales-history-row .shr-receipt { font-weight: 700; font-family: var(--font-mono); }
 .sales-history-row .shr-date { color: var(--muted); font-size: 10.5px; }
 .sales-history-row .shr-right { display: flex; align-items: center; gap: 8px; }
@@ -375,7 +387,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
 .preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
-.receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d8d5c9; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
+.receipt-preview-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 10px 4px 8px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; }
+.receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d7dbe0; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
 .quick-receipt-settings { width: 80mm; max-width: 100%; margin: 0 0 8px; flex-shrink: 0; }
 .quick-settings-toggle { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; }
 .quick-settings-toggle:hover { border-color: var(--accent); color: var(--accent-dark); }
@@ -444,7 +457,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-payment-line { display: flex; justify-content: space-between; gap: 5px; margin: 1.5mm 0; }
 .receipt-footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px dashed #a9a495; text-align: center; font-size: 8.5pt; line-height: 1.5; color: #3c463f; }
 .receipt-footer p { margin: 1mm 0; word-break: break-word; }
-.receipt-empty-hint { text-align: center; color: #a19d8f; font-size: 8pt; padding: 8mm 0; }
+.receipt-empty-hint { text-align: center; color: #9aa1ab; font-size: 8pt; padding: 8mm 0; }
 
 @media (max-width: 900px) {
   .pos-main { padding: 10px; }
@@ -514,13 +527,13 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 
 <div class="pos-sidebar-nav">
 <button type="button" id="newSaleButton" class="pos-sidebar-item pos-sidebar-item-primary" onclick="newSale()">🧾 <span id="newSaleButtonLabel">New Sale</span></button>
-<button type="button" id="sidebarProductsButton" class="pos-sidebar-item" onclick="openSettingsTab('products')">🛒 <span id="sidebarProductsLabel">Products</span></button>
-<button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')">📦 <span id="sidebarInventoryLabel">Inventory</span></button>
-<button type="button" id="sidebarSalesHistoryButton" class="pos-sidebar-item" onclick="openSettingsTab('salesHistory')">🧮 <span id="sidebarSalesHistoryLabel">Sales History</span></button>
-<button type="button" id="sidebarCashiersButton" class="pos-sidebar-item" onclick="openSettingsTab('cashiers')">🧑‍🤝‍🧑 <span id="sidebarCashiersLabel">Cashiers</span></button>
-<button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day">📅 <span id="endOfDayShortcutLabel">End of Day</span></button>
-<button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
-<button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
+<button type="button" id="sidebarProductsButton" class="pos-sidebar-item" onclick="openSettingsTab('products')"><span class="pos-sidebar-icon pos-sidebar-icon-blue">🛒</span> <span id="sidebarProductsLabel">Products</span></button>
+<button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')"><span class="pos-sidebar-icon pos-sidebar-icon-orange">📦</span> <span id="sidebarInventoryLabel">Inventory</span></button>
+<button type="button" id="sidebarSalesHistoryButton" class="pos-sidebar-item" onclick="openSettingsTab('salesHistory')"><span class="pos-sidebar-icon pos-sidebar-icon-purple">🧮</span> <span id="sidebarSalesHistoryLabel">Sales History</span></button>
+<button type="button" id="sidebarCashiersButton" class="pos-sidebar-item" onclick="openSettingsTab('cashiers')"><span class="pos-sidebar-icon pos-sidebar-icon-teal">🧑‍🤝‍🧑</span> <span id="sidebarCashiersLabel">Cashiers</span></button>
+<button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day"><span class="pos-sidebar-icon pos-sidebar-icon-red">📅</span> <span id="endOfDayShortcutLabel">End of Day</span></button>
+<button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()"><span class="pos-sidebar-icon pos-sidebar-icon-gray">📺</span> <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting"><span class="pos-sidebar-icon pos-sidebar-icon-teal">❓</span> <span id="howToUseShortcutLabel">How To Use</span></button>
 <select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
 <button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
@@ -528,36 +541,38 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:END -->
 <button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()">⚙ <span id="settingsButtonLabel">More Settings</span></button>
 </div>
-
-<div class="pos-sidebar-footer">
-<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
-<button type="button" id="homepageShortcutButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage">🏠 <span id="homepageShortcutLabel">Homepage</span></button>
-<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
-<!-- OFFLINE-STRIP:BLOG-BUTTON:START -->
-<button type="button" id="blogShortcutButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
-<!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
-<button type="button" id="createInvoiceButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
-<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
-<button type="button" id="createReceiptButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
-<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:START -->
-<button type="button" id="createBarcodeButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="openCreateBarcode()" title="Create a barcode or QR code">▤ <span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
-<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:START -->
-<button type="button" id="createVatButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="openCreateVat()" title="Calculate VAT">% <span id="createVatShortcutLabel">Free VAT Calculator</span></button>
-<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:END -->
-<!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:START -->
-<button type="button" id="createPricingButton" class="pos-sidebar-item pos-sidebar-item-ext" onclick="openCreatePricing()" title="Work out the right selling price for a product">🏷 <span id="createPricingShortcutLabel">Free Pricing Calculator</span></button>
-<!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:END -->
-</div>
 </nav>
 
 <div class="pos-main">
 
 <header class="app-header">
+<div class="app-header-greeting">
+<div class="pos-welcome-title" id="welcomeBackTitle">Welcome back!</div>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
+</div>
+<div class="app-header-links">
+<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
+<button type="button" id="homepageShortcutButton" class="app-header-link" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage">🏠 <span id="homepageShortcutLabel">Homepage</span></button>
+<!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
+<!-- OFFLINE-STRIP:BLOG-BUTTON:START -->
+<button type="button" id="blogShortcutButton" class="app-header-link" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
+<!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
+<button type="button" id="createInvoiceButton" class="app-header-link" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
+<!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
+<button type="button" id="createReceiptButton" class="app-header-link" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
+<!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:START -->
+<button type="button" id="createBarcodeButton" class="app-header-link" onclick="openCreateBarcode()" title="Create a barcode or QR code">▤ <span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
+<!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:START -->
+<button type="button" id="createVatButton" class="app-header-link" onclick="openCreateVat()" title="Calculate VAT">% <span id="createVatShortcutLabel">Free VAT Calculator</span></button>
+<!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:END -->
+<!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:START -->
+<button type="button" id="createPricingButton" class="app-header-link" onclick="openCreatePricing()" title="Work out the right selling price for a product">🏷 <span id="createPricingShortcutLabel">Free Pricing Calculator</span></button>
+<!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:END -->
+</div>
 </header>
 
 <div class="pos-topbar">
@@ -652,6 +667,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
+<div class="receipt-preview-tab no-print">📄 <span id="receiptPreviewLabel">Receipt Preview</span></div>
 <div class="quick-receipt-settings no-print" id="quickReceiptSettings">
 <button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()">⚙ <span id="quickSettingsToggleLabel">Quick Settings</span></button>
 <div class="quick-settings-body hidden" id="quickSettingsBody">
@@ -3274,7 +3290,7 @@ function changeLanguage() {
   document.body.dir = language === "ar" ? "rtl" : "ltr";
 
   const ids = {
-    appTitle: "appTitle", appSubtitle: "appSubtitle",
+    appTitle: "appTitle", appSubtitle: "appSubtitle", welcomeBackTitle: "welcomeBackTitle",
     settingsButtonLabel: "settingsButtonLabel", printButtonLabel: "printButtonLabel", newSaleButtonLabel: "newSaleButtonLabel",
     catalogHeading: "catalogHeading", customItemLink: "customItemLink", proceedLabel: "proceedLabel",
     checkoutHeading: "checkoutHeading", totalDueLabel: "totalDueLabel",
@@ -3282,7 +3298,7 @@ function changeLanguage() {
     backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
-    quickSettingsToggleLabel: "quickSettingsToggleLabel",
+    quickSettingsToggleLabel: "quickSettingsToggleLabel", receiptPreviewLabel: "receiptPreviewLabel",
     quickStoreNameLabel: "storeNameLabel", quickStoreDetailsLabel: "storeDetailsLabel",
     quickTaxNameLabel: "taxNameLabel", quickTaxRateLabel: "taxRateLabel",
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
