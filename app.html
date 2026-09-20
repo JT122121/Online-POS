@@ -498,6 +498,12 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   .no-print { display: none !important; }
   .receipt-item-name-input, .receipt-item-description-input { pointer-events: none; border-bottom: none !important; }
 }
+body.pdf-capture-mode .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; color: #000; }
+body.pdf-capture-mode .receipt::after { display: none; }
+body.pdf-capture-mode .receipt-header, body.pdf-capture-mode .receipt-column-header, body.pdf-capture-mode .dashed-line, body.pdf-capture-mode .receipt-footer { border-color: #000 !important; }
+body.pdf-capture-mode .receipt-store-details, body.pdf-capture-mode .receipt-meta, body.pdf-capture-mode .receipt-total-line, body.pdf-capture-mode .receipt-item-detail-print, body.pdf-capture-mode .receipt-item-description-input, body.pdf-capture-mode .receipt-footer, body.pdf-capture-mode .receipt-grand-total { color: #000 !important; }
+body.pdf-capture-mode .no-print { display: none !important; }
+body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-item-description-input { pointer-events: none; border-bottom: none !important; }
 .cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 640px; margin: 0 auto; z-index: 300; background: var(--ink); color: #fff; border-radius: var(--radius-sm); box-shadow: 0 6px 20px rgba(0,0,0,.25); padding: 14px 16px; }
 .cookie-consent.hidden { display: none !important; }
 .cookie-consent .cc-text { font-size: 12.5px; line-height: 1.5; flex: 1; min-width: 200px; color: #d7dcd8; }
@@ -1378,6 +1384,8 @@ Website: Goonlinepos.com</textarea>
 </div>
 
 <script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/html2canvas.min.js"></script>
 <!-- OFFLINE-STRIP:JSZIP:START --><script src="vendor/jszip.min.js"></script><!-- OFFLINE-STRIP:JSZIP:END -->
 <script src="modules/translations.js"></script>
 <script src="modules/usb-scanner.js"></script>
@@ -2026,10 +2034,7 @@ async function completeAndSavePdf() {
     return;
   }
   await saveCurrentSaleToHistory();
-  const prevTitle = document.title;
-  document.title = (getDocumentTitle() + "-" + (currentReceiptNumber || "")).trim();
-  printReceipt();
-  document.title = prevTitle;
+  await downloadReceiptAsPdf();
   await startNewSale();
 }
 async function completeOnly() {

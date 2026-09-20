@@ -10,6 +10,23 @@ xlsx.full.min.js
   Source  : https://www.npmjs.com/package/xlsx
   Used by : app.html, offline/app.html (Excel export)
 
+jspdf.umd.min.js
+  Package : jspdf
+  Version : 4.2.1
+  License : MIT
+  Source  : https://www.npmjs.com/package/jspdf
+  Used by : app.html, offline/app.html (Complete & Save as PDF - builds
+            the downloaded PDF around an html2canvas-captured receipt
+            image)
+
+html2canvas.min.js
+  Package : html2canvas
+  Version : 1.4.1
+  License : MIT
+  Source  : https://www.npmjs.com/package/html2canvas
+  Used by : app.html, offline/app.html (Complete & Save as PDF - captures
+            the live #receipt element as an image for jsPDF to embed)
+
 jszip.min.js
   Package : jszip
   Version : 3.10.1
