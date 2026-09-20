@@ -949,6 +949,30 @@ all of them under one pattern:
   "Default store name/details are obviously-fake placeholder data"
   under "`app.html` — architecture" below) rather than showing the
   site's real brand name/domain as if it were an actual store.
+- **The mock's sidebar/topbar icons were resynced again**, per an
+  explicit follow-up request to match the real app's now-modern SVG
+  icon set (see "Follow-up: emoji icons replaced with a self-hosted
+  inline SVG icon set" under "`app.html` — architecture" below) - the
+  mock had drifted back to its own plain-emoji sidebar (🧾/🛒/📦/🧮/⚙)
+  and a 🌐 globe emoji in its topbar. `index.html` picked up its own
+  small, scoped copy of the icon sprite (just the 6 symbols this mock
+  actually needs - `plus-circle`/`cart`/`package`/`bar-chart`/
+  `settings`/`globe` - not the full ~20-icon set `app.html` carries,
+  since a static homepage screenshot has no use for icons like
+  `barcode`/`coffee`/`monitor` that only appear on buttons this mock
+  doesn't show) in the same `<svg class="hidden">` sprite pattern,
+  referenced via `.ap-icon`/`<use href="#icon-x">`. New Sale/Products/
+  Inventory/Sales History/Settings all swapped from emoji to the
+  matching SVG glyph, with Products/Inventory/Sales History/Settings
+  also picking up the same small colored circular badge treatment
+  (`.ap-sidebar-icon`, blue/orange/purple/gray) as the real sidebar's
+  own `.pos-sidebar-icon` badges, scaled down to fit the mock's much
+  smaller 9.5px item text. "Settings" was also relabeled "More
+  Settings" to match the real button's current label (see "Site-wide
+  header, nav & footer" above). Verified with Playwright: the mock
+  renders correctly with every icon visible inside its colored badge,
+  zero console errors, and zero horizontal overflow at both 390px and
+  1920px.
 - **`index.html` now translates into the same six languages as `app.html`
   and the five free tools** (en/ar/fil/hi/es/th) - its own self-contained
   `translations` object and `translate()`/`currentLang()`/
