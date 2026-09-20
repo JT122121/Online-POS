@@ -93,10 +93,12 @@ YOUR DATA
 
 Same as the hosted app: everything (products, sales history, settings,
 logo, cashiers, payment methods) is saved only in this browser, on this
-computer. There is no cloud sync. Use Settings -> Backup -> Download
-Backup regularly, and keep that .json file somewhere safe — it's the
-only way to move your data to another computer or recover it if this
-browser's storage is ever cleared.
+computer. There is no cloud sync. Go to Settings -> Backup and set up
+Auto-Backup (Chrome/Edge on desktop) to save a copy automatically to a
+folder you choose, or use Download Backup regularly and keep that .json
+file somewhere safe - either way, it's the only way to move your data
+to another computer or recover it if this browser's storage is ever
+cleared.
 
 Note: if you use both Option A (localhost) and Option B (file://) on the
 same computer, your browser treats those as two different storage

@@ -2055,6 +2055,113 @@ has zero network calls.
   `applyBackupPayload(backup)` (originally factored out to also be shared
   with the now-retired Cloud Sync feature below - kept as-is since it's
   a clean split regardless).
+- **Auto-Backup** - a local, zero-network alternative to remembering to
+  click "Download Backup," built after a design discussion about the
+  cleanest way to guarantee nothing is ever lost without introducing a
+  server, an account, or a third-party integration (Google Sheets and a
+  Google-OAuth-based sync were both considered and explicitly rejected in
+  favor of this - see that conversation's reasoning: a local file needs
+  no backend for us to run, no per-user Apps Script deployment, and no
+  OAuth consent/token-refresh flow). Settings → Backup's "Auto-Backup"
+  section lets a shop owner choose a folder on their own computer **once**
+  (`chooseAutoBackupFolder()`, `window.showDirectoryPicker({mode:
+  "readwrite"})` - the File System Access API); from then on, `app.html`
+  silently rewrites `buildBackupPayload()`'s output into a fixed file
+  (`GoOnlinePOS-Backup.json`) inside that folder every time something
+  meaningful changes - a completed sale, a product/setting/cashier edit -
+  with zero dialog, zero download-bar, zero network call of any kind.
+  - **Hooked into `storageSet()` itself, not into dozens of individual
+    call sites.** Every meaningful state mutation in this file already
+    goes through `storageSet()` by convention (see "Always go through
+    `storageGet`/`storageSet`" above) - so `storageSet()` calls
+    `scheduleAutoBackupWrite()` on every write (skipping only its own
+    internal `pos-auto-backup-last-snapshot-date` bookkeeping key, to
+    avoid a pointless second write scheduling itself after the snapshot
+    write below saves). This means the feature never had to be wired
+    into `saveCurrentSaleToHistory()`, `saveSettings()`, product/cashier
+    add/edit/delete, or any other specific function individually - it
+    catches everything automatically, by construction, the same way the
+    storage abstraction itself already guarantees every write lands in
+    the right place.
+  - **Debounced, not instant** - `scheduleAutoBackupWrite()` clears and
+    resets a `setTimeout` (`AUTO_BACKUP_DEBOUNCE_MS`, 2.5s) on every
+    qualifying write, so a burst of changes (adding several cart items,
+    typing in a settings field) collapses into one actual disk write
+    once things settle, not one write per keystroke.
+  - **The folder handle survives a reload** via a tiny dedicated
+    IndexedDB store (`goonlinepos-auto-backup` database,
+    `idbSaveAutoBackupHandle`/`idbLoadAutoBackupHandle`/
+    `idbClearAutoBackupHandle`) - `FileSystemDirectoryHandle` objects
+    can't be stored in `localStorage` (not JSON-serializable), but
+    Chromium's IndexedDB implementation can structured-clone them
+    directly, which is the standard, documented pattern for this API.
+    `loadAutoBackupState()` (called from `init()`) re-loads the stored
+    handle and calls `handle.queryPermission({mode:"readwrite"})` to
+    check whether the browser still trusts it without needing a user
+    gesture - "granted" resumes auto-saving immediately; anything else
+    sets `autoBackupPermissionState = "needs-permission"` and shows a
+    "Reconnect Backup Folder" button, since re-requesting write
+    permission (`handle.requestPermission(...)`) requires an actual user
+    click and can't be done silently on page load.
+  - **A once-a-day dated snapshot rides along with the live overwrite**
+    (`maybeWriteAutoBackupSnapshot()`, `GoOnlinePOS-Backup-YYYY-MM-DD.json`,
+    gated on a `pos-auto-backup-last-snapshot-date` storage key so it
+    only fires once per calendar day) - the live file is always
+    overwritten in place (that's the point - no manual action, no
+    file-pileup), but a single bad write at the exact wrong moment
+    (crash, power loss mid-write) could otherwise leave zero fallback
+    copy; the daily snapshot costs at most one extra small file a day
+    and means that scenario never destroys the only backup.
+  - **Feature-detected, Chromium-desktop-only, with a mandatory manual
+    fallback - never a silent gap.** `isAutoBackupSupported()` checks for
+    `window.showDirectoryPicker`; Firefox and Safari (and all mobile
+    browsers) don't implement the writable File System Access API at
+    all. On those browsers the panel shows an explicit
+    `autoBackupUnsupportedInfo` note explaining why, and - this was a
+    deliberate decision, not an oversight - the plain "Download Full
+    Backup" button (`#downloadBackupButton`) **stays visible and
+    functional** there; it also stays visible on supported browsers
+    right up until Auto-Backup is actually connected. The moment
+    Auto-Backup is connected (`autoBackupPermissionState === "granted"`),
+    `renderAutoBackupStatus()` hides that manual button, since it's now
+    redundant - but it reappears immediately if Auto-Backup is turned
+    off or its permission lapses. No user, on any browser, is ever left
+    with zero way to get their data out.
+  - **"Restore from Backup" is completely unchanged** - it already reads
+    the exact same `buildBackupPayload()` JSON shape, whether that file
+    came from a manual "Download Backup" click or from Auto-Backup's own
+    silently-written file, so no new restore logic was needed anywhere.
+  - **Ships in the offline package unmodified, not `OFFLINE-STRIP`-wrapped**
+    - unlike Account & Subscription or analytics, this feature needs zero
+    network to begin with, so there's nothing about it that's
+    inappropriate for a zero-connectivity offline copy; it works exactly
+    the same way there.
+  - New translation keys (`autoBackupTitle`, `autoBackupInfo`,
+    `autoBackupChooseLabel`, `autoBackupChangeLabel`,
+    `autoBackupTurnOffLabel`, `autoBackupReconnectLabel`,
+    `autoBackupUnsupportedInfo`, `autoBackupConnectedPrefix`,
+    `autoBackupLastSavedPrefix`, `autoBackupNotSavedYet`,
+    `autoBackupDisconnectConfirm`) exist across all six languages and are
+    wired into `changeLanguage()`'s `ids` map; `renderAutoBackupStatus()`
+    is also called directly from `changeLanguage()` (same pattern as
+    `renderAppTitleBadge()`/`renderWelcomeBadge()`) since its "Auto-Backup
+    is on. Saving to: X - Last saved: Y" status line is composed from
+    `tr()` calls rather than static markup, so a language switch
+    re-composes it immediately instead of waiting for the next write.
+    `backupInfo`/`backupNoticeText`/`backupNoticeButton` (existing keys)
+    were reworded across all six languages to mention Auto-Backup
+    alongside the manual option; the backup-reminder banner's button
+    (`#backupNoticeButton`) now opens Settings → Backup
+    (`openBackupSettings()`) instead of immediately triggering a
+    download, since "go set this up" is the more useful action once
+    Auto-Backup exists. `index.html`'s "Full backup & restore" feature
+    card (renamed "Auto-Backup & restore"), its "Can I backup and
+    restore my data?" FAQ answer, and its privacy-note reminder;
+    `privacy.html`'s "Your data can be lost" section; and `terms.html`'s
+    "your data is your responsibility" paragraph were all updated to
+    match, across all six languages plus each page's raw HTML default,
+    per this repo's own "raw HTML default and the `en` translations
+    value must always match" convention.
 - **Retired: Cloud Sync.** An optional cloud backup/restore feature used
   to live here (Settings → Backup → Cloud Sync, `modules/cloud-sync.js`,
   `pushBackupToCloud()`/`pullBackupFromCloud()` against the `store_settings`/

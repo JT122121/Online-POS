@@ -635,9 +635,9 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 
 <div id="backupNotice" class="backup-notice hidden">
-<div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Download a backup regularly so nothing is lost if your cache gets cleared.</span></div>
+<div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Set up Auto-Backup or download a backup so nothing is lost if your cache gets cleared.</span></div>
 <div class="bn-actions">
-<button type="button" class="bn-backup-btn" onclick="downloadFullBackup()" id="backupNoticeButton">Download Backup</button>
+<button type="button" class="bn-backup-btn" onclick="openBackupSettings()" id="backupNoticeButton">Set Up Backup</button>
 <button type="button" class="bn-dismiss-btn" onclick="dismissBackupNotice()" aria-label="Dismiss">×</button>
 </div>
 </div>
@@ -1215,8 +1215,26 @@ Website: Goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-backup">
         <h3 id="backupTitle">Backup & Restore</h3>
-        <div class="info" id="backupInfo" style="display:block;">Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Download a full backup regularly, especially before clearing your browser data or switching devices.</div>
-        <button type="button" class="small-btn" onclick="downloadFullBackup()" style="width:100%; margin-top:12px;">⬇ Download Full Backup</button>
+        <div class="info" id="backupInfo" style="display:block;">Everything here - products, sales history, settings, your logo, cashiers, and payment methods - is saved only in this browser. Set up Auto-Backup below to save a copy automatically, or download a one-time backup manually.</div>
+
+        <label style="margin-top:16px;"><span id="autoBackupTitle">Auto-Backup</span></label>
+        <div class="info" id="autoBackupInfo" style="display:block;">Choose a folder on this computer once, and every change - a completed sale, a new product, any setting - is saved there automatically. No need to remember. Available in Chrome and Edge on a desktop computer.</div>
+
+        <button type="button" class="small-btn hidden" id="autoBackupChooseBtn" onclick="chooseAutoBackupFolder()" style="width:100%; margin-top:12px;">📁 <span id="autoBackupChooseLabel">Choose Backup Folder</span></button>
+
+        <div id="autoBackupConnectedBox" class="hidden">
+          <div class="info" id="autoBackupStatusInfo" style="display:block; margin-top:12px;"></div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button type="button" class="small-btn" onclick="chooseAutoBackupFolder()" style="flex:1;"><span id="autoBackupChangeLabel">Change Folder</span></button>
+            <button type="button" class="small-btn" onclick="disconnectAutoBackupFolder()" style="flex:1; background:var(--danger);"><span id="autoBackupTurnOffLabel">Turn Off</span></button>
+          </div>
+        </div>
+
+        <button type="button" class="small-btn hidden" id="autoBackupReconnectBtn" onclick="reconnectAutoBackupFolder()" style="width:100%; margin-top:12px;">🔄 <span id="autoBackupReconnectLabel">Reconnect Backup Folder</span></button>
+
+        <div class="info hidden" id="autoBackupUnsupportedInfo">Auto-Backup isn't available in this browser. Use Chrome or Edge on a desktop computer for automatic backups, or download a backup manually below.</div>
+
+        <button type="button" class="small-btn" id="downloadBackupButton" onclick="downloadFullBackup()" style="width:100%; margin-top:20px;">⬇ Download Full Backup</button>
         <label id="restoreBackupLabel" style="margin-top:20px;">Restore from Backup</label>
         <input id="backupFileInput" type="file" accept=".json,application/json" onchange="handleBackupFileSelect(event)">
         <div class="info" id="restoreInfo" style="display:block;">This replaces everything currently saved with what's in the backup file. The page will reload after restoring.</div>
@@ -1251,7 +1269,7 @@ Website: Goonlinepos.com</textarea>
       <li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>
     </ul>
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalUpdateTitle">Getting updates later</h3>
-    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
+    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime to get the latest version. To carry your data over: on the old copy, go to Settings → Backup and get a backup (Auto-Backup's saved file, or Download Full Backup), then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
     <div style="margin:0 0 14px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px;">
       <label style="display:flex; align-items:flex-start; gap:8px; font-size:12.5px; line-height:1.55; cursor:pointer;">
         <input type="checkbox" id="offlineAgreeCheckbox" onchange="handleOfflineAgreeChange()" style="margin-top:2px;">
@@ -1442,9 +1460,11 @@ async function storageGet(key) {
 async function storageSet(key, value) {
   if (hasArtifactStorage()) {
     try { await window.storage.set(key, value, false); } catch (e) { console.error("Could not save " + key, e); }
+    if (key !== "pos-auto-backup-last-snapshot-date") scheduleAutoBackupWrite();
     return;
   }
   try { localStorage.setItem("onlinepos_" + key, value); } catch (e) { console.error("Could not save " + key, e); }
+  if (key !== "pos-auto-backup-last-snapshot-date") scheduleAutoBackupWrite();
 }
 
 function openSettings() {
@@ -2574,6 +2594,176 @@ async function dismissBackupNotice() {
   await storageSet("pos-backup-notice-dismissed", "1");
 }
 
+// --- Auto-Backup: silently rewrite a full backup into a locally chosen folder on every change ---
+const AUTO_BACKUP_FILENAME = "GoOnlinePOS-Backup.json";
+const AUTO_BACKUP_DEBOUNCE_MS = 2500;
+const AUTO_BACKUP_DB_NAME = "goonlinepos-auto-backup";
+const AUTO_BACKUP_STORE_NAME = "handles";
+const AUTO_BACKUP_HANDLE_KEY = "backup-folder";
+let autoBackupDirHandle = null;
+let autoBackupPermissionState = "unset"; // "unset" | "granted" | "needs-permission" | "unsupported"
+let autoBackupWriteTimer = null;
+let autoBackupLastSavedAt = null;
+
+function isAutoBackupSupported() {
+  return typeof window !== "undefined" && typeof window.showDirectoryPicker === "function" && typeof indexedDB !== "undefined";
+}
+function openAutoBackupDb() {
+  return new Promise(function(resolve, reject) {
+    const req = indexedDB.open(AUTO_BACKUP_DB_NAME, 1);
+    req.onupgradeneeded = function() { req.result.createObjectStore(AUTO_BACKUP_STORE_NAME); };
+    req.onsuccess = function() { resolve(req.result); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+async function idbSaveAutoBackupHandle(handle) {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readwrite");
+    tx.objectStore(AUTO_BACKUP_STORE_NAME).put(handle, AUTO_BACKUP_HANDLE_KEY);
+    tx.oncomplete = function() { resolve(); };
+    tx.onerror = function() { reject(tx.error); };
+  });
+}
+async function idbLoadAutoBackupHandle() {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readonly");
+    const req = tx.objectStore(AUTO_BACKUP_STORE_NAME).get(AUTO_BACKUP_HANDLE_KEY);
+    req.onsuccess = function() { resolve(req.result || null); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+async function idbClearAutoBackupHandle() {
+  const db = await openAutoBackupDb();
+  return new Promise(function(resolve, reject) {
+    const tx = db.transaction(AUTO_BACKUP_STORE_NAME, "readwrite");
+    tx.objectStore(AUTO_BACKUP_STORE_NAME).delete(AUTO_BACKUP_HANDLE_KEY);
+    tx.oncomplete = function() { resolve(); };
+    tx.onerror = function() { reject(tx.error); };
+  });
+}
+
+async function loadAutoBackupState() {
+  if (!isAutoBackupSupported()) { autoBackupPermissionState = "unsupported"; renderAutoBackupStatus(); return; }
+  try {
+    const handle = await idbLoadAutoBackupHandle();
+    if (!handle) { autoBackupPermissionState = "unset"; renderAutoBackupStatus(); return; }
+    const perm = await handle.queryPermission({ mode: "readwrite" });
+    autoBackupDirHandle = handle;
+    autoBackupPermissionState = (perm === "granted") ? "granted" : "needs-permission";
+  } catch (e) {
+    autoBackupPermissionState = "unset";
+  }
+  renderAutoBackupStatus();
+}
+
+async function chooseAutoBackupFolder() {
+  if (!isAutoBackupSupported()) return;
+  try {
+    const handle = await window.showDirectoryPicker({ id: "goonlinepos-backup", mode: "readwrite" });
+    autoBackupDirHandle = handle;
+    autoBackupPermissionState = "granted";
+    await idbSaveAutoBackupHandle(handle);
+    await performAutoBackupWrite();
+    trackEvent("auto_backup_connected", {});
+  } catch (e) {
+    // Picker cancelled or blocked - leave state as it was.
+  }
+  renderAutoBackupStatus();
+}
+
+async function reconnectAutoBackupFolder() {
+  if (!autoBackupDirHandle) return;
+  try {
+    const perm = await autoBackupDirHandle.requestPermission({ mode: "readwrite" });
+    if (perm === "granted") {
+      autoBackupPermissionState = "granted";
+      await performAutoBackupWrite();
+    }
+  } catch (e) {}
+  renderAutoBackupStatus();
+}
+
+async function disconnectAutoBackupFolder() {
+  if (!confirm(tr("autoBackupDisconnectConfirm"))) return;
+  autoBackupDirHandle = null;
+  autoBackupPermissionState = "unset";
+  await idbClearAutoBackupHandle();
+  renderAutoBackupStatus();
+  trackEvent("auto_backup_disconnected", {});
+}
+
+function scheduleAutoBackupWrite() {
+  if (typeof autoBackupPermissionState === "undefined" || autoBackupPermissionState !== "granted" || !autoBackupDirHandle) return;
+  clearTimeout(autoBackupWriteTimer);
+  autoBackupWriteTimer = setTimeout(function() { performAutoBackupWrite(); }, AUTO_BACKUP_DEBOUNCE_MS);
+}
+
+async function performAutoBackupWrite() {
+  if (!autoBackupDirHandle || autoBackupPermissionState !== "granted") return;
+  try {
+    const payload = await buildBackupPayload();
+    const json = JSON.stringify(payload, null, 2);
+    const fileHandle = await autoBackupDirHandle.getFileHandle(AUTO_BACKUP_FILENAME, { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(json);
+    await writable.close();
+    autoBackupLastSavedAt = new Date();
+    await maybeWriteAutoBackupSnapshot(json);
+  } catch (e) {
+    autoBackupPermissionState = "needs-permission";
+  }
+  renderAutoBackupStatus();
+}
+
+async function maybeWriteAutoBackupSnapshot(json) {
+  const today = todayStamp();
+  const lastSnapshot = await storageGet("pos-auto-backup-last-snapshot-date");
+  if (lastSnapshot === today) return;
+  try {
+    const fileHandle = await autoBackupDirHandle.getFileHandle("GoOnlinePOS-Backup-" + today + ".json", { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(json);
+    await writable.close();
+    await storageSet("pos-auto-backup-last-snapshot-date", today);
+  } catch (e) {
+    // Snapshot is a best-effort safety net - the live backup file above already saved successfully.
+  }
+}
+
+function renderAutoBackupStatus() {
+  const chooseBtn = document.getElementById("autoBackupChooseBtn");
+  if (!chooseBtn) return;
+  const connectedBox = document.getElementById("autoBackupConnectedBox");
+  const reconnectBtn = document.getElementById("autoBackupReconnectBtn");
+  const unsupportedInfo = document.getElementById("autoBackupUnsupportedInfo");
+  const manualBtn = document.getElementById("downloadBackupButton");
+
+  chooseBtn.classList.add("hidden");
+  connectedBox.classList.add("hidden");
+  reconnectBtn.classList.add("hidden");
+  unsupportedInfo.classList.add("hidden");
+  if (manualBtn) manualBtn.classList.remove("hidden");
+
+  if (!isAutoBackupSupported()) {
+    unsupportedInfo.classList.remove("hidden");
+    return;
+  }
+  if (autoBackupPermissionState === "granted" && autoBackupDirHandle) {
+    connectedBox.classList.remove("hidden");
+    if (manualBtn) manualBtn.classList.add("hidden");
+    const statusInfo = document.getElementById("autoBackupStatusInfo");
+    const folderName = autoBackupDirHandle.name || "";
+    const savedText = autoBackupLastSavedAt ? autoBackupLastSavedAt.toLocaleTimeString() : tr("autoBackupNotSavedYet");
+    statusInfo.textContent = tr("autoBackupConnectedPrefix") + " " + folderName + " - " + tr("autoBackupLastSavedPrefix") + " " + savedText;
+  } else if (autoBackupPermissionState === "needs-permission") {
+    reconnectBtn.classList.remove("hidden");
+  } else {
+    chooseBtn.classList.remove("hidden");
+  }
+}
+
 function buildSalesExportRows(list) {
   const source = list || salesHistory;
   const parentRows = source.map(function(s) {
@@ -3396,6 +3586,9 @@ function changeLanguage() {
     languageTitle: "languageTitle", languageLabel: "languageLabel",
     backupTitle: "backupTitle", backupInfo: "backupInfo", restoreBackupLabel: "restoreBackupLabel", restoreInfo: "restoreInfo",
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
+    autoBackupTitle: "autoBackupTitle", autoBackupInfo: "autoBackupInfo", autoBackupChooseLabel: "autoBackupChooseLabel",
+    autoBackupChangeLabel: "autoBackupChangeLabel", autoBackupTurnOffLabel: "autoBackupTurnOffLabel",
+    autoBackupReconnectLabel: "autoBackupReconnectLabel", autoBackupUnsupportedInfo: "autoBackupUnsupportedInfo",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
     inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo",
@@ -3424,6 +3617,7 @@ function changeLanguage() {
     element.textContent = tr(ids[id]);
   });
   renderSidebarToggle();
+  renderAutoBackupStatus();
 
   const searchEl = document.getElementById("productSearch");
   if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
@@ -3498,6 +3692,7 @@ async function init() {
   await loadLogo();
   await loadSalesHistory();
   await loadBackupNoticeState();
+  await loadAutoBackupState();
   await loadQuickReceiptSettingsState();
   await loadReceiptPrefix();
   await loadPanelSplit();
