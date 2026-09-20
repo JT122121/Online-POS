@@ -1077,6 +1077,83 @@ all of them under one pattern:
     same text had the bug). Verified with Playwright: all three titles
     read a real `&` character on first load and after a language
     round-trip (Spanish back to English), zero console errors.
+  - **Follow-up: the 6 audience cards got real photos + colored icon
+    badges, replacing the plain single emoji each card used to lead
+    with.** Per an explicit follow-up ("can you also change this icon
+    to modern? an AI generated not cartoon") after the sidebar/header
+    icon-sprite work above - this session has no image-generation tool
+    or connector at all (confirmed by reviewing the full tool list and
+    by searching for an image-gen MCP connector, which returned nothing
+    relevant), so a same-theme sourced-photo or plain-icon alternative
+    was offered first; the user then pasted a reference composite
+    image showing this exact "Who is GoOnlinePOS for?" layout - all six
+    cards, matching titles, a photo per card, and a small colored
+    circular icon badge per card in the same visual language the
+    sidebar/header icons already use - which was cropped into the six
+    individual card photos actually shipped. Each photo was cropped
+    from the pasted composite with PIL (precise per-card boundaries
+    found by scanning for the white-background/photo edge, not just
+    eyeballed), resized to a 320px-wide JPEG (quality 78, ~15-21KB
+    each, ~120KB total), and embedded as a `data:image/jpeg;base64,...`
+    `<img class="aud-photo">` - the same inline base64-JPEG embedding
+    convention the homepage's `.app-preview` mock already uses for its
+    own product photos, not a new asset file.
+  - **The badge icons are five new symbols added to `index.html`'s own
+    small scoped `<svg class="hidden">` sprite** (the same one the
+    `.app-preview` mock already uses for its sidebar/topbar icons - see
+    "The mock's sidebar/topbar icons were resynced again" above) -
+    `icon-cupcake`/`icon-truck`/`icon-store`/`icon-shopping-bag`/
+    `icon-file-text`, hand-drawn in the same 24x24 Feather/Lucide-style
+    line-icon convention as every other icon in that sprite (`icon-cart`
+    was already there and reused as-is for the first card). Each
+    `.aud-badge` is a small tinted circle (`.aud-badge-blue`/`-pink`/
+    `-green`/`-purple`/`-teal`/`-orange`, one 2-color pair - a pale
+    tint background plus a saturated stroke color - per card, matching
+    the reference image's own six badge colors) holding one of these
+    icons via `<svg><use href="#icon-x">`.
+  - **A real bug caught before shipping, same class as the
+    `.ap-icon`-vs-`.icon` naming mismatch that's bitten this file
+    before**: the badge icons were first marked up with `class="icon"`,
+    but `index.html` has no base `.icon` CSS rule at all (its scoped
+    sprite's own icons use `.ap-icon`, a name specific to the
+    `.app-preview` mock) - so the new icons rendered as solid black
+    filled shapes instead of the intended colored stroked line icons,
+    caught by a zoomed-in screenshot crop, not just reading the CSS.
+    Fixed with a dedicated `.aud-badge svg { stroke: currentColor; fill:
+    none; stroke-width: 2; ... }` rule scoped to just these six badges,
+    rather than either reusing `.ap-icon` (mock-specific) or defining a
+    new page-wide `.icon` base class this file doesn't otherwise have.
+  - **Each photo is a sibling of the translated `<strong>`/`<p>` pair,
+    never inside them** - `.aud-photo`/`.aud-badge` sit in their own
+    `.aud-body`-adjacent markup, outside the `id`-bearing elements
+    `changeLanguage()` rewrites via `.textContent`, matching the exact
+    defensive pattern already established for `.products-empty::before`
+    in `app.html` - anything added as child markup of a `.textContent`-
+    driven element gets silently wiped on the next language switch or
+    page load, so it never went there in the first place here.
+  - **`.audience-list > div` changed from a padded vertical block to a
+    horizontal flex row** (`.aud-photo` fixed-width `110px` photo on one
+    side, `.aud-body` holding the badge/title/text on the other) with a
+    new `@media (max-width: 640px)` override stacking each card to a
+    single column (`.audience-list` itself also drops from its existing
+    `repeat(2, 1fr)` grid to one column there) and the photo to a
+    full-width `140px`-tall strip above the badge/title/text - the
+    fixed 2-column grid had no such override before, since a bare emoji
+    + short text never needed one at this width.
+  - Verified with Playwright: all 6 photos load with a correct
+    `naturalWidth`/`naturalHeight` and all 6 badge icons render in their
+    intended stroke color (checked via a zoomed screenshot crop, not
+    just computed style, after the `.icon`-vs-`.aud-badge svg` fix);
+    switching to Arabic keeps all 6 photos in the DOM, mirrors the whole
+    row (photo right, text left) via the existing plain `dir="rtl"`
+    toggle with zero extra RTL CSS, and re-translates every title/text
+    correctly; a full-page desktop screenshot shows a clean 3-row,
+    2-column grid with no cropped/stretched photos or misaligned
+    badges; a 390px mobile screenshot shows the same six cards stacked
+    to one column, photo full-width above the badge/title/text, with
+    zero horizontal overflow; and zero console errors throughout
+    (aside from the sandbox's own unrelated cert-proxy warning for
+    externally-loaded resources, not caused by this change).
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
