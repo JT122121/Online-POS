@@ -1154,6 +1154,47 @@ all of them under one pattern:
     zero horizontal overflow; and zero console errors throughout
     (aside from the sandbox's own unrelated cert-proxy warning for
     externally-loaded resources, not caused by this change).
+  - **Follow-up: the six photos were re-cropped at higher resolution
+    and sharpened after a report that they looked blurred.** Root
+    cause, found by decoding the actually-embedded base64 back out of
+    the shipped `index.html` and checking its real pixel dimensions:
+    each photo was only `320x244`-ish, cropped and downsized from a
+    source composite image whose own per-card region was already just
+    ~328x250 native pixels. On desktop that 320px source is fine (each
+    `.aud-photo` only displays at a 110px CSS width there), but on
+    mobile `.aud-photo` displays at up to 100% of the card's width
+    (~200px+ CSS width) - and on any high-DPI/retina screen (2x or 3x
+    device pixel ratio, i.e. most phones), the browser needs roughly
+    `CSS width x DPR` real source pixels to render crisply, e.g.
+    ~600-plus physical pixels at 3x, well beyond the ~320px source that
+    was shipped - so the browser had no choice but to upscale it,
+    producing visible softness/blur specifically on phones. Confirmed
+    directly with Playwright by emulating a 3x-DPR 390px mobile
+    viewport and reading each `<img>`'s real `clientWidth` (~202px CSS,
+    ⇒ ~606 physical px needed) against its old `naturalWidth` (320px) -
+    a clear, measured shortfall, not just a guess. Fixed by re-cropping
+    the same six regions from the original reference composite at
+    **720px wide** instead of 320px (well above the ~606px a 3x-DPR
+    phone needs at this layout's current display width, with headroom),
+    then applying a mild `ImageFilter.UnsharpMask` (radius 1.6, percent
+    140, threshold 2) before re-encoding as JPEG quality 85 (up from
+    78) - the unsharp pass exists specifically to counter the natural
+    softening any Lanczos upscale introduces, not to fabricate detail
+    the ~328px native source photos don't have; there's a hard ceiling
+    on how much real sharpness six small crops from one composite
+    screenshot can ever have, and this is that ceiling, made as crisp
+    as it reasonably can be rather than claiming a true resolution
+    increase. Total embedded payload for all six photos grew from
+    ~120KB to ~446KB (`index.html` is now ~787KB total) - a real,
+    accepted size/quality tradeoff for a marketing page that already
+    loads fonts/analytics, not something worth re-litigating unless a
+    future report specifically flags page-weight as a problem.
+    Re-verified with Playwright at 3x-DPR/390px: every `<img>` now
+    reports `naturalWidth: 720` against a real `clientWidth` of ~202px
+    (comfortably above the DPR-adjusted need), zero horizontal
+    overflow, zero console errors; and a 2x-DPR desktop screenshot at
+    1280px shows the same six photos rendering sharp with no visible
+    upscale softness there either.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
