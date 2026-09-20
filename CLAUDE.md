@@ -2113,6 +2113,44 @@ has zero network calls.
     to decrement in the first place). This closes a real correctness
     gap the old name+price matching had wherever two catalog products
     could ever share both fields.
+  - **Bug fix: every inline checkbox next to a text label (Settings →
+    Products' "+ Add Product" form's Tax Exempt checkbox, and the
+    matching one on each row of the manage-products list) rendered as a
+    giant, near-full-width invisible-looking box** instead of a normal
+    small checkbox, pushing its label text off to the far right/bottom
+    of the panel - reported directly from a screenshot. Root cause: the
+    site-wide base rule `input, textarea, select { width: 100%; ... }`
+    (`app.html`'s CSS, near the top) was written for text-style inputs
+    and never excluded checkboxes/radios, so any checkbox sitting inside
+    a `display: flex` row (like `<label style="display:flex;
+    align-items:center; gap:8px;"><input type="checkbox"> <span>Tax
+    Exempt</span></label>`) stretched to fill the rest of that flex
+    row's width instead of sizing to its natural ~13px - the row's own
+    `gap`/`align-items` were correct, only the checkbox's own computed
+    `width` (over 1300px on a wide desktop Settings modal) was wrong.
+    One other checkbox (`.receipt-item-controls .cart-tax-exempt-label
+    input`, in the checkout cart) had already been individually patched
+    around this same bug with its own `width: 11px; height: 11px;`
+    override, but nothing generalized the fix - every other inline
+    checkbox in the file (Products' Tax Exempt, the manage-list's
+    `.mp-tax-exempt`, the Sales History edit modal's `.sdi-tax-exempt`/
+    `.sdi-description-toggle`) still had the bug. Fixed with a single
+    added rule right after the base `input, textarea, select` rule -
+    `input[type="checkbox"], input[type="radio"] { width: auto; padding:
+    0; flex-shrink: 0; }` - rather than patching each selector
+    individually, so every current and future inline checkbox in the
+    file is correctly sized by default. **Confirmed this doesn't affect
+    the toggle-switch pill inputs** (`#barcodeScannerToggle` and
+    friends, `.toggle-switch input`) - that class's own existing rule
+    (`width: 0; height: 0; opacity: 0; position: absolute;`, needed to
+    visually hide the real checkbox behind its `.toggle-slider` pill)
+    has equal CSS specificity to the new rule and appears later in the
+    stylesheet, so it still wins for anything wrapped in `.toggle-switch`
+    - verified via Playwright that `#barcodeScannerToggle`'s computed
+    width is still `0px` after this change. Verified the Add Product
+    checkbox and the manage-list's `.mp-tax-exempt` both now render at a
+    natural 13×13px directly beside their label text, with zero console
+    errors.
 - **Exports:** uses `xlsx.full.min.js` for `.xlsx` inventory/sales reports
   (`exportInventoryToExcel`, `exportSalesToExcel`) and a hand-rolled
   CSV/text export path (`rowsToCsv`, `downloadTextFile`). Sales History
