@@ -1871,6 +1871,98 @@ has zero network calls.
     live site and is present unmodified in the built offline package
     (confirming it reads correctly there too, since it's shared verbatim
     rather than swapped), zero console errors.
+- **Visual refresh pass on the sidebar/top-bar layout**, per a reference
+  screenshot the site owner shared of a differently-styled sidebar POS
+  mockup - explicitly scoped to color/spacing/icon polish using only
+  what already exists, not a rebuild (no new pages, no new features,
+  same reasoning as the earlier sidebar reskin's own locked scope).
+  - **`:root` tokens** - `--bg`/`--line`/`--line-soft` moved from a
+    warm beige palette (`#eeede6`/`#e3e0d6`/`#ecebe3`) to a cooler
+    neutral gray-white one (`#f4f5f7`/`#e5e7eb`/`#eef1f4`), plus every
+    other hardcoded beige-tinted hex literal scattered through the
+    file's CSS (card/input backgrounds, hover borders, disabled-state
+    colors, the receipt's own screen-only border) swept to matching
+    cooler grays - `--accent`/`--gold`/`--danger` and the rest of the
+    palette untouched. `.receipt`'s border-color change is screen-only
+    (`@media print` already sets `border: none` there), confirmed with
+    a real `page.pdf()` render plus a `getComputedStyle` check under
+    `page.emulateMedia({ media: "print" })` that `.app-header`/
+    `.receipt-preview-tab` (both new/touched in this pass) still
+    resolve to `display: none` in print, same as before.
+  - **`.category-chip.active`** changed from solid `var(--ink)`
+    (near-black) to `var(--accent)` (green), matching the mockup's
+    green active-category pill.
+  - **Sidebar nav icons got colored badge backgrounds** - each
+    `.pos-sidebar-item`'s emoji is now wrapped in a
+    `<span class="pos-sidebar-icon pos-sidebar-icon-<color>">` (blue/
+    orange/purple/teal/red/gray per item - Products/Inventory/Sales
+    History/Cashiers-How To Use/End of Day/Customer Screen-Settings
+    respectively), a small rounded-square tinted background behind
+    just the icon. New Sale (already a solid green pill) and the
+    already gold-tinted Backup/Buy Me a Coffee buttons were
+    deliberately left unbadged - they already carry their own full-button
+    color treatment, and a second badge color on top would fight it.
+  - **`.products-empty` (the "No products yet" box)** changed from a
+    dashed-border, no-icon box to a solid-border card with a small
+    circular `--accent-tint` badge (a 🛒 emoji, added via `::before` so
+    it survives `renderProductCatalog()`'s `emptyState.textContent =
+    tr(...)` re-render every catalog update without extra JS/markup
+    changes) - closer to the mockup's illustrated empty state.
+    **`.custom-item-link` ("+ Add a custom item")** changed from a
+    dashed, unstyled link to a solid green-outlined button.
+  - **The Homepage/Blog/five-free-tool shortcuts moved out of the
+    sidebar footer into the app header row**, per an explicit follow-up
+    ("use that free space above, move there") pointing at the mostly-empty
+    horizontal strip next to `#appSubtitle` in `.app-header`. The same
+    seven buttons (`#homepageShortcutButton` through
+    `#createPricingButton`), their exact `onclick` handlers and
+    `OFFLINE-STRIP` marker wrapping unchanged, moved from
+    `.pos-sidebar-footer` (now-empty, its CSS rule left in place as
+    harmless dead code per this repo's own tolerance for that) into a
+    new `.app-header-links` row, restyled from full-width sidebar list
+    items to compact inline dark-green pills (`.app-header-link` -
+    reviving the same `--accent-dark` pill look the pre-sidebar-reskin
+    `.header-links` row used to have, see "Site-wide header, nav &
+    footer" above) that wraps onto its own line via `flex-wrap` if the
+    window is too narrow, pushed to the row's right edge via
+    `margin-left: auto` on desktop. `.app-header` itself changed from a
+    column stack to a wrapping row so the subtitle and the links row
+    share the same horizontal band instead of stacking. Verified this
+    doesn't touch print (`.app-header` was already, and still is, in
+    the print hide-list) or the offline build (`stripMarked()`'s regex
+    matches by marker name, not position in the file, so the move
+    didn't require any `modules/offline-builder.js` change - confirmed
+    by re-running the offline build simulation and checking zero
+    leftover markers, zero `console.warn`, and the button genuinely
+    absent from the stripped output).
+  - **A bold "Welcome back!" headline** (`#welcomeBackTitle`, new
+    `welcomeBackTitle` translation key across all six languages) was
+    added directly above the existing `#appSubtitle` line, wrapped
+    together in a new `.app-header-greeting` div - the mockup's header
+    reads as a real greeting rather than just the one muted subtitle
+    line `app.html` had before.
+  - **A "📄 Receipt Preview" tab-style header** (plain text, not
+    `OFFLINE-STRIP`-wrapped - it's decorative chrome, not a
+    network-dependent feature, so it ships in the offline package
+    unchanged) was added directly above the existing Quick Settings
+    toggle inside `.preview-area`, with a bottom border in `--accent`
+    to read as an active tab underline - mirroring the mockup's own
+    receipt-panel header instead of the receipt panel starting cold
+    with just the Quick Settings toggle. New `receiptPreviewLabel`
+    translation key across all six languages, wired into
+    `changeLanguage()`'s `ids` map alongside `quickSettingsToggleLabel`.
+  - Verified with Playwright: zero console errors at both desktop
+    (1680px) and mobile (390px, zero horizontal overflow); the moved
+    header-links row renders in the free space next to the welcome
+    headline and every button still opens its correct destination;
+    `#welcomeBackTitle`/`#receiptPreviewLabel` both re-translate
+    correctly on a language switch (checked against Arabic); a real
+    print-media check confirms the printed receipt is unaffected by
+    any of this (`.app-header`/`.receipt-preview-tab` both resolve to
+    `display: none` under `page.emulateMedia({ media: "print" })`); and
+    the offline build produces zero leftover `OFFLINE-STRIP`/
+    `OFFLINE-SWAP` markers with the seven relocated buttons correctly
+    absent from the stripped output.
 
 ## `modules/` — split-out app.html pieces
 

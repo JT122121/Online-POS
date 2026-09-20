@@ -1,7 +1,7 @@
 const translations = {
 
 en: {
-  appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.",
+  appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.", welcomeBackTitle: "Welcome back!",
   settingsButtonLabel: "More Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
@@ -14,7 +14,7 @@ en: {
   noPaymentAlert: "Enter a payment amount before completing the sale.",
   receiptEmptyHint: "Cart is empty - add products from the left panel.",
   settingsModalTitle: "Settings",
-  storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details", quickSettingsToggleLabel: "Quick Settings",
+  storeTitle: "Store Information", storeNameLabel: "Store Name", storeDetailsLabel: "Store Details", quickSettingsToggleLabel: "Quick Settings", receiptPreviewLabel: "Receipt Preview",
   storeInfo: "You can enter address, phone, email, TRN, website and other information.",
   storeLogoLabel: "Company Logo", logoEmptyLabel: "No logo", removeLogoButton: "Remove logo",
   storeLogoInfo: "Shown at the top of every receipt. Saved in this browser, so it stays after you reload - it only goes away if you clear this site's data or remove it here.",
@@ -85,7 +85,7 @@ en: {
 },
 
 ar: {
-  appTitle: "نظام نقاط البيع", appSubtitle: "بدون تسجيل، بدون حساب. افتح الصفحة وابدأ البيع فورًا.",
+  appTitle: "نظام نقاط البيع", appSubtitle: "بدون تسجيل، بدون حساب. افتح الصفحة وابدأ البيع فورًا.", welcomeBackTitle: "مرحبًا بعودتك!",
   settingsButtonLabel: "المزيد من الإعدادات", printButtonLabel: "طباعة", newSaleButtonLabel: "بيع جديد",
   catalogHeading: "المنتجات", cartCountBadge: "في السلة", allCategory: "الكل",
   productsSearchPlaceholder: "ابحث عن منتج...", productsEmptyState: "لا توجد منتجات بعد. أضفها من الإعدادات ← المنتجات.",
@@ -97,7 +97,7 @@ ar: {
   cartEmptyAlert: "أضف صنفاً واحداً على الأقل قبل المتابعة إلى الدفع.", noPaymentAlert: "أدخل مبلغ الدفع قبل إتمام عملية البيع.",
   receiptEmptyHint: "السلة فارغة - أضف منتجات من اللوحة اليسرى.",
   settingsModalTitle: "الإعدادات",
-  storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر", quickSettingsToggleLabel: "إعدادات سريعة",
+  storeTitle: "معلومات المتجر", storeNameLabel: "اسم المتجر", storeDetailsLabel: "تفاصيل المتجر", quickSettingsToggleLabel: "إعدادات سريعة", receiptPreviewLabel: "معاينة الإيصال",
   storeInfo: "يمكنك إدخال العنوان والهاتف والبريد الإلكتروني والرقم الضريبي والموقع وأي معلومات أخرى.",
   storeLogoLabel: "شعار الشركة", logoEmptyLabel: "لا يوجد شعار", removeLogoButton: "إزالة الشعار",
   storeLogoInfo: "يظهر أعلى كل إيصال. يُحفظ في هذا المتصفح ويبقى بعد إعادة التحميل - يختفي فقط عند مسح بيانات الموقع أو إزالته من هنا.",
@@ -168,12 +168,12 @@ ar: {
 },
 
 fil: {
-  appTitle: "Online POS", appSubtitle: "Walang sign up, walang login. Buksan lang ang tab at magbenta na.",
+  appTitle: "Online POS", appSubtitle: "Walang sign up, walang login. Buksan lang ang tab at magbenta na.", welcomeBackTitle: "Maligayang pagbabalik!",
   settingsButtonLabel: "Higit Pang Setting", settingsModalTitle: "Setting",
   catalogHeading: "Mga Produkto", allCategory: "Lahat",
   checkoutHeading: "Bayad", totalDueLabel: "Kabuuang Babayaran", noPaymentAlert: "Maglagay ng halaga ng bayad bago tapusin ang benta.",
   paymentMethodLabel: "Paraan ng Pagbabayad", totalEnteredLabel: "Ipinasok:", changeLabelInfo: "Sukli:", addPaymentRowBtn: "+ Hatiin ang Bayad",
-  storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan", quickSettingsToggleLabel: "Mabilisang Setting",
+  storeTitle: "Impormasyon ng Tindahan", storeNameLabel: "Pangalan ng Tindahan", storeDetailsLabel: "Detalye ng Tindahan", quickSettingsToggleLabel: "Mabilisang Setting", receiptPreviewLabel: "Preview ng Resibo",
   storeInfo: "Ilagay ang address, telepono, email, TRN, website at iba pang impormasyon.",
   storeLogoLabel: "Logo ng Kumpanya", logoEmptyLabel: "Walang logo", removeLogoButton: "Alisin ang logo",
   storeLogoInfo: "Makikita sa itaas ng bawat resibo. Naka-save sa browser na ito kaya nananatili pagkatapos mag-reload - mawawala lang kung burahin ang data ng site o alisin ito dito.",
@@ -244,12 +244,12 @@ fil: {
 },
 
 hi: {
-  appTitle: "ऑनलाइन पीओएस", appSubtitle: "कोई साइनअप नहीं, कोई लॉगिन नहीं। टैब खोलें और बिक्री शुरू करें।",
+  appTitle: "ऑनलाइन पीओएस", appSubtitle: "कोई साइनअप नहीं, कोई लॉगिन नहीं। टैब खोलें और बिक्री शुरू करें।", welcomeBackTitle: "वापसी पर स्वागत है!",
   settingsButtonLabel: "अधिक सेटिंग्स", settingsModalTitle: "सेटिंग्स",
   catalogHeading: "उत्पाद", allCategory: "सभी",
   checkoutHeading: "भुगतान", totalDueLabel: "कुल देय राशि", noPaymentAlert: "बिक्री पूरी करने से पहले भुगतान राशि दर्ज करें।",
   paymentMethodLabel: "भुगतान का तरीका", totalEnteredLabel: "दर्ज राशि:", changeLabelInfo: "बाकी राशि:", addPaymentRowBtn: "+ भुगतान विभाजित करें",
-  storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण", quickSettingsToggleLabel: "त्वरित सेटिंग्स",
+  storeTitle: "स्टोर जानकारी", storeNameLabel: "स्टोर का नाम", storeDetailsLabel: "स्टोर विवरण", quickSettingsToggleLabel: "त्वरित सेटिंग्स", receiptPreviewLabel: "रसीद पूर्वावलोकन",
   storeInfo: "आप पता, फ़ोन, ईमेल, TRN, वेबसाइट और अन्य जानकारी दर्ज कर सकते हैं।",
   storeLogoLabel: "कंपनी का लोगो", logoEmptyLabel: "कोई लोगो नहीं", removeLogoButton: "लोगो हटाएं",
   storeLogoInfo: "यह हर रसीद के ऊपर दिखेगा। यह इस ब्राउज़र में सेव रहता है और रीलोड के बाद भी बना रहता है - यह केवल तभी हटेगा जब आप साइट डेटा साफ़ करें या इसे यहां से हटाएं।",
@@ -320,12 +320,12 @@ hi: {
 },
 
 es: {
-  appTitle: "POS en Línea", appSubtitle: "Sin registro, sin inicio de sesión. Abre la pestaña y empieza a vender.",
+  appTitle: "POS en Línea", appSubtitle: "Sin registro, sin inicio de sesión. Abre la pestaña y empieza a vender.", welcomeBackTitle: "¡Bienvenido de nuevo!",
   settingsButtonLabel: "Más Ajustes", settingsModalTitle: "Ajustes",
   catalogHeading: "Productos", allCategory: "Todos",
   checkoutHeading: "Pago", totalDueLabel: "Total a Pagar", noPaymentAlert: "Ingresa un monto de pago antes de completar la venta.",
   paymentMethodLabel: "Método de Pago", totalEnteredLabel: "Ingresado:", changeLabelInfo: "Cambio:", addPaymentRowBtn: "+ Dividir Pago",
-  storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda", quickSettingsToggleLabel: "Ajustes Rápidos",
+  storeTitle: "Información de la Tienda", storeNameLabel: "Nombre de la Tienda", storeDetailsLabel: "Detalles de la Tienda", quickSettingsToggleLabel: "Ajustes Rápidos", receiptPreviewLabel: "Vista Previa del Recibo",
   storeInfo: "Puedes ingresar dirección, teléfono, correo, RFC/TRN, sitio web y otra información.",
   storeLogoLabel: "Logo de la Empresa", logoEmptyLabel: "Sin logo", removeLogoButton: "Quitar logo",
   storeLogoInfo: "Aparece en la parte superior de cada recibo. Se guarda en este navegador, así que permanece tras recargar la página - solo desaparece si borras los datos del sitio o lo quitas aquí.",
@@ -396,12 +396,12 @@ es: {
 },
 
 th: {
-  appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ไม่ต้องสมัคร ไม่ต้องล็อกอิน เปิดแท็บแล้วเริ่มขายได้เลย",
+  appTitle: "ระบบขายหน้าร้านออนไลน์", appSubtitle: "ไม่ต้องสมัคร ไม่ต้องล็อกอิน เปิดแท็บแล้วเริ่มขายได้เลย", welcomeBackTitle: "ยินดีต้อนรับกลับ!",
   settingsButtonLabel: "การตั้งค่าเพิ่มเติม", settingsModalTitle: "การตั้งค่า",
   catalogHeading: "สินค้า", allCategory: "ทั้งหมด",
   checkoutHeading: "การชำระเงิน", totalDueLabel: "ยอดที่ต้องชำระ", noPaymentAlert: "กรุณากรอกจำนวนเงินที่ชำระก่อนทำรายการขายให้เสร็จสมบูรณ์",
   paymentMethodLabel: "วิธีการชำระเงิน", totalEnteredLabel: "จำนวนที่กรอก:", changeLabelInfo: "เงินทอน:", addPaymentRowBtn: "+ แยกการชำระเงิน",
-  storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า", quickSettingsToggleLabel: "การตั้งค่าด่วน",
+  storeTitle: "ข้อมูลร้านค้า", storeNameLabel: "ชื่อร้านค้า", storeDetailsLabel: "รายละเอียดร้านค้า", quickSettingsToggleLabel: "การตั้งค่าด่วน", receiptPreviewLabel: "ตัวอย่างใบเสร็จ",
   storeInfo: "คุณสามารถกรอกที่อยู่ เบอร์โทร อีเมล เลขประจำตัวผู้เสียภาษี เว็บไซต์ และข้อมูลอื่นๆ",
   storeLogoLabel: "โลโก้บริษัท", logoEmptyLabel: "ไม่มีโลโก้", removeLogoButton: "ลบโลโก้",
   storeLogoInfo: "แสดงที่ด้านบนของใบเสร็จทุกใบ บันทึกไว้ในเบราว์เซอร์นี้ จึงยังอยู่แม้รีโหลดหน้า - จะหายไปก็ต่อเมื่อคุณล้างข้อมูลเว็บไซต์หรือลบออกจากที่นี่เท่านั้น",
