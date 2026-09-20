@@ -1195,6 +1195,44 @@ all of them under one pattern:
     overflow, zero console errors; and a 2x-DPR desktop screenshot at
     1280px shows the same six photos rendering sharp with no visible
     upscale softness there either.
+  - **Follow-up: 5 of the 6 photos replaced again with clearer,
+    individually-supplied source images, and the 6 colored icon badges
+    removed outright.** The user supplied 6 clean, individually-cropped
+    photos (one per card, matching the same 6 subjects - market stall,
+    bakery, food cart, new-business storefront, independent shop,
+    laptop dashboard) and asked to remove the icons. 5 of the 6
+    (audience2-6: Home Bakers, Food Carts, New Businesses, Small
+    Independent Shops, Businesses Tired of Complex POS) arrived as
+    ordinary tool-provided image attachments with a filesystem path and
+    were processed directly; the 6th (audience1, Market Stalls &
+    Pop-Ups) arrived in a later, separate message with no accessible
+    file path on disk (confirmed by searching the whole filesystem for
+    recently-modified image files and finding nothing new) - since it
+    was the same subject as the photo already shipped (from the earlier
+    composite crop), that one was left as-is rather than blocked on an
+    inaccessible file. The 5 replaced photos went through the identical
+    720px-wide Lanczos-upscale + `ImageFilter.UnsharpMask` + JPEG-85
+    pipeline documented in the blur-fix bullet above, for the same
+    reason (these source crops were only ~322-328px wide, the same
+    retina-blur risk as before) - not a new technique. **The `.aud-badge`
+    icon badges were removed entirely, not just hidden** - the 6 `<span
+    class="aud-badge ...">` markup blocks, the `.aud-badge`/
+    `.aud-badge-blue/-pink/-green/-purple/-teal/-orange` CSS rules, and
+    the 5 SVG symbol defs added only for these badges
+    (`icon-cupcake`/`icon-truck`/`icon-store`/`icon-shopping-bag`/
+    `icon-file-text`) were all deleted outright once confirmed to have
+    zero remaining references - matching this repo's established
+    "remove outright, don't leave dead code" convention for an
+    explicitly-cut visual element (same treatment as `barcode-generator.html`'s
+    Print button removal). `icon-cart` was left in the sprite since the
+    homepage's `.app-preview` mock still uses it independently. Each
+    card's `<img class="aud-photo">` is now followed directly by
+    `.aud-body`'s `<strong>`/`<p>` with nothing in between. Verified
+    with Playwright: all 6 photos report `naturalWidth: 720`;
+    `document.querySelectorAll('.aud-badge').length` is `0`; a language
+    switch to Arabic still re-translates every title/text and keeps all
+    6 photos in the DOM; and zero horizontal overflow/console errors at
+    both 1280px desktop (2x DPR) and 390px mobile.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
