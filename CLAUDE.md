@@ -2561,6 +2561,62 @@ has zero network calls.
     and the offline build simulation confirms the icon sprite ships
     there unmodified with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP`
     markers.
+- **Desktop layout widened to fill the screen, removing the fixed
+  1500-1600px content caps that left large unused side margins on any
+  monitor wider than that** - per explicit feedback that the app should
+  "feel like a real web app" rather than a narrow column floating in a
+  sea of empty background on desktop. Five `max-width` caps were
+  removed outright rather than just raised: `.pos-shell` (was `1600px`,
+  the sidebar+main-content wrapper), and `.app-header`/`.pos-topbar`/
+  `.app`/`.site-footer`/`.backup-notice` (each was `1500px`, nested
+  inside `.pos-main`, which is itself `flex: 1` and was already filling
+  whatever width `.pos-shell` allowed - so `.pos-shell`'s own cap was
+  the actual binding constraint site-wide, and the inner `1500px` caps
+  were mostly redundant with it, just a second layer of the same
+  problem). Now the sidebar (fixed `236px`) plus main content genuinely
+  fills the full browser width at any desktop size, with no artificial
+  ceiling. The product catalog benefits most directly - `.product-list`
+  already uses `grid-template-columns: repeat(auto-fill, minmax(138px,
+  1fr))`, so more available width on the catalog side (`.app`'s own
+  `minmax(320px, var(--catalog-width, 75%))` column, still governed by
+  the existing resizable-panel-split feature - see "Resizable product/
+  receipt split" below) now simply renders more product-card columns
+  per row instead of leaving them stranded in a narrow band, the same
+  "more real content, not more empty margin" outcome the
+  `auto-fill`/stranded-last-row lesson elsewhere in this file already
+  established for `index.html`'s own grids. The receipt/preview column
+  is unaffected in spirit - `.receipt` itself still has a fixed
+  `width: 80mm` regardless of container (see "Resizable product/receipt
+  split" below), so it was never the source of the wasted-space
+  complaint; it just centers with a bit more breathing room now that
+  its column isn't artificially squeezed by an outer 1500px cap either.
+- **Settings modal maximized too**, since Products, Inventory, and
+  Sales History all live as tabs inside it - `.settings-modal`'s
+  `max-width` went from `780px` to `1600px` and `max-height` from `88vh`
+  to `94vh`. At `780px` on any modern desktop monitor the modal sat as a
+  small centered box with roughly half the screen as plain dark
+  backdrop on either side, regardless of how much real content (a long
+  product/inventory table, a sales history list) was inside it -
+  exactly the "lot of unused space" complaint, and the most visible
+  instance of it since a shop owner spends real working time inside
+  these tabs, not just glancing at them. The `1600px` ceiling (rather
+  than removing the cap entirely, the way the outer shell above was
+  handled) keeps the dialog from stretching edge-to-edge on very large
+  monitors, which would read as an oddly proportioned modal rather than
+  a deliberate full-width page - `.settings-overlay`'s own `padding:
+  16px` plus the modal's `width: 100%` already means it fills up to
+  that cap smoothly on anything from a small laptop through a large
+  desktop display. `.settings-tab-rail`'s own fixed `158px` width was
+  left unchanged - it's a navigation rail, not a content area, so it
+  doesn't benefit from extra width the way the actual tab panels
+  (Products' manage-list, Inventory's stock table, Sales History's
+  grouped list, and every other settings tab) do. The smaller,
+  purpose-built dialogs that happen to reuse `.settings-modal`'s base
+  class with their own inline `max-width` override (e.g.
+  `#saleDetailOverlay`'s Sale Details editor at `640px`) were
+  deliberately left alone - those are single-record edit forms, not
+  list/table views, and stayed appropriately compact rather than being
+  swept up in the same change.
 
 ## `modules/` — split-out app.html pieces
 
