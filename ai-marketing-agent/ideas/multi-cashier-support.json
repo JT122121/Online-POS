@@ -1,0 +1,70 @@
+{
+  "idea_id": "multi-cashier-support",
+  "source_feature_id": "multi-cashier-support",
+  "hook": "Know exactly which cashier rang up which sale - no guessing at shift-close.",
+  "topic": "Multiple Cashiers",
+  "target_audience": "Shop owners with more than one person working the register across shifts.",
+  "problem": "No way to tell which staff member rang up which sale when the register comes up short.",
+  "solution": "Multiple named cashiers can be configured; each sale records which cashier rang it up, and End of Day / Sales History report totals broken down per cashier.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Know exactly which cashier rang up which sale - no guessing at shift-close.",
+      "voiceover": "Know exactly which cashier rang up which sale - no guessing at shift-close."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "No way to tell which staff member rang up which sale when the register comes up short.",
+      "voiceover": "No way to tell which staff member rang up which sale when the register comes up short."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Multiple Cashiers",
+      "voiceover": "Here's how GoOnlinePOS handles it: Multiple named cashiers can be configured; each sale records which cashier rang it up, and End of Day / Sales History report totals broken down per cashier."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "See exactly how much each staff member sold and collected during a shift.",
+      "voiceover": "See exactly how much each staff member sold and collected during a shift."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Cashiers, End of Day report in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Multiple named cashiers can be configured; each sale records which cashier rang it up, and End of Day / Sales History report totals broken down per cashier.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Know exactly which cashier rang up which sale - no guessing at shift-close. See exactly how much each staff member sold and collected during a shift.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#MultiCashier"
+  ],
+  "suggested_title": "Multiple Cashiers in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "async function loadCashiers\\(\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "activeCashierName",
+      "found": true
+    }
+  ]
+}

@@ -1030,6 +1030,158 @@ all of them under one pattern:
     overflow and zero console errors at 390px in both English and
     Arabic.
 
+## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
+
+Per an explicit "keep everything for free" decision, the entire Premium
+system described at length further down this file (Account &
+Subscription's Google sign-in/Supabase backend, the Buy Premium modal,
+PayPal purchases, redeemable codes, the free 15-day trial, and the
+offline package's own separate local-code activation panel) has been
+**removed outright from the live app**, not just disabled - every
+formerly-gated feature (Company Logo upload, editable Receipt Number/
+Prefix, Inventory stock editing/export, Customer Screen, downloading
+the offline package) is now unconditionally available to every visitor,
+with no sign-in, no code, and no lock message anywhere.
+
+**Everything in the "Account & Subscription," "Automated Premium sales
+via PayPal," "New signup email notification," and "Download Offline
+POS"'s Gate-B/offline-activation material further down this file
+describes retired functionality** - read it as history of what this
+codebase used to do, not as a description of what `app.html` does
+today. The same applies to any other "Premium"/"Basic tier"/PayPal
+mention elsewhere in this file that predates this change.
+
+What actually happened, concretely:
+
+- **`app.html`**: `applyPremiumLocks()`, `premiumUnlocked`,
+  `initPremiumSystem()`, `revertLogoToDefaultIfNotPremium()`,
+  `renderAppTitleBadge()`, `openAccountSettings()`, the entire
+  `OFFLINE-STRIP:BUY-PREMIUM-JS` block (`openBuyPremiumModal`/
+  `renderPaypalArea`/`renderPaypalButtons`/`PAYPAL_PLANS`/the real
+  `PAYPAL_CLIENT_ID`/`PAYPAL_VERIFY_URL`), and
+  `loadPremiumPromoNoticeState`/`dismissPremiumPromoNotice` were all
+  deleted, along with every DOM element that only existed to gate,
+  promote, or manage Premium status: the header's Premium/Basic badge,
+  the sidebar's "Redeem Your Premium Code" button, the gold promo
+  banner, the account welcome/sign-in-prompt row, the entire Settings →
+  Premium tab and its Account & Subscription panel, and the Buy Premium
+  modal (PayPal buttons included). Every remaining Premium-gated
+  control (logo input, receipt number/prefix inputs, inventory stock
+  inputs/export button, Customer Screen content, offline download
+  button) simply has nothing left disabling it - no replacement
+  "always unlocked" flag was introduced, since removing the gating code
+  entirely is the same result with less surface area.
+  `isPremiumCached()`/the Premium ad-free check in `loadAnalyticsAndAds()`
+  was removed too - ads load unconditionally now, there's no more
+  ad-free tier to check for.
+- **`modules/account.js`** (the entire Supabase Account & Subscription
+  client) and **`vendor/supabase.min.js`** were **deleted outright**,
+  not just unlinked - unlike the "retire, don't delete" treatment given
+  to standalone marketing pages elsewhere in this file, a JS module with
+  zero remaining callers is dead weight, matching how `modules/
+  cloud-sync.js` was already deleted when Cloud Sync was retired (see
+  below). `vendor/LICENSES.txt`'s `supabase.min.js` entry was removed to
+  match.
+- **`modules/offline-builder.js`**: the `OFFLINE_PREMIUM_CODE` constant,
+  the `OFFLINE-SWAP:PREMIUM-ACTIVATION`/`OFFLINE-SWAP:PREMIUM-PANEL`
+  swap logic (which used to inject the offline build's own local-code
+  unlock system), and the `ACCOUNT-SCRIPT`/`ACCOUNT-WELCOME`/
+  `PREMIUM-PROMO-NOTICE`/`FREE-TRIAL-BUTTON`/`BUY-PREMIUM-BUTTON`/
+  `BUY-PREMIUM-MODAL` strip calls were all removed - those markers no
+  longer exist in `app.html` (the content they wrapped was deleted
+  directly rather than left in place for the offline build to strip),
+  so referencing them would have produced permanent, meaningless
+  `console.warn` noise on every offline build. The offline package now
+  ships with every feature already unlocked, live and offline alike -
+  there is nothing left for it to activate.
+- **`customer.html`**: `isPremiumUnlocked()`, `showLockedScreen()`, the
+  `#csLocked` panel, and both call sites that gated `render()`/
+  `loadInitialState()` behind a Premium check were removed. The page
+  now renders the live order state directly, with no gate at all - the
+  same "no signup, no login" policy the rest of the site already
+  follows.
+- **`index.html`**: the "Is it really free?" and "Do I need to create
+  an account?" FAQ answers were rewritten to state the app is 100% free
+  with no sign-in of any kind; the "Is Premium a subscription?" and
+  "What do I get with Premium?" FAQ entries were deleted outright (13
+  items → 11) since there is no Premium tier left to ask about. The
+  `SoftwareApplication` JSON-LD `offers` block already said
+  `"price": "0"` and needed no change.
+- **`modules/translations.js`**: every Premium/Basic-badge, Buy Premium
+  modal, PayPal, Account & Subscription, redeem-code, and offline
+  Premium-panel translation key was removed across all six languages
+  (61 keys × 6 languages) - not left as "harmless dead references" the
+  way some genuinely-orphaned keys are tolerated elsewhere in this file,
+  since leaving stale "Premium"/"$3.99/month" wording sitting in the
+  dictionary would misdescribe the product to a future reader even
+  though nothing renders it.
+- **Left in place, unused, per this repo's established "retire, don't
+  delete" convention** (same treatment as `guide.html`/`about.html`/
+  `premium-validation/AppsScript.gs`): `paypal-premium/` (the Apps
+  Script that verified PayPal orders and called
+  `grant_premium_from_paypal`) and `supabase/schema.sql`'s `profiles`/
+  `redemption_codes`/`paypal_purchases` tables and their functions -
+  nothing in the live app calls any of it anymore, but the schema/script
+  are left on disk rather than deleted in case the site owner wants to
+  reference them later. Unlike `modules/account.js` above, these were
+  never wired into a page's own `<script src>` tag, so leaving them
+  costs nothing and follows precedent; `modules/account.js` was the one
+  exception deleted outright because it was a dead script tag, not a
+  dormant backend file.
+- Verified end-to-end with Playwright: fresh `app.html` load has zero
+  console errors and zero leftover Premium/PayPal/account DOM elements;
+  every previously-gated input/button (`logoFileInput`,
+  `receiptNumberInput`, `inventoryExportButton`, `offlineDownloadButton`)
+  is enabled with no lock message anywhere; Customer Screen opens
+  directly with real content, no lock panel; a language switch to
+  Arabic and back produces zero console errors; `customer.html` loaded
+  directly (no `#csLocked` element in the DOM) renders the waiting
+  screen immediately; `index.html`'s FAQ is 11 items with the reworded
+  free-forever answers and no `faq12`/`faq13` elements; and a live
+  "Download Offline POS" build (`buildOfflineAppHtml`/
+  `buildOfflineCustomerHtml`/`buildOfflineEndOfDayHtml`) produces zero
+  leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers, zero `console.warn`
+  output, and zero remaining "premium"/"supabase" references anywhere
+  in the generated `app.html`.
+- **The old "Buy Premium" PayPal flow was replaced with a plain, voluntary
+  "☕ Buy Me a Coffee" button** - per an explicit "make that old paypal
+  link as Buy me a Coffee instead any amount" request, and per a
+  follow-up ("display that in main pos app visible") it's a real button
+  in `.pos-sidebar-nav`, right after Backup and before Settings, not
+  tucked inside a settings tab - the single most visible spot in the
+  toolbar this feature could occupy. `#supportCoffeeButton` →
+  `openBuyMeCoffee()` opens `SUPPORT_PAYPAL_URL` in a new tab, PayPal's
+  standard `cmd=_donations` Donate-button link
+  (`https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS`)
+  built from the site owner's real PayPal account email
+  (`goonlinepos@gmail.com`) rather than a `paypal.me` username - this
+  link style lets the visitor type in whatever amount they want to send
+  and needs nothing beyond a regular PayPal account tied to that email,
+  no separate `paypal.me` profile to set up first. Gold-tinted
+  (`--gold-tint`/`#f0dfb0`, same treatment as `#backupShortcutButton`),
+  its own `supportCoffeeLabel` translation key across all six
+  `modules/translations.js` languages, wired into `changeLanguage()`'s
+  `ids` map like every other sidebar label. Wrapped in its own
+  `OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON`/`SUPPORT-COFFEE-JS` marker pair
+  and stripped from the offline package - same treatment as
+  Homepage/Blog/the five free-tool shortcuts, since opening a live
+  `paypal.com` URL needs network access the offline build doesn't
+  assume. **The `stripMarked()` call for the button marker and the JS
+  regex for the JS marker both had to be added to
+  `modules/offline-builder.js` explicitly** - wrapping a new element in
+  an `OFFLINE-STRIP` marker in `app.html` doesn't strip it by itself,
+  the builder only strips markers it's told to look for by name - the
+  same class of easy-to-forget wiring step already documented for new
+  `.header-links` buttons elsewhere in this file. Verified: the button
+  renders visibly in the sidebar with the correct gold background and
+  translates correctly (checked against Arabic and back to English);
+  clicking it opens the real donate URL above with zero console errors;
+  and a simulated offline build removes the button markup and
+  `openBuyMeCoffee()`/`SUPPORT_PAYPAL_URL` entirely with zero leftover
+  markers and zero `console.warn` (only a harmless dead
+  `#supportCoffeeButton` CSS rule remains, matching this repo's existing
+  tolerance for dead selectors with nothing left to apply to).
+
 ## `app.html` — architecture
 
 Client-only, no server. All persistence is local to the browser. The one

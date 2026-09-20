@@ -1,0 +1,70 @@
+{
+  "idea_id": "product-photos",
+  "source_feature_id": "product-photos",
+  "hook": "Add a real photo to every product - find items by sight, not just by name.",
+  "topic": "Product Photos in the Catalog",
+  "target_audience": "Cashiers and shop staff working a busy counter, especially with lookalike products like food or bakery items.",
+  "problem": "Cashiers wasting time squinting at a text-only product list to find the right item.",
+  "solution": "Each product can carry a photo, auto-compressed client-side to a small 160px JPEG so the whole catalog still fits comfortably in browser storage.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Add a real photo to every product - find items by sight, not just by name.",
+      "voiceover": "Add a real photo to every product - find items by sight, not just by name."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Cashiers wasting time squinting at a text-only product list to find the right item.",
+      "voiceover": "Cashiers wasting time squinting at a text-only product list to find the right item."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Product Photos in the Catalog",
+      "voiceover": "Here's how GoOnlinePOS handles it: Each product can carry a photo, auto-compressed client-side to a small 160px JPEG so the whole catalog still fits comfortably in browser storage."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Cashiers find items faster by sight, especially useful for food, bakery, or lookalike products.",
+      "voiceover": "Cashiers find items faster by sight, especially useful for food, bakery, or lookalike products."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try GoOnlinePOS free - no signup, no login needed to start."
+    }
+  ],
+  "cta": "Try GoOnlinePOS free - no signup, no login needed to start.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Products / the main catalog grid in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Each product can carry a photo, auto-compressed client-side to a small 160px JPEG so the whole catalog still fits comfortably in browser storage.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Add a real photo to every product - find items by sight, not just by name. Cashiers find items faster by sight, especially useful for food, bakery, or lookalike products.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#RetailTips"
+  ],
+  "suggested_title": "Product Photos in the Catalog in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function compressProductPhoto\\(file\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "function renderProductCatalog\\(\\)",
+      "found": true
+    }
+  ]
+}

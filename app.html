@@ -7,18 +7,12 @@
   var CONSENT_KEY = "goonlinepos-cookie-consent";
   var SEEN_KEY = "goonlinepos-cookie-notice-seen";
 
-  function isPremiumCached() {
-    try { return localStorage.getItem("onlinepos_account-premium-cached") === "1"; } catch (e) { return false; }
-  }
-
   function loadAnalyticsAndAds() {
-    if (!isPremiumCached()) {
-      var adsScript = document.createElement("script");
-      adsScript.async = true;
-      adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
-      adsScript.crossOrigin = "anonymous";
-      document.head.appendChild(adsScript);
-    }
+    var adsScript = document.createElement("script");
+    adsScript.async = true;
+    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4312510288776967";
+    adsScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsScript);
 
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){ window.dataLayer.push(arguments); };
@@ -143,7 +137,6 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .pos-sidebar-footer { display: flex; flex-direction: column; gap: 2px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
 .pos-sidebar-item { display: flex; align-items: center; gap: 9px; width: 100%; border: 1px solid transparent; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; padding: 10px 10px; text-align: left; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#premiumToolbarButton { align-items: flex-start; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.3; }
 .pos-sidebar-item:hover { background: #efeee5; }
 .pos-sidebar-item-primary { margin-bottom: 6px; font-weight: 700; }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
@@ -151,9 +144,9 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-select.active-cashier-select { margin: 0 0 4px; }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
-#premiumToolbarButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
-#premiumToolbarButton:hover { background: #f5e6c2; }
 #backupShortcutButton:hover { background: #f5e7c4; }
+#supportCoffeeButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
+#supportCoffeeButton:hover { background: #f5e7c4; }
 .active-cashier-select { padding: 9px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; background: var(--panel); color: var(--ink); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
 #homepageShortcutButton, #blogShortcutButton, #createInvoiceButton, #createReceiptButton, #createBarcodeButton, #createVatButton, #createPricingButton { color: var(--accent-dark); }
@@ -282,14 +275,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .htu-num { display: block; font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
 .htu-item h3 { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0 0 6px; }
 .htu-item p { color: var(--ink-soft); font-size: 13px; line-height: 1.6; margin: 0; }
-.premium-note { display: inline-block; margin-top: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 3px 10px; border-radius: 999px; }
-.pricing-tiers { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.pricing-tier { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
-.pricing-tier.pt-best { border-color: #f0dfb0; background: var(--gold-tint); }
-.pt-name { font-weight: 700; font-size: 13.5px; }
-.pt-sub { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
-.pt-badge { display: inline-block; margin-left: 4px; font-size: 9px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: #fff; border: 1px solid #f0dfb0; padding: 1px 6px; border-radius: 999px; vertical-align: middle; }
-.paypal-btn-box { width: 118px; min-height: 35px; flex-shrink: 0; }
 .usb-scan-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; text-align: center; box-shadow: var(--shadow-lg); z-index: 200; }
 .usb-scan-toast.success { background: var(--accent-tint); color: var(--accent-dark); }
 .usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
@@ -310,20 +295,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .settings-panel-content.active { display: block; }
 .settings-panel-content h3 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 600; font-size: 15px; }
 
-.premium-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #7a5a0e; background: var(--gold-tint); border: 1px solid #f0dfb0; padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
-.basic-badge { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--ink-soft); background: var(--panel); border: 1px solid var(--line); padding: 2px 7px; border-radius: 999px; vertical-align: middle; }
-#premiumBadgeAppTitle { cursor: pointer; }
-.account-inline-btn { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 3px 9px; border: 0; border-radius: 999px; font-size: 10.5px; font-weight: 700; cursor: pointer; vertical-align: middle; }
-.account-inline-btn-out { background: var(--danger-tint); color: var(--danger); }
-.account-inline-btn-out:hover { background: #f6d9d5; }
-.account-inline-btn-in { background: var(--gold-tint); color: #7a5a0e; border: 1px solid #f0dfb0; }
-.account-inline-btn-in:hover { background: #f5e6c2; }
-.google-signin-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 12px; padding: 9px 13px; border: 1px solid #dadce0; border-radius: var(--radius-sm); background: #fff; color: #3c4043; font-weight: 600; font-size: 13px; cursor: pointer; }
-.google-signin-btn:hover { background: #f7f8f8; box-shadow: 0 1px 3px rgba(60,64,67,.2); }
-.google-signin-icon { width: 18px; height: 18px; flex-shrink: 0; }
-.google-signin-icon-sm { width: 13px; height: 13px; flex-shrink: 0; vertical-align: -2px; }
-.account-signout-btn { width: 100%; margin-top: 16px; border: 1px solid #f0c2bd; border-radius: var(--radius-sm); background: var(--danger-tint); color: var(--danger); padding: 9px 13px; font-weight: 700; cursor: pointer; }
-.account-signout-btn:hover { background: #f6d9d5; }
 .logo-upload-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
 .logo-preview-box { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fbfbf8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
 .logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -538,7 +509,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 <div class="pos-sidebar-brand-text">
 <div class="pos-sidebar-title"><span id="appTitle">Online POS</span></div>
-<span class="premium-badge" id="premiumBadgeAppTitle" onclick="openAccountSettings()" title="View your subscription">Premium</span>
 </div>
 </div>
 
@@ -552,8 +522,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()">📺 <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
-<button type="button" id="premiumToolbarButton" class="pos-sidebar-item" onclick="openAccountSettings()" title="View your subscription and redeem a Premium code">🔓 <span id="premiumToolbarLabel">Redeem Your Premium Code</span></button>
 <button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
+<!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
+<button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional">☕ <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
+<!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:END -->
 <button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()">⚙ <span id="settingsButtonLabel">More Settings</span></button>
 </div>
 
@@ -606,12 +578,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products">◧</button>
 <button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt">◨</button>
 <button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language">🌐</button>
-<!-- OFFLINE-STRIP:ACCOUNT-WELCOME:START -->
-<div class="pos-topbar-account">
-<div class="subtitle hidden" id="accountWelcomeBadge">👋 <span id="accountWelcomeText"></span><button type="button" class="account-inline-btn account-inline-btn-out" onclick="signOutAccount()"><span id="accountHeaderSignOutLabel">Sign Out</span></button></div>
-<div class="subtitle hidden" id="accountSignInPrompt"><button type="button" class="account-inline-btn account-inline-btn-in" onclick="openAccountSettings()"><svg class="google-signin-icon-sm" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg> <span id="accountQuickSignInLabel">Sign in - 15 Days Free</span></button></div>
-</div>
-<!-- OFFLINE-STRIP:ACCOUNT-WELCOME:END -->
 </div>
 </div>
 
@@ -622,16 +588,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" class="bn-dismiss-btn" onclick="dismissBackupNotice()" aria-label="Dismiss">×</button>
 </div>
 </div>
-
-<!-- OFFLINE-STRIP:PREMIUM-PROMO-NOTICE:START -->
-<div id="premiumPromoNotice" class="backup-notice hidden">
-<div class="bn-text"><svg class="google-signin-icon-sm" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg> <span id="premiumPromoText">You're on the Basic plan. Sign in with Google to get 15 days of Premium free - no code needed! Unlocks Company Logo, Customer Screen, Inventory editing, an ad-free experience, and more.</span></div>
-<div class="bn-actions">
-<button type="button" class="bn-backup-btn" onclick="openAccountSettings()" id="premiumPromoButton">Go Premium</button>
-<button type="button" class="bn-dismiss-btn" onclick="dismissPremiumPromoNotice()" aria-label="Dismiss">×</button>
-</div>
-</div>
-<!-- OFFLINE-STRIP:PREMIUM-PROMO-NOTICE:END -->
 
 <div class="app">
 
@@ -703,7 +659,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <input id="quickStoreName" oninput="syncQuickField('storeName', this.value)">
 <label id="quickStoreDetailsLabel">Store Details</label>
 <textarea id="quickStoreDetails" oninput="syncQuickField('storeDetails', this.value)"></textarea>
-<label><span id="quickStoreLogoLabel">Company Logo</span> <span class="premium-badge" id="quickPremiumBadgeLogo">Premium</span></label>
+<label><span id="quickStoreLogoLabel">Company Logo</span></label>
 <div class="logo-upload-row">
 <div class="logo-preview-box empty" id="quickLogoPreviewBox">
 <span id="quickLogoPreviewEmptyText">No logo</span>
@@ -720,9 +676,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <option value="invoice">Invoice</option>
 <option value="payment">Payment Received</option>
 </select>
-<label><span id="quickReceiptNumberLabel">Current Receipt Number</span> <span class="premium-badge" id="quickPremiumBadgeReceiptNumber">Premium</span></label>
+<label><span id="quickReceiptNumberLabel">Current Receipt Number</span></label>
 <input id="quickReceiptNumberInput" type="text" inputmode="numeric" oninput="handleReceiptNumberEdit(this)">
-<label><span id="quickReceiptPrefixLabel">Receipt Number Prefix</span> <span class="premium-badge" id="quickPremiumBadgeReceiptPrefix">Premium</span></label>
+<label><span id="quickReceiptPrefixLabel">Receipt Number Prefix</span></label>
 <input id="quickReceiptPrefixInput" maxlength="8" placeholder="e.g. INV-" oninput="handleReceiptPrefixEdit(this)">
 <div class="quick-settings-row">
 <div>
@@ -819,12 +775,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div id="customerScreenOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeCustomerScreenPanel()">
 <div class="scanner-modal" style="max-width:480px;">
   <div class="scanner-header">
-    <div style="display:flex; align-items:center; gap:8px;"><h2 id="customerScreenTitle">Customer Screen</h2> <span class="premium-badge" id="premiumBadgeCustomerScreen">Premium</span></div>
+    <h2 id="customerScreenTitle">Customer Screen</h2>
     <button onclick="closeCustomerScreenPanel()">✕</button>
   </div>
   <div style="padding:18px 20px;">
-    <div id="customerScreenLockMsg" class="error-text hidden">🔒 <span id="customerScreenLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to unlock the Customer Screen.</span></div>
-    <div id="customerScreenUnlockedContent">
     <p id="customerScreenIntro" style="margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.55;">Open this link in a second window, monitor, or tablet facing your customer - it updates live as you ring up a sale.</p>
     <div style="display:flex; gap:8px;">
       <input id="customerScreenUrlInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px;">
@@ -832,7 +786,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
     </div>
     <div id="customerScreenCopiedMsg" class="success-text hidden" style="margin-top:8px;">Copied!</div>
     <button type="button" class="custom-item-link" onclick="openCustomerScreenGuide()" id="customerScreenGuideBtn" style="margin-top:16px;">📖 <span id="customerScreenGuideBtnLabel">Guide Me - How to Set This Up</span></button>
-    </div>
   </div>
 </div>
 </div>
@@ -988,7 +941,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
       <button class="settings-tab-item hidden" data-tab="language" onclick="selectSettingsTab('language')">🌐 <span>Language</span></button>
       <button class="settings-tab-item hidden" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item hidden" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
-      <button class="settings-tab-item hidden" data-tab="premium" onclick="selectSettingsTab('premium')">🔓 <span id="premiumTabLabel">Premium</span></button>
     </div>
     <div class="settings-tab-panel">
 
@@ -1002,7 +954,7 @@ Tel: +000 000 000
 Email: Demo@example.com
 Website: Goonlinepos.com</textarea>
         <div class="info" id="storeInfo" style="display:block;">You can enter address, phone, email, TRN, website and other information.</div>
-        <label><span id="storeLogoLabel">Company Logo</span> <span class="premium-badge" id="premiumBadgeLogo">Premium</span></label>
+        <label><span id="storeLogoLabel">Company Logo</span></label>
         <div class="logo-upload-row">
           <div class="logo-preview-box empty" id="logoPreviewBox">
             <span id="logoPreviewEmptyText">No logo</span>
@@ -1014,7 +966,6 @@ Website: Goonlinepos.com</textarea>
           </div>
         </div>
         <div class="info" id="storeLogoInfo" style="display:block;">Shown at the top of every receipt. Saved in this browser, so it stays after you reload - it only goes away if you clear this site's data or remove it here.</div>
-        <div id="logoLockMsg" class="error-text hidden">🔒 <span id="logoLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to upload a logo.</span></div>
       </div>
 
       <div class="settings-panel-content" id="panel-document">
@@ -1025,14 +976,13 @@ Website: Goonlinepos.com</textarea>
           <option value="invoice">Invoice</option>
           <option value="payment">Payment Received</option>
         </select>
-        <label><span id="receiptNumberLabel">Current Receipt Number</span> <span class="premium-badge" id="premiumBadgeReceiptNumber">Premium</span></label>
+        <label><span id="receiptNumberLabel">Current Receipt Number</span></label>
         <input id="receiptNumberInput" type="text" inputmode="numeric" oninput="handleReceiptNumberEdit(this)">
         <div class="info" id="receiptNumberInfo" style="display:block;">Edit this to set where numbering continues from - numbers only. The next new sale continues counting up from here.</div>
         <div id="receiptNumberErrorBox" class="error-text hidden"></div>
-        <label><span id="receiptPrefixLabel">Receipt Number Prefix</span> <span class="premium-badge" id="premiumBadgeReceiptPrefix">Premium</span></label>
+        <label><span id="receiptPrefixLabel">Receipt Number Prefix</span></label>
         <input id="receiptPrefixInput" maxlength="8" placeholder="e.g. INV-" oninput="handleReceiptPrefixEdit(this)">
         <div class="info" id="receiptPrefixInfo" style="display:block;">Combined with the number above - e.g. INV- + 000123 prints as INV-000123. Up to 8 characters total, including any dashes or symbols.</div>
-        <div id="receiptNumberLockMsg" class="error-text hidden">🔒 <span id="receiptNumberLockMsgText">These are Premium features. Activate a Premium code in Settings → Premium to edit the receipt number and prefix.</span></div>
       </div>
 
       <div class="settings-panel-content" id="panel-tax">
@@ -1111,9 +1061,8 @@ Website: Goonlinepos.com</textarea>
       </div>
 
       <div class="settings-panel-content" id="panel-inventory">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><h3 id="inventoryTitle" style="margin:0;">Inventory</h3> <span class="premium-badge" id="premiumBadgeInventory">Premium</span></div>
+        <h3 id="inventoryTitle" style="margin:0 0 10px;">Inventory</h3>
         <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock - leave a field blank if you don't want to track stock for that product.</div>
-        <div id="inventoryLockMsg" class="error-text hidden">🔒 <span id="inventoryLockMsgText">Editing stock and downloading reports is a Premium feature. Activate a Premium code in Settings → Premium to unlock it. You can still browse your inventory below.</span></div>
         <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
         <div id="inventoryList" class="payment-list" style="margin-top:9px;"></div>
         <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
@@ -1216,61 +1165,11 @@ Website: Goonlinepos.com</textarea>
 
         <!-- OFFLINE-STRIP:DOWNLOAD-SECTION:START -->
         <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
-          <label><span id="offlineDownloadLabel">Offline Version</span> <span class="premium-badge" id="premiumBadgeOffline">Premium</span></label>
+          <label><span id="offlineDownloadLabel">Offline Version</span></label>
           <div class="info" id="offlineDownloadInfo" style="display:block;">Get a full copy of the app that runs with zero internet - good for a shop computer that's offline, or as a backup install. Everything works the same, including the Customer Screen.</div>
           <button type="button" class="small-btn" id="offlineDownloadButton" onclick="openOfflineDownloadModal()" style="width:100%; margin-top:12px;">⬇ <span id="offlineDownloadButtonLabel">Download Offline POS</span></button>
-          <div id="offlineLockMsg" class="error-text hidden">🔒 <span id="offlineLockMsgText">This is a Premium feature. Activate a Premium code in Settings → Premium to download the offline version.</span></div>
         </div>
         <!-- OFFLINE-STRIP:DOWNLOAD-SECTION:END -->
-      </div>
-
-      <div class="settings-panel-content" id="panel-premium">
-        <!-- OFFLINE-SWAP:PREMIUM-PANEL:START -->
-        <h3 id="accountPanelTitle">Account &amp; Subscription</h3>
-        <div class="info" id="accountPanelInfo" style="display:block;">Sign in with Google to get a free account and an automatic 15-day Premium trial - Company Logo, editable Receipt Numbers, Receipt Number Prefix, Customer Screen, Inventory, and an ad-free experience. Redeem a code anytime to extend it further.</div>
-
-        <div id="accountSignedOut">
-          <div id="redeemCodePrompt" style="margin-bottom:12px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px; text-align:center;">
-            <div style="font-family:var(--font-display); font-weight:700; font-size:14.5px; color:var(--ink);">🎁 <span id="redeemCodePromptTitle">Get 15 Days Premium Free</span></div>
-            <div style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;"><span id="redeemCodePromptText">Sign in with Google below - no code needed. Already have a code? Redeem it after signing in.</span></div>
-          </div>
-          <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
-            <svg class="google-signin-icon" viewBox="0 0 18 18" aria-hidden="true">
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-            </svg>
-            <span id="accountSignInButton">Sign in with Google</span>
-          </button>
-          <label style="margin-top:8px; margin-bottom:2px;">🔒 <span id="accountSecurityLabel">Account Security</span></label>
-          <div class="info" id="accountSecurityNote" style="display:block; margin-top:0;"><span id="accountSecurityNoteText">We only use your name and email from Google to create your free account - we never see or store your Google password. Signing in just lets your Premium subscription follow you to any device you sign in on.</span></div>
-          <div id="accountError" class="error-text hidden" style="margin-top:8px;"></div>
-        </div>
-
-        <div id="accountSignedIn" class="hidden">
-          <div class="info" style="display:block; margin-top:12px;"><span id="accountSignedInAs">Signed in as</span> <strong id="accountEmail"></strong></div>
-
-          <div id="accountStatusFree" class="info hidden" style="display:block; margin-top:8px;"><span id="accountStatusFreeText">Your subscription: Basic</span></div>
-          <div id="accountStatusPremium" class="success-text hidden" style="margin-top:8px;">✅ <span id="accountStatusPremiumText">Your subscription: Premium</span> <span id="accountPremiumUntil"></span></div>
-
-          <div style="margin-top:16px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px;">
-            <label id="redeemCodeLabel" style="margin-top:0;">Redeem Code</label>
-            <input id="redeemCodeInput" type="text" placeholder="Enter code" style="width:100%; margin-bottom:8px;">
-            <button type="button" class="small-btn" id="redeemCodeButton" onclick="redeemCodeNow()" style="width:100%; background:var(--gold); color:var(--ink);"><span id="redeemCodeButtonLabel">Redeem</span></button>
-            <div id="redeemCodeError" class="error-text hidden" style="margin-top:8px;"></div>
-            <div id="redeemCodeSuccess" class="success-text hidden" style="margin-top:8px;"></div>
-          </div>
-
-          <button type="button" class="account-signout-btn" onclick="signOutAccount()"><span id="accountSignOutButton">Sign Out</span></button>
-        </div>
-        <!-- OFFLINE-SWAP:PREMIUM-PANEL:END -->
-
-        <!-- OFFLINE-STRIP:BUY-PREMIUM-BUTTON:START -->
-        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--line);">
-          <button type="button" class="small-btn" onclick="openBuyPremiumModal()" id="buyPremiumBtn" style="width:100%;">💳 <span id="buyPremiumButtonLabel">Buy Premium Code</span></button>
-        </div>
-        <!-- OFFLINE-STRIP:BUY-PREMIUM-BUTTON:END -->
       </div>
 
     </div>
@@ -1294,7 +1193,7 @@ Website: Goonlinepos.com</textarea>
       <li>Data is saved only on that computer, with no cloud sync - back up regularly from Settings → Backup.</li>
     </ul>
     <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="offlineModalUpdateTitle">Getting updates later</h3>
-    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime while your Premium is active to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
+    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0 0 16px;" id="offlineModalUpdateText">Come back and download again anytime to get the latest version. To carry your data over: on the old copy, go to Settings → Backup → Download Full Backup, then on the new copy use Settings → Backup → Restore from Backup to load it back in.</p>
     <div style="margin:0 0 14px; padding:12px; background:var(--gold-tint); border:1px solid #f0dfb0; border-radius:8px;">
       <label style="display:flex; align-items:flex-start; gap:8px; font-size:12.5px; line-height:1.55; cursor:pointer;">
         <input type="checkbox" id="offlineAgreeCheckbox" onchange="handleOfflineAgreeChange()" style="margin-top:2px;">
@@ -1312,59 +1211,6 @@ Website: Goonlinepos.com</textarea>
 </div>
 <!-- OFFLINE-STRIP:DOWNLOAD-MODAL:END -->
 
-<!-- OFFLINE-STRIP:BUY-PREMIUM-MODAL:START -->
-<div id="buyPremiumOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeBuyPremiumModal()">
-<div class="scanner-modal" style="max-width:420px; max-height:85vh; display:flex; flex-direction:column;">
-  <div class="scanner-header">
-    <h2 id="buyPremiumModalTitle">Buy Premium Code</h2>
-    <button onclick="closeBuyPremiumModal()">✕</button>
-  </div>
-  <div style="padding:18px 20px; overflow-y:auto;">
-    <h3 style="font-family:var(--font-display); font-size:14.5px; margin:0 0 8px;" id="buyPremiumBenefitsTitle">Why go Premium?</h3>
-    <ul style="margin:0 0 18px; padding-left:20px; font-size:13.5px; line-height:1.9; color:var(--ink-soft);">
-      <li id="buyPremiumBenefit1">Company logo on receipts</li>
-      <li id="buyPremiumBenefit2">Editable receipt numbers & prefix</li>
-      <li id="buyPremiumBenefit3">Customer-facing screen</li>
-      <li id="buyPremiumBenefit4">Inventory tracking with export</li>
-      <li id="buyPremiumBenefit5">Downloadable offline version</li>
-      <li id="buyPremiumBenefit6">Ad-free - no ads while using the app</li>
-    </ul>
-    <div class="pricing-tiers" id="buyPremiumTiers">
-      <div class="pricing-tier">
-        <div>
-          <div class="pt-name" id="buyPremiumPlan1Name">1 Month - $3.99</div>
-          <div class="pt-sub" id="buyPremiumPlan1Sub">Billed once</div>
-        </div>
-        <div class="paypal-btn-box" id="paypalButtonBox1"></div>
-      </div>
-      <div class="pricing-tier">
-        <div>
-          <div class="pt-name" id="buyPremiumPlan2Name">3 Months - $9.99</div>
-          <div class="pt-sub" id="buyPremiumPlan2Sub">$3.33 / month</div>
-        </div>
-        <div class="paypal-btn-box" id="paypalButtonBox2"></div>
-      </div>
-      <div class="pricing-tier pt-best">
-        <div>
-          <div class="pt-name"><span id="buyPremiumPlan3Name">1 Year - $19.99</span><span class="pt-badge" id="buyPremiumPlan3Badge">Best Value</span></div>
-          <div class="pt-sub" id="buyPremiumPlan3Sub">$1.67 / month</div>
-        </div>
-        <div class="paypal-btn-box" id="paypalButtonBox3"></div>
-      </div>
-    </div>
-    <div id="paypalSignInPrompt" class="info hidden" style="display:block; margin-bottom:14px;">🔑 <span id="paypalSignInPromptText">Sign in with Google above to pay with PayPal.</span></div>
-    <div id="paypalStatusBox" class="hidden" style="margin-bottom:14px;"></div>
-    <ul style="margin:0 0 18px; padding-left:20px; font-size:13.5px; line-height:1.9;">
-      <li id="buyPremiumFeature1">Redeem to extend your subscription</li>
-      <li id="buyPremiumFeature2">Works on any device you sign in on</li>
-      <li id="buyPremiumFeature3">Non-refundable</li>
-    </ul>
-    <p style="font-size:13px; color:var(--ink-soft); line-height:1.65; margin:0;" id="buyPremiumContactText">Prefer another way to pay, or PayPal not working for you? <a href="contact" target="_blank" rel="noopener">Contact us</a> and we'll get you set up with a code instead.</p>
-  </div>
-</div>
-</div>
-<!-- OFFLINE-STRIP:BUY-PREMIUM-MODAL:END -->
-
 <div id="howToUseOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeHowToUse()">
 <div class="scanner-modal" style="max-width:640px; max-height:85vh; display:flex; flex-direction:column;">
   <div class="scanner-header">
@@ -1372,19 +1218,18 @@ Website: Goonlinepos.com</textarea>
     <button onclick="closeHowToUse()">✕</button>
   </div>
   <div style="padding:18px 20px; overflow-y:auto;" class="how-to-use-body">
-    <p style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 18px;">A quick walkthrough of every setting, from your Store details down to Premium.</p>
+    <p style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 18px;">A quick walkthrough of every setting, from your Store details to Backup.</p>
 
     <div class="htu-item">
       <span class="htu-num">MAIN SCREEN</span>
       <h3>Your everyday screen</h3>
-      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the toolbar for more room). Tap a product to add it to the cart, search or filter by category, and use the header buttons to reach Premium, Backup, Settings, End of Day, Print, Inventory, Customer Screen, New Sale, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle here and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
+      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the toolbar for more room). Tap a product to add it to the cart, search or filter by category, and use the header buttons to reach Backup, Settings, End of Day, Inventory, Customer Screen, New Sale, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle here and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
     </div>
 
     <div class="htu-item">
       <span class="htu-num">HEADER → CUSTOMER SCREEN</span>
       <h3>Customer Screen</h3>
       <p>Show customers exactly what they're ordering and what they owe, on a second monitor or tablet facing them - items and totals update live as you ring things up, and it shows a "Thank you" screen with the payment breakdown once the sale completes.</p>
-      <span class="premium-note">Customer Screen is a Premium feature</span>
     </div>
 
     <div class="htu-item">
@@ -1397,14 +1242,12 @@ Website: Goonlinepos.com</textarea>
       <span class="htu-num">SETTINGS → STORE</span>
       <h3>Store</h3>
       <p>Set your store name and details - address, phone, email, website, anything you want printed at the top of every receipt. Upload your own logo here too, so receipts look like they came from your actual business.</p>
-      <span class="premium-note">Logo upload is a Premium feature</span>
     </div>
 
     <div class="htu-item">
       <span class="htu-num">SETTINGS → DOCUMENT</span>
       <h3>Document</h3>
       <p>Choose whether you're printing a Receipt, Invoice, or Payment Received. The current receipt number lives here too - editable, with a custom prefix if you want one (like INV-000123).</p>
-      <span class="premium-note">Editable receipt number & prefix are Premium features</span>
     </div>
 
     <div class="htu-item">
@@ -1465,7 +1308,6 @@ Website: Goonlinepos.com</textarea>
       <span class="htu-num">SETTINGS → INVENTORY</span>
       <h3>Inventory</h3>
       <p>Stock is grouped by category, with SKU and total value shown per item. Numbers deduct automatically with every sale - edit any figure directly to correct it or restock, and download a full inventory report to Excel whenever you need it.</p>
-      <span class="premium-note">Editing stock & exporting reports are Premium features</span>
     </div>
 
     <div class="htu-item">
@@ -1477,14 +1319,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">SETTINGS → BACKUP → OFFLINE VERSION</span>
       <h3>Offline Version</h3>
-      <p>Download a complete copy of the app that runs with zero internet - a shop computer with no connection, a spare install, or just a backup plan. It's built fresh from the live site each time you click Download, so it's always current, and it includes the Customer Screen, End of Day report, and USB barcode scanner support. Come back and download again anytime your Premium is active to grab the latest version; carry your data over with Backup → Download Full Backup on the old copy, then Restore from Backup on the new one.</p>
-      <span class="premium-note">Downloading the offline version is a Premium feature</span>
-    </div>
-
-    <div class="htu-item">
-      <span class="htu-num">SETTINGS → PREMIUM</span>
-      <h3>Premium</h3>
-      <p>Premium features stay visible throughout the app with a gold badge, even before you unlock anything - you can see exactly what's available. On the live site, sign in with Google and redeem a code here to unlock them - Premium then follows your account to any device you sign in on, not just this one. The offline version uses its own separate code entered directly in this same panel, with no sign-in needed.</p>
+      <p>Download a complete copy of the app that runs with zero internet - a shop computer with no connection, a spare install, or just a backup plan. It's built fresh from the live site each time you click Download, so it's always current, and it includes the Customer Screen, End of Day report, and USB barcode scanner support. Come back and download again anytime to grab the latest version; carry your data over with Backup → Download Full Backup on the old copy, then Restore from Backup on the new one.</p>
     </div>
   </div>
 </div>
@@ -1495,7 +1330,6 @@ Website: Goonlinepos.com</textarea>
 <script src="modules/translations.js"></script>
 <script src="modules/usb-scanner.js"></script>
 <script src="modules/receipt.js"></script>
-<!-- OFFLINE-STRIP:ACCOUNT-SCRIPT:START --><script src="vendor/supabase.min.js"></script><script src="modules/account.js"></script><!-- OFFLINE-STRIP:ACCOUNT-SCRIPT:END -->
 <!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:START --><script src="modules/offline-builder.js"></script><!-- OFFLINE-STRIP:OFFLINE-BUILDER-SCRIPT:END -->
 <script>
 
@@ -1560,9 +1394,6 @@ function openSettings() {
 }
 function openBackupSettings() {
   openSettingsTab("backup");
-}
-function openAccountSettings() {
-  openSettingsTab("premium");
 }
 function openSettingsTab(name) {
   document.getElementById("settingsOverlay").classList.remove("hidden");
@@ -1905,91 +1736,12 @@ function resetRemoveLogoButton() {
     if (btn) { btn.textContent = tr("removeLogoButton"); btn.classList.remove("confirm-pending"); }
   });
 }
-// Called only from the settled Premium-status points in modules/account.js
-// (refreshAccountState()/signOutAccount()) - never from applyPremiumLocks()
-// itself, since that also fires with premiumUnlocked still at its default
-// "false" before initPremiumSystem() has actually determined real status,
-// which would otherwise wipe a Premium user's logo before their status is
-// even known. A no-op whenever premiumUnlocked is true, or the current
-// logo is already the default (never customized, or already reverted).
-function revertLogoToDefaultIfNotPremium() {
-  if (premiumUnlocked) return;
-  if (!logoDataUrl || logoDataUrl === DEFAULT_LOGO_DATA_URL) return;
-  logoDataUrl = DEFAULT_LOGO_DATA_URL;
-  storageSet("pos-logo", DEFAULT_LOGO_DATA_URL);
-  renderLogo();
-}
 async function loadSalesHistory() {
   const raw = await storageGet("pos-sales-history");
   try { salesHistory = raw ? JSON.parse(raw) : []; } catch (e) { salesHistory = []; }
   renderSalesHistoryPanel();
 }
 async function saveSalesHistoryToStorage() { await storageSet("pos-sales-history", JSON.stringify(salesHistory)); }
-let premiumUnlocked = false;
-
-/* OFFLINE-SWAP:PREMIUM-ACTIVATION:START */
-async function initPremiumSystem() {
-  await initAccount();
-}
-/* OFFLINE-SWAP:PREMIUM-ACTIVATION:END */
-
-function applyPremiumLocks() {
-  const logoInput = document.getElementById("logoFileInput");
-  if (logoInput) logoInput.disabled = !premiumUnlocked;
-  const logoLockMsg = document.getElementById("logoLockMsg");
-  if (logoLockMsg) logoLockMsg.classList.toggle("hidden", premiumUnlocked);
-  const quickLogoInput = document.getElementById("quickLogoFileInput");
-  if (quickLogoInput) quickLogoInput.disabled = !premiumUnlocked;
-
-  const receiptNumInput = document.getElementById("receiptNumberInput");
-  const receiptPrefixInput = document.getElementById("receiptPrefixInput");
-  if (receiptNumInput) receiptNumInput.disabled = !premiumUnlocked;
-  if (receiptPrefixInput) receiptPrefixInput.disabled = !premiumUnlocked;
-  const receiptLockMsg = document.getElementById("receiptNumberLockMsg");
-  if (receiptLockMsg) receiptLockMsg.classList.toggle("hidden", premiumUnlocked);
-
-  const quickReceiptNumInput = document.getElementById("quickReceiptNumberInput");
-  const quickReceiptPrefixInput = document.getElementById("quickReceiptPrefixInput");
-  if (quickReceiptNumInput) quickReceiptNumInput.disabled = !premiumUnlocked;
-  if (quickReceiptPrefixInput) quickReceiptPrefixInput.disabled = !premiumUnlocked;
-
-  const invExportBtn = document.getElementById("inventoryExportButton");
-  if (invExportBtn) invExportBtn.disabled = !premiumUnlocked;
-  const invLockMsg = document.getElementById("inventoryLockMsg");
-  if (invLockMsg) invLockMsg.classList.toggle("hidden", premiumUnlocked);
-  document.querySelectorAll(".inv-row-stock input").forEach(function(inp) { inp.disabled = !premiumUnlocked; });
-
-  const csLockMsg = document.getElementById("customerScreenLockMsg");
-  const csContent = document.getElementById("customerScreenUnlockedContent");
-  if (csLockMsg && csContent) {
-    csLockMsg.classList.toggle("hidden", premiumUnlocked);
-    csContent.classList.toggle("hidden", !premiumUnlocked);
-  }
-
-  const offlineBtn = document.getElementById("offlineDownloadButton");
-  if (offlineBtn) offlineBtn.disabled = !premiumUnlocked;
-  const offlineLockMsg = document.getElementById("offlineLockMsg");
-  if (offlineLockMsg) offlineLockMsg.classList.toggle("hidden", premiumUnlocked);
-
-  // Signed in but on Basic (e.g. an expired trial) should not see a "sign
-  // in to get 15 days free" pitch - they've already signed in and already
-  // used it. typeof-guarded since currentUser only exists when
-  // modules/account.js is loaded (never true on the offline build, where
-  // this whole element is OFFLINE-STRIP'd anyway).
-  const promoNotice = document.getElementById("premiumPromoNotice");
-  const alreadySignedIn = typeof currentUser !== "undefined" && !!currentUser;
-  if (promoNotice) promoNotice.classList.toggle("hidden", premiumUnlocked || premiumPromoDismissed || alreadySignedIn);
-
-  renderAppTitleBadge();
-}
-async function renderAppTitleBadge() {
-  const badge = document.getElementById("premiumBadgeAppTitle");
-  if (badge) {
-    badge.textContent = premiumUnlocked ? tr("premiumBadgeLabel") : tr("basicBadgeLabel");
-    badge.classList.toggle("premium-badge", premiumUnlocked);
-    badge.classList.toggle("basic-badge", !premiumUnlocked);
-  }
-}
 
 let receiptPrefix = "";
 let receiptCounterValue = 0;
@@ -2745,18 +2497,6 @@ async function dismissBackupNotice() {
   await storageSet("pos-backup-notice-dismissed", "1");
 }
 
-let premiumPromoDismissed = false;
-async function loadPremiumPromoNoticeState() {
-  premiumPromoDismissed = (await storageGet("pos-premium-promo-dismissed")) === "1";
-  if (typeof applyPremiumLocks === "function") applyPremiumLocks();
-}
-async function dismissPremiumPromoNotice() {
-  premiumPromoDismissed = true;
-  const notice = document.getElementById("premiumPromoNotice");
-  if (notice) notice.classList.add("hidden");
-  await storageSet("pos-premium-promo-dismissed", "1");
-}
-
 function buildSalesExportRows(list) {
   const source = list || salesHistory;
   const parentRows = source.map(function(s) {
@@ -2868,90 +2608,6 @@ function exportSalesToExcel() {
   downloadTextFile("sales-report-items-" + suffix + ".csv", rowsToCsv(childRows));
 }
 
-/* OFFLINE-STRIP:BUY-PREMIUM-JS:START */
-function openBuyPremiumModal() {
-  document.getElementById("buyPremiumOverlay").classList.remove("hidden");
-  renderPaypalArea();
-}
-function closeBuyPremiumModal() {
-  document.getElementById("buyPremiumOverlay").classList.add("hidden");
-}
-
-const PAYPAL_CLIENT_ID = "BAAFzMFCWyqW2b8IO4QHQaEGMgsc_08x2mx5EPGYSi9R2VPzdqKsdEjNeGzzf0h-_25fd7jES7U2H7jdgU";
-const PAYPAL_VERIFY_URL = "https://script.google.com/macros/s/AKfycbzcVVm0OLAiUlDQcNyD3bRmadKqKFu007oRSSDdSLuZkX23-Q0asboLGK68lvtm0mLuVQ/exec";
-const PAYPAL_PLANS = [
-  { boxId: "paypalButtonBox1", amount: "3.99", label: "1 Month" },
-  { boxId: "paypalButtonBox2", amount: "9.99", label: "3 Months" },
-  { boxId: "paypalButtonBox3", amount: "19.99", label: "1 Year" }
-];
-let paypalSdkLoading = false;
-let paypalButtonsRendered = false;
-
-function renderPaypalArea() {
-  const signInPrompt = document.getElementById("paypalSignInPrompt");
-  if (!currentUser) {
-    if (signInPrompt) signInPrompt.classList.remove("hidden");
-    return;
-  }
-  if (signInPrompt) signInPrompt.classList.add("hidden");
-  if (paypalButtonsRendered) return;
-  if (window.paypal) { renderPaypalButtons(); return; }
-  if (paypalSdkLoading) return;
-  paypalSdkLoading = true;
-  const script = document.createElement("script");
-  script.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(PAYPAL_CLIENT_ID) + "&currency=USD&intent=capture";
-  script.onload = function() { renderPaypalButtons(); };
-  script.onerror = function() { paypalSdkLoading = false; showPaypalStatus(tr("paypalLoadError"), true); };
-  document.head.appendChild(script);
-}
-
-function renderPaypalButtons() {
-  if (paypalButtonsRendered || !window.paypal || !currentUser) return;
-  paypalButtonsRendered = true;
-  PAYPAL_PLANS.forEach(function(plan) {
-    paypal.Buttons({
-      style: { layout: "horizontal", tagline: false, height: 35, label: "pay" },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: { value: plan.amount, currency_code: "USD" },
-            custom_id: currentUser.id,
-            description: "GoOnlinePOS Premium - " + plan.label
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        showPaypalStatus(tr("paypalProcessing"), false);
-        return actions.order.capture().then(function() {
-          return fetch(PAYPAL_VERIFY_URL, {
-            method: "POST",
-            body: JSON.stringify({ orderID: data.orderID, userId: currentUser.id })
-          }).then(function(res) { return res.json(); }).then(function(result) {
-            if (result && result.success) {
-              showPaypalStatus(tr("paypalSuccess"), false);
-              refreshAccountState();
-            } else {
-              showPaypalStatus(tr("paypalVerifyFailed"), true);
-            }
-          });
-        });
-      },
-      onError: function() {
-        showPaypalStatus(tr("paypalError"), true);
-      }
-    }).render("#" + plan.boxId);
-  });
-}
-
-function showPaypalStatus(text, isError) {
-  const box = document.getElementById("paypalStatusBox");
-  if (!box) return;
-  box.className = isError ? "error-text" : "success-text";
-  box.textContent = text;
-  box.classList.remove("hidden");
-}
-/* OFFLINE-STRIP:BUY-PREMIUM-JS:END */
-
 function openHowToUse() {
   document.getElementById("howToUseOverlay").classList.remove("hidden");
 }
@@ -2984,7 +2640,6 @@ function broadcastCustomerScreenState(state) {
 }
 
 function broadcastCustomerScreenOrder() {
-  if (!premiumUnlocked) return;
   const totals = computeTotals();
   broadcastCustomerScreenState({
     stage: "ordering",
@@ -3003,7 +2658,6 @@ function broadcastCustomerScreenOrder() {
 }
 
 function broadcastCustomerScreenCompleted(record) {
-  if (!premiumUnlocked) return;
   broadcastCustomerScreenState({
     stage: "completed",
     lang: currentLang(),
@@ -3056,11 +2710,21 @@ function openCreatePricing() {
 }
 /* OFFLINE-STRIP:CREATE-PRICING-JS:END */
 
+/* OFFLINE-STRIP:SUPPORT-COFFEE-JS:START */
+// PayPal's standard "Donate" button link - lets the visitor type in whatever
+// amount they want to send to this PayPal account, no separate paypal.me
+// username needed. This is a plain voluntary support link, not tied to any
+// feature or account status.
+const SUPPORT_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS";
+function openBuyMeCoffee() {
+  window.open(SUPPORT_PAYPAL_URL, "_blank");
+}
+/* OFFLINE-STRIP:SUPPORT-COFFEE-JS:END */
+
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
   document.getElementById("customerScreenOverlay").classList.remove("hidden");
-  applyPremiumLocks();
   broadcastCustomerScreenOrder();
 }
 function closeCustomerScreenPanel() {
@@ -3411,8 +3075,6 @@ function renderInventoryList() {
       list.appendChild(row);
     });
   });
-
-  document.querySelectorAll(".inv-row-stock input").forEach(function(inp) { inp.disabled = !premiumUnlocked; });
 }
 
 async function handleInventoryStockEdit(index, rawValue) {
@@ -3627,15 +3289,14 @@ function changeLanguage() {
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
     quickLanguageLabel: "languageLabel",
     storeLogoLabel: "storeLogoLabel", logoPreviewEmptyText: "logoEmptyLabel", removeLogoButton: "removeLogoButton", storeLogoInfo: "storeLogoInfo",
-    quickStoreLogoLabel: "storeLogoLabel", quickPremiumBadgeLogo: "premiumBadgeLabel",
+    quickStoreLogoLabel: "storeLogoLabel",
     quickLogoPreviewEmptyText: "logoEmptyLabel", quickRemoveLogoButton: "removeLogoButton",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
-    endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel", premiumToolbarLabel: "premiumToolbarLabel",
-    backupShortcutLabel: "backupShortcutLabel", premiumShortcutLabel: "premiumShortcutLabel",
+    endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
+    backupShortcutLabel: "backupShortcutLabel", supportCoffeeLabel: "supportCoffeeLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
     quickReceiptNumberLabel: "receiptNumberLabel", quickReceiptPrefixLabel: "receiptPrefixLabel",
-    quickPremiumBadgeReceiptNumber: "premiumBadgeLabel", quickPremiumBadgeReceiptPrefix: "premiumBadgeLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",
     taxTitle: "taxTitle", taxNameLabel: "taxNameLabel", taxRateLabel: "taxRateLabel", discountLabel: "discountLabel",
     discountMovedInfo: "discountMovedInfo",
@@ -3660,8 +3321,7 @@ function changeLanguage() {
     backupNoticeText: "backupNoticeText", backupNoticeButton: "backupNoticeButton",
     receiptItemHeader: "item", receiptQtyHeader: "qty", receiptTotalHeader: "total",
     customerScreenButtonLabel: "customerScreenButtonLabel", addProductStockLabel: "addProductStockLabel",
-    inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo", premiumBadgeLogo: "premiumBadgeLabel", premiumBadgeReceiptNumber: "premiumBadgeLabel",
-    premiumBadgeReceiptPrefix: "premiumBadgeLabel", premiumBadgeCustomerScreen: "premiumBadgeLabel", premiumBadgeInventory: "premiumBadgeLabel",
+    inventoryTitle: "inventoryTitle", inventoryInfo: "inventoryInfo",
     customerScreenTitle: "customerScreenTitle", customerScreenIntro: "customerScreenIntro", copyCustomerScreenUrlBtn: "copyCustomerScreenUrlBtn", customerScreenCopiedMsg: "customerScreenCopiedMsg",
     customerScreenGuideBtnLabel: "customerScreenGuideBtnLabel", customerScreenGuideTitle: "customerScreenGuideTitle",
     guideMethod1Title: "guideMethod1Title", guideMethod2Title: "guideMethod2Title",
@@ -3673,25 +3333,7 @@ function changeLanguage() {
     saleDetailGrandLabel: "saleDetailGrandLabel", saleDetailReceivedLabel: "saleDetailReceivedLabel", saleDetailChangeLabel: "saleDetailChangeLabel",
     saleDetailReprintLabel: "saleDetailReprintLabel", saleDetailSaveLabel: "saleDetailSaveLabel", inventoryExportButtonLabel: "inventoryExportButtonLabel",
     salesExportFromLabel: "salesExportFromLabel", salesExportToLabel: "salesExportToLabel",
-    premiumTabLabel: "premiumTabLabel", premiumPanelTitle: "premiumPanelTitle", premiumPanelInfo: "premiumPanelInfo", premiumActiveLabel: "premiumActiveLabel",
-    premiumCodeLabel: "premiumCodeLabel", premiumActivateBtn: "premiumActivateBtn",
-    redeemCodePromptTitle: "redeemCodePromptTitle", redeemCodePromptText: "redeemCodePromptText",
-    accountPanelTitle: "accountPanelTitle", accountPanelInfo: "accountPanelInfo", accountSignInButton: "accountSignInButton",
-    accountSignedInAs: "accountSignedInAs", accountStatusFreeText: "accountStatusFreeText", accountStatusPremiumText: "accountStatusPremiumText",
-    redeemCodeLabel: "redeemCodeLabel", redeemCodeButtonLabel: "redeemCodeButton", accountSignOutButton: "accountSignOutButton",
-    accountSecurityLabel: "accountSecurityLabel", accountSecurityNoteText: "accountSecurityNoteText", accountHeaderSignOutLabel: "accountSignOutButton", accountQuickSignInLabel: "accountQuickSignInLabel",
-    premiumPromoText: "premiumPromoText", premiumPromoButton: "premiumPromoButton",
-    logoLockMsgText: "logoLockMsgText", receiptNumberLockMsgText: "receiptNumberLockMsgText", inventoryLockMsgText: "inventoryLockMsgText", customerScreenLockMsgText: "customerScreenLockMsgText",
-    offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel", offlineLockMsgText: "offlineLockMsgText",
-    buyPremiumButtonLabel: "buyPremiumButtonLabel", buyPremiumModalTitle: "buyPremiumModalTitle",
-    buyPremiumPlan1Name: "buyPremiumPlan1Name", buyPremiumPlan1Sub: "buyPremiumPlan1Sub",
-    buyPremiumPlan2Name: "buyPremiumPlan2Name", buyPremiumPlan2Sub: "buyPremiumPlan2Sub",
-    buyPremiumPlan3Name: "buyPremiumPlan3Name", buyPremiumPlan3Sub: "buyPremiumPlan3Sub", buyPremiumPlan3Badge: "buyPremiumPlan3Badge",
-    buyPremiumFeature1: "buyPremiumFeature1", buyPremiumFeature2: "buyPremiumFeature2", buyPremiumFeature3: "buyPremiumFeature3",
-    buyPremiumBenefitsTitle: "buyPremiumBenefitsTitle", buyPremiumBenefit1: "buyPremiumBenefit1", buyPremiumBenefit2: "buyPremiumBenefit2",
-    buyPremiumBenefit3: "buyPremiumBenefit3", buyPremiumBenefit4: "buyPremiumBenefit4", buyPremiumBenefit5: "buyPremiumBenefit5", buyPremiumBenefit6: "buyPremiumBenefit6",
-    paypalSignInPromptText: "paypalSignInPromptText",
-    premiumBadgeOffline: "premiumBadgeLabel",
+    offlineDownloadLabel: "offlineDownloadLabel", offlineDownloadInfo: "offlineDownloadInfo", offlineDownloadButtonLabel: "offlineDownloadButtonLabel",
     offlineModalTitle: "offlineModalTitle", offlineModalHowTitle: "offlineModalHowTitle", offlineModalUpdateTitle: "offlineModalUpdateTitle", offlineModalUpdateText: "offlineModalUpdateText",
     offlineCancelBtnLabel: "offlineCancelBtnLabel", offlineConfirmDownloadBtnLabel: "offlineConfirmDownloadBtnLabel",
     subtotalLabel: "subtotal", totalLabel: "total", receiptDiscountLabel: "discount",
@@ -3726,8 +3368,6 @@ function changeLanguage() {
   if (offlineHowList) offlineHowList.innerHTML = tr("offlineModalHowList");
   const offlineAgree = document.getElementById("offlineAgreeLabel");
   if (offlineAgree) offlineAgree.innerHTML = tr("offlineAgreeLabel");
-  const buyPremiumContact = document.getElementById("buyPremiumContactText");
-  if (buyPremiumContact) buyPremiumContact.innerHTML = tr("buyPremiumContactText");
   const offlineProgress = document.getElementById("offlineDownloadProgress");
   if (offlineProgress) offlineProgress.textContent = tr("offlineDownloadPreparing");
 
@@ -3761,9 +3401,7 @@ function changeLanguage() {
   renderSalesHistoryPanel();
   renderCashierSelect();
   renderInventoryList();
-  if (typeof renderPremiumStatus === "function") renderPremiumStatus();
-  if (typeof renderWelcomeBadge === "function") renderWelcomeBadge();
-  renderAppTitleBadge();}
+}
 
 function escapeHtml(text) {
   const div = document.createElement("div");
@@ -3783,12 +3421,10 @@ async function init() {
   await loadLogo();
   await loadSalesHistory();
   await loadBackupNoticeState();
-  await loadPremiumPromoNoticeState();
   await loadQuickReceiptSettingsState();
   await loadReceiptPrefix();
   await loadPanelSplit();
   await loadSidebarState();
-  await initPremiumSystem();
   await startFirstSale();
   changePaperSize();
   updateZoom();

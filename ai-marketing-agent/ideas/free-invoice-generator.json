@@ -1,0 +1,70 @@
+{
+  "idea_id": "free-invoice-generator",
+  "source_feature_id": "free-invoice-generator",
+  "hook": "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free.",
+  "topic": "Free Invoice Generator (standalone tool)",
+  "target_audience": "Freelancers, small service businesses, and shop owners who occasionally invoice rather than ring up a sale.",
+  "problem": "Needing to bill a customer on net terms instead of a same-day cash sale, without dedicated invoicing software.",
+  "solution": "A free-standing invoice builder (invoice-generator.html) for formal, net-terms billing to a customer - separate from POS checkout receipts.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free.",
+      "voiceover": "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Needing to bill a customer on net terms instead of a same-day cash sale, without dedicated invoicing software.",
+      "voiceover": "Needing to bill a customer on net terms instead of a same-day cash sale, without dedicated invoicing software."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Free Invoice Generator (standalone tool)",
+      "voiceover": "Here's how GoOnlinePOS handles it: A free-standing invoice builder (invoice-generator.html) for formal, net-terms billing to a customer - separate from POS checkout receipts."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Send a proper, professional invoice to a customer on net terms - not every sale is a same-day cash sale.",
+      "voiceover": "Send a proper, professional invoice to a customer on net terms - not every sale is a same-day cash sale."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Use it free, right now, no signup - linked from GoOnlinePOS.com."
+    }
+  ],
+  "cta": "Use it free, right now, no signup - linked from GoOnlinePOS.com.",
+  "visual_scenes": [
+    "Screen recording: open invoice-generator.html in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A free-standing invoice builder (invoice-generator.html) for formal, net-terms billing to a customer - separate from POS checkout receipts.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free. Send a proper, professional invoice to a customer on net terms - not every sale is a same-day cash sale.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#FreeInvoice"
+  ],
+  "suggested_title": "Free Invoice Generator (standalone tool) in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "no",
+  "evidence": [
+    {
+      "file": "invoice-generator.html",
+      "pattern": "invFrom",
+      "found": true
+    },
+    {
+      "file": "invoice-generator.html",
+      "pattern": "recalcTotals",
+      "found": true
+    }
+  ]
+}

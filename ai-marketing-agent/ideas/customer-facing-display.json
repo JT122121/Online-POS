@@ -1,0 +1,70 @@
+{
+  "idea_id": "customer-facing-display",
+  "source_feature_id": "customer-facing-display",
+  "hook": "Give your customer their own screen showing exactly what they're being charged.",
+  "topic": "Customer-Facing Order Screen",
+  "target_audience": "Retail and food-service shop owners who want a supermarket-style checkout experience - Premium subscribers.",
+  "problem": "A customer at the counter has no way to see what they're actually being charged until the receipt prints.",
+  "solution": "A second, lightweight page (customer.html) mirrors the live cart/order state in real time, meant for a second monitor or a screen facing the customer. This is a Premium feature - app.html's applyPremiumLocks() keeps it locked until Premium is active.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Give your customer their own screen showing exactly what they're being charged.",
+      "voiceover": "Give your customer their own screen showing exactly what they're being charged."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "A customer at the counter has no way to see what they're actually being charged until the receipt prints.",
+      "voiceover": "A customer at the counter has no way to see what they're actually being charged until the receipt prints."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Customer-Facing Order Screen",
+      "voiceover": "Here's how GoOnlinePOS handles it: A second, lightweight page (customer.html) mirrors the live cart/order state in real time, meant for a second monitor or a screen facing the customer. This is a Premium feature - app.html's applyPremiumLocks() keeps it locked until Premium is active."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Let the customer see exactly what's being rung up and the running total, the way a supermarket checkout does.",
+      "voiceover": "Let the customer see exactly what's being rung up and the running total, the way a supermarket checkout does."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "This one's a Premium feature - try GoOnlinePOS free, then start your 15-day Premium trial with just a Google sign-in."
+    }
+  ],
+  "cta": "This one's a Premium feature - try GoOnlinePOS free, then start your 15-day Premium trial with just a Google sign-in.",
+  "visual_scenes": [
+    "Screen recording: open app.html header -> Customer Screen, customer.html in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A second, lightweight page (customer.html) mirrors the live cart/order state in real time, meant for a second monitor or a screen facing the customer. This is a Premium feature - app.html's applyPremiumLocks() keeps it locked until Premium is active.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Give your customer their own screen showing exactly what they're being charged. Let the customer see exactly what's being rung up and the running total, the way a supermarket checkout does.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#CustomerExperience"
+  ],
+  "suggested_title": "Customer-Facing Order Screen in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "yes",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function customerScreenUrl\\(\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "function broadcastCustomerScreenState\\(state\\)",
+      "found": true
+    }
+  ]
+}

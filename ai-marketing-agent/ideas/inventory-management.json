@@ -1,0 +1,70 @@
+{
+  "idea_id": "inventory-management",
+  "source_feature_id": "inventory-management",
+  "hook": "Track your stock without relying on manual spreadsheets.",
+  "topic": "Inventory Management",
+  "target_audience": "Shop owners who track their own inventory - convenience stores, small retail, home-based sellers.",
+  "problem": "Still counting stock by hand or guessing what's left on the shelf?",
+  "solution": "Optional per-product stock tracking. Stock decrements automatically on every sale and can be corrected/restocked from Settings -> Inventory.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "Track your stock without relying on manual spreadsheets.",
+      "voiceover": "Track your stock without relying on manual spreadsheets."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Still counting stock by hand or guessing what's left on the shelf?",
+      "voiceover": "Still counting stock by hand or guessing what's left on the shelf?"
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Inventory Management",
+      "voiceover": "Here's how GoOnlinePOS handles it: Optional per-product stock tracking. Stock decrements automatically on every sale and can be corrected/restocked from Settings -> Inventory."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Know what's actually left on the shelf without a separate spreadsheet, and never oversell an item you're out of.",
+      "voiceover": "Know what's actually left on the shelf without a separate spreadsheet, and never oversell an item you're out of."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "Try it free at GoOnlinePOS.com - Viewing and tracking stock is free; editing stock numbers or exporting the inventory list requires Premium (see app.html's applyPremiumLocks())."
+    }
+  ],
+  "cta": "Try it free at GoOnlinePOS.com - Viewing and tracking stock is free; editing stock numbers or exporting the inventory list requires Premium (see app.html's applyPremiumLocks()).",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Inventory in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: Optional per-product stock tracking. Stock decrements automatically on every sale and can be corrected/restocked from Settings -> Inventory.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "Track your stock without relying on manual spreadsheets. Know what's actually left on the shelf without a separate spreadsheet, and never oversell an item you're out of.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#InventoryManagement"
+  ],
+  "suggested_title": "Inventory Management in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "partial",
+  "evidence": [
+    {
+      "file": "app.html",
+      "pattern": "function renderInventoryList\\(\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "data-tab=\"inventory\"",
+      "found": true
+    }
+  ]
+}

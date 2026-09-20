@@ -1,0 +1,70 @@
+{
+  "idea_id": "offline-mode",
+  "source_feature_id": "offline-mode",
+  "hook": "No internet at your market stall? Download the offline version and keep selling.",
+  "topic": "Downloadable Offline POS",
+  "target_audience": "Market stall vendors, pop-up shops, and any location with unreliable internet - Premium subscribers.",
+  "problem": "Losing the ability to sell the moment the wifi drops.",
+  "solution": "A Premium feature that builds a self-contained, zero-network .zip of the entire app, live in the browser, that runs with a local Python server or directly via file:// with no internet connection required.",
+  "script": [
+    {
+      "timing": "0-3s",
+      "scene": "HOOK",
+      "on_screen_text": "No internet at your market stall? Download the offline version and keep selling.",
+      "voiceover": "No internet at your market stall? Download the offline version and keep selling."
+    },
+    {
+      "timing": "3-8s",
+      "scene": "PROBLEM",
+      "on_screen_text": "Losing the ability to sell the moment the wifi drops.",
+      "voiceover": "Losing the ability to sell the moment the wifi drops."
+    },
+    {
+      "timing": "8-20s",
+      "scene": "SOLUTION (screen recording of the real feature)",
+      "on_screen_text": "Downloadable Offline POS",
+      "voiceover": "Here's how GoOnlinePOS handles it: A Premium feature that builds a self-contained, zero-network .zip of the entire app, live in the browser, that runs with a local Python server or directly via file:// with no internet connection required."
+    },
+    {
+      "timing": "20-28s",
+      "scene": "BENEFIT",
+      "on_screen_text": "Keep selling even with no internet connection at all - a real concern for market stalls, pop-ups, and spotty-wifi locations.",
+      "voiceover": "Keep selling even with no internet connection at all - a real concern for market stalls, pop-ups, and spotty-wifi locations."
+    },
+    {
+      "timing": "28-35s",
+      "scene": "CTA",
+      "on_screen_text": "GoOnlinePOS.com",
+      "voiceover": "This one's a Premium feature - try GoOnlinePOS free, then start your 15-day Premium trial with just a Google sign-in."
+    }
+  ],
+  "cta": "This one's a Premium feature - try GoOnlinePOS free, then start your 15-day Premium trial with just a Google sign-in.",
+  "visual_scenes": [
+    "Screen recording: open app.html - Settings -> Backup -> Download Offline POS (Premium) in a real browser.",
+    "Close-up / zoomed capture of the actual UI described: A Premium feature that builds a self-contained, zero-network .zip of the entire app, live in the browser, that runs with a local Python server or directly via file:// with no internet connection required.",
+    "Cut to a simple on-screen text card stating the benefit, over a plain background matching the site's own green/gold palette.",
+    "End card: GoOnlinePOS logo + 'GoOnlinePOS.com' + the CTA text."
+  ],
+  "caption": "No internet at your market stall? Download the offline version and keep selling. Keep selling even with no internet connection at all - a real concern for market stalls, pop-ups, and spotty-wifi locations.",
+  "hashtags": [
+    "#SmallBusiness",
+    "#POS",
+    "#RetailTech",
+    "#GoOnlinePOS",
+    "#OfflinePOS"
+  ],
+  "suggested_title": "Downloadable Offline POS in GoOnlinePOS (Free POS for Small Business)",
+  "is_premium": "yes",
+  "evidence": [
+    {
+      "file": "modules/offline-builder.js",
+      "pattern": "async function confirmOfflineDownload\\(\\)",
+      "found": true
+    },
+    {
+      "file": "app.html",
+      "pattern": "OFFLINE-SWAP:PREMIUM-ACTIVATION",
+      "found": true
+    }
+  ]
+}

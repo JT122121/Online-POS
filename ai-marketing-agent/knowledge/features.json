@@ -1,0 +1,513 @@
+{
+  "generated_at": "2026-09-10T10:42:37.988769+00:00",
+  "source_repo": "/home/user/Online-POS",
+  "note": "Every feature below was hand-inspected in the real GoOnlinePOS source before being added here, and is re-verified against that same source every time this script runs. 'verified': false means an expected anchor no longer matches - the claim needs re-checking before it's used in marketing content.",
+  "feature_count": 18,
+  "verified_count": 18,
+  "drifted_count": 0,
+  "features": [
+    {
+      "feature_id": "inventory-management",
+      "feature": "Inventory Management",
+      "description": "Optional per-product stock tracking. Stock decrements automatically on every sale and can be corrected/restocked from Settings -> Inventory.",
+      "page_or_location": "app.html - Settings -> Inventory",
+      "benefit": "Know what's actually left on the shelf without a separate spreadsheet, and never oversell an item you're out of.",
+      "marketing_angles": [
+        "Track your stock without relying on manual spreadsheets.",
+        "Stock updates itself the moment you make a sale."
+      ],
+      "confidence": "high",
+      "is_premium": "partial",
+      "problem": "Still counting stock by hand or guessing what's left on the shelf?",
+      "target_audience": "Shop owners who track their own inventory - convenience stores, small retail, home-based sellers.",
+      "premium_note": "Viewing and tracking stock is free; editing stock numbers or exporting the inventory list requires Premium (see app.html's applyPremiumLocks()).",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function renderInventoryList\\(\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "data-tab=\"inventory\"",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.952602+00:00"
+    },
+    {
+      "feature_id": "product-photos",
+      "feature": "Product Photos in the Catalog",
+      "description": "Each product can carry a photo, auto-compressed client-side to a small 160px JPEG so the whole catalog still fits comfortably in browser storage.",
+      "page_or_location": "app.html - Settings -> Products / the main catalog grid",
+      "benefit": "Cashiers find items faster by sight, especially useful for food, bakery, or lookalike products.",
+      "marketing_angles": [
+        "Add a real photo to every product - find items by sight, not just by name."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Cashiers wasting time squinting at a text-only product list to find the right item.",
+      "target_audience": "Cashiers and shop staff working a busy counter, especially with lookalike products like food or bakery items.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function compressProductPhoto\\(file\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "function renderProductCatalog\\(\\)",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.955961+00:00"
+    },
+    {
+      "feature_id": "bulk-product-import",
+      "feature": "Bulk Product Import (CSV or Excel)",
+      "description": "The whole product catalog can be replaced in one step by uploading a CSV or .xlsx/.xls file (Name/Price/Category/SKU, optional Stock/TaxExempt).",
+      "page_or_location": "app.html - Settings -> Products",
+      "benefit": "Load hundreds of products in minutes from a spreadsheet you already have, instead of typing each one in by hand.",
+      "marketing_angles": [
+        "Already have your product list in Excel? Upload it and you're ready to sell."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Typing in a hundred products one at a time before you can even open for business.",
+      "target_audience": "New shop owners setting up their catalog for the first time, or anyone migrating from a spreadsheet.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function handleProductFileUpload\\(event\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "vendor/xlsx\\.full\\.min\\.js",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.959389+00:00"
+    },
+    {
+      "feature_id": "usb-barcode-scanning",
+      "feature": "USB Barcode Scanner Support",
+      "description": "Keyboard-wedge style USB barcode scanner support - a fast keystroke burst ending in Enter is matched against product SKU and added to the cart automatically.",
+      "page_or_location": "app.html - main catalog screen, Barcode Scanner toggle",
+      "benefit": "Ring up items as fast as a real checkout counter - plug in any standard USB barcode scanner, no special drivers.",
+      "marketing_angles": [
+        "Plug in a $20 USB barcode scanner and start scanning - no setup, no drivers."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Ringing up items by typing the name in manually, one by one, while a line builds up.",
+      "target_audience": "Retail cashiers and convenience-store staff who already own a standard USB barcode scanner.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "modules/usb-scanner.js",
+          "pattern": "function handleUsbScanKeydown\\(e\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "id=\"barcodeScannerToggle\"",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.961211+00:00"
+    },
+    {
+      "feature_id": "split-payments",
+      "feature": "Split Payments Across Multiple Methods",
+      "description": "A single sale can be paid using more than one payment method (e.g. part cash, part card) by adding extra payment rows at checkout.",
+      "page_or_location": "app.html - checkout screen",
+      "benefit": "Handle real-world customers who want to pay part cash, part card, without any workaround.",
+      "marketing_angles": [
+        "Customer paying half cash, half card? One sale, one receipt, no problem."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "A customer wants to pay part cash, part card, and the register can't handle it in one sale.",
+      "target_audience": "Cashiers handling walk-in retail or food-service customers with mixed payment habits.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function addPaymentRow\\(\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "paymentRows",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.964471+00:00"
+    },
+    {
+      "feature_id": "per-sale-discount-and-tax-exempt",
+      "feature": "Per-Sale Discounts & Per-Item Tax Exemption",
+      "description": "A percent or fixed-amount discount can be applied at checkout, and any item (catalog default or overridden per sale) can be marked tax-exempt.",
+      "page_or_location": "app.html - checkout screen / cart lines",
+      "benefit": "Apply a one-off discount to a single customer, or exempt specific items from tax, without changing your store-wide settings.",
+      "marketing_angles": [
+        "Give one customer a discount without touching your store-wide pricing."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Needing to give one customer a one-off discount without touching your store-wide prices.",
+      "target_audience": "Shop owners who occasionally negotiate price or serve tax-exempt customers or organizations.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "id=\"discountType\"",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "cart-tax-exempt",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.967654+00:00"
+    },
+    {
+      "feature_id": "multi-cashier-support",
+      "feature": "Multiple Cashiers",
+      "description": "Multiple named cashiers can be configured; each sale records which cashier rang it up, and End of Day / Sales History report totals broken down per cashier.",
+      "page_or_location": "app.html - Settings -> Cashiers, End of Day report",
+      "benefit": "See exactly how much each staff member sold and collected during a shift.",
+      "marketing_angles": [
+        "Know exactly which cashier rang up which sale - no guessing at shift-close."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "No way to tell which staff member rang up which sale when the register comes up short.",
+      "target_audience": "Shop owners with more than one person working the register across shifts.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "async function loadCashiers\\(\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "activeCashierName",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.970948+00:00"
+    },
+    {
+      "feature_id": "sales-history-and-end-of-day",
+      "feature": "Sales History + Printable End of Day Report",
+      "description": "Every completed sale is saved and browsable/editable in Sales History. A separate End of Day report (end-of-day.html) totals a chosen day's sales, items sold, payment-method breakdown, and per-cashier collection, and can be printed or saved as a frozen snapshot.",
+      "page_or_location": "app.html header -> End of Day, end-of-day.html",
+      "benefit": "Close out the register with a real report - total sales, best sellers, and cash-vs-card breakdown - not a mental tally.",
+      "marketing_angles": [
+        "Close your register with a real report, not a guess - totals, best sellers, and payment breakdown in one click."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Closing the register with a mental guess instead of a real total.",
+      "target_audience": "Shop owners and managers closing out a business day.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function openEndOfDayReport\\(\\)",
+          "found": true
+        },
+        {
+          "file": "end-of-day.html",
+          "pattern": "saleMethodBreakdown",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.972956+00:00"
+    },
+    {
+      "feature_id": "sales-export-excel",
+      "feature": "Export Sales & Inventory to Excel",
+      "description": "Sales History (optionally filtered by date range) and Inventory can both be exported to a real .xlsx workbook, or CSV as a fallback.",
+      "page_or_location": "app.html - Settings -> Sales History",
+      "benefit": "Hand your accountant a real spreadsheet of sales for any date range, no manual re-typing.",
+      "marketing_angles": [
+        "Download your sales as a real Excel file for any date range - ready for your accountant."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Hand-copying sales numbers into a spreadsheet every time your accountant asks for them.",
+      "target_audience": "Shop owners who work with an accountant or bookkeeper, or file their own taxes.",
+      "premium_note": "Sales export is not Premium-gated (only Inventory export is - see applyPremiumLocks()).",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function exportSalesToExcel\\(\\)",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.974351+00:00"
+    },
+    {
+      "feature_id": "customer-facing-display",
+      "feature": "Customer-Facing Order Screen",
+      "description": "A second, lightweight page (customer.html) mirrors the live cart/order state in real time, meant for a second monitor or a screen facing the customer. This is a Premium feature - app.html's applyPremiumLocks() keeps it locked until Premium is active.",
+      "page_or_location": "app.html header -> Customer Screen, customer.html",
+      "benefit": "Let the customer see exactly what's being rung up and the running total, the way a supermarket checkout does.",
+      "marketing_angles": [
+        "Give your customer their own screen showing exactly what they're being charged."
+      ],
+      "confidence": "high",
+      "is_premium": "yes",
+      "problem": "A customer at the counter has no way to see what they're actually being charged until the receipt prints.",
+      "target_audience": "Retail and food-service shop owners who want a supermarket-style checkout experience - Premium subscribers.",
+      "premium_note": "Fully Premium-gated - app.html's applyPremiumLocks() hides the unlocked customer-screen content entirely until Premium is active.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function customerScreenUrl\\(\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "function broadcastCustomerScreenState\\(state\\)",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.977212+00:00"
+    },
+    {
+      "feature_id": "full-backup-restore",
+      "feature": "Full Backup & Restore",
+      "description": "One-click download of every piece of local data (products, sales, settings, cashiers, logo) as a JSON file, and a matching restore that loads it back in.",
+      "page_or_location": "app.html - Settings -> Backup",
+      "benefit": "Move to a new computer or recover from a cleared browser without losing your product list or sales history.",
+      "marketing_angles": [
+        "Your data lives in your browser - back it up with one click so you never lose it."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "A cleared browser or a new computer wiping out your entire product list and sales history.",
+      "target_audience": "Any shop owner relying on a browser-based POS for day-to-day data.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "async function downloadFullBackup\\(\\)",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.979116+00:00"
+    },
+    {
+      "feature_id": "multi-currency",
+      "feature": "Multiple Currencies",
+      "description": "Store currency code/symbol is configurable, affecting every price, receipt, and total shown throughout the app.",
+      "page_or_location": "app.html - Settings -> Currency",
+      "benefit": "Runs correctly for a business pricing in dollars, dinars, pesos, or any other currency, not just USD.",
+      "marketing_angles": [
+        "Set your own currency once - every receipt, price, and report follows."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "A POS that only prices in US dollars, when your business runs in a different currency entirely.",
+      "target_audience": "Shop owners outside the US, or anyone pricing in a currency other than USD.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "id=\"currencyCode\"",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.980820+00:00"
+    },
+    {
+      "feature_id": "six-language-support",
+      "feature": "Six-Language Interface",
+      "description": "The entire app UI (and the marketing site, and the free tools) can be switched between English, Arabic (with full RTL layout), Filipino, Hindi, Spanish, and Thai.",
+      "page_or_location": "app.html - Settings -> Language",
+      "benefit": "Staff and customers can use the POS in the language they're actually comfortable with, including full right-to-left Arabic.",
+      "marketing_angles": [
+        "Switch the entire POS between English, Arabic, Filipino, Hindi, Spanish, and Thai."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Staff or customers who aren't comfortable reading the POS in English.",
+      "target_audience": "Multilingual staff and customer-facing businesses, including Arabic-speaking markets needing full right-to-left layout.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function changeLanguage\\(\\)",
+          "found": true
+        },
+        {
+          "file": "modules/translations.js",
+          "pattern": "\\bar:\\s*\\{",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.983325+00:00"
+    },
+    {
+      "feature_id": "configurable-paper-size",
+      "feature": "Configurable Receipt Paper Size",
+      "description": "Printed receipts can target 58mm/80mm thermal paper, A4, A5, or a custom width, with the on-screen preview and the real printed output kept in sync.",
+      "page_or_location": "app.html - Settings -> Paper & Zoom",
+      "benefit": "Print on whatever printer you already own - a thermal receipt printer or a normal A4/Letter printer - no extra hardware required.",
+      "marketing_angles": [
+        "No thermal printer? Print receipts on any regular A4 printer instead."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Feeling like you need to buy a special thermal printer just to use a POS.",
+      "target_audience": "Shop owners using a regular A4/Letter printer instead of a dedicated thermal receipt printer.",
+      "premium_note": "Included in the free Basic plan.",
+      "evidence": [
+        {
+          "file": "app.html",
+          "pattern": "function changePaperSize\\(\\)",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.985021+00:00"
+    },
+    {
+      "feature_id": "offline-mode",
+      "feature": "Downloadable Offline POS",
+      "description": "A Premium feature that builds a self-contained, zero-network .zip of the entire app, live in the browser, that runs with a local Python server or directly via file:// with no internet connection required.",
+      "page_or_location": "app.html - Settings -> Backup -> Download Offline POS (Premium)",
+      "benefit": "Keep selling even with no internet connection at all - a real concern for market stalls, pop-ups, and spotty-wifi locations.",
+      "marketing_angles": [
+        "No internet at your market stall? Download the offline version and keep selling."
+      ],
+      "confidence": "high",
+      "is_premium": "yes",
+      "problem": "Losing the ability to sell the moment the wifi drops.",
+      "target_audience": "Market stall vendors, pop-up shops, and any location with unreliable internet - Premium subscribers.",
+      "premium_note": "Requires an active Premium subscription to download.",
+      "evidence": [
+        {
+          "file": "modules/offline-builder.js",
+          "pattern": "async function confirmOfflineDownload\\(\\)",
+          "found": true
+        },
+        {
+          "file": "app.html",
+          "pattern": "OFFLINE-SWAP:PREMIUM-ACTIVATION",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.986852+00:00"
+    },
+    {
+      "feature_id": "free-invoice-generator",
+      "feature": "Free Invoice Generator (standalone tool)",
+      "description": "A free-standing invoice builder (invoice-generator.html) for formal, net-terms billing to a customer - separate from POS checkout receipts.",
+      "page_or_location": "invoice-generator.html",
+      "benefit": "Send a proper, professional invoice to a customer on net terms - not every sale is a same-day cash sale.",
+      "marketing_angles": [
+        "Need to bill a customer on terms, not just ring up a cash sale? Create a real invoice free."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "Needing to bill a customer on net terms instead of a same-day cash sale, without dedicated invoicing software.",
+      "target_audience": "Freelancers, small service businesses, and shop owners who occasionally invoice rather than ring up a sale.",
+      "premium_note": "A separate free tool with no Premium concept at all.",
+      "evidence": [
+        {
+          "file": "invoice-generator.html",
+          "pattern": "invFrom",
+          "found": true
+        },
+        {
+          "file": "invoice-generator.html",
+          "pattern": "recalcTotals",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.987947+00:00"
+    },
+    {
+      "feature_id": "free-barcode-qr-generator",
+      "feature": "Free Barcode & QR Code Generator (standalone tool)",
+      "description": "A free-standing generator (barcode-generator.html) for common barcode symbologies (CODE128, EAN-13, UPC-A, and more) and QR codes, with print-ready label sizing and PNG export.",
+      "page_or_location": "barcode-generator.html",
+      "benefit": "Generate real, scannable barcodes for products that don't already have one, ready to print on labels.",
+      "marketing_angles": [
+        "New product with no barcode yet? Generate a scannable one free, sized for your label printer."
+      ],
+      "confidence": "high",
+      "is_premium": "no",
+      "problem": "A new product with no barcode yet, and no easy way to generate one.",
+      "target_audience": "Shop owners adding new products that don't already have a manufacturer barcode.",
+      "premium_note": "A separate free tool with no Premium concept at all.",
+      "evidence": [
+        {
+          "file": "barcode-generator.html",
+          "pattern": "window\\.JsBarcode\\(codeCanvas",
+          "found": true
+        },
+        {
+          "file": "vendor/jsbarcode.min.js",
+          "pattern": ".",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.988556+00:00"
+    },
+    {
+      "feature_id": "premium-subscription",
+      "feature": "Premium Subscription (sign in once, use anywhere)",
+      "description": "Signing in with Google grants a free 15-day Premium trial automatically; Premium unlocks logo upload, receipt numbering, inventory export, the customer screen, and the offline download, and follows the signed-in account to any device rather than being tied to one browser.",
+      "page_or_location": "app.html - Settings -> Premium",
+      "benefit": "Unlock extra features on a free trial with just a Google sign-in, no card required, and it follows you to any device you sign into.",
+      "marketing_angles": [
+        "Get 15 days of Premium free - just sign in with Google, no card needed."
+      ],
+      "confidence": "high",
+      "is_premium": "n/a",
+      "problem": "Wanting to try extra features without committing to a paid plan first.",
+      "target_audience": "Any GoOnlinePOS user curious about Premium features.",
+      "premium_note": "This entry describes the Premium system itself, not a Premium-gated feature.",
+      "evidence": [
+        {
+          "file": "modules/account.js",
+          "pattern": "async function redeemCodeNow\\(\\)",
+          "found": true
+        },
+        {
+          "file": "supabase/README.md",
+          "pattern": ".",
+          "found": true
+        }
+      ],
+      "verified": true,
+      "verified_at": "2026-09-10T10:42:37.988755+00:00"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "queue": [
+    "bulk-product-import",
+    "configurable-paper-size",
+    "free-barcode-qr-generator",
+    "free-invoice-generator",
+    "full-backup-restore",
+    "multi-cashier-support",
+    "multi-currency",
+    "per-sale-discount-and-tax-exempt",
+    "product-photos",
+    "sales-export-excel",
+    "sales-history-and-end-of-day",
+    "six-language-support",
+    "split-payments",
+    "usb-barcode-scanning",
+    "customer-facing-display",
+    "inventory-management",
+    "offline-mode",
+    "premium-subscription"
+  ],
+  "selection_reason": "No real performance data yet (Phase 7 analytics not built). Ordered free (is_premium=no) features first for the broadest 'try it right now' CTA, then alphabetically by feature_id."
+}
