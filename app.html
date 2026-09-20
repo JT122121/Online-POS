@@ -273,12 +273,17 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .split-payment-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
 
 .checkout-actions { display: flex; gap: 8px; margin-top: 18px; }
+.checkout-actions-secondary { margin-top: 8px; }
 .checkout-actions button { flex: 1; padding: 13px; border: 0; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; }
 .back-btn { background: #f0efe8; color: var(--ink); }
 .back-btn:hover { background: #e6e4d9; }
 .complete-btn { background: var(--accent); color: #fff; font-weight: 700; }
 .complete-btn:hover:not(:disabled) { background: var(--accent-dark); }
 .complete-btn:disabled { background: #e2e5e9; color: #9aa1ab; }
+.pdf-btn { background: var(--accent-tint); color: var(--accent-dark); border: 1px solid var(--accent); }
+.pdf-btn:hover:not(:disabled) { background: #d8ebe1; }
+.complete-only-btn { background: #f0efe8; color: var(--ink); }
+.complete-only-btn:hover:not(:disabled) { background: #e6e4d9; }
 
 .scanner-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 420px; overflow: hidden; box-shadow: var(--shadow-lg); }
 .scanner-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
@@ -483,7 +488,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .pos-sidebar, .pos-topbar, .app-header, .left-panel, .settings-overlay, .site-footer, .backup-notice { display: none !important; }
+  .pos-sidebar, .pos-topbar, .app-header, .left-panel, .settings-overlay, .site-footer, .backup-notice, .cookie-consent { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -686,6 +691,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
     <div class="checkout-actions">
       <button class="back-btn" onclick="backToCatalog()" id="backToCatalogBtn">← Back</button>
       <button class="complete-btn" id="completeBtn" onclick="completeAndPrint()">✓ <span id="completeBtnLabel">Complete &amp; Print</span></button>
+    </div>
+    <div class="checkout-actions checkout-actions-secondary">
+      <button class="pdf-btn" id="completePdfBtn" onclick="completeAndSavePdf()">📄 <span id="completePdfBtnLabel">Complete &amp; Save as PDF</span></button>
+      <button class="complete-only-btn" id="completeOnlyBtn" onclick="completeOnly()"><span id="completeOnlyBtnLabel">Complete Order</span></button>
     </div>
   </div>
 
@@ -2011,6 +2020,26 @@ async function completeAndPrint() {
   printReceipt();
   await startNewSale();
 }
+async function completeAndSavePdf() {
+  if (totalEntered() <= 0) {
+    alert(tr("noPaymentAlert"));
+    return;
+  }
+  await saveCurrentSaleToHistory();
+  const prevTitle = document.title;
+  document.title = (getDocumentTitle() + "-" + (currentReceiptNumber || "")).trim();
+  printReceipt();
+  document.title = prevTitle;
+  await startNewSale();
+}
+async function completeOnly() {
+  if (totalEntered() <= 0) {
+    alert(tr("noPaymentAlert"));
+    return;
+  }
+  await saveCurrentSaleToHistory();
+  await startNewSale();
+}
 
 async function deductStockForCart() {
   let changed = false;
@@ -3323,6 +3352,7 @@ function changeLanguage() {
     checkoutHeading: "checkoutHeading", totalDueLabel: "totalDueLabel",
     paymentMethodLabel: "paymentMethodLabel", totalEnteredLabel: "totalEnteredLabel", changeLabelInfo: "changeLabelInfo", addPaymentRowBtn: "addPaymentRowBtn",
     backToCatalogBtn: "backToCatalogBtn", completeBtnLabel: "completeBtnLabel",
+    completePdfBtnLabel: "completePdfBtnLabel", completeOnlyBtnLabel: "completeOnlyBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
     quickSettingsToggleLabel: "quickSettingsToggleLabel", receiptPreviewLabel: "receiptPreviewLabel",

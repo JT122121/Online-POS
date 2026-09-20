@@ -1712,6 +1712,73 @@ has zero network calls.
   so re-uploading is a single click, no separate "edit" mode needed.
 - **Cart/checkout:** `addProductToCart` → `computeTotals()` → `goToCheckout`
   → split payments via `paymentRows` → `printReceipt()`.
+  **Checkout has three completion buttons, not one** - per an explicit
+  request for a "save as PDF" option and a plain "complete order" option
+  alongside the original print button. `#checkoutView`'s
+  `.checkout-actions` row (← Back / ✓ Complete & Print, unchanged) is
+  followed by a second `.checkout-actions.checkout-actions-secondary`
+  row: `#completePdfBtn` → `completeAndSavePdf()` and `#completeOnlyBtn`
+  → `completeOnly()`, both next to `completeAndPrint()` in `app.html`.
+  All three share the same `saveCurrentSaleToHistory()` → `startNewSale()`
+  bookend and the same `totalEntered() <= 0` guard/`noPaymentAlert` -
+  they only differ in what happens in between: `completeAndPrint()` calls
+  `printReceipt()` unconditionally; `completeOnly()` calls neither
+  `printReceipt()` nor `window.print()` at all, so a cashier can close
+  out a sale with no paper/dialog interruption; `completeAndSavePdf()`
+  also calls `printReceipt()` (reusing the exact same function, not a
+  separate print path) so it inherits the same `@page { margin: 0 }`
+  clean-output styling, but first swaps `document.title` to
+  `"<Receipt/Invoice/Payment>-<receiptNumber>"` (e.g. `Receipt-000066`)
+  and restores the original title right after - browsers that offer
+  "Save as PDF" as a print destination use the page's `document.title`
+  as the suggested filename, so this makes a saved PDF's filename
+  meaningful instead of the app's own generic page title. There is no
+  way for JS to force the print dialog's destination to PDF specifically
+  (no such browser API exists) - "Save as PDF" is still a choice the
+  visitor makes inside the same native print dialog `completeAndPrint()`
+  already opens; the button's own distinct value is the meaningful
+  suggested filename, not a different underlying mechanism, matching
+  this repo's own established "PDF export" precedent on
+  `invoice-generator.html`/`receipt-generator.html` (plain `window.print()`
+  plus print CSS, no PDF library dependency anywhere in this codebase).
+  **A real, separate pre-existing bug was caught and fixed in the same
+  pass**, per explicit feedback that a saved PDF needed to be "clean, no
+  computer details/timestamp" - `#cookieConsentBanner`/`.cookie-consent`
+  was never in the `@media print` hide list (`app.html`'s existing
+  `.pos-sidebar, .pos-topbar, .app-header, .left-panel, .settings-overlay,
+  .site-footer, .backup-notice { display: none !important; }` rule), so
+  a visitor who completed and printed/saved a sale before dismissing the
+  cookie banner got it baked directly into the printed/PDF receipt below
+  the actual receipt content - confirmed by generating a real print-media
+  PDF with Playwright before the fix (the banner's exact cookie-consent
+  text appeared on the page) and after (gone, receipt only). Fixed by
+  adding `.cookie-consent` to that same hide-list selector, one word,
+  no new rule needed. None of the three buttons or this print-CSS fix
+  are `OFFLINE-STRIP`-wrapped - checkout completion and clean printing
+  are core POS functionality with no network dependency, so all of it
+  ships unchanged in the offline package. New `completePdfBtnLabel`/
+  `completeOnlyBtnLabel` translation keys exist in all six
+  `modules/translations.js` languages and are wired into
+  `changeLanguage()`'s `ids` map alongside the existing
+  `completeBtnLabel`/`backToCatalogBtn` entries - though `fil`/`hi`/`es`/
+  `th` turned out to already be missing `completeBtnLabel`/
+  `backToCatalogBtn` themselves (a separate, pre-existing translation
+  gap unrelated to this change - `tr()`'s English fallback means those
+  two buttons silently show English text in those four languages today;
+  left as-is since backfilling every older gap in this file is a
+  distinct undertaking from adding two new buttons' own keys correctly).
+  Verified with Playwright (mocking `window.print()` to avoid a real
+  modal dialog in headless Chromium): clicking Complete & Save as PDF
+  calls `print()` exactly once with `document.title` correctly set to
+  `Receipt-<number>` at the moment of the call and restored immediately
+  after; clicking Complete Order calls `print()` zero additional times
+  and still records the sale in `salesHistory`; a language switch to
+  Spanish correctly re-translates both new button labels; zero console
+  errors and zero horizontal overflow at both 1280px desktop and 390px
+  mobile (the secondary button row wraps its longer label to two lines
+  on narrow phones without breaking layout); and the regenerated
+  print-media PDF is confirmed clean of the cookie banner with the fix
+  in place.
   `computeTotals()` is a thin wrapper around the shared
   `computeTotalsFromItems(items, taxRate, discountType, discountValue)`,
   which also powers the Sales History detail editor
