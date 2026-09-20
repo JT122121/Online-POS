@@ -1233,6 +1233,44 @@ all of them under one pattern:
     switch to Arabic still re-translates every title/text and keeps all
     6 photos in the DOM; and zero horizontal overflow/console errors at
     both 1280px desktop (2x DPR) and 390px mobile.
+  - **Follow-up: plain Lanczos-upscale-plus-unsharp-mask wasn't actually
+    enough, and was replaced with real learned super-resolution.** The
+    user reported the photos still looked blurry even after the fixes
+    above, despite supplying "direct" source files - correctly, since
+    every source crop (both the individually-supplied photos and the
+    original composite crop) was only ~322-328px wide to begin with;
+    Lanczos resizing plus an unsharp-mask pass can sharpen *edges* in an
+    upscaled image but can't invent detail a ~328px source never had -
+    it was always going to plateau well short of genuinely crisp. Fixed
+    by running every one of the 6 source crops through a real
+    single-image super-resolution model instead of a classical resize:
+    `cv2.dnn_superres` (OpenCV's DNN super-resolution module, part of
+    `opencv-contrib-python-headless` - not installed by the base
+    `opencv-python-headless` package already in the sandbox, so it was
+    installed via `pip install opencv-contrib-python-headless`) with the
+    **EDSR x4** pretrained model (`EDSR_x4.pb`, from
+    `Saafke/EDSR_Tensorflow` on GitHub - fetched via a plain
+    `raw.githubusercontent.com` URL, reachable in this sandbox per the
+    same GitHub-CDN exception already documented for the homepage mock's
+    sourced product photos above) - a real learned upscaler that
+    reconstructs plausible fine detail (skin texture, individual bread/
+    pastry shapes, screen UI elements) rather than just interpolating
+    and sharpening existing pixels. Each 4x EDSR output (~1300px wide)
+    was then downsized with Lanczos to the same 720px final width as
+    before (still comfortably above what a 3x-DPR phone needs at this
+    layout, per the earlier blur-fix math) and re-encoded as JPEG
+    quality 87 (up from 85) - the downsize-after-SR step matters: it
+    lets the final asset benefit from the model's real detail while
+    still landing at a sane, retina-safe file size rather than shipping
+    a needlessly huge 1300px source. This is a genuinely different,
+    stronger fix than the previous pass, not a repeat of the same
+    technique with different numbers. Verified visually via zoomed
+    before/after crops (bread texture, screen UI elements, hand/apron
+    detail all visibly sharper than the Lanczos+unsharp version) and
+    with Playwright: all 6 photos still report `naturalWidth: 720`,
+    zero horizontal overflow/console errors at 1280px desktop (2x DPR)
+    and 390px mobile, and the Arabic language switch still keeps all 6
+    photos in the DOM and re-translates every title/text correctly.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
