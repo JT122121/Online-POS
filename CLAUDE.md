@@ -1834,6 +1834,54 @@ has zero network calls.
       package build bundles both new vendor files at their expected
       sizes and produces a working, zero-network auto-download inside
       the extracted offline copy; and zero console errors throughout.
+    - **Follow-up bug fix: a genuinely silent failure mode** - a
+      visitor reported "the save as PDF button is not working" with no
+      further detail, and `downloadReceiptAsPdf()`'s capture/save step
+      was wrapped in `try { ... } finally { ... }` with **no `catch`
+      block at all**. If `html2canvas`/`jsPDF` ever threw for any reason
+      - most plausibly a privacy-hardened mobile browser (Brave, Firefox
+      with Enhanced Tracking Protection, an ad-blocker with
+      canvas-fingerprinting protection enabled) throwing a
+      `SecurityError`/returning a tainted canvas from
+      `canvas.toDataURL()`, since `html2canvas` depends entirely on the
+      Canvas API those protections specifically target, or the two
+      vendor scripts simply failing to load for any transient reason -
+      the exception propagated all the way up through
+      `completeAndSavePdf()`'s `await downloadReceiptAsPdf()` with
+      nothing to catch it: no alert, no console message a visitor would
+      ever see, no fallback of any kind. From the outside this reads
+      exactly as "the button does nothing" regardless of what actually
+      broke, and reproducing the reported failure directly wasn't
+      possible from this sandbox (headless Chromium, standard settings,
+      both desktop and an emulated mobile Chrome/Android user agent,
+      all succeeded cleanly) - so the fix targets the missing safety net
+      itself rather than one specific unreproducible cause. Fixed by
+      checking `typeof html2canvas === "function" && window.jspdf &&
+      typeof window.jspdf.jsPDF === "function"` up front, adding a real
+      `catch` around the capture/save step, and - either way a failure
+      happens - falling back to the exact same `printReceipt()` the
+      original print-dialog-based implementation used (see the earlier
+      follow-up above), plus a new translated `pdfFallbackAlert` message
+      ("Couldn't auto-download the PDF on this browser. Opening the
+      print dialog instead - choose \"Save as PDF\" there.", all six
+      languages) so the visitor gets a concrete explanation and a
+      working manual path instead of silence. `succeeded` is only ever
+      set `true` on `pdf.save()`'s own line, after everything before it
+      has already run without throwing, so the fallback fires for
+      *every* failure mode (missing libraries, a thrown capture error,
+      a thrown save error) through the same one code path, not three
+      separate checks. The sale itself is unaffected either way -
+      `saveCurrentSaleToHistory()` in `completeAndSavePdf()` already ran
+      before `downloadReceiptAsPdf()` is ever called, so a PDF failure
+      never loses or duplicates the recorded sale. Verified with
+      Playwright by directly forcing the failure this can't otherwise
+      reproduce (`window.html2canvas = undefined` before clicking):
+      the translated alert fires with the expected text,
+      `window.print()` fires exactly once as the fallback, and the sale
+      still lands in `salesHistory` despite the forced PDF failure; the
+      normal success path (libraries present, capture succeeds) was
+      re-verified unchanged afterward - real `download` event, correct
+      filename, zero `window.print()` calls, zero console errors.
   `computeTotals()` is a thin wrapper around the shared
   `computeTotalsFromItems(items, taxRate, discountType, discountValue)`,
   which also powers the Sales History detail editor
