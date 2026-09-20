@@ -10,34 +10,49 @@ function printReceipt() {
 
 async function downloadReceiptAsPdf() {
   const receiptEl = document.getElementById("receipt");
-  const select = document.getElementById("paperSize");
-  let widthMm = 80;
-  if (select.value === "custom") widthMm = Number(document.getElementById("customWidth").value) || 80;
-  else if (select.value !== "auto") widthMm = Number(select.value) || 80;
+  const librariesReady = typeof html2canvas === "function" && window.jspdf && typeof window.jspdf.jsPDF === "function";
+  let succeeded = false;
 
-  const prevWidth = receiptEl.style.width;
-  const prevZoom = receiptEl.style.zoom;
-  receiptEl.style.width = widthMm + "mm";
-  receiptEl.style.zoom = 1;
-  document.body.classList.add("pdf-capture-mode");
-  await new Promise(function(resolve) { requestAnimationFrame(function() { requestAnimationFrame(resolve); }); });
+  if (librariesReady) {
+    const select = document.getElementById("paperSize");
+    let widthMm = 80;
+    if (select.value === "custom") widthMm = Number(document.getElementById("customWidth").value) || 80;
+    else if (select.value !== "auto") widthMm = Number(select.value) || 80;
 
-  try {
-    const rect = receiptEl.getBoundingClientRect();
-    const canvas = await html2canvas(receiptEl, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
-    const imgData = canvas.toDataURL("image/jpeg", 0.92);
-    const pxToMm = 25.4 / 96;
-    const pdfWidthMm = rect.width * pxToMm;
-    const pdfHeightMm = rect.height * pxToMm;
-    const pdf = new window.jspdf.jsPDF({ unit: "mm", format: [pdfWidthMm, pdfHeightMm] });
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidthMm, pdfHeightMm);
-    const number = (typeof currentReceiptNumber !== "undefined" && currentReceiptNumber) ? currentReceiptNumber : "";
-    const filename = (getDocumentTitle() + "-" + number).trim().replace(/\s+/g, "-") + ".pdf";
-    pdf.save(filename);
-  } finally {
-    document.body.classList.remove("pdf-capture-mode");
-    receiptEl.style.width = prevWidth;
-    receiptEl.style.zoom = prevZoom;
+    const prevWidth = receiptEl.style.width;
+    const prevZoom = receiptEl.style.zoom;
+    receiptEl.style.width = widthMm + "mm";
+    receiptEl.style.zoom = 1;
+    document.body.classList.add("pdf-capture-mode");
+    await new Promise(function(resolve) { requestAnimationFrame(function() { requestAnimationFrame(resolve); }); });
+
+    try {
+      const rect = receiptEl.getBoundingClientRect();
+      const canvas = await html2canvas(receiptEl, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const imgData = canvas.toDataURL("image/jpeg", 0.92);
+      const pxToMm = 25.4 / 96;
+      const pdfWidthMm = rect.width * pxToMm;
+      const pdfHeightMm = rect.height * pxToMm;
+      const pdf = new window.jspdf.jsPDF({ unit: "mm", format: [pdfWidthMm, pdfHeightMm] });
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidthMm, pdfHeightMm);
+      const number = (typeof currentReceiptNumber !== "undefined" && currentReceiptNumber) ? currentReceiptNumber : "";
+      const filename = (getDocumentTitle() + "-" + number).trim().replace(/\s+/g, "-") + ".pdf";
+      pdf.save(filename);
+      succeeded = true;
+    } catch (e) {
+      console.error("PDF auto-download failed, falling back to print dialog:", e);
+    } finally {
+      document.body.classList.remove("pdf-capture-mode");
+      receiptEl.style.width = prevWidth;
+      receiptEl.style.zoom = prevZoom;
+    }
+  } else {
+    console.error("PDF libraries (html2canvas/jsPDF) did not load, falling back to print dialog");
+  }
+
+  if (!succeeded) {
+    alert(tr("pdfFallbackAlert"));
+    printReceipt();
   }
 }
 
