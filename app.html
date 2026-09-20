@@ -145,6 +145,8 @@ button:active { transform: translateY(1px); }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
 #backupShortcutButton:hover { background: #f5e7c4; }
+#supportCoffeeButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
+#supportCoffeeButton:hover { background: #f5e7c4; }
 .active-cashier-select { padding: 9px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; background: var(--panel); color: var(--ink); }
 .active-cashier-select:focus { outline: none; border-color: var(--accent); }
 #homepageShortcutButton, #blogShortcutButton, #createInvoiceButton, #createReceiptButton, #createBarcodeButton, #createVatButton, #createPricingButton { color: var(--accent-dark); }
@@ -521,6 +523,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting">❓ <span id="howToUseShortcutLabel">How To Use</span></button>
 <select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
 <button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
+<!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
+<button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional">☕ <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
+<!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:END -->
 <button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()">⚙ <span id="settingsButtonLabel">More Settings</span></button>
 </div>
 
@@ -2705,6 +2710,17 @@ function openCreatePricing() {
 }
 /* OFFLINE-STRIP:CREATE-PRICING-JS:END */
 
+/* OFFLINE-STRIP:SUPPORT-COFFEE-JS:START */
+// PayPal's standard "Donate" button link - lets the visitor type in whatever
+// amount they want to send to this PayPal account, no separate paypal.me
+// username needed. This is a plain voluntary support link, not tied to any
+// feature or account status.
+const SUPPORT_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS";
+function openBuyMeCoffee() {
+  window.open(SUPPORT_PAYPAL_URL, "_blank");
+}
+/* OFFLINE-STRIP:SUPPORT-COFFEE-JS:END */
+
 function openCustomerScreenPanel() {
   document.getElementById("customerScreenUrlInput").value = customerScreenUrl();
   document.getElementById("customerScreenCopiedMsg").classList.add("hidden");
@@ -3278,7 +3294,7 @@ function changeLanguage() {
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
-    backupShortcutLabel: "backupShortcutLabel",
+    backupShortcutLabel: "backupShortcutLabel", supportCoffeeLabel: "supportCoffeeLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
     quickReceiptNumberLabel: "receiptNumberLabel", quickReceiptPrefixLabel: "receiptPrefixLabel",
     receiptNumberLabel: "receiptNumberLabel", receiptNumberInfo: "receiptNumberInfo", receiptPrefixLabel: "receiptPrefixLabel", receiptPrefixInfo: "receiptPrefixInfo",

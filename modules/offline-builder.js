@@ -47,6 +47,7 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "CREATE-BARCODE-BUTTON", "create barcode button");
   html = stripMarked(html, "CREATE-VAT-BUTTON", "create vat calculator button");
   html = stripMarked(html, "CREATE-PRICING-BUTTON", "create pricing calculator button");
+  html = stripMarked(html, "SUPPORT-COFFEE-BUTTON", "buy me a coffee button");
   html = stripMarked(html, "COOKIE-CONSENT", "cookie consent script");
   html = stripMarked(html, "GOOGLE-FONTS", "google fonts links");
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
@@ -65,6 +66,8 @@ function buildOfflineAppHtml(html) {
   html = createVatJsRe.test(html) ? html.replace(createVatJsRe, "") : (console.warn("Offline package: create-vat-js marker not found"), html);
   const createPricingJsRe = /\/\* OFFLINE-STRIP:CREATE-PRICING-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:CREATE-PRICING-JS:END \*\/\n?/;
   html = createPricingJsRe.test(html) ? html.replace(createPricingJsRe, "") : (console.warn("Offline package: create-pricing-js marker not found"), html);
+  const supportCoffeeJsRe = /\/\* OFFLINE-STRIP:SUPPORT-COFFEE-JS:START \*\/[\s\S]*?\/\* OFFLINE-STRIP:SUPPORT-COFFEE-JS:END \*\/\n?/;
+  html = supportCoffeeJsRe.test(html) ? html.replace(supportCoffeeJsRe, "") : (console.warn("Offline package: support-coffee-js marker not found"), html);
 
   return html;
 }

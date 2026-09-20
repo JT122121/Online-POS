@@ -1143,6 +1143,44 @@ What actually happened, concretely:
   leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers, zero `console.warn`
   output, and zero remaining "premium"/"supabase" references anywhere
   in the generated `app.html`.
+- **The old "Buy Premium" PayPal flow was replaced with a plain, voluntary
+  "☕ Buy Me a Coffee" button** - per an explicit "make that old paypal
+  link as Buy me a Coffee instead any amount" request, and per a
+  follow-up ("display that in main pos app visible") it's a real button
+  in `.pos-sidebar-nav`, right after Backup and before Settings, not
+  tucked inside a settings tab - the single most visible spot in the
+  toolbar this feature could occupy. `#supportCoffeeButton` →
+  `openBuyMeCoffee()` opens `SUPPORT_PAYPAL_URL` in a new tab, PayPal's
+  standard `cmd=_donations` Donate-button link
+  (`https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=goonlinepos%40gmail.com&currency_code=USD&item_name=Support+GoOnlinePOS`)
+  built from the site owner's real PayPal account email
+  (`goonlinepos@gmail.com`) rather than a `paypal.me` username - this
+  link style lets the visitor type in whatever amount they want to send
+  and needs nothing beyond a regular PayPal account tied to that email,
+  no separate `paypal.me` profile to set up first. Gold-tinted
+  (`--gold-tint`/`#f0dfb0`, same treatment as `#backupShortcutButton`),
+  its own `supportCoffeeLabel` translation key across all six
+  `modules/translations.js` languages, wired into `changeLanguage()`'s
+  `ids` map like every other sidebar label. Wrapped in its own
+  `OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON`/`SUPPORT-COFFEE-JS` marker pair
+  and stripped from the offline package - same treatment as
+  Homepage/Blog/the five free-tool shortcuts, since opening a live
+  `paypal.com` URL needs network access the offline build doesn't
+  assume. **The `stripMarked()` call for the button marker and the JS
+  regex for the JS marker both had to be added to
+  `modules/offline-builder.js` explicitly** - wrapping a new element in
+  an `OFFLINE-STRIP` marker in `app.html` doesn't strip it by itself,
+  the builder only strips markers it's told to look for by name - the
+  same class of easy-to-forget wiring step already documented for new
+  `.header-links` buttons elsewhere in this file. Verified: the button
+  renders visibly in the sidebar with the correct gold background and
+  translates correctly (checked against Arabic and back to English);
+  clicking it opens the real donate URL above with zero console errors;
+  and a simulated offline build removes the button markup and
+  `openBuyMeCoffee()`/`SUPPORT_PAYPAL_URL` entirely with zero leftover
+  markers and zero `console.warn` (only a harmless dead
+  `#supportCoffeeButton` CSS rule remains, matching this repo's existing
+  tolerance for dead selectors with nothing left to apply to).
 
 ## `app.html` — architecture
 
