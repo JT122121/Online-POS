@@ -1725,22 +1725,7 @@ has zero network calls.
   `printReceipt()` unconditionally; `completeOnly()` calls neither
   `printReceipt()` nor `window.print()` at all, so a cashier can close
   out a sale with no paper/dialog interruption; `completeAndSavePdf()`
-  also calls `printReceipt()` (reusing the exact same function, not a
-  separate print path) so it inherits the same `@page { margin: 0 }`
-  clean-output styling, but first swaps `document.title` to
-  `"<Receipt/Invoice/Payment>-<receiptNumber>"` (e.g. `Receipt-000066`)
-  and restores the original title right after - browsers that offer
-  "Save as PDF" as a print destination use the page's `document.title`
-  as the suggested filename, so this makes a saved PDF's filename
-  meaningful instead of the app's own generic page title. There is no
-  way for JS to force the print dialog's destination to PDF specifically
-  (no such browser API exists) - "Save as PDF" is still a choice the
-  visitor makes inside the same native print dialog `completeAndPrint()`
-  already opens; the button's own distinct value is the meaningful
-  suggested filename, not a different underlying mechanism, matching
-  this repo's own established "PDF export" precedent on
-  `invoice-generator.html`/`receipt-generator.html` (plain `window.print()`
-  plus print CSS, no PDF library dependency anywhere in this codebase).
+  calls the new `downloadReceiptAsPdf()` (`modules/receipt.js`) instead.
   **A real, separate pre-existing bug was caught and fixed in the same
   pass**, per explicit feedback that a saved PDF needed to be "clean, no
   computer details/timestamp" - `#cookieConsentBanner`/`.cookie-consent`
@@ -1753,12 +1738,11 @@ has zero network calls.
   PDF with Playwright before the fix (the banner's exact cookie-consent
   text appeared on the page) and after (gone, receipt only). Fixed by
   adding `.cookie-consent` to that same hide-list selector, one word,
-  no new rule needed. None of the three buttons or this print-CSS fix
-  are `OFFLINE-STRIP`-wrapped - checkout completion and clean printing
-  are core POS functionality with no network dependency, so all of it
-  ships unchanged in the offline package. New `completePdfBtnLabel`/
-  `completeOnlyBtnLabel` translation keys exist in all six
-  `modules/translations.js` languages and are wired into
+  no new rule needed - this fix carried over unchanged into the
+  follow-up below, since `downloadReceiptAsPdf()`'s own capture-mode CSS
+  (see below) only touches `.receipt` itself, not the banner. New
+  `completePdfBtnLabel`/`completeOnlyBtnLabel` translation keys exist in
+  all six `modules/translations.js` languages and are wired into
   `changeLanguage()`'s `ids` map alongside the existing
   `completeBtnLabel`/`backToCatalogBtn` entries - though `fil`/`hi`/`es`/
   `th` turned out to already be missing `completeBtnLabel`/
@@ -1767,18 +1751,89 @@ has zero network calls.
   two buttons silently show English text in those four languages today;
   left as-is since backfilling every older gap in this file is a
   distinct undertaking from adding two new buttons' own keys correctly).
-  Verified with Playwright (mocking `window.print()` to avoid a real
-  modal dialog in headless Chromium): clicking Complete & Save as PDF
-  calls `print()` exactly once with `document.title` correctly set to
-  `Receipt-<number>` at the moment of the call and restored immediately
-  after; clicking Complete Order calls `print()` zero additional times
-  and still records the sale in `salesHistory`; a language switch to
-  Spanish correctly re-translates both new button labels; zero console
-  errors and zero horizontal overflow at both 1280px desktop and 390px
-  mobile (the secondary button row wraps its longer label to two lines
-  on narrow phones without breaking layout); and the regenerated
-  print-media PDF is confirmed clean of the cookie banner with the fix
-  in place.
+  None of the three buttons or the print-CSS fix are `OFFLINE-STRIP`-
+  wrapped - checkout completion and clean printing are core POS
+  functionality with no network dependency, so all of it ships unchanged
+  in the offline package.
+  - **Follow-up: "Complete & Save as PDF" was rebuilt to actually
+    auto-download a PDF file, not just open the native print dialog.**
+    The first version reused `printReceipt()` (`window.print()` plus a
+    `document.title` swap so a manually-chosen "Save as PDF" print
+    destination got a meaningful suggested filename) - per explicit
+    follow-up feedback that it "should save and download automatically
+    as pdf," since there's no browser API that lets JS force the print
+    dialog's destination, a print-dialog-based approach can never be a
+    true one-click automatic download regardless of the filename hint.
+    Replaced with a real client-side PDF pipeline: `html2canvas`
+    (captures the live `#receipt` element as a raster image) feeding
+    into `jsPDF` (wraps that image in a PDF sized to match, then calls
+    `.save(filename)`, which triggers a genuine browser file download
+    with no dialog at all) - both vendored as unmodified npm builds in
+    `vendor/jspdf.umd.min.js` (4.2.1)/`vendor/html2canvas.min.js`
+    (1.4.1), matching this repo's established self-hosted-library
+    convention (no CDN), loaded via plain `<script>` tags right after
+    `vendor/xlsx.full.min.js` - **not** `OFFLINE-STRIP`-wrapped, since
+    the offline package needs this feature working with zero network
+    access too (confirmed by building a real offline zip and clicking
+    Complete & Save as PDF inside it - same auto-download, zero network
+    calls, zero console errors). `downloadReceiptAsPdf()` (new, in
+    `modules/receipt.js` next to `printReceipt()`) does the real work:
+    - Reads the same `#paperSize`/`#customWidth` selection
+      `printReceipt()` already reads, so the downloaded PDF's page width
+      matches whatever paper width the cashier has configured (falls
+      back to 80mm for `"auto"`, since a PDF page has no physical
+      printer to size itself against).
+    - Temporarily sets `#receipt`'s inline `width`/`zoom` and toggles a
+      new `body.pdf-capture-mode` class before capturing, then reverts
+      both in a `finally` block. `pdf-capture-mode`'s CSS is a
+      near-verbatim copy of the existing `@media print` block's own
+      `.receipt`/`.no-print`/`.receipt-item-*` rules (min-height reset
+      to `auto` so the captured image isn't `#receipt`'s on-screen
+      `100vh` scroll-filling height full of blank space, the qty
+      stepper/remove-button/checkbox controls hidden via the same
+      `.no-print` class, black-on-white color overrides) - reusing the
+      print rules under a class selector instead of a media query was
+      the only way to make an on-screen `html2canvas` capture actually
+      match what printing already produces, since `@media print` rules
+      never apply outside an actual print/PDF context.
+    - Captures at `scale: 2` and encodes as **JPEG quality 0.92**, not
+      PNG - the first version of this follow-up used PNG at `scale: 3`,
+      which produced a working but absurdly large ~5MB file for one
+      short receipt (the receipt's own colorful logo image compresses
+      far worse as lossless PNG once magnified 3x than the rest of the
+      mostly-monospace-text-on-white content), caught by actually
+      checking the downloaded file's size, not just confirming a
+      download fired. JPEG at quality 0.92 with `scale: 2` brought the
+      same receipt down to ~100KB with no visible quality loss (checked
+      by reading the generated PDF directly) - a real, measured
+      tradeoff, not an arbitrary guess.
+    - Names the file `"<Receipt/Invoice/Payment>-<receiptNumber>.pdf"`
+      (e.g. `Receipt-000066.pdf`) via `jsPDF`'s own `.save(filename)`
+      parameter - a real, always-applied filename now, superseding the
+      old `document.title`-as-suggestion approach, which only ever
+      worked as a hint inside a dialog the visitor had to interact with
+      anyway.
+    - `vendor/LICENSES.txt` and `offline/vendor/LICENSES.txt` both got
+      matching new entries; `modules/offline-builder.js`'s
+      `confirmOfflineDownload()` fetches both new vendor files
+      alongside `vendor/xlsx.full.min.js` and adds them to the zip at
+      the same `vendor/...` paths its own unmarked `<script src>` tags
+      expect.
+    - Verified with Playwright: clicking Complete & Save as PDF fires a
+      real `download` event with filename `Receipt-<number>.pdf` and
+      zero `window.print()` calls (mocked to prove it, not assumed);
+      the downloaded PDF's `/MediaBox` matches the selected paper width
+      in mm: (checked the raw PDF bytes, not just a screenshot); the
+      captured receipt is confirmed clean of interactive controls and
+      the cookie banner (read directly from the generated PDF); file
+      size dropped from ~5MB to ~100KB after the PNG→JPEG/scale change
+      with no visible quality regression; Complete & Print and Complete
+      Order are both unaffected (`window.print()` fires exactly once
+      for Complete & Print, zero times for either of the other two);
+      all three sales correctly land in `salesHistory`; a real offline
+      package build bundles both new vendor files at their expected
+      sizes and produces a working, zero-network auto-download inside
+      the extracted offline copy; and zero console errors throughout.
   `computeTotals()` is a thin wrapper around the shared
   `computeTotalsFromItems(items, taxRate, discountType, discountValue)`,
   which also powers the Sales History detail editor
@@ -2432,7 +2487,13 @@ loads both via local `<script src="vendor/...">` tags — **not**
 cdnjs/unpkg — so the live site has zero third-party CDN dependency.
 `customer.html` needs neither. `jszip.min.js` is used only by the
 "Download Offline POS" feature below; `xlsx.full.min.js` is also what
-gets pulled into the generated offline package. (`vendor/zxing-browser.min.js`
+gets pulled into the generated offline package. `vendor/jspdf.umd.min.js`
+(4.2.1) and `vendor/html2canvas.min.js` (1.4.1) are the same convention,
+loaded right after `xlsx.full.min.js` and likewise **not**
+`OFFLINE-STRIP`-wrapped - they power `modules/receipt.js`'s
+`downloadReceiptAsPdf()` (the "Complete & Save as PDF" checkout button -
+see "Cart/checkout" under "`app.html` — architecture" below) on both the
+live site and the offline package. (`vendor/zxing-browser.min.js`
 was removed along with the camera barcode scanner — see "Barcode
 scanning" above.) `vendor/jsbarcode.min.js` and `vendor/qrcode.js` +
 `vendor/qrcode_UTF8.js` (load in that order — the `_UTF8` file patches

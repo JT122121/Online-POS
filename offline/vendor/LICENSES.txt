@@ -7,3 +7,15 @@ xlsx.full.min.js
   Version : 0.18.5
   License : Apache-2.0
   Source  : https://www.npmjs.com/package/xlsx
+
+jspdf.umd.min.js
+  Package : jspdf
+  Version : 4.2.1
+  License : MIT
+  Source  : https://www.npmjs.com/package/jspdf
+
+html2canvas.min.js
+  Package : html2canvas
+  Version : 1.4.1
+  License : MIT
+  Source  : https://www.npmjs.com/package/html2canvas
