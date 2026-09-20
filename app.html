@@ -142,13 +142,16 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
 .pos-sidebar-item-ext:hover { background: #eef1f4 !important; color: var(--ink-soft); }
 .pos-sidebar-select.active-cashier-select { margin: 0 0 4px; }
-.pos-sidebar-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 8px; font-size: 13px; flex-shrink: 0; }
-.pos-sidebar-icon-blue { background: #e5edfb; }
-.pos-sidebar-icon-orange { background: #fdecdc; }
-.pos-sidebar-icon-purple { background: #efe6fb; }
-.pos-sidebar-icon-teal { background: #dff5f0; }
-.pos-sidebar-icon-red { background: #fbe6e5; }
-.pos-sidebar-icon-gray { background: #eef1f4; }
+.icon { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; }
+.icon-fill { fill: currentColor; stroke: none; }
+.pos-sidebar-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; }
+.pos-sidebar-icon .icon { width: 14px; height: 14px; vertical-align: middle; }
+.pos-sidebar-icon-blue { background: #e5edfb; color: #3562c9; }
+.pos-sidebar-icon-orange { background: #fdecdc; color: #c8641b; }
+.pos-sidebar-icon-purple { background: #efe6fb; color: #7c3fc9; }
+.pos-sidebar-icon-teal { background: #dff5f0; color: #14806a; }
+.pos-sidebar-icon-red { background: #fbe6e5; color: #c23b34; }
+.pos-sidebar-icon-gray { background: #eef1f4; color: var(--ink-soft); }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
 #backupShortcutButton:hover { background: #f5e7c4; }
@@ -178,7 +181,7 @@ button:active { transform: translateY(1px); }
 .pos-topbar-account { display: flex; align-items: center; }
 .pos-topbar-account .subtitle { margin: 0; }
 
-.app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(220px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
+.app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(330px, 1fr); align-items: start; max-width: 1500px; margin: auto; }
 .app .left-panel { margin-right: 4px; }
 .app .preview-area { margin-left: 4px; }
 .app.catalog-fullscreen { grid-template-columns: 1fr; }
@@ -386,7 +389,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 8px 8px 2px; margin-bottom: 6px; }
 .sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
-.preview-area { width: 100%; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
+.preview-area { width: 100%; min-width: 0; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
 .receipt-preview-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 10px 4px 8px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; }
 .receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d7dbe0; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
 .quick-receipt-settings { width: 80mm; max-width: 100%; margin: 0 0 8px; flex-shrink: 0; }
@@ -513,6 +516,30 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </head>
 <body>
 
+<svg class="hidden" aria-hidden="true">
+<defs>
+<symbol id="icon-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></symbol>
+<symbol id="icon-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+<symbol id="icon-package" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+<symbol id="icon-bar-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+<symbol id="icon-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="icon-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+<symbol id="icon-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+<symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+<symbol id="icon-coffee" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></symbol>
+<symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+<symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+<symbol id="icon-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+<symbol id="icon-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+<symbol id="icon-barcode" viewBox="0 0 24 24" stroke="none" fill="currentColor"><rect x="3" y="4" width="1.4" height="16"/><rect x="6" y="4" width="1" height="16"/><rect x="8.3" y="4" width="2" height="16"/><rect x="11.8" y="4" width="1" height="16"/><rect x="14" y="4" width="1.6" height="16"/><rect x="16.8" y="4" width="1" height="16"/><rect x="19" y="4" width="2" height="16"/></symbol>
+<symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+<symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+<symbol id="icon-maximize" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
+<symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+</defs>
+</svg>
+
 <div class="pos-shell">
 
 <nav class="pos-sidebar" id="posSidebar">
@@ -526,20 +553,20 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 
 <div class="pos-sidebar-nav">
-<button type="button" id="newSaleButton" class="pos-sidebar-item pos-sidebar-item-primary" onclick="newSale()">🧾 <span id="newSaleButtonLabel">New Sale</span></button>
-<button type="button" id="sidebarProductsButton" class="pos-sidebar-item" onclick="openSettingsTab('products')"><span class="pos-sidebar-icon pos-sidebar-icon-blue">🛒</span> <span id="sidebarProductsLabel">Products</span></button>
-<button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')"><span class="pos-sidebar-icon pos-sidebar-icon-orange">📦</span> <span id="sidebarInventoryLabel">Inventory</span></button>
-<button type="button" id="sidebarSalesHistoryButton" class="pos-sidebar-item" onclick="openSettingsTab('salesHistory')"><span class="pos-sidebar-icon pos-sidebar-icon-purple">🧮</span> <span id="sidebarSalesHistoryLabel">Sales History</span></button>
-<button type="button" id="sidebarCashiersButton" class="pos-sidebar-item" onclick="openSettingsTab('cashiers')"><span class="pos-sidebar-icon pos-sidebar-icon-teal">🧑‍🤝‍🧑</span> <span id="sidebarCashiersLabel">Cashiers</span></button>
-<button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day"><span class="pos-sidebar-icon pos-sidebar-icon-red">📅</span> <span id="endOfDayShortcutLabel">End of Day</span></button>
-<button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()"><span class="pos-sidebar-icon pos-sidebar-icon-gray">📺</span> <span id="customerScreenButtonLabel">Customer Screen</span></button>
-<button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting"><span class="pos-sidebar-icon pos-sidebar-icon-teal">❓</span> <span id="howToUseShortcutLabel">How To Use</span></button>
+<button type="button" id="newSaleButton" class="pos-sidebar-item pos-sidebar-item-primary" onclick="newSale()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="newSaleButtonLabel">New Sale</span></button>
+<button type="button" id="sidebarProductsButton" class="pos-sidebar-item" onclick="openSettingsTab('products')"><span class="pos-sidebar-icon pos-sidebar-icon-blue"><svg class="icon"><use href="#icon-cart"></use></svg></span> <span id="sidebarProductsLabel">Products</span></button>
+<button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')"><span class="pos-sidebar-icon pos-sidebar-icon-orange"><svg class="icon"><use href="#icon-package"></use></svg></span> <span id="sidebarInventoryLabel">Inventory</span></button>
+<button type="button" id="sidebarSalesHistoryButton" class="pos-sidebar-item" onclick="openSettingsTab('salesHistory')"><span class="pos-sidebar-icon pos-sidebar-icon-purple"><svg class="icon"><use href="#icon-bar-chart"></use></svg></span> <span id="sidebarSalesHistoryLabel">Sales History</span></button>
+<button type="button" id="sidebarCashiersButton" class="pos-sidebar-item" onclick="openSettingsTab('cashiers')"><span class="pos-sidebar-icon pos-sidebar-icon-teal"><svg class="icon"><use href="#icon-users"></use></svg></span> <span id="sidebarCashiersLabel">Cashiers</span></button>
+<button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day"><span class="pos-sidebar-icon pos-sidebar-icon-red"><svg class="icon"><use href="#icon-calendar"></use></svg></span> <span id="endOfDayShortcutLabel">End of Day</span></button>
+<button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()"><span class="pos-sidebar-icon pos-sidebar-icon-gray"><svg class="icon"><use href="#icon-monitor"></use></svg></span> <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting"><span class="pos-sidebar-icon pos-sidebar-icon-teal"><svg class="icon"><use href="#icon-help-circle"></use></svg></span> <span id="howToUseShortcutLabel">How To Use</span></button>
 <select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
-<button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data">💾 <span id="backupShortcutLabel">Backup</span></button>
+<button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data"><svg class="icon"><use href="#icon-save"></use></svg> <span id="backupShortcutLabel">Backup</span></button>
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
-<button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional">☕ <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
+<button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional"><svg class="icon"><use href="#icon-coffee"></use></svg> <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:END -->
-<button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()">⚙ <span id="settingsButtonLabel">More Settings</span></button>
+<button type="button" id="settingsButton" class="pos-sidebar-item" onclick="openSettings()"><svg class="icon"><use href="#icon-settings"></use></svg> <span id="settingsButtonLabel">More Settings</span></button>
 </div>
 </nav>
 
@@ -552,31 +579,31 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 </div>
 <div class="app-header-links">
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
-<button type="button" id="homepageShortcutButton" class="app-header-link" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage">🏠 <span id="homepageShortcutLabel">Homepage</span></button>
+<button type="button" id="homepageShortcutButton" class="app-header-link" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage"><svg class="icon"><use href="#icon-home"></use></svg> <span id="homepageShortcutLabel">Homepage</span></button>
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
 <!-- OFFLINE-STRIP:BLOG-BUTTON:START -->
-<button type="button" id="blogShortcutButton" class="app-header-link" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog">📰 <span id="blogShortcutLabel">Blog</span></button>
+<button type="button" id="blogShortcutButton" class="app-header-link" onclick="window.open('blog', '_blank')" title="Read the GoOnlinePOS blog"><svg class="icon"><use href="#icon-list"></use></svg> <span id="blogShortcutLabel">Blog</span></button>
 <!-- OFFLINE-STRIP:BLOG-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:START -->
-<button type="button" id="createInvoiceButton" class="app-header-link" onclick="openCreateInvoice()" title="Create a formal invoice for a customer">🧾 <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
+<button type="button" id="createInvoiceButton" class="app-header-link" onclick="openCreateInvoice()" title="Create a formal invoice for a customer"><svg class="icon"><use href="#icon-file-text"></use></svg> <span id="createInvoiceShortcutLabel">Free Invoice Generator</span></button>
 <!-- OFFLINE-STRIP:CREATE-INVOICE-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:START -->
-<button type="button" id="createReceiptButton" class="app-header-link" onclick="openCreateReceipt()" title="Create a standalone payment receipt">🧾 <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
+<button type="button" id="createReceiptButton" class="app-header-link" onclick="openCreateReceipt()" title="Create a standalone payment receipt"><svg class="icon"><use href="#icon-file-text"></use></svg> <span id="createReceiptShortcutLabel">Free Receipt Generator</span></button>
 <!-- OFFLINE-STRIP:CREATE-RECEIPT-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:START -->
-<button type="button" id="createBarcodeButton" class="app-header-link" onclick="openCreateBarcode()" title="Create a barcode or QR code">▤ <span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
+<button type="button" id="createBarcodeButton" class="app-header-link" onclick="openCreateBarcode()" title="Create a barcode or QR code"><svg class="icon icon-fill"><use href="#icon-barcode"></use></svg> <span id="createBarcodeShortcutLabel">Free Barcode &amp; QR Code</span></button>
 <!-- OFFLINE-STRIP:CREATE-BARCODE-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:START -->
 <button type="button" id="createVatButton" class="app-header-link" onclick="openCreateVat()" title="Calculate VAT">% <span id="createVatShortcutLabel">Free VAT Calculator</span></button>
 <!-- OFFLINE-STRIP:CREATE-VAT-BUTTON:END -->
 <!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:START -->
-<button type="button" id="createPricingButton" class="app-header-link" onclick="openCreatePricing()" title="Work out the right selling price for a product">🏷 <span id="createPricingShortcutLabel">Free Pricing Calculator</span></button>
+<button type="button" id="createPricingButton" class="app-header-link" onclick="openCreatePricing()" title="Work out the right selling price for a product"><svg class="icon"><use href="#icon-tag"></use></svg> <span id="createPricingShortcutLabel">Free Pricing Calculator</span></button>
 <!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:END -->
 </div>
 </header>
 
 <div class="pos-topbar">
-<button type="button" class="pos-topbar-icon-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Hide Sidebar">☰</button>
+<button type="button" class="pos-topbar-icon-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Hide Sidebar"><svg class="icon"><use href="#icon-menu"></use></svg></button>
 <div class="pos-topbar-search">
 <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
 </div>
@@ -590,9 +617,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
         <span class="toggle-slider"></span>
       </label>
 </div>
-<button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products">◧</button>
-<button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt">◨</button>
-<button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language">🌐</button>
+<button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
+<button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
+<button type="button" class="pos-topbar-icon-btn" id="topbarLanguageButton" onclick="openSettingsTab('language')" title="Language"><svg class="icon"><use href="#icon-globe"></use></svg></button>
 </div>
 </div>
 
@@ -667,9 +694,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 <div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
-<div class="receipt-preview-tab no-print">📄 <span id="receiptPreviewLabel">Receipt Preview</span></div>
+<div class="receipt-preview-tab no-print"><svg class="icon"><use href="#icon-file-text"></use></svg> <span id="receiptPreviewLabel">Receipt Preview</span></div>
 <div class="quick-receipt-settings no-print" id="quickReceiptSettings">
-<button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()">⚙ <span id="quickSettingsToggleLabel">Quick Settings</span></button>
+<button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()"><svg class="icon"><use href="#icon-settings"></use></svg> <span id="quickSettingsToggleLabel">Quick Settings</span></button>
 <div class="quick-settings-body hidden" id="quickSettingsBody">
 <label id="quickStoreNameLabel">Store Name</label>
 <input id="quickStoreName" oninput="syncQuickField('storeName', this.value)">
