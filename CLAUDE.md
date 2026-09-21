@@ -3599,6 +3599,65 @@ has zero network calls.
   `OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON` marker pair is still present and
   intact; and zero horizontal overflow or console errors at 1400px
   desktop and 390px mobile.
+- **Follow-up: the Barcode Scanner toggle stopped being a direct
+  click-to-flip switch, and became a click-to-open form with explicit
+  Turn On/Turn Off buttons.** Per an explicit "the on off should be
+  click open a form click on or off" request - the inline
+  `<label class="toggle-switch">` slider (drag/tap to instantly flip)
+  was replaced with `#barcodeScannerStatusBtn`, a small pill
+  (`.pos-sidebar-toggle-status`, a colored dot plus "On"/"Off" text,
+  green when on / red when off) that opens a new
+  `#barcodeScannerToggleOverlay` modal on click
+  (`openBarcodeScannerToggleForm()`) instead of changing anything
+  itself.
+  - **The real `#barcodeScannerToggle` checkbox never went away** - it's
+    still the one source of truth `loadSettings()`/`saveSettings()`/
+    `modules/usb-scanner.js` all read by `id`, unchanged - it just no
+    longer has a visible `.toggle-switch` UI of its own; it's a plain
+    hidden checkbox (`class="hidden"`) that only the new JS functions
+    touch programmatically. The modal shows the current state
+    ("Currently: **On**") plus two buttons - `setBarcodeScannerEnabled(true|false)`
+    sets `barcodeScannerToggle.checked`, calls the existing
+    `toggleBarcodeScannerSetting()` (which just persists via
+    `saveSettings()`, unchanged), updates the sidebar pill, and closes
+    the modal - a single explicit choice per open, not a toggle you
+    could misfire by an accidental tap.
+  - **`renderBarcodeScannerStatus()`** (new) is the one function that
+    keeps the pill's dot/text/color and the modal's "Currently:" line in
+    sync with the checkbox's real `checked` state - called from
+    `loadSettings()` (so a fresh page load or a restored backup shows
+    the correct pill immediately), from `openBarcodeScannerToggleForm()`
+    (so the modal never shows a stale status), from
+    `setBarcodeScannerEnabled()` itself, and from `changeLanguage()`
+    (so its `tr("onLabel")`/`tr("offLabel")` text stays correct on a
+    language switch, matching the same "call the render function
+    directly from `changeLanguage()`" pattern `renderAppTitleBadge()`/
+    `renderCashierSelect()` already use elsewhere in this file).
+  - **The now fully-unused `.pos-sidebar-toggle-switch` CSS rule was
+    replaced outright**, not left dead, with the new
+    `.pos-sidebar-toggle-status`/`.pos-sidebar-toggle-dot`/`.on`/`.off`
+    rules - same "don't leave orphaned CSS behind" discipline this
+    session already applied when `.pos-topbar`/`.toggle-row` were
+    removed.
+  - New translation keys (`onLabel`/`offLabel` - read directly via
+    `tr()` inside `renderBarcodeScannerStatus()`, not through the
+    `ids`-map `textContent` loop, since they're composed dynamically
+    depending on state - plus `barcodeScannerToggleFormTitle`/
+    `barcodeScannerToggleFormCurrentLabel`/`barcodeScannerToggleFormInfo`/
+    `barcodeScannerTurnOnBtn`/`barcodeScannerTurnOffBtn`) exist in
+    `modules/translations.js` and the last five are wired into
+    `changeLanguage()`'s `ids` map, matching this file's standing
+    convention.
+  - Verified with Playwright: the pill reads "On" with the green/on
+    styling on a fresh load; clicking it opens the modal showing
+    "Currently: On"; clicking Turn Off closes the modal, unchecks the
+    real checkbox, and flips the pill to the red/off styling; the
+    checkbox's own live `.checked` value (what `usb-scanner.js` actually
+    reads on every keydown) reflects the change immediately; reloading
+    the page shows the choice persisted (pill still reads "Off"); reopening
+    the form and clicking Turn On correctly flips everything back; and
+    zero horizontal overflow or console errors with the form open at
+    1400px desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
