@@ -165,7 +165,13 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-item.pos-sidebar-toggle-item:hover { background: transparent; }
 .pos-sidebar-toggle-row-top { display: flex; align-items: center; gap: 9px; overflow: hidden; text-overflow: ellipsis; }
 .pos-sidebar-toggle-row-top span:not(.pos-sidebar-icon) { overflow: hidden; text-overflow: ellipsis; }
-.pos-sidebar-toggle-switch { align-self: flex-end; }
+.pos-sidebar-toggle-status { align-self: flex-end; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; background: #fff; color: var(--ink-soft); cursor: pointer; }
+.pos-sidebar-toggle-status:hover { border-color: var(--accent); }
+.pos-sidebar-toggle-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+.pos-sidebar-toggle-status.on { background: var(--accent-tint); border-color: #bfe0cf; color: var(--accent-dark); }
+.pos-sidebar-toggle-status.on .pos-sidebar-toggle-dot { background: var(--accent); }
+.pos-sidebar-toggle-status.off { background: var(--danger-tint); border-color: #f0c2bd; color: var(--danger); }
+.pos-sidebar-toggle-status.off .pos-sidebar-toggle-dot { background: var(--danger); }
 #settingsButton::after { content: "▾"; font-size: 10px; opacity: .75; margin-left: auto; }
 #backupShortcutButton { background: var(--gold-tint); color: #6b4f12; border-color: #f0dfb0 !important; }
 #backupShortcutButton:hover { background: #f5e7c4; }
@@ -619,10 +625,11 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
     <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
     <button type="button" class="info-btn" onclick="openBarcodeScannerInfo()" title="How it works" aria-label="How it works">ℹ</button>
   </div>
-  <label class="toggle-switch pos-sidebar-toggle-switch">
-    <input type="checkbox" id="barcodeScannerToggle" checked onchange="toggleBarcodeScannerSetting()">
-    <span class="toggle-slider"></span>
-  </label>
+  <button type="button" class="pos-sidebar-toggle-status" id="barcodeScannerStatusBtn" onclick="openBarcodeScannerToggleForm()">
+    <span class="pos-sidebar-toggle-dot" id="barcodeScannerStatusDot"></span>
+    <span id="barcodeScannerStatusText">On</span>
+  </button>
+  <input type="checkbox" id="barcodeScannerToggle" checked class="hidden">
 </div>
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
 <button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional"><svg class="icon"><use href="#icon-coffee"></use></svg> <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
@@ -913,6 +920,23 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
   </div>
   <div style="padding:18px 20px;">
     <p id="barcodeScannerInfoText" style="margin:0; font-size:13px; color:var(--ink-soft); line-height:1.6;">Plug in any USB barcode scanner - it works like a keyboard, no setup needed. With this toggle on, scan a product's barcode and it's added to your cart automatically. It won't interfere while you're typing in a text field.</p>
+  </div>
+</div>
+</div>
+
+<div id="barcodeScannerToggleOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeBarcodeScannerToggleForm()">
+<div class="scanner-modal" style="max-width:380px;">
+  <div class="scanner-header">
+    <h2 id="barcodeScannerToggleFormTitle">Barcode Scanner</h2>
+    <button onclick="closeBarcodeScannerToggleForm()">✕</button>
+  </div>
+  <div style="padding:18px 20px;">
+    <p style="margin:0 0 4px; font-size:13px; color:var(--ink-soft);"><span id="barcodeScannerToggleFormCurrentLabel">Currently:</span> <strong id="barcodeScannerToggleFormStatus">On</strong></p>
+    <p id="barcodeScannerToggleFormInfo" style="margin:0 0 14px; font-size:12.5px; color:var(--muted); line-height:1.5;">Choose whether a USB barcode scanner should add items to the cart automatically.</p>
+    <div class="csv-actions">
+      <button type="button" id="barcodeScannerTurnOnBtn" onclick="setBarcodeScannerEnabled(true)" style="background:var(--accent);">Turn On</button>
+      <button type="button" id="barcodeScannerTurnOffBtn" onclick="setBarcodeScannerEnabled(false)" style="background:var(--danger);">Turn Off</button>
+    </div>
   </div>
 </div>
 </div>
@@ -1620,6 +1644,7 @@ async function loadSettings() {
       if (scannerToggle) scannerToggle.checked = s.barcodeScannerEnabled !== false;
     } catch (e) {  }
   }
+  renderBarcodeScannerStatus();
   document.getElementById("newProductPrice").step = amountStep();
 }
 async function saveSettings() {
@@ -1636,6 +1661,31 @@ async function saveSettings() {
 }
 function toggleBarcodeScannerSetting() {
   saveSettings();
+}
+function renderBarcodeScannerStatus() {
+  const enabled = document.getElementById("barcodeScannerToggle").checked;
+  const statusBtn = document.getElementById("barcodeScannerStatusBtn");
+  const statusText = document.getElementById("barcodeScannerStatusText");
+  if (statusBtn) {
+    statusBtn.classList.toggle("on", enabled);
+    statusBtn.classList.toggle("off", !enabled);
+  }
+  if (statusText) statusText.textContent = enabled ? tr("onLabel") : tr("offLabel");
+  const formStatus = document.getElementById("barcodeScannerToggleFormStatus");
+  if (formStatus) formStatus.textContent = enabled ? tr("onLabel") : tr("offLabel");
+}
+function openBarcodeScannerToggleForm() {
+  renderBarcodeScannerStatus();
+  document.getElementById("barcodeScannerToggleOverlay").classList.remove("hidden");
+}
+function closeBarcodeScannerToggleForm() {
+  document.getElementById("barcodeScannerToggleOverlay").classList.add("hidden");
+}
+function setBarcodeScannerEnabled(enabled) {
+  document.getElementById("barcodeScannerToggle").checked = enabled;
+  toggleBarcodeScannerSetting();
+  renderBarcodeScannerStatus();
+  closeBarcodeScannerToggleForm();
 }
 function syncQuickField(targetId, value) {
   const el = document.getElementById(targetId);
@@ -3745,6 +3795,8 @@ function changeLanguage() {
     productsTitle: "productsTitle", productsUploadHint: "productsUploadHint",
     barcodeScannerToggleLabel: "barcodeScannerToggleLabel",
     barcodeScannerInfoTitle: "barcodeScannerInfoTitle", barcodeScannerInfoText: "barcodeScannerToggleInfo",
+    barcodeScannerToggleFormTitle: "barcodeScannerToggleFormTitle", barcodeScannerToggleFormCurrentLabel: "barcodeScannerToggleFormCurrentLabel",
+    barcodeScannerToggleFormInfo: "barcodeScannerToggleFormInfo", barcodeScannerTurnOnBtn: "barcodeScannerTurnOnBtn", barcodeScannerTurnOffBtn: "barcodeScannerTurnOffBtn",
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
     addProductPhotoLabel: "addProductPhotoLabel", removePhotoLabel: "removePhotoLabel",
     addProductButton: "addProductButton",
@@ -3844,6 +3896,7 @@ function changeLanguage() {
   renderSalesHistoryPanel();
   renderCashierSelect();
   renderInventoryList();
+  renderBarcodeScannerStatus();
 }
 
 function escapeHtml(text) {
