@@ -3007,6 +3007,54 @@ has zero network calls.
     chips alongside its existing search-by-name-or-SKU note. No section
     was added or removed, so the panel is still exactly 16 `.htu-item`s
     - only these three descriptions changed to stay accurate.
+- **Follow-up: the "📄 Receipt Preview" tab-style header was removed and
+  replaced with the Cashier selector**, per an explicit "remove the
+  receipt preview instead replace it with cashier better" request,
+  confirmed via `AskUserQuestion` that this meant moving the actual
+  `#activeCashierSelect` dropdown up into that spot (not just swapping
+  the label text for a read-only cashier name) - the dropdown existed
+  before this pass but sat as a small, easy-to-miss plain `<select>`
+  mixed in among the sidebar's nav buttons (`.pos-sidebar-select`,
+  between How To Use and Backup), which made it easy to forget to pick
+  a cashier before ringing up a sale. It's now the first thing at the
+  top of the receipt/preview column - `.receipt-preview-tab`'s CSS was
+  renamed to `.receipt-cashier-tab` and restyled as a flex row (a
+  `#icon-users` glyph plus the `<select>` itself, border removed on the
+  select so it reads as plain centered bold text inside the same tab
+  chrome the old static label used - same `--accent` bottom-border
+  "active tab" look) rather than a static `font-weight:700; text-align:
+  center;` label. The select kept its exact same `id`
+  (`activeCashierSelect`) and `onchange="setActiveCashier()"` handler,
+  so `setActiveCashier()`/`saveActiveCashier()` needed zero changes -
+  only where the element lives and how it's styled changed, not how it
+  works. The sidebar's own copy of the select (and its now-empty
+  `.pos-sidebar-select.active-cashier-select` CSS rule) was deleted
+  outright rather than duplicated - there is only ever one
+  `#activeCashierSelect` in the DOM at a time, same as before.
+  `renderCashierSelect()` (`cashiers.length === 0` -> hide) now toggles
+  `.hidden` on the new `#receiptCashierTab` wrapper instead of on the
+  select itself, so the whole tab - icon included - disappears cleanly
+  when no cashiers are configured yet, rather than leaving a bare icon
+  with nothing next to it. The old `#receiptPreviewLabel` span is gone
+  entirely, and its now-dead `receiptPreviewLabel: "receiptPreviewLabel"`
+  entry was removed from `changeLanguage()`'s `ids` map (the same
+  "remove it once the id it targets is gone for good, not just for one
+  build" convention already applied to the Language-removal pass above)
+  - the `receiptPreviewLabel` translation key itself is left defined in
+  `modules/translations.js`, unused now, matching this repo's existing
+  dead-key tolerance elsewhere. Not `OFFLINE-STRIP`-wrapped, same as the
+  tab it replaced - cashier selection has zero network dependency, so it
+  ships identically in the offline package. Verified with Playwright:
+  the tab starts hidden on a fresh install with no cashiers configured;
+  adding a cashier via Settings → Cashiers reveals it immediately with
+  the new cashier in the dropdown; selecting a cashier updates
+  `activeCashierName` and the live receipt's own "Cashier: X" line;
+  exactly one `#activeCashierSelect` exists in the DOM (confirmed it
+  wasn't left duplicated in the sidebar); `#receiptPreviewLabel` and the
+  literal text "Receipt Preview" are both completely gone from the page;
+  the tab still correctly resolves to `display: none` under
+  `page.emulateMedia({ media: "print" })`; and zero console errors and
+  zero horizontal overflow at 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
