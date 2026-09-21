@@ -48,6 +48,7 @@ function buildOfflineAppHtml(html) {
   html = stripMarked(html, "CREATE-VAT-BUTTON", "create vat calculator button");
   html = stripMarked(html, "CREATE-PRICING-BUTTON", "create pricing calculator button");
   html = stripMarked(html, "SUPPORT-COFFEE-BUTTON", "buy me a coffee button");
+  html = stripMarked(html, "HOWTOUSE-VIDEO", "how to use video tutorial embed");
   html = stripMarked(html, "COOKIE-CONSENT", "cookie consent script");
   html = stripMarked(html, "GOOGLE-FONTS", "google fonts links");
   html = stripMarked(html, "COOKIE-SETTINGS-LINK", "cookie settings footer link");
