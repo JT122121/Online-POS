@@ -1288,6 +1288,75 @@ all of them under one pattern:
     zero horizontal overflow/console errors at 1280px desktop (2x DPR)
     and 390px mobile, and the Arabic language switch still keeps all 6
     photos in the DOM and re-translates every title/text correctly.
+- **Follow-up: `index.html`'s SEO meta and "Set it up your way" feature
+  grid updated to mention the Customers module**, per an explicit
+  "update now our seo and main page that we have also manage customer
+  data base with links orders or history as contact details" request,
+  once `app.html`'s own Customers module (Settings → Customers - see
+  "`app.html` — architecture" below) had shipped without ever being
+  reflected on the marketing site.
+  - **`meta description`/`og:description`/`twitter:description`** all
+    picked up "track customers" into the existing "Sell, manage
+    inventory, ... print receipts" list (kept as a short clause, not a
+    rewrite, matching the terse style the rest of that sentence already
+    has); **`meta keywords`** gained `"pos customer database"`/
+    `"customer purchase history"`, appended rather than replacing any
+    existing term; and the `SoftwareApplication` JSON-LD's own
+    `featureList` string gained `"customer database with purchase
+    history"` right after `"customer-facing display"`, the other
+    customer-facing entry already in that list.
+  - **A new `.feature-card`, "Customer database"** (a single-person
+    Feather-style icon, matching the same inline-SVG convention every
+    other feature card already uses - not the sprite `<use>` pattern,
+    since this section predates that convention and was never migrated
+    to it), placed right after "Customer-facing screen" so the two
+    customer-related cards sit next to each other - text: "Save names,
+    companies, emails, and phone numbers in Settings → Customers, then
+    link a customer to each sale at checkout - every past order shows
+    right on their record, newest first," directly naming the contact
+    fields and the linked-order-history behavior the request asked to
+    surface. New `feature16Title`/`feature16Text` keys (appended after
+    `feature15`, not renumbered into the sequence - matching this
+    file's own existing `feature11` gap, a translation key still
+    defined but with no card left in the DOM after the six-language
+    system's retirement, since strict sequential numbering was already
+    not being enforced) exist in `index.html`'s own `translations.en`
+    block and `changeLanguage()`'s `ids` map. This raises the grid from
+    14 real cards to 15 - still not an exact multiple of the 4 or 5
+    columns `repeat(auto-fit, minmax(260px, 1fr))` actually renders at
+    common desktop widths (checked via Playwright: 4 columns at
+    1280-1400px, 5 at 1600-1920px), so the last row is short by one or
+    more cards at every one of those widths regardless - the same was
+    already true of the pre-existing 14-card count before this change
+    (14 isn't a multiple of 4 or 5 either), so this isn't a regression
+    this pass introduced, and manufacturing extra unrelated feature
+    cards purely to hit a clean multiple - for a target that shifts
+    per viewport anyway - wasn't worth doing for a request that only
+    asked about the customer database.
+  - **A new FAQ entry, "Can I keep a customer database?"** added as
+    `faq12` (12th question overall, raising the FAQ from 11 items to
+    12, following the existing `faq1-11` numbering exactly, no
+    renumbering), right after
+    "Can I change the currency?" - answer: "Yes. **Settings →
+    Customers** lets you save a name, company, email, and phone number
+    for each customer, plus any notes you want. Link a customer to a
+    sale at checkout and every order they've ever placed shows right on
+    their record, newest first." Its `<strong>Settings → Customers</strong>`
+    menu-path reference needed `innerHTML`, not `textContent`, matching
+    the exact precedent `faq5A`/`faq6A`/`faq8A` already established for
+    FAQ answers that bold a Settings path - `faq12A` was added to that
+    same hardcoded `innerHTML` id list in `changeLanguage()` (only
+    `faq12Q`, the plain-text question, went into the generic
+    `textContent` `ids` map, same split every other bolded FAQ answer
+    already uses).
+  - Verified with Playwright at 390/1280/1400/1600/1920px: the feature
+    grid renders 15 cards with zero horizontal overflow or console
+    errors at every width; `#faq12A`'s rendered `innerHTML` keeps its
+    `<strong>Settings → Customers</strong>` tag intact; both
+    `application/ld+json` blocks on the page still parse as valid JSON
+    after the `featureList` edit; and the rest of the existing
+    regression baseline (hero copy, tool-card links, FAQ answers 1-11)
+    is unchanged.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
