@@ -4082,6 +4082,160 @@ has zero network calls.
     leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero
     `console.warn` output; and zero console errors or horizontal
     overflow at 1400px desktop and 390px mobile on both tabs.
+- **Dark Mode** - a real dark theme, toggled by a dedicated circular
+  button fixed at the top-right corner of the screen
+  (`#darkModeToggleBtn`, sun/moon icon swap via `#icon-sun`/`#icon-moon`
+  in the shared sprite), per an explicit "add a really nice darkmode
+  option too put it on the top right side" request.
+  - **Mechanism: a single `body.dark-mode` class flips the whole app's
+    CSS custom-property palette**, not a second parallel stylesheet or
+    per-element dark rules. Since almost every structural container in
+    this file already reads its colors from `:root` tokens
+    (`--ink`/`--bg`/`--panel`/`--line`/etc.) rather than hardcoded hex,
+    redefining those same token names under `body.dark-mode { ... }`
+    (darker `--bg`/`--panel`/`--surface`/`--line`/`--line-soft`, a
+    brighter `--accent`/`--gold`/`--danger` tuned for contrast against a
+    dark background, and `color-scheme: dark` so native browser controls
+    - checkboxes, the toggle-switch's focus ring, scrollbars - pick up
+    free dark styling) re-themes the overwhelming majority of the UI
+    automatically, with zero markup changes anywhere.
+  - **A real semantic conflict had to be resolved first: `var(--ink)` was
+    doing two incompatible jobs.** Most of the file uses it correctly as
+    body/heading *text* color (which must go light in dark mode), but
+    eight spots use it as a solid dark *background* paired with hardcoded
+    white text - `.app-header-link:hover`, the product catalog's "+"
+    add-to-cart button, `.checkout-total-box`'s gradient (the "Total Due"
+    box), `.settings-tab-item.active`, `.small-btn`, `.sh-view-btn.active`
+    (Sales History's By Date/All toggle), `.cookie-consent`, and the two
+    inline-styled "Download Sample Excel/CSV" buttons - plus two more
+    where it's dark text sitting on a `var(--gold)` button background
+    (`.bn-backup-btn`, `.cc-accept`). Naively letting `--ink` invert
+    everywhere would have made all ten of these render light-text-on-
+    light-background (or dark-text-on-now-light-gold), unreadable.
+    Fixed by introducing a second, deliberately **decoupled** token,
+    `--ink-solid` (`#16211d` in light mode, a lighter `#323a40` slate in
+    dark mode - not the same dark value in both modes, since a pure
+    near-black button would look like a hole against a dark-mode page
+    background; `#323a40` still reads as "the dark solid button" while
+    having enough contrast against the `#14171a` dark-mode page bg to
+    look intentional), and repointing exactly those ten background/text
+    declarations at it instead of `--ink` - `--ink` itself is now free to
+    invert cleanly for its one real job, body/heading text.
+  - **A second, easy-to-miss category of bug: hardcoded `#fff`/`white`
+    backgrounds paired with an inverting text color.** A handful of rules
+    set a literal white background (not a variable) while still using
+    `var(--ink)`/`var(--ink-soft)`/`var(--muted)` for their text -
+    `input, textarea, select`'s own base rule (every text field in the
+    app), `.search-box:focus`, `.category-chip`, `.sh-view-btn`, and
+    `.shr-delete-btn`. Left alone, every input/select/textarea in the
+    entire app would have rendered as light text on a white box even
+    with dark mode on - by far the highest-impact miss it if it had
+    shipped, since text inputs are everywhere (Settings, checkout,
+    Products, etc.). Fixed with one small `body.dark-mode` override block
+    forcing all of these to `background: var(--panel)` instead, found by
+    grepping for every `background:\s*#fff|white` in the stylesheet and
+    checking each one's paired text color, not just skimming for obvious
+    cases.
+  - **The printed receipt "paper" is deliberately excluded from theming
+    entirely, on screen and in print alike** - `.receipt` and every
+    `.receipt-*` descendant (the live cart/checkout preview, which is
+    the literal DOM `window.print()` renders) keep their pre-existing
+    hardcoded `background: white`/dark literal text colors untouched, in
+    both light and dark mode. A real receipt is printed on white paper
+    with dark ink regardless of what theme the cashier's screen happens
+    to be in, so the on-screen preview has to keep matching that
+    literal appearance even while dark mode is on, or the "what you see
+    is what prints" guarantee this file relies on everywhere else would
+    break. The earlier bulk hex-to-variable sweep (`#fafbfc`/`#eef1f4`/
+    `#c7ccd3`/etc. → the new `--surface`/`--line-soft`/`--line` tokens)
+    was deliberately scoped to skip the `.receipt` CSS block for the
+    same reason - confirmed via `grep` afterward that only the receipt's
+    own three internal color literals and `--line-soft`'s own definition
+    line still contain the old hex values, nothing else. The frame/
+    `box-shadow` drawn *around* the white paper (which already used
+    `var(--accent-dark)`, unrelated to this work) is decorative chrome,
+    not paper content, so it's fine for it to pick up the theme's accent
+    color in dark mode - only the paper's own background/text is pinned.
+  - **New tokens added to `:root`**: `--ink-solid` (see above), `--surface`
+    (a slightly-off-panel "card/row background" tone many components -
+    `.product-item`, `.sh-row`, `.search-box` - already used a near-white
+    hex literal for; giving it a real token name made both the light-mode
+    literal-hex sweep and the dark-mode override possible in one place),
+    and `--accent-tint-border`/`--danger-tint-border` (the tint boxes'
+    own border colors, previously hardcoded `#bfe0cf`/`#f0c2bd` in
+    several places, needed as real tokens so their dark-mode equivalents
+    - translucent rgba versions of the brighter dark-mode accent/danger
+    colors, matching `--accent-tint`/`--danger-tint`'s own rgba
+    treatment - could be defined once).
+  - **Placement: a dedicated circular button, `position: fixed; top: 16px;
+    right: 16px`, not folded into the existing `.app-header-links` row.**
+    A distinct floating toggle in the literal top-right corner (reachable
+    regardless of scroll position, since it's fixed to the viewport, not
+    to `.app-header` which scrolls away with the rest of the page) is
+    both a more typical dark-mode-toggle convention and a more literal
+    reading of "top right side" than adding an eighth pill to the
+    Homepage/Blog/5-free-tools row. This reintroduced the exact class of
+    overlap risk this file has hit before (`.sidebar-toggle-btn`
+    overlapping "Welcome back!" when the sidebar collapses - see the
+    sidebar-reskin history above) - here, a fixed top-right button risks
+    sitting on top of `.app-header-links`' own right-aligned, wrapping
+    pill row on wide desktop screens. Fixed the same way that earlier bug
+    was: reserved real space for it rather than hoping nothing collides -
+    `.app-header { padding-right: 58px; }`, comfortably wider than the
+    button's own 34px + 16px offset footprint, so the header-links row's
+    wrap boundary always stays clear of the button regardless of viewport
+    width. On mobile (`max-width: 900px`, where `#sidebarToggleBtn`
+    itself relocates to the same `top: 8px; right: 8px` corner - see
+    "Site-wide header, nav & footer" history above) the dark-mode button
+    moves to `top: 8px; right: 50px`, sitting just to its left instead of
+    on top of it. Verified with Playwright by measuring both buttons'
+    real `getBoundingClientRect()`s for rectangle overlap (not just a
+    screenshot) at 1400px, 1920px, and 390px - zero overlap with either
+    `.app-header-links` or `#sidebarToggleBtn` at any of the three.
+  - **State**: `loadDarkModeState()` (called from `init()`, right after
+    `loadSidebarState()`) reads `storageGet("pos-dark-mode")` - `"1"`/`"0"`
+    if the visitor has ever toggled it before, otherwise falls back to
+    the OS/browser's own `prefers-color-scheme: dark` media query for a
+    sensible first-visit default rather than always starting light.
+    `toggleDarkMode()` flips `document.body.classList` and persists the
+    explicit choice via `storageSet`, so once a visitor has ever clicked
+    the button their choice always wins over the OS preference on every
+    later visit. `renderDarkModeToggle()` swaps the icon's `<use href>`
+    between `#icon-sun`/`#icon-moon` (showing the icon for the mode
+    clicking would switch *to*, the standard convention) and updates the
+    button's translated `title`/`aria-label`; it's called both from the
+    toggle handler and from `changeLanguage()`'s tail (alongside
+    `renderSidebarToggle()`), so a language switch never leaves the
+    tooltip in a stale language. Two new keys,
+    `darkModeToggleOnLabel`/`darkModeToggleOffLabel`, exist in
+    `modules/translations.js` (English-only now - see "Retired: the
+    six-language translation system" above).
+  - **Ships in the offline package unmodified, not `OFFLINE-STRIP`-wrapped**
+    - same treatment as `#sidebarToggleBtn` and the sidebar-collapse
+    state next to it: a theme toggle has zero network dependency, so
+    there's nothing about it inappropriate for a zero-connectivity
+    offline copy.
+  - Verified with Playwright: the toggle switches `body.dark-mode` on/off
+    and the choice survives a reload; a fresh session with the OS set to
+    `prefers-color-scheme: dark` starts in dark mode with no prior
+    toggle; the ten `--ink-solid`-converted buttons (including a live
+    catalog "+" add-to-cart button once a real product exists, and Sales
+    History's By Date/All toggle) all render as readable white-text-on-
+    dark-gray in both modes; every text input/select/textarea (checked
+    via computed `background-color`/`color` on `#productSearch`) renders
+    correctly in dark mode instead of the light-text-on-white-box bug
+    described above; the receipt panel's computed background/text stay
+    literal white/black in dark mode both on screen and under
+    `page.emulateMedia({ media: "print" })`, and the toggle button itself
+    (and the sidebar) correctly resolve to `display: none` under print
+    media via the existing `.no-print` class; zero rectangle overlap
+    between the toggle and `.app-header-links`/`#sidebarToggleBtn` at
+    1400px, 1920px, and 390px; zero horizontal overflow and zero console
+    errors at all three widths; and the offline-package build
+    (`buildOfflineAppHtml()`) carries the toggle button, its icon
+    symbols, and the full `body.dark-mode` CSS block through unchanged,
+    with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero
+    `console.warn` output.
 
 ## `modules/` — split-out app.html pieces
 
