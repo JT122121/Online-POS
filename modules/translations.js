@@ -35,6 +35,7 @@ en: {
   customerDetailEmptyText: "Select a customer from the list, or click New Customer, to view and edit their details.",
   customerDetailDeleteLabel: "Delete Customer", customerDeleteConfirm: "Delete this customer? This can't be undone.",
   customerRelatedSalesLabel: "Related Sales", customerRelatedSalesEmpty: "No sales yet for this customer.",
+  saleDetailBackToCustomerLabel: "Back to Customer",
   endOfDayShortcutLabel: "End of Day", howToUseShortcutLabel: "How To Use",
   homepageShortcutLabel: "Homepage", blogShortcutLabel: "Blog",
   backupShortcutLabel: "Backup", supportCoffeeLabel: "Buy Me a Coffee", toolbarHideLabel: "Hide Toolbar", toolbarShowLabel: "Show Toolbar", sidebarHideLabel: "Hide Sidebar", sidebarShowLabel: "Show Sidebar",
