@@ -3477,6 +3477,108 @@ has zero network calls.
     relocated selector now lives inside) still resolves to `display:
     none` under print media; and zero horizontal overflow or console
     errors at 1400px, 1000px, and 390px mobile.
+- **Follow-up: the Barcode Scanner toggle moved out of the Products
+  panel entirely, into its own item in the sidebar.** Per an explicit
+  "should be next to New Sale" request that was immediately revised to
+  "Better completely move the barcode scanner settings to Side bar" -
+  the final ask supersedes the first, so it was never placed next to
+  New Sale at all. The `.toggle-row.compact` block (scanner icon,
+  label, info button, toggle switch) that used to sit between the
+  product search box and the category chips in `#catalogView` was
+  removed outright, and a new `.pos-sidebar-item.pos-sidebar-toggle-item`
+  entry was added to `.pos-sidebar-nav` between Customer Screen and How
+  To Use - the exact same `#barcodeScannerToggle`
+  `onchange="toggleBarcodeScannerSetting()"` checkbox and
+  `openBarcodeScannerInfo()` info button, just relocated, so
+  `modules/usb-scanner.js`/`loadSettings()`/`saveSettings()` (all of
+  which read the checkbox purely by `id`) needed zero changes.
+  - **A two-row card, not a single squeezed row** - a sidebar item is
+    only ~196px of usable content width once its icon badge and
+    padding are accounted for, nowhere near enough for an icon, "Barcode
+    Scanner", an info button, and a 44px toggle switch all on one line
+    without truncating the label. `.pos-sidebar-toggle-item` sets
+    `flex-direction: column` instead of the default row, so the top row
+    (`.pos-sidebar-toggle-row-top`: icon badge + label + info button)
+    reads exactly like every other sidebar item, and the toggle switch
+    itself sits on its own row underneath, right-aligned via
+    `.pos-sidebar-toggle-switch { align-self: flex-end; }` - a pattern
+    with no other current use in this codebase, but the only one that
+    fits a full-width toggle control into the sidebar's fixed 236px
+    column without any part of it clipping or overlapping.
+  - **A real, now-fully-dead pair of CSS classes was caught and removed
+    in the same pass**: once the old `.toggle-row compact` markup was
+    deleted, `.toggle-row`/`.toggle-row.compact`/`.toggle-row.compact
+    .toggle-label`/`.toggle-label` had zero remaining HTML references
+    anywhere in the file (confirmed via grep) - this toggle was their
+    only user, unlike other Settings toggles (e.g. Auto-Backup), which
+    turn out to already use their own inline markup rather than this
+    shared component. Removed outright rather than left as tolerated
+    dead weight, matching this session's own established precedent from
+    deleting `.pos-topbar`'s CSS the same way once its last HTML user
+    was removed.
+  - **The MAIN SCREEN `.htu-item` in How To Use** was rewinded from
+    "Turn on the Barcode Scanner toggle here" (accurate when the toggle
+    lived on the same screen it described) to "...in the sidebar",
+    since the toggle no longer lives inside the product-catalog screen
+    itself.
+  - Verified with Playwright: exactly one `#barcodeScannerToggle` exists
+    in the DOM, now inside `.pos-sidebar` and absent from `#catalogView`;
+    clicking the relocated toggle switch still flips its checked state;
+    the info button still opens the same "How the Barcode Scanner Works"
+    modal; the row's own bounding box stays fully inside the sidebar's
+    bounding box at 1400px (no clipping); a 390px mobile check (where
+    the sidebar becomes a horizontal scroll bar) shows the taller
+    two-row item sitting inline with the other pills with zero
+    horizontal page overflow; and zero console errors on either build.
+- **Follow-up: "Download Sales Report" now asks for a mandatory date
+  range in a small modal, instead of showing always-visible optional
+  From/To fields on the page.** Per a screenshot plus "Make this show
+  as form only when user click the button download sales report will
+  ask this question make from and to mandatory" - the `#salesExportFrom`/
+  `#salesExportTo` date inputs used to sit permanently in the
+  `.sh-list-pane` above the action buttons, both optional (an empty
+  range meant "export everything"). They moved into a new
+  `#salesExportOverlay` modal (the same `.scanner-modal`/`.scanner-header`
+  generic modal-box classes `#barcodeScannerInfoOverlay`/
+  `#offlineDownloadOverlay` already use, placed as a later DOM sibling
+  of `#settingsOverlay` - same stacking-order convention as those two,
+  needed since this modal has to paint on top of the full-screen
+  Settings modal it's opened from) that only appears when
+  `#downloadSalesButton` is clicked (`openSalesExportModal()`, which
+  also resets both fields blank on every open so a stale previous range
+  is never silently reused) - `filterSalesHistoryByDateRange()`/
+  `salesExportFileSuffix()`/`exportSalesToExcel()` themselves needed
+  **zero** changes, since they already read `#salesExportFrom`/
+  `#salesExportTo` purely by `id` regardless of where those elements
+  live in the DOM.
+  - **Both dates are now mandatory, enforced client-side before the
+    real export ever runs** - a new `confirmSalesExport()` checks both
+    fields are non-empty and shows `#salesExportModalError` (reusing
+    the existing `.error-text` style) instead of calling
+    `exportSalesToExcel()` when either is blank; only once both are
+    filled does it call the unmodified `exportSalesToExcel()` and then
+    `closeSalesExportModal()`. `salesExportFromLabel`/
+    `salesExportToLabel`'s text changed from "From (optional)"/"To
+    (optional)" to plain "From"/"To" (raw HTML default and the `en`
+    value in `modules/translations.js` both updated together, per this
+    repo's "the two must always agree" convention) since neither is
+    optional anymore. Four new keys
+    (`salesExportModalTitle`/`salesExportModalInfo`/
+    `salesExportModalError`/`salesExportConfirmLabel`) were added to
+    `modules/translations.js` and wired into `changeLanguage()`'s `ids`
+    map alongside the existing two, matching this file's standing
+    convention of keeping every user-facing string wired into that
+    map even though only English exists today.
+  - Verified with Playwright: the From/To fields are no longer visible
+    anywhere on the Sales History panel itself; clicking Download Sales
+    Report opens the modal; confirming with both fields blank, or with
+    only From filled, shows the error and fires zero `download` events;
+    filling both and confirming fires a real `download` event with the
+    expected `sales-report-<from>_to_<to>.xlsx` filename and closes the
+    modal; reopening the modal afterward shows both fields blank again,
+    not the previously-entered range; and zero horizontal overflow or
+    console errors with the modal open at 1400px desktop and 390px
+    mobile.
 
 ## `modules/` — split-out app.html pieces
 
