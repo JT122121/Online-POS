@@ -141,7 +141,6 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-item-primary { margin-bottom: 6px; font-weight: 700; }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
 .pos-sidebar-item-ext:hover { background: #eef1f4 !important; color: var(--ink-soft); }
-.pos-sidebar-select.active-cashier-select { margin: 0 0 4px; }
 .icon { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; }
 .icon-fill { fill: currentColor; stroke: none; }
 .pos-sidebar-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; }
@@ -402,7 +401,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
 .preview-area { width: 100%; min-width: 0; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
-.receipt-preview-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 10px 4px 8px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; }
+.receipt-cashier-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 8px 4px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.receipt-cashier-tab .receipt-cashier-select { width: auto; max-width: calc(100% - 24px); border: none; background: transparent; padding: 2px 4px; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; cursor: pointer; }
+.receipt-cashier-tab .receipt-cashier-select:focus { outline: none; }
 .receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d7dbe0; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
 .quick-receipt-settings { width: 80mm; max-width: 100%; margin: 0 0 8px; flex-shrink: 0; }
 .quick-settings-toggle { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; }
@@ -578,7 +579,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day"><span class="pos-sidebar-icon pos-sidebar-icon-red"><svg class="icon"><use href="#icon-calendar"></use></svg></span> <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()"><span class="pos-sidebar-icon pos-sidebar-icon-gray"><svg class="icon"><use href="#icon-monitor"></use></svg></span> <span id="customerScreenButtonLabel">Customer Screen</span></button>
 <button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting"><span class="pos-sidebar-icon pos-sidebar-icon-teal"><svg class="icon"><use href="#icon-help-circle"></use></svg></span> <span id="howToUseShortcutLabel">How To Use</span></button>
-<select id="activeCashierSelect" class="active-cashier-select pos-sidebar-select hidden" onchange="setActiveCashier()"></select>
 <button type="button" id="backupShortcutButton" class="pos-sidebar-item" onclick="openBackupSettings()" title="Back up your data"><svg class="icon"><use href="#icon-save"></use></svg> <span id="backupShortcutLabel">Backup</span></button>
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START -->
 <button type="button" id="supportCoffeeButton" class="pos-sidebar-item" onclick="openBuyMeCoffee()" title="Support this project - any amount, totally optional"><svg class="icon"><use href="#icon-coffee"></use></svg> <span id="supportCoffeeLabel">Buy Me a Coffee</span></button>
@@ -714,7 +714,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
-<div class="receipt-preview-tab no-print"><svg class="icon"><use href="#icon-file-text"></use></svg> <span id="receiptPreviewLabel">Receipt Preview</span></div>
+<div class="receipt-cashier-tab no-print hidden" id="receiptCashierTab"><svg class="icon"><use href="#icon-users"></use></svg> <select id="activeCashierSelect" class="active-cashier-select receipt-cashier-select" onchange="setActiveCashier()"></select></div>
 <div class="quick-receipt-settings no-print" id="quickReceiptSettings">
 <button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()"><svg class="icon"><use href="#icon-settings"></use></svg> <span id="quickSettingsToggleLabel">Quick Settings</span></button>
 <div class="quick-settings-body hidden" id="quickSettingsBody">
@@ -1886,9 +1886,10 @@ function renderCashiersList() {
 }
 function renderCashierSelect() {
   const select = document.getElementById("activeCashierSelect");
+  const wrapper = document.getElementById("receiptCashierTab");
   if (!select) return;
   select.innerHTML = "";
-  select.classList.toggle("hidden", cashiers.length === 0);
+  if (wrapper) wrapper.classList.toggle("hidden", cashiers.length === 0);
   if (cashiers.length === 0) return;
 
   const blankOption = document.createElement("option");
@@ -3625,7 +3626,7 @@ function changeLanguage() {
     completePdfBtnLabel: "completePdfBtnLabel", completeOnlyBtnLabel: "completeOnlyBtnLabel",
     settingsModalTitle: "settingsModalTitle",
     storeTitle: "storeTitle", storeNameLabel: "storeNameLabel", storeDetailsLabel: "storeDetailsLabel", storeInfo: "storeInfo",
-    quickSettingsToggleLabel: "quickSettingsToggleLabel", receiptPreviewLabel: "receiptPreviewLabel",
+    quickSettingsToggleLabel: "quickSettingsToggleLabel",
     quickStoreNameLabel: "storeNameLabel", quickStoreDetailsLabel: "storeDetailsLabel",
     quickTaxNameLabel: "taxNameLabel", quickTaxRateLabel: "taxRateLabel",
     quickFooterLine1Label: "footerLine1Label", quickFooterLine2Label: "footerLine2Label",
