@@ -2674,6 +2674,48 @@ has zero network calls.
     The offline-package build still produces zero leftover
     `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero `console.warn` with
     this fix in place.
+  - **Follow-up audit: `pos-receipt-prefix` was a second, separate real
+    gap**, found by grepping every `storageGet`/`storageSet` call in
+    `app.html`/`modules/*.js` for literal key names and diffing that
+    full list against what `buildBackupPayload()`/`applyBackupPayload()`
+    actually read/wrote, per an explicit "a lot of settings not added
+    in backup check all and fix" report. Receipt Number Prefix
+    (`receiptPrefix`, Settings → Store's `#receiptPrefixInput`) is
+    stored under its own key, separate from `pos-receipt-counter`, and
+    was never included - a real business-data loss on restore (a
+    shop's receipt prefix, e.g. `"INV-"`, would silently reset to blank
+    on a new device), same class of bug as the customers gap above.
+    Fixed the same way, added to both functions as a plain string (not
+    JSON, matching `receiptCounter`'s own pattern) -
+    `receiptPrefix: (await storageGet("pos-receipt-prefix")) || ""` in
+    `buildBackupPayload()`, `if (backup.receiptPrefix !== undefined)
+    await storageSet("pos-receipt-prefix", backup.receiptPrefix);` in
+    `applyBackupPayload()`. `init()`'s existing `loadReceiptPrefix()`
+    call already picks up the restored key on the post-restore
+    `location.reload()`, same as every other backed-up key - no other
+    wiring needed. **Every other key the audit surfaced was confirmed
+    correctly excluded, not missed** - `pos-catalog-width`/
+    `pos-dark-mode`/`pos-sidebar-collapsed`/`pos-header-links-collapsed`/
+    `pos-quick-settings-open`/`pos-backup-notice-dismissed` are all
+    device/UI display preferences (panel width, theme, sidebar/toolbar
+    collapse state, a dismissed reminder banner), the same category
+    already deliberately left out of backup elsewhere in this file
+    (e.g. the toolbar-hide state's own "every fresh page load starts
+    expanded regardless" convention) - restoring these on a different
+    device/browser would be wrong, not helpful, so they're correctly
+    absent. `pos-auto-backup-last-snapshot-date` is pure internal
+    dedup bookkeeping for the once-a-day snapshot file, tied to a local
+    folder handle that itself lives in IndexedDB (not `localStorage`)
+    and is inherently device-specific - also correctly excluded, not a
+    gap. Every genuine `pos-settings` sub-field (currency, tax,
+    discount, paper size, document type, barcode-scanner-enabled, ...)
+    already travels inside the single `pos-settings` JSON blob, which
+    was already backed up whole. Verified with Playwright: setting a
+    real Receipt Number Prefix, building a backup, clearing
+    `localStorage` entirely to simulate a fresh device, applying the
+    backup, and reloading correctly restores the exact same prefix in
+    both the live `receiptPrefix` module variable and the Settings-tab
+    input field; zero console errors.
 - **Auto-Backup** - a local, zero-network alternative to remembering to
   click "Download Backup," built after a design discussion about the
   cleanest way to guarantee nothing is ever lost without introducing a
