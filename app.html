@@ -229,6 +229,11 @@ button:active { transform: translateY(1px); }
 .app-header-greeting { flex-shrink: 0; }
 .pos-welcome-title { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
 .app-header .subtitle { margin: 0; color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
+.app-header-links-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.app-header-links-toggle-btn { flex-shrink: 0; width: 22px; height: 22px; border: 1px solid var(--line); background: var(--panel); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.app-header-links-toggle-btn:hover { border-color: var(--accent); background: var(--accent-tint); }
+.app-header-links-toggle-btn .icon { width: 12px; height: 12px; transition: transform .15s ease; }
+.app-header-links-wrap.collapsed .app-header-links-toggle-btn .icon { transform: rotate(180deg); }
 .app-header-links { display: flex; flex-wrap: wrap; gap: 6px; }
 .app-header-link { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-dark); color: #fff; border: 0; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .app-header-link:hover { background: var(--ink-solid); }
@@ -649,6 +654,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 <symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 <symbol id="icon-chevron-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+<symbol id="icon-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
 <symbol id="icon-trash-2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
 <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
 <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
@@ -703,7 +709,9 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <div class="pos-welcome-title" id="welcomeBackTitle">Welcome back!</div>
 <div class="subtitle" id="appSubtitle">No signup. No login. Just open the tab and start selling.</div>
 </div>
-<div class="app-header-links">
+<div class="app-header-links-wrap" id="appHeaderLinksWrap">
+<button type="button" class="app-header-links-toggle-btn no-print" id="appHeaderLinksToggleBtn" onclick="toggleAppHeaderLinks()" title="Hide Quick Links"><svg class="icon"><use href="#icon-chevron-down" id="appHeaderLinksToggleIconUse"></use></svg></button>
+<div class="app-header-links" id="appHeaderLinks">
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:START -->
 <button type="button" id="homepageShortcutButton" class="app-header-link" onclick="window.open('/', '_blank')" title="Visit the GoOnlinePOS homepage"><svg class="icon"><use href="#icon-home"></use></svg> <span id="homepageShortcutLabel">Homepage</span></button>
 <!-- OFFLINE-STRIP:HOMEPAGE-BUTTON:END -->
@@ -725,6 +733,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:START -->
 <button type="button" id="createPricingButton" class="app-header-link" onclick="openCreatePricing()" title="Work out the right selling price for a product"><svg class="icon"><use href="#icon-tag"></use></svg> <span id="createPricingShortcutLabel">Free Pricing Calculator</span></button>
 <!-- OFFLINE-STRIP:CREATE-PRICING-BUTTON:END -->
+</div>
 </div>
 </header>
 
@@ -1812,6 +1821,34 @@ async function loadDarkModeState() {
     on = !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
   }
   applyDarkMode(on);
+}
+async function toggleAppHeaderLinks() {
+  const links = document.getElementById("appHeaderLinks");
+  const wrap = document.getElementById("appHeaderLinksWrap");
+  if (!links) return;
+  links.classList.toggle("hidden");
+  const collapsed = links.classList.contains("hidden");
+  if (wrap) wrap.classList.toggle("collapsed", collapsed);
+  renderAppHeaderLinksToggle();
+  await storageSet("pos-header-links-collapsed", collapsed ? "1" : "0");
+}
+function renderAppHeaderLinksToggle() {
+  const btn = document.getElementById("appHeaderLinksToggleBtn");
+  const links = document.getElementById("appHeaderLinks");
+  if (!btn || !links) return;
+  const collapsed = links.classList.contains("hidden");
+  btn.title = tr(collapsed ? "appHeaderLinksShowLabel" : "appHeaderLinksHideLabel");
+  btn.setAttribute("aria-label", btn.title);
+}
+async function loadAppHeaderLinksState() {
+  const collapsed = (await storageGet("pos-header-links-collapsed")) === "1";
+  if (collapsed) {
+    const links = document.getElementById("appHeaderLinks");
+    const wrap = document.getElementById("appHeaderLinksWrap");
+    if (links) links.classList.add("hidden");
+    if (wrap) wrap.classList.add("collapsed");
+  }
+  renderAppHeaderLinksToggle();
 }
 async function loadPanelSplit() {
   const saved = await storageGet("pos-catalog-width");
@@ -4468,6 +4505,7 @@ function changeLanguage() {
   });
   renderSidebarToggle();
   renderDarkModeToggle();
+  renderAppHeaderLinksToggle();
   renderAutoBackupStatus();
 
   const searchEl = document.getElementById("productSearch");
@@ -4559,6 +4597,7 @@ async function init() {
   await loadPanelSplit();
   await loadSidebarState();
   await loadDarkModeState();
+  await loadAppHeaderLinksState();
   await startFirstSale();
   changePaperSize();
   updateZoom();

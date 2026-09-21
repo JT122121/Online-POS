@@ -38,6 +38,7 @@ en: {
   homepageShortcutLabel: "Homepage", blogShortcutLabel: "Blog",
   backupShortcutLabel: "Backup", supportCoffeeLabel: "Buy Me a Coffee", toolbarHideLabel: "Hide Toolbar", toolbarShowLabel: "Show Toolbar", sidebarHideLabel: "Hide Sidebar", sidebarShowLabel: "Show Sidebar",
   darkModeToggleOnLabel: "Switch to Dark Mode", darkModeToggleOffLabel: "Switch to Light Mode",
+  appHeaderLinksHideLabel: "Hide Quick Links", appHeaderLinksShowLabel: "Show Quick Links",
   logoUploadError: "Couldn't load that image. Try a PNG or JPG file.", logoRemoveConfirm: "Remove the company logo?", removeLogoConfirmButton: "Click again to remove",
   documentTitle: "Document", documentTypeLabel: "Document Type",
   inventoryUncategorized: "Uncategorized", inventoryExportEmptyAlert: "No products yet - add some first.", inventoryExportButtonLabel: "Download Inventory Report", inventoryValueLabel: "Value:",
