@@ -2,7 +2,7 @@ const translations = {
 
 en: {
   appTitle: "Online POS", appSubtitle: "No signup. No login. Just open the tab and start selling.", welcomeBackTitle: "Welcome back!",
-  settingsButtonLabel: "More Settings", printButtonLabel: "Print", newSaleButtonLabel: "New Sale",
+  settingsButtonLabel: "More Settings", printButtonLabel: "Print", clearCartButtonLabel: "Clear Cart",
   catalogHeading: "Products", cartCountBadge: "in cart", allCategory: "All",
   productsSearchPlaceholder: "Search products...", productsEmptyState: "No products yet. Add some from Settings → Products.",
   scannerFound: "Added:", scannerNotFound: "No product found for barcode:",

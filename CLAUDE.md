@@ -3658,6 +3658,44 @@ has zero network calls.
     the form and clicking Turn On correctly flips everything back; and
     zero horizontal overflow or console errors with the form open at
     1400px desktop and 390px mobile.
+- **Follow-up: "New Sale" renamed to "Clear Cart", since it was never
+  actually needed to *start* a sale.** Per an explicit "i think its no
+  use since we can always start sale by click the plus sign in product"
+  report - confirmed via `AskUserQuestion` before touching anything,
+  since the button's real job (the only way to abandon an in-progress
+  cart without completing checkout, with a "the current cart will be
+  cleared" confirm) would have been lost if it were simply deleted as
+  first suggested. The chosen fix keeps that capability but renames and
+  re-styles the button to describe what it actually does, rather than
+  what it was never really for: `#newSaleButton`/`newSale()`/
+  `newSaleButtonLabel` became `#clearCartButton`/`clearCart()`/
+  `clearCartButtonLabel` (label "Clear Cart", confirm text "Clear the
+  cart? This can't be undone."), the icon swapped from `#icon-plus-circle`
+  to a new `#icon-trash-2` sprite symbol (Feather-style, matching this
+  file's existing icon convention), and its color flipped from the
+  green `--accent`/`--accent-dark` "positive action" pair to
+  `--danger`/`#8f1f19` - matching the same red styling every other
+  irreversible "Clear ..." button in this file already uses
+  (`#productsClearButton`/`#clearSalesButton`), rather than looking
+  like a primary green "add" action. `startNewSale()` itself (the
+  lower-level cart-reset helper also called after a completed checkout)
+  was left unchanged - only the public-facing wrapper and its button
+  were renamed. The MAIN SCREEN `.htu-item` in How To Use was reworded
+  to match (adding a product now explicitly "start[s] a sale", and
+  Clear Cart is framed as "abandon it and start over," not a
+  prerequisite first step). `index.html`'s homepage `.app-preview` mock
+  still shows its own decorative "New Sale" sidebar item - deliberately
+  left as-is, matching this file's established "the mock drifts and
+  gets resynced in its own dedicated pass, not on every real-app UI
+  tweak" precedent documented elsewhere in this section.
+  - Verified with Playwright: the button reads "Clear Cart" with the
+    trash icon and red background; `#newSaleButton` no longer exists
+    anywhere in the DOM; adding a product to the cart then clicking
+    Clear Cart and dismissing the confirm leaves the cart untouched;
+    accepting the confirm empties it; clicking Clear Cart again with an
+    already-empty cart fires no confirm dialog at all (the existing
+    `cart.length &&` guard, unchanged); and zero horizontal overflow or
+    console errors at 1400px desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
