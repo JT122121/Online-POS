@@ -3739,6 +3739,45 @@ has zero network calls.
     `#barcodeScannerInfoOverlay` no longer exists anywhere in the DOM;
     and zero horizontal overflow or console errors with the modal open
     at 1400px desktop and 390px mobile.
+- **Bug fix: the Cashier select's "No cashier selected" placeholder text
+  was visibly clipped** in its new Products-panel pill (`#receiptCashierTab`,
+  next to New Sale/Clear Cart - see the panel-heading-actions move above),
+  reported directly ("The word No cashier selected is truncated"). Root
+  cause, found by measuring the rendered `<select>` rather than just
+  reading the CSS: the intended narrowing rule,
+  `.panel-heading-actions .receipt-cashier-select { max-width: 150px; }`,
+  was never actually the one taking effect - it ties in specificity
+  (two classes) with the older, unrelated `.receipt-cashier-tab
+  .receipt-cashier-select { max-width: calc(100% - 24px); ... }` base
+  rule (written for the select's original home in `.preview-area`, still
+  present further down the stylesheet), and CSS resolves a specificity
+  tie by source order, so the later base rule silently won regardless of
+  which one looked like the "real" override. That left the select's
+  actual rendered width resolving to ~142px - just short of what "No
+  cashier selected" needs at its 11.5px/600-weight font, so the browser's
+  own native `<select>` clipped the trailing character(s) against the
+  dropdown arrow instead of wrapping or ellipsizing visibly. Confirmed
+  with a zoomed Playwright screenshot showing literally "No cashier
+  selectec" with the final "d" cut off. Fixed two ways together, not
+  just a bigger number: the selector was changed to
+  `.panel-heading-actions .receipt-cashier-tab .receipt-cashier-select`
+  (three classes) so it has strictly higher specificity than the base
+  rule and always wins regardless of source order - the same class of
+  "an override rule silently loses a specificity tie" bug worth checking
+  for any time two rules target the same element from different contexts
+  in this file - and `max-width: 150px` was replaced with `max-width:
+  none; min-width: 170px;`, sized to comfortably fit the placeholder text
+  with room to spare rather than just barely. `.receipt-cashier-tab`
+  itself also changed from `flex-shrink: 1` to `flex-shrink: 0` in this
+  same context so the pill can't be squeezed by its flex siblings (Cart
+  count badge, Clear Cart) even under tighter layouts - `.panel-heading-
+  actions` already has `flex-wrap: wrap`, so a genuinely tight row wraps
+  onto a new line instead of compressing the select's text illegibly.
+  Verified with Playwright: both "No cashier selected" and a real
+  selected cashier name (including a longer one, "Alexandria") now
+  render in full with no clipping at 1400px desktop; the same holds at
+  390px mobile with zero horizontal overflow; and zero console errors
+  throughout.
 
 ## `modules/` — split-out app.html pieces
 
