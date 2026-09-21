@@ -348,30 +348,24 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--accent); outline-offset: 2px; }
 .error-text { margin-top: 8px; padding: 9px 10px; background: var(--danger-tint); border: 1px solid #f0c2bd; border-radius: var(--radius-sm); color: var(--danger); font-size: 11.5px; line-height: 1.45; }
 .success-text { margin-top: 8px; padding: 9px 10px; background: var(--accent-tint); border: 1px solid #bfe0cf; border-radius: var(--radius-sm); color: var(--accent-dark); font-size: 11.5px; line-height: 1.45; }
-.inv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; }
+.inv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; cursor: pointer; }
+.inv-row:hover { background: var(--accent-tint); }
 .inv-group-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; margin: 12px 0 6px; font-family: var(--font-display); font-weight: 600; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
 .inv-group-header:first-child { margin-top: 0; }
 .inv-group-count { background: var(--line-soft); color: var(--ink-soft); font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: none; letter-spacing: 0; }
 .inv-row.low-stock { background: var(--danger-tint); border-color: #f0c2bd; }
+.inv-row.selected { background: var(--accent-tint); border-color: #bfe0cf; }
 .inv-row-info { min-width: 0; flex: 1; }
 .inv-row-name { font-weight: 600; font-size: 12.5px; overflow-wrap: break-word; }
 .inv-row-sub { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
 .inv-row-sku { font-size: 10.5px; color: var(--muted); font-family: var(--font-mono); }
-.inv-row-value { font-size: 10.5px; color: var(--accent-dark); font-weight: 600; font-family: var(--font-mono); }
-.inv-row-cat { font-size: 10.5px; color: var(--muted); }
-.inv-row-stock { flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
-.inv-row-stock label { margin: 0; font-size: 10.5px; color: var(--muted); font-weight: 500; }
-.inv-row-stock input { width: 70px; padding: 6px 8px; font-size: 12.5px; text-align: right; }
+.inv-row-stock-display { flex-shrink: 0; font-weight: 700; font-size: 13px; color: var(--ink); font-family: var(--font-mono); min-width: 34px; text-align: right; }
 
 .payment-editor { display: flex; gap: 6px; margin-top: 8px; }
 .payment-editor input { flex: 1; }
 .payment-list { margin-top: 9px; }
 .payment-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; font-size: 12px; font-weight: 500; }
 .payment-item button { background: #eef1f4; border: 0; padding: 4px 8px; border-radius: 5px; color: var(--ink-soft); }
-.mp-name-input { flex-shrink: 0; width: auto; max-width: 130px; border: 1px solid transparent; background: transparent; padding: 3px 5px; font-size: 12px; font-weight: 600; color: var(--ink); border-radius: 5px; }
-.mp-name-input:hover { border-color: var(--line); background: #fff; }
-.mp-name-input:focus { border-color: var(--accent); background: #fff; box-shadow: none; }
-.mp-meta { flex: 1; font-size: 12px; color: var(--ink-soft); overflow-wrap: break-word; }
 .payment-item button:hover { background: var(--danger-tint); color: var(--danger); }
 .csv-actions { display: flex; gap: 8px; margin-top: 9px; }
 .csv-actions button { flex: 1; border: 0; border-radius: var(--radius-sm); color: #fff; padding: 10px; font-size: 12.5px; font-weight: 600; }
@@ -382,26 +376,33 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .settings-primary-btn .icon { width: 16px; height: 16px; }
 .add-product-form { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
 
-/* Sales History: master-detail split view (full-screen tab) */
-.settings-tab-panel.sales-history-active { padding: 0; overflow: hidden; }
-.settings-tab-panel.sales-history-active #panel-salesHistory.active { height: 100%; display: flex; flex-direction: column; }
-.sh-split { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.sh-list-pane { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; }
-.sh-detail-pane { display: none; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; border-top: 1px solid var(--line-soft); }
-.sh-split.detail-open .sh-list-pane { display: none; }
-.sh-split.detail-open .sh-detail-pane { display: block; }
-.sh-detail-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--muted); gap: 8px; }
-.sh-detail-empty-icon { font-size: 34px; opacity: .5; }
-.sh-detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.sh-detail-header h3 { margin: 0; }
-.sh-detail-close-btn { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
-.sh-detail-close-btn:hover { background: #f2f1ea; color: var(--ink); }
+/* Master-detail split view (full-screen tabs: Products, Inventory, Sales History) */
+.settings-tab-panel.split-view-active { padding: 0; overflow: hidden; }
+.settings-tab-panel.split-view-active .settings-panel-content.active { height: 100%; display: flex; flex-direction: column; }
+.md-split { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.md-list-pane { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; }
+.md-detail-pane { display: none; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; border-top: 1px solid var(--line-soft); }
+.md-split.detail-open .md-list-pane { display: none; }
+.md-split.detail-open .md-detail-pane { display: block; }
+.md-detail-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--muted); gap: 8px; }
+.md-detail-empty-icon { font-size: 34px; opacity: .5; }
+.md-detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.md-detail-header h3 { margin: 0; }
+.md-detail-close-btn { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
+.md-detail-close-btn:hover { background: #f2f1ea; color: var(--ink); }
 @media (min-width: 901px) {
-  .sh-split { flex-direction: row; gap: 0; }
-  .sh-list-pane { flex: 0 0 420px; border-right: 1px solid var(--line-soft); }
-  .sh-detail-pane { flex: 1; display: block !important; border-top: 0; }
-  .sh-split.detail-open .sh-list-pane { display: block; }
+  .md-split { flex-direction: row; gap: 0; }
+  .md-list-pane { flex: 0 0 420px; border-right: 1px solid var(--line-soft); }
+  .md-detail-pane { flex: 1; display: block !important; border-top: 0; }
+  .md-split.detail-open .md-list-pane { display: block; }
 }
+
+.prod-row { display: flex; align-items: center; gap: 10px; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; cursor: pointer; }
+.prod-row:hover { background: var(--accent-tint); }
+.prod-row.selected { background: var(--accent-tint); border-color: #bfe0cf; }
+.prod-row-info { flex: 1; min-width: 0; }
+.prod-row-name { font-weight: 600; font-size: 12.5px; overflow-wrap: break-word; }
+.prod-row-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; overflow-wrap: break-word; }
 
 .sh-view-toggle { display: flex; gap: 6px; margin: 10px 0; }
 .sh-view-btn { flex: 1; border: 1px solid var(--line); background: #fff; color: var(--ink-soft); border-radius: var(--radius-sm); padding: 7px 8px; font-size: 11.5px; font-weight: 600; }
@@ -409,7 +410,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sh-view-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
 .sales-history-list { margin-top: 9px; max-height: 260px; overflow-y: auto; }
-.settings-tab-panel.sales-history-active .sales-history-list { max-height: none; }
+.settings-tab-panel.split-view-active .sales-history-list { max-height: none; }
 .sh-row { display: grid; grid-template-columns: 76px 1fr 90px 62px; align-items: center; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-top: none; background: #fafbfc; font-size: 11.5px; }
 .sh-row:first-of-type { border-top: 1px solid var(--line-soft); border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); }
 .sh-row:last-of-type { border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
@@ -1014,69 +1015,152 @@ Website: Goonlinepos.com</textarea>
       </div>
 
       <div class="settings-panel-content" id="panel-products">
-        <h3 id="productsTitle">Products</h3>
-        <button type="button" class="settings-primary-btn" id="addProductToggleBtn" onclick="toggleAddProductForm()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="addProductToggleLabel">Add Product</span></button>
+        <div class="md-split" id="productsSplit">
+          <div class="md-list-pane">
+            <h3 id="productsTitle">Products</h3>
+            <button type="button" class="settings-primary-btn" id="addProductToggleBtn" onclick="toggleAddProductForm()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="addProductToggleLabel">Add Product</span></button>
 
-        <div id="addProductForm" class="add-product-form hidden">
-        <label id="addProductPhotoLabel">Photo (optional)</label>
-        <div class="new-product-photo-row">
-          <label class="mp-photo-label" title="Upload a photo">
-            <span id="newProductPhotoPreview"><div class="product-thumb product-thumb-placeholder">📦</div></span>
-            <input type="file" accept="image/*" class="hidden" onchange="handleNewProductPhotoUpload(event)">
-          </label>
-          <button type="button" class="small-btn hidden" id="newProductPhotoRemoveBtn" onclick="removeNewProductPhoto()" style="background:transparent; color:var(--ink-soft); width:auto;">✕ <span id="removePhotoLabel">Remove</span></button>
-        </div>
-        <label id="addProductNameLabel">Product Name</label>
-        <input id="newProductName" placeholder="e.g. Coca Cola 330ml">
-        <div class="two-columns">
-          <div>
-            <label id="addProductPriceLabel">Price</label>
-            <input id="newProductPrice" type="number" min="0" step="0.01" placeholder="0.00">
+            <div id="addProductForm" class="add-product-form hidden">
+            <label id="addProductPhotoLabel">Photo (optional)</label>
+            <div class="new-product-photo-row">
+              <label class="mp-photo-label" title="Upload a photo">
+                <span id="newProductPhotoPreview"><div class="product-thumb product-thumb-placeholder">📦</div></span>
+                <input type="file" accept="image/*" class="hidden" onchange="handleNewProductPhotoUpload(event)">
+              </label>
+              <button type="button" class="small-btn hidden" id="newProductPhotoRemoveBtn" onclick="removeNewProductPhoto()" style="background:transparent; color:var(--ink-soft); width:auto;">✕ <span id="removePhotoLabel">Remove</span></button>
+            </div>
+            <label id="addProductNameLabel">Product Name</label>
+            <input id="newProductName" placeholder="e.g. Coca Cola 330ml">
+            <div class="two-columns">
+              <div>
+                <label id="addProductPriceLabel">Price</label>
+                <input id="newProductPrice" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+              <div>
+                <label id="addProductCategoryLabel">Category (optional)</label>
+                <input id="newProductCategory" placeholder="e.g. Beverages">
+              </div>
+            </div>
+            <label id="addProductSkuLabel">SKU</label>
+            <input id="newProductSku" placeholder="e.g. 8901">
+            <label id="addProductStockLabel">Stock Level (optional)</label>
+            <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
+            <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
+              <input id="newProductTaxExempt" type="checkbox"> <span id="addProductTaxExemptLabel">Tax Exempt</span>
+            </label>
+            <button type="button" class="settings-primary-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:12px;">Save Product</button>
+            <div id="addProductErrorBox" class="error-text hidden"></div>
+            </div>
+
+            <div id="productsCategoryChips" class="category-chips" style="margin-top:14px;"></div>
+            <div id="manageProductsList" class="payment-list"></div>
+            <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
+
+            <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, SKU (all required), and optionally Category, Stock, and TaxExempt. Products with a SKU that already exists in your catalog are updated; products with a new SKU are added; rows with no SKU are skipped. Nothing already in your catalog is removed - use Clear Products below for that.</div>
+            <input id="csvFileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleProductFileUpload(event)">
+            <div id="csvErrorBox" class="error-text hidden"></div>
+            <div id="csvSuccessBox" class="success-text hidden"></div>
+            <div class="csv-actions">
+              <button style="background:var(--ink);" onclick="downloadSampleExcel()" id="productsSampleExcelButton">Download Sample Excel</button>
+              <button style="background:var(--ink);" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
+              <button style="background:var(--danger);" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
+            </div>
           </div>
-          <div>
-            <label id="addProductCategoryLabel">Category (optional)</label>
-            <input id="newProductCategory" placeholder="e.g. Beverages">
+          <div class="md-detail-pane" id="productDetailPane">
+            <div class="md-detail-empty" id="productDetailEmptyState">
+              <div class="md-detail-empty-icon">📦</div>
+              <p id="productDetailEmptyText">Select a product from the list to view and edit its details.</p>
+            </div>
+            <div id="productDetailContent" class="hidden">
+              <div class="md-detail-header">
+                <h3 id="productDetailTitle">Edit Product</h3>
+                <button type="button" class="md-detail-close-btn" onclick="closeProductDetail()" aria-label="Close">✕</button>
+              </div>
+              <label id="productDetailPhotoLabel">Photo (optional)</label>
+              <div class="new-product-photo-row">
+                <label class="mp-photo-label" title="Upload a photo">
+                  <span id="productDetailPhotoPreview"></span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleProductDetailPhotoUpload(event)">
+                </label>
+                <button type="button" class="small-btn hidden" id="productDetailPhotoRemoveBtn" onclick="removeProductDetailPhoto()" style="background:transparent; color:var(--ink-soft); width:auto;">✕ <span id="productDetailPhotoRemoveLabel">Remove</span></button>
+              </div>
+              <label id="productDetailNameLabel">Product Name</label>
+              <input id="productDetailName" placeholder="e.g. Coca Cola 330ml">
+              <div class="two-columns">
+                <div>
+                  <label id="productDetailPriceLabel">Price</label>
+                  <input id="productDetailPrice" type="number" min="0" step="0.01" placeholder="0.00">
+                </div>
+                <div>
+                  <label id="productDetailCategoryLabel">Category (optional)</label>
+                  <input id="productDetailCategory" placeholder="e.g. Beverages">
+                </div>
+              </div>
+              <label id="productDetailSkuLabel">SKU</label>
+              <input id="productDetailSku" placeholder="e.g. 8901">
+              <label id="productDetailStockLabel">Stock Level (optional)</label>
+              <input id="productDetailStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
+                <input id="productDetailTaxExempt" type="checkbox"> <span id="productDetailTaxExemptLabel">Tax Exempt</span>
+              </label>
+              <div id="productDetailErrorBox" class="error-text hidden"></div>
+              <button type="button" class="settings-primary-btn" onclick="saveProductDetailEdits()" id="productDetailSaveBtn" style="margin-top:16px;"><span id="productDetailSaveLabel">Save Changes</span></button>
+            </div>
           </div>
-        </div>
-        <label id="addProductSkuLabel">SKU</label>
-        <input id="newProductSku" placeholder="e.g. 8901">
-        <label id="addProductStockLabel">Stock Level (optional)</label>
-        <input id="newProductStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
-        <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
-          <input id="newProductTaxExempt" type="checkbox"> <span id="addProductTaxExemptLabel">Tax Exempt</span>
-        </label>
-        <button type="button" class="settings-primary-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:12px;">Save Product</button>
-        <div id="addProductErrorBox" class="error-text hidden"></div>
-        </div>
-
-        <div id="productsCategoryChips" class="category-chips" style="margin-top:14px;"></div>
-        <div id="manageProductsList" class="payment-list"></div>
-        <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
-
-        <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, SKU (all required), and optionally Category, Stock, and TaxExempt. Products with a SKU that already exists in your catalog are updated; products with a new SKU are added; rows with no SKU are skipped. Nothing already in your catalog is removed - use Clear Products below for that.</div>
-        <input id="csvFileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="handleProductFileUpload(event)">
-        <div id="csvErrorBox" class="error-text hidden"></div>
-        <div id="csvSuccessBox" class="success-text hidden"></div>
-        <div class="csv-actions">
-          <button style="background:var(--ink);" onclick="downloadSampleExcel()" id="productsSampleExcelButton">Download Sample Excel</button>
-          <button style="background:var(--ink);" onclick="downloadSampleCsv()" id="productsSampleButton">Download Sample CSV</button>
-          <button style="background:var(--danger);" onclick="clearProducts()" id="productsClearButton">Clear Products</button>
         </div>
       </div>
 
       <div class="settings-panel-content" id="panel-inventory">
-        <h3 id="inventoryTitle" style="margin:0 0 10px;">Inventory</h3>
-        <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock - leave a field blank if you don't want to track stock for that product.</div>
-        <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
-        <div id="inventoryCategoryChips" class="category-chips" style="margin-top:10px;"></div>
-        <div id="inventoryList" class="payment-list"></div>
-        <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
-        <button type="button" class="small-btn" onclick="exportInventoryToExcel()" id="inventoryExportButton" style="width:100%; margin-top:12px; background:var(--accent);">⬇ <span id="inventoryExportButtonLabel">Download Inventory Report</span></button>
+        <div class="md-split" id="inventorySplit">
+          <div class="md-list-pane">
+            <h3 id="inventoryTitle" style="margin:0 0 10px;">Inventory</h3>
+            <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Click any product to view and correct its stock on the right - leave it blank if you don't want to track stock for that product.</div>
+            <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
+            <div id="inventoryCategoryChips" class="category-chips" style="margin-top:10px;"></div>
+            <div id="inventoryList" class="payment-list"></div>
+            <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
+            <button type="button" class="small-btn" onclick="exportInventoryToExcel()" id="inventoryExportButton" style="width:100%; margin-top:12px; background:var(--accent);">⬇ <span id="inventoryExportButtonLabel">Download Inventory Report</span></button>
+          </div>
+          <div class="md-detail-pane" id="inventoryDetailPane">
+            <div class="md-detail-empty" id="inventoryDetailEmptyState">
+              <div class="md-detail-empty-icon">📦</div>
+              <p id="inventoryDetailEmptyText">Select a product from the list to view and edit its stock.</p>
+            </div>
+            <div id="inventoryDetailContent" class="hidden">
+              <div class="md-detail-header">
+                <h3 id="inventoryDetailTitle">Edit Stock</h3>
+                <button type="button" class="md-detail-close-btn" onclick="closeInventoryDetail()" aria-label="Close">✕</button>
+              </div>
+              <div id="inventoryDetailPhoto" style="margin-bottom:12px;"></div>
+              <label id="inventoryDetailNameLabel">Product Name</label>
+              <input id="inventoryDetailName" readonly>
+              <div class="two-columns">
+                <div>
+                  <label id="inventoryDetailSkuLabel">SKU</label>
+                  <input id="inventoryDetailSku" readonly>
+                </div>
+                <div>
+                  <label id="inventoryDetailCategoryLabel">Category</label>
+                  <input id="inventoryDetailCategory" readonly>
+                </div>
+              </div>
+              <label id="inventoryDetailPriceLabel">Price</label>
+              <input id="inventoryDetailPrice" readonly>
+              <label id="inventoryDetailStockLabel">Stock Level (optional)</label>
+              <input id="inventoryDetailStock" type="number" min="0" step="1" placeholder="Leave blank to not track stock">
+              <div class="info" style="margin-top:12px; display:flex;">
+                <span id="inventoryDetailValueLabel">Value:</span>
+                <strong id="inventoryDetailValueAmount">-</strong>
+              </div>
+              <button type="button" class="settings-primary-btn" onclick="saveInventoryDetailEdits()" id="inventoryDetailSaveBtn" style="margin-top:16px;"><span id="inventoryDetailSaveLabel">Save Changes</span></button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="settings-panel-content" id="panel-salesHistory">
-        <div class="sh-split" id="salesHistorySplit">
-          <div class="sh-list-pane">
+        <div class="md-split" id="salesHistorySplit">
+          <div class="md-list-pane">
             <h3 id="salesHistoryTitle">Sales History</h3>
             <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
             <div class="sh-view-toggle">
@@ -1090,15 +1174,15 @@ Website: Goonlinepos.com</textarea>
             </div>
             <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. Click any sale to view full details, edit it, or reprint the receipt on the right. The download gives you one file with two tabs: "Sales" (one row per sale - totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
           </div>
-          <div class="sh-detail-pane" id="salesDetailPane">
-            <div class="sh-detail-empty" id="saleDetailEmptyState">
-              <div class="sh-detail-empty-icon">🧾</div>
+          <div class="md-detail-pane" id="salesDetailPane">
+            <div class="md-detail-empty" id="saleDetailEmptyState">
+              <div class="md-detail-empty-icon">🧾</div>
               <p id="saleDetailEmptyText">Select a sale from the list to view its details.</p>
             </div>
             <div id="saleDetailContent" class="hidden">
-              <div class="sh-detail-header">
+              <div class="md-detail-header">
                 <h3 id="saleDetailTitle">Sale Details</h3>
-                <button type="button" class="sh-detail-close-btn" onclick="closeSaleDetail()" aria-label="Close">✕</button>
+                <button type="button" class="md-detail-close-btn" onclick="closeSaleDetail()" aria-label="Close">✕</button>
               </div>
               <div class="two-columns">
                 <div>
@@ -1390,7 +1474,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">SETTINGS → PRODUCTS</span>
       <h3>Products</h3>
-      <p>Click "+ Add Product" to open the add-item form - Name, Price, and SKU are required (SKU is the product's unique code, and it's what Inventory, the cart, and barcode scanning all use to tell products apart), plus optional Category, Stock Level, Photo, and Tax-Exempt status; the form stays open after each save so you can keep adding items back to back. Product names are editable right in this list, and changes sync everywhere instantly, including Inventory. Use the category chips above the list to filter it down to just one category, or "All" to see everything again. You can also upload a CSV or Excel file to add or update many products at once - a row with a new SKU is added, a row matching an existing SKU updates that product, and nothing already in your catalog is removed; rows with no SKU are skipped. Use Clear Products if you want to wipe the whole list and start over.</p>
+      <p>Opens full-screen as a table-style, two-pane view - a list of every product on the left, its full details on the right. Click "+ Add Product" to open the add-item form - Name, Price, and SKU are required (SKU is the product's unique code, and it's what Inventory, the cart, and barcode scanning all use to tell products apart), plus optional Category, Stock Level, Photo, and Tax-Exempt status; the form stays open after each save so you can keep adding items back to back. Click any product in the list to open it on the right and edit any of its details, or use the × on the row for a quick delete - changes sync everywhere instantly, including Inventory. Use the category chips above the list to filter it down to just one category, or "All" to see everything again. You can also upload a CSV or Excel file to add or update many products at once - a row with a new SKU is added, a row matching an existing SKU updates that product, and nothing already in your catalog is removed; rows with no SKU are skipped. Use Clear Products if you want to wipe the whole list and start over.</p>
     </div>
 
     <div class="htu-item">
@@ -1420,7 +1504,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">SETTINGS → INVENTORY</span>
       <h3>Inventory</h3>
-      <p>Opens full-screen, grouped by category, with SKU and total value shown per item - search by name or SKU to find something fast, or click a category chip above the list to filter down to just that category. Numbers deduct automatically with every sale - edit any figure directly to correct it or restock, and download a full inventory report to Excel whenever you need it.</p>
+      <p>Opens full-screen as a table-style, two-pane view - a list of every product's stock on the left, grouped by category, with the selected product's full details and total inventory value on the right. Search by name or SKU to find something fast, or click a category chip above the list to filter down to just that category. Numbers deduct automatically with every sale - click any product to correct its stock or restock it, and download a full inventory report to Excel whenever you need it.</p>
     </div>
 
     <div class="htu-item">
@@ -1461,6 +1545,8 @@ let salesHistory = [];
 let activeCategory = "all";
 let activeManageProductsCategory = "all";
 let activeInventoryCategory = "all";
+let editingProductIndex = null;
+let editingInventorySku = null;
 let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
@@ -1606,8 +1692,9 @@ function selectSettingsTab(name) {
   settingsActiveTab = name;
   document.querySelectorAll(".settings-panel-content").forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
   document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
-  document.getElementById("settingsOverlay").classList.toggle("fullscreen-tab", name === "inventory" || name === "salesHistory");
-  document.getElementById("settingsTabPanel").classList.toggle("sales-history-active", name === "salesHistory");
+  const isSplitView = name === "inventory" || name === "salesHistory" || name === "products";
+  document.getElementById("settingsOverlay").classList.toggle("fullscreen-tab", isSplitView);
+  document.getElementById("settingsTabPanel").classList.toggle("split-view-active", isSplitView);
 }
 
 async function loadSettings() {
@@ -3413,24 +3500,15 @@ function renderNewProductPhotoPreview() {
   preview.innerHTML = productThumbHtml(newProductPhotoDataUrl);
   if (removeBtn) removeBtn.classList.toggle("hidden", !newProductPhotoDataUrl);
 }
-async function handleExistingProductPhotoUpload(index, event) {
-  const file = event.target.files[0];
-  event.target.value = "";
-  if (!file) return;
-  try {
-    products[index].photo = await compressProductPhoto(file);
-    await saveProducts();
-    renderProductCatalog();
-    renderInventoryList();
-  } catch (e) {
-    alert(tr("productPhotoUploadError"));
-  }
-}
-
 async function removeProduct(index) {
   products.splice(index, 1);
   await saveProducts();
-  renderProductCatalog();
+  if (editingProductIndex === index) {
+    closeProductDetail();
+  } else {
+    if (editingProductIndex !== null && editingProductIndex > index) editingProductIndex--;
+    renderProductCatalog();
+  }
 }
 
 function renderInventoryCategoryChips() {
@@ -3488,30 +3566,26 @@ function renderInventoryList() {
     groupHeader.innerHTML = "<span>" + escapeHtml(cat) + "</span><span class=\"inv-group-count\">" + groups[cat].length + "</span>";
     list.appendChild(groupHeader);
 
-    groups[cat].forEach(function(p) {
-      const hasStock = p.stock !== null && p.stock !== undefined;
-      const isLow = hasStock && Number(p.stock) <= 5;
-      const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
-      const symbol = symbolNow();
-      const row = document.createElement("div");
-      row.className = "inv-row" + (isLow ? " low-stock" : "");
-      row.innerHTML =
-        productThumbHtml(p.photo, "small") +
-        "<div class=\"inv-row-info\">" +
-          "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
-          "<div class=\"inv-row-sub\">" +
-            (p.sku ? "<span class=\"inv-row-sku\">SKU: " + escapeHtml(p.sku) + "</span>" : "") +
-            (totalValue !== null ? "<span class=\"inv-row-value\">" + escapeHtml(tr("inventoryValueLabel")) + " " + escapeHtml(symbol) + " " + totalValue.toFixed(decimalsNow()) + "</span>" : "") +
-          "</div>" +
-        "</div>" +
-        "<div class=\"inv-row-stock\">" +
-          "<label>" + escapeHtml(tr("inventoryStockLabel")) + "</label>" +
-          "<input type=\"number\" min=\"0\" step=\"1\" value=\"" + (hasStock ? p.stock : "") + "\" placeholder=\"-\">" +
-        "</div>";
-      row.querySelector("input").addEventListener("change", function() { handleInventoryStockEdit(p.sku, this.value); });
-      list.appendChild(row);
-    });
+    groups[cat].forEach(function(p) { list.appendChild(buildInventoryRow(p)); });
   });
+}
+
+function buildInventoryRow(p) {
+  const hasStock = p.stock !== null && p.stock !== undefined;
+  const isLow = hasStock && Number(p.stock) <= 5;
+  const row = document.createElement("div");
+  row.className = "inv-row" + (isLow ? " low-stock" : "") + (editingInventorySku === p.sku ? " selected" : "");
+  row.innerHTML =
+    productThumbHtml(p.photo, "small") +
+    "<div class=\"inv-row-info\">" +
+      "<div class=\"inv-row-name\">" + escapeHtml(p.name) + "</div>" +
+      "<div class=\"inv-row-sub\">" +
+        (p.sku ? "<span class=\"inv-row-sku\">SKU: " + escapeHtml(p.sku) + "</span>" : "") +
+      "</div>" +
+    "</div>" +
+    "<div class=\"inv-row-stock-display\">" + (hasStock ? escapeHtml(String(p.stock)) : "-") + "</div>";
+  row.addEventListener("click", function() { openInventoryDetail(p.sku); });
+  return row;
 }
 
 async function handleInventoryStockEdit(sku, rawValue) {
@@ -3523,18 +3597,39 @@ async function handleInventoryStockEdit(sku, rawValue) {
   renderInventoryList();
 }
 
-async function handleProductNameEdit(index, newName) {
-  const trimmed = newName.trim();
-  if (!trimmed) { renderManageProductsList(); return; }
-  products[index].name = trimmed;
-  await saveProducts();
-  renderProductCatalog();
+function openInventoryDetail(sku) {
+  const p = products.find(function(pr) { return pr.sku === sku; });
+  if (!p) return;
+  editingInventorySku = sku;
+  const symbol = symbolNow();
+
+  document.getElementById("inventoryDetailPhoto").innerHTML = productThumbHtml(p.photo, "small");
+  document.getElementById("inventoryDetailName").value = p.name || "";
+  document.getElementById("inventoryDetailSku").value = p.sku || "";
+  document.getElementById("inventoryDetailCategory").value = p.category || "";
+  document.getElementById("inventoryDetailPrice").value = symbol + " " + Number(p.price).toFixed(decimalsNow());
+  document.getElementById("inventoryDetailStock").value = (p.stock === null || p.stock === undefined) ? "" : p.stock;
+
+  const hasStock = p.stock !== null && p.stock !== undefined;
+  const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
+  document.getElementById("inventoryDetailValueAmount").textContent = totalValue !== null ? (symbol + " " + totalValue.toFixed(decimalsNow())) : "-";
+
+  document.getElementById("inventoryDetailEmptyState").classList.add("hidden");
+  document.getElementById("inventoryDetailContent").classList.remove("hidden");
+  document.getElementById("inventorySplit").classList.add("detail-open");
   renderInventoryList();
 }
-async function handleProductTaxExemptEdit(index, checked) {
-  if (!products[index]) return;
-  products[index].taxExempt = !!checked;
-  await saveProducts();
+function closeInventoryDetail() {
+  editingInventorySku = null;
+  document.getElementById("inventoryDetailContent").classList.add("hidden");
+  document.getElementById("inventoryDetailEmptyState").classList.remove("hidden");
+  document.getElementById("inventorySplit").classList.remove("detail-open");
+  renderInventoryList();
+}
+async function saveInventoryDetailEdits() {
+  if (!editingInventorySku) return;
+  await handleInventoryStockEdit(editingInventorySku, document.getElementById("inventoryDetailStock").value);
+  closeInventoryDetail();
 }
 
 function renderManageProductsCategoryChips() {
@@ -3571,25 +3666,109 @@ function renderManageProductsList() {
 
   products.forEach(function(p, index) {
     if (activeManageProductsCategory !== "all" && (p.category || "").trim() !== activeManageProductsCategory) return;
-    const row = document.createElement("div");
-    row.className = "payment-item";
-    row.innerHTML =
-      "<label class=\"mp-photo-label\" title=\"" + escapeAttr(tr("productPhotoChangeTitle")) + "\">" +
-        productThumbHtml(p.photo, "small") +
-        "<input type=\"file\" accept=\"image/*\" class=\"hidden\">" +
-      "</label>" +
-      "<input class=\"mp-name-input\" type=\"text\" value=\"" + escapeAttr(p.name) + "\">" +
-      "<span class=\"mp-meta\">- " + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
-      (p.category ? " <span style=\"color:var(--muted);\">(" + escapeHtml(p.category) + ")</span>" : "") + "</span>" +
-      "<label style=\"display:flex; align-items:center; gap:4px; font-size:11.5px; color:var(--ink-soft); cursor:pointer; white-space:nowrap;\" title=\"" + escapeAttr(tr("taxExemptLabel")) + "\">" +
-        "<input class=\"mp-tax-exempt\" type=\"checkbox\"" + (p.taxExempt ? " checked" : "") + "> " + escapeHtml(tr("taxExemptTag")) +
-      "</label>" +
-      "<button onclick=\"removeProduct(" + index + ")\">×</button>";
-    row.querySelector(".mp-name-input").addEventListener("change", function() { handleProductNameEdit(index, this.value); });
-    row.querySelector(".mp-photo-label input").addEventListener("change", function(e) { handleExistingProductPhotoUpload(index, e); });
-    row.querySelector(".mp-tax-exempt").addEventListener("change", function() { handleProductTaxExemptEdit(index, this.checked); });
-    list.appendChild(row);
+    list.appendChild(buildManageProductRow(p, index, symbol));
   });
+}
+
+function buildManageProductRow(p, index, symbol) {
+  const row = document.createElement("div");
+  row.className = "prod-row" + (editingProductIndex === index ? " selected" : "");
+  row.innerHTML =
+    productThumbHtml(p.photo, "small") +
+    "<div class=\"prod-row-info\">" +
+      "<div class=\"prod-row-name\">" + escapeHtml(p.name) + "</div>" +
+      "<div class=\"prod-row-sub\">" + escapeHtml(symbol) + " " + Number(p.price).toFixed(decimalsNow()) +
+        (p.sku ? " · SKU: " + escapeHtml(p.sku) : "") +
+        (p.category ? " · " + escapeHtml(p.category) : "") +
+      "</div>" +
+    "</div>" +
+    "<button type=\"button\" class=\"shr-delete-btn\" title=\"Delete product\">×</button>";
+  row.addEventListener("click", function() { openProductDetail(index); });
+  row.querySelector(".shr-delete-btn").addEventListener("click", function(e) { e.stopPropagation(); removeProduct(index); });
+  return row;
+}
+
+let productDetailPhotoDataUrl = "";
+function openProductDetail(index) {
+  const p = products[index];
+  if (!p) return;
+  editingProductIndex = index;
+
+  productDetailPhotoDataUrl = p.photo || "";
+  renderProductDetailPhotoPreview();
+
+  document.getElementById("productDetailName").value = p.name || "";
+  document.getElementById("productDetailPrice").value = p.price;
+  document.getElementById("productDetailCategory").value = p.category || "";
+  document.getElementById("productDetailSku").value = p.sku || "";
+  document.getElementById("productDetailStock").value = (p.stock === null || p.stock === undefined) ? "" : p.stock;
+  document.getElementById("productDetailTaxExempt").checked = !!p.taxExempt;
+  document.getElementById("productDetailErrorBox").classList.add("hidden");
+
+  document.getElementById("productDetailEmptyState").classList.add("hidden");
+  document.getElementById("productDetailContent").classList.remove("hidden");
+  document.getElementById("productsSplit").classList.add("detail-open");
+  renderManageProductsList();
+}
+function closeProductDetail() {
+  editingProductIndex = null;
+  document.getElementById("productDetailContent").classList.add("hidden");
+  document.getElementById("productDetailEmptyState").classList.remove("hidden");
+  document.getElementById("productsSplit").classList.remove("detail-open");
+  renderManageProductsList();
+}
+async function handleProductDetailPhotoUpload(event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  try {
+    productDetailPhotoDataUrl = await compressProductPhoto(file);
+    renderProductDetailPhotoPreview();
+  } catch (e) {
+    alert(tr("productPhotoUploadError"));
+  }
+}
+function removeProductDetailPhoto() {
+  productDetailPhotoDataUrl = "";
+  renderProductDetailPhotoPreview();
+}
+function renderProductDetailPhotoPreview() {
+  const preview = document.getElementById("productDetailPhotoPreview");
+  const removeBtn = document.getElementById("productDetailPhotoRemoveBtn");
+  if (!preview) return;
+  preview.innerHTML = productThumbHtml(productDetailPhotoDataUrl);
+  if (removeBtn) removeBtn.classList.toggle("hidden", !productDetailPhotoDataUrl);
+}
+async function saveProductDetailEdits() {
+  if (editingProductIndex === null || !products[editingProductIndex]) { closeProductDetail(); return; }
+  const errorBox = document.getElementById("productDetailErrorBox");
+  errorBox.classList.add("hidden");
+
+  const name = document.getElementById("productDetailName").value.trim();
+  const price = parseFloat(document.getElementById("productDetailPrice").value);
+  const sku = document.getElementById("productDetailSku").value.trim();
+
+  if (!name) { errorBox.textContent = tr("addProductNameError"); errorBox.classList.remove("hidden"); return; }
+  if (isNaN(price) || price < 0) { errorBox.textContent = tr("addProductPriceError"); errorBox.classList.remove("hidden"); return; }
+  if (!sku) { errorBox.textContent = tr("addProductSkuError"); errorBox.classList.remove("hidden"); return; }
+  if (products.some(function(p, i) { return i !== editingProductIndex && p.sku === sku; })) {
+    errorBox.textContent = tr("addProductSkuDuplicateError"); errorBox.classList.remove("hidden"); return;
+  }
+
+  const stockRaw = document.getElementById("productDetailStock").value.trim();
+  const p = products[editingProductIndex];
+  p.name = name;
+  p.price = price;
+  p.category = document.getElementById("productDetailCategory").value.trim();
+  p.sku = sku;
+  p.stock = stockRaw === "" ? null : (parseFloat(stockRaw) || 0);
+  p.photo = productDetailPhotoDataUrl;
+  p.taxExempt = document.getElementById("productDetailTaxExempt").checked;
+
+  await saveProducts();
+  renderProductCatalog();
+  renderInventoryList();
+  closeProductDetail();
 }
 
 async function clearProducts() {
@@ -3772,6 +3951,17 @@ function changeLanguage() {
     addProductNameLabel: "addProductNameLabel", addProductPriceLabel: "addProductPriceLabel", addProductCategoryLabel: "addProductCategoryLabel", addProductSkuLabel: "addProductSkuLabel",
     addProductPhotoLabel: "addProductPhotoLabel", removePhotoLabel: "removePhotoLabel",
     addProductButton: "addProductButton",
+    productDetailTitle: "productDetailTitle", productDetailEmptyText: "productDetailEmptyText",
+    productDetailPhotoLabel: "addProductPhotoLabel", productDetailPhotoRemoveLabel: "removePhotoLabel",
+    productDetailNameLabel: "addProductNameLabel", productDetailPriceLabel: "addProductPriceLabel",
+    productDetailCategoryLabel: "addProductCategoryLabel", productDetailSkuLabel: "addProductSkuLabel",
+    productDetailStockLabel: "addProductStockLabel", productDetailTaxExemptLabel: "taxExemptLabel",
+    productDetailSaveLabel: "saleDetailSaveLabel",
+    inventoryDetailTitle: "inventoryDetailTitle", inventoryDetailEmptyText: "inventoryDetailEmptyText",
+    inventoryDetailNameLabel: "addProductNameLabel", inventoryDetailSkuLabel: "addProductSkuLabel",
+    inventoryDetailCategoryLabel: "inventoryDetailCategoryLabel", inventoryDetailPriceLabel: "addProductPriceLabel",
+    inventoryDetailStockLabel: "addProductStockLabel", inventoryDetailValueLabel: "inventoryValueLabel",
+    inventoryDetailSaveLabel: "saleDetailSaveLabel",
     productsSampleButton: "productsSampleButton", productsSampleExcelButton: "productsSampleExcelButton", productsClearButton: "productsClearButton",
     footerTitle: "footerTitle", footerLine1Label: "footerLine1Label", footerLine2Label: "footerLine2Label",
     paperTitle: "paperTitle", paperLabel: "paperLabel", customWidthLabel: "customWidthLabel", currentWidthLabel: "currentWidthLabel",
@@ -3823,6 +4013,10 @@ function changeLanguage() {
   if (invSearchEl) invSearchEl.placeholder = tr("productsSearchPlaceholder");
   const stockPlaceholderEl = document.getElementById("newProductStock");
   if (stockPlaceholderEl) stockPlaceholderEl.placeholder = tr("newProductStockPlaceholder");
+  const productDetailStockEl = document.getElementById("productDetailStock");
+  if (productDetailStockEl) productDetailStockEl.placeholder = tr("newProductStockPlaceholder");
+  const inventoryDetailStockEl = document.getElementById("inventoryDetailStock");
+  if (inventoryDetailStockEl) inventoryDetailStockEl.placeholder = tr("newProductStockPlaceholder");
 
   const guideList1 = document.getElementById("guideMethod1List");
   if (guideList1) guideList1.innerHTML = tr("guideMethod1List");

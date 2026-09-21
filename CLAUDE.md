@@ -3778,6 +3778,136 @@ has zero network calls.
   render in full with no clipping at 1400px desktop; the same holds at
   390px mobile with zero horizontal overflow; and zero console errors
   throughout.
+- **Follow-up: Products and Inventory got the same full-screen,
+  two-pane master-detail treatment Sales History already had** - per an
+  explicit "we need 2 window full screen also when user click the row
+  detail view will open and able to edit the row same goes to
+  inventory" request. Both tabs were already full-screen (see "Sales
+  History and Inventory go genuinely full-screen" above) but weren't
+  split-pane - Products edited every row inline in a single flat list,
+  and Inventory's stock field was a plain `<input>` right inside each
+  row. Both now match Sales History's own list-pane/detail-pane pattern
+  exactly: click a row on the left, its full details open in a form on
+  the right.
+  - **The master-detail CSS itself was generalized, not copy-pasted a
+    third time.** The Sales-History-only class names this pattern
+    originally shipped under (`.sh-split`/`.sh-list-pane`/
+    `.sh-detail-pane`/`.sh-detail-empty`/`.sh-detail-empty-icon`/
+    `.sh-detail-header`/`.sh-detail-close-btn`) were renamed to generic
+    `.md-split`/`.md-list-pane`/`.md-detail-pane`/`.md-detail-empty`/
+    `.md-detail-empty-icon`/`.md-detail-header`/`.md-detail-close-btn`
+    ("md" for master-detail) and reused as-is for both new panels -
+    same CSS, same responsive breakpoint (`@media (min-width: 901px)`
+    switches from a stacked mobile layout, list-then-detail, to a
+    permanent side-by-side desktop layout), same `.detail-open` toggle
+    mechanics. `salesHistorySplit`/`saleDetailEmptyState`/
+    `saleDetailContent` and all of Sales History's own element `id`s
+    were left completely untouched - only the *class* attributes on
+    that markup changed, so none of `openSaleDetail()`/
+    `closeSaleDetail()`/`saveSaleDetailEdits()` needed a single line
+    changed. The one genuinely sales-specific piece,
+    `.settings-tab-panel.sales-history-active`, was generalized the
+    same way to `.settings-tab-panel.split-view-active` (and its
+    `#panel-salesHistory.active`-specific override became
+    `.settings-panel-content.active`, since the extra classes already
+    give enough specificity to outrank the shared
+    `.settings-panel-content.active { display: block; }` rule for
+    *any* of the three tabs, not just Sales History by ID) - `Products`/
+    `Inventory`/`salesHistory` all now flip this one class via
+    `selectSettingsTab()`'s `isSplitView` check, replacing the old
+    `name === "inventory" || name === "salesHistory"` condition with
+    `name === "inventory" || name === "salesHistory" || name ===
+    "products"` for both the `fullscreen-tab` and `split-view-active`
+    toggles together.
+  - **Products**: the manage-list's old fully-inline-editable row (a
+    clickable photo-upload label, an editable name `<input>`, an
+    editable tax-exempt checkbox, all live in the row itself) was
+    replaced with a plain, clickable summary row (`.prod-row` - photo
+    thumbnail, name, and a `price · SKU · category` line, new CSS)
+    ending in a small `×` quick-delete button (reusing Sales History's
+    own `.shr-delete-btn` styling verbatim, since it's already a
+    generic small icon-button class, not sales-specific despite where
+    it first shipped). Clicking anywhere else on the row calls the new
+    `openProductDetail(index)`, which populates a full edit form on the
+    right - Photo, Name, Price, Category, SKU, Stock, Tax Exempt, all
+    the same fields/validation `addSingleProduct()` already had
+    (blank-name/invalid-price/blank-SKU/duplicate-SKU all block the
+    save with the same translated error messages, duplicate-SKU check
+    excludes the product's own current index) - and `saveProductDetailEdits()`
+    writes the changes back and closes the pane. The three functions
+    that used to handle the old inline controls
+    (`handleProductNameEdit`/`handleProductTaxExemptEdit`/
+    `handleExistingProductPhotoUpload`) had zero remaining callers once
+    the row was simplified, so they were deleted outright along with
+    their now-dead `.mp-name-input`/`.mp-meta` CSS, matching this
+    repo's "don't leave orphaned code behind" convention - `.mp-photo-label`
+    stayed, since both the Add Product form and the new detail pane's
+    own photo upload still use it. `removeProduct(index)` (the row's
+    quick-delete, still confirm-free exactly as before) now also keeps
+    `editingProductIndex` correct across a deletion instead of just
+    blindly re-rendering: deleting the currently-open product closes
+    the detail pane outright, while deleting an unrelated row above it
+    decrements the tracked index so an already-open detail pane keeps
+    pointing at the right product rather than silently going stale.
+  - **Inventory**: each row (`.inv-row`, the existing category-grouped
+    markup, unchanged in shape) lost its inline stock `<input>` in favor
+    of a plain right-aligned number display (`.inv-row-stock-display`,
+    new CSS) and became clickable, calling the new
+    `openInventoryDetail(sku)`. The detail pane shows the product's
+    photo/name/SKU/category/price as read-only context (this tab edits
+    stock, not the product record itself - that's what Products is for)
+    plus one editable Stock field and a computed Value line (stock ×
+    price, the same math the old inline row's own now-removed "Value: $X"
+    badge used to show) - `saveInventoryDetailEdits()` just calls the
+    existing `handleInventoryStockEdit(sku, value)` under the hood, so
+    the actual stock-write logic is unchanged, only how a shop owner
+    reaches it. The now-dead `.inv-row-value`/`.inv-row-stock`/
+    `.inv-row-stock label`/`.inv-row-stock input` CSS was removed along
+    with the already-dead-before-this-pass `.inv-row-cat` rule (confirmed
+    via grep to have had zero HTML users even before this change - swept
+    up anyway since this whole block was already being rewritten).
+    `.inv-row`/`.inv-row.low-stock` both picked up a `.selected` /
+    `:hover` treatment matching `.prod-row`'s and Sales History's own
+    `.sh-row.selected`/`:hover`, so a row visibly highlights while its
+    detail is open on both new panels, not just Sales History's.
+  - **The "SETTINGS → PRODUCTS" and "SETTINGS → INVENTORY" `.htu-item`s
+    in How To Use were reworded to match**, same "keep this panel in
+    sync with what this session changed" pattern already established
+    for the SKU/Auto-Backup/full-screen passes elsewhere in this file -
+    both now open with the same "Opens full-screen as a table-style,
+    two-pane view" framing Sales History's own entry already used, and
+    describe clicking a row to edit it (Products) or correct its stock
+    (Inventory) instead of the old inline-edit wording.
+  - New translation keys (`productDetailTitle`, `productDetailEmptyText`,
+    `inventoryDetailTitle`, `inventoryDetailEmptyText`,
+    `inventoryDetailCategoryLabel`) were added; every other detail-pane
+    label reuses an existing key exactly as-is (`addProductNameLabel`,
+    `addProductPriceLabel`, `addProductCategoryLabel`, `addProductSkuLabel`,
+    `addProductStockLabel`, `taxExemptLabel`, `addProductPhotoLabel`,
+    `removePhotoLabel`, `saleDetailSaveLabel` for both new "Save Changes"
+    buttons, `inventoryValueLabel`) via `changeLanguage()`'s `ids` map,
+    the same "one key can back multiple element ids" precedent already
+    documented for `blog.html`'s shared `updatedLabel`/`minReadLabel`
+    keys - both `productsUploadHint` (Products) and `inventoryInfo`
+    (Inventory)'s own raw-HTML descriptions were also reworded to match
+    the new click-to-edit workflow, with their `modules/translations.js`
+    `en` values updated to match verbatim, per this repo's "the two must
+    always agree" convention.
+  - Verified with Playwright: both tabs render genuinely full-viewport-
+    width (matching Sales History's own already-verified behavior);
+    adding two products, clicking one open, editing its name/price, and
+    saving correctly updates the row and closes the detail pane; trying
+    to save a duplicate SKU is blocked with the existing translated
+    error and leaves the pane open; the row's own `×` quick-delete works
+    without opening the detail pane, and correctly keeps a separately-open
+    detail pane pointing at the right product afterward; Inventory's
+    detail pane shows the correct stock/value on open and a stock edit
+    correctly updates the row's own display and the computed value; the
+    offline-package build (`buildOfflineAppHtml()`) carries every new
+    element and the renamed `.md-*` classes through unchanged, with zero
+    leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero
+    `console.warn` output; and zero console errors or horizontal
+    overflow at 1400px desktop and 390px mobile on both tabs.
 
 ## `modules/` — split-out app.html pieces
 
