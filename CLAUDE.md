@@ -3055,6 +3055,88 @@ has zero network calls.
   the tab still correctly resolves to `display: none` under
   `page.emulateMedia({ media: "print" })`; and zero console errors and
   zero horizontal overflow at 390px mobile.
+- **Follow-up: the sidebar hide/collapse button (`#sidebarToggleBtn`)
+  moved from the topbar to a docked spot right at the sidebar's edge,
+  with a simpler chevron icon, plus bold dark borders on the Products
+  panel and the receipt preview**, per two explicit follow-up requests
+  in the same session ("the side 3 lines to hide it should be inside
+  the side bar and icon should be very straightforward"; "we need to
+  have a solid dark color border... of preview receipt and products to
+  make it feel real pos").
+  - **Sidebar toggle relocation** - confirmed via two rounds of
+    `AskUserQuestion`: (1) placement is the top of the sidebar, next to
+    the logo, not the bottom; (2) since `toggleSidebar()` fully
+    `display:none`s the entire `#posSidebar` (see "Header toolbar
+    toggle" above for the analogous, older `.header-actions` mechanism
+    this superseded), a button that's a genuine DOM child of the
+    sidebar would vanish along with it, with no way to bring it back -
+    so the agreed fix keeps the *full-hide* behavior unchanged and
+    instead **docks** the button to the sidebar's edge: it's a sibling
+    of `#posSidebar` (not nested inside it), absolutely positioned
+    relative to `.pos-shell` (`position: relative` added there) so it
+    survives the sidebar's own hide/show toggle. `.sidebar-toggle-btn`
+    is a small circular button (`border-radius: 50%`, same `--panel`/
+    `--line`/`--shadow` tokens as `.pos-topbar-icon-btn`) sitting at
+    `top: 20px; left: 210px` when the sidebar is expanded (visually
+    straddling the sidebar's right border, next to the brand row) and
+    `left: 14px` when collapsed (`.pos-shell.sidebar-collapsed
+    .sidebar-toggle-btn`) - `toggleSidebar()`/`loadSidebarState()` both
+    now toggle a new `sidebar-collapsed` class on `.pos-shell` (not just
+    `.hidden` on `#posSidebar` itself) specifically so this positioning
+    rule - and the icon-flip rule below - have something to key off of
+    from outside the sidebar. On mobile (`max-width: 900px`, where
+    `.pos-sidebar` becomes a horizontal scrollable bar instead of a left
+    column - see "Desktop layout widened" above), the button is pinned
+    to a fixed `top: 8px; right: 8px` instead, since the desktop
+    geometry (`left: 210px`/`14px`) has no meaning once the sidebar
+    isn't a left column anymore.
+  - **New `#icon-chevron-left` symbol** added to the icon sprite (a
+    plain `‹`-shaped polyline, the standard "collapse" glyph) replacing
+    the old `#icon-menu` hamburger on this specific button - the
+    hamburger stays in the sprite (`#icon-menu`) since nothing else
+    uses it here, but this button no longer does. Rather than swapping
+    between two separate icon symbols for expanded-vs-collapsed state,
+    `.pos-shell.sidebar-collapsed .sidebar-toggle-btn .icon { transform:
+    rotate(180deg); }` flips the same single chevron to point the other
+    way, so a collapsed sidebar's button visually points right ("expand
+    me") and an expanded one points left ("collapse me") - one symbol,
+    one CSS rule, matching the explicit "very straightforward" ask more
+    literally than a two-icon swap would have.
+  - Verified with Playwright: exactly one `#sidebarToggleBtn` exists in
+    the DOM, confirmed no longer inside `.pos-topbar` and now a direct
+    child of `.pos-shell`; clicking it collapses the sidebar and the
+    button itself stays visible and clickable throughout (repositioning
+    from `left: 210px` to `left: 14px`, icon rotating 180°); a second
+    click correctly re-expands the sidebar; the button correctly
+    resolves to `display: none` under print media (it carries the same
+    `no-print` class every other screen-only control uses); and at a
+    390px mobile viewport the button sits pinned at its fixed top-right
+    corner spot with zero horizontal overflow before or after toggling.
+  - **Bold dark borders on the Products panel and the receipt
+    preview** - `.left-panel`'s border changed from the faint `1px
+    solid var(--line)` every other card on the page uses to `2px solid
+    var(--ink)`, and `.receipt`'s own border changed from `1px solid
+    #d7dbe0` to the same `2px solid var(--ink)` - both keep their
+    existing rounded corners (`var(--radius)` on the panel, the
+    receipt's own corner treatment) rather than switching to hard
+    square corners, since a literal sharp-square panel would clash with
+    the rounded-corner design language used everywhere else on this
+    page; "solid dark border" was read as a heavier, more clearly
+    defined frame around each panel, not a corner-style change. Safe
+    for `.receipt` specifically because printing and PDF export were
+    already confirmed to override it back to `border: none` explicitly
+    (`@media print .receipt { border: none; ... }` and
+    `body.pdf-capture-mode .receipt { border: none; ... }`, both
+    pre-existing rules) - the printed/exported receipt is completely
+    unaffected by this on-screen-only styling change, still governed
+    entirely by its own paper-size/zoom settings. Verified with
+    Playwright: both panels' computed `border-color` resolves to
+    `--ink` (`rgb(22, 33, 29)`) at `2px` width on screen; the receipt's
+    `border-style` resolves to `none` under
+    `page.emulateMedia({ media: "print" })`, confirming the print
+    override still wins; and a full-page screenshot at 1400px desktop
+    shows both panels reading as clearly framed, distinct POS-terminal
+    regions rather than the previous faint-outline cards.
 
 ## `modules/` — split-out app.html pieces
 
