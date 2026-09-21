@@ -3082,6 +3082,42 @@ has zero network calls.
     (was 17 before this pass, 18 originally - see above), zero
     `SETTINGS → LANGUAGE` or `SETTINGS → PREMIUM` text remains, and zero
     console errors opening the panel.
+  - **Follow-up: a "🎥 Video Tutorial" embed added at the top of the
+    panel**, per an explicit request to add a specific YouTube video
+    link. `.htu-video-block` sits directly inside `.how-to-use-body`,
+    above the existing intro paragraph and every `.htu-item` - a
+    responsive 16:9 wrapper (`padding-bottom: 56.25%`, the standard
+    intrinsic-ratio trick, since this modal's `max-width: 640px` has no
+    fixed height to size a plain `<iframe>` against) holding an `<iframe
+    src="https://www.youtube-nocookie.com/embed/ClY3qPJkc00">`. Uses
+    `youtube-nocookie.com`, YouTube's own privacy-enhanced embed domain,
+    rather than plain `youtube.com/embed` - it doesn't set tracking
+    cookies until the visitor actually presses play, consistent with
+    this site's existing cookie-conscious design elsewhere (the
+    consent-gated Analytics/AdSense/PayPal SDK loading) without needing
+    to build a full click-to-load consent gate of its own for one
+    embedded video. This is the first video/iframe embed anywhere in
+    the codebase (confirmed via grep - no prior `<iframe>` usage
+    existed).
+  - **Wrapped in a new `OFFLINE-STRIP:HOWTOUSE-VIDEO` marker**, since
+    unlike the rest of this panel's plain-text content, an embedded
+    YouTube player needs live network access to render at all - the one
+    piece of this otherwise offline-safe panel that doesn't belong in a
+    zero-connectivity package. `modules/offline-builder.js`'s
+    `buildOfflineAppHtml()` picked up the matching
+    `stripMarked(html, "HOWTOUSE-VIDEO", ...)` call in the same pass -
+    per this repo's own standing lesson, wrapping a new element in an
+    `OFFLINE-STRIP` marker in `app.html` does nothing by itself until
+    the builder is told to look for that marker name too.
+  - Verified with Playwright: the video block renders as the true first
+    child of `.how-to-use-body` (above the intro paragraph); the iframe
+    resolves to the exact `youtube-nocookie.com/embed/ClY3qPJkc00` URL;
+    zero horizontal overflow at both 1400px desktop and 390px mobile;
+    zero console errors opening the panel; and running the *current*
+    live page's own HTML through `buildOfflineAppHtml()` directly
+    confirms the iframe and the marker comments are both completely
+    absent from the output, with zero `console.warn` - the marker is
+    correctly wired into the builder, not just present in the markup.
 - **Visual refresh pass on the sidebar/top-bar layout**, per a reference
   screenshot the site owner shared of a differently-styled sidebar POS
   mockup - explicitly scoped to color/spacing/icon polish using only
