@@ -3290,6 +3290,193 @@ has zero network calls.
     are nested inside it, so the existing print hide-list still covers
     them with no new selector needed); and zero horizontal overflow or
     console errors at 1400px desktop and 390px mobile.
+- **Sales History rebuilt as a table-style master-detail view**, per an
+  explicit request that it should "group by date latest on top and have
+  option for All sort by latest on top and should be table style. Best
+  as well if full screen 2 window when row selected details show in the
+  other window - parent and child - with receipt reprint and edit too."
+  Settings → Sales History was already full-screen (see "Sales History
+  and Inventory go genuinely full-screen" above) and already grouped by
+  date - what was missing was a flat "All" view, a genuinely tabular row
+  layout, and a real second pane for details instead of a separate modal
+  covering the list.
+  - **`#saleDetailOverlay`, the old standalone edit modal, was deleted
+    outright** - its exact inner markup (every field/label/button, same
+    `id`s) was moved verbatim into a new permanent `#saleDetailContent`
+    block inside a new `.sh-detail-pane` on the right half of the panel,
+    rather than a `hidden` overlay stacked on top of Settings. Since
+    `openSaleDetail()` was the only caller of that overlay, this was a
+    safe, fully self-contained move - no other flow in the app opened
+    that modal.
+  - **`.sh-split`** (`#salesHistorySplit`) wraps a `.sh-list-pane` (the
+    existing summary/view-toggle/list/export controls) and the new
+    `.sh-detail-pane`, side by side at desktop widths
+    (`@media (min-width: 901px)`, matching this file's existing mobile
+    breakpoint) via `flex-direction: row`, `.sh-list-pane` fixed at
+    `420px`. Below that width the two panes stack and behave as a real
+    two-window navigation: selecting a sale adds a `.detail-open` class
+    that hides `.sh-list-pane` and shows `.sh-detail-pane` (a "✕ Close"
+    button in the detail header, `closeSaleDetail()`, returns to the
+    list) - at desktop widths `.sh-detail-pane` is forced permanently
+    visible (`display: block !important`) regardless of `.detail-open`,
+    so both panes are always on screen there, true to the "2 window"
+    ask. **A real bug in the first draft of this desktop override was
+    caught by a Playwright screenshot, not just by reading the CSS**:
+    an extra `.sh-detail-empty { display: flex !important; }` rule
+    inside the same media query had the identical specificity and
+    `!important` weight as the pre-existing global `.hidden { display:
+    none !important; }` utility class, so - being later in the
+    stylesheet - it permanently won the tie and kept
+    `#saleDetailEmptyState` visible even after `openSaleDetail()` added
+    `.hidden` to it, rendering the empty-state placeholder and the real
+    populated detail form stacked on top of each other at once. Fixed
+    by deleting that one line entirely - the parent `.sh-detail-pane`
+    only needed forcing to `display: block` at desktop; the
+    child empty-state/content split was already correctly governed by
+    the plain `.hidden` toggle and needed no override of its own.
+  - **`#panel-salesHistory` fills the full available height as a flex
+    column only while it's the active full-screen tab** -
+    `selectSettingsTab()` now also toggles a `sales-history-active`
+    class on `#settingsTabPanel` (the shared wrapper around every
+    Settings tab's content), and `.settings-tab-panel.sales-history-active
+    #panel-salesHistory.active` (an ID selector, so it safely outguns
+    the shared `.settings-panel-content.active { display: block; }`
+    rule every other tab still uses) switches it to `display: flex;
+    height: 100%;` - every other tab (Store, Products, Inventory, ...)
+    keeps the original block/scrolling behavior untouched, since the
+    class only ever applies while `salesHistory` is the selected tab.
+  - **"By Date" / "All (Latest First)"** (`#salesHistoryViewGroupedBtn`/
+    `#salesHistoryViewAllBtn`, `.sh-view-toggle`/`.sh-view-btn`) is a new
+    two-button toggle above the list, backed by a `salesHistoryView`
+    state var and `setSalesHistoryView(view)`. Grouped stays the
+    original accordion-by-date behavior (latest date group on top,
+    unchanged `expandedHistoryDates`/`toggleHistoryGroup()`); All
+    renders every sale as one flat, ungrouped list, sorted newest first.
+    **Sorting by `dateTime` needed a real chronological key, not a
+    string compare** - `dateTime` is stored `DD/MM/YYYY HH:MM:SS`, so
+    naively sorting the raw strings would sort by day-of-month first;
+    the existing `saleDateKey()` helper already reformats the date
+    portion to `YYYY-MM-DD` for grouping, so a new
+    `salesHistorySortKey(s)` appends the untouched time portion
+    (`saleDateKey(s.dateTime) + " " + timePart`) to get one
+    lexicographically-sortable string, and `bySaleDateDesc(a, b)`
+    compares two sales by it. This same comparator also now orders the
+    sales *within* an expanded date group (previously just
+    `.slice().reverse()`, which trusted array insertion order rather
+    than actually reading each sale's own timestamp) - a real, if minor,
+    correctness improvement that came along for free.
+  - **Every row (grouped or flat) is built by one shared
+    `buildSalesHistoryRow(s, symbol)`**, replacing the old bespoke
+    per-row `innerHTML` inside the accordion body - a genuine
+    `display: grid` table row (`.sh-row`, `grid-template-columns: 76px
+    1fr 90px 62px`: Receipt / Date & Time / Payment / Total, plus a
+    trailing reprint/delete icon pair), with a matching `.sh-row-head`
+    header row rendered once above either view so the columns read as
+    a real table, not the previous loose bordered/rounded card list.
+    `.sh-row` also gets a `.selected` class (`accent-tint` background)
+    when it's the sale currently open in the detail pane, so on
+    desktop's permanent two-pane layout it's always visually obvious
+    which row's detail you're looking at - a real "master/detail"
+    affordance the old modal-based flow had no equivalent for (the
+    list was never visible *while* the detail was open before).
+  - **`openSaleDetail()`/`closeSaleDetail()` no longer toggle the
+    settings overlay at all** - they toggle `.hidden` on
+    `#saleDetailEmptyState`/`#saleDetailContent`, `.detail-open` on
+    `#salesHistorySplit`, and call `renderSalesHistoryPanel()` so the
+    list's `.selected` highlight and the mobile pane switch both update
+    together. `saveSaleDetailEdits()`'s old `renderSalesHistoryPanel();
+    closeSaleDetail();` double-call was simplified to just
+    `closeSaleDetail();`, since `closeSaleDetail()` already re-renders
+    the list itself now. `deleteSaleRecord()` and `clearSalesHistory()`
+    both call `closeSaleDetail()` (instead of a bare re-render) whenever
+    the sale being deleted is the one currently open in the detail pane
+    - a real gap the old modal design didn't have to worry about, since
+    the modal could simply be closed independently of which row a click
+    came from; with the detail now living permanently on screen next to
+    the list, deleting the *currently open* sale has to explicitly clear
+    it back to the empty state rather than leaving a stale, now-deleted
+    record's edit form sitting there.
+  - **The "SETTINGS → SALES HISTORY" `.htu-item` in How To Use** was
+    reworded to describe the new table-style two-pane layout and the
+    By Date/All toggle, replacing its older single-pane/modal-based
+    description.
+  - Verified with Playwright: the full-screen modal genuinely fills the
+    viewport; the table header row reads Receipt/Date & Time/Payment/
+    Total; the grouped view's latest date group contains the correct
+    sale and the All view lists every sale sorted newest-first; clicking
+    a row populates the detail pane (parent fields plus its child items
+    list) with the matching receipt number; Reprint from the detail pane
+    fires `window.print()` and returns to the empty state; editing a
+    field and clicking Save Changes persists the change to
+    `salesHistory` in storage and returns to the empty state; deleting a
+    row updates the row count live; at 1400px desktop both panes stay
+    visible with the correct data at every step (including immediately
+    after the `.sh-detail-empty`/`.hidden` specificity bug fix, re-shot
+    to confirm the empty state and the populated form no longer render
+    on top of each other); at 390px mobile selecting a row hides the list
+    and shows only the detail pane, the close button returns to the
+    list, and there is zero horizontal overflow throughout; the
+    `.left-panel`/`.settings-overlay` print hide-list still resolves to
+    `display: none` under print media with the new markup nested inside
+    it; and zero console errors in either build.
+- **Follow-up: the header-links row now stays left-aligned with "Welcome
+  back!" when it wraps, and the Cashier selector moved out of the
+  receipt column into the Products panel next to New Sale.** Per an
+  explicit "This Homepage blog etc should be align with Welcome Back
+  then cashier selected should be inside the product next to New Sale
+  and we can drag up the quick settings and preview receipt" request,
+  sent with a screenshot showing the `.app-header-links` row (Homepage/
+  Blog/the five free-tool buttons) floating away from the left edge
+  once it wrapped onto its own line under "Welcome back!".
+  - **Root cause of the misalignment**: `.app-header-links` had its own
+    `margin-left: auto`, meant to push it to the right end of
+    `.app-header`'s single flex row on wide screens - but `margin-left:
+    auto` keeps applying *within whichever flex line an item ends up
+    on* once `flex-wrap: wrap` forces it onto a second line, pushing
+    the wrapped row rightward instead of flush against the left edge
+    the greeting text sits at. Fixed by removing that margin and adding
+    `justify-content: space-between` to `.app-header` instead - with
+    exactly two flex children, `space-between` still spreads them apart
+    on one wide line (greeting left, links right, unchanged from
+    before), but once wrapping puts each child alone on its own line,
+    a single item under `space-between` resolves to plain start-aligned
+    (left) - exactly the alignment being asked for, with no need for a
+    width-specific media-query breakpoint to guess where wrapping
+    happens.
+  - **`#receiptCashierTab`** (the Cashier `<select>` pill, previously
+    docked at the very top of `.preview-area` above Quick Settings - see
+    "the '📄 Receipt Preview' tab-style header was removed and replaced
+    with the Cashier selector" above) moved into `#catalogView`'s
+    `.panel-heading-actions` row, sitting between the existing
+    `#cartCountBadge` and `#newSaleButton` - kept its exact same `id`,
+    `onchange="setActiveCashier()"` handler, and the
+    `renderCashierSelect()` function that shows/hides it via
+    `cashiers.length === 0`, so no JS changed at all, only where the
+    element lives in the DOM. A new, more specific
+    `.panel-heading-actions .receipt-cashier-tab` rule overrides the
+    base `.receipt-cashier-tab` style (which was sized for its old
+    80mm-wide receipt-column tab) down to a compact rounded pill sized
+    to match its new siblings, and `.panel-heading`/
+    `.panel-heading-actions` both picked up `flex-wrap: wrap` so the
+    now-three-item action row (cart count, cashier select, New Sale)
+    wraps cleanly onto its own line under "Products" on narrower
+    widths instead of overflowing.
+  - **Quick Settings and the receipt itself move up on their own, with
+    no extra code** - removing `#receiptCashierTab` from
+    `.preview-area` just leaves `#quickReceiptSettings` as that
+    column's first child, exactly the "drag up" the request asked for,
+    since nothing else was anchoring it to a lower position.
+  - Verified with Playwright: at both 1400px and a deliberately
+    narrower 1000px width (chosen to force `.app-header-links` to wrap),
+    the greeting and links row resolve to the identical left `x`
+    coordinate; `#receiptCashierTab` exists exactly once, now inside
+    `.panel-heading-actions` and no longer inside `.preview-area`;
+    `.preview-area`'s first visible child is `#quickReceiptSettings`;
+    selecting a cashier from its new location still updates
+    `activeCashierName` and the live receipt; `.left-panel` (which the
+    relocated selector now lives inside) still resolves to `display:
+    none` under print media; and zero horizontal overflow or console
+    errors at 1400px, 1000px, and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 

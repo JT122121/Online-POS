@@ -171,11 +171,11 @@ button:active { transform: translateY(1px); }
 #newSaleButton:hover { background: var(--accent-dark); }
 
 .pos-main { flex: 1; min-width: 0; padding: 20px; }
-.app-header { margin: 0 0 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; }
+.app-header { margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
 .app-header-greeting { flex-shrink: 0; }
 .pos-welcome-title { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
 .app-header .subtitle { margin: 0; color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
-.app-header-links { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.app-header-links { display: flex; flex-wrap: wrap; gap: 6px; }
 .app-header-link { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-dark); color: #fff; border: 0; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .app-header-link:hover { background: var(--ink); }
 
@@ -202,11 +202,14 @@ button:active { transform: translateY(1px); }
 
 .left-panel { position: sticky; top: 20px; background: var(--panel); border: none; border-radius: var(--radius); box-shadow: 0 0 0 2px var(--accent-dark), var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
 
-.panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
-.panel-heading-actions { display: flex; align-items: center; gap: 10px; }
+.panel-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
 .cart-count-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 .new-sale-catalog-btn { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.panel-heading-actions .receipt-cashier-tab { width: auto; max-width: none; flex-shrink: 1; margin: 0; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; background: #fafbfc; }
+.panel-heading-actions .receipt-cashier-tab .icon { width: 14px; height: 14px; }
+.panel-heading-actions .receipt-cashier-select { font-size: 11.5px; font-weight: 600; max-width: 150px; }
 
 .search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fafbfc; }
 .search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
@@ -377,12 +380,47 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .settings-primary-btn:hover { background: var(--accent-dark); box-shadow: 0 4px 10px rgba(20,32,25,.22); }
 .settings-primary-btn .icon { width: 16px; height: 16px; }
 .add-product-form { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+
+/* Sales History: master-detail split view (full-screen tab) */
+.settings-tab-panel.sales-history-active { padding: 0; overflow: hidden; }
+.settings-tab-panel.sales-history-active #panel-salesHistory.active { height: 100%; display: flex; flex-direction: column; }
+.sh-split { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.sh-list-pane { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; }
+.sh-detail-pane { display: none; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px; border-top: 1px solid var(--line-soft); }
+.sh-split.detail-open .sh-list-pane { display: none; }
+.sh-split.detail-open .sh-detail-pane { display: block; }
+.sh-detail-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--muted); gap: 8px; }
+.sh-detail-empty-icon { font-size: 34px; opacity: .5; }
+.sh-detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.sh-detail-header h3 { margin: 0; }
+.sh-detail-close-btn { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
+.sh-detail-close-btn:hover { background: #f2f1ea; color: var(--ink); }
+@media (min-width: 901px) {
+  .sh-split { flex-direction: row; gap: 0; }
+  .sh-list-pane { flex: 0 0 420px; border-right: 1px solid var(--line-soft); }
+  .sh-detail-pane { flex: 1; display: block !important; border-top: 0; }
+  .sh-split.detail-open .sh-list-pane { display: block; }
+}
+
+.sh-view-toggle { display: flex; gap: 6px; margin: 10px 0; }
+.sh-view-btn { flex: 1; border: 1px solid var(--line); background: #fff; color: var(--ink-soft); border-radius: var(--radius-sm); padding: 7px 8px; font-size: 11.5px; font-weight: 600; }
+.sh-view-btn:hover { border-color: var(--accent); }
+.sh-view-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
 .sales-history-list { margin-top: 9px; max-height: 260px; overflow-y: auto; }
-.sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; font-size: 11.5px; }
-.sales-history-row .shr-receipt { font-weight: 700; font-family: var(--font-mono); }
-.sales-history-row .shr-date { color: var(--muted); font-size: 10.5px; }
-.sales-history-row .shr-right { display: flex; align-items: center; gap: 8px; }
-.sales-history-row .shr-total { font-weight: 700; text-align: right; font-family: var(--font-mono); }
+.settings-tab-panel.sales-history-active .sales-history-list { max-height: none; }
+.sh-row { display: grid; grid-template-columns: 76px 1fr 90px 62px; align-items: center; gap: 6px; padding: 8px 9px; border: 1px solid var(--line-soft); border-top: none; background: #fafbfc; font-size: 11.5px; }
+.sh-row:first-of-type { border-top: 1px solid var(--line-soft); border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); }
+.sh-row:last-of-type { border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
+.sh-row:not(.sh-row-head):hover { background: var(--accent-tint); cursor: pointer; }
+.sh-row.selected { background: var(--accent-tint); border-color: #bfe0cf; }
+.sh-row-head { background: #f4f3ee; font-weight: 700; font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-soft); }
+.sh-col-receipt { font-weight: 700; font-family: var(--font-mono); overflow-wrap: break-word; }
+.sh-col-date { color: var(--muted); font-size: 10.5px; overflow-wrap: break-word; }
+.sh-row-head .sh-col-date { color: inherit; font-size: inherit; }
+.sh-col-payment { font-size: 10.5px; color: var(--ink-soft); overflow-wrap: break-word; }
+.sh-col-total { font-weight: 700; text-align: right; font-family: var(--font-mono); }
+.sh-col-actions { display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
 .shr-delete-btn { flex-shrink: 0; width: 22px; height: 22px; border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 6px; font-size: 13px; line-height: 1; padding: 0; }
 .shr-delete-btn:hover { background: var(--danger-tint); color: var(--danger); border-color: #f0c2bd; }
 .sales-history-empty { padding: 18px 8px; text-align: center; color: var(--muted); font-size: 12px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
@@ -394,8 +432,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .shg-date { font-weight: 700; font-size: 12.5px; }
 .shg-count { font-size: 11px; color: var(--muted); }
 .shg-total { font-weight: 700; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent-dark); }
-.sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 8px 8px 2px; margin-bottom: 6px; }
-.sales-history-group-body .sales-history-row { margin-bottom: 6px; }
+.sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 0 0 2px; margin-bottom: 6px; overflow: hidden; }
+.sales-history-group-body .sh-row { border-left: 0; border-right: 0; border-radius: 0 !important; }
+.sales-history-group-body .sh-row:first-of-type { border-top: 0; }
 
 .preview-area { width: 100%; min-width: 0; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 16px 5px 5px; }
 .receipt-cashier-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 8px 4px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -635,6 +674,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
       <h3 id="catalogHeading">Products</h3>
       <div class="panel-heading-actions">
         <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
+        <div class="receipt-cashier-tab no-print hidden" id="receiptCashierTab"><svg class="icon"><use href="#icon-users"></use></svg> <select id="activeCashierSelect" class="active-cashier-select receipt-cashier-select" onchange="setActiveCashier()"></select></div>
         <button type="button" id="newSaleButton" class="new-sale-catalog-btn" onclick="newSale()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="newSaleButtonLabel">New Sale</span></button>
       </div>
     </div>
@@ -706,7 +746,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <div class="panel-resize-handle" id="panelResizeHandle" title="Drag to resize"></div>
 
 <div class="preview-area">
-<div class="receipt-cashier-tab no-print hidden" id="receiptCashierTab"><svg class="icon"><use href="#icon-users"></use></svg> <select id="activeCashierSelect" class="active-cashier-select receipt-cashier-select" onchange="setActiveCashier()"></select></div>
 <div class="quick-receipt-settings no-print" id="quickReceiptSettings">
 <button type="button" class="quick-settings-toggle" onclick="toggleQuickReceiptSettings()"><svg class="icon"><use href="#icon-settings"></use></svg> <span id="quickSettingsToggleLabel">Quick Settings</span></button>
 <div class="quick-settings-body hidden" id="quickSettingsBody">
@@ -874,98 +913,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 </div>
 
-<div id="saleDetailOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSaleDetail()">
-<div class="settings-modal" style="max-width:640px;">
-  <div class="settings-modal-header">
-    <h2 id="saleDetailTitle">Sale Details</h2>
-    <button onclick="closeSaleDetail()">✕</button>
-  </div>
-  <div style="padding:18px 20px; overflow-y:auto; flex:1;">
-    <div class="two-columns">
-      <div>
-        <label id="saleDetailReceiptLabel">Receipt No</label>
-        <input id="saleDetailReceiptNo" readonly>
-      </div>
-      <div>
-        <label id="saleDetailDateLabel">Date</label>
-        <input id="saleDetailDate" readonly>
-      </div>
-    </div>
-    <div class="two-columns">
-      <div>
-        <label id="saleDetailCustomerLabel">Customer Name</label>
-        <input id="saleDetailCustomer" placeholder="Optional">
-      </div>
-      <div>
-        <label id="saleDetailCashierLabel">Cashier</label>
-        <select id="saleDetailCashier"></select>
-      </div>
-    </div>
-
-    <label id="saleDetailItemsLabel">Items</label>
-    <div id="saleDetailItemsList"></div>
-    <button type="button" class="custom-item-link" onclick="addSaleDetailItem()" id="saleDetailAddItemBtn">+ Add Item</button>
-
-    <div class="two-columns" style="margin-top:12px;">
-      <div>
-        <label id="saleDetailTaxNameLabel">Tax Name</label>
-        <input id="saleDetailTaxName" oninput="recomputeSaleDetailTotals()">
-      </div>
-      <div>
-        <label id="saleDetailTaxRateLabel">Tax Rate (%)</label>
-        <input id="saleDetailTaxRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
-      </div>
-    </div>
-    <label id="saleDetailDiscountLabel">Discount</label>
-    <div class="two-columns">
-      <div>
-        <select id="saleDetailDiscountType" onchange="recomputeSaleDetailTotals()">
-          <option value="percent">Percent (%)</option>
-          <option value="amount">Fixed Amount</option>
-        </select>
-      </div>
-      <div>
-        <input id="saleDetailDiscountRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
-      </div>
-    </div>
-
-    <label id="saleDetailPaymentsLabel">Payments</label>
-    <div id="saleDetailPaymentsList"></div>
-    <button type="button" class="split-payment-btn" onclick="addSaleDetailPaymentRow()" id="saleDetailAddPaymentBtn">+ Add Payment Row</button>
-
-    <div class="info" style="margin-top:14px; display:flex;">
-      <span id="saleDetailSubtotalLabel">Subtotal:</span>
-      <strong id="saleDetailSubtotalValue">$0.00</strong>
-    </div>
-    <div class="info" style="display:flex;">
-      <span id="saleDetailDiscountAmtLabel">Discount:</span>
-      <strong id="saleDetailDiscountAmtValue">$0.00</strong>
-    </div>
-    <div class="info" style="display:flex;">
-      <span id="saleDetailTaxAmtLabel">Tax:</span>
-      <strong id="saleDetailTaxAmtValue">$0.00</strong>
-    </div>
-    <div class="info" style="display:flex; font-weight:700; color:var(--ink);">
-      <span id="saleDetailGrandLabel">Total:</span>
-      <strong id="saleDetailGrandValue">$0.00</strong>
-    </div>
-    <div class="info" style="display:flex;">
-      <span id="saleDetailReceivedLabel">Received:</span>
-      <strong id="saleDetailReceivedValue">$0.00</strong>
-    </div>
-    <div class="info" style="display:flex;">
-      <span id="saleDetailChangeLabel">Change:</span>
-      <strong id="saleDetailChangeValue">$0.00</strong>
-    </div>
-
-    <div class="checkout-actions" style="margin-top:16px;">
-      <button class="back-btn" onclick="reprintSaleFromDetail()" id="saleDetailReprintBtn">🖨 <span id="saleDetailReprintLabel">Reprint</span></button>
-      <button class="complete-btn" onclick="saveSaleDetailEdits()" id="saleDetailSaveBtn">💾 <span id="saleDetailSaveLabel">Save Changes</span></button>
-    </div>
-  </div>
-</div>
-</div>
-
 <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeSettings()">
 <div class="settings-modal">
   <div class="settings-modal-header">
@@ -987,7 +934,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
       <button class="settings-tab-item hidden" data-tab="inventory" onclick="selectSettingsTab('inventory'); renderInventoryList();">📦 <span>Inventory</span></button>
       <button class="settings-tab-item hidden" data-tab="backup" onclick="selectSettingsTab('backup')">💾 <span>Backup</span></button>
     </div>
-    <div class="settings-tab-panel">
+    <div class="settings-tab-panel" id="settingsTabPanel">
 
       <div class="settings-panel-content" id="panel-store">
         <h3 id="storeTitle">Store Information</h3>
@@ -1121,24 +1068,125 @@ Website: Goonlinepos.com</textarea>
       </div>
 
       <div class="settings-panel-content" id="panel-salesHistory">
-        <h3 id="salesHistoryTitle">Sales History</h3>
-        <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
-        <div id="salesHistoryTable" class="sales-history-list"></div>
-        <div class="two-columns" style="margin-top:10px;">
-          <div>
-            <label id="salesExportFromLabel">From (optional)</label>
-            <input id="salesExportFrom" type="date">
+        <div class="sh-split" id="salesHistorySplit">
+          <div class="sh-list-pane">
+            <h3 id="salesHistoryTitle">Sales History</h3>
+            <div class="info" id="salesHistorySummary" style="display:block;">0 sales recorded.</div>
+            <div class="sh-view-toggle">
+              <button type="button" class="sh-view-btn active" data-view="grouped" onclick="setSalesHistoryView('grouped')" id="salesHistoryViewGroupedBtn">By Date</button>
+              <button type="button" class="sh-view-btn" data-view="all" onclick="setSalesHistoryView('all')" id="salesHistoryViewAllBtn">All (Latest First)</button>
+            </div>
+            <div id="salesHistoryTable" class="sales-history-list"></div>
+            <div class="two-columns" style="margin-top:10px;">
+              <div>
+                <label id="salesExportFromLabel">From (optional)</label>
+                <input id="salesExportFrom" type="date">
+              </div>
+              <div>
+                <label id="salesExportToLabel">To (optional)</label>
+                <input id="salesExportTo" type="date">
+              </div>
+            </div>
+            <div class="csv-actions">
+              <button style="background:var(--accent);" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
+              <button style="background:var(--danger);" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
+            </div>
+            <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. Click any sale to view full details, edit it, or reprint the receipt on the right. The download gives you one file with two tabs: "Sales" (one row per sale - totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
           </div>
-          <div>
-            <label id="salesExportToLabel">To (optional)</label>
-            <input id="salesExportTo" type="date">
+          <div class="sh-detail-pane" id="salesDetailPane">
+            <div class="sh-detail-empty" id="saleDetailEmptyState">
+              <div class="sh-detail-empty-icon">🧾</div>
+              <p id="saleDetailEmptyText">Select a sale from the list to view its details.</p>
+            </div>
+            <div id="saleDetailContent" class="hidden">
+              <div class="sh-detail-header">
+                <h3 id="saleDetailTitle">Sale Details</h3>
+                <button type="button" class="sh-detail-close-btn" onclick="closeSaleDetail()" aria-label="Close">✕</button>
+              </div>
+              <div class="two-columns">
+                <div>
+                  <label id="saleDetailReceiptLabel">Receipt No</label>
+                  <input id="saleDetailReceiptNo" readonly>
+                </div>
+                <div>
+                  <label id="saleDetailDateLabel">Date</label>
+                  <input id="saleDetailDate" readonly>
+                </div>
+              </div>
+              <div class="two-columns">
+                <div>
+                  <label id="saleDetailCustomerLabel">Customer Name</label>
+                  <input id="saleDetailCustomer" placeholder="Optional">
+                </div>
+                <div>
+                  <label id="saleDetailCashierLabel">Cashier</label>
+                  <select id="saleDetailCashier"></select>
+                </div>
+              </div>
+
+              <label id="saleDetailItemsLabel">Items</label>
+              <div id="saleDetailItemsList"></div>
+              <button type="button" class="custom-item-link" onclick="addSaleDetailItem()" id="saleDetailAddItemBtn">+ Add Item</button>
+
+              <div class="two-columns" style="margin-top:12px;">
+                <div>
+                  <label id="saleDetailTaxNameLabel">Tax Name</label>
+                  <input id="saleDetailTaxName" oninput="recomputeSaleDetailTotals()">
+                </div>
+                <div>
+                  <label id="saleDetailTaxRateLabel">Tax Rate (%)</label>
+                  <input id="saleDetailTaxRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
+                </div>
+              </div>
+              <label id="saleDetailDiscountLabel">Discount</label>
+              <div class="two-columns">
+                <div>
+                  <select id="saleDetailDiscountType" onchange="recomputeSaleDetailTotals()">
+                    <option value="percent">Percent (%)</option>
+                    <option value="amount">Fixed Amount</option>
+                  </select>
+                </div>
+                <div>
+                  <input id="saleDetailDiscountRate" type="number" min="0" step="0.01" oninput="recomputeSaleDetailTotals()">
+                </div>
+              </div>
+
+              <label id="saleDetailPaymentsLabel">Payments</label>
+              <div id="saleDetailPaymentsList"></div>
+              <button type="button" class="split-payment-btn" onclick="addSaleDetailPaymentRow()" id="saleDetailAddPaymentBtn">+ Add Payment Row</button>
+
+              <div class="info" style="margin-top:14px; display:flex;">
+                <span id="saleDetailSubtotalLabel">Subtotal:</span>
+                <strong id="saleDetailSubtotalValue">$0.00</strong>
+              </div>
+              <div class="info" style="display:flex;">
+                <span id="saleDetailDiscountAmtLabel">Discount:</span>
+                <strong id="saleDetailDiscountAmtValue">$0.00</strong>
+              </div>
+              <div class="info" style="display:flex;">
+                <span id="saleDetailTaxAmtLabel">Tax:</span>
+                <strong id="saleDetailTaxAmtValue">$0.00</strong>
+              </div>
+              <div class="info" style="display:flex; font-weight:700; color:var(--ink);">
+                <span id="saleDetailGrandLabel">Total:</span>
+                <strong id="saleDetailGrandValue">$0.00</strong>
+              </div>
+              <div class="info" style="display:flex;">
+                <span id="saleDetailReceivedLabel">Received:</span>
+                <strong id="saleDetailReceivedValue">$0.00</strong>
+              </div>
+              <div class="info" style="display:flex;">
+                <span id="saleDetailChangeLabel">Change:</span>
+                <strong id="saleDetailChangeValue">$0.00</strong>
+              </div>
+
+              <div class="checkout-actions" style="margin-top:16px;">
+                <button class="back-btn" onclick="reprintSaleFromDetail()" id="saleDetailReprintBtn">🖨 <span id="saleDetailReprintLabel">Reprint</span></button>
+                <button class="complete-btn" onclick="saveSaleDetailEdits()" id="saleDetailSaveBtn">💾 <span id="saleDetailSaveLabel">Save Changes</span></button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="csv-actions">
-          <button style="background:var(--accent);" onclick="exportSalesToExcel()" id="downloadSalesButton">⬇ Download Sales Report</button>
-          <button style="background:var(--danger);" onclick="clearSalesHistory()" id="clearSalesButton">Clear History</button>
-        </div>
-        <div class="info" id="salesHistoryHint" style="display:block;">Every completed sale is saved automatically. Click any sale below to view full details, edit it, or reprint the receipt. The download gives you one file with two tabs: "Sales" (one row per sale - totals, payment, date) and "Sale Items" (one row per product sold, linked back to its Receipt No).</div>
       </div>
 
       <div class="settings-panel-content" id="panel-footer">
@@ -1333,7 +1381,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">SETTINGS → SALES HISTORY</span>
       <h3>Sales History</h3>
-      <p>Opens full-screen for a real, spacious view of every completed sale, saved automatically and grouped by date. Click any sale to view full details, fix a mistake, or reprint the receipt - and download a two-tab Excel report whenever you need your own records, optionally filtered to a date range.</p>
+      <p>Opens full-screen as a table-style, two-pane view - a list of every completed sale on the left, grouped by date with the latest day on top (or switch to "All" to see every sale sorted latest-first in one flat list), and the selected sale's full details on the right, including its line items. Click any sale to view it, fix a mistake, or reprint the receipt right there - and download a two-tab Excel report whenever you need your own records, optionally filtered to a date range.</p>
     </div>
 
     <div class="htu-item">
@@ -1544,6 +1592,7 @@ function selectSettingsTab(name) {
   document.querySelectorAll(".settings-panel-content").forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
   document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
   document.getElementById("settingsOverlay").classList.toggle("fullscreen-tab", name === "inventory" || name === "salesHistory");
+  document.getElementById("settingsTabPanel").classList.toggle("sales-history-active", name === "salesHistory");
 }
 
 async function loadSettings() {
@@ -2102,6 +2151,39 @@ function toggleHistoryGroup(key) {
   renderSalesHistoryPanel();
 }
 
+let salesHistoryView = "grouped";
+function setSalesHistoryView(view) {
+  salesHistoryView = view;
+  document.querySelectorAll(".sh-view-btn").forEach(function(btn) { btn.classList.toggle("active", btn.dataset.view === view); });
+  renderSalesHistoryPanel();
+}
+
+function salesHistorySortKey(s) {
+  return saleDateKey(s.dateTime) + " " + ((s.dateTime || "").split(" ")[1] || "");
+}
+function bySaleDateDesc(a, b) {
+  return salesHistorySortKey(b).localeCompare(salesHistorySortKey(a));
+}
+
+function buildSalesHistoryRow(s, symbol) {
+  const row = document.createElement("div");
+  row.className = "sh-row" + (editingSaleRecord && editingSaleRecord.receiptNumber === s.receiptNumber ? " selected" : "");
+  row.innerHTML =
+    "<div class=\"sh-col sh-col-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
+    "<div class=\"sh-col sh-col-date\">" + escapeHtml(s.dateTime) + "</div>" +
+    "<div class=\"sh-col sh-col-payment\">" + escapeHtml(s.paymentMethod || "-") + "</div>" +
+    "<div class=\"sh-col sh-col-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(decimalsNow()) + "</div>" +
+    "<div class=\"sh-col sh-col-actions\">" +
+      "<button type=\"button\" class=\"shr-delete-btn\" title=\"Reprint this receipt\">🖨</button>" +
+      "<button type=\"button\" class=\"shr-delete-btn\" title=\"Delete this sale\">×</button>" +
+    "</div>";
+  row.addEventListener("click", function() { openSaleDetail(s.receiptNumber); });
+  const buttons = row.querySelectorAll(".shr-delete-btn");
+  buttons[0].addEventListener("click", function(e) { reprintSaleFromHistory(s.receiptNumber, e); });
+  buttons[1].addEventListener("click", function(e) { e.stopPropagation(); deleteSaleRecord(s.receiptNumber); });
+  return row;
+}
+
 function renderSalesHistoryPanel() {
   const summary = document.getElementById("salesHistorySummary");
   const table = document.getElementById("salesHistoryTable");
@@ -2118,6 +2200,21 @@ function renderSalesHistoryPanel() {
     empty.className = "sales-history-empty";
     empty.textContent = "No completed sales yet. They'll appear here once you finish a payment.";
     table.appendChild(empty);
+    return;
+  }
+
+  const head = document.createElement("div");
+  head.className = "sh-row sh-row-head";
+  head.innerHTML =
+    "<div class=\"sh-col sh-col-receipt\">Receipt</div>" +
+    "<div class=\"sh-col sh-col-date\">Date &amp; Time</div>" +
+    "<div class=\"sh-col sh-col-payment\">Payment</div>" +
+    "<div class=\"sh-col sh-col-total\">Total</div>" +
+    "<div class=\"sh-col sh-col-actions\"></div>";
+  table.appendChild(head);
+
+  if (salesHistoryView === "all") {
+    salesHistory.slice().sort(bySaleDateDesc).forEach(function(s) { table.appendChild(buildSalesHistoryRow(s, symbol)); });
     return;
   }
 
@@ -2150,25 +2247,8 @@ function renderSalesHistoryPanel() {
     if (isExpanded) {
       const groupBody = document.createElement("div");
       groupBody.className = "sales-history-group-body";
-      group.sales.slice().reverse().forEach(function(s) {
-        const row = document.createElement("div");
-        row.className = "sales-history-row";
-        row.style.cursor = "pointer";
-        row.innerHTML =
-          "<div>" +
-            "<div class=\"shr-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
-            "<div class=\"shr-date\">" + escapeHtml(s.dateTime) + " • " + escapeHtml(s.paymentMethod || "-") + "</div>" +
-          "</div>" +
-          "<div class=\"shr-right\">" +
-            "<div class=\"shr-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(decimalsNow()) + "</div>" +
-            "<button type=\"button\" class=\"shr-delete-btn\" title=\"Reprint this receipt\">🖨</button>" +
-            "<button type=\"button\" class=\"shr-delete-btn\" title=\"Delete this sale\">×</button>" +
-          "</div>";
-        row.addEventListener("click", function() { openSaleDetail(s.receiptNumber); });
-        const buttons = row.querySelectorAll(".shr-delete-btn");
-        buttons[0].addEventListener("click", function(e) { reprintSaleFromHistory(s.receiptNumber, e); });
-        buttons[1].addEventListener("click", function(e) { e.stopPropagation(); deleteSaleRecord(s.receiptNumber); });
-        groupBody.appendChild(row);
+      group.sales.slice().sort(bySaleDateDesc).forEach(function(s) {
+        groupBody.appendChild(buildSalesHistoryRow(s, symbol));
       });
       table.appendChild(groupBody);
     }
@@ -2224,13 +2304,17 @@ function openSaleDetail(receiptNumber) {
   renderSaleDetailPayments();
   recomputeSaleDetailTotals();
 
-  document.getElementById("settingsOverlay").classList.add("hidden");
-  document.getElementById("saleDetailOverlay").classList.remove("hidden");
+  document.getElementById("saleDetailEmptyState").classList.add("hidden");
+  document.getElementById("saleDetailContent").classList.remove("hidden");
+  document.getElementById("salesHistorySplit").classList.add("detail-open");
+  renderSalesHistoryPanel();
 }
 function closeSaleDetail() {
-  document.getElementById("saleDetailOverlay").classList.add("hidden");
-  document.getElementById("settingsOverlay").classList.remove("hidden");
   editingSaleRecord = null;
+  document.getElementById("saleDetailContent").classList.add("hidden");
+  document.getElementById("saleDetailEmptyState").classList.remove("hidden");
+  document.getElementById("salesHistorySplit").classList.remove("detail-open");
+  renderSalesHistoryPanel();
 }
 
 function renderSaleDetailItems() {
@@ -2368,7 +2452,7 @@ async function saveSaleDetailEdits() {
   editingSaleRecord.change = change;
 
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();  closeSaleDetail();
+  closeSaleDetail();
 }
 
 function printHistoricalReceipt(record) {
@@ -2442,14 +2526,17 @@ async function deleteSaleRecord(receiptNumber) {
   if (!confirm("Delete sale #" + receiptNumber + "? This can't be undone.")) return;
   salesHistory = salesHistory.filter(function(s) { return s.receiptNumber !== receiptNumber; });
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();}
+  if (editingSaleRecord && editingSaleRecord.receiptNumber === receiptNumber) closeSaleDetail();
+  else renderSalesHistoryPanel();
+}
 
 async function clearSalesHistory() {
   if (!salesHistory.length) return;
   if (!confirm("Delete all recorded sales history? This can't be undone.")) return;
   salesHistory = [];
   await saveSalesHistoryToStorage();
-  renderSalesHistoryPanel();}
+  closeSaleDetail();
+}
 
 function todayStamp() {
   const d = new Date();
