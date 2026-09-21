@@ -1279,6 +1279,11 @@ Website: Goonlinepos.com</textarea>
                 <strong id="inventoryDetailValueAmount">-</strong>
               </div>
               <button type="button" class="settings-primary-btn" onclick="saveInventoryDetailEdits()" id="inventoryDetailSaveBtn" style="margin-top:16px;"><span id="inventoryDetailSaveLabel">Save Changes</span></button>
+              <div id="inventoryRelatedSalesSection" style="margin-top:20px;">
+                <label id="inventoryRelatedSalesLabel">Related Sales</label>
+                <div id="inventoryRelatedSalesList"></div>
+                <div id="inventoryRelatedSalesEmpty" class="info hidden">No sales yet for this product.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1306,7 +1311,7 @@ Website: Goonlinepos.com</textarea>
               <p id="saleDetailEmptyText">Select a sale from the list to view its details.</p>
             </div>
             <div id="saleDetailContent" class="hidden">
-              <button type="button" class="sale-detail-back-to-customer-btn hidden no-print" id="saleDetailBackToCustomerBtn" onclick="backToCustomerFromSaleDetail()">← <span id="saleDetailBackToCustomerLabel">Back to Customer</span></button>
+              <button type="button" class="sale-detail-back-to-customer-btn hidden no-print" id="saleDetailBackToOriginBtn" onclick="backToOriginFromSaleDetail()">← <span id="saleDetailBackToOriginLabel">Back to Customer</span></button>
               <div class="md-detail-header">
                 <h3 id="saleDetailTitle">Sale Details</h3>
                 <button type="button" class="md-detail-close-btn" onclick="closeSaleDetail()" aria-label="Close">✕</button>
@@ -1714,7 +1719,7 @@ let customerCounterValue = 0;
 let activeCustomerId = "";
 let editingCustomerId = null;
 let creatingNewCustomer = false;
-let saleDetailFromCustomerId = null;
+let saleDetailOrigin = null;
 let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
@@ -2581,7 +2586,7 @@ async function saveCurrentSaleToHistory() {
     change: Math.max(0, totalEntered() - totals.grandTotal),
     itemCount: cartTotalCount(),
     items: cart.map(function(c) {
-      return { name: c.name || tr("customItemName"), qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0), taxExempt: !!c.taxExempt, description: (c.showDescription && c.description) ? c.description.trim() : "" };
+      return { name: c.name || tr("customItemName"), sku: c.sku || "", qty: Number(c.qty) || 0, price: Number(c.price) || 0, lineTotal: (Number(c.qty) || 0) * (Number(c.price) || 0), taxExempt: !!c.taxExempt, description: (c.showDescription && c.description) ? c.description.trim() : "" };
     })
   };
 
@@ -2733,10 +2738,10 @@ let saleDetailPayments = [];
 function openSaleDetail(receiptNumber) {
   const record = salesHistory.find(function(s) { return s.receiptNumber === receiptNumber; });
   if (!record) return;
-  saleDetailFromCustomerId = null;
-  renderSaleDetailBackToCustomerLink();
+  saleDetailOrigin = null;
+  renderSaleDetailBackLink();
   editingSaleRecord = record;
-  saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price, taxExempt: !!it.taxExempt, description: it.description || "", showDescription: !!it.description }; });
+  saleDetailItems = record.items.map(function(it) { return { name: it.name, sku: it.sku || "", qty: it.qty, price: it.price, taxExempt: !!it.taxExempt, description: it.description || "", showDescription: !!it.description }; });
   saleDetailPayments = (record.payments && record.payments.length)
     ? record.payments.map(function(p) { return { method: p.method, amount: p.amount }; })
     : [{ method: record.paymentMethod || (paymentMethods[0] || ""), amount: record.amountReceived || 0 }];
@@ -2775,23 +2780,30 @@ function openSaleDetail(receiptNumber) {
 }
 function closeSaleDetail() {
   editingSaleRecord = null;
-  saleDetailFromCustomerId = null;
+  saleDetailOrigin = null;
   document.getElementById("saleDetailContent").classList.add("hidden");
   document.getElementById("saleDetailEmptyState").classList.remove("hidden");
   document.getElementById("salesHistorySplit").classList.remove("detail-open");
   renderSalesHistoryPanel();
 }
-function renderSaleDetailBackToCustomerLink() {
-  const btn = document.getElementById("saleDetailBackToCustomerBtn");
-  if (!btn) return;
-  btn.classList.toggle("hidden", !saleDetailFromCustomerId);
+function renderSaleDetailBackLink() {
+  const btn = document.getElementById("saleDetailBackToOriginBtn");
+  const label = document.getElementById("saleDetailBackToOriginLabel");
+  if (!btn || !label) return;
+  btn.classList.toggle("hidden", !saleDetailOrigin);
+  if (saleDetailOrigin) label.textContent = tr(saleDetailOrigin.type === "inventory" ? "saleDetailBackToInventoryLabel" : "saleDetailBackToCustomerLabel");
 }
-function backToCustomerFromSaleDetail() {
-  const customerId = saleDetailFromCustomerId;
-  if (!customerId) return;
+function backToOriginFromSaleDetail() {
+  const origin = saleDetailOrigin;
+  if (!origin) return;
   closeSaleDetail();
+  if (origin.type === "inventory") {
+    openSettingsTab("inventory");
+    openInventoryDetail(origin.id);
+    return;
+  }
   openSettingsTab("customers");
-  openCustomerDetail(customerId);
+  openCustomerDetail(origin.id);
 }
 
 function renderSaleDetailItems() {
@@ -2905,7 +2917,7 @@ async function saveSaleDetailEdits() {
   const change = Math.max(0, received - totals.grandTotal);
 
   const cleanItems = saleDetailItems.filter(function(it) { return it.name.trim() !== ""; }).map(function(it) {
-    return { name: it.name.trim(), qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0), taxExempt: !!it.taxExempt, description: (it.showDescription && it.description) ? it.description.trim() : "" };
+    return { name: it.name.trim(), sku: it.sku || "", qty: Number(it.qty) || 0, price: Number(it.price) || 0, lineTotal: (Number(it.qty) || 0) * (Number(it.price) || 0), taxExempt: !!it.taxExempt, description: (it.showDescription && it.description) ? it.description.trim() : "" };
   });
   const cleanPayments = saleDetailPayments.filter(function(p) { return Number(p.amount) > 0; }).map(function(p) {
     return { method: p.method, amount: Number(p.amount) || 0 };
@@ -3973,6 +3985,8 @@ function openInventoryDetail(sku) {
   const totalValue = hasStock ? Number(p.stock) * (Number(p.price) || 0) : null;
   document.getElementById("inventoryDetailValueAmount").textContent = totalValue !== null ? (symbol + " " + totalValue.toFixed(decimalsNow())) : "-";
 
+  renderInventoryRelatedSales(sku);
+
   document.getElementById("inventoryDetailEmptyState").classList.add("hidden");
   document.getElementById("inventoryDetailContent").classList.remove("hidden");
   document.getElementById("inventorySplit").classList.add("detail-open");
@@ -4303,8 +4317,38 @@ function viewCustomerRelatedSale(receiptNumber) {
   const fromCustomerId = editingCustomerId;
   openSettingsTab("salesHistory");
   openSaleDetail(receiptNumber);
-  saleDetailFromCustomerId = fromCustomerId;
-  renderSaleDetailBackToCustomerLink();
+  saleDetailOrigin = { type: "customer", id: fromCustomerId };
+  renderSaleDetailBackLink();
+}
+function renderInventoryRelatedSales(sku) {
+  const list = document.getElementById("inventoryRelatedSalesList");
+  const empty = document.getElementById("inventoryRelatedSalesEmpty");
+  if (!list || !empty) return;
+  const related = salesHistory.filter(function(s) {
+    return (s.items || []).some(function(it) { return it.sku && it.sku === sku; });
+  }).slice().sort(bySaleDateDesc);
+  list.innerHTML = "";
+  empty.classList.toggle("hidden", related.length > 0);
+  empty.textContent = tr("inventoryRelatedSalesEmpty");
+  const symbol = symbolNow();
+  related.forEach(function(s) {
+    const row = document.createElement("div");
+    row.className = "sh-row";
+    row.style.gridTemplateColumns = "76px 1fr 90px";
+    row.innerHTML =
+      "<div class=\"sh-col sh-col-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
+      "<div class=\"sh-col sh-col-date\">" + escapeHtml(s.dateTime) + "</div>" +
+      "<div class=\"sh-col sh-col-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(decimalsNow()) + "</div>";
+    row.addEventListener("click", function() { viewInventoryRelatedSale(s.receiptNumber); });
+    list.appendChild(row);
+  });
+}
+function viewInventoryRelatedSale(receiptNumber) {
+  const fromSku = editingInventorySku;
+  openSettingsTab("salesHistory");
+  openSaleDetail(receiptNumber);
+  saleDetailOrigin = { type: "inventory", id: fromSku };
+  renderSaleDetailBackLink();
 }
 
 async function clearProducts() {
@@ -4480,7 +4524,7 @@ function changeLanguage() {
     customerDetailEmailLabel: "quickCustomerEmailLabel", customerDetailPhoneLabel: "quickCustomerPhoneLabel",
     customerDetailDetailsLabel: "quickCustomerDetailsLabel", customerDetailDeleteLabel: "customerDetailDeleteLabel",
     customerDetailEmptyText: "customerDetailEmptyText", customerRelatedSalesLabel: "customerRelatedSalesLabel",
-    saleDetailBackToCustomerLabel: "saleDetailBackToCustomerLabel",
+    inventoryRelatedSalesLabel: "inventoryRelatedSalesLabel",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", supportCoffeeLabel: "supportCoffeeLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
@@ -4615,6 +4659,7 @@ function changeLanguage() {
   renderCustomerSelect();
   renderCustomersList();
   renderCustomerDetailTitle();
+  renderSaleDetailBackLink();
 }
 
 function escapeHtml(text) {

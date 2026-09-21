@@ -36,6 +36,8 @@ en: {
   customerDetailDeleteLabel: "Delete Customer", customerDeleteConfirm: "Delete this customer? This can't be undone.",
   customerRelatedSalesLabel: "Related Sales", customerRelatedSalesEmpty: "No sales yet for this customer.",
   saleDetailBackToCustomerLabel: "Back to Customer",
+  inventoryRelatedSalesLabel: "Related Sales", inventoryRelatedSalesEmpty: "No sales yet for this product.",
+  saleDetailBackToInventoryLabel: "Back to Inventory",
   endOfDayShortcutLabel: "End of Day", howToUseShortcutLabel: "How To Use",
   homepageShortcutLabel: "Homepage", blogShortcutLabel: "Blog",
   backupShortcutLabel: "Backup", supportCoffeeLabel: "Buy Me a Coffee", toolbarHideLabel: "Hide Toolbar", toolbarShowLabel: "Show Toolbar", sidebarHideLabel: "Hide Sidebar", sidebarShowLabel: "Show Sidebar",
