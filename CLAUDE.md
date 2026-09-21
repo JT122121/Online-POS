@@ -2152,6 +2152,50 @@ has zero network calls.
     unchanged with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers
     and zero `console.warn`; and zero console errors or horizontal
     overflow at 1400px desktop and 390px mobile.
+  - **Follow-up: Email and Phone are optional but must be unique**, per
+    an explicit "make sure in customer email and phones are unique"
+    request. Neither field is required (matching the original "only
+    Name is required" design), but once either is filled in, it can't
+    match another customer's - two shared helpers,
+    `isCustomerEmailTaken(email, excludeId)`/
+    `isCustomerPhoneTaken(phone, excludeId)` (next to `createCustomer()`),
+    are called from both entry points - `saveQuickNewCustomer()`
+    (checkout's quick-create modal) and `saveCustomerDetailEdits()` (the
+    full Customers module's detail pane, both create and edit) - the
+    same "one check, two callers" pattern `addSingleProduct()`/
+    `saveProductDetailEdits()` already established for SKU uniqueness.
+    An empty email/phone never triggers the check (many customers
+    legitimately have neither, and two blanks shouldn't collide with
+    each other), matching SKU's own "only check when non-blank" logic.
+    **Email comparison is case-insensitive** (`"Alice@Example.com"` and
+    `"alice@example.com"` are treated as the same address) - a
+    deliberate, real-world-correct choice rather than blindly copying
+    SKU's plain case-sensitive `===` precedent, since email addresses
+    are conventionally treated as case-insensitive; **phone comparison
+    is a plain trimmed exact match**, same as SKU, since normalizing
+    phone formatting (stripping spaces/dashes/country-code variants)
+    risks false positives between genuinely different numbers and
+    wasn't asked for. `excludeId` lets editing a customer's *own*
+    existing record pass without tripping over itself - `null` when
+    creating (nothing to exclude), the customer's own `id` when editing
+    an existing one (`saveCustomerDetailEdits()` computes this from
+    `creatingNewCustomer ? null : editingCustomerId`). New translation
+    keys `customerEmailDuplicateError`/`customerPhoneDuplicateError`
+    reuse the exact same inline error-box pattern
+    (`quickCustomerErrorBox`/`customerDetailErrorBox`) the blank-name
+    check already uses, so a duplicate shows the same way a blank name
+    already did - no new UI element. Verified with Playwright: creating
+    a customer with an email that only differs by case from an existing
+    one is blocked with the translated error and the modal/pane stays
+    open; the same for a duplicate phone; fixing the conflicting field
+    and resaving succeeds; two different customers can both have a
+    blank email/phone with no false positive; opening an existing
+    customer and resaving with their own unchanged email doesn't
+    falsely flag itself as a duplicate; editing one customer's email to
+    another existing customer's email is correctly blocked; the same
+    duplicate-phone block works from the full Customers module's own
+    "+ New Customer" flow, not just checkout's quick-create modal; and
+    zero console errors throughout.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk upload from **either CSV or Excel
