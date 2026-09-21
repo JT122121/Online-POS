@@ -54,7 +54,7 @@ en: {
   addProductNameLabel: "Product Name", addProductPriceLabel: "Price", addProductCategoryLabel: "Category (optional)", addProductSkuLabel: "SKU",
   addProductSkuError: "Enter a SKU.", addProductSkuDuplicateError: "A product with this SKU already exists.",
   addProductPhotoLabel: "Photo (optional)", productPhotoUploadError: "Couldn't load that image. Try a different file.", productPhotoChangeTitle: "Click to change photo", removePhotoLabel: "Remove",
-  addProductButton: "+ Add Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
+  addProductButton: "Save Product", addProductNameError: "Enter a product name.", addProductPriceError: "Enter a valid price.",
   manageProductsEmpty: "No products yet - add one above or upload a CSV or Excel file below.",
   productsSampleButton: "Download Sample CSV", productsSampleExcelButton: "Download Sample Excel", productsClearButton: "Clear Products",
   productsClearConfirm: "Remove all uploaded products?", productsUploadError: "Couldn't read that file. Make sure it's a CSV or Excel file with Name, Price, and SKU columns.",
