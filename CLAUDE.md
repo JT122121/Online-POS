@@ -3696,6 +3696,49 @@ has zero network calls.
     already-empty cart fires no confirm dialog at all (the existing
     `cart.length &&` guard, unchanged); and zero horizontal overflow or
     console errors at 1400px desktop and 390px mobile.
+- **Follow-up: the Barcode Scanner sidebar item collapsed back down to
+  one row**, per a screenshot plus "Not nice this Barcode scanner
+  eating space" - the two-row card from the earlier "click open a form"
+  pass (icon/label/info-button row, then a centered status pill on its
+  own row underneath) was visibly taller than every other sidebar item
+  and stood out awkwardly in the list. Fixed by making the whole row a
+  single `<button id="barcodeScannerStatusBtn" class="pos-sidebar-item">`
+  again - icon badge, label, and a small trailing status pill
+  (`.pos-sidebar-status-pill`, green/on or red/off, `margin-left: auto`
+  pushing it to the row's right edge) all on one line, the exact same
+  "icon + label + small thing pinned to the end" pattern
+  `#settingsButton::after`'s dropdown-arrow already used elsewhere in
+  this file - clicking anywhere on the row still opens the same
+  `#barcodeScannerToggleOverlay` form as before.
+  - **The separate "How the Barcode Scanner Works" info modal and its
+    dedicated ℹ button were removed and folded into the toggle form
+    itself**, not just shrunk - the info button was the single biggest
+    thing crowding the old two-row layout, and once the row became a
+    single click target there was no room left for a second, differently-
+    purposed button on it anyway. `#barcodeScannerInfoOverlay`/
+    `openBarcodeScannerInfo()`/`closeBarcodeScannerInfo()` were deleted
+    outright; the explanatory paragraph they used to show
+    (`barcodeScannerToggleInfo`, unchanged text minus one now-inaccurate
+    "toggle" reference) now opens directly inside
+    `#barcodeScannerToggleOverlay`, above the "Currently: On/Off" line -
+    one modal covers both "what this does" and "turn it on or off" now,
+    reached the same one way. The now fully-unused `.info-btn` CSS rule
+    (confirmed via grep to have had exactly one user in the whole file)
+    was removed too, matching this session's own "don't leave orphaned
+    CSS behind" discipline applied repeatedly above.
+  - Verified with Playwright: the Barcode Scanner row's own
+    `getBoundingClientRect().height` now exactly matches a genuinely
+    single-row sidebar item's height (compared directly against
+    Cashiers, another icon-badged item, both measuring identically -
+    not against a plain-icon item like Backup, which is naturally
+    shorter and would have been a misleading comparison); the sidebar's
+    alphabetical order (see the earlier follow-up above) is unaffected;
+    clicking the row opens the merged modal showing both the
+    explanation text and the current On/Off status; Turn Off/Turn On
+    still work and update the trailing pill's color and text correctly;
+    `#barcodeScannerInfoOverlay` no longer exists anywhere in the DOM;
+    and zero horizontal overflow or console errors with the modal open
+    at 1400px desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
