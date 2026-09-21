@@ -2991,6 +2991,22 @@ has zero network calls.
     dialog size; the ✕ close button works from the full-screen state;
     and zero console errors and zero horizontal overflow at both 1400px
     desktop and 390px mobile.
+  - **The in-app How To Use panel was updated to match**, per the same
+    "keep this panel in sync with what this session changed" pattern
+    already established for the SKU/Auto-Backup/language passes above -
+    three `.htu-item`s had drifted stale from this round's own work.
+    **SETTINGS → PRODUCTS** still described adding items directly into
+    an always-visible form - reworded to describe clicking "+ Add
+    Product" to open it, and that the form deliberately stays open
+    after each save for adding several items in a row, plus a new
+    clause about the category chips filtering the manage-list.
+    **SETTINGS → SALES HISTORY** and **SETTINGS → INVENTORY** both
+    gained an opening "Opens full-screen" clause describing the new
+    viewport-filling overlay instead of the old capped dialog;
+    Inventory's own sentence also picked up a mention of the category
+    chips alongside its existing search-by-name-or-SKU note. No section
+    was added or removed, so the panel is still exactly 16 `.htu-item`s
+    - only these three descriptions changed to stay accurate.
 
 ## `modules/` — split-out app.html pieces
 
