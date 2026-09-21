@@ -4562,6 +4562,100 @@ has zero network calls.
   (`buildOfflineAppHtml()`) carries the toggle button through unchanged
   while still correctly stripping Homepage/Blog/every free-tool button
   inside it, with zero leftover markers and zero `console.warn` output.
+- **Inventory detail also got a Related Sales section, matching
+  Customers' own**, per an explicit "also add related sales to the
+  inventory detail make it same way as what we did in Customer related
+  sales latest at the top and having option back to inventory" request.
+  `renderInventoryRelatedSales(sku)` (called from `openInventoryDetail()`,
+  right alongside its existing field population) lists every sale whose
+  `items[]` includes that SKU, sorted latest-first via the same
+  `bySaleDateDesc` comparator Customers' own Related Sales and Sales
+  History's own "All (Latest First)" view already share - one sort
+  function, not a third copy. Each row reuses the exact same
+  `.sh-row`/3-column inline `gridTemplateColumns` markup Customer's
+  Related Sales rows already use, and clicking one calls the new
+  `viewInventoryRelatedSale(receiptNumber)`.
+  - **A real, easy-to-miss data gap had to be fixed first: sale line
+    items never stored `sku` at all.** `salesHistory` records' own
+    `items[]` only ever carried `{name, qty, price, lineTotal,
+    taxExempt, description}` - every field needed to print a receipt or
+    reopen a sale for editing, but nothing that could link an item back
+    to the product it came from. Filtering sales by SKU (the whole point
+    of this feature) needed that field to exist first. Fixed by adding
+    `sku: c.sku || ""` to `saveCurrentSaleToHistory()`'s own item-mapping
+    (custom/manual cart items already carry `sku: ""` per
+    `addCustomItem()`, so they're naturally excluded from ever matching
+    an inventory SKU, no special-casing needed). **This is a forward-only
+    fix, the same known limitation this file has already documented
+    elsewhere for other historical-schema additions** (e.g. `taxExempt`/
+    `discountType` when those first shipped) - sales completed before
+    this change have no `sku` on their items and will never show up in
+    a product's Related Sales list, even though they were real sales of
+    it; only sales completed after this fix are linkable.
+  - **A second, adjacent bug was caught while wiring this up, not just
+    assumed away**: `openSaleDetail()`'s own `saleDetailItems` mapping
+    (what the Sales History editor actually works from) never carried
+    `sku` through either, and `saveSaleDetailEdits()`'s `cleanItems`
+    rebuild would have silently dropped it the moment *any* existing
+    sale was reopened and saved again - even one that already had a
+    correctly-tagged `sku` from the fix above. Both mappings now
+    round-trip `sku` alongside every other field, confirmed by editing
+    and resaving a sale through the Sales History editor and checking
+    the stored record's `sku` survives unchanged.
+  - **The "Back to Customer" link was generalized into a single
+    "Back to Origin" mechanism, not duplicated a second time.** The
+    single-purpose `saleDetailFromCustomerId`/
+    `renderSaleDetailBackToCustomerLink()`/`backToCustomerFromSaleDetail()`
+    trio from the earlier "Back to Customer" fix (see above) became one
+    `saleDetailOrigin` variable (`{type: "customer"|"inventory", id}` or
+    `null`), one `renderSaleDetailBackLink()` that shows/hides the same
+    button and sets its label text from `tr("saleDetailBackToInventoryLabel")`
+    or `tr("saleDetailBackToCustomerLabel")` depending on `type`, and one
+    `backToOriginFromSaleDetail()` that branches on `type` to call either
+    `openSettingsTab("inventory") + openInventoryDetail(id)` or
+    `openSettingsTab("customers") + openCustomerDetail(id)` - the same
+    "generalize once a second real use case appears" precedent this file
+    already followed for the `.sh-*` → `.md-*` master-detail CSS classes
+    once Products/Inventory needed Sales History's own split-pane
+    pattern. The HTML button/span were renamed
+    `#saleDetailBackToOriginBtn`/`#saleDetailBackToOriginLabel` to match
+    - `viewCustomerRelatedSale()` was updated to set the new
+    `{type: "customer", ...}` shape, and `openSaleDetail()`/
+    `closeSaleDetail()` both reset `saleDetailOrigin` to `null` (instead
+    of the old customer-only variable), so a plain row click from the
+    ordinary Sales History list still always clears any stale link from
+    a previous customer- or inventory-originated visit, exactly like
+    before. Since the label is now composed dynamically rather than
+    walked by the generic `textContent` `ids`-map loop,
+    `saleDetailBackToCustomerLabel`'s old ids-map entry was removed
+    (the element id it targeted, `#saleDetailBackToCustomerLabel`, no
+    longer exists) and `renderSaleDetailBackLink()` is called directly
+    from `changeLanguage()`'s tail instead, the same "dynamic,
+    mode-dependent text needs its own re-render function" pattern
+    `renderBarcodeScannerStatus()`/`renderCustomerDetailTitle()` already
+    established.
+  - New translation keys `inventoryRelatedSalesLabel`/
+    `inventoryRelatedSalesEmpty`/`saleDetailBackToInventoryLabel` exist
+    in `modules/translations.js` alongside the existing Customer-side
+    keys; only `inventoryRelatedSalesLabel` needed an entry in
+    `changeLanguage()`'s `ids` map (a plain static label) - the other
+    two are read directly via `tr()` from inside their own render
+    functions, matching `onLabel`/`offLabel`'s existing precedent for
+    state-dependent text.
+  - Verified with Playwright end-to-end: selling a real catalog product
+    (not a custom item) correctly stamps `sku` onto the saved sale's line
+    item; opening that product's Inventory detail pane shows exactly one
+    Related Sales row; clicking it lands on Sales History with the
+    populated sale and a visible "← Back to Inventory" link; clicking
+    that link returns to the Inventory tab with the same product's
+    detail pane open again (name field correctly repopulated); editing
+    and resaving that same sale through the Sales History editor leaves
+    its `sku` intact; the pre-existing Customer "Back to Customer" flow
+    (from the earlier fix) still works identically end-to-end under the
+    generalized mechanism, including still correctly hiding the link for
+    a sale opened directly from the plain Sales History list; and the
+    offline-package build still produces zero leftover
+    `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero `console.warn`.
 
 ## `modules/` — split-out app.html pieces
 
