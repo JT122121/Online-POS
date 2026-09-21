@@ -1384,6 +1384,51 @@ all of them under one pattern:
     overflow, zero console errors, and a cropped screenshot of just
     `.app-preview` confirms Customers renders with its own icon in the
     correct position between Sales History and More Settings.
+  - **Follow-up: the mock widened from 820px to 1100px**, per an
+    explicit "the mook pos image can you expand it? Seems a lot of
+    space make it full length" report - `.preview-wrap`'s `max-width`
+    was the actual binding constraint (not `.hero`/`.wrap`, both
+    already filling the page's full 1600px shell - see "Follow-up:
+    every marketing/tool page widened to match" above), so on any
+    monitor wider than ~820px + the page's own side margins, the mock
+    sat centered with a visibly growing band of plain background on
+    both sides - worse than the feature-grid/settings-modal version of
+    this same complaint this file has already fixed twice before,
+    since the mock is the very first thing a visitor's eye lands on
+    below the headline. Not simply set to fill the full 1600px shell
+    like `app.html`'s own layout was - the mock's internal content
+    (10-13px fixed font sizes, a 46px-tall product-thumbnail row) is
+    sized for a compact card look, not a fluid real layout, so stretching
+    it all the way to 1600px would have spread that same fixed-size
+    content across a much wider box with little visual gain; 1100px was
+    chosen as a middle ground that meaningfully closes the empty-margin
+    gap without making the mock's own internal spacing look sparse or
+    its thumbnails look like a smear of pixels. **`.ap-product-grid`
+    changed from a fixed 2-column grid to 3 columns in the same pass** -
+    the mock shows exactly 3 products (Pepperoni Pizza/Cheeseburger/
+    French Fries - see "The `.app-preview` mock's 3 catalog products"
+    above), and a 2-column grid with 3 items already left a lone,
+    stranded third card on its own half-empty row even before this
+    widening (the same "stranded last row" class of issue this file has
+    named and fixed elsewhere) - simply widening a 2-column grid would
+    have made that already-present stranding worse by stretching each
+    of the 2 cards on the first row even wider while leaving the
+    second row's lone card just as alone. Moving to 3 columns fixes
+    both problems in one change: all 3 products now sit in a single
+    clean row, and the extra width from the 1100px cap distributes
+    across three cards instead of concentrating in two, keeping each
+    product thumbnail's proportions reasonable rather than stretching
+    into an oversized banner. Verified with Playwright at
+    360/390/414/900/1280/1400/1600/1920px: zero horizontal overflow and
+    zero console errors at every width; the preview's own rendered
+    width resolves to exactly `1100px` (not more) at both 1400px and
+    1920px viewports, confirming it's capped, not edge-to-edge; a
+    cropped screenshot of just `.preview-wrap` at 1400px shows all 3
+    products in one row with proportionate thumbnails and no visual
+    stretching; and the existing mobile single-column collapse
+    (`@media (max-width: 900px) { .app-preview { grid-template-columns:
+    1fr; } }`) is unaffected, still rendering the 3-column product grid
+    cleanly inside the narrower single-column mock at 390px.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
