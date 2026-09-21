@@ -1357,6 +1357,33 @@ all of them under one pattern:
     after the `featureList` edit; and the rest of the existing
     regression baseline (hero copy, tool-card links, FAQ answers 1-11)
     is unchanged.
+  - **Follow-up: the Hero's `.app-preview` mock sidebar also got a
+    "Customers" entry**, per an explicit "Add also in card view
+    homepage" follow-up - the mock's small sidebar (New Sale/Products/
+    Inventory/Sales History/More Settings) had drifted stale the moment
+    the real app's own sidebar gained its `#sidebarCustomersButton`
+    entry (see "Customers" under "`app.html` — architecture" below),
+    the same "the mock drifts and gets resynced in its own dedicated
+    pass" precedent already documented for this element elsewhere in
+    this file. A new `#icon-user` symbol was added to `index.html`'s
+    own small scoped icon sprite (the identical path data as
+    `app.html`'s own sprite `icon-user` glyph, for visual consistency
+    between the real icon and its marketing-page mock), and a new
+    `.ap-sidebar-item` - "Customers", `.ap-sidebar-icon-gray` badge -
+    was inserted between Sales History and More Settings, matching the
+    real sidebar's own gray badge choice for this item exactly (even
+    though the mock's own badge-color assignments don't otherwise track
+    the real sidebar 1:1 - New Sale/Products/Inventory/Sales History
+    there are a solid-green pill/blue/orange/purple respectively, none
+    of which match the real sidebar's own per-item badge colors,
+    confirming the mock has always been a loose stylization, not a
+    literal copy - Customers happening to already be gray on both sides
+    made this one an easy, deliberate match rather than a coincidence
+    worth preserving generally). Verified with Playwright at 390/1400/
+    1920px: the mock renders 6 sidebar items (was 5), zero horizontal
+    overflow, zero console errors, and a cropped screenshot of just
+    `.app-preview` confirms Customers renders with its own icon in the
+    correct position between Sales History and More Settings.
 
 ## Retired: Premium tier, Account & Subscription, and PayPal - everything is now 100% free
 
