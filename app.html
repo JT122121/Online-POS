@@ -3057,7 +3057,9 @@ async function buildBackupPayload() {
     products: JSON.parse((await storageGet("pos-products")) || "[]"),
     logo: (await storageGet("pos-logo")) || "",
     salesHistory: JSON.parse((await storageGet("pos-sales-history")) || "[]"),
-    receiptCounter: (await storageGet("pos-receipt-counter")) || "0"
+    receiptCounter: (await storageGet("pos-receipt-counter")) || "0",
+    customers: JSON.parse((await storageGet("pos-customers")) || "[]"),
+    customerCounter: (await storageGet("pos-customer-counter")) || "0"
   };
 }
 
@@ -3070,6 +3072,8 @@ async function applyBackupPayload(backup) {
   if (backup.logo) await storageSet("pos-logo", backup.logo);
   if (backup.salesHistory) await storageSet("pos-sales-history", JSON.stringify(backup.salesHistory));
   if (backup.receiptCounter !== undefined) await storageSet("pos-receipt-counter", backup.receiptCounter);
+  if (backup.customers) await storageSet("pos-customers", JSON.stringify(backup.customers));
+  if (backup.customerCounter !== undefined) await storageSet("pos-customer-counter", backup.customerCounter);
 }
 
 async function downloadFullBackup() {

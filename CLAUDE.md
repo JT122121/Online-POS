@@ -2641,6 +2641,39 @@ has zero network calls.
   `applyBackupPayload(backup)` (originally factored out to also be shared
   with the now-retired Cloud Sync feature below - kept as-is since it's
   a clean split regardless).
+  - **Bug fix: `customers[]`/the customer ID counter were never included**,
+    reported directly ("customer module is not added to backup") - the
+    Customers module (`pos-customers`/`pos-customer-counter`, see
+    "Customers" above) shipped after `buildBackupPayload()`/
+    `applyBackupPayload()` were last touched, and neither function was
+    updated to read/write those two keys alongside `products`/
+    `cashiers`/`salesHistory`/etc. - a real, silent data-loss gap: on a
+    cleared browser or a new device (the two scenarios this feature
+    exists for, per its own description above), every saved customer
+    and their entire linked purchase history reference would simply be
+    gone, with no error or warning anywhere. Fixed by adding
+    `customers`/`customerCounter` to both functions, the same
+    `JSON.parse(...) || "[]"` / plain-string pattern already used for
+    `products`/`receiptCounter` respectively - `customerCounter` has to
+    travel with the customer list, not just the list itself, or a
+    restored device would start re-issuing already-used customer IDs
+    (`C0001`, `C0002`, ...) from scratch and collide with whatever the
+    backup's own customer records still reference. No change was needed
+    to `handleBackupFileSelect()` itself - it already calls
+    `location.reload()` after `applyBackupPayload()`, and `init()`'s
+    existing `loadCustomerCounter() → loadCustomers()` sequence picks up
+    the newly-restored keys automatically on that reload, the same as
+    every other backed-up key already does. Verified with Playwright:
+    `buildBackupPayload()`'s output now contains both keys with the
+    correct live data; simulating a genuinely fresh device (clearing
+    `localStorage` entirely, then calling `applyBackupPayload()` with a
+    backup taken from a session that had one customer) correctly
+    restores that exact customer after a reload; and creating a new
+    customer immediately afterward correctly continues the ID sequence
+    (`C0002`, not a colliding `C0001`) rather than restarting from zero.
+    The offline-package build still produces zero leftover
+    `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero `console.warn` with
+    this fix in place.
 - **Auto-Backup** - a local, zero-network alternative to remembering to
   click "Download Backup," built after a design discussion about the
   cleanest way to guarantee nothing is ever lost without introducing a
