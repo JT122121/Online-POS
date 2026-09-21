@@ -3137,6 +3137,60 @@ has zero network calls.
     override still wins; and a full-page screenshot at 1400px desktop
     shows both panels reading as clearly framed, distinct POS-terminal
     regions rather than the previous faint-outline cards.
+  - **Follow-up bug fix #1: the docked collapse button overlapped the
+    "Welcome back!" header title when the sidebar was collapsed.**
+    Reported directly from a screenshot showing the button's circle
+    sitting on top of the "We" in "Welcome". Root cause: collapsing
+    `#posSidebar` removes it from the flex row entirely, so `.pos-main`
+    (with its own `padding: 20px`) immediately fills the freed space
+    from the very left edge of `.pos-shell` - the same `left: 14px; top:
+    20px` spot the docked button sits at when collapsed, which is
+    exactly where `.app-header`'s title text now starts too. Fixed by
+    reserving space for the button instead of letting content run under
+    it: `.pos-shell.sidebar-collapsed .pos-main { padding-left: 60px;
+    }` (60px = the button's own `14px` left offset + `30px` width +
+    `16px` clearance), overridden back down to the mobile `.pos-main`'s
+    own `10px` base inside the `max-width: 900px` media query, since
+    the mobile button sits pinned at `top-right` instead and never
+    overlaps left-aligned header content in the first place. Verified
+    with Playwright by computing both elements' real
+    `getBoundingClientRect()`s and checking for rectangle overlap
+    directly (not just eyeballing a screenshot) - zero overlap at both
+    a 1400px desktop collapse and a 390px mobile collapse, and zero
+    horizontal overflow at either width.
+  - **Follow-up bug fix #2: the receipt's left border visually vanished
+    on a real Windows monitor**, reported directly from a photo showing
+    a crisp dark line across the top and down the right edge of the
+    receipt card, but no visible line at all down the left edge -
+    plausibly a sub-pixel/display-scaling rendering artifact (a
+    `border` is rasterized as four independent edges, and a thin edge
+    landing on a non-integer physical pixel under fractional Windows
+    display scaling - 125%/150%, very common - can round away to
+    nothing on one side while the others stay visible; this sandbox's
+    own headless Chromium render at 100% zoom couldn't reproduce it
+    directly, matching the "can't reproduce a scaling-specific artifact
+    from a different renderer/DPI" limitation already documented
+    elsewhere in this file for other hard-to-reproduce visual bugs).
+    Fixed by switching both `.left-panel` and `.receipt` from a plain
+    `border: 2px solid var(--ink)` to `border: none` plus a `box-shadow:
+    0 0 0 2px var(--ink), <original box-shadow>` - a solid-spread
+    box-shadow renders as one unified shape instead of four separately
+    rasterized edges, which is the standard, well-known workaround for
+    exactly this class of "one side of a thin border disappears at
+    certain zoom/DPI levels" Chromium rendering quirk. This needed
+    **zero** changes to the existing print/PDF-export rules - both
+    `@media print` and `body.pdf-capture-mode` already reset
+    `.receipt`'s `box-shadow` to `none` outright (they always did, for
+    the original drop-shadow), so folding the dark frame into that same
+    property means it's automatically stripped from printed/exported
+    receipts along with the shadow, exactly like the border was before.
+    Verified with Playwright: both elements' computed `box-shadow` now
+    includes a `0px 0px 0px 2px` layer in `--ink` alongside their
+    original shadow layer, `border-style` resolves to `none` on both,
+    and the receipt's `box-shadow` still resolves to `none` entirely
+    under `page.emulateMedia({ media: "print" })`; a zoomed screenshot
+    crop confirms all four sides of both panels now render as an
+    equally crisp, unbroken dark line.
 
 ## `modules/` — split-out app.html pieces
 
