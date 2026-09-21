@@ -2043,6 +2043,16 @@ async function getNextCustomerId() {
   await storageSet("pos-customer-counter", String(customerCounterValue));
   return "C" + String(customerCounterValue).padStart(4, "0");
 }
+function isCustomerEmailTaken(email, excludeId) {
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return false;
+  return customers.some(function(c) { return c.id !== excludeId && c.email && c.email.trim().toLowerCase() === normalized; });
+}
+function isCustomerPhoneTaken(phone, excludeId) {
+  const normalized = phone.trim();
+  if (!normalized) return false;
+  return customers.some(function(c) { return c.id !== excludeId && c.phone && c.phone.trim() === normalized; });
+}
 async function createCustomer(fields) {
   const id = await getNextCustomerId();
   const customer = {
@@ -2361,13 +2371,17 @@ async function saveQuickNewCustomer() {
   const name = document.getElementById("quickCustomerName").value.trim();
   const errorBox = document.getElementById("quickCustomerErrorBox");
   if (!name) { errorBox.textContent = tr("customerNameError"); errorBox.classList.remove("hidden"); return; }
+  const email = document.getElementById("quickCustomerEmail").value.trim();
+  const phone = document.getElementById("quickCustomerPhone").value.trim();
+  if (email && isCustomerEmailTaken(email, null)) { errorBox.textContent = tr("customerEmailDuplicateError"); errorBox.classList.remove("hidden"); return; }
+  if (phone && isCustomerPhoneTaken(phone, null)) { errorBox.textContent = tr("customerPhoneDuplicateError"); errorBox.classList.remove("hidden"); return; }
   errorBox.classList.add("hidden");
 
   const customer = await createCustomer({
     name: name,
     companyName: document.getElementById("quickCustomerCompany").value,
-    email: document.getElementById("quickCustomerEmail").value,
-    phone: document.getElementById("quickCustomerPhone").value,
+    email: email,
+    phone: phone,
     details: document.getElementById("quickCustomerDetails").value
   });
   activeCustomerId = customer.id;
@@ -4195,13 +4209,18 @@ async function saveCustomerDetailEdits() {
   const name = document.getElementById("customerDetailName").value.trim();
   const errorBox = document.getElementById("customerDetailErrorBox");
   if (!name) { errorBox.textContent = tr("customerNameError"); errorBox.classList.remove("hidden"); return; }
+  const email = document.getElementById("customerDetailEmail").value.trim();
+  const phone = document.getElementById("customerDetailPhone").value.trim();
+  const excludeId = creatingNewCustomer ? null : editingCustomerId;
+  if (email && isCustomerEmailTaken(email, excludeId)) { errorBox.textContent = tr("customerEmailDuplicateError"); errorBox.classList.remove("hidden"); return; }
+  if (phone && isCustomerPhoneTaken(phone, excludeId)) { errorBox.textContent = tr("customerPhoneDuplicateError"); errorBox.classList.remove("hidden"); return; }
   errorBox.classList.add("hidden");
 
   const fields = {
     name: name,
     companyName: document.getElementById("customerDetailCompany").value,
-    email: document.getElementById("customerDetailEmail").value,
-    phone: document.getElementById("customerDetailPhone").value,
+    email: email,
+    phone: phone,
     details: document.getElementById("customerDetailDetails").value
   };
 

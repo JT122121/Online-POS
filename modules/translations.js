@@ -24,6 +24,7 @@ en: {
   activeCashierPlaceholder: "No cashier selected",
   customerNameLabel: "Customer", customerNamePlaceholder: "Optional", customerLabelText: "Customer:",
   customerSelectBlank: "Walk-in / No Customer", customerSelectNew: "+ New Customer...", customerNameError: "Enter a customer name.",
+  customerEmailDuplicateError: "A customer with this email already exists.", customerPhoneDuplicateError: "A customer with this phone number already exists.",
   sidebarCustomersLabel: "Customers", customersTitle: "Customers", customersSearchPlaceholder: "Search customers...",
   customersEmpty: "No customers yet - click New Customer to add one.",
   newCustomerButtonLabel: "New Customer",
