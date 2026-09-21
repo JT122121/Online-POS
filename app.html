@@ -449,6 +449,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .md-detail-header h3 { margin: 0; }
 .md-detail-close-btn { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
 .md-detail-close-btn:hover { background: #f2f1ea; color: var(--ink); }
+.sale-detail-back-to-customer-btn { display: inline-flex; align-items: center; gap: 4px; background: transparent; border: 0; padding: 0; margin-bottom: 10px; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.sale-detail-back-to-customer-btn:hover { text-decoration: underline; }
 @media (min-width: 901px) {
   .md-split { flex-direction: row; gap: 0; }
   .md-list-pane { flex: 0 0 420px; border-right: 1px solid var(--line-soft); }
@@ -1304,6 +1306,7 @@ Website: Goonlinepos.com</textarea>
               <p id="saleDetailEmptyText">Select a sale from the list to view its details.</p>
             </div>
             <div id="saleDetailContent" class="hidden">
+              <button type="button" class="sale-detail-back-to-customer-btn hidden no-print" id="saleDetailBackToCustomerBtn" onclick="backToCustomerFromSaleDetail()">← <span id="saleDetailBackToCustomerLabel">Back to Customer</span></button>
               <div class="md-detail-header">
                 <h3 id="saleDetailTitle">Sale Details</h3>
                 <button type="button" class="md-detail-close-btn" onclick="closeSaleDetail()" aria-label="Close">✕</button>
@@ -1711,6 +1714,7 @@ let customerCounterValue = 0;
 let activeCustomerId = "";
 let editingCustomerId = null;
 let creatingNewCustomer = false;
+let saleDetailFromCustomerId = null;
 let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
@@ -2729,6 +2733,8 @@ let saleDetailPayments = [];
 function openSaleDetail(receiptNumber) {
   const record = salesHistory.find(function(s) { return s.receiptNumber === receiptNumber; });
   if (!record) return;
+  saleDetailFromCustomerId = null;
+  renderSaleDetailBackToCustomerLink();
   editingSaleRecord = record;
   saleDetailItems = record.items.map(function(it) { return { name: it.name, qty: it.qty, price: it.price, taxExempt: !!it.taxExempt, description: it.description || "", showDescription: !!it.description }; });
   saleDetailPayments = (record.payments && record.payments.length)
@@ -2769,10 +2775,23 @@ function openSaleDetail(receiptNumber) {
 }
 function closeSaleDetail() {
   editingSaleRecord = null;
+  saleDetailFromCustomerId = null;
   document.getElementById("saleDetailContent").classList.add("hidden");
   document.getElementById("saleDetailEmptyState").classList.remove("hidden");
   document.getElementById("salesHistorySplit").classList.remove("detail-open");
   renderSalesHistoryPanel();
+}
+function renderSaleDetailBackToCustomerLink() {
+  const btn = document.getElementById("saleDetailBackToCustomerBtn");
+  if (!btn) return;
+  btn.classList.toggle("hidden", !saleDetailFromCustomerId);
+}
+function backToCustomerFromSaleDetail() {
+  const customerId = saleDetailFromCustomerId;
+  if (!customerId) return;
+  closeSaleDetail();
+  openSettingsTab("customers");
+  openCustomerDetail(customerId);
 }
 
 function renderSaleDetailItems() {
@@ -4277,8 +4296,11 @@ function renderCustomerRelatedSales(customerId) {
   });
 }
 function viewCustomerRelatedSale(receiptNumber) {
+  const fromCustomerId = editingCustomerId;
   openSettingsTab("salesHistory");
   openSaleDetail(receiptNumber);
+  saleDetailFromCustomerId = fromCustomerId;
+  renderSaleDetailBackToCustomerLink();
 }
 
 async function clearProducts() {
@@ -4454,6 +4476,7 @@ function changeLanguage() {
     customerDetailEmailLabel: "quickCustomerEmailLabel", customerDetailPhoneLabel: "quickCustomerPhoneLabel",
     customerDetailDetailsLabel: "quickCustomerDetailsLabel", customerDetailDeleteLabel: "customerDetailDeleteLabel",
     customerDetailEmptyText: "customerDetailEmptyText", customerRelatedSalesLabel: "customerRelatedSalesLabel",
+    saleDetailBackToCustomerLabel: "saleDetailBackToCustomerLabel",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", supportCoffeeLabel: "supportCoffeeLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",

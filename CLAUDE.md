@@ -2196,6 +2196,52 @@ has zero network calls.
     duplicate-phone block works from the full Customers module's own
     "+ New Customer" flow, not just checkout's quick-create modal; and
     zero console errors throughout.
+  - **Follow-up: a "← Back to Customer" link on the Sale Details pane**,
+    per a real reported bug - "in related sales when i click the child i
+    cannot go back to parent table which is the customer."
+    `viewCustomerRelatedSale(receiptNumber)` (the click handler on each
+    row of a customer's own Related Sales list - see above) switches to
+    the Sales History tab and opens that sale's detail pane, but nothing
+    tracked *where the click came from* - once there, the only options
+    were "✕ Close" (back to the plain Sales History list) or manually
+    re-opening Settings → Customers and re-finding the same customer
+    from scratch, losing the direct parent/child navigation the feature
+    was built for. Fixed with a new `saleDetailFromCustomerId` global,
+    set by `viewCustomerRelatedSale()` right after it opens the sale
+    (captured from `editingCustomerId`, which switching settings tabs
+    doesn't clear on its own) and read by a small link,
+    `#saleDetailBackToCustomerBtn` ("← Back to Customer"), that renders
+    above the Sale Details header only when it's set.
+    `backToCustomerFromSaleDetail()` closes the sale detail, switches to
+    the Customers tab, and reopens that exact customer's detail pane
+    (`openSettingsTab("customers")` + `openCustomerDetail(customerId)`) -
+    the same two-call pattern `viewCustomerRelatedSale()` itself already
+    uses in reverse, so the parent/child relationship is symmetric in
+    both directions. **`openSaleDetail()` itself resets
+    `saleDetailFromCustomerId` to `null` at its very start**, so the
+    link only ever shows for the one sale it was actually opened *for* -
+    a plain row click from the ordinary Sales History list (the other,
+    older caller of `openSaleDetail()`) always clears any stale link
+    from a previous customer-originated visit, and
+    `viewCustomerRelatedSale()` re-sets it immediately after calling
+    `openSaleDetail()` so the reset-then-set ordering never races.
+    `closeSaleDetail()` also clears it, so closing via ✕ and later
+    reopening a *different* sale never carries the link over by
+    accident. New `saleDetailBackToCustomerLabel` translation key,
+    wired into `changeLanguage()`'s `ids` map like every other static
+    label on this pane. Not `OFFLINE-STRIP`-wrapped - navigating between
+    two tabs already in the same document has zero network dependency,
+    so it ships unchanged in the offline package. Verified with
+    Playwright end-to-end: completing a sale for a customer created via
+    checkout's quick-create modal, opening that customer's own detail
+    pane, and clicking their one related sale correctly lands on Sales
+    History with the sale's own data (including "Customer Name: X")
+    populated and the back-link visible; clicking the back-link returns
+    to the Customers tab with that same customer's detail pane open
+    again (name field correctly repopulated, not a blank/reset pane);
+    opening a sale directly (bypassing the customer flow entirely)
+    correctly never shows the back-link; and zero console errors
+    throughout.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk upload from **either CSV or Excel
