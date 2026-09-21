@@ -3191,6 +3191,19 @@ has zero network calls.
     under `page.emulateMedia({ media: "print" })`; a zoomed screenshot
     crop confirms all four sides of both panels now render as an
     equally crisp, unbroken dark line.
+  - **Follow-up: frame color changed from `--ink` to `--accent-dark`**
+    (`#124f36`, the darker of the site's two greens, already used for
+    the `.site-nav` pills/`.app-header-link` row elsewhere in this
+    file), per an explicit "should be dark green" request - both
+    `.left-panel` and `.receipt`'s `0 0 0 2px` box-shadow frame layer
+    now reads `var(--accent-dark)` instead of `var(--ink)`, reusing an
+    existing token rather than introducing a new color. Every mention
+    above of the frame being "`--ink`"/"dark" describes the color as it
+    shipped before this follow-up - it's `--accent-dark` (dark green)
+    now. Verified with Playwright: both elements' `box-shadow` resolves
+    to `rgb(18, 79, 54)` (`#124f36`) for the `0px 0px 0px 2px` layer,
+    and the receipt's `box-shadow` still resolves to `none` under print
+    media.
 
 ## `modules/` — split-out app.html pieces
 
