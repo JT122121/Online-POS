@@ -3579,6 +3579,26 @@ has zero network calls.
     not the previously-entered range; and zero horizontal overflow or
     console errors with the modal open at 1400px desktop and 390px
     mobile.
+- **Follow-up: `.pos-sidebar-nav` reordered alphabetically by label**,
+  per an explicit "arrange the sidebar alphabetically" request - a
+  pure reordering pass, every button/`id`/`onclick`/marker left
+  byte-for-byte unchanged, just moved. Current order: Backup, Barcode
+  Scanner, Buy Me a Coffee, Cashiers, Customer Screen, End of Day, How
+  To Use, Inventory, More Settings, Products, Sales History. The
+  `<!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:START/END -->` marker pair
+  moved as one unit with the Buy Me a Coffee button it wraps - this
+  needed no `modules/offline-builder.js` change, since `stripMarked()`
+  finds a marker by name, not by position in the file (the same
+  already-confirmed fact this file's own header/sidebar-reskin passes
+  relied on above). New sidebar items added in the future should keep
+  this ordering rather than being appended at the end. Verified with
+  Playwright: reading every `.pos-sidebar-nav` item's own label text in
+  DOM order matches that same list sorted alphabetically; a spot-checked
+  button (Products) still opens its correct Settings tab and the
+  relocated Barcode Scanner toggle still flips state; the
+  `OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON` marker pair is still present and
+  intact; and zero horizontal overflow or console errors at 1400px
+  desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
