@@ -2383,6 +2383,23 @@ has zero network calls.
     opening a sale directly (bypassing the customer flow entirely)
     correctly never shows the back-link; and zero console errors
     throughout.
+  - **Follow-up: the search box's placeholder now says what it already
+    searched**, per "In customer we can use to search phone or email
+    also?" - `renderCustomersList()`'s filter (`customers.filter(...)`)
+    had matched against `name`/`companyName`/`email`/`phone` since the
+    module first shipped, the same all-fields approach Inventory's own
+    search already established for SKU - the feature itself was never
+    missing, only the plain "Search customers..." placeholder never
+    told a visitor it covered more than the name. Reworded to "Search
+    by name, company, email, or phone..." (raw HTML default and the
+    `en` value in `modules/translations.js` both updated together, per
+    this repo's "the two must always agree" convention) - no logic
+    change, since the underlying filter already did the job correctly.
+    Verified with Playwright: creating two customers and searching by a
+    fragment of one's phone number, then by the other's full email
+    address, each correctly returns only the matching customer; a
+    shared partial email domain correctly matches both; and the
+    placeholder renders the new text with zero console errors.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk upload from **either CSV or Excel
