@@ -127,7 +127,16 @@ button:active { transform: translateY(1px); }
 .hidden { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.pos-shell { display: flex; align-items: flex-start; }
+.pos-shell { display: flex; align-items: flex-start; position: relative; }
+.sidebar-toggle-btn { position: absolute; top: 20px; left: 210px; z-index: 5; width: 30px; height: 30px; border: 1px solid var(--line); background: var(--panel); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; transition: left .15s ease; }
+.sidebar-toggle-btn:hover { border-color: var(--accent); background: var(--accent-tint); }
+.sidebar-toggle-btn .icon { width: 15px; height: 15px; transition: transform .15s ease; }
+.pos-shell.sidebar-collapsed .sidebar-toggle-btn { left: 14px; }
+.pos-shell.sidebar-collapsed .sidebar-toggle-btn .icon { transform: rotate(180deg); }
+@media (max-width: 900px) {
+  .sidebar-toggle-btn { top: 8px; left: auto; right: 8px; }
+  .pos-shell.sidebar-collapsed .sidebar-toggle-btn { left: auto; right: 8px; }
+}
 .pos-sidebar { position: sticky; top: 0; align-self: flex-start; width: 236px; flex-shrink: 0; height: 100vh; overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 14px 10px; gap: 12px; }
 .pos-sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 2px 6px 12px; border-bottom: 1px solid var(--line-soft); }
 .pos-sidebar-brand .brand-mark { width: 38px; height: 38px; border-radius: 9px; background: #fff; border: 1px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 3px; }
@@ -205,7 +214,7 @@ button:active { transform: translateY(1px); }
 .bn-dismiss-btn { border: 0; background: transparent; color: #6b4f12; font-size: 19px; line-height: 1; padding: 4px 7px; opacity: .65; border-radius: 6px; }
 .bn-dismiss-btn:hover { opacity: 1; background: rgba(0,0,0,.05); }
 
-.left-panel { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
+.left-panel { position: sticky; top: 20px; background: var(--panel); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; max-height: calc(100vh - 40px); overflow-y: auto; display: flex; flex-direction: column; }
 
 .panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
@@ -404,7 +413,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .receipt-cashier-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 8px 4px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .receipt-cashier-tab .receipt-cashier-select { width: auto; max-width: calc(100% - 24px); border: none; background: transparent; padding: 2px 4px; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; cursor: pointer; }
 .receipt-cashier-tab .receipt-cashier-select:focus { outline: none; }
-.receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 1px solid #d7dbe0; color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
+.receipt { position: relative; width: 80mm; min-height: 100vh; padding: 5mm 4mm 8mm; background: white; border: 2px solid var(--ink); color: #14201c; flex-shrink: 0; font-family: var(--font-mono); font-size: 10pt; box-shadow: var(--shadow-lg); }
 .quick-receipt-settings { width: 80mm; max-width: 100%; margin: 0 0 8px; flex-shrink: 0; }
 .quick-settings-toggle { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; }
 .quick-settings-toggle:hover { border-color: var(--accent); color: var(--accent-dark); }
@@ -554,11 +563,14 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-barcode" viewBox="0 0 24 24" stroke="none" fill="currentColor"><rect x="3" y="4" width="1.4" height="16"/><rect x="6" y="4" width="1" height="16"/><rect x="8.3" y="4" width="2" height="16"/><rect x="11.8" y="4" width="1" height="16"/><rect x="14" y="4" width="1.6" height="16"/><rect x="16.8" y="4" width="1" height="16"/><rect x="19" y="4" width="2" height="16"/></symbol>
 <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 <symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+<symbol id="icon-chevron-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
 <symbol id="icon-maximize" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
 </defs>
 </svg>
 
 <div class="pos-shell">
+
+<button type="button" class="sidebar-toggle-btn no-print" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Hide Sidebar"><svg class="icon"><use href="#icon-chevron-left"></use></svg></button>
 
 <nav class="pos-sidebar" id="posSidebar">
 <div class="pos-sidebar-brand">
@@ -620,7 +632,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </header>
 
 <div class="pos-topbar">
-<button type="button" class="pos-topbar-icon-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Hide Sidebar"><svg class="icon"><use href="#icon-menu"></use></svg></button>
 <div class="pos-topbar-search">
 <input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
 </div>
@@ -1467,7 +1478,9 @@ function openSettingsTab(name) {
 }
 async function toggleSidebar() {
   const sidebar = document.getElementById("posSidebar");
+  const shell = document.querySelector(".pos-shell");
   sidebar.classList.toggle("hidden");
+  if (shell) shell.classList.toggle("sidebar-collapsed", sidebar.classList.contains("hidden"));
   renderSidebarToggle();
   await storageSet("pos-sidebar-collapsed", sidebar.classList.contains("hidden") ? "1" : "0");
 }
@@ -1481,7 +1494,11 @@ function renderSidebarToggle() {
 }
 async function loadSidebarState() {
   const collapsed = (await storageGet("pos-sidebar-collapsed")) === "1";
-  if (collapsed) document.getElementById("posSidebar").classList.add("hidden");
+  if (collapsed) {
+    document.getElementById("posSidebar").classList.add("hidden");
+    const shell = document.querySelector(".pos-shell");
+    if (shell) shell.classList.add("sidebar-collapsed");
+  }
 }
 async function loadPanelSplit() {
   const saved = await storageGet("pos-catalog-width");
