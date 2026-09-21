@@ -148,7 +148,6 @@ button:active { transform: translateY(1px); }
 .pos-sidebar-footer { display: flex; flex-direction: column; gap: 2px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
 .pos-sidebar-item { display: flex; align-items: center; gap: 9px; width: 100%; border: 1px solid transparent; background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; padding: 10px 10px; text-align: left; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pos-sidebar-item:hover { background: #eef1f4; }
-.pos-sidebar-item-primary { margin-bottom: 6px; font-weight: 700; }
 .pos-sidebar-item-ext { font-size: 12px; font-weight: 500; color: var(--muted); background: transparent !important; border-color: transparent !important; }
 .pos-sidebar-item-ext:hover { background: #eef1f4 !important; color: var(--ink-soft); }
 .icon { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; }
@@ -180,27 +179,13 @@ button:active { transform: translateY(1px); }
 .app-header-link { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-dark); color: #fff; border: 0; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .app-header-link:hover { background: var(--ink); }
 
-.pos-topbar { margin: 0 0 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 10px 14px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.pos-topbar-search { flex: 1; min-width: 200px; }
-.pos-topbar-search .search-box { margin-bottom: 0; }
-.pos-topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.toggle-row.compact.pos-topbar-scanner { margin-bottom: 0; }
-.pos-topbar-icon-btn { border: 1px solid var(--line); background: #fafbfc; border-radius: var(--radius-sm); width: 38px; height: 38px; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.pos-topbar-icon-btn:hover { border-color: var(--accent); background: var(--accent-tint); }
-.pos-topbar-account { display: flex; align-items: center; }
-.pos-topbar-account .subtitle { margin: 0; }
 
 .app { display: grid; grid-template-columns: minmax(320px, var(--catalog-width, 75%)) 14px minmax(330px, 1fr); align-items: start; }
 .app .left-panel { margin-right: 4px; }
 .app .preview-area { margin-left: 4px; }
-.app.catalog-fullscreen { grid-template-columns: 1fr; }
-.app.catalog-fullscreen .panel-resize-handle, .app.catalog-fullscreen .preview-area { display: none; }
-.app.receipt-fullscreen { grid-template-columns: 1fr; }
-.app.receipt-fullscreen .panel-resize-handle, .app.receipt-fullscreen .left-panel { display: none; }
 .panel-resize-handle { align-self: stretch; cursor: col-resize; position: relative; touch-action: none; }
 .panel-resize-handle::after { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--line); transform: translateX(-50%); transition: background .15s ease; }
 .panel-resize-handle:hover::after, .panel-resize-handle.dragging::after { background: var(--accent); }
-.pos-topbar-icon-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
 
 .site-footer { margin: 20px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
 .site-footer a { color: var(--muted); text-decoration: none; }
@@ -219,7 +204,9 @@ button:active { transform: translateY(1px); }
 
 .panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .panel-heading h3 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
+.panel-heading-actions { display: flex; align-items: center; gap: 10px; }
 .cart-count-badge { background: var(--accent-tint); color: var(--accent-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+.new-sale-catalog-btn { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 
 .search-box { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 13.5px; margin-bottom: 0; background: #fafbfc; }
 .search-box:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
@@ -410,7 +397,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .sales-history-group-body { border: 1px solid #bfe0cf; border-top: 0; border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); padding: 8px 8px 2px; margin-bottom: 6px; }
 .sales-history-group-body .sales-history-row { margin-bottom: 6px; }
 
-.preview-area { width: 100%; min-width: 0; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 5px; }
+.preview-area { width: 100%; min-width: 0; min-height: calc(100vh - 32px); display: flex; flex-direction: column; align-items: center; overflow: auto; padding: 16px 5px 5px; }
 .receipt-cashier-tab { width: 80mm; max-width: 100%; flex-shrink: 0; margin: 0 0 8px; padding: 8px 4px; background: var(--panel); border: 1px solid var(--line); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .receipt-cashier-tab .receipt-cashier-select { width: auto; max-width: calc(100% - 24px); border: none; background: transparent; padding: 2px 4px; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; cursor: pointer; }
 .receipt-cashier-tab .receipt-cashier-select:focus { outline: none; }
@@ -507,7 +494,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 @page { margin: 0; }
 @media print {
   html, body { margin: 0; padding: 0; background: white; }
-  .pos-sidebar, .pos-topbar, .app-header, .left-panel, .settings-overlay, .site-footer, .backup-notice, .cookie-consent { display: none !important; }
+  .pos-sidebar, .app-header, .left-panel, .settings-overlay, .site-footer, .backup-notice, .cookie-consent { display: none !important; }
   .preview-area { width: auto; min-height: auto; display: block; overflow: visible; padding: 0; }
   .receipt { margin: 0; border: none; box-shadow: none; min-height: auto; zoom: 1 !important; color: #000; }
   .receipt::after { display: none; }
@@ -566,7 +553,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
 <symbol id="icon-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 <symbol id="icon-chevron-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
-<symbol id="icon-maximize" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
 </defs>
 </svg>
 
@@ -585,7 +571,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 
 <div class="pos-sidebar-nav">
-<button type="button" id="newSaleButton" class="pos-sidebar-item pos-sidebar-item-primary" onclick="newSale()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="newSaleButtonLabel">New Sale</span></button>
 <button type="button" id="sidebarProductsButton" class="pos-sidebar-item" onclick="openSettingsTab('products')"><span class="pos-sidebar-icon pos-sidebar-icon-blue"><svg class="icon"><use href="#icon-cart"></use></svg></span> <span id="sidebarProductsLabel">Products</span></button>
 <button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')"><span class="pos-sidebar-icon pos-sidebar-icon-orange"><svg class="icon"><use href="#icon-package"></use></svg></span> <span id="sidebarInventoryLabel">Inventory</span></button>
 <button type="button" id="sidebarSalesHistoryButton" class="pos-sidebar-item" onclick="openSettingsTab('salesHistory')"><span class="pos-sidebar-icon pos-sidebar-icon-purple"><svg class="icon"><use href="#icon-bar-chart"></use></svg></span> <span id="sidebarSalesHistoryLabel">Sales History</span></button>
@@ -633,25 +618,6 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 </div>
 </header>
 
-<div class="pos-topbar">
-<div class="pos-topbar-search">
-<input id="productSearch" class="search-box" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
-</div>
-<div class="pos-topbar-actions">
-<div class="toggle-row compact pos-topbar-scanner">
-<div class="toggle-label"><svg class="scanner-icon" viewBox="0 0 322.943532 322.528573" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(-104.000000,347.528573) scale(0.100000,-0.100000)" fill="currentColor" stroke="none"><path d="M2880 3466 c-117 -24 -301 -68 -415 -100 -27 -8 -255 -65 -505 -127 -481 -119 -503 -127 -536 -191 -18 -35 -15 -67 21 -248 3 -14 7 -41 10 -60 4 -19 10 -53 15 -75 5 -22 21 -105 36 -185 14 -80 32 -161 39 -180 13 -38 65 -79 124 -99 20 -7 45 -16 56 -22 28 -13 236 -83 325 -109 41 -12 86 -26 100 -30 14 -5 41 -12 60 -15 19 -4 49 -11 65 -15 54 -16 198 -49 285 -65 47 -8 108 -20 135 -25 113 -23 225 -35 318 -35 l98 0 10 -38 c15 -55 -5 -143 -57 -259 -57 -127 -60 -184 -12 -228 18 -17 55 -36 83 -44 175 -50 227 -56 275 -31 32 17 106 124 140 205 30 73 69 208 71 245 l1 30 10 -35 c6 -19 8 -86 5 -150 -9 -242 -113 -424 -229 -406 -18 3 -57 8 -86 11 l-53 6 8 -78 c14 -137 10 -179 -23 -225 -16 -22 -47 -50 -69 -63 -62 -34 -88 -78 -83 -146 8 -111 179 -359 282 -408 39 -19 60 -21 287 -21 285 0 310 5 392 80 80 73 160 221 192 355 19 78 19 282 1 379 -8 41 -29 121 -46 178 -17 57 -42 139 -55 183 -13 44 -39 134 -59 200 -84 286 -116 466 -116 655 0 187 40 358 96 411 13 12 35 41 48 63 22 39 24 54 30 276 8 270 5 285 -71 327 -47 26 -211 54 -458 79 -82 8 -193 19 -245 25 -166 17 -428 19 -500 5z m-950 -672 c47 -8 128 -24 180 -34 52 -10 115 -22 140 -25 25 -4 61 -11 80 -15 19 -5 87 -19 150 -30 63 -12 147 -28 187 -36 40 -8 80 -14 90 -14 10 0 24 -4 31 -8 12 -8 38 -134 67 -327 8 -49 17 -105 21 -122 5 -27 3 -33 -10 -33 -25 0 -182 28 -333 60 -210 44 -538 137 -694 198 l-66 25 -27 146 c-15 80 -31 165 -37 188 -16 74 -18 72 64 57 39 -8 110 -21 157 -30z"/><path d="M1040 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M1410 940 l0 -440 65 0 65 0 0 440 0 440 -65 0 -65 0 0 -440z"/><path d="M1660 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M2030 940 l0 -440 68 0 67 0 0 440 0 440 -67 0 -68 0 0 -440z"/></g></svg> <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
-        <button type="button" class="info-btn" onclick="openBarcodeScannerInfo()" title="How it works" aria-label="How it works">ℹ</button>
-      </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="barcodeScannerToggle" checked onchange="toggleBarcodeScannerSetting()">
-        <span class="toggle-slider"></span>
-      </label>
-</div>
-<button type="button" class="pos-topbar-icon-btn" id="toggleCatalogFullscreenBtn" onclick="toggleCatalogFullscreen()" title="Full-Screen Products"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
-<button type="button" class="pos-topbar-icon-btn" id="toggleReceiptFullscreenBtn" onclick="toggleReceiptFullscreen()" title="Full-Screen Receipt"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
-</div>
-</div>
-
 <div id="backupNotice" class="backup-notice hidden">
 <div class="bn-text">💾 <span id="backupNoticeText">Your data lives only in this browser. Set up Auto-Backup or download a backup so nothing is lost if your cache gets cleared.</span></div>
 <div class="bn-actions">
@@ -667,7 +633,20 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
   <div id="catalogView">
     <div class="panel-heading">
       <h3 id="catalogHeading">Products</h3>
-      <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
+      <div class="panel-heading-actions">
+        <span class="cart-count-badge" id="cartCountBadge">0 in cart</span>
+        <button type="button" id="newSaleButton" class="new-sale-catalog-btn" onclick="newSale()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="newSaleButtonLabel">New Sale</span></button>
+      </div>
+    </div>
+    <input id="productSearch" class="search-box" style="margin-bottom:10px;" type="text" placeholder="Search products..." oninput="renderProductCatalog()">
+    <div class="toggle-row compact">
+      <div class="toggle-label"><svg class="scanner-icon" viewBox="0 0 322.943532 322.528573" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(-104.000000,347.528573) scale(0.100000,-0.100000)" fill="currentColor" stroke="none"><path d="M2880 3466 c-117 -24 -301 -68 -415 -100 -27 -8 -255 -65 -505 -127 -481 -119 -503 -127 -536 -191 -18 -35 -15 -67 21 -248 3 -14 7 -41 10 -60 4 -19 10 -53 15 -75 5 -22 21 -105 36 -185 14 -80 32 -161 39 -180 13 -38 65 -79 124 -99 20 -7 45 -16 56 -22 28 -13 236 -83 325 -109 41 -12 86 -26 100 -30 14 -5 41 -12 60 -15 19 -4 49 -11 65 -15 54 -16 198 -49 285 -65 47 -8 108 -20 135 -25 113 -23 225 -35 318 -35 l98 0 10 -38 c15 -55 -5 -143 -57 -259 -57 -127 -60 -184 -12 -228 18 -17 55 -36 83 -44 175 -50 227 -56 275 -31 32 17 106 124 140 205 30 73 69 208 71 245 l1 30 10 -35 c6 -19 8 -86 5 -150 -9 -242 -113 -424 -229 -406 -18 3 -57 8 -86 11 l-53 6 8 -78 c14 -137 10 -179 -23 -225 -16 -22 -47 -50 -69 -63 -62 -34 -88 -78 -83 -146 8 -111 179 -359 282 -408 39 -19 60 -21 287 -21 285 0 310 5 392 80 80 73 160 221 192 355 19 78 19 282 1 379 -8 41 -29 121 -46 178 -17 57 -42 139 -55 183 -13 44 -39 134 -59 200 -84 286 -116 466 -116 655 0 187 40 358 96 411 13 12 35 41 48 63 22 39 24 54 30 276 8 270 5 285 -71 327 -47 26 -211 54 -458 79 -82 8 -193 19 -245 25 -166 17 -428 19 -500 5z m-950 -672 c47 -8 128 -24 180 -34 52 -10 115 -22 140 -25 25 -4 61 -11 80 -15 19 -5 87 -19 150 -30 63 -12 147 -28 187 -36 40 -8 80 -14 90 -14 10 0 24 -4 31 -8 12 -8 38 -134 67 -327 8 -49 17 -105 21 -122 5 -27 3 -33 -10 -33 -25 0 -182 28 -333 60 -210 44 -538 137 -694 198 l-66 25 -27 146 c-15 80 -31 165 -37 188 -16 74 -18 72 64 57 39 -8 110 -21 157 -30z"/><path d="M1040 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M1410 940 l0 -440 65 0 65 0 0 440 0 440 -65 0 -65 0 0 -440z"/><path d="M1660 940 l0 -440 125 0 125 0 0 440 0 440 -125 0 -125 0 0 -440z"/><path d="M2030 940 l0 -440 68 0 67 0 0 440 0 440 -67 0 -68 0 0 -440z"/></g></svg> <span id="barcodeScannerToggleLabel">Barcode Scanner</span>
+        <button type="button" class="info-btn" onclick="openBarcodeScannerInfo()" title="How it works" aria-label="How it works">ℹ</button>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="barcodeScannerToggle" checked onchange="toggleBarcodeScannerSetting()">
+        <span class="toggle-slider"></span>
+      </label>
     </div>
     <div id="categoryChips" class="category-chips"></div>
     <div id="productsList" class="product-list"></div>
@@ -1300,7 +1279,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">MAIN SCREEN</span>
       <h3>Your everyday screen</h3>
-      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the toolbar for more room). Tap a product to add it to the cart, search or filter by category, and use the header buttons to reach Backup, Settings, End of Day, Inventory, Customer Screen, New Sale, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle here and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
+      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the sidebar for more room). Tap a product to add it to the cart, search or filter by category, and click "New Sale" in the Products panel to start over. Use the sidebar to reach Backup, Settings, End of Day, Inventory, Customer Screen, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle here and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
     </div>
 
     <div class="htu-item">
@@ -1506,28 +1485,6 @@ async function loadPanelSplit() {
   const saved = await storageGet("pos-catalog-width");
   const percent = saved ? parseFloat(saved) : NaN;
   document.documentElement.style.setProperty("--catalog-width", (isNaN(percent) ? 75 : percent) + "%");
-}
-function renderPanelFullscreenButtons() {
-  const appEl = document.querySelector(".app");
-  const catalogBtn = document.getElementById("toggleCatalogFullscreenBtn");
-  const receiptBtn = document.getElementById("toggleReceiptFullscreenBtn");
-  if (!appEl || !catalogBtn || !receiptBtn) return;
-  catalogBtn.classList.toggle("active", appEl.classList.contains("catalog-fullscreen"));
-  receiptBtn.classList.toggle("active", appEl.classList.contains("receipt-fullscreen"));
-}
-function toggleCatalogFullscreen() {
-  const appEl = document.querySelector(".app");
-  const turningOn = !appEl.classList.contains("catalog-fullscreen");
-  appEl.classList.toggle("catalog-fullscreen", turningOn);
-  if (turningOn) appEl.classList.remove("receipt-fullscreen");
-  renderPanelFullscreenButtons();
-}
-function toggleReceiptFullscreen() {
-  const appEl = document.querySelector(".app");
-  const turningOn = !appEl.classList.contains("receipt-fullscreen");
-  appEl.classList.toggle("receipt-fullscreen", turningOn);
-  if (turningOn) appEl.classList.remove("catalog-fullscreen");
-  renderPanelFullscreenButtons();
 }
 function initPanelResize() {
   const handle = document.getElementById("panelResizeHandle");

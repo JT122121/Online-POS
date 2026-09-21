@@ -3204,6 +3204,92 @@ has zero network calls.
     to `rgb(18, 79, 54)` (`#124f36`) for the `0px 0px 0px 2px` layer,
     and the receipt's `box-shadow` still resolves to `none` under print
     media.
+  - **Follow-up: the two full-screen toggle buttons were removed
+    outright, and New Sale moved into the Products panel itself.** Per
+    an explicit "We need to remove this full screen option. Also
+    completely move the new same inside the product main pos" request -
+    the second half was ambiguous ("the new same") and confirmed via
+    `AskUserQuestion`'s free-text answer as **"NEW SALE"**. The topbar's
+    `#toggleCatalogFullscreenBtn`/`#toggleReceiptFullscreenBtn` icon
+    buttons, their `renderPanelFullscreenButtons()`/
+    `toggleCatalogFullscreen()`/`toggleReceiptFullscreen()` functions,
+    the `.app.catalog-fullscreen`/`.app.receipt-fullscreen` CSS states,
+    `.pos-topbar-icon-btn`'s three CSS rules, and the now-unused
+    `#icon-maximize` sprite symbol were all deleted together - nothing
+    else referenced any of them, confirmed via grep before removing.
+    `#newSaleButton` moved out of the sidebar (where it briefly lived
+    after the earlier "Site-wide header, nav & footer" sidebar reskin -
+    see `.pos-sidebar-item-primary`, also removed here as dead CSS with
+    no other user) into a new `.panel-heading-actions` wrapper inside
+    `#catalogView`'s own `.panel-heading`, sitting next to the existing
+    `#cartCountBadge` - restyled from a full-width sidebar list item to
+    a compact green pill (`.new-sale-catalog-btn`, reusing the existing
+    `#newSaleButton { background: var(--accent); }` id rule unchanged)
+    so it reads as a Products-panel action rather than a sidebar nav
+    item, since starting a new sale is something you do from the
+    product-browsing screen, not a global sidebar destination. The
+    MAIN SCREEN `.htu-item` in How To Use was reworded to match (drag
+    the divider to resize "or collapse the **sidebar**" not "toolbar",
+    click "New Sale" **in the Products panel**, and the header-button
+    list now says "Use the **sidebar** to reach..." since those buttons
+    no longer live in a header row at all). Verified with Playwright:
+    zero fullscreen buttons remain; exactly one `#newSaleButton` exists,
+    confirmed absent from the sidebar and present inside
+    `.panel-heading`; a functional click still starts a new sale; and
+    zero horizontal overflow at 1400px desktop and 390px mobile.
+  - **Follow-up: the separate `.pos-topbar` search/scanner bar was
+    removed entirely and folded into the Products panel, fixing a real
+    vertical-alignment gap between the two panels in the process.** Per
+    a screenshot plus "The search product eats to much space. Cut it
+    move the barcode scanner and allign the prview receipt to the
+    product" - later clarified with "New Sale i mean" once the second
+    half turned out to reference the just-relocated New Sale button, not
+    "the products panel" generically. `#productSearch` and the
+    `#barcodeScannerToggle` toggle-row moved from the standalone
+    `.pos-topbar` bar (a full-width strip that used to sit above both
+    the Products and receipt-preview columns) into `#catalogView`
+    itself, directly below the `.panel-heading` row and above the
+    category chips - the same "consolidate catalog-related controls
+    into the panel that owns them" pattern the New Sale move above
+    already established. This alone shrinks the search box from
+    spanning the *entire app width* (`.pos-topbar-search { flex: 1;
+    min-width: 200px; }`, sized against both columns combined) down to
+    just the Products panel's own ~75%-of-app-width column - the "cut
+    it" ask, achieved by relocating it rather than adding a new
+    max-width rule. The scanner toggle dropped its
+    `.pos-topbar-scanner` modifier class (`margin-bottom: 0`, needed
+    only to sit flush inside the old horizontal topbar row) in favor of
+    plain `.toggle-row.compact`'s own existing `margin-bottom: 10px` -
+    correct spacing for its new vertical position with no new CSS
+    needed. `.pos-topbar`/`.pos-topbar-search`/`.pos-topbar-search
+    .search-box`/`.pos-topbar-actions`/`.pos-topbar-account`/
+    `.pos-topbar-account .subtitle` (the last two already-dead CSS from
+    an earlier pass) and `.pos-topbar` in the print hide-list were all
+    removed together, since nothing renders inside that bar anymore.
+    **A real, measured vertical-alignment bug surfaced and was fixed in
+    the same pass**: `.left-panel` has `padding: 16px` but
+    `.preview-area` had `padding: 5px` on every side - harmless while
+    the two columns' first visible rows had nothing in particular to
+    line up with, but once the Products panel's top row (New Sale) and
+    the receipt column's top row (`#receiptCashierTab`, or
+    `#quickReceiptSettings` when no cashier is configured yet) both
+    became meaningful "first action" rows, the 11px padding gap between
+    them read as visibly uneven - confirmed by measuring
+    `getBoundingClientRect().top` on both with Playwright (200px vs.
+    189px). Fixed by changing `.preview-area`'s padding from a flat
+    `5px` to `16px 5px 5px` (top only raised to match `.left-panel`'s
+    16px, left/right/bottom untouched) - re-measured afterward, both
+    rows now resolve to an identical 200px top, confirmed both with no
+    cashiers configured (Quick Settings is the preview column's first
+    row) and with cashiers configured (the Cashier tab is). Verified
+    with Playwright end-to-end: `.pos-topbar` no longer exists in the
+    DOM; the search input and scanner toggle both still work
+    (typing/checking); `.left-panel`/`.preview-area` resolve to the same
+    top y-coordinate in both cashier states; `.left-panel` still
+    resolves to `display: none` under print media (the moved controls
+    are nested inside it, so the existing print hide-list still covers
+    them with no new selector needed); and zero horizontal overflow or
+    console errors at 1400px desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 
