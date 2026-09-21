@@ -2865,6 +2865,132 @@ has zero network calls.
   mobile on a sample of pages (`vat-calculator.html`/`index.html`/
   `privacy.html`) to confirm the existing `@media (max-width: 640px)`
   rules are completely unaffected by a desktop-only `max-width` change.
+- **Follow-up: Sales History and Inventory go genuinely full-screen,
+  not just capped at 1600px, plus a category filter for both Products
+  and Inventory, plus a collapsible Add Product form.** Per an explicit
+  "sales history should be a full screen... feel it as a real web app"
+  request, confirmed via two rounds of `AskUserQuestion`: (1) both
+  Sales History *and* Inventory get the full-screen treatment, not
+  Sales History alone, since both are long data-dense list views a shop
+  owner spends real time in; (2) "full screen" means the existing
+  `#settingsOverlay`/`.settings-modal` overlay itself expands to fill
+  the entire viewport edge-to-edge (own close button still works,
+  closing returns to the POS exactly like Settings does today) - not a
+  structural rework into a separate routed view.
+  - **Mechanism**: a new `.settings-overlay.fullscreen-tab` CSS state
+    (`padding: 0` on the overlay, `max-width: none; max-height: none;
+    width: 100vw; height: 100vh; border-radius: 0;` on `.settings-modal`
+    itself) is toggled directly inside `selectSettingsTab(name)` -
+    `document.getElementById("settingsOverlay").classList.toggle(
+    "fullscreen-tab", name === "inventory" || name === "salesHistory")`
+    - one line, since `selectSettingsTab()` already runs on every tab
+    switch regardless of entry point (`openSettingsTab()`'s dedicated
+    sidebar shortcuts, or the generic tab rail), so every other tab
+    (Store, Tax, Products, Backup, ...) automatically reverts the modal
+    to its normal 1600px-capped dialog size the moment you switch away
+    from Inventory/Sales History, with no special-casing needed anywhere
+    else. Verified with Playwright: `.settings-modal`'s rendered width
+    is exactly the viewport width (1400px at a 1400px viewport) on
+    Inventory/Sales History, and back to the capped 1600px-ceiling
+    dialog width on every other tab (e.g. Backup); the header's ✕ button
+    still closes the overlay correctly from the full-screen state.
+  - **Category filter chips added to both Settings → Products' own
+    manage-list and Settings → Inventory**, reusing the exact same
+    `.category-chips`/`.category-chip` pill component and All-plus-
+    per-category pattern the main catalog's `renderCategoryChips()`/
+    `activeCategory` already use - "real app" consistency means the
+    same filter control looks and behaves identically everywhere a
+    product list appears, not a bespoke one-off. Two new state
+    variables, `activeManageProductsCategory`/`activeInventoryCategory`
+    (both default `"all"`, deliberately **separate** from the main
+    catalog's own `activeCategory` - filtering the Inventory list to
+    "Drinks" has no reason to also silently change what the cashier's
+    own product-browsing screen shows), back two new render functions,
+    `renderManageProductsCategoryChips()`/`renderInventoryCategoryChips()`,
+    both built from `getCategories()` exactly like the original. Called
+    from the top of `renderManageProductsList()`/`renderInventoryList()`
+    respectively (mirroring how `renderCategoryChips()` is already
+    called from the top of `renderProductCatalog()`), and the category
+    check is added into each function's own existing filter -
+    `renderManageProductsList()`'s `products.forEach(function(p, index)
+    {...})` now `return`s early for a non-matching category **without
+    changing what `index` means**, since it still iterates the full,
+    unfiltered array and only skips rendering - this matters because
+    `index` is the real array position `removeProduct(index)`/
+    `handleProductNameEdit(index, ...)`/photo-upload/tax-exempt edits
+    all key off directly; filtering by array-slicing first would have
+    broken every one of those handlers. `renderInventoryList()`'s own
+    `.filter()` picked up the same `activeInventoryCategory !== "all"
+    && (p.category || "").trim() !== activeInventoryCategory` check
+    ahead of its existing search-query check.
+  - **A real, easy-to-miss bug caught before it shipped**: the new
+    "Save Product" submit button was first written wrapped in its own
+    `<span id="addProductButtonLabel">Save Product</span>`, matching the
+    `<span id="...">text</span>` pattern most translated labels in this
+    file use - but `#addProductButton` **itself** (the outer button, not
+    a wrapping span) already had its own entry in `changeLanguage()`'s
+    `ids` map from long before this session
+    (`addProductButton: "addProductButton"`), which runs on every page
+    load and sets that element's `.textContent` directly from
+    `modules/translations.js`'s `addProductButton` key (`"+ Add
+    Product"`) - overwriting the button's entire contents, span and all,
+    the moment `changeLanguage()` ran, so the new label never actually
+    rendered (confirmed live via `outerHTML` - the span was silently
+    gone, replaced by the translated plain string). Fixed by dropping
+    the redundant inner span entirely and updating
+    `modules/translations.js`'s `addProductButton` value itself to
+    `"Save Product"` - the correct fix given this element was already
+    wired into the site's translation-id-map architecture (kept intact
+    site-wide even though only English exists now, see "Retired: the
+    six-language translation system" above), not something to route
+    around with a second, competing text node. A lesson worth repeating
+    for any future edit to an existing button's label: check
+    `changeLanguage()`'s `ids` map for that element's own `id` first,
+    since a direct `textContent` assignment there will silently blow
+    away child markup added underneath it.
+  - **Add Product form collapsed behind a toggle button**, per an
+    explicit "this should show only when they click the plus sign"
+    request after a screenshot showed the full add-product form (photo
+    upload, name, price, category, SKU, stock, tax-exempt, submit
+    button) always taking up the top of the Products panel above the
+    product list, pushing everything else down. The whole form (Photo
+    through the submit button and its error box) is now wrapped in
+    `<div id="addProductForm" class="add-product-form hidden">`, revealed
+    by a new `#addProductToggleBtn` ("+ Add Product", the site's
+    existing `#icon-plus-circle` sprite glyph) calling a new
+    `toggleAddProductForm()` - toggles the `hidden` class, swaps the
+    button's own label between "Add Product"/"Close", and focuses
+    `#newProductName` the moment the form opens. Deliberately **doesn't
+    auto-collapse after a successful add** - a shop owner adding several
+    products in a row (the exact CSV/Excel-alternative use case this
+    form exists for) shouldn't have to re-open it after every single
+    item, the same "stays open for the next one" convention a Trello-
+    style quick-add card input already follows.
+  - **New `.settings-primary-btn` class** ("make the buttons prominent
+    type like a real app") - a solid `--accent`-green, bold, full-width
+    button with a subtle drop shadow and a darker `--accent-dark` hover
+    state, replacing the plain dark `.small-btn` (identical styling to
+    every other secondary Settings button - Download Sample CSV, Clear
+    Products, etc. - no visual weight of its own) that `#addProductButton`
+    used before. Applied to both the new `#addProductToggleBtn` and the
+    form's own submit button, so opening the form and saving a product
+    are the two most visually prominent actions in the panel, matching
+    how a real consumer web app treats its primary "create" action
+    versus secondary/destructive ones (`.small-btn`'s plain `--ink`/
+    `--danger` styling elsewhere in this same panel is unchanged -
+    scoped to just the Add Product action per the reported ask, not a
+    blanket restyle of every Settings button site-wide).
+  - Verified with Playwright end-to-end: the full add-product flow
+    (open the form via the toggle, fill every field, submit) correctly
+    adds the product and the new category shows up as a chip; clicking
+    a category chip in Products' manage-list and in Inventory each
+    correctly filters that list down to just matching products, without
+    affecting the other list's filter or the main catalog's own
+    `activeCategory`; Sales History and Inventory both render genuinely
+    full-viewport-width, every other tab stays at the normal capped
+    dialog size; the ✕ close button works from the full-screen state;
+    and zero console errors and zero horizontal overflow at both 1400px
+    desktop and 390px mobile.
 
 ## `modules/` — split-out app.html pieces
 

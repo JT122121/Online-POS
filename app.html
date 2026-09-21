@@ -301,7 +301,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .usb-scan-toast.error { background: var(--danger-tint); color: var(--danger); }
 
 .settings-overlay { position: fixed; inset: 0; background: rgba(20,26,23,.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+.settings-overlay.fullscreen-tab { padding: 0; }
 .settings-modal { background: var(--panel); border-radius: var(--radius); width: 100%; max-width: 1600px; max-height: 94vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg); }
+.settings-overlay.fullscreen-tab .settings-modal { max-width: none; max-height: none; width: 100vw; height: 100vh; border-radius: 0; }
 .settings-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line-soft); }
 .settings-modal-header h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
 .settings-modal-header button { background: transparent; border: 0; font-size: 17px; padding: 5px 9px; border-radius: 7px; color: var(--muted); }
@@ -375,6 +377,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
 .csv-actions button { flex: 1; border: 0; border-radius: var(--radius-sm); color: #fff; padding: 10px; font-size: 12.5px; font-weight: 600; }
 .small-btn { border: 0; border-radius: var(--radius-sm); background: var(--ink); color: white; padding: 9px 13px; font-weight: 600; }
 .small-btn:hover { background: var(--accent); }
+.settings-primary-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; border: 0; border-radius: var(--radius-sm); background: var(--accent); color: #fff; padding: 12px 16px; font-size: 13.5px; font-weight: 700; box-shadow: 0 2px 6px rgba(20,32,25,.16); cursor: pointer; }
+.settings-primary-btn:hover { background: var(--accent-dark); box-shadow: 0 4px 10px rgba(20,32,25,.22); }
+.settings-primary-btn .icon { width: 16px; height: 16px; }
+.add-product-form { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
 .sales-history-list { margin-top: 9px; max-height: 260px; overflow-y: auto; }
 .sales-history-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); margin-bottom: 6px; background: #fafbfc; font-size: 11.5px; }
 .sales-history-row .shr-receipt { font-weight: 700; font-family: var(--font-mono); }
@@ -1063,6 +1069,9 @@ Website: Goonlinepos.com</textarea>
 
       <div class="settings-panel-content" id="panel-products">
         <h3 id="productsTitle">Products</h3>
+        <button type="button" class="settings-primary-btn" id="addProductToggleBtn" onclick="toggleAddProductForm()"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="addProductToggleLabel">Add Product</span></button>
+
+        <div id="addProductForm" class="add-product-form hidden">
         <label id="addProductPhotoLabel">Photo (optional)</label>
         <div class="new-product-photo-row">
           <label class="mp-photo-label" title="Upload a photo">
@@ -1090,10 +1099,12 @@ Website: Goonlinepos.com</textarea>
         <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-top:8px;">
           <input id="newProductTaxExempt" type="checkbox"> <span id="addProductTaxExemptLabel">Tax Exempt</span>
         </label>
-        <button type="button" class="small-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:10px; width:100%;">+ Add Product</button>
+        <button type="button" class="settings-primary-btn" id="addProductButton" onclick="addSingleProduct()" style="margin-top:12px;">Save Product</button>
         <div id="addProductErrorBox" class="error-text hidden"></div>
+        </div>
 
-        <div id="manageProductsList" class="payment-list" style="margin-top:14px;"></div>
+        <div id="productsCategoryChips" class="category-chips" style="margin-top:14px;"></div>
+        <div id="manageProductsList" class="payment-list"></div>
         <div id="manageProductsEmpty" class="products-empty hidden">No products yet - add one above or upload a CSV or Excel file below.</div>
 
         <div class="info" id="productsUploadHint" style="display:block; margin-top:16px;">Or upload a CSV or Excel (.xlsx) file with columns: Name, Price, SKU (all required), and optionally Category, Stock, and TaxExempt. Products with a SKU that already exists in your catalog are updated; products with a new SKU are added; rows with no SKU are skipped. Nothing already in your catalog is removed - use Clear Products below for that.</div>
@@ -1111,7 +1122,8 @@ Website: Goonlinepos.com</textarea>
         <h3 id="inventoryTitle" style="margin:0 0 10px;">Inventory</h3>
         <div class="info" id="inventoryInfo" style="display:block;">Stock goes down automatically every time an item is sold. Edit any number below to correct it or restock - leave a field blank if you don't want to track stock for that product.</div>
         <input id="inventorySearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search products..." oninput="renderInventoryList()">
-        <div id="inventoryList" class="payment-list" style="margin-top:9px;"></div>
+        <div id="inventoryCategoryChips" class="category-chips" style="margin-top:10px;"></div>
+        <div id="inventoryList" class="payment-list"></div>
         <div id="inventoryEmpty" class="products-empty hidden">No products yet. Add some from Settings → Products.</div>
         <button type="button" class="small-btn" onclick="exportInventoryToExcel()" id="inventoryExportButton" style="width:100%; margin-top:12px; background:var(--accent);">⬇ <span id="inventoryExportButtonLabel">Download Inventory Report</span></button>
       </div>
@@ -1392,6 +1404,8 @@ let logoDataUrl = null;
 let cart = [];
 let salesHistory = [];
 let activeCategory = "all";
+let activeManageProductsCategory = "all";
+let activeInventoryCategory = "all";
 let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
@@ -1553,6 +1567,7 @@ function selectSettingsTab(name) {
   settingsActiveTab = name;
   document.querySelectorAll(".settings-panel-content").forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
   document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
+  document.getElementById("settingsOverlay").classList.toggle("fullscreen-tab", name === "inventory" || name === "salesHistory");
 }
 
 async function loadSettings() {
@@ -3203,6 +3218,14 @@ function downloadSampleExcel() {
   XLSX.writeFile(wb, "sample-products.xlsx");
 }
 
+function toggleAddProductForm() {
+  const form = document.getElementById("addProductForm");
+  const opening = form.classList.contains("hidden");
+  form.classList.toggle("hidden", !opening);
+  document.getElementById("addProductToggleLabel").textContent = opening ? "Close" : "Add Product";
+  if (opening) document.getElementById("newProductName").focus();
+}
+
 async function addSingleProduct() {
   const nameEl = document.getElementById("newProductName");
   const priceEl = document.getElementById("newProductPrice");
@@ -3289,10 +3312,32 @@ async function removeProduct(index) {
   renderProductCatalog();
 }
 
+function renderInventoryCategoryChips() {
+  const container = document.getElementById("inventoryCategoryChips");
+  if (!container) return;
+  const categories = getCategories();
+  container.innerHTML = "";
+
+  const allChip = document.createElement("button");
+  allChip.className = "category-chip" + (activeInventoryCategory === "all" ? " active" : "");
+  allChip.textContent = tr("allCategory");
+  allChip.onclick = function() { activeInventoryCategory = "all"; renderInventoryList(); };
+  container.appendChild(allChip);
+
+  categories.forEach(function(cat) {
+    const chip = document.createElement("button");
+    chip.className = "category-chip" + (activeInventoryCategory === cat ? " active" : "");
+    chip.textContent = cat;
+    chip.onclick = function() { activeInventoryCategory = cat; renderInventoryList(); };
+    container.appendChild(chip);
+  });
+}
+
 function renderInventoryList() {
   const list = document.getElementById("inventoryList");
   const empty = document.getElementById("inventoryEmpty");
   if (!list || !empty) return;
+  renderInventoryCategoryChips();
 
   const query = (document.getElementById("inventorySearch").value || "").toLowerCase().trim();
   list.innerHTML = "";
@@ -3300,6 +3345,7 @@ function renderInventoryList() {
   empty.textContent = tr("inventoryEmpty");
 
   const filtered = products.filter(function(p) {
+    if (activeInventoryCategory !== "all" && (p.category || "").trim() !== activeInventoryCategory) return false;
     if (!query) return true;
     return p.name.toLowerCase().indexOf(query) !== -1 ||
       (p.sku && p.sku.toLowerCase().indexOf(query) !== -1) ||
@@ -3370,10 +3416,32 @@ async function handleProductTaxExemptEdit(index, checked) {
   await saveProducts();
 }
 
+function renderManageProductsCategoryChips() {
+  const container = document.getElementById("productsCategoryChips");
+  if (!container) return;
+  const categories = getCategories();
+  container.innerHTML = "";
+
+  const allChip = document.createElement("button");
+  allChip.className = "category-chip" + (activeManageProductsCategory === "all" ? " active" : "");
+  allChip.textContent = tr("allCategory");
+  allChip.onclick = function() { activeManageProductsCategory = "all"; renderManageProductsList(); };
+  container.appendChild(allChip);
+
+  categories.forEach(function(cat) {
+    const chip = document.createElement("button");
+    chip.className = "category-chip" + (activeManageProductsCategory === cat ? " active" : "");
+    chip.textContent = cat;
+    chip.onclick = function() { activeManageProductsCategory = cat; renderManageProductsList(); };
+    container.appendChild(chip);
+  });
+}
+
 function renderManageProductsList() {
   const list = document.getElementById("manageProductsList");
   const empty = document.getElementById("manageProductsEmpty");
   if (!list || !empty) return;
+  renderManageProductsCategoryChips();
   const symbol = symbolNow();
 
   list.innerHTML = "";
@@ -3381,6 +3449,7 @@ function renderManageProductsList() {
   empty.textContent = tr("manageProductsEmpty");
 
   products.forEach(function(p, index) {
+    if (activeManageProductsCategory !== "all" && (p.category || "").trim() !== activeManageProductsCategory) return;
     const row = document.createElement("div");
     row.className = "payment-item";
     row.innerHTML =
