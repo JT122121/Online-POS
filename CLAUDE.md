@@ -4236,6 +4236,51 @@ has zero network calls.
     symbols, and the full `body.dark-mode` CSS block through unchanged,
     with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers and zero
     `console.warn` output.
+- **A chevron toggle to hide the Homepage/Blog/five-free-tool "Quick
+  Links" row**, per an explicit "add an option to hide the tabs
+  Homepage blog etc" request. `.app-header-links` (the row of "leave
+  the app" pills - see "Site-wide header, nav & footer" above) is now
+  wrapped in `.app-header-links-wrap` alongside a small circular
+  `#appHeaderLinksToggleBtn` (a down-chevron, `#icon-chevron-down`,
+  new sprite symbol next to the existing `#icon-chevron-left`) that
+  sits right before the row - `toggleAppHeaderLinks()` toggles `.hidden`
+  on `#appHeaderLinks` itself (the same class every other collapsible
+  panel in this file already uses) and a `.collapsed` class on the wrap
+  that flips the chevron 180° to point up, matching the exact rotate-
+  the-same-icon convention `.sidebar-toggle-btn`'s own chevron already
+  established, rather than swapping between two separate icon symbols.
+  **Persisted, not reset on every load** - `storageGet`/
+  `storageSet("pos-header-links-collapsed")`, `loadAppHeaderLinksState()`
+  called from `init()` right after `loadDarkModeState()` - this was a
+  deliberate choice against the older `#toolbarToggleBtn` precedent
+  (which is explicitly *not* persisted, since it's about reclaiming
+  screen space mid-session): hiding Homepage/Blog/the tool links is a
+  "I never use these, stop showing them" preference, closer in spirit
+  to the sidebar's own persisted collapse state than to a temporary
+  toolbar declutter. `renderAppHeaderLinksToggle()` keeps the button's
+  translated `title`/`aria-label` (`appHeaderLinksHideLabel`/
+  `appHeaderLinksShowLabel`, both new keys) in sync with the current
+  state, called from the toggle handler, from `loadAppHeaderLinksState()`,
+  and from `changeLanguage()`'s tail alongside `renderDarkModeToggle()`/
+  `renderSidebarToggle()`. Wrapping the row in an extra `<div>` needed
+  no change to any `OFFLINE-STRIP` marker - every `HOMEPAGE-BUTTON`/
+  `BLOG-BUTTON`/`CREATE-*-BUTTON` marker pair still wraps its own
+  button exactly as before, just one DOM level deeper, and
+  `stripMarked()` matches markers by name/content, not by their parent
+  structure (the same already-confirmed fact this file's own header/
+  sidebar-reskin passes relied on repeatedly above). Not itself
+  `OFFLINE-STRIP`-wrapped - the toggle button and its collapsed state
+  have zero network dependency, so they ship unchanged in the offline
+  package, same as `#sidebarToggleBtn`/`#darkModeToggleBtn`. Verified
+  with Playwright at 1400px (light and dark mode) and 390px mobile: the
+  row starts visible, clicking the chevron hides it and rotates the
+  icon 180°, the button's title updates to "Show Quick Links", the
+  collapsed state survives a reload, clicking again brings the row back
+  and restores the icon/title, zero horizontal overflow at any width in
+  either theme, zero console errors; and the offline-package build
+  (`buildOfflineAppHtml()`) carries the toggle button through unchanged
+  while still correctly stripping Homepage/Blog/every free-tool button
+  inside it, with zero leftover markers and zero `console.warn` output.
 
 ## `modules/` — split-out app.html pieces
 
