@@ -1978,6 +1978,180 @@ has zero network calls.
   (`openSaleDetail`), edited, and reprinted. Summary panel
   (`renderSalesSummary`) breaks totals down by payment method and by
   cashier.
+- **Customers** - a real customer directory (Settings → Customers,
+  `customers[]`), per an explicit request for "Customer Id, Name,
+  Company Name, Email, Phone, More Details" fields, linked into
+  checkout as a dropdown, and its own full-screen master-detail module
+  matching Products/Inventory/Sales History's own pattern (see "the
+  same full-screen master-detail view as Sales History" above -
+  Customers reuses that exact same `.md-split`/`.md-list-pane`/
+  `.md-detail-pane` CSS, no new layout code). Each customer record is
+  `{id, name, companyName, email, phone, details}` - `id` is the one
+  field a shop owner never types: `getNextCustomerId()` auto-assigns it
+  from a persistent counter (`pos-customer-counter`, the identical
+  "increment, persist, format" pattern `getNextReceiptNumber()` already
+  uses for receipt numbers) as `"C" + a zero-padded number` (`C0001`,
+  `C0002`, ...) - never reused even after a delete, so two different
+  customers can never collide on ID. `name` is the only required field;
+  `companyName`/`email`/`phone`/`details` (a free-text notes textarea -
+  address, preferences, anything that doesn't fit a dedicated field) are
+  all optional.
+  - **Checkout's old free-text "Customer Name" input became a real
+    dropdown** (`#customerSelect`, relabeled "Customer") - per the
+    explicit "link to main pos as customer dropdown user can click new
+    or choose from dropdown" request. `renderCustomerSelect()` lists
+    every customer alphabetically by name (with `(Company)` appended
+    when set) plus a leading "Walk-in / No Customer" blank option and a
+    trailing "+ New Customer..." option. **The old `#customerName`
+    input still exists, just hidden** - `handleCustomerSelectChange()`
+    writes the selected customer's name into it and calls the existing
+    `updateReceipt()`, so every other piece of code that already read
+    `val("customerName")` (`saveCurrentSaleToHistory()`,
+    `modules/receipt.js`'s receipt-header rendering, `startNewSale()`'s
+    reset) needed **zero** changes - they still see exactly the plain
+    name string they always did, just now sourced from a dropdown
+    selection instead of free typing. A new `activeCustomerId` global
+    (mirroring `activeCashierName`'s own role) is what actually links a
+    sale to a customer record - `saveCurrentSaleToHistory()` now also
+    stamps `customerId` onto the saved record alongside the existing
+    `customerName` snapshot, and `startNewSale()` resets it back to `""`
+    same as every other per-sale field.
+  - **"+ New Customer..." opens a lightweight quick-create modal
+    (`#quickNewCustomerOverlay`) instead of leaving checkout** - a
+    cashier mid-sale shouldn't have to abandon an in-progress cart to
+    reach the full Settings → Customers module just to add a walk-in's
+    details. Picking it from the dropdown snaps the `<select>` back to
+    whatever was actually selected before (so it never visibly sits on
+    the inert `"__new__"` option) and opens the modal;
+    `saveQuickNewCustomer()` calls the same shared `createCustomer()`
+    both this modal and the full module use, then immediately selects
+    the new customer in the checkout dropdown and updates the receipt -
+    one creation path, two entry points, exactly the "single source of
+    truth" convention this file already follows elsewhere (e.g. Backup/
+    Restore's shared `buildBackupPayload()`).
+  - **The full Customers module** (`#panel-customers`, reachable via
+    its own sidebar button - `#sidebarCustomersButton`, positioned
+    alphabetically between Customer Screen and End of Day, a new
+    single-person `#icon-user` sprite symbol distinct from Cashiers'
+    multi-person `#icon-users`) is full-screen and master-detail, added
+    to `selectSettingsTab()`'s `isSplitView` check alongside Products/
+    Inventory/Sales History. The list pane (`renderCustomersList()`,
+    `buildCustomerRow()`) is sorted alphabetically by name and
+    searchable across name/company/email/phone
+    (`customerSearch` input) - per the explicit "sort my name
+    alphabetical and able to search too" request. Rows reuse Products'
+    own `.prod-row`/`.prod-row-info`/`.prod-row-name`/`.prod-row-sub`
+    CSS verbatim (no photo thumbnail, so the row is just the info block
+    plus the same `.shr-delete-btn` quick-delete `×` Products/Sales
+    History both already use) - clicking a row opens it in the detail
+    pane; a "+ New Customer" button (`openNewCustomerDetail()`) opens
+    the same detail pane blank instead of a separate add-form, since
+    every customer field is already right there once the pane is open -
+    unlike Products, which keeps its own dedicated collapsible add-form
+    for a reason specific to that panel (CSV/Excel upload sits right
+    below it).
+  - **One detail pane, two modes, not two different forms** -
+    `creatingNewCustomer` (a boolean) plus `editingCustomerId`
+    (`null` when creating) together decide what the pane shows:
+    `openCustomerDetail(id)` reveals the read-only Customer ID row, the
+    Delete button, and the Related Sales section and titles the pane
+    "Customer Details"; `openNewCustomerDetail()` hides all three and
+    titles it "New Customer" instead - `renderCustomerDetailTitle()` is
+    the one function that keeps the title and the Save button's own
+    label ("Save Changes" vs "Save Customer") in sync with whichever
+    mode is active, called from both open functions and from
+    `changeLanguage()`'s tail (the same "dynamic, mode-dependent text
+    needs its own re-render function" pattern already established for
+    `renderBarcodeScannerStatus()`/`renderAppTitleBadge()`).
+    `saveCustomerDetailEdits()` branches on `creatingNewCustomer` to
+    either call `createCustomer()` or write the edited fields onto the
+    existing record by `editingCustomerId` - both paths share the same
+    blank-name validation (`customerNameError`) before either can
+    succeed.
+  - **Related Sales, sorted latest-first** - per the explicit "in
+    details show the related sales sort by latest date on top" request,
+    `renderCustomerRelatedSales(customerId)` filters `salesHistory` by
+    `s.customerId === customerId` and sorts with the exact same
+    `bySaleDateDesc` comparator Sales History's own "All (Latest First)"
+    view already uses - one shared sort function, not a second copy.
+    Each row reuses Sales History's own `.sh-row`/`.sh-col-*` CSS
+    (receipt #, date, total - a 3-column inline override of the base
+    4-column `grid-template-columns`, since there's no reprint/delete
+    action column needed here) and is clickable -
+    `viewCustomerRelatedSale(receiptNumber)` calls
+    `openSettingsTab("salesHistory")` then `openSaleDetail(receiptNumber)`
+    in the same synchronous call, jumping straight from a customer's
+    record to that exact sale's own detail pane in one click.
+  - **Deleting a customer never touches sales history** - a sale's own
+    `customerName`/`customerId` are a snapshot taken at checkout time,
+    the same "receipt content is frozen once printed" principle every
+    other historical-sale field already follows (store name, tax rate,
+    cashier, ...); removing the customer record just leaves that
+    `customerId` pointing at nothing, harmless, exactly like a deleted
+    product's SKU can still appear in an old sale's line items.
+    `deleteCustomer(id)` also clears `activeCustomerId` and resets the
+    live checkout dropdown back to blank if the customer being deleted
+    happened to be the one currently selected for an in-progress sale.
+  - **Sales History's own "Customer Name" edit field
+    (`#saleDetailCustomer`) was deliberately left as free text,
+    unconverted** - editing a past sale's customer name there still
+    only touches the `customerName` string, never `customerId`, so a
+    sale's customer *link* can't be silently reassigned by typing a
+    different name into an unrelated editor; this was a deliberate
+    scope decision, not an oversight, since the request was specifically
+    about linking the checkout dropdown and the new module to each
+    other, not about reworking how Sales History's existing editor
+    works.
+  - New translation keys (`customerSelectBlank`/`customerSelectNew`,
+    `newCustomerButtonLabel`, `quickCustomerNameLabel`/
+    `CompanyLabel`/`EmailLabel`/`PhoneLabel`/`DetailsLabel`/`SaveLabel`,
+    `customerNameError`, `sidebarCustomersLabel`, `customersTitle`,
+    `customersSearchPlaceholder`, `customersEmpty`,
+    `customerDetailTitle`, `customerDetailIdLabel`,
+    `customerDetailEmptyText`, `customerDetailDeleteLabel`,
+    `customerDeleteConfirm`, `customerRelatedSalesLabel`,
+    `customerRelatedSalesEmpty`) were added to `modules/translations.js`;
+    every detail-pane field label reuses the matching `quickCustomer*`
+    key from the checkout modal rather than duplicating it (`one key
+    can back multiple element ids`, the same precedent already
+    documented for `blog.html`'s shared `updatedLabel`), and the
+    Save button's two possible texts reuse `quickCustomerSaveLabel`/
+    the existing `saleDetailSaveLabel` rather than adding new ones.
+    `customerNameLabel`'s own value changed from "Customer Name" to
+    plain "Customer" (raw HTML default and the `en` translations value
+    both updated together) to read correctly now that the field is a
+    dropdown, not a name-typing box; its now-pointless
+    `customerNamePlaceholder` wiring (the placeholder of a permanently-
+    hidden input) was removed from `changeLanguage()` - the translation
+    key itself was left defined, unused, matching this repo's existing
+    dead-key tolerance.
+  - **The "MAIN SCREEN" and new "SETTINGS → CUSTOMERS" `.htu-item`s in
+    How To Use** were added/updated to match - the sidebar-buttons list
+    in "MAIN SCREEN" now mentions Customers alongside Backup/Settings/
+    End of Day/Inventory/Customer Screen/Home, and the new Customers
+    section describes the full-screen module, the checkout dropdown,
+    and the Related Sales jump-to-sale behavior.
+  - Verified with Playwright: the Customers tab renders genuinely
+    full-viewport-width; creating three customers (Alice/Bob/Zach) and
+    reading the rendered row order back confirms alphabetical sorting;
+    searching narrows the list correctly and clears back to the full
+    list; a blank name is rejected with the translated error on both
+    the quick modal and the full module; a customer created from
+    checkout's own "+ New Customer..." is immediately selected in the
+    dropdown, is added to the customer list, and completing that sale
+    stamps the correct `customerId`; the printed receipt's own customer
+    row correctly shows/hides based on the dropdown selection; that
+    customer's Related Sales list shows the completed sale sorted
+    correctly, and clicking it jumps to Sales History with that exact
+    sale's detail pane open and the right customer name shown;
+    completing a sale resets the checkout dropdown back to "Walk-in / No
+    Customer" for the next one; deleting a customer removes them from
+    the list and clears an active checkout selection without touching
+    the already-saved sale record or throwing; the offline-package
+    build (`buildOfflineAppHtml()`) carries every new element through
+    unchanged with zero leftover `OFFLINE-STRIP`/`OFFLINE-SWAP` markers
+    and zero `console.warn`; and zero console errors or horizontal
+    overflow at 1400px desktop and 390px mobile.
 - **Inventory:** optional per-product stock tracking, decremented on sale;
   editable in Settings → Inventory (`renderInventoryList`); exportable.
 - **Products:** manual add, or bulk upload from **either CSV or Excel

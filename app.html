@@ -581,6 +581,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <symbol id="icon-package" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
 <symbol id="icon-bar-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
 <symbol id="icon-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
 <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
 <symbol id="icon-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
 <symbol id="icon-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
@@ -628,6 +629,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
 <!-- OFFLINE-STRIP:SUPPORT-COFFEE-BUTTON:END -->
 <button type="button" id="sidebarCashiersButton" class="pos-sidebar-item" onclick="openSettingsTab('cashiers')"><span class="pos-sidebar-icon pos-sidebar-icon-teal"><svg class="icon"><use href="#icon-users"></use></svg></span> <span id="sidebarCashiersLabel">Cashiers</span></button>
 <button type="button" id="customerScreenButton" class="pos-sidebar-item" onclick="openCustomerScreenPanel()"><span class="pos-sidebar-icon pos-sidebar-icon-gray"><svg class="icon"><use href="#icon-monitor"></use></svg></span> <span id="customerScreenButtonLabel">Customer Screen</span></button>
+<button type="button" id="sidebarCustomersButton" class="pos-sidebar-item" onclick="openSettingsTab('customers')"><span class="pos-sidebar-icon pos-sidebar-icon-gray"><svg class="icon"><use href="#icon-user"></use></svg></span> <span id="sidebarCustomersLabel">Customers</span></button>
 <button type="button" id="endOfDayButton" class="pos-sidebar-item" onclick="openEndOfDayReport()" title="Print or save a closing report for a business day"><span class="pos-sidebar-icon pos-sidebar-icon-red"><svg class="icon"><use href="#icon-calendar"></use></svg></span> <span id="endOfDayShortcutLabel">End of Day</span></button>
 <button type="button" id="howToUseButton" class="pos-sidebar-item" onclick="openHowToUse()" title="A quick walkthrough of every setting"><span class="pos-sidebar-icon pos-sidebar-icon-teal"><svg class="icon"><use href="#icon-help-circle"></use></svg></span> <span id="howToUseShortcutLabel">How To Use</span></button>
 <button type="button" id="sidebarInventoryButton" class="pos-sidebar-item" onclick="openSettingsTab('inventory')"><span class="pos-sidebar-icon pos-sidebar-icon-orange"><svg class="icon"><use href="#icon-package"></use></svg></span> <span id="sidebarInventoryLabel">Inventory</span></button>
@@ -721,8 +723,9 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
         <input id="discountRate" type="number" value="0" min="0" step="0.01" oninput="updateReceipt()">
       </div>
     </div>
-    <label id="customerNameLabel">Customer Name</label>
-    <input id="customerName" placeholder="Optional" oninput="updateReceipt()">
+    <label id="customerNameLabel">Customer</label>
+    <select id="customerSelect" onchange="handleCustomerSelectChange(this.value)"></select>
+    <input type="hidden" id="customerName">
     <label id="paymentMethodLabel">Payment Method</label>
     <div id="paymentRowsContainer"></div>
     <button type="button" class="split-payment-btn" onclick="addPaymentRow()" id="addPaymentRowBtn">+ Split Payment</button>
@@ -934,6 +937,7 @@ body.pdf-capture-mode .receipt-item-name-input, body.pdf-capture-mode .receipt-i
       <button class="settings-tab-item" data-tab="tax" onclick="selectSettingsTab('tax')">🧮 <span>Tax</span></button>
       <button class="settings-tab-item" data-tab="paymentMethods" onclick="selectSettingsTab('paymentMethods')">💳 <span>Payment Methods</span></button>
       <button class="settings-tab-item hidden" data-tab="cashiers" onclick="selectSettingsTab('cashiers')">🧑‍💼 <span>Cashiers</span></button>
+      <button class="settings-tab-item hidden" data-tab="customers" onclick="selectSettingsTab('customers')">👤 <span>Customers</span></button>
       <button class="settings-tab-item hidden" data-tab="products" onclick="selectSettingsTab('products')">📦 <span>Products</span></button>
       <button class="settings-tab-item hidden" data-tab="salesHistory" onclick="selectSettingsTab('salesHistory')">📊 <span>Sales History</span></button>
       <button class="settings-tab-item" data-tab="footer" onclick="selectSettingsTab('footer')">📝 <span>Footer</span></button>
@@ -1012,6 +1016,60 @@ Website: Goonlinepos.com</textarea>
         </div>
         <div id="cashiersList" class="payment-list"></div>
         <div class="info" id="cashiersInfo" style="display:block;">These appear in the cashier dropdown at the top of the main screen. Whoever's selected there prints on every receipt and shows up in the End of Day report.</div>
+      </div>
+
+      <div class="settings-panel-content" id="panel-customers">
+        <div class="md-split" id="customersSplit">
+          <div class="md-list-pane">
+            <h3 id="customersTitle">Customers</h3>
+            <button type="button" class="settings-primary-btn" onclick="openNewCustomerDetail()" id="newCustomerButton"><svg class="icon"><use href="#icon-plus-circle"></use></svg> <span id="newCustomerButtonLabel">New Customer</span></button>
+            <input id="customerSearch" class="search-box" style="margin-top:10px;" type="text" placeholder="Search customers..." oninput="renderCustomersList()">
+            <div id="customersList" class="payment-list" style="margin-top:10px;"></div>
+            <div id="customersEmpty" class="products-empty hidden">No customers yet - click New Customer to add one.</div>
+          </div>
+          <div class="md-detail-pane" id="customerDetailPane">
+            <div class="md-detail-empty" id="customerDetailEmptyState">
+              <div class="md-detail-empty-icon">👤</div>
+              <p id="customerDetailEmptyText">Select a customer from the list, or click New Customer, to view and edit their details.</p>
+            </div>
+            <div id="customerDetailContent" class="hidden">
+              <div class="md-detail-header">
+                <h3 id="customerDetailTitle">Customer Details</h3>
+                <button type="button" class="md-detail-close-btn" onclick="closeCustomerDetail()" aria-label="Close">✕</button>
+              </div>
+              <div id="customerDetailIdRow" class="info hidden" style="display:flex;">
+                <span id="customerDetailIdLabel">Customer ID:</span>
+                <strong id="customerDetailIdValue"></strong>
+              </div>
+              <label id="customerDetailNameLabel">Name</label>
+              <input id="customerDetailName" placeholder="e.g. John Doe">
+              <label id="customerDetailCompanyLabel">Company Name (optional)</label>
+              <input id="customerDetailCompany" placeholder="e.g. Acme Inc.">
+              <div class="two-columns">
+                <div>
+                  <label id="customerDetailEmailLabel">Email (optional)</label>
+                  <input id="customerDetailEmail" type="email" placeholder="name@example.com">
+                </div>
+                <div>
+                  <label id="customerDetailPhoneLabel">Phone (optional)</label>
+                  <input id="customerDetailPhone" placeholder="e.g. +1 555 0100">
+                </div>
+              </div>
+              <label id="customerDetailDetailsLabel">More Details (optional)</label>
+              <textarea id="customerDetailDetails" rows="4" placeholder="Notes, address, preferences..."></textarea>
+              <div id="customerDetailErrorBox" class="error-text hidden"></div>
+              <div class="checkout-actions" style="margin-top:16px;">
+                <button type="button" class="back-btn" onclick="deleteCustomerFromDetail()" id="customerDetailDeleteBtn" style="background:var(--danger-tint); color:var(--danger);">🗑 <span id="customerDetailDeleteLabel">Delete Customer</span></button>
+                <button type="button" class="complete-btn" onclick="saveCustomerDetailEdits()" id="customerDetailSaveBtn">💾 <span id="customerDetailSaveLabel">Save Changes</span></button>
+              </div>
+              <div id="customerRelatedSalesSection" style="margin-top:20px;">
+                <label id="customerRelatedSalesLabel">Related Sales</label>
+                <div id="customerRelatedSalesList"></div>
+                <div id="customerRelatedSalesEmpty" class="info hidden">No sales yet for this customer.</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="settings-panel-content" id="panel-products">
@@ -1380,6 +1438,35 @@ Website: Goonlinepos.com</textarea>
 </div>
 </div>
 
+<div id="quickNewCustomerOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeQuickNewCustomerModal()">
+<div class="scanner-modal" style="max-width:420px;">
+  <div class="scanner-header">
+    <h2 id="quickNewCustomerTitle">New Customer</h2>
+    <button onclick="closeQuickNewCustomerModal()">✕</button>
+  </div>
+  <div style="padding:18px 20px;">
+    <label id="quickCustomerNameLabel">Name</label>
+    <input id="quickCustomerName" placeholder="e.g. John Doe">
+    <label id="quickCustomerCompanyLabel">Company Name (optional)</label>
+    <input id="quickCustomerCompany" placeholder="e.g. Acme Inc.">
+    <div class="two-columns">
+      <div>
+        <label id="quickCustomerEmailLabel">Email (optional)</label>
+        <input id="quickCustomerEmail" type="email" placeholder="name@example.com">
+      </div>
+      <div>
+        <label id="quickCustomerPhoneLabel">Phone (optional)</label>
+        <input id="quickCustomerPhone" placeholder="e.g. +1 555 0100">
+      </div>
+    </div>
+    <label id="quickCustomerDetailsLabel">More Details (optional)</label>
+    <textarea id="quickCustomerDetails" rows="3" placeholder="Notes, address, preferences..."></textarea>
+    <div class="error-text hidden" id="quickCustomerErrorBox"></div>
+    <button type="button" class="settings-primary-btn" style="margin-top:14px;" onclick="saveQuickNewCustomer()" id="quickCustomerSaveBtn"><span id="quickCustomerSaveLabel">Save Customer</span></button>
+  </div>
+</div>
+</div>
+
 <!-- OFFLINE-STRIP:DOWNLOAD-MODAL:START -->
 <div id="offlineDownloadOverlay" class="settings-overlay hidden" onclick="if(event.target===this) closeOfflineDownloadModal()">
 <div class="scanner-modal" style="max-width:560px; max-height:85vh; display:flex; flex-direction:column;">
@@ -1426,7 +1513,7 @@ Website: Goonlinepos.com</textarea>
     <div class="htu-item">
       <span class="htu-num">MAIN SCREEN</span>
       <h3>Your everyday screen</h3>
-      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the sidebar for more room). Tap a product to add it to the cart to start a sale, search or filter by category, and click "Clear Cart" in the Products panel if you need to abandon it and start over. Use the sidebar to reach Backup, Settings, End of Day, Inventory, Customer Screen, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle in the sidebar and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
+      <p>This is what you'll spend most of your time on - your product catalog on the left, live receipt preview on the right (drag the divider between them to resize, or collapse the sidebar for more room). Tap a product to add it to the cart to start a sale, search or filter by category, and click "Clear Cart" in the Products panel if you need to abandon it and start over. Use the sidebar to reach Backup, Settings, End of Day, Inventory, Customers, Customer Screen, and Home. Products can carry a photo, too - no photo yet just shows a placeholder icon. Turn on the Barcode Scanner toggle in the sidebar and a USB barcode scanner adds items by SKU automatically from anywhere on this screen - no camera, no setup.</p>
     </div>
 
     <div class="htu-item">
@@ -1469,6 +1556,12 @@ Website: Goonlinepos.com</textarea>
       <span class="htu-num">SETTINGS → CASHIERS</span>
       <h3>Cashiers</h3>
       <p>Add everyone who works the till. Whoever's selected in the header dropdown gets printed on every receipt and tracked separately in the End of Day report - so you always know who rang up what.</p>
+    </div>
+
+    <div class="htu-item">
+      <span class="htu-num">SETTINGS → CUSTOMERS</span>
+      <h3>Customers</h3>
+      <p>Opens full-screen as a table-style, two-pane view - a list of every customer on the left, sorted alphabetically by name and searchable by name, company, email, or phone, and the selected customer's full details on the right. Click "New Customer" or any row to view or edit their Name, Company Name, Email, Phone, and More Details (a free-text notes field), or delete them entirely - a customer's own Customer ID is auto-assigned and shown once they're saved. Every one of their past sales shows right there too, newest first, and clicking one jumps straight to it in Sales History. At checkout, pick a customer from the Customer dropdown, or choose "+ New Customer..." to add one on the spot without leaving your sale - leave it on "Walk-in / No Customer" for a sale with no customer on file.</p>
     </div>
 
     <div class="htu-item">
@@ -1547,6 +1640,11 @@ let activeManageProductsCategory = "all";
 let activeInventoryCategory = "all";
 let editingProductIndex = null;
 let editingInventorySku = null;
+let customers = [];
+let customerCounterValue = 0;
+let activeCustomerId = "";
+let editingCustomerId = null;
+let creatingNewCustomer = false;
 let settingsActiveTab = "store";
 
 function val(id) { return document.getElementById(id).value; }
@@ -1692,7 +1790,7 @@ function selectSettingsTab(name) {
   settingsActiveTab = name;
   document.querySelectorAll(".settings-panel-content").forEach(function(c) { c.classList.toggle("active", c.id === "panel-" + name); });
   document.querySelectorAll(".settings-tab-item").forEach(function(i) { i.classList.toggle("active", i.dataset.tab === name); });
-  const isSplitView = name === "inventory" || name === "salesHistory" || name === "products";
+  const isSplitView = name === "inventory" || name === "salesHistory" || name === "products" || name === "customers";
   document.getElementById("settingsOverlay").classList.toggle("fullscreen-tab", isSplitView);
   document.getElementById("settingsTabPanel").classList.toggle("split-view-active", isSplitView);
 }
@@ -1807,6 +1905,36 @@ async function loadProductsFromStorage() {
   renderProductCatalog();
 }
 async function saveProducts() { await storageSet("pos-products", JSON.stringify(products)); }
+
+async function loadCustomers() {
+  const raw = await storageGet("pos-customers");
+  try { customers = raw ? JSON.parse(raw) : []; } catch (e) { customers = []; }
+  renderCustomerSelect();
+}
+async function saveCustomers() { await storageSet("pos-customers", JSON.stringify(customers)); }
+async function loadCustomerCounter() {
+  const raw = await storageGet("pos-customer-counter");
+  customerCounterValue = parseInt(raw, 10) || 0;
+}
+async function getNextCustomerId() {
+  customerCounterValue++;
+  await storageSet("pos-customer-counter", String(customerCounterValue));
+  return "C" + String(customerCounterValue).padStart(4, "0");
+}
+async function createCustomer(fields) {
+  const id = await getNextCustomerId();
+  const customer = {
+    id: id,
+    name: (fields.name || "").trim(),
+    companyName: (fields.companyName || "").trim(),
+    email: (fields.email || "").trim(),
+    phone: (fields.phone || "").trim(),
+    details: (fields.details || "").trim()
+  };
+  customers.push(customer);
+  await saveCustomers();
+  return customer;
+}
 
 async function loadLogo() {
   const raw = await storageGet("pos-logo");
@@ -2059,6 +2187,75 @@ function setActiveCashier() {
   updateReceipt();
 }
 
+function renderCustomerSelect() {
+  const select = document.getElementById("customerSelect");
+  if (!select) return;
+  select.innerHTML = "";
+
+  const blankOption = document.createElement("option");
+  blankOption.value = "";
+  blankOption.textContent = tr("customerSelectBlank");
+  select.appendChild(blankOption);
+
+  customers.slice().sort(function(a, b) { return (a.name || "").localeCompare(b.name || ""); }).forEach(function(c) {
+    const option = document.createElement("option");
+    option.value = c.id;
+    option.textContent = c.companyName ? (c.name + " (" + c.companyName + ")") : c.name;
+    select.appendChild(option);
+  });
+
+  const newOption = document.createElement("option");
+  newOption.value = "__new__";
+  newOption.textContent = tr("customerSelectNew");
+  select.appendChild(newOption);
+
+  select.value = (activeCustomerId && customers.some(function(c) { return c.id === activeCustomerId; })) ? activeCustomerId : "";
+}
+function handleCustomerSelectChange(value) {
+  if (value === "__new__") {
+    document.getElementById("customerSelect").value = activeCustomerId || "";
+    openQuickNewCustomerModal();
+    return;
+  }
+  activeCustomerId = value || "";
+  const customer = customers.find(function(c) { return c.id === activeCustomerId; });
+  document.getElementById("customerName").value = customer ? customer.name : "";
+  updateReceipt();
+}
+function openQuickNewCustomerModal() {
+  document.getElementById("quickCustomerName").value = "";
+  document.getElementById("quickCustomerCompany").value = "";
+  document.getElementById("quickCustomerEmail").value = "";
+  document.getElementById("quickCustomerPhone").value = "";
+  document.getElementById("quickCustomerDetails").value = "";
+  document.getElementById("quickCustomerErrorBox").classList.add("hidden");
+  document.getElementById("quickNewCustomerOverlay").classList.remove("hidden");
+  document.getElementById("quickCustomerName").focus();
+}
+function closeQuickNewCustomerModal() {
+  document.getElementById("quickNewCustomerOverlay").classList.add("hidden");
+}
+async function saveQuickNewCustomer() {
+  const name = document.getElementById("quickCustomerName").value.trim();
+  const errorBox = document.getElementById("quickCustomerErrorBox");
+  if (!name) { errorBox.textContent = tr("customerNameError"); errorBox.classList.remove("hidden"); return; }
+  errorBox.classList.add("hidden");
+
+  const customer = await createCustomer({
+    name: name,
+    companyName: document.getElementById("quickCustomerCompany").value,
+    email: document.getElementById("quickCustomerEmail").value,
+    phone: document.getElementById("quickCustomerPhone").value,
+    details: document.getElementById("quickCustomerDetails").value
+  });
+  activeCustomerId = customer.id;
+  renderCustomerSelect();
+  document.getElementById("customerName").value = customer.name;
+  updateReceipt();
+  closeQuickNewCustomerModal();
+  if (document.getElementById("panel-customers")) renderCustomersList();
+}
+
 function addPaymentMethod() {
   const input = document.getElementById("newPaymentMethod");
   const value = input.value.trim();
@@ -2138,7 +2335,9 @@ async function startNewSale() {
   cart = [];
   paymentRows = [{ method: paymentMethods[0] || "", amount: 0 }];
   renderPaymentRows();
+  activeCustomerId = "";
   document.getElementById("customerName").value = "";
+  renderCustomerSelect();
   document.getElementById("discountType").value = "percent";
   document.getElementById("discountRate").value = "0";
   backToCatalog();
@@ -2225,6 +2424,7 @@ async function saveCurrentSaleToHistory() {
     decimalPlaces: decimalsNow(),
     cashierName: activeCashierName,
     customerName: val("customerName").trim(),
+    customerId: activeCustomerId || "",
     currencyCode: val("currencyCode"),
     currencySymbol: symbolNow(),
     taxName: val("taxName").trim() || tr("tax"),
@@ -3771,6 +3971,175 @@ async function saveProductDetailEdits() {
   closeProductDetail();
 }
 
+function renderCustomersList() {
+  const list = document.getElementById("customersList");
+  const empty = document.getElementById("customersEmpty");
+  if (!list || !empty) return;
+
+  const query = (document.getElementById("customerSearch").value || "").toLowerCase().trim();
+  list.innerHTML = "";
+  empty.classList.toggle("hidden", customers.length > 0);
+  empty.textContent = tr("customersEmpty");
+
+  const filtered = customers.filter(function(c) {
+    if (!query) return true;
+    return (c.name || "").toLowerCase().indexOf(query) !== -1 ||
+      (c.companyName || "").toLowerCase().indexOf(query) !== -1 ||
+      (c.email || "").toLowerCase().indexOf(query) !== -1 ||
+      (c.phone || "").toLowerCase().indexOf(query) !== -1;
+  });
+  filtered.sort(function(a, b) { return (a.name || "").localeCompare(b.name || ""); });
+
+  filtered.forEach(function(c) { list.appendChild(buildCustomerRow(c)); });
+}
+
+function buildCustomerRow(c) {
+  const row = document.createElement("div");
+  row.className = "prod-row" + (editingCustomerId === c.id ? " selected" : "");
+  const subParts = [c.companyName, c.email, c.phone].filter(function(v) { return v; });
+  row.innerHTML =
+    "<div class=\"prod-row-info\">" +
+      "<div class=\"prod-row-name\">" + escapeHtml(c.name) + "</div>" +
+      "<div class=\"prod-row-sub\">" + escapeHtml(subParts.join(" · ")) + "</div>" +
+    "</div>" +
+    "<button type=\"button\" class=\"shr-delete-btn\" title=\"Delete customer\">×</button>";
+  row.addEventListener("click", function() { openCustomerDetail(c.id); });
+  row.querySelector(".shr-delete-btn").addEventListener("click", function(e) { e.stopPropagation(); deleteCustomer(c.id); });
+  return row;
+}
+
+function renderCustomerDetailTitle() {
+  const titleEl = document.getElementById("customerDetailTitle");
+  if (!titleEl) return;
+  titleEl.textContent = creatingNewCustomer ? tr("newCustomerButtonLabel") : tr("customerDetailTitle");
+  const saveLabelEl = document.getElementById("customerDetailSaveLabel");
+  if (saveLabelEl) saveLabelEl.textContent = creatingNewCustomer ? tr("quickCustomerSaveLabel") : tr("saleDetailSaveLabel");
+}
+
+function openCustomerDetail(id) {
+  const c = customers.find(function(cu) { return cu.id === id; });
+  if (!c) return;
+  editingCustomerId = id;
+  creatingNewCustomer = false;
+
+  document.getElementById("customerDetailIdRow").classList.remove("hidden");
+  document.getElementById("customerDetailIdValue").textContent = c.id;
+  document.getElementById("customerDetailName").value = c.name || "";
+  document.getElementById("customerDetailCompany").value = c.companyName || "";
+  document.getElementById("customerDetailEmail").value = c.email || "";
+  document.getElementById("customerDetailPhone").value = c.phone || "";
+  document.getElementById("customerDetailDetails").value = c.details || "";
+  document.getElementById("customerDetailErrorBox").classList.add("hidden");
+  document.getElementById("customerDetailDeleteBtn").classList.remove("hidden");
+  document.getElementById("customerRelatedSalesSection").classList.remove("hidden");
+  renderCustomerDetailTitle();
+  renderCustomerRelatedSales(c.id);
+
+  document.getElementById("customerDetailEmptyState").classList.add("hidden");
+  document.getElementById("customerDetailContent").classList.remove("hidden");
+  document.getElementById("customersSplit").classList.add("detail-open");
+  renderCustomersList();
+}
+function openNewCustomerDetail() {
+  editingCustomerId = null;
+  creatingNewCustomer = true;
+
+  document.getElementById("customerDetailIdRow").classList.add("hidden");
+  document.getElementById("customerDetailName").value = "";
+  document.getElementById("customerDetailCompany").value = "";
+  document.getElementById("customerDetailEmail").value = "";
+  document.getElementById("customerDetailPhone").value = "";
+  document.getElementById("customerDetailDetails").value = "";
+  document.getElementById("customerDetailErrorBox").classList.add("hidden");
+  document.getElementById("customerDetailDeleteBtn").classList.add("hidden");
+  document.getElementById("customerRelatedSalesSection").classList.add("hidden");
+  renderCustomerDetailTitle();
+
+  document.getElementById("customerDetailEmptyState").classList.add("hidden");
+  document.getElementById("customerDetailContent").classList.remove("hidden");
+  document.getElementById("customersSplit").classList.add("detail-open");
+  renderCustomersList();
+  document.getElementById("customerDetailName").focus();
+}
+function closeCustomerDetail() {
+  editingCustomerId = null;
+  creatingNewCustomer = false;
+  document.getElementById("customerDetailContent").classList.add("hidden");
+  document.getElementById("customerDetailEmptyState").classList.remove("hidden");
+  document.getElementById("customersSplit").classList.remove("detail-open");
+  renderCustomersList();
+}
+async function saveCustomerDetailEdits() {
+  const name = document.getElementById("customerDetailName").value.trim();
+  const errorBox = document.getElementById("customerDetailErrorBox");
+  if (!name) { errorBox.textContent = tr("customerNameError"); errorBox.classList.remove("hidden"); return; }
+  errorBox.classList.add("hidden");
+
+  const fields = {
+    name: name,
+    companyName: document.getElementById("customerDetailCompany").value,
+    email: document.getElementById("customerDetailEmail").value,
+    phone: document.getElementById("customerDetailPhone").value,
+    details: document.getElementById("customerDetailDetails").value
+  };
+
+  if (creatingNewCustomer) {
+    await createCustomer(fields);
+  } else {
+    if (editingCustomerId === null) { closeCustomerDetail(); return; }
+    const c = customers.find(function(cu) { return cu.id === editingCustomerId; });
+    if (!c) { closeCustomerDetail(); return; }
+    c.name = fields.name;
+    c.companyName = fields.companyName.trim();
+    c.email = fields.email.trim();
+    c.phone = fields.phone.trim();
+    c.details = fields.details.trim();
+    await saveCustomers();
+  }
+  renderCustomerSelect();
+  closeCustomerDetail();
+}
+async function deleteCustomer(id) {
+  if (!confirm(tr("customerDeleteConfirm"))) return;
+  customers = customers.filter(function(c) { return c.id !== id; });
+  await saveCustomers();
+  if (activeCustomerId === id) {
+    activeCustomerId = "";
+    document.getElementById("customerName").value = "";
+    updateReceipt();
+  }
+  renderCustomerSelect();
+  if (editingCustomerId === id) closeCustomerDetail(); else renderCustomersList();
+}
+function deleteCustomerFromDetail() {
+  if (editingCustomerId !== null) deleteCustomer(editingCustomerId);
+}
+function renderCustomerRelatedSales(customerId) {
+  const list = document.getElementById("customerRelatedSalesList");
+  const empty = document.getElementById("customerRelatedSalesEmpty");
+  if (!list || !empty) return;
+  const related = salesHistory.filter(function(s) { return s.customerId === customerId; }).slice().sort(bySaleDateDesc);
+  list.innerHTML = "";
+  empty.classList.toggle("hidden", related.length > 0);
+  empty.textContent = tr("customerRelatedSalesEmpty");
+  const symbol = symbolNow();
+  related.forEach(function(s) {
+    const row = document.createElement("div");
+    row.className = "sh-row";
+    row.style.gridTemplateColumns = "76px 1fr 90px";
+    row.innerHTML =
+      "<div class=\"sh-col sh-col-receipt\">#" + escapeHtml(s.receiptNumber) + "</div>" +
+      "<div class=\"sh-col sh-col-date\">" + escapeHtml(s.dateTime) + "</div>" +
+      "<div class=\"sh-col sh-col-total\">" + escapeHtml(s.currencySymbol || symbol) + " " + Number(s.grandTotal).toFixed(decimalsNow()) + "</div>";
+    row.addEventListener("click", function() { viewCustomerRelatedSale(s.receiptNumber); });
+    list.appendChild(row);
+  });
+}
+function viewCustomerRelatedSale(receiptNumber) {
+  openSettingsTab("salesHistory");
+  openSaleDetail(receiptNumber);
+}
+
 async function clearProducts() {
   if (!products.length) return;
   if (!confirm(tr("productsClearConfirm"))) return;
@@ -3934,6 +4303,16 @@ function changeLanguage() {
     quickLogoPreviewEmptyText: "logoEmptyLabel", quickRemoveLogoButton: "removeLogoButton",
     cashiersTitle: "cashiersTitle", cashiersInfo: "cashiersInfo", cashierLabelText: "cashierLabelText",
     customerNameLabel: "customerNameLabel", customerLabelText: "customerLabelText",
+    sidebarCustomersLabel: "sidebarCustomersLabel", customersTitle: "customersTitle",
+    newCustomerButtonLabel: "newCustomerButtonLabel", quickNewCustomerTitle: "newCustomerButtonLabel",
+    quickCustomerNameLabel: "quickCustomerNameLabel", quickCustomerCompanyLabel: "quickCustomerCompanyLabel",
+    quickCustomerEmailLabel: "quickCustomerEmailLabel", quickCustomerPhoneLabel: "quickCustomerPhoneLabel",
+    quickCustomerDetailsLabel: "quickCustomerDetailsLabel", quickCustomerSaveLabel: "quickCustomerSaveLabel",
+    customerDetailIdLabel: "customerDetailIdLabel",
+    customerDetailNameLabel: "quickCustomerNameLabel", customerDetailCompanyLabel: "quickCustomerCompanyLabel",
+    customerDetailEmailLabel: "quickCustomerEmailLabel", customerDetailPhoneLabel: "quickCustomerPhoneLabel",
+    customerDetailDetailsLabel: "quickCustomerDetailsLabel", customerDetailDeleteLabel: "customerDetailDeleteLabel",
+    customerDetailEmptyText: "customerDetailEmptyText", customerRelatedSalesLabel: "customerRelatedSalesLabel",
     endOfDayShortcutLabel: "endOfDayShortcutLabel", howToUseShortcutLabel: "howToUseShortcutLabel",
     backupShortcutLabel: "backupShortcutLabel", supportCoffeeLabel: "supportCoffeeLabel",
     documentTitle: "documentTitle", documentTypeLabel: "documentTypeLabel", quickDocumentTypeLabel: "documentTypeLabel",
@@ -4007,8 +4386,6 @@ function changeLanguage() {
 
   const searchEl = document.getElementById("productSearch");
   if (searchEl) searchEl.placeholder = tr("productsSearchPlaceholder");
-  const customerEl = document.getElementById("customerName");
-  if (customerEl) customerEl.placeholder = tr("customerNamePlaceholder");
   const invSearchEl = document.getElementById("inventorySearch");
   if (invSearchEl) invSearchEl.placeholder = tr("productsSearchPlaceholder");
   const stockPlaceholderEl = document.getElementById("newProductStock");
@@ -4017,6 +4394,8 @@ function changeLanguage() {
   if (productDetailStockEl) productDetailStockEl.placeholder = tr("newProductStockPlaceholder");
   const inventoryDetailStockEl = document.getElementById("inventoryDetailStock");
   if (inventoryDetailStockEl) inventoryDetailStockEl.placeholder = tr("newProductStockPlaceholder");
+  const customerSearchEl = document.getElementById("customerSearch");
+  if (customerSearchEl) customerSearchEl.placeholder = tr("customersSearchPlaceholder");
 
   const guideList1 = document.getElementById("guideMethod1List");
   if (guideList1) guideList1.innerHTML = tr("guideMethod1List");
@@ -4063,6 +4442,9 @@ function changeLanguage() {
   renderCashierSelect();
   renderInventoryList();
   renderBarcodeScannerStatus();
+  renderCustomerSelect();
+  renderCustomersList();
+  renderCustomerDetailTitle();
 }
 
 function escapeHtml(text) {
@@ -4080,6 +4462,8 @@ async function init() {
   await loadCashiers();
   await loadActiveCashier();
   await loadProductsFromStorage();
+  await loadCustomerCounter();
+  await loadCustomers();
   await loadLogo();
   await loadSalesHistory();
   await loadBackupNoticeState();
