@@ -2113,6 +2113,48 @@ has zero network calls.
   description produces no stray `.receipt-item-description-input` div
   at all, and the built offline `app.html` carries the CSS/markup with
   zero leftover `OFFLINE-STRIP` markers.
+- **Bug fix: the printed/PDF-exported receipt read as faint, not the
+  bold, high-contrast thermal-printer look a real POS receipt should
+  have** - reported directly ("the pos receipt when printing is not
+  clear better make it darker and bold"). The color side of this was
+  already correct - every explicitly-colored receipt element
+  (`.receipt-store-details`/`.receipt-meta`/`.receipt-total-line`/
+  `.receipt-footer`/etc., all `#3c463f`/`#5b655e` muted tones on
+  screen) was already forced to `color: #000 !important` in both
+  `@media print` and `body.pdf-capture-mode`, and everything else
+  already inherited `#000` from `.receipt`'s own print override - so
+  the actual gap was **weight**, not color: almost every line (item
+  qty, store details, the meta block, each total/payment line, the
+  footer) printed at the browser's plain default `font-weight: 400`,
+  which reads thin and washed-out once a monospace receipt font is
+  rendered at a thermal printer's lower effective resolution, even
+  though the ink itself is technically pure black. Fixed by adding
+  `font-weight: 600` to `.receipt`'s own print/pdf-capture-mode rule
+  (inherited by every line that doesn't already set its own weight -
+  item name/qty/store-details/meta/total-line/payment-line/footer all
+  pick this up automatically) plus a new `font-weight: 700 !important`
+  rule for the header business-name, the RECEIPT/INVOICE/PAYMENT
+  document-title line, the column header row, and the grand total -
+  the lines that should read as the heaviest/most prominent on the
+  page - plus `.receipt-item-total` (previously 600, bumped to match).
+  `-webkit-print-color-adjust: exact; print-color-adjust: exact;` was
+  added to `.receipt` in both blocks too, so a browser's own print
+  ink-economy mode can't quietly lighten the output regardless of the
+  CSS. **Deliberately left unchanged**: the on-screen (non-print,
+  non-pdf-capture-mode) `.receipt` still renders at its original
+  `color: #14201c`/`font-weight: 400` - this fix only strengthens what
+  actually gets printed or saved as PDF, not the live POS screen the
+  cashier looks at; and `.receipt-item-description-input`'s own
+  intentionally secondary italic/muted styling was left alone (it still
+  inherits the new bolder weight along with everything else, but kept
+  its smaller size/italic/`color:#000`-forced treatment exactly as
+  before, so it still reads as a de-emphasized sub-line, just a
+  correspondingly bolder one). Verified with Playwright: under
+  `page.emulateMedia({ media: "print" })`, every receipt text element's
+  computed `color` resolves to `rgb(0, 0, 0)` and `font-weight` to `600`
+  (body lines) or `700` (headers/totals), while the same elements with
+  no print emulation still compute to the original `rgb(20, 32, 28)`/
+  `400` on screen, unchanged; and zero console errors.
 - **Sales history:** completed sales pushed into `salesHistory` and
   rendered grouped by date (`renderSalesHistoryPanel`,
   `saleDateKey`/`toggleHistoryGroup`); each sale can be reopened
@@ -6067,6 +6109,22 @@ the on-page heading stays the more natural "Create Invoice").
   little up/down stepper arrows printed next to every number field,
   which is what a "the preview looks right but printing looks different"
   report traced back to. Fixed identically in `receipt-generator.html`.
+- **Bug fix: empty fields' placeholder text (`"Your business name, address,
+  phone, email"`, `"Customer name, address, phone, email"`, `"e.g. Net 15"`,
+  `"(optional)"`, etc.) printed onto the actual invoice** - reported
+  directly ("the place holder should not be included in print"). Browsers
+  render an `<input>`/`<textarea>`'s `::placeholder` pseudo-element in
+  print the same as on screen; nothing in the print block hid it, so a
+  visitor who left "Bill To"/Terms/PO # blank got the literal hint text
+  baked into their printed/PDF-saved invoice instead of a blank line.
+  Fixed with `input::placeholder, textarea::placeholder { color:
+  transparent !important; opacity: 0 !important; }` (plus the
+  `::-webkit-input-placeholder` prefix for older WebKit print engines) in
+  the existing `@media print` block - the placeholder's layout space is
+  still reserved (an empty field still reads as blank, not collapsed),
+  only its text is made invisible. Verified with a real `page.pdf()`
+  render of an invoice left entirely blank: extracting the PDF's text
+  confirms none of the placeholder strings appear anywhere in the output.
 - **`.doc-addr-box` gives "From" and "Bill To" a bordered box**, matching
   standard commercial-invoice layout, per explicit feedback that both
   blocks should be "fitted with line box as standard." A shared class
