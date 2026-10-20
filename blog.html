@@ -7,23 +7,25 @@
   var CONSENT_KEY = "goonlinepos-cookie-consent";
   var SEEN_KEY = "goonlinepos-cookie-notice-seen";
 
-  function loadAnalyticsAndAds() {
-    var adsScript = document.createElement("script");
-    adsScript.async = true;
-    adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9013281257238178";
-    adsScript.crossOrigin = "anonymous";
-    document.head.appendChild(adsScript);
-
+  function loadAnalytics() {
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-7WMTJVB3VY');
+    window.gtag("js", new Date());
+    window.gtag("config", "G-7WMTJVB3VY");
 
     var gtagScript = document.createElement("script");
     gtagScript.async = true;
     gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-7WMTJVB3VY";
     document.head.appendChild(gtagScript);
   }
+
+  // AdSense's own code must load unconditionally on every page for site verification
+  // and ad serving - unlike Analytics above, it does not wait on cookie consent.
+  var adsScript = document.createElement("script");
+  adsScript.async = true;
+  adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9013281257238178";
+  adsScript.crossOrigin = "anonymous";
+  document.head.appendChild(adsScript);
 
   function showView(id) {
     ["cookieNoticeView", "cookieChoiceView", "cookieDeclinedView"].forEach(function(v) {
@@ -57,7 +59,7 @@
     } catch (e) {}
 
     hideBanner();
-    loadAnalyticsAndAds();
+    loadAnalytics();
   };
 
   window.declineCookies = function() {
@@ -81,7 +83,7 @@
   } catch (e) {}
 
   if (consent === "accepted") {
-    loadAnalyticsAndAds();
+    loadAnalytics();
   } else if (consent !== "declined" && !seen) {
     document.addEventListener("DOMContentLoaded", function() {
       showView("cookieNoticeView");
