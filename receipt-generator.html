@@ -336,6 +336,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   .no-print { display: none !important; }
   textarea, .field-input, .items-table input, .doc-meta-row input, .number-row input, .totals-line .tl-controls input, .payment-row input { border: none !important; background: transparent !important; box-shadow: none !important; color: #000 !important; padding: 2px 0 !important; }
   textarea { min-height: 0 !important; }
+  input::placeholder, textarea::placeholder { color: transparent !important; opacity: 0 !important; }
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color: transparent !important; opacity: 0 !important; }
   select { border: none !important; background: transparent !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   input[type="date"] { -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; }
   input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }

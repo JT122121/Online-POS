@@ -212,10 +212,17 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
 .items-table input:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-tint); }
 .items-table .col-qty, .items-table .col-rate { width: 90px; }
 .items-table .col-amount { width: 110px; text-align: right; }
-.items-table .col-amount input { text-align: right; background: var(--line-soft); }
+.items-table .col-amount input { text-align: right; }
+.items-table .col-amount input:read-only { background: var(--line-soft); }
 .items-table .col-tax-exempt { width: 74px; text-align: center; }
 .items-table .col-tax-exempt input { width: auto; border: none; background: transparent; padding: 0; }
 .items-table .col-remove { width: 34px; text-align: center; }
+.items-table.hide-qty .col-qty, .items-table.hide-rate .col-rate, .items-table.hide-tax-exempt .col-tax-exempt { display: none !important; }
+
+.columns-toggle { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; font-size: 12.5px; color: var(--ink-soft); flex-wrap: wrap; }
+.columns-toggle-label { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: 11px; color: var(--muted); }
+.columns-toggle label { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; cursor: pointer; }
+.columns-toggle input[type="checkbox"] { width: auto; margin: 0; }
 .line-remove-btn { border: none; background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
 .line-remove-btn:hover { background: #fbe9e7; color: #b3261e; }
 .line-remove-btn:disabled { opacity: .35; cursor: not-allowed; }
@@ -429,6 +436,13 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
     <textarea id="invTo" placeholder="Customer name, address, phone, email"></textarea>
   </div>
 
+  <div class="columns-toggle no-print" id="columnsToggleRow">
+    <span class="columns-toggle-label" id="columnsToggleLabel">Columns:</span>
+    <label><input type="checkbox" id="toggleQtyCol" checked> <span id="toggleQtyLabel">Qty</span></label>
+    <label><input type="checkbox" id="toggleRateCol" checked> <span id="toggleRateLabel">Rate</span></label>
+    <label><input type="checkbox" id="toggleTaxExemptCol" checked> <span id="toggleTaxExemptLabel">Tax Free</span></label>
+  </div>
+
   <table class="items-table">
     <thead>
       <tr>
@@ -520,7 +534,7 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   <ol>
     <li id="howToStep1">Add your logo (optional) and fill in who the invoice is from and who it's billed to.</li>
     <li id="howToStep2">Add an invoice number, date, due date, and payment terms.</li>
-    <li id="howToStep3">List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed.</li>
+    <li id="howToStep3">List each line item with a quantity and rate - the amount is calculated for you. Check "Tax Free" on any item that shouldn't be taxed. Don't need Qty, Rate, or Tax Free? Uncheck them in "Columns" above the table to hide them - hiding Rate lets you type the Amount directly instead.</li>
     <li id="howToStep4">Add tax and a discount if they apply, then check the balance due.</li>
     <li id="howToStep5">Click "Save Invoice" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.</li>
   </ol>
@@ -576,6 +590,8 @@ textarea:focus, .field-input:focus, select:focus { outline: none; border-color: 
   var HISTORY_KEY = "goonlinepos-invoice-history";
   var DEFAULTS_KEY = "goonlinepos-invoice-defaults";
   var LANG_KEY = "goonlinepos-invoice-lang";
+  var COLUMNS_KEY = "goonlinepos-invoice-columns";
+  var showQty = true, showRate = true, showTaxExempt = true;
   var CURRENCIES = {
     AED: "د.إ", AFN: "؋", ALL: "L", AMD: "դր.", ANG: "ƒ", AOA: "Kz", ARS: "$", AUD: "A$",
     AWG: "ƒ", AZN: "₼", BAM: "KM", BBD: "$", BDT: "৳", BGN: "лв", BHD: ".د.ب", BIF: "FBu",
@@ -608,6 +624,7 @@ en: {
       billToLabel: "Bill To", billToPlaceholder: "Customer name, address, phone, email",
       dateLabel: "Date", dueDateLabel: "Due Date", termsWord: "Terms", termsMetaPlaceholder: "e.g. Net 15", poLabel: "PO #", optionalLabel: "(optional)",
       descriptionLabel: "Description", qtyLabel: "Qty", rateLabel: "Rate", taxFreeLabel: "Tax Free", amountLabel: "Amount",
+      columnsLabel: "Columns:",
       itemDescPlaceholder: "Item or service description", addLineItemLabel: "Add Line Item",
       subtotalLabel: "Subtotal", discountLabel: "Discount", taxLabel: "Tax", totalLabel: "Total",
       amountPaidLabel: "Amount Paid", balanceDueLabel: "Balance Due", flatLabel: "Flat",
@@ -622,7 +639,7 @@ en: {
       howToTitle: "How to make an invoice",
       howToStep1: "Add your logo (optional) and fill in who the invoice is from and who it's billed to.",
       howToStep2: "Add an invoice number, date, due date, and payment terms.",
-      howToStep3: "List each line item with a quantity and rate - the amount is calculated for you. Check \"Tax Free\" on any item that shouldn't be taxed.",
+      howToStep3: "List each line item with a quantity and rate - the amount is calculated for you. Check \"Tax Free\" on any item that shouldn't be taxed. Don't need Qty, Rate, or Tax Free? Uncheck them in \"Columns\" above the table to hide them - hiding Rate lets you type the Amount directly instead.",
       howToStep4: "Add tax and a discount if they apply, then check the balance due.",
       howToStep5: "Click \"Save Invoice\" to keep it in your Saved Invoices list, and Print / Save as PDF whenever you're ready to send it.",
       faqTitle: "Invoice FAQ",
@@ -649,6 +666,7 @@ en: {
       fromLabel: "fromLabel", billToLabel: "billToLabel",
       dateLabel: "dateLabel", dueDateLabel: "dueDateLabel", termsMetaLabel: "termsWord", poLabel: "poLabel",
       thDescription: "descriptionLabel", thQty: "qtyLabel", thRate: "rateLabel", thTaxFree: "taxFreeLabel", thAmount: "amountLabel",
+      columnsToggleLabel: "columnsLabel", toggleQtyLabel: "qtyLabel", toggleRateLabel: "rateLabel", toggleTaxExemptLabel: "taxFreeLabel",
       addLineBtnLabel: "addLineItemLabel",
       subtotalLabel: "subtotalLabel", discountLabelInv: "discountLabel", taxLabelInv: "taxLabel", totalLabelInv: "totalLabel",
       amountPaidLabel: "amountPaidLabel", balanceDueLabel: "balanceDueLabel",
@@ -762,20 +780,87 @@ en: {
     return currencySymbol() + n.toFixed(2);
   }
 
-  function makeLineRow(desc, qty, rate, exempt) {
+  function makeLineRow(desc, qty, rate, exempt, amount) {
     var row = document.createElement("tr");
+    var qtyVal = qty != null ? qty : 1;
+    var rateVal = rate != null ? rate : 0;
+    var amountVal = (amount !== undefined && amount !== null && amount !== "") ? (parseFloat(amount) || 0) : (parseFloat(qtyVal) || 0) * (parseFloat(rateVal) || 0);
     row.innerHTML =
       '<td data-label="' + translate("descriptionLabel") + '"><input type="text" class="line-desc" placeholder="' + translate("itemDescPlaceholder") + '" value="' + (desc ? escapeHtml(desc) : "") + '"></td>' +
-      '<td class="col-qty" data-label="' + translate("qtyLabel") + '"><input type="number" class="line-qty" min="0" step="0.01" value="' + (qty != null ? qty : 1) + '"></td>' +
-      '<td class="col-rate" data-label="' + translate("rateLabel") + '"><input type="number" class="line-rate" min="0" step="0.01" value="' + (rate != null ? rate : 0) + '"></td>' +
+      '<td class="col-qty" data-label="' + translate("qtyLabel") + '"><input type="number" class="line-qty" min="0" step="0.01" value="' + qtyVal + '"></td>' +
+      '<td class="col-rate" data-label="' + translate("rateLabel") + '"><input type="number" class="line-rate" min="0" step="0.01" value="' + rateVal + '"></td>' +
       '<td class="col-tax-exempt" data-label="' + translate("taxFreeLabel") + '"><input type="checkbox" class="line-tax-exempt"' + (exempt ? " checked" : "") + '></td>' +
-      '<td class="col-amount" data-label="' + translate("amountLabel") + '"><input type="text" class="line-amount" readonly tabindex="-1" value="0.00"></td>' +
+      '<td class="col-amount" data-label="' + translate("amountLabel") + '"><input type="text" class="line-amount"' + (showRate ? ' readonly tabindex="-1"' : '') + ' value="' + amountVal.toFixed(2) + '"></td>' +
       '<td class="col-remove no-print"><button type="button" class="line-remove-btn" aria-label="Remove line">✕</button></td>';
     itemsBody.appendChild(row);
     wireRow(row);
-    updateRowAmount(row);
+    if (showRate) updateRowAmount(row);
     return row;
   }
+
+  function applyColumnVisibility() {
+    document.getElementById("toggleQtyCol").checked = showQty;
+    document.getElementById("toggleRateCol").checked = showRate;
+    document.getElementById("toggleTaxExemptCol").checked = showTaxExempt;
+    var table = document.querySelector(".items-table");
+    table.classList.toggle("hide-qty", !showQty);
+    table.classList.toggle("hide-rate", !showRate);
+    table.classList.toggle("hide-tax-exempt", !showTaxExempt);
+  }
+
+  function loadColumnPrefs() {
+    try {
+      var raw = localStorage.getItem(COLUMNS_KEY);
+      if (raw) {
+        var p = JSON.parse(raw);
+        showQty = p.showQty !== false;
+        showRate = p.showRate !== false;
+        showTaxExempt = p.showTaxExempt !== false;
+      }
+    } catch (e) {}
+    applyColumnVisibility();
+  }
+
+  function saveColumnPrefs() {
+    try { localStorage.setItem(COLUMNS_KEY, JSON.stringify({ showQty: showQty, showRate: showRate, showTaxExempt: showTaxExempt })); } catch (e) {}
+  }
+
+  document.getElementById("toggleQtyCol").addEventListener("change", function() {
+    showQty = this.checked;
+    if (!showQty) {
+      itemsBody.querySelectorAll(".line-qty").forEach(function(el) { el.value = "1"; });
+      if (showRate) itemsBody.querySelectorAll("tr").forEach(updateRowAmount);
+    }
+    applyColumnVisibility();
+    recalcTotals();
+    scheduleSave();
+    saveColumnPrefs();
+  });
+
+  document.getElementById("toggleRateCol").addEventListener("change", function() {
+    showRate = this.checked;
+    itemsBody.querySelectorAll("tr").forEach(function(row) {
+      var amountEl = row.querySelector(".line-amount");
+      amountEl.readOnly = showRate;
+      amountEl.tabIndex = showRate ? -1 : 0;
+      if (showRate) updateRowAmount(row);
+    });
+    applyColumnVisibility();
+    recalcTotals();
+    scheduleSave();
+    saveColumnPrefs();
+  });
+
+  document.getElementById("toggleTaxExemptCol").addEventListener("change", function() {
+    showTaxExempt = this.checked;
+    if (!showTaxExempt) {
+      itemsBody.querySelectorAll(".line-tax-exempt").forEach(function(el) { el.checked = false; });
+    }
+    applyColumnVisibility();
+    recalcTotals();
+    scheduleSave();
+    saveColumnPrefs();
+  });
 
   function escapeHtml(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -788,7 +873,10 @@ en: {
 
   function wireRow(row) {
     row.querySelectorAll(".line-desc, .line-qty, .line-rate").forEach(function(el) {
-      el.addEventListener("input", function() { updateRowAmount(row); recalcTotals(); scheduleSave(); });
+      el.addEventListener("input", function() { if (showRate) updateRowAmount(row); recalcTotals(); scheduleSave(); });
+    });
+    row.querySelector(".line-amount").addEventListener("input", function() {
+      if (!showRate) { recalcTotals(); scheduleSave(); }
     });
     row.querySelector(".line-tax-exempt").addEventListener("change", function() { recalcTotals(); scheduleSave(); });
     row.querySelector(".line-remove-btn").addEventListener("click", function() {
@@ -864,7 +952,8 @@ en: {
         desc: row.querySelector(".line-desc").value,
         qty: row.querySelector(".line-qty").value,
         rate: row.querySelector(".line-rate").value,
-        exempt: row.querySelector(".line-tax-exempt").checked
+        exempt: row.querySelector(".line-tax-exempt").checked,
+        amount: row.querySelector(".line-amount").value
       });
     });
     return {
@@ -1044,7 +1133,7 @@ en: {
 
     itemsBody.innerHTML = "";
     var items = (state.items && state.items.length) ? state.items : [{ desc: "", qty: 1, rate: 0, exempt: false }];
-    items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate, it.exempt); });
+    items.forEach(function(it) { makeLineRow(it.desc, it.qty, it.rate, it.exempt, it.amount); });
     recalcTotals();
     document.querySelectorAll("textarea").forEach(autosizeTextarea);
   }
@@ -1119,6 +1208,7 @@ en: {
   window.addEventListener("beforeprint", autosizeAllTextareas);
   window.addEventListener("afterprint", autosizeAllTextareas);
 
+  loadColumnPrefs();
   loadLanguagePref();
   loadDraft();
 })();

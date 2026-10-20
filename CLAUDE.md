@@ -6125,6 +6125,70 @@ the on-page heading stays the more natural "Create Invoice").
   only its text is made invisible. Verified with a real `page.pdf()`
   render of an invoice left entirely blank: extracting the PDF's text
   confirms none of the placeholder strings appear anywhere in the output.
+- **Follow-up regression fix: `receipt-generator.html` never actually got
+  this placeholder-hiding rule**, despite this file's own note above
+  claiming it was "Fixed identically in `receipt-generator.html`" -
+  reported directly again ("we should not include the place holder to be
+  printed"). A grep for `::placeholder` in `receipt-generator.html`'s
+  `@media print` block came back empty - the two
+  `input::placeholder`/`input::-webkit-input-placeholder` rules above
+  were apparently never actually carried over when this fix first
+  shipped, so `#rcFrom`/`#rcReceivedFrom`'s placeholder hints kept
+  printing on every receipt this whole time. Added the identical two
+  rules to `receipt-generator.html`'s print block, right after its own
+  `textarea { min-height: 0 !important; }` line (the same position
+  `invoice-generator.html`'s copy occupies). Verified with Playwright
+  under `page.emulateMedia({ media: "print" })`: both fields' computed
+  `::placeholder` color now resolves to `rgba(0,0,0,0)`, matching
+  `invoice-generator.html`'s already-correct behavior.
+- **Columns toggle - Qty/Rate/Tax Free can each be hidden from the items
+  table**, per an explicit "user should be able to remove the columns not
+  require in the invoice" request. A new `.columns-toggle no-print` row
+  (`#toggleQtyCol`/`#toggleRateCol`/`#toggleTaxExemptCol`, labeled
+  "Columns:") sits directly above the items table; each checkbox toggles
+  a `hide-qty`/`hide-rate`/`hide-tax-exempt` class on `.items-table`
+  (`display: none !important` on that column's `th`/`td`, which wins over
+  both the desktop and the mobile-stacked-row CSS by specificity, and
+  applies under print too since it isn't scoped to any media query - a
+  hidden column truly never appears on paper). Description and Amount
+  are always required and have no toggle.
+  - **Hiding Qty** forces every row's quantity to `1` (so Amount still
+    reads as `1 x Rate` even though the column is gone) rather than
+    silently keeping whatever quantity was last typed out of sight.
+  - **Hiding Rate** is what actually changes the math: with no rate to
+    multiply, `.line-amount` drops its `readonly` attribute and becomes a
+    normal editable field - the cashier types the line's Amount directly
+    instead of it being computed. Re-showing Rate makes it `readonly`
+    again and immediately recomputes it as `Qty x Rate`, discarding
+    whatever was typed manually while Rate was hidden - the field is
+    either computed-and-locked or manual-and-editable, never both at
+    once. `collectState()`/`applyState()`/`makeLineRow()` all gained a
+    5th `amount` field so a manually-typed amount actually survives a
+    save/reload instead of being silently recomputed back to `0.00`.
+  - **Hiding Tax Free** forces every row's tax-exempt checkbox back to
+    unchecked (taxable) - a hidden control can't be left in a state the
+    visitor can no longer see or change.
+  - **Persisted as a device preference, not per-invoice content** - its
+    own `goonlinepos-invoice-columns` `localStorage` key (separate from
+    the invoice draft/history), the same "device preference" reasoning
+    already used for Language/Currency defaults elsewhere on this page -
+    so a shop that never bills by quantity can hide Qty/Rate once and
+    have every future invoice open with Amount already editable, rather
+    than re-hiding the same columns on every new invoice.
+  - `receipt-generator.html`'s own items table was deliberately **not**
+    given this same toggle - unlike `invoice-generator.html`'s five
+    columns, it only ever has Description and Amount (no Qty/Rate/Tax
+    Free to begin with - see that page's own section below), so there is
+    nothing there to remove.
+  - Verified with Playwright: qty x rate still computes Amount normally
+    by default; hiding Rate makes Amount editable and a typed value
+    survives (no tax/discount in play, so the Total matches it exactly);
+    re-showing Rate recomputes Amount from Qty x Rate again, discarding
+    the manual value; hiding Qty forces it to `1` and Amount to `1 x
+    Rate`; hiding Tax Free force-unchecks the checkbox; all three
+    checkbox states persist across a reload; the hidden columns stay
+    `display: none` under `page.emulateMedia({ media: "print" })` too;
+    and zero horizontal overflow at 390px.
 - **`.doc-addr-box` gives "From" and "Bill To" a bordered box**, matching
   standard commercial-invoice layout, per explicit feedback that both
   blocks should be "fitted with line box as standard." A shared class
